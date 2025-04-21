@@ -1,0 +1,42 @@
+name: frontend
+description: A new Flutter project.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # iOS-style ikony
+  cupertino_icons: ^1.0.8
+
+  # 🔑 HTTP klient
+  http: ^0.13.6
+
+  # 🔐 Bezpečné ukládání dat (např. JWT token)
+  flutter_secure_storage: ^8.0.0
+
+  # 🧠 Správa stavu
+  provider: ^6.0.5
+
+  # 📦 JSON anotace (pro budoucí modely)
+  json_annotation: ^4.8.1
+
+  # 🪪 JWT dekodér – zjistí údaje z tokenu
+  jwt_decoder: ^2.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Zde můžeš přidat assets nebo fonty:
+  # assets:
+  #   - images/
