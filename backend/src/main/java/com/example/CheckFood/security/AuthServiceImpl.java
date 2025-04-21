@@ -1,13 +1,15 @@
 package com.example.CheckFood.security;
 
-import com.example.CheckFood.domain.user.*;
 import com.example.CheckFood.domain.user.User;
-import com.example.CheckFood.security.dto.*;
+import com.example.CheckFood.domain.user.UserRepository;
+import com.example.CheckFood.security.dto.AuthenticationRequest;
+import com.example.CheckFood.security.dto.AuthenticationResponse;
+import com.example.CheckFood.security.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +20,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    public void setAuthenticationManager(@Lazy AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
@@ -60,7 +56,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+    
 }

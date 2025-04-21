@@ -18,22 +18,33 @@ class AuthService {
     required String password,
   }) async {
     final url = Uri.parse('$_baseUrl/register');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        "name": name,
-        "surname": surname,
-        "email": email,
-        "phone": phone,
-        "age": age,
-        "role": role,
-        "username": username,
-        "password": password,
-      }),
-    );
+    final body = {
+      "firstName": name,
+      "lastName": surname,
+      "email": email,
+      "phone": phone,
+      "age": age,
+      "role": role,
+      "username": username,
+      "password": password,
+    };
 
-    return response.statusCode == 200;
+    try {
+      print(" Posílám data: ${jsonEncode(body)}");
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      print(" Status code: ${response.statusCode}");
+      print(" Odpověď těla: ${response.body}");
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print(" Chyba při registraci: $e");
+      return false;
+    }
   }
 
   /// Přihlášení uživatele – pošle username + password a uloží JWT token

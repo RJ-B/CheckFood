@@ -1,6 +1,8 @@
 package com.example.CheckFood.security;
 
-import com.example.CheckFood.security.dto.*;
+import com.example.CheckFood.security.dto.AuthenticationRequest;
+import com.example.CheckFood.security.dto.AuthenticationResponse;
+import com.example.CheckFood.security.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
