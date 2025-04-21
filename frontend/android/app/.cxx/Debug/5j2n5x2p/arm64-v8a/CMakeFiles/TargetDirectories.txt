@@ -1,2 +1,0 @@
-C:/Users/A/Desktop/WEBY/CheckFood/aplikace/frontend/android/app/.cxx/Debug/5j2n5x2p/arm64-v8a/CMakeFiles/edit_cache.dir
-C:/Users/A/Desktop/WEBY/CheckFood/aplikace/frontend/android/app/.cxx/Debug/5j2n5x2p/arm64-v8a/CMakeFiles/rebuild_cache.dir
