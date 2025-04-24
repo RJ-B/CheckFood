@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import 'home_screen.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -32,10 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (success) {
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
       setState(() {
         _errorMessage = 'Neplatné přihlašovací údaje.';
@@ -62,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'NÁZEV',
+                  'CheckFood',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,
@@ -164,13 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _socialButton(
-                        'Přihlásit se přes Google',
-                        Icons.g_mobiledata,
-                      ),
-                      const SizedBox(height: 10),
-                      _socialButton('Přihlásit se přes Apple', Icons.apple),
-                      const SizedBox(height: 16),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/register');
@@ -197,20 +187,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _socialButton(String text, IconData icon) {
-    return OutlinedButton.icon(
-      onPressed: () {
-        // TODO: přihlášení přes Google / Apple
-      },
-      icon: Icon(icon, size: 20),
-      label: Text(text),
-      style: OutlinedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 50),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

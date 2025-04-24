@@ -13,17 +13,22 @@ class AuthProvider extends ChangeNotifier {
   String? get email => _email;
 
   Future<bool> login(String username, String password) async {
-    final response = await AuthService.login(username, password);
-    _isLoggedIn = response != null;
-
-    if (_isLoggedIn) {
-      _firstName = response!['firstName'];
-      _lastName = response['lastName'];
-      _email = response['email'];
+    final userData = await AuthService.login(username, password);
+    if (userData != null) {
+      _isLoggedIn = true;
+      _firstName = userData['firstName'];
+      _lastName = userData['lastName'];
+      _email = userData['email'];
+      notifyListeners();
+      return true;
     }
 
+    _isLoggedIn = false;
+    _firstName = null;
+    _lastName = null;
+    _email = null;
     notifyListeners();
-    return _isLoggedIn;
+    return false;
   }
 
   Future<void> logout() async {

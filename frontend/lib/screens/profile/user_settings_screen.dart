@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart';
-import '../../widgets/main_scaffold.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/widgets/main_scaffold.dart';
 
 class UserSettingsScreen extends StatelessWidget {
   const UserSettingsScreen({super.key});
@@ -20,10 +20,10 @@ class UserSettingsScreen extends StatelessWidget {
               color: Colors.white,
               child: Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 32,
                     backgroundImage: NetworkImage(
-                      'https://i.pravatar.cc/150?img=8',
+                      'https://i.pravatar.cc/150?u=${authProvider.email ?? "default"}',
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -48,20 +48,19 @@ class UserSettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            _sectionTitle('Account'),
-            _settingsTile(context, 'Upravit profil', Icons.arrow_forward_ios),
-            _settingsTile(context, 'Země', Icons.arrow_forward_ios),
-            _settingsTile(context, 'Notifikace', Icons.arrow_forward_ios),
-            _settingsTile(context, 'Změna údajů', Icons.arrow_forward_ios),
-            const SizedBox(height: 10),
-            _sectionTitle('Obecné'),
-            _settingsTile(context, 'Podpora', Icons.arrow_forward_ios),
+            _sectionTitle('Účet'),
             _settingsTile(
               context,
-              'Podmínky používání',
-              Icons.arrow_forward_ios,
+              'Upravit profil',
+              Icons.edit,
+              '/edit-profile',
             ),
-            _settingsTile(context, 'Pozvat přátele', Icons.arrow_forward_ios),
+            _settingsTile(context, 'Změna údajů', Icons.info_outline),
+            const SizedBox(height: 10),
+            _sectionTitle('Obecné'),
+            _settingsTile(context, 'Podpora', Icons.support_agent),
+            _settingsTile(context, 'Podmínky používání', Icons.policy),
+            _settingsTile(context, 'Pozvat přátele', Icons.person_add_alt),
           ],
         ),
       ),
@@ -84,7 +83,12 @@ class UserSettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _settingsTile(BuildContext context, String title, IconData icon) {
+  Widget _settingsTile(
+    BuildContext context,
+    String title,
+    IconData icon, [
+    String? route,
+  ]) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
@@ -94,10 +98,8 @@ class UserSettingsScreen extends StatelessWidget {
           title: Text(title),
           trailing: Icon(icon, size: 16),
           onTap: () {
-            if (title == 'Upravit profil') {
-              Navigator.pushNamed(context, '/edit-profile');
-            } else {
-              // Můžeš přidat další navigace podle názvu
+            if (route != null) {
+              Navigator.pushNamed(context, route);
             }
           },
         ),

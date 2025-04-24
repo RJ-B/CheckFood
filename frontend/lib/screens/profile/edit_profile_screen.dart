@@ -110,23 +110,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                profileImageController.text.isNotEmpty
-                    ? ClipOval(
-                      child: Image.network(
-                        profileImageController.text,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder:
-                            (_, __, ___) =>
-                                const Icon(Icons.image_not_supported),
-                      ),
-                    )
-                    : const CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.grey,
-                      child: Icon(Icons.person, size: 40, color: Colors.white),
-                    ),
+                ClipOval(
+                  child: Image.network(
+                    profileImageController.text,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (_, __, ___) => const Icon(Icons.image_not_supported),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _submit,

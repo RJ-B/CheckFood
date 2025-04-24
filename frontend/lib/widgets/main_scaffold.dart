@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../screens/home_screen.dart';
 import '../screens/map_screen.dart';
-import '../screens/user_settings_screen.dart';
+import '../screens/profile/user_settings_screen.dart'; // ✅ správná cesta
 
 class MainScaffold extends StatelessWidget {
   final Widget body;
@@ -11,8 +11,7 @@ class MainScaffold extends StatelessWidget {
     : super(key: key);
 
   void _onTabTapped(BuildContext context, int index) {
-    if (index == currentIndex)
-      return; // Neprovádět nic, pokud jsme už na této stránce
+    if (index == currentIndex) return;
 
     switch (index) {
       case 0:
