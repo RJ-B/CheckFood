@@ -3,8 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String _baseUrl =
-      'http://10.0.2.2:8080/api/auth'; // změň IP, pokud nejsi v emulatoru
+  static const String _baseUrl = 'http://10.0.2.2:8080/api/auth';
   static const _storage = FlutterSecureStorage();
 
   static Future<bool> register({
@@ -13,7 +12,6 @@ class AuthService {
     required String email,
     required String phone,
     required int? age,
-    required String role,
     required String username,
     required String password,
   }) async {
@@ -24,31 +22,28 @@ class AuthService {
       "email": email,
       "phone": phone,
       "age": age,
-      "role": role,
       "username": username,
       "password": password,
     };
 
-    try {
-      print(" Posílám data: ${jsonEncode(body)}");
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
+    print('Odesílám data k registraci: $body');
 
-      print(" Status code: ${response.statusCode}");
-      print(" Odpověď těla: ${response.body}");
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
 
-      return response.statusCode == 200;
-    } catch (e) {
-      print(" Chyba při registraci: $e");
-      return false;
-    }
+    print('Response status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    return response.statusCode == 200;
   }
 
-  /// Přihlášení uživatele – pošle username + password a uloží JWT token
-  static Future<bool> login(String username, String password) async {
+  static Future<Map<String, dynamic>?> login(
+    String username,
+    String password,
+  ) async {
     final url = Uri.parse('$_baseUrl/login');
     final response = await http.post(
       url,
@@ -59,28 +54,30 @@ class AuthService {
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       final token = body['token'];
+
       if (token != null) {
         await _storage.write(key: 'jwt', value: token);
-        return true;
+        await _storage.write(key: 'firstName', value: body['firstName']);
+        await _storage.write(key: 'lastName', value: body['lastName']);
+        await _storage.write(key: 'email', value: body['email']);
+        return body;
       }
     }
 
-    return false;
+    return null;
   }
 
-  /// Odhlášení uživatele – smaže token
   static Future<void> logout() async {
-    await _storage.delete(key: 'jwt');
+    await _storage.deleteAll();
   }
 
-  /// Získání aktuálního JWT tokenu
-  static Future<String?> getToken() async {
-    return await _storage.read(key: 'jwt');
-  }
+  static Future<String?> getToken() async => await _storage.read(key: 'jwt');
 
-  /// Zjištění, zda je uživatel přihlášen (token existuje)
-  static Future<bool> isLoggedIn() async {
-    final token = await getToken();
-    return token != null;
-  }
+  static Future<bool> isLoggedIn() async => (await getToken()) != null;
+
+  static Future<String?> getFirstName() async =>
+      await _storage.read(key: 'firstName');
+  static Future<String?> getLastName() async =>
+      await _storage.read(key: 'lastName');
+  static Future<String?> getEmail() async => await _storage.read(key: 'email');
 }

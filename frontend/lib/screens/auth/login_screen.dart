@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +14,34 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final success = await Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    ).login(_emailController.text.trim(), _passwordController.text.trim());
+
+    setState(() => _isLoading = false);
+
+    if (success) {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } else {
+      setState(() {
+        _errorMessage = 'Neplatné přihlašovací údaje.';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
                       const SizedBox(height: 24),
                       TextField(
                         controller: _emailController,
@@ -95,13 +125,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
+                      if (_errorMessage != null)
+                        Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: login logic
-                          },
+                          onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF5F3DC4),
                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -109,10 +143,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text(
-                            'Přihlásit se',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          child:
+                              _isLoading
+                                  ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                  : const Text(
+                                    'Přihlásit se',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -125,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 16),
                       GestureDetector(
                         onTap: () {
-                          // TODO: přesměrovat na registraci
+                          Navigator.pushNamed(context, '/register');
                         },
                         child: const Text.rich(
                           TextSpan(

@@ -1,4 +1,4 @@
-package com.example.CheckFood.security.dto;
+package com.example.CheckFood.domain.user.dto;
 
 import lombok.*;
 
@@ -6,11 +6,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegisterRequest {
+public class UserUpdateRequest {
     private String firstName;
     private String lastName;
-    private String email;
     private String phone;
-    private String username;
-    private String password;
+    private Integer age;
+    private String profileImage;
 }

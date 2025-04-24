@@ -1,5 +1,6 @@
 package com.example.CheckFood.domain.user;
 
+import com.example.CheckFood.domain.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
