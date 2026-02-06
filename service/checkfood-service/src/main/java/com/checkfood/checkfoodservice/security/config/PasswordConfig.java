@@ -1,0 +1,24 @@
+package com.checkfood.checkfoodservice.security.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+/**
+ * Konfigurace pro práci s hesly.
+ */
+@Configuration
+public class PasswordConfig {
+
+    /**
+     * Hlavní encoder hesel (BCrypt, síla 12).
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+
+        return new BCryptPasswordEncoder(12);
+    }
+
+}

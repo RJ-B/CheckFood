@@ -1,0 +1,110 @@
+name: checkfood_client
+description: "CheckFood mobile client application"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- Základní UI a Ikony ---
+  cupertino_icons: ^1.0.8
+  flutter_svg: ^2.0.10 # Vektorové ikony
+  google_fonts: ^6.2.1 # Fonty
+  gap: ^3.0.1 # Mezery
+
+  # --- Architektura a State Management ---
+  flutter_bloc: ^8.1.6 # State management
+  equatable: ^2.0.7 # Porovnávání objektů
+  get_it: ^7.7.0 # Dependency Injection
+
+  # --- Navigace a Deep Linking ---
+  go_router: ^14.0.0 # Routing
+  app_links: ^6.3.2 # [PŘIDÁNO] Obsluha checkfood:// odkazů (Deep Links)
+
+  # --- Konfigurace prostředí ---
+  flutter_dotenv: ^5.2.1 # [PŘIDÁNO] Pro načítání .env souborů (URL backendu)
+
+  # --- Síťová komunikace ---
+  dio: ^5.4.3 # HTTP klient
+  internet_connection_checker: ^1.0.0+1
+
+  # --- Serializace a Imutabilita ---
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+  # --- Lokální úložiště a Bezpečnost ---
+  flutter_secure_storage: ^9.2.2 # Ukládání tokenů
+  shared_preferences: ^2.2.3 # Jednoduché nastavení
+
+  # --- Práce se zařízením a Soubory ---
+  # FIX: Verze 10.1.2 řeší Kotlin konflikt.
+  device_info_plus: ^10.1.2
+
+  # FIX: Verze 8.0.0 je kompatibilní s device_info_plus v10
+  package_info_plus: ^8.0.0
+  path_provider: ^2.1.3 # Přístup k souborům
+  url_launcher: ^6.3.0 # Otevírání URL
+  io: ^1.0.4
+
+  # --- Média a Zobrazování ---
+  cached_network_image: ^3.3.1 # Cache obrázků
+  qr_flutter: ^4.1.0 # QR kódy
+  webview_flutter: ^4.8.0 # WebView
+
+  # --- Utility a Formátování ---
+  intl: ^0.19.0 # Formátování data/času
+  logger: ^2.3.0 # Logování
+  uuid: ^4.4.0 # Generování ID
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+  # --- Generování kódu ---
+  build_runner: ^2.4.9
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+
+  # --- Nástroje ---
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
+
+# --------------------------------------------------
+# Konfigurace ikony aplikace
+# --------------------------------------------------
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: assets/icons/CheckFood_icon.png
+
+# --------------------------------------------------
+# Konfigurace Splash Screenu
+# --------------------------------------------------
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/icons/CheckFood_icon.png
+  android_12:
+    color: "#FFFFFF"
+    image: assets/icons/CheckFood_icon.png
+
+# --------------------------------------------------
+# Nastavení Assets a Fontů
+# --------------------------------------------------
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/animations/
+    - assets/three/
+    - assets/panoramas/
+    - .env
