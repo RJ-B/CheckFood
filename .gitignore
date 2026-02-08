@@ -52,13 +52,13 @@ checkfood-service/.mvn/wrapper/maven-wrapper.jar
 # CLIENT (checkfood-client) - VS Code / Flutter
 # ==========================================
 
-# IDE a systémové (VS Code ponecháváme dle vašeho uvážení)
+# IDE a systémové
 checkfood-client/.vscode/
-checkfood-client/.atom/
 checkfood-client/.idea/
 checkfood-client/*.iml
 checkfood-client/*.ipr
 checkfood-client/*.iws
+checkfood-client/.history/
 
 # Flutter / Dart / Pub specifika
 checkfood-client/.dart_tool/
@@ -66,25 +66,37 @@ checkfood-client/.flutter-plugins
 checkfood-client/.flutter-plugins-dependencies
 checkfood-client/.pub-cache/
 checkfood-client/.pub/
+checkfood-client/.packages
 checkfood-client/build/
-checkfood-client/**/doc/api/
-checkfood-client/**/ios/Flutter/.last_build_id
 
-# Android artefakty
+# Web specifika
+checkfood-client/web/stack.css
+
+# Logy a dočasné soubory
+checkfood-client/*.log
+checkfood-client/*.mode1v3
+checkfood-client/*.mode2v3
+checkfood-client/*.moved-aside
+
+# Android artefakty a lokální konfigurace
+checkfood-client/android/local.properties
+checkfood-client/android/**/generated/
 checkfood-client/android/app/debug/
 checkfood-client/android/app/profile/
 checkfood-client/android/app/release/
+# Ignorovat keystory (pokud je přidáš do projektu)
+checkfood-client/android/*.keystore
+checkfood-client/android/*.jks
 
-# Ostatní technologie a nástroje
-checkfood-client/*.class
-checkfood-client/*.pyc
-checkfood-client/.build/
-checkfood-client/.buildlog/
-checkfood-client/.svn/
-checkfood-client/.swiftpm/
-checkfood-client/migrate_working_dir/
-checkfood-client/node_modules/
+# iOS / macOS specifika
+checkfood-client/ios/Flutter/Generated.xcconfig
+checkfood-client/ios/Flutter/flutter_export_environment.sh
+checkfood-client/ios/Flutter/.last_build_id
+checkfood-client/macos/Flutter/Generated.xcconfig
+checkfood-client/macos/Flutter/ephemeral/
+checkfood-client/**/Pods/
+checkfood-client/**/.last_build_id
 
-# Symboly a obfuskace
+# Obfuskace a mapy symbolů
 checkfood-client/app.*.symbols
 checkfood-client/app.*.map.json
