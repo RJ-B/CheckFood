@@ -1,0 +1,17 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$RefreshTokenRequestModelImpl _$$RefreshTokenRequestModelImplFromJson(
+  Map<String, dynamic> json,
+) => _$RefreshTokenRequestModelImpl(
+  refreshToken: json['refreshToken'] as String,
+  deviceIdentifier: json['deviceIdentifier'] as String,
+);
+
+Map<String, dynamic> _$$RefreshTokenRequestModelImplToJson(
+  _$RefreshTokenRequestModelImpl instance,
+) => <String, dynamic>{
+  'refreshToken': instance.refreshToken,
+  'deviceIdentifier': instance.deviceIdentifier,
+};

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+  />
+
+  <title>Table Selection</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    #scene {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---------- UI overlay ---------- */
+    #ui {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .btn {
+      pointer-events: auto;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+
+    #btn-add {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #22c55e;
+    }
+
+    #btn-done {
+      position: absolute;
+      top: 64px;
+      right: 16px;
+      background: #ef4444;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Three.js canvas -->
+  <div id="scene"></div>
+
+  <!-- UI -->
+  <div id="ui">
+    <button id="btn-add" class="btn">➕ Přidat stůl</button>
+    <button id="btn-done" class="btn">✔ Hotovo</button>
+  </div>
+
+  <!-- Libs -->
+  <script src="three.min.js"></script>
+
+  <!-- App -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

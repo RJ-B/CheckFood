@@ -1,0 +1,30 @@
+# ==========================================
+# Root .gitattributes for CHECKFOOD Project
+# ==========================================
+
+# Výchozí chování: automatická detekce textu, vynucení LF pro repozitář
+* text=auto eol=lf
+
+# --- BACKEND (checkfood-service) ---
+
+# Maven wrapper musí mít specifické konce řádků pro funkčnost v daném OS
+checkfood-service/mvnw      text eol=lf
+checkfood-service/mvnw.cmd  text eol=crlf
+
+# --- Společné skripty ---
+
+# Windows skripty musí mít vždy CRLF
+*.cmd  text eol=crlf
+*.bat  text eol=crlf
+
+# Shell skripty musí mít vždy LF (pro Linux/macOS/Docker)
+*.sh   text eol=lf
+
+# --- Specifické typy souborů ---
+
+# Označení binárních souborů, u kterých se nemá měnit nic
+*.jar  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.pdf  binary

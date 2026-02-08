@@ -1,0 +1,19 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$AuthErrorResponseModelImpl _$$AuthErrorResponseModelImplFromJson(
+  Map<String, dynamic> json,
+) => _$AuthErrorResponseModelImpl(
+  message: json['message'] as String,
+  email: json['email'] as String?,
+  isExpired: json['isExpired'] as bool? ?? false,
+);
+
+Map<String, dynamic> _$$AuthErrorResponseModelImplToJson(
+  _$AuthErrorResponseModelImpl instance,
+) => <String, dynamic>{
+  'message': instance.message,
+  'email': instance.email,
+  'isExpired': instance.isExpired,
+};

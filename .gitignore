@@ -1,0 +1,90 @@
+# ==========================================
+# Root .gitignore for CHECKFOOD Project
+# ==========================================
+
+# --- Obecné systémové a dočasné soubory ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.log
+*.swp
+*.history
+.env
+.env.local
+.env.prod
+.env.test
+# ==========================================
+# BACKEND (checkfood-service) - IntelliJ IDEA
+# ==========================================
+
+# IDE a nástroje
+checkfood-service/.idea/
+checkfood-service/*.iml
+checkfood-service/*.iws
+checkfood-service/*.ipr
+checkfood-service/.apt_generated
+checkfood-service/.classpath
+checkfood-service/.factorypath
+checkfood-service/.project
+checkfood-service/.settings/
+checkfood-service/.springBeans
+checkfood-service/.sts4-cache
+
+# Build a distribuce
+checkfood-service/target/
+checkfood-service/build/
+checkfood-service/dist/
+checkfood-service/nbbuild/
+checkfood-service/nbdist/
+checkfood-service/.nb-gradle/
+checkfood-service/nbproject/private/
+checkfood-service/HELP.md
+checkfood-service/.mvn/wrapper/maven-wrapper.jar
+
+# Výjimky pro zachování struktury
+!checkfood-service/src/main/**/target/
+!checkfood-service/src/test/**/target/
+!checkfood-service/src/main/**/build/
+!checkfood-service/src/test/**/build/
+
+# ==========================================
+# CLIENT (checkfood-client) - VS Code / Flutter
+# ==========================================
+
+# IDE a systémové (VS Code ponecháváme dle vašeho uvážení)
+checkfood-client/.vscode/
+checkfood-client/.atom/
+checkfood-client/.idea/
+checkfood-client/*.iml
+checkfood-client/*.ipr
+checkfood-client/*.iws
+
+# Flutter / Dart / Pub specifika
+checkfood-client/.dart_tool/
+checkfood-client/.flutter-plugins
+checkfood-client/.flutter-plugins-dependencies
+checkfood-client/.pub-cache/
+checkfood-client/.pub/
+checkfood-client/build/
+checkfood-client/**/doc/api/
+checkfood-client/**/ios/Flutter/.last_build_id
+
+# Android artefakty
+checkfood-client/android/app/debug/
+checkfood-client/android/app/profile/
+checkfood-client/android/app/release/
+
+# Ostatní technologie a nástroje
+checkfood-client/*.class
+checkfood-client/*.pyc
+checkfood-client/.build/
+checkfood-client/.buildlog/
+checkfood-client/.svn/
+checkfood-client/.swiftpm/
+checkfood-client/migrate_working_dir/
+checkfood-client/node_modules/
+
+# Symboly a obfuskace
+checkfood-client/app.*.symbols
+checkfood-client/app.*.map.json
