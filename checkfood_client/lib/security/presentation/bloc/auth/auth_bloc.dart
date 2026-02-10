@@ -1,11 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Domain Layer - UseCases
+import '../../../data/models/auth/response/auth_error_response_model.dart';
 import '../../../domain/usecases/auth/get_authenticated_user_usecase.dart';
 import '../../../domain/usecases/auth/login_usecase.dart';
 import '../../../domain/usecases/auth/logout_usecase.dart';
 import '../../../domain/usecases/auth/register_usecase.dart';
 import '../../../domain/usecases/auth/resend_verification_code_usecase.dart';
 import '../../../domain/usecases/auth/verify_email_usecase.dart';
+
+// Domain Layer - Exceptions
 import '../../../exceptions/auth_exceptions.dart';
+
+// Data Layer - Models
+
+// Bloc Events and States
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -43,6 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
+  /// Inicializace aplikace - kontrola, zda je uživatel již přihlášen.
   Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     try {
       final user = await _getAuthenticatedUserUseCase();
@@ -56,6 +66,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  /// Zpracování požadavku na přihlášení.
   Future<void> _onLoginRequested(
     LoginRequested event,
     Emitter<AuthState> emit,
@@ -68,35 +79,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         emit(AuthState.authenticated(user));
       } else {
-        emit(const AuthState.failure('Chyba: Nepodařilo se načíst profil.'));
-      }
-    } on AccountNotVerifiedException catch (e) {
-      // ✅ NOVÉ: Emitujeme specifický stav pro neověřený účet
-      emit(
-        AuthState.unverifiedFailure(
-          message: e.message,
-          email: event.request.email,
-          isExpired: false, // Při loginu jde obvykle o "ještě neaktivní" stav
-        ),
-      );
-    } on SecurityException catch (e) {
-      // Zde můžeme odchytit i 410 Gone, pokud by ji backend vracel při loginu
-      if (e.message.toLowerCase().contains('vypršel')) {
         emit(
-          AuthState.unverifiedFailure(
-            message: e.message,
-            email: event.request.email,
-            isExpired: true,
+          AuthState.failure(
+            const AuthErrorResponseModel(
+              message: 'Chyba: Nepodařilo se načíst profil uživatele.',
+            ),
           ),
         );
-      } else {
-        emit(AuthState.failure(e.message));
       }
+    } on AccountNotVerifiedException catch (e) {
+      // ✅ Využíváme model přímo z výjimky vyhozené Repozitářem.
+      emit(AuthState.failure(e.errorModel!));
+    } on SecurityException catch (e) {
+      emit(
+        AuthState.failure(
+          e.errorModel ?? AuthErrorResponseModel(message: e.message),
+        ),
+      );
     } catch (e) {
-      emit(AuthState.failure('Neočekávaná chyba systému: $e'));
+      emit(
+        AuthState.failure(
+          AuthErrorResponseModel(message: 'Neočekávaná chyba systému: $e'),
+        ),
+      );
     }
   }
 
+  /// Zpracování registrace nového uživatele.
   Future<void> _onRegisterRequested(
     RegisterRequested event,
     Emitter<AuthState> emit,
@@ -106,12 +115,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _registerUseCase(event.request);
       emit(const AuthState.registerSuccess());
     } on SecurityException catch (e) {
-      emit(AuthState.failure(e.message));
+      emit(
+        AuthState.failure(
+          e.errorModel ?? AuthErrorResponseModel(message: e.message),
+        ),
+      );
     } catch (e) {
-      emit(AuthState.failure('Chyba při registraci: $e'));
+      emit(
+        AuthState.failure(
+          AuthErrorResponseModel(message: 'Chyba při registraci: $e'),
+        ),
+      );
     }
   }
 
+  /// Verifikace e-mailu pomocí tokenu (např. z Deep Linku).
   Future<void> _onVerifyEmailRequested(
     VerifyEmailRequested event,
     Emitter<AuthState> emit,
@@ -120,45 +138,57 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _verifyEmailUseCase(event.request);
 
+      // Po úspěšné verifikaci se pokusíme rovnou přihlásit/načíst uživatele.
       final user = await _getAuthenticatedUserUseCase();
       if (user != null) {
         emit(AuthState.authenticated(user));
       } else {
+        // Pokud tokeny nemáme, pošleme ho na login s úspěšnou hláškou.
         emit(const AuthState.unauthenticated());
       }
+    } on AccountNotVerifiedException catch (e) {
+      // Token mohl vypršet (410 Gone), vracíme model pro možnost resendu.
+      emit(AuthState.failure(e.errorModel!));
     } on SecurityException catch (e) {
-      // ✅ NOVÉ: Pokud verifikace selže kvůli expiraci (410), pošleme unverifiedFailure
-      if (e.message.toLowerCase().contains('vypršel')) {
-        emit(
-          AuthState.unverifiedFailure(
-            message: e.message,
-            email:
-                '', // Email zde musíme případně dohledat z kontextu/argumentů
-            isExpired: true,
-          ),
-        );
-      } else {
-        emit(AuthState.failure(e.message));
-      }
+      emit(
+        AuthState.failure(
+          e.errorModel ?? AuthErrorResponseModel(message: e.message),
+        ),
+      );
     } catch (e) {
-      emit(AuthState.failure('Verifikace selhala: $e'));
+      emit(
+        AuthState.failure(
+          AuthErrorResponseModel(message: 'Verifikace selhala: $e'),
+        ),
+      );
     }
   }
 
+  /// Znovuzaslání verifikačního kódu/odkazu.
   Future<void> _onResendCodeRequested(
     ResendCodeRequested event,
     Emitter<AuthState> emit,
   ) async {
+    // Zde obvykle neemitujeme loading stav celého BLoCu, aby nezmizel formulář.
+    // Chybu však zachytit musíme.
     try {
       await _resendVerificationCodeUseCase(event.email);
-      // Po úspěšném resendu se nic nemění, UI zůstává na verifikačním screenu
     } on SecurityException catch (e) {
-      emit(AuthState.failure(e.message));
+      emit(
+        AuthState.failure(
+          e.errorModel ?? AuthErrorResponseModel(message: e.message),
+        ),
+      );
     } catch (e) {
-      emit(AuthState.failure('Nepodařilo se odeslat kód.'));
+      emit(
+        AuthState.failure(
+          const AuthErrorResponseModel(message: 'Nepodařilo se odeslat kód.'),
+        ),
+      );
     }
   }
 
+  /// Odhlášení uživatele.
   Future<void> _onLogoutRequested(
     LogoutRequested event,
     Emitter<AuthState> emit,
@@ -167,6 +197,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _logoutUseCase();
     } catch (_) {
+      // Při logoutu chyby většinou ignorujeme a uživatele prostě odhlásíme lokálně.
     } finally {
       emit(const AuthState.unauthenticated());
     }

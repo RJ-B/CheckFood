@@ -1,7 +1,12 @@
+import '../data/models/auth/response/auth_error_response_model.dart';
+
 /// Základní třída pro všechny výjimky v modulu security.
 abstract class SecurityException implements Exception {
   final String message;
-  const SecurityException(this.message);
+  // Přidáváme volitelný model pro případy, kdy server vrátí detailní data
+  final AuthErrorResponseModel? errorModel;
+
+  const SecurityException(this.message, {this.errorModel});
 
   @override
   String toString() => message;
@@ -14,7 +19,7 @@ class InvalidCredentialsException extends SecurityException {
   ]);
 }
 
-/// Výjimka vyhozená, pokud je účet uživatele zablokován nebo neaktivní.
+/// Výjimka vyhozená, pokud je účet uživatele zablokován nebo deaktivován.
 class AccountDisabledException extends SecurityException {
   const AccountDisabledException([super.message = 'Váš účet byl deaktivován.']);
 }
@@ -35,14 +40,12 @@ class SessionExpiredException extends SecurityException {
 
 /// Obecná výjimka pro chyby serveru nebo sítě.
 class AuthServerException extends SecurityException {
-  const AuthServerException([
-    super.message = 'Došlo k chybě při komunikaci se serverem.',
-  ]);
+  const AuthServerException(super.message, {super.errorModel});
 }
 
-/// Výjimka vyhozená, pokud účet existuje, ale není ověřený (403).
+/// ✅ KLÍČOVÁ ZMĚNA: Výjimka vyhozená, pokud účet není ověřený (403/410).
+/// Vyžaduje AuthErrorResponseModel, který nese zprávu, email a příznak expirace.
 class AccountNotVerifiedException extends SecurityException {
-  const AccountNotVerifiedException([
-    super.message = 'Účet není aktivní. Zkontrolujte prosím svůj e-mail.',
-  ]);
+  AccountNotVerifiedException(AuthErrorResponseModel model)
+    : super(model.message, errorModel: model);
 }

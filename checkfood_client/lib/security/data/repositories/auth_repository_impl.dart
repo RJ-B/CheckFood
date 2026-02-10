@@ -14,6 +14,7 @@ import '../models/auth/request/login_request_model.dart';
 import '../models/auth/request/register_request_model.dart';
 import '../models/auth/request/verify_email_request_model.dart';
 import '../models/auth/request/refresh_token_request_model.dart';
+import '../models/auth/response/auth_error_response_model.dart'; // ✅ Import modelu
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -36,7 +37,8 @@ class AuthRepositoryImpl implements AuthRepository {
       _currentUser = response.user.toEntity();
       return response.toEntity();
     } on DioException catch (e) {
-      throw _mapDioException(e);
+      // ✅ Předáváme email z requestu pro případ, že ho backend nevrátí v JSONu
+      throw _mapDioException(e, emailFallback: request.email);
     } catch (e) {
       throw AuthServerException('Neočekávaná chyba při přihlášení: $e');
     }
@@ -47,7 +49,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _remoteDataSource.register(request);
     } on DioException catch (e) {
-      throw _mapDioException(e);
+      throw _mapDioException(e, emailFallback: request.email);
     } catch (e) {
       throw AuthServerException('Neočekávaná chyba při registraci: $e');
     }
@@ -69,7 +71,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _remoteDataSource.resendVerificationCode(email);
     } on DioException catch (e) {
-      throw _mapDioException(e);
+      throw _mapDioException(e, emailFallback: email);
     } catch (e) {
       throw AuthServerException('Nepodařilo se znovu odeslat kód: $e');
     }
@@ -111,66 +113,80 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  // --- Mapování chyb ---
+  // --- Mapování chyb (Čistá verze) ---
 
-  SecurityException _mapDioException(DioException e) {
-    String? serverMessage;
+  SecurityException _mapDioException(DioException e, {String? emailFallback}) {
+    AuthErrorResponseModel? errorModel;
 
+    // 1. Extrakce dat ze serveru do našeho Response modelu
     if (e.response?.data != null && e.response?.data is Map) {
-      final data = e.response!.data as Map<String, dynamic>;
-      serverMessage = data['message'] ?? data['detail'] ?? data['error'];
+      try {
+        errorModel = AuthErrorResponseModel.fromJson(
+          e.response!.data as Map<String, dynamic>,
+        );
+
+        // Pokud v JSONu chybí email, doplníme ten, se kterým uživatel pracoval
+        if (errorModel.email == null || errorModel.email!.isEmpty) {
+          errorModel = errorModel.copyWith(email: emailFallback);
+        }
+      } catch (_) {
+        // Fallback pro případ špatného formátu JSONu
+        errorModel = AuthErrorResponseModel(
+          message: 'Chyba formátu odpovědi serveru.',
+          email: emailFallback,
+        );
+      }
     }
 
+    // 2. Ošetření síťových chyb (Timeout atd.)
     if (e.type == DioExceptionType.connectionTimeout ||
-        e.type == DioExceptionType.receiveTimeout ||
         e.type == DioExceptionType.connectionError) {
-      return const AuthServerException(
-        'Server je momentálně nedostupný. Zkontrolujte své připojení.',
+      return AuthServerException(
+        'Server je momentálně nedostupný. Zkontrolujte připojení.',
+        errorModel: AuthErrorResponseModel(
+          message: 'Network error',
+          email: emailFallback,
+        ),
       );
     }
 
-    switch (e.response?.statusCode) {
+    final statusCode = e.response?.statusCode;
+    final finalMessage = errorModel?.message ?? 'Neočekávaná chyba serveru.';
+
+    // 3. Rozlišení chyb podle HTTP kódu
+    switch (statusCode) {
       case 400:
-        return AuthServerException(serverMessage ?? 'Neplatný požadavek.');
+        return AuthServerException(finalMessage, errorModel: errorModel);
 
       case 401:
-        return InvalidCredentialsException(
-          serverMessage ?? 'Neplatné přihlašovací údaje.',
-        );
+        return InvalidCredentialsException(finalMessage);
 
       case 403:
-        if (serverMessage?.toLowerCase().contains('aktivní') ?? false) {
-          // Repozitář stále vrací specifickou výjimku, BLoC se pak rozhodne, co s ní
-          return AccountNotVerifiedException(serverMessage!);
+        // Pokud zpráva obsahuje "aktivní", jde o neověřený účet
+        if (finalMessage.toLowerCase().contains('aktivní')) {
+          return AccountNotVerifiedException(errorModel!);
         }
-        return AccountDisabledException(
-          serverMessage ?? 'Váš účet byl zablokován nebo deaktivován.',
-        );
-
-      case 404:
-        return AuthServerException(serverMessage ?? 'Zdroj nenalezen.');
+        return AccountDisabledException(finalMessage);
 
       case 409:
-        return EmailAlreadyExistsException(
-          serverMessage ?? 'Uživatel s tímto e-mailem již existuje.',
-        );
+        return EmailAlreadyExistsException(finalMessage);
 
       case 410:
-        // ✅ NOVÉ: Ošetření vypršení platnosti (Gone) - např. expirovaný verifikační token
-        return AuthServerException(
-          serverMessage ??
-              'Platnost ověřovacího kódu vypršela. Nechte si zaslat nový.',
+        // Gone = Expirovaný token. Nastavíme isExpired na true pro UI.
+        return AccountNotVerifiedException(
+          errorModel?.copyWith(isExpired: true) ??
+              AuthErrorResponseModel(
+                message: finalMessage,
+                email: emailFallback,
+                isExpired: true,
+              ),
         );
 
       case 500:
-        return const AuthServerException(
-          'Na serveru došlo k chybě. Zkuste to prosím později.',
-        );
+        return const AuthServerException('Chyba na straně serveru (500).');
 
       default:
-        return AuthServerException(
-          serverMessage ?? 'Neočekávaná chyba při komunikaci se serverem.',
-        );
+        return AuthServerException(finalMessage, errorModel: errorModel);
     }
   }
 }

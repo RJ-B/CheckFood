@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-// Ujisti se, že importuješ správnou entitu User/UserEntity podle tvého projektu
+import '../../../data/models/auth/response/auth_error_response_model.dart';
 import '../../../domain/entities/user.dart';
 
 part 'auth_state.freezed.dart';
@@ -15,13 +14,6 @@ class AuthState with _$AuthState {
       _VerificationRequired;
   const factory AuthState.registerSuccess() = _RegisterSuccess;
 
-  // Standardní chyby (špatné heslo, server nedostupný)
-  const factory AuthState.failure(String message) = _Failure;
-
-  // ✅ NOVÝ STAV: Specifický pro neaktivní účet nebo expirovaný odkaz
-  const factory AuthState.unverifiedFailure({
-    required String message,
-    required String email,
-    @Default(false) bool isExpired,
-  }) = _UnverifiedFailure;
+  /// ✅ Jednotný chybový stav nesoucí komplexní informaci z backendu
+  const factory AuthState.failure(AuthErrorResponseModel error) = _Failure;
 }

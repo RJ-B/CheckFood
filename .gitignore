@@ -1,0 +1,131 @@
+# ==========================================
+# Root .gitignore for CHECKFOOD Project
+# ==========================================
+
+# --- Obecné systémové a dočasné soubory ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.log
+*.swp
+*.history
+.env
+.env.local
+.env.prod
+.env.test
+
+# ==========================================
+# BACKEND (checkfood_service) - Spring Boot
+# ==========================================
+
+# IDE a nástroje
+checkfood_service/.idea/
+checkfood_service/*.iml
+checkfood_service/*.iws
+checkfood_service/*.ipr
+checkfood_service/.apt_generated
+checkfood_service/.settings/
+checkfood_service/.project
+checkfood_service/.classpath
+
+# Build a generované soubory
+checkfood_service/target/
+checkfood_service/build/
+checkfood_service/out/
+checkfood_service/.mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
+# CLIENT (checkfood_client) - Flutter
+# ==========================================
+
+# IDE a systémové
+checkfood_client/.vscode/
+checkfood_client/.idea/
+checkfood_client/*.iml
+
+# Flutter / Dart / Pub specifika
+checkfood_client/.dart_tool/
+checkfood_client/.flutter-plugins
+checkfood_client/.flutter-plugins-dependencies
+checkfood_client/.pub-cache/
+checkfood_client/.pub/
+checkfood_client/.packages
+checkfood_client/build/
+
+# Android artefakty a lokální konfigurace
+checkfood_client/android/local.properties
+checkfood_client/android/**/generated/
+checkfood_client/android/app/debug/
+checkfood_client/android/app/profile/
+checkfood_client/android/app/release/
+checkfood_client/android/*.keystore
+checkfood_client/android/*.jks
+
+# iOS / macOS specifika
+checkfood_client/ios/Flutter/Generated.xcconfig
+checkfood_client/ios/Flutter/flutter_export_environment.sh
+checkfood_client/ios/Flutter/.last_build_id
+checkfood_client/macos/Flutter/Generated.xcconfig
+checkfood_client/macos/Flutter/ephemeral/
+checkfood_client/**/Pods/
+
+# Web specifika
+checkfood_client/web/stack.css
+
+# Symboly a obfuskace
+checkfood_client/app.*.symbols
+checkfood_client/app.*.map.json
+
+# ==========================================
+# CLIENT (checkfood_client) - VS Code / Flutter
+# ==========================================
+
+# IDE a systémové
+checkfood_client/.vscode/
+checkfood_client/.idea/
+checkfood_client/*.iml
+checkfood_client/*.ipr
+checkfood_client/*.iws
+checkfood_client/.history/
+
+# Flutter / Dart / Pub specifika
+checkfood_client/.dart_tool/
+checkfood_client/.flutter-plugins
+checkfood_client/.flutter-plugins-dependencies
+checkfood_client/.pub-cache/
+checkfood_client/.pub/
+checkfood_client/.packages
+checkfood_client/build/
+
+# Web specifika
+checkfood_client/web/stack.css
+
+# Logy a dočasné soubory
+checkfood_client/*.log
+checkfood_client/*.mode1v3
+checkfood_client/*.mode2v3
+checkfood_client/*.moved-aside
+
+# Android artefakty a lokální konfigurace
+checkfood_client/android/local.properties
+checkfood_client/android/**/generated/
+checkfood_client/android/app/debug/
+checkfood_client/android/app/profile/
+checkfood_client/android/app/release/
+# Ignorovat keystory (pokud je přidáš do projektu)
+checkfood_client/android/*.keystore
+checkfood_client/android/*.jks
+
+# iOS / macOS specifika
+checkfood_client/ios/Flutter/Generated.xcconfig
+checkfood_client/ios/Flutter/flutter_export_environment.sh
+checkfood_client/ios/Flutter/.last_build_id
+checkfood_client/macos/Flutter/Generated.xcconfig
+checkfood_client/macos/Flutter/ephemeral/
+checkfood_client/**/Pods/
+checkfood_client/**/.last_build_id
+
+# Obfuskace a mapy symbolů
+checkfood_client/app.*.symbols
+checkfood_client/app.*.map.json

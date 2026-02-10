@@ -11,7 +11,6 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar jsme nechali pro snadný návrat zpět
       appBar: AppBar(
         title: const Text('Registrace'),
         elevation: 0,
@@ -26,20 +25,24 @@ class RegisterPage extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text(
-                    'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail.',
+                    'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail pro aktivaci účtu.',
                   ),
                   backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
                 ),
               );
-              // Nahradíme registraci verifikací, aby se uživatel nemohl vrátit zpět k rozdělanému formuláři
+
+              // Přesuneme uživatele na verifikaci.
+              // Tip: Pokud byste chtěli předvyplnit email, musel by ho stav registerSuccess nést.
               Navigator.of(context).pushReplacementNamed(AppRouter.verifyEmail);
             },
 
-            // 2. CHYBA -> Jednotné zobrazení hlášky z backendu
-            failure: (message) {
+            // 2. CHYBA -> Upraveno pro práci s AuthErrorResponseModel
+            failure: (error) {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(message),
+                  content: Text(error.message),
                   backgroundColor: Colors.red,
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -96,7 +99,6 @@ class RegisterPage extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Pokud jsme přišli z loginu, stačí se vrátit
                         if (Navigator.of(context).canPop()) {
                           Navigator.of(context).pop();
                         } else {

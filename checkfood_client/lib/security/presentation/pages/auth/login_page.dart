@@ -17,6 +17,9 @@ class _LoginPageState extends State<LoginPage> {
   // Lokální stav pro ovládání viditelnosti tlačítka pro znovuzaslání
   bool _showResendButton = false;
 
+  // ✅ PŘIDÁNO: Proměnná pro uchování emailu z neúspěšného pokusu
+  String? _lastAttemptedEmail;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,21 +27,28 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           state.maybeWhen(
             authenticated: (user) {
-              // Vyčistíme staré hlášky a jdeme dál
+              // Vyčistíme staré hlášky a jdeme do hlavní části aplikace
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               Navigator.of(
                 context,
               ).pushNamedAndRemoveUntil(AppRouter.main, (route) => false);
             },
-            failure: (message, email) {
-              // <-- email nyní přichází ze stavu
-              final isNotVerified = message.toLowerCase().contains('aktivní');
-              final isExpired = message.toLowerCase().contains('vypršel');
+            failure: (error) {
+              // ✅ OPRAVA: 'error' je nyní typu AuthErrorResponseModel
+
+              // Logika pro zobrazení resend tlačítka:
+              // Buď backend poslal příznak isExpired, nebo zpráva obsahuje klíčová slova
+              final isNotVerified = error.message.toLowerCase().contains(
+                'aktivní',
+              );
+              final isExpired =
+                  error.isExpired ||
+                  error.message.toLowerCase().contains('vypršel');
 
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(message),
+                  content: Text(error.message),
                   backgroundColor:
                       (isNotVerified || isExpired)
                           ? Colors.orange.shade900
@@ -50,8 +60,8 @@ class _LoginPageState extends State<LoginPage> {
               if (isNotVerified || isExpired) {
                 setState(() {
                   _showResendButton = true;
-                  _lastAttemptedEmail =
-                      email ?? ''; // ✅ Uložíme si email pro pozdější resend
+                  // ✅ Uložíme si email z modelu pro pozdější navigaci/resend
+                  _lastAttemptedEmail = error.email;
                 });
               }
             },
@@ -97,18 +107,21 @@ class _LoginPageState extends State<LoginPage> {
                   // --- Autentizační formulář ---
                   const LoginForm(),
 
-                  // ✅ DYNAMICKÉ TLAČÍTKO: Objeví se jen při chybě verifikace
+                  // ✅ DYNAMICKÉ TLAČÍTKO: Objeví se při chybě verifikace
                   if (_showResendButton) ...[
                     const SizedBox(height: 16),
                     OutlinedButton.icon(
                       onPressed: () {
-                        // Tlačítko po kliknutí zmizí
                         setState(() {
                           _showResendButton = false;
                         });
 
-                        // Přesuneme uživatele na screen pro verifikaci
-                        Navigator.of(context).pushNamed(AppRouter.verifyEmail);
+                        // ✅ NAVIGACE: Předáme email jako argument, aby ho verifikační
+                        // stránka mohla automaticky předvyplnit.
+                        Navigator.of(context).pushNamed(
+                          AppRouter.verifyEmail,
+                          arguments: _lastAttemptedEmail,
+                        );
                       },
                       icon: const Icon(Icons.mail_outline),
                       label: const Text('VYŘEŠIT AKTIVACI ÚČTU'),

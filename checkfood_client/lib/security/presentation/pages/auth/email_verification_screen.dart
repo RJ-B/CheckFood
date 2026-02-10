@@ -22,34 +22,42 @@ class EmailVerificationScreen extends StatelessWidget {
         listener: (context, state) {
           state.maybeWhen(
             authenticated: (user) {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('E-mail byl úspěšně ověřen!'),
                   backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
                 ),
               );
               Navigator.of(
                 context,
               ).pushNamedAndRemoveUntil(AppRouter.main, (route) => false);
             },
-            failure: (message) {
-              final isExpired = message.toLowerCase().contains('vypršel');
+            failure: (error) {
+              // ✅ OPRAVA: Využíváme isExpired přímo z modelu místo parsování textu
+              final isExpired =
+                  error.isExpired ||
+                  error.message.toLowerCase().contains('vypršel');
 
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(message),
+                  content: Text(error.message),
                   backgroundColor: Colors.red,
                   behavior: SnackBarBehavior.floating,
                   duration: const Duration(seconds: 6),
                   // Akce pro okamžitý resend při expiraci
                   action:
-                      isExpired && email != null
+                      isExpired && (email ?? error.email) != null
                           ? SnackBarAction(
                             label: 'ZNOVU ODESLAT',
                             textColor: Colors.white,
                             onPressed: () {
                               context.read<AuthBloc>().add(
-                                AuthEvent.resendCodeRequested(email!),
+                                AuthEvent.resendCodeRequested(
+                                  email ?? error.email!,
+                                ),
                               );
                             },
                           )
@@ -94,6 +102,9 @@ class EmailVerificationScreen extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text("Zpět na přihlášení"),
                 ),
@@ -115,6 +126,7 @@ class EmailVerificationScreen extends StatelessWidget {
                                   'Žádost o nový e-mail byla odeslána.',
                                 ),
                                 backgroundColor: Colors.blueGrey,
+                                behavior: SnackBarBehavior.floating,
                               ),
                             );
                           }
