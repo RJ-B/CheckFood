@@ -9,7 +9,8 @@ class LogoutDeviceUseCase {
   LogoutDeviceUseCase(this._repository);
 
   /// Provede odhlášení vybraného zařízení voláním repozitáře.
-  Future<void> call(String deviceId) async {
+  /// ✅ OPRAVA: Parametr změněn na int (odpovídá Java Long).
+  Future<void> call(int deviceId) async {
     return await _repository.logoutDevice(deviceId);
   }
 }

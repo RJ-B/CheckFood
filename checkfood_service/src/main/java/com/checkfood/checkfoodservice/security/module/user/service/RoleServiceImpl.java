@@ -14,12 +14,11 @@ import java.util.Optional;
 
 /**
  * Implementace role servisu pro správu uživatelských rolí.
- * Zajišťuje CRUD operace a vyhledávání rolí v rámci RBAC (Role-Based Access Control) systému.
- * Podporuje eager loading permissions pomocí EntityGraph pro optimalizaci výkonu.
  *
- * @see RoleService
- * @see RoleRepository
- * @see UserLogger
+ * Verze JDK 21:
+ * - Využití 'var'.
+ * - Rozlišení logování pro CREATE/UPDATE operace.
+ * - Striktní použití UserException.
  */
 @Service
 @RequiredArgsConstructor
@@ -31,85 +30,49 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * Uloží nebo aktualizuje roli v systému.
-     *
-     * @param role role k uložení
-     * @return uložená role s vygenerovaným ID
+     * Automaticky detekuje, zda jde o novou roli nebo aktualizaci pro správné logování.
      */
     @Override
     public RoleEntity save(RoleEntity role) {
-        userLogger.logUserCreated("Role: " + role.getName());
-        return roleRepository.save(role);
+        boolean isUpdate = role.getId() != null;
+
+        var saved = roleRepository.save(role);
+
+        if (isUpdate) {
+            userLogger.logRoleUpdated(saved.getName(), saved.getId());
+        } else {
+            userLogger.logRoleCreated(saved.getName(), saved.getId());
+        }
+
+        return saved;
     }
 
-    /**
-     * Najde roli podle ID.
-     *
-     * @param id ID role
-     * @return Optional s rolí nebo prázdný Optional
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<RoleEntity> findById(Long id) {
         return roleRepository.findById(id);
     }
 
-    /**
-     * Najde roli podle názvu.
-     * Načítá pouze základní data bez permissions (lazy loading).
-     *
-     * @param name název role (např. "ADMIN", "USER")
-     * @return nalezená role
-     * @throws UserException pokud role není nalezena
-     */
     @Override
     @Transactional(readOnly = true)
     public RoleEntity findByName(String name) {
         return roleRepository.findByName(name)
-                .orElseThrow(() -> {
-                    userLogger.logUserNotFound("Role: " + name);
-                    return UserException.roleNotFound(name);
-                });
+                .orElseThrow(() -> UserException.roleNotFound(name));
     }
 
-    /**
-     * Najde roli včetně jejích oprávnění v jednom dotazu.
-     * Používá EntityGraph pro prevenci N+1 problému při načítání permissions.
-     * Vhodné pro detailní zobrazení role s její kompletní konfigurací.
-     *
-     * @param name název role
-     * @return nalezená role včetně permissions
-     * @throws UserException pokud role není nalezena
-     */
     @Override
     @Transactional(readOnly = true)
     public RoleEntity findByNameWithPermissions(String name) {
         return roleRepository.findWithPermissionsByName(name)
-                .orElseThrow(() -> {
-                    userLogger.logUserNotFound("Role: " + name);
-                    return UserException.roleNotFound(name);
-                });
+                .orElseThrow(() -> UserException.roleNotFound(name));
     }
 
-    /**
-     * Vrátí seznam všech rolí v systému.
-     * Eager načte permissions pro všechny role.
-     *
-     * @return seznam všech rolí včetně jejich permissions
-     */
     @Override
     @Transactional(readOnly = true)
     public List<RoleEntity> findAll() {
         return roleRepository.findAll();
     }
 
-    /**
-     * Najde všechny role, jejichž názvy jsou v zadané kolekci.
-     * Používá se při hromadném přiřazování rolí uživatelům.
-     * Optimalizováno pomocí IN klauzule místo N dotazů.
-     *
-     * @param names kolekce názvů rolí k vyhledání
-     * @return seznam nalezených rolí (prázdný seznam pokud names je null nebo prázdné)
-     */
     @Override
     @Transactional(readOnly = true)
     public List<RoleEntity> findAllByNames(Collection<String> names) {
@@ -117,5 +80,17 @@ public class RoleServiceImpl implements RoleService {
             return List.of();
         }
         return roleRepository.findAllByNameIn(names);
+    }
+
+    /**
+     * Smazání role podle ID.
+     * (Doplněno pro kompletnost CRUD operací, pokud je v interface)
+     */
+    public void deleteById(Long id) {
+        var role = roleRepository.findById(id)
+                .orElseThrow(() -> UserException.roleNotFoundById(id));
+
+        roleRepository.delete(role);
+        userLogger.logRoleDeleted(role.getName(), id);
     }
 }

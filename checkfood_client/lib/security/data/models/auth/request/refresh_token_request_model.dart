@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../config/security_json_keys.dart';
 
 part 'refresh_token_request_model.freezed.dart';
 part 'refresh_token_request_model.g.dart';
@@ -6,8 +7,9 @@ part 'refresh_token_request_model.g.dart';
 @freezed
 class RefreshTokenRequestModel with _$RefreshTokenRequestModel {
   const factory RefreshTokenRequestModel({
-    @JsonKey(name: 'refreshToken') required String refreshToken,
-    @JsonKey(name: 'deviceIdentifier') required String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) required String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
+    required String deviceIdentifier,
   }) = _RefreshTokenRequestModel;
 
   factory RefreshTokenRequestModel.fromJson(Map<String, dynamic> json) =>

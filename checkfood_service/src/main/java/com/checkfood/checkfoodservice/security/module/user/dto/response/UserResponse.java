@@ -1,12 +1,11 @@
-package com.checkfood.checkfoodservice.security.module.auth.dto.response;
+package com.checkfood.checkfoodservice.security.module.user.dto.response;
 
 import lombok.*;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * DTO pro přenos základních informací o uživateli v autentizačních odpovědích.
- * Rozšířeno o auditní data a granulární autority pro potřeby frontendové navigace.
+ * Základní identita uživatele pro potřeby autentizace.
+ * Odpovídá UserResponseModel ve Flutteru.
  */
 @Getter
 @Setter
@@ -14,20 +13,26 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class UserResponse {
-
     private Long id;
-
     private String email;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String role;
-
+    // Stav účtu
     private Boolean isActive;
 
-    private LocalDateTime lastLogin;
+    /**
+     * Hlavní role pro UI (např. "ADMIN").
+     */
+    private String role;
 
+    /**
+     * Technická oprávnění ze Spring Security (authorities).
+     * Např. ["ROLE_USER", "READ_PRIVILEGE"]
+     */
     private Set<String> authorities;
+
+    @Builder.Default
+    private Boolean needsRestaurantClaim = false;
+
+    @Builder.Default
+    private Boolean needsOnboarding = false;
 }

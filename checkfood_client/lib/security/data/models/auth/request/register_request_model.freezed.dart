@@ -21,22 +21,14 @@ RegisterRequestModel _$RegisterRequestModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RegisterRequestModel {
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'password')
+  @JsonKey(name: SecurityJsonKeys.password)
   String get password => throw _privateConstructorUsedError;
-  @JsonKey(name: 'confirmPassword')
-  String get confirmPassword => throw _privateConstructorUsedError;
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   String get firstName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceIdentifier')
-  String get deviceIdentifier => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceName')
-  String get deviceName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceType')
-  String get deviceType => throw _privateConstructorUsedError;
 
   /// Serializes this RegisterRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,14 +48,10 @@ abstract class $RegisterRequestModelCopyWith<$Res> {
   ) = _$RegisterRequestModelCopyWithImpl<$Res, RegisterRequestModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'email') String email,
-    @JsonKey(name: 'password') String password,
-    @JsonKey(name: 'confirmPassword') String confirmPassword,
-    @JsonKey(name: 'firstName') String firstName,
-    @JsonKey(name: 'lastName') String lastName,
-    @JsonKey(name: 'deviceIdentifier') String deviceIdentifier,
-    @JsonKey(name: 'deviceName') String deviceName,
-    @JsonKey(name: 'deviceType') String deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) String email,
+    @JsonKey(name: SecurityJsonKeys.password) String password,
+    @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
   });
 }
 
@@ -87,12 +75,8 @@ class _$RegisterRequestModelCopyWithImpl<
   $Res call({
     Object? email = null,
     Object? password = null,
-    Object? confirmPassword = null,
     Object? firstName = null,
     Object? lastName = null,
-    Object? deviceIdentifier = null,
-    Object? deviceName = null,
-    Object? deviceType = null,
   }) {
     return _then(
       _value.copyWith(
@@ -106,11 +90,6 @@ class _$RegisterRequestModelCopyWithImpl<
                     ? _value.password
                     : password // ignore: cast_nullable_to_non_nullable
                         as String,
-            confirmPassword:
-                null == confirmPassword
-                    ? _value.confirmPassword
-                    : confirmPassword // ignore: cast_nullable_to_non_nullable
-                        as String,
             firstName:
                 null == firstName
                     ? _value.firstName
@@ -120,21 +99,6 @@ class _$RegisterRequestModelCopyWithImpl<
                 null == lastName
                     ? _value.lastName
                     : lastName // ignore: cast_nullable_to_non_nullable
-                        as String,
-            deviceIdentifier:
-                null == deviceIdentifier
-                    ? _value.deviceIdentifier
-                    : deviceIdentifier // ignore: cast_nullable_to_non_nullable
-                        as String,
-            deviceName:
-                null == deviceName
-                    ? _value.deviceName
-                    : deviceName // ignore: cast_nullable_to_non_nullable
-                        as String,
-            deviceType:
-                null == deviceType
-                    ? _value.deviceType
-                    : deviceType // ignore: cast_nullable_to_non_nullable
                         as String,
           )
           as $Val,
@@ -152,14 +116,10 @@ abstract class _$$RegisterRequestModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'email') String email,
-    @JsonKey(name: 'password') String password,
-    @JsonKey(name: 'confirmPassword') String confirmPassword,
-    @JsonKey(name: 'firstName') String firstName,
-    @JsonKey(name: 'lastName') String lastName,
-    @JsonKey(name: 'deviceIdentifier') String deviceIdentifier,
-    @JsonKey(name: 'deviceName') String deviceName,
-    @JsonKey(name: 'deviceType') String deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) String email,
+    @JsonKey(name: SecurityJsonKeys.password) String password,
+    @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
   });
 }
 
@@ -179,12 +139,8 @@ class __$$RegisterRequestModelImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? password = null,
-    Object? confirmPassword = null,
     Object? firstName = null,
     Object? lastName = null,
-    Object? deviceIdentifier = null,
-    Object? deviceName = null,
-    Object? deviceType = null,
   }) {
     return _then(
       _$RegisterRequestModelImpl(
@@ -198,11 +154,6 @@ class __$$RegisterRequestModelImplCopyWithImpl<$Res>
                 ? _value.password
                 : password // ignore: cast_nullable_to_non_nullable
                     as String,
-        confirmPassword:
-            null == confirmPassword
-                ? _value.confirmPassword
-                : confirmPassword // ignore: cast_nullable_to_non_nullable
-                    as String,
         firstName:
             null == firstName
                 ? _value.firstName
@@ -213,21 +164,6 @@ class __$$RegisterRequestModelImplCopyWithImpl<$Res>
                 ? _value.lastName
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String,
-        deviceIdentifier:
-            null == deviceIdentifier
-                ? _value.deviceIdentifier
-                : deviceIdentifier // ignore: cast_nullable_to_non_nullable
-                    as String,
-        deviceName:
-            null == deviceName
-                ? _value.deviceName
-                : deviceName // ignore: cast_nullable_to_non_nullable
-                    as String,
-        deviceType:
-            null == deviceType
-                ? _value.deviceType
-                : deviceType // ignore: cast_nullable_to_non_nullable
-                    as String,
       ),
     );
   }
@@ -237,47 +173,31 @@ class __$$RegisterRequestModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RegisterRequestModelImpl implements _RegisterRequestModel {
   const _$RegisterRequestModelImpl({
-    @JsonKey(name: 'email') required this.email,
-    @JsonKey(name: 'password') required this.password,
-    @JsonKey(name: 'confirmPassword') required this.confirmPassword,
-    @JsonKey(name: 'firstName') required this.firstName,
-    @JsonKey(name: 'lastName') required this.lastName,
-    @JsonKey(name: 'deviceIdentifier') required this.deviceIdentifier,
-    @JsonKey(name: 'deviceName') required this.deviceName,
-    @JsonKey(name: 'deviceType') required this.deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) required this.email,
+    @JsonKey(name: SecurityJsonKeys.password) required this.password,
+    @JsonKey(name: SecurityJsonKeys.firstName) required this.firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) required this.lastName,
   });
 
   factory _$RegisterRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RegisterRequestModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   final String email;
   @override
-  @JsonKey(name: 'password')
+  @JsonKey(name: SecurityJsonKeys.password)
   final String password;
   @override
-  @JsonKey(name: 'confirmPassword')
-  final String confirmPassword;
-  @override
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   final String firstName;
   @override
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   final String lastName;
-  @override
-  @JsonKey(name: 'deviceIdentifier')
-  final String deviceIdentifier;
-  @override
-  @JsonKey(name: 'deviceName')
-  final String deviceName;
-  @override
-  @JsonKey(name: 'deviceType')
-  final String deviceType;
 
   @override
   String toString() {
-    return 'RegisterRequestModel(email: $email, password: $password, confirmPassword: $confirmPassword, firstName: $firstName, lastName: $lastName, deviceIdentifier: $deviceIdentifier, deviceName: $deviceName, deviceType: $deviceType)';
+    return 'RegisterRequestModel(email: $email, password: $password, firstName: $firstName, lastName: $lastName)';
   }
 
   @override
@@ -288,33 +208,16 @@ class _$RegisterRequestModelImpl implements _RegisterRequestModel {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
-            (identical(other.confirmPassword, confirmPassword) ||
-                other.confirmPassword == confirmPassword) &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
-                other.lastName == lastName) &&
-            (identical(other.deviceIdentifier, deviceIdentifier) ||
-                other.deviceIdentifier == deviceIdentifier) &&
-            (identical(other.deviceName, deviceName) ||
-                other.deviceName == deviceName) &&
-            (identical(other.deviceType, deviceType) ||
-                other.deviceType == deviceType));
+                other.lastName == lastName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    email,
-    password,
-    confirmPassword,
-    firstName,
-    lastName,
-    deviceIdentifier,
-    deviceName,
-    deviceType,
-  );
+  int get hashCode =>
+      Object.hash(runtimeType, email, password, firstName, lastName);
 
   /// Create a copy of RegisterRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -336,43 +239,27 @@ class _$RegisterRequestModelImpl implements _RegisterRequestModel {
 
 abstract class _RegisterRequestModel implements RegisterRequestModel {
   const factory _RegisterRequestModel({
-    @JsonKey(name: 'email') required final String email,
-    @JsonKey(name: 'password') required final String password,
-    @JsonKey(name: 'confirmPassword') required final String confirmPassword,
-    @JsonKey(name: 'firstName') required final String firstName,
-    @JsonKey(name: 'lastName') required final String lastName,
-    @JsonKey(name: 'deviceIdentifier') required final String deviceIdentifier,
-    @JsonKey(name: 'deviceName') required final String deviceName,
-    @JsonKey(name: 'deviceType') required final String deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) required final String email,
+    @JsonKey(name: SecurityJsonKeys.password) required final String password,
+    @JsonKey(name: SecurityJsonKeys.firstName) required final String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) required final String lastName,
   }) = _$RegisterRequestModelImpl;
 
   factory _RegisterRequestModel.fromJson(Map<String, dynamic> json) =
       _$RegisterRequestModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String get email;
   @override
-  @JsonKey(name: 'password')
+  @JsonKey(name: SecurityJsonKeys.password)
   String get password;
   @override
-  @JsonKey(name: 'confirmPassword')
-  String get confirmPassword;
-  @override
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   String get firstName;
   @override
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName;
-  @override
-  @JsonKey(name: 'deviceIdentifier')
-  String get deviceIdentifier;
-  @override
-  @JsonKey(name: 'deviceName')
-  String get deviceName;
-  @override
-  @JsonKey(name: 'deviceType')
-  String get deviceType;
 
   /// Create a copy of RegisterRequestModel
   /// with the given fields replaced by the non-null parameter values.

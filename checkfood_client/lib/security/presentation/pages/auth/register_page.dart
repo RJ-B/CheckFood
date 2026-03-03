@@ -10,116 +10,170 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Použití Theme pro konzistentní barvy
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registrace'),
-        elevation: 0,
+        centerTitle: true,
+        // Barvy bereme z tématu, ne natvrdo
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black87,
+        elevation: 0,
+        foregroundColor: theme.colorScheme.onSurface,
       ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.maybeWhen(
-            // 1. ÚSPĚCH -> Přesun na verifikaci e-mailu
+            // 1. ÚSPĚCH -> Navigace
             registerSuccess: () {
+              // Skryjeme klávesnici, pokud zůstala otevřená
+              FocusScope.of(context).unfocus();
+
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail pro aktivaci účtu.',
+                SnackBar(
+                  content: const Text(
+                    'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail.',
                   ),
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.green.shade600,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
-
-              // Přesuneme uživatele na verifikaci.
-              // Tip: Pokud byste chtěli předvyplnit email, musel by ho stav registerSuccess nést.
               Navigator.of(context).pushReplacementNamed(AppRouter.verifyEmail);
             },
-
-            // 2. CHYBA -> Upraveno pro práci s AuthErrorResponseModel
+            // 2. CHYBA -> Zobrazení hlášky
             failure: (error) {
+              FocusScope.of(
+                context,
+              ).unfocus(); // Skrýt klávesnici pro lepší viditelnost chyby
+
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
+                  // Zde se zobrazí lokalizovaná hláška, pokud ji backend/mapper připravil
                   content: Text(error.message),
-                  backgroundColor: Colors.red,
+                  backgroundColor: theme.colorScheme.error,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
             },
-
             orElse: () {},
           );
         },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 20.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Icon(
-                  Icons.person_add_rounded,
-                  size: 80,
-                  color: Colors.green,
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Vytvořte si účet',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+        // Použijeme Stack pro zobrazení Loading Overlay přes celou obrazovku
+        child: Stack(
+          children: [
+            // --- Hlavní obsah ---
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 20.0,
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Zadejte své údaje pro zahájení cesty s CheckFood',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                ),
-                const SizedBox(height: 40),
-
-                // --- Registrační Formulář ---
-                const RegisterForm(),
-
-                const SizedBox(height: 24),
-
-                // --- Návrat na Login ---
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Již máte účet?",
-                      style: TextStyle(color: Colors.grey.shade700),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop();
-                        } else {
-                          Navigator.of(
-                            context,
-                          ).pushReplacementNamed(AppRouter.login);
-                        }
-                      },
-                      child: const Text(
-                        'Přihlaste se',
-                        style: TextStyle(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Icon(
+                        Icons.person_add_rounded,
+                        size: 80,
+                        color:
+                            theme.colorScheme.primary, // Použití primární barvy
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'Vytvořte si účet',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      Text(
+                        'Zadejte své údaje pro zahájení cesty s CheckFood',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+
+                      // --- Formulář ---
+                      const RegisterForm(),
+
+                      const SizedBox(height: 24),
+
+                      // --- Patička (Login link) ---
+                      // Obalíme do BlocBuilderu, abychom tento odkaz deaktivovali při načítání
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          final isLoading = state.maybeWhen(
+                            loading: () => true,
+                            orElse: () => false,
+                          );
+
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Již máte účet?",
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                              TextButton(
+                                // Pokud se načítá, tlačítko deaktivujeme (null)
+                                onPressed:
+                                    isLoading
+                                        ? null
+                                        : () {
+                                          if (Navigator.of(context).canPop()) {
+                                            Navigator.of(context).pop();
+                                          } else {
+                                            Navigator.of(
+                                              context,
+                                            ).pushReplacementNamed(
+                                              AppRouter.login,
+                                            );
+                                          }
+                                        },
+                                child: Text(
+                                  'Přihlaste se',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        isLoading
+                                            ? theme.disabledColor
+                                            : theme.colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
+
+            // --- Loading Overlay ---
+            // Překryje celou obrazovku poloprůhlednou vrstvou, když se načítá
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loading:
+                      () => Container(
+                        color: Colors.black.withOpacity(0.3),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

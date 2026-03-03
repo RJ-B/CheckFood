@@ -5,113 +5,110 @@ import org.springframework.http.HttpStatus;
 
 /**
  * Výjimka pro JWT modul.
- * Poskytuje tovární metody pro nejčastější JWT chyby s přednastavenými HTTP stavy a error kódy.
- *
- * @see SecurityException
- * @see JwtErrorCode
+ * Poskytuje tovární metody pro JWT chyby.
  */
 public class JwtException extends SecurityException {
 
-    /**
-     * Vytvoří novou JWT výjimku.
-     *
-     * @param errorCode JWT error kód
-     * @param message lidsky čitelná chybová zpráva
-     * @param status HTTP status kód odpovědi
-     */
     public JwtException(JwtErrorCode errorCode, String message, HttpStatus status) {
         super(errorCode, message, status);
     }
 
-    /**
-     * JWT token je neplatný.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
-     */
-    public static JwtException invalidToken() {
+    public JwtException(JwtErrorCode errorCode, String message, HttpStatus status, Throwable cause) {
+        super(errorCode, message, status, cause);
+    }
+
+    // --- SECURITY & VALIDATION ---
+
+    public static JwtException invalidToken(String details) {
         return new JwtException(
                 JwtErrorCode.JWT_INVALID,
-                "Neplatný JWT token.",
+                "Neplatný JWT token: " + details,
                 HttpStatus.UNAUTHORIZED
         );
     }
 
-    /**
-     * JWT token vypršel.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
-     */
     public static JwtException expiredToken() {
         return new JwtException(
                 JwtErrorCode.JWT_EXPIRED,
-                "JWT token vypršel.",
+                "JWT token vypršel. Obnovte přihlášení.",
                 HttpStatus.UNAUTHORIZED
         );
     }
 
-    /**
-     * JWT token chybí v požadavku.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
-     */
     public static JwtException missingToken() {
         return new JwtException(
                 JwtErrorCode.JWT_MISSING,
-                "JWT token chybí v požadavku.",
+                "Autentizační token chybí.",
                 HttpStatus.UNAUTHORIZED
         );
     }
 
-    /**
-     * JWT token má neplatný podpis.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
-     */
     public static JwtException invalidSignature() {
         return new JwtException(
                 JwtErrorCode.JWT_INVALID_SIGNATURE,
-                "JWT token má neplatný podpis.",
+                "Neplatný podpis tokenu (Integrity Check Failed).",
                 HttpStatus.UNAUTHORIZED
         );
     }
 
-    /**
-     * JWT token má neplatné claims.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
-     */
-    public static JwtException invalidClaims() {
+    public static JwtException blacklistedToken() {
+        return new JwtException(
+                JwtErrorCode.JWT_BLACKLISTED,
+                "Token byl zneplatněn (odhlášen).",
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    public static JwtException invalidClaims(String details) {
         return new JwtException(
                 JwtErrorCode.JWT_INVALID_CLAIMS,
-                "JWT token má neplatné claims.",
+                "Token obsahuje neplatná data: " + details,
                 HttpStatus.UNAUTHORIZED
         );
     }
 
-    /**
-     * Chyba při generování JWT tokenu.
-     *
-     * @param message detailní popis chyby
-     * @return výjimka s HTTP 500 Internal Server Error
-     */
-    public static JwtException generationError(String message) {
+    public static JwtException unsupportedToken(String details) {
         return new JwtException(
-                JwtErrorCode.JWT_GENERATION_ERROR,
-                "Chyba při generování JWT tokenu: " + message,
-                HttpStatus.INTERNAL_SERVER_ERROR
+                JwtErrorCode.JWT_UNSUPPORTED,
+                "Nepodporovaný formát tokenu: " + details,
+                HttpStatus.BAD_REQUEST
         );
     }
 
-    /**
-     * Chyba při parsování JWT tokenu.
-     *
-     * @param message detailní popis chyby
-     * @return výjimka s HTTP 401 Unauthorized
-     */
-    public static JwtException parseError(String message) {
+    // --- SYSTEM ERRORS (S podporou 'cause') ---
+
+    public static JwtException generationError(String message, Throwable cause) {
+        return new JwtException(
+                JwtErrorCode.JWT_GENERATION_ERROR,
+                "Chyba generování tokenu: " + message,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                cause
+        );
+    }
+
+    public static JwtException parseError(String message, Throwable cause) {
         return new JwtException(
                 JwtErrorCode.JWT_PARSE_ERROR,
-                "Chyba při parsování JWT tokenu: " + message,
+                "Interní chyba zpracování tokenu: " + message,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                cause
+        );
+    }
+
+    // --- USER CONTEXT ---
+
+    public static JwtException userNotFound(String username) {
+        return new JwtException(
+                JwtErrorCode.JWT_USER_NOT_FOUND,
+                "Uživatel z tokenu nenalezen: " + username,
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    public static JwtException accountDisabled() {
+        return new JwtException(
+                JwtErrorCode.JWT_ACCOUNT_DISABLED,
+                "Účet je deaktivován.",
                 HttpStatus.UNAUTHORIZED
         );
     }

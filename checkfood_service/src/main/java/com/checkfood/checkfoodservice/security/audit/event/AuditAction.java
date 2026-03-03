@@ -105,6 +105,7 @@ public enum AuditAction {
      */
     INVALID_TOKEN,
 
+    ROLE_ASSIGNED,
     /**
      * Pokus o neoprávněný přístup k chráněnému zdroji.
      */

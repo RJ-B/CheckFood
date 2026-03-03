@@ -23,12 +23,12 @@ ChangePasswordRequestModel _$ChangePasswordRequestModelFromJson(
 
 /// @nodoc
 mixin _$ChangePasswordRequestModel {
-  @JsonKey(name: 'currentPassword')
+  @JsonKey(name: SecurityJsonKeys.currentPassword)
   String get currentPassword => throw _privateConstructorUsedError;
-  @JsonKey(name: 'newPassword')
+  @JsonKey(name: SecurityJsonKeys.newPassword)
   String get newPassword => throw _privateConstructorUsedError;
-  @JsonKey(name: 'confirmNewPassword')
-  String get confirmNewPassword => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.confirmPassword)
+  String get confirmPassword => throw _privateConstructorUsedError;
 
   /// Serializes this ChangePasswordRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,9 +52,9 @@ abstract class $ChangePasswordRequestModelCopyWith<$Res> {
       >;
   @useResult
   $Res call({
-    @JsonKey(name: 'currentPassword') String currentPassword,
-    @JsonKey(name: 'newPassword') String newPassword,
-    @JsonKey(name: 'confirmNewPassword') String confirmNewPassword,
+    @JsonKey(name: SecurityJsonKeys.currentPassword) String currentPassword,
+    @JsonKey(name: SecurityJsonKeys.newPassword) String newPassword,
+    @JsonKey(name: SecurityJsonKeys.confirmPassword) String confirmPassword,
   });
 }
 
@@ -78,7 +78,7 @@ class _$ChangePasswordRequestModelCopyWithImpl<
   $Res call({
     Object? currentPassword = null,
     Object? newPassword = null,
-    Object? confirmNewPassword = null,
+    Object? confirmPassword = null,
   }) {
     return _then(
       _value.copyWith(
@@ -92,10 +92,10 @@ class _$ChangePasswordRequestModelCopyWithImpl<
                     ? _value.newPassword
                     : newPassword // ignore: cast_nullable_to_non_nullable
                         as String,
-            confirmNewPassword:
-                null == confirmNewPassword
-                    ? _value.confirmNewPassword
-                    : confirmNewPassword // ignore: cast_nullable_to_non_nullable
+            confirmPassword:
+                null == confirmPassword
+                    ? _value.confirmPassword
+                    : confirmPassword // ignore: cast_nullable_to_non_nullable
                         as String,
           )
           as $Val,
@@ -113,9 +113,9 @@ abstract class _$$ChangePasswordRequestModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'currentPassword') String currentPassword,
-    @JsonKey(name: 'newPassword') String newPassword,
-    @JsonKey(name: 'confirmNewPassword') String confirmNewPassword,
+    @JsonKey(name: SecurityJsonKeys.currentPassword) String currentPassword,
+    @JsonKey(name: SecurityJsonKeys.newPassword) String newPassword,
+    @JsonKey(name: SecurityJsonKeys.confirmPassword) String confirmPassword,
   });
 }
 
@@ -139,7 +139,7 @@ class __$$ChangePasswordRequestModelImplCopyWithImpl<$Res>
   $Res call({
     Object? currentPassword = null,
     Object? newPassword = null,
-    Object? confirmNewPassword = null,
+    Object? confirmPassword = null,
   }) {
     return _then(
       _$ChangePasswordRequestModelImpl(
@@ -153,10 +153,10 @@ class __$$ChangePasswordRequestModelImplCopyWithImpl<$Res>
                 ? _value.newPassword
                 : newPassword // ignore: cast_nullable_to_non_nullable
                     as String,
-        confirmNewPassword:
-            null == confirmNewPassword
-                ? _value.confirmNewPassword
-                : confirmNewPassword // ignore: cast_nullable_to_non_nullable
+        confirmPassword:
+            null == confirmPassword
+                ? _value.confirmPassword
+                : confirmPassword // ignore: cast_nullable_to_non_nullable
                     as String,
       ),
     );
@@ -167,9 +167,11 @@ class __$$ChangePasswordRequestModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ChangePasswordRequestModelImpl implements _ChangePasswordRequestModel {
   const _$ChangePasswordRequestModelImpl({
-    @JsonKey(name: 'currentPassword') required this.currentPassword,
-    @JsonKey(name: 'newPassword') required this.newPassword,
-    @JsonKey(name: 'confirmNewPassword') required this.confirmNewPassword,
+    @JsonKey(name: SecurityJsonKeys.currentPassword)
+    required this.currentPassword,
+    @JsonKey(name: SecurityJsonKeys.newPassword) required this.newPassword,
+    @JsonKey(name: SecurityJsonKeys.confirmPassword)
+    required this.confirmPassword,
   });
 
   factory _$ChangePasswordRequestModelImpl.fromJson(
@@ -177,18 +179,18 @@ class _$ChangePasswordRequestModelImpl implements _ChangePasswordRequestModel {
   ) => _$$ChangePasswordRequestModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'currentPassword')
+  @JsonKey(name: SecurityJsonKeys.currentPassword)
   final String currentPassword;
   @override
-  @JsonKey(name: 'newPassword')
+  @JsonKey(name: SecurityJsonKeys.newPassword)
   final String newPassword;
   @override
-  @JsonKey(name: 'confirmNewPassword')
-  final String confirmNewPassword;
+  @JsonKey(name: SecurityJsonKeys.confirmPassword)
+  final String confirmPassword;
 
   @override
   String toString() {
-    return 'ChangePasswordRequestModel(currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmNewPassword)';
+    return 'ChangePasswordRequestModel(currentPassword: $currentPassword, newPassword: $newPassword, confirmPassword: $confirmPassword)';
   }
 
   @override
@@ -200,18 +202,14 @@ class _$ChangePasswordRequestModelImpl implements _ChangePasswordRequestModel {
                 other.currentPassword == currentPassword) &&
             (identical(other.newPassword, newPassword) ||
                 other.newPassword == newPassword) &&
-            (identical(other.confirmNewPassword, confirmNewPassword) ||
-                other.confirmNewPassword == confirmNewPassword));
+            (identical(other.confirmPassword, confirmPassword) ||
+                other.confirmPassword == confirmPassword));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    currentPassword,
-    newPassword,
-    confirmNewPassword,
-  );
+  int get hashCode =>
+      Object.hash(runtimeType, currentPassword, newPassword, confirmPassword);
 
   /// Create a copy of ChangePasswordRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -232,24 +230,26 @@ class _$ChangePasswordRequestModelImpl implements _ChangePasswordRequestModel {
 abstract class _ChangePasswordRequestModel
     implements ChangePasswordRequestModel {
   const factory _ChangePasswordRequestModel({
-    @JsonKey(name: 'currentPassword') required final String currentPassword,
-    @JsonKey(name: 'newPassword') required final String newPassword,
-    @JsonKey(name: 'confirmNewPassword')
-    required final String confirmNewPassword,
+    @JsonKey(name: SecurityJsonKeys.currentPassword)
+    required final String currentPassword,
+    @JsonKey(name: SecurityJsonKeys.newPassword)
+    required final String newPassword,
+    @JsonKey(name: SecurityJsonKeys.confirmPassword)
+    required final String confirmPassword,
   }) = _$ChangePasswordRequestModelImpl;
 
   factory _ChangePasswordRequestModel.fromJson(Map<String, dynamic> json) =
       _$ChangePasswordRequestModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'currentPassword')
+  @JsonKey(name: SecurityJsonKeys.currentPassword)
   String get currentPassword;
   @override
-  @JsonKey(name: 'newPassword')
+  @JsonKey(name: SecurityJsonKeys.newPassword)
   String get newPassword;
   @override
-  @JsonKey(name: 'confirmNewPassword')
-  String get confirmNewPassword;
+  @JsonKey(name: SecurityJsonKeys.confirmPassword)
+  String get confirmPassword;
 
   /// Create a copy of ChangePasswordRequestModel
   /// with the given fields replaced by the non-null parameter values.

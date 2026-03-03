@@ -1,81 +1,60 @@
 import 'package:flutter/material.dart';
 
-// Importy
 import 'route_guards.dart';
+import 'main_shell.dart';
 import '../security/presentation/pages/auth/login_page.dart';
 import '../security/presentation/pages/auth/register_page.dart';
 import '../security/presentation/pages/auth/email_verification_screen.dart';
-
-// Zkontrolujte, zda máte MainShell v této složce, nebo upravte cestu!
-// Pokud je MainShell v lib/navigation/main_shell.dart:
-import 'main_shell.dart';
+import '../modules/owner/presentation/pages/owner_register_page.dart';
+import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
 
 class AppRouter {
   static const String root = '/';
   static const String login = '/login';
   static const String register = '/register';
+  static const String registerOwner = '/register-owner';
+  static const String claimRestaurant = '/claim-restaurant';
   static const String verifyEmail = '/verify-email';
-
-  // TOTO JE ONA - Cesta, kterou router nemůže najít
   static const String main = '/main';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    // 👇 DEBUG VÝPISY - Sledujte konzoli po přihlášení 👇
-    print('--- ROUTER DEBUG ---');
-    print('Požadovaná cesta (settings.name): ${settings.name}');
-
     final uri = Uri.parse(settings.name ?? '/');
-    print('Rozparsovaná cesta (uri.path): ${uri.path}');
 
     switch (uri.path) {
       case root:
         return MaterialPageRoute(builder: (_) => const RootGuard());
 
       case login:
-        final status = uri.queryParameters['status'];
-        final message = uri.queryParameters['message'];
+        final String? status = uri.queryParameters['status'];
+        final String? message = uri.queryParameters['message'];
+
         return MaterialPageRoute(
-          builder: (context) {
-            if (status == 'error' && message != null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Chyba: $message'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              });
-            } else if (status == 'success') {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Účet ověřen!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              });
-            }
-            return const LoginPage();
-          },
+          builder:
+              (_) => LoginPage(
+                verificationStatus: status,
+                verificationMessage: message,
+              ),
         );
 
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
 
+      case registerOwner:
+        return MaterialPageRoute(builder: (_) => const OwnerRegisterPage());
+
+      case claimRestaurant:
+        return MaterialPageRoute(builder: (_) => const ClaimRestaurantPage());
+
       case verifyEmail:
+        final String? email = settings.arguments as String?;
         return MaterialPageRoute(
-          builder: (_) => const EmailVerificationScreen(),
+          builder: (_) => EmailVerificationScreen(email: email),
         );
 
-      // 👇 TOTO JE KLÍČOVÁ ČÁST 👇
       case main:
-        print('✅ Router: Našel jsem shodu pro MAIN, otevírám MainShell');
         return MaterialPageRoute(builder: (_) => const MainShell());
 
       default:
-        print(
-          '❌ Router: Nenašel jsem shodu pro ${uri.path}, vracím ErrorRoute',
-        );
         return _errorRoute();
     }
   }

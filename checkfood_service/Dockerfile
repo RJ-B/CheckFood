@@ -1,8 +1,7 @@
 # ===============================================================
 # 1. FÁZE: SESTAVENÍ (BUILD STAGE)
 # ===============================================================
-# Změna z openjdk na eclipse-temurin pro zajištění dostupnosti obrazu
-FROM maven:3.8.5-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -15,11 +14,10 @@ RUN mvn clean package -DskipTests
 # ===============================================================
 # 2. FÁZE: RUNTIME (RUN STAGE)
 # ===============================================================
-FROM eclipse-temurin:17-jre-focal
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
-# Kopírování JAR souboru
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8081

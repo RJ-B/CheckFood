@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/utils/ui_helpers.dart';
+// Bloc
 import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
 import '../../bloc/user/user_state.dart';
+
+// Widgets
 import '../../widgets/user/device/device_item_tile.dart';
 
 class DeviceManagementScreen extends StatefulWidget {
@@ -17,34 +19,30 @@ class DeviceManagementScreen extends StatefulWidget {
 
 class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   bool _isRefreshing = false;
-
-  // OPRAVA: Změněno na int, aby to sedělo na Entitu Device
   int? _loggingOutDeviceId;
 
   @override
   void initState() {
     super.initState();
-    // Požadavek na načtení profilu
-    context.read<UserBloc>().add(const UserEvent.profileRequested());
+    // ✅ 1. Načteme zařízení (to je hlavní účel této obrazovky)
+    context.read<UserBloc>().add(const UserEvent.devicesRequested());
   }
 
   Future<void> _refreshDevices() async {
     setState(() {
       _isRefreshing = true;
     });
-    context.read<UserBloc>().add(const UserEvent.profileRequested());
+    // ✅ 2. Refresh volá znovu načtení zařízení
+    context.read<UserBloc>().add(const UserEvent.devicesRequested());
   }
 
-  // OPRAVA: Metoda přijímá int (ID z databáze)
   void _onLogoutDevice(int deviceId) {
     setState(() {
       _loggingOutDeviceId = deviceId;
     });
 
-    // Konverze int -> String pro BLoC (pokud BLoC očekává String)
-    context.read<UserBloc>().add(
-      UserEvent.deviceLoggedOut(deviceId.toString()),
-    );
+    // ✅ 3. Logout s ID (int)
+    context.read<UserBloc>().add(UserEvent.deviceLoggedOut(deviceId));
   }
 
   @override
@@ -54,31 +52,31 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       body: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {
           state.maybeWhen(
-            loaded: (profile) {
-              setState(() {
-                _isRefreshing = false;
-                _loggingOutDeviceId = null;
-              });
+            // Pokud jsme načetli data, vypneme refresh
+            loaded: (_, __) {
+              if (_isRefreshing) {
+                setState(() {
+                  _isRefreshing = false;
+                  _loggingOutDeviceId = null;
+                });
+              }
             },
             failure: (message) {
               setState(() {
                 _isRefreshing = false;
                 _loggingOutDeviceId = null;
               });
-              AppNotifications.showError(context, message);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message), backgroundColor: Colors.red),
+              );
             },
-            orElse: () {
-              if (_isRefreshing) {
-                setState(() => _isRefreshing = false);
-              }
-            },
+            orElse: () {},
           );
         },
         builder: (context, state) {
           return state.maybeWhen(
-            loaded: (profile) {
-              final devices = profile.devices;
-
+            // ✅ 4. Destrukce stavu (profile, devices)
+            loaded: (profile, devices) {
               if (devices.isEmpty && !_isRefreshing) {
                 return Center(
                   child: Column(
@@ -110,15 +108,20 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   itemBuilder: (context, index) {
                     final device = devices[index];
 
-                    // OPRAVA: Používáme vlastnost přímo z Entity.
-                    // Backend/Mapper musí zajistit, že 'isCurrentDevice' je správně nastaveno.
-                    final isCurrentDevice = device.isCurrentDevice;
-
                     return DeviceItemTile(
-                      device: device, // Zde posíláme entitu s int ID
-                      isCurrentDevice: isCurrentDevice,
-                      onLogout: () => _onLogoutDevice(device.id),
-                      isLoggingOut: _loggingOutDeviceId == device.id,
+                      device: device,
+                      // ✅ 5. isCurrentDevice z Entity
+                      isCurrentDevice: device.isCurrentDevice,
+                      // ✅ 6. Logout callback
+                      onLogout: () {
+                        // Pokud je to aktuální zařízení, měl by to být spíše "Logout z aplikace"
+                        // což řeší DeviceItemTile obvykle skrytím tlačítka nebo jinou akcí.
+                        // Zde voláme logout konkrétního ID.
+                        _onLogoutDevice(device.id);
+                      },
+                      // Indikace načítání u konkrétní položky (volitelné)
+                      // DeviceItemTile musí podporovat parametr isLoggingOut
+                      // isLoggingOut: _loggingOutDeviceId == device.id,
                     );
                   },
                 ),
@@ -128,7 +131,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
             loading:
                 () =>
                     _isRefreshing
-                        ? const SizedBox.shrink()
+                        ? const SizedBox.shrink() // Pokud refreshujeme, obsah zůstává (řeší RefreshIndicator)
                         : const Center(child: CircularProgressIndicator()),
 
             failure:

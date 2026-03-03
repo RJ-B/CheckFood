@@ -5,6 +5,7 @@ import com.checkfood.checkfoodservice.security.module.user.logging.UserLogger;
 import com.checkfood.checkfoodservice.security.module.user.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @RequiredArgsConstructor
+@Order(1)
 public class RoleDataLoader implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
@@ -37,6 +39,8 @@ public class RoleDataLoader implements CommandLineRunner {
 
         ensureRoleExists("USER");
         ensureRoleExists("ADMIN");
+        ensureRoleExists("OWNER");
+        ensureRoleExists("MANAGER");
 
         userLogger.logUserCreated("Inicializace rolí dokončena");
     }

@@ -1,28 +1,29 @@
 import '../entities/auth_tokens.dart';
 import '../entities/user.dart';
-import '../../data/models/auth/request/login_request_model.dart';
-import '../../data/models/auth/request/register_request_model.dart';
-import '../../data/models/auth/request/verify_email_request_model.dart';
-import '../../data/models/auth/request/refresh_token_request_model.dart';
+import '../usecases/auth/params/auth_params.dart';
 
 abstract class AuthRepository {
-  Future<AuthTokens> login(LoginRequestModel request);
+  /// Přihlášení uživatele pomocí doménových parametrů.
+  Future<AuthTokens> login(LoginParams params);
 
-  // Změna na void
-  Future<void> register(RegisterRequestModel request);
+  /// Registrace nového uživatele pomocí doménových parametrů.
+  Future<void> register(RegisterParams params);
 
-  // Změna na void
-  Future<void> verifyEmail(VerifyEmailRequestModel request);
+  /// Registrace majitele restaurace (role OWNER).
+  Future<void> registerOwner(RegisterParams params);
 
-  /// Znovu odešle verifikační kód na e-mail.
+  /// Verifikace emailu pouze pomocí tokenu (jednoduchý String).
+  Future<void> verifyEmail(String token);
+
+  /// Znovuodeslání verifikačního kódu.
   Future<void> resendVerificationCode(String email);
 
-  /// Odhlásí uživatele (server i local).
+  /// Odhlášení (lokální i vzdálené).
   Future<void> logout();
 
-  /// Obnoví access token pomocí refresh tokenu.
-  Future<AuthTokens> refreshToken(RefreshTokenRequestModel request);
+  /// Obnovení tokenu (parametry si repozitář bere interně ze storage).
+  Future<AuthTokens> refreshToken();
 
-  /// Vrátí aktuálně přihlášeného uživatele (z cache).
+  /// Získání aktuálně přihlášeného uživatele z paměti nebo cache.
   Future<User?> getAuthenticatedUser();
 }

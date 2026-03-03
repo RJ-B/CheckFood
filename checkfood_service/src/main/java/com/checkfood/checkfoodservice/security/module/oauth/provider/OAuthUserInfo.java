@@ -1,76 +1,34 @@
 package com.checkfood.checkfoodservice.security.module.oauth.provider;
 
+import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider;
+import lombok.Builder;
+import lombok.Getter;
+
 /**
- * Sjednocený model informací o uživateli z OAuth providerů.
- *
- * Slouží jako mezivrstva mezi externím providerem
- * (Google, Apple, ...) a interním UserEntity.
+ * Sjednocená přepravka pro data získaná z externích OAuth poskytovatelů.
+ * Upraveno pro striktní oddělení jména a příjmení (firstName/lastName).
  */
+@Getter
+@Builder
 public class OAuthUserInfo {
 
-    // Unikátní ID u providera (sub)
+    /** Unikátní ID uživatele u poskytovatele (např. 'sub' claim). */
     private String providerUserId;
 
-    // Email uživatele
+    /** E-mailová adresa získaná z externího tokenu. */
     private String email;
 
-    // Zobrazované jméno
-    private String fullName;
+    /** Křestní jméno (z Google 'given_name' nebo Apple 'givenName'). */
+    private String firstName; // ✅ Změna z fullName
 
-    // Typ providera (GOOGLE / APPLE)
-    private OAuthProviderType providerType;
+    /** Příjmení (z Google 'family_name' nebo Apple 'familyName'). */
+    private String lastName;  // ✅ Změna z fullName
 
+    /** URL adresa profilového obrázku (typicky u Google). */
+    private String profileImageUrl;
 
-    public OAuthUserInfo() {
-    }
+    /** Typ poskytovatele pro určení kontextu uložení v DB. */
+    private AuthProvider providerType;
 
-
-    public OAuthUserInfo(
-            String providerUserId,
-            String email,
-            String fullName,
-            OAuthProviderType providerType
-    ) {
-        this.providerUserId = providerUserId;
-        this.email = email;
-        this.fullName = fullName;
-        this.providerType = providerType;
-    }
-
-
-    public String getProviderUserId() {
-        return providerUserId;
-    }
-
-    public void setProviderUserId(String providerUserId) {
-        this.providerUserId = providerUserId;
-    }
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-
-    public OAuthProviderType getProviderType() {
-        return providerType;
-    }
-
-    public void setProviderType(OAuthProviderType providerType) {
-        this.providerType = providerType;
-    }
-
+    // Metoda getFullName() již není potřeba, protože Service si to skládá sama nebo používá oddělené atributy.
 }

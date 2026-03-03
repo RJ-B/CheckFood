@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../security/presentation/bloc/auth/auth_bloc.dart';
-import '../security/presentation/bloc/auth/auth_state.dart';
+
 import '../features/onboarding/onboarding_screen.dart';
+import '../features/splash/splash_screen.dart';
+import '../../security/presentation/bloc/auth/auth_bloc.dart';
+import '../../security/presentation/bloc/auth/auth_state.dart';
+import '../../security/domain/enums/user_role.dart';
+import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
+import '../modules/owner/onboarding/presentation/pages/onboarding_wizard_page.dart';
 import 'main_shell.dart';
 
-/// Inteligentní rozcestník, který rozhoduje o úvodní obrazovce aplikace.
-/// Naslouchá stavu AuthBloc a dynamicky mění widget bez nutnosti manuální navigace.
 class RootGuard extends StatelessWidget {
   const RootGuard({super.key});
 
@@ -15,19 +18,18 @@ class RootGuard extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return state.maybeWhen(
-          // Stav: Uživatel je přihlášen (token je platný)
-          authenticated: (user) => const MainShell(),
-
-          // Stav: Aplikace právě čte tokeny z paměti nebo ověřuje relaci
-          loading:
-              () => const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              ),
-
-          // Stav: Uživatel není přihlášen nebo se odhlásil
+          authenticated: (user) {
+            if (user.role == UserRole.owner && user.needsRestaurantClaim) {
+              return const ClaimRestaurantPage();
+            }
+            if (user.role == UserRole.owner && user.needsOnboarding) {
+              return const OnboardingWizardPage();
+            }
+            return const MainShell();
+          },
+          loading: () => const SplashScreen(),
+          initial: () => const SplashScreen(),
           unauthenticated: () => const OnboardingScreen(),
-
-          // Výchozí stav (např. initial) - pro jistotu vracíme Onboarding
           orElse: () => const OnboardingScreen(),
         );
       },

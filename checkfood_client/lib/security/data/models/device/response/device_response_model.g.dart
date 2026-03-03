@@ -10,22 +10,23 @@ _$DeviceResponseModelImpl _$$DeviceResponseModelImplFromJson(
   Map<String, dynamic> json,
 ) => _$DeviceResponseModelImpl(
   id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
+  deviceName: json['deviceName'] as String?,
+  deviceType: json['deviceType'] as String?,
   deviceIdentifier: json['deviceIdentifier'] as String,
-  type: json['type'] as String,
-  ipAddress: json['ipAddress'] as String,
-  lastActive: DateTime.parse(json['lastActive'] as String),
-  isCurrent: json['isCurrent'] as bool,
+  lastLogin:
+      json['lastLogin'] == null
+          ? null
+          : DateTime.parse(json['lastLogin'] as String),
+  isCurrentDevice: json['currentDevice'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$$DeviceResponseModelImplToJson(
   _$DeviceResponseModelImpl instance,
 ) => <String, dynamic>{
   'id': instance.id,
-  'name': instance.name,
+  'deviceName': instance.deviceName,
+  'deviceType': instance.deviceType,
   'deviceIdentifier': instance.deviceIdentifier,
-  'type': instance.type,
-  'ipAddress': instance.ipAddress,
-  'lastActive': instance.lastActive.toIso8601String(),
-  'isCurrent': instance.isCurrent,
+  'lastLogin': instance.lastLogin?.toIso8601String(),
+  'currentDevice': instance.isCurrentDevice,
 };

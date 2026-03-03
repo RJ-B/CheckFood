@@ -1,23 +1,32 @@
 class PasswordValidator {
-  // Regex už nepotřebujeme
-  // static final RegExp _passwordRegex = ...
+  static const int minLength = 8;
+  static const int maxLength = 64;
+
+  /// Regex pro silné heslo:
+  /// - Minimálně jedno velké písmeno
+  /// - Minimálně jedno malé písmeno
+  /// - Minimálně jedna číslice
+  /// - Minimálně jeden speciální znak (@$!%*?&)
+  static final RegExp _passwordRegex = RegExp(
+    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+  );
 
   static String? validate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Heslo je povinné';
     }
 
-    // Změníme limit na 3 znaky, aby to sedělo s backendem
-    if (value.length < 3) {
-      return 'Heslo musí mít alespoň 3 znaky';
+    if (value.length < minLength) {
+      return 'Heslo musí mít alespoň $minLength znaků';
     }
 
-    // Tuto přísnou kontrolu zakomentujeme/smažeme:
-    /*
-    if (!_passwordRegex.hasMatch(value)) {
-      return 'Heslo musí obsahovat velké/malé písmeno...';
+    if (value.length > maxLength) {
+      return 'Heslo může mít maximálně $maxLength znaků';
     }
-    */
+
+    if (!_passwordRegex.hasMatch(value)) {
+      return 'Heslo musí obsahovat velké písmeno, malé písmeno, číslici a speciální znak (@\$!%*?&)';
+    }
 
     return null;
   }

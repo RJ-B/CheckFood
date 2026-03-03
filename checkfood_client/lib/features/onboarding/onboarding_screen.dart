@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // ✅ Nutný import pro uložení stavu
+
 import '../../core/theme/spacing.dart';
 import '../../core/theme/typography.dart';
 import '../../core/theme/colors.dart';
@@ -53,7 +55,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void _finish() {
+  /// ✅ Tato metoda nyní uloží do paměti, že uživatel onboarding viděl.
+  Future<void> _finish() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_seen', true);
+    } catch (e) {
+      debugPrint('Chyba při ukládání onboarding stavu: $e');
+    }
+
+    if (!mounted) return;
+
+    // Přesměrování na Login Page
     Navigator.of(
       context,
     ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
@@ -77,6 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
               child: Row(
                 children: [
+                  // Indikátor stránek (tečky)
                   Row(
                     children: List.generate(
                       pages.length,
@@ -96,15 +110,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   const Spacer(),
+                  // Tlačítko Skip
                   if (!isLast)
                     GhostButton(
                       label: 'Skip',
+                      // Skip jen přeskočí na poslední slide.
+                      // Pokud bys chtěl, aby Skip rovnou ukončil onboarding,
+                      // změň to na: onTap: _finish,
                       onTap: () => _controller.jumpToPage(pages.length - 1),
                     ),
                 ],
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
+            // Hlavní tlačítko Next / Get Started
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
               child: PrimaryButton(
@@ -165,16 +184,4 @@ class _OnboardingPageData {
     required this.title,
     required this.subtitle,
   });
-}
-
-/* -------------------------------------------------------------------------- */
-/* TEMP – nahradíme Login screenem */
-
-class _TempAuth extends StatelessWidget {
-  const _TempAuth();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Auth placeholder')));
-  }
 }

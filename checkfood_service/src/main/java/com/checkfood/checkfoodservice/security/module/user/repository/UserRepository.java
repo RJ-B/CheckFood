@@ -1,5 +1,6 @@
 package com.checkfood.checkfoodservice.security.module.user.repository;
 
+import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,51 +10,52 @@ import java.util.Optional;
 
 /**
  * Repository pro správu uživatelských účtů v systému.
- * Poskytuje optimalizované dotazy s EntityGraph pro efektivní načítání vztahů (roles, devices).
- * Prevence N+1 problému při práci s lazy loaded associations.
- *
- * @see UserEntity
+ * Poskytuje optimalizované dotazy s EntityGraph pro efektivní načítání vztahů.
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
      * Najde uživatele podle emailové adresy.
-     * Načítá pouze základní data bez vztahů (lazy loading).
-     *
-     * @param email emailová adresa uživatele
-     * @return Optional s uživatelem nebo prázdný Optional
      */
     Optional<UserEntity> findByEmail(String email);
 
     /**
-     * Najde uživatele a eager načte jeho role v jednom SQL dotazu.
-     * Kritické pro Spring Security autentizaci a autorizaci (prevence N+1 problému).
-     * Používá se v JwtAuthenticationFilter a při kontrole oprávnění.
-     *
-     * @param email emailová adresa uživatele
-     * @return Optional s uživatelem včetně rolí nebo prázdný Optional
+     * Najde uživatele a eager načte jeho role.
+     * Kritické pro Spring Security autentizaci.
      */
     @EntityGraph(attributePaths = {"roles"})
     Optional<UserEntity> findWithRolesByEmail(String email);
 
     /**
      * Najde uživatele a eager načte role i registrovaná zařízení.
-     * Optimalizace pro endpointy vyžadující kompletní uživatelský profil (např. /api/auth/me).
-     * Vhodné pro zobrazení přehledu aktivních relací uživatele.
-     *
-     * @param email emailová adresa uživatele
-     * @return Optional s uživatelem včetně rolí a zařízení nebo prázdný Optional
      */
     @EntityGraph(attributePaths = {"roles", "devices"})
     Optional<UserEntity> findWithAllDetailsByEmail(String email);
 
     /**
-     * Ověří existenci uživatele s danou emailovou adresou.
-     * Efektivnější než findByEmail pro pouhé ověření existence (COUNT dotaz místo SELECT *).
+     * Vyhledá uživatele podle externí identity (poskytovatel + ID uživatele).
+     * Tato metoda je klíčová pro proces OAuth přihlášení.
      *
-     * @param email emailová adresa k ověření
-     * @return true pokud uživatel s emailem existuje, jinak false
+     * @param authProvider Poskytovatel identity (např. GOOGLE, APPLE)
+     * @param providerId Unikátní identifikátor z externího systému
+     * @return Optional s uživatelem
+     */
+    Optional<UserEntity> findByAuthProviderAndProviderId(AuthProvider authProvider, String providerId);
+
+    /**
+     * Vyhledá uživatele podle externí identity a okamžitě načte jeho role.
+     * Optimalizace pro OAuth proces: po nalezení/vytvoření uživatele následuje generování JWT.
+     *
+     * @param authProvider Poskytovatel identity
+     * @param providerId Unikátní identifikátor z externího systému
+     * @return Optional s uživatelem včetně rolí
+     */
+    @EntityGraph(attributePaths = {"roles"})
+    Optional<UserEntity> findWithRolesByAuthProviderAndProviderId(AuthProvider authProvider, String providerId);
+
+    /**
+     * Ověří existenci uživatele s danou emailovou adresou.
      */
     boolean existsByEmail(String email);
 }

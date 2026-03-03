@@ -23,11 +23,11 @@ AuthErrorResponseModel _$AuthErrorResponseModelFromJson(
 
 /// @nodoc
 mixin _$AuthErrorResponseModel {
-  @JsonKey(name: 'message')
+  @JsonKey(name: SecurityJsonKeys.message)
   String get message => throw _privateConstructorUsedError;
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String? get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'isExpired')
+  @JsonKey(name: SecurityJsonKeys.isExpired)
   bool get isExpired => throw _privateConstructorUsedError;
 
   /// Serializes this AuthErrorResponseModel to a JSON map.
@@ -48,9 +48,9 @@ abstract class $AuthErrorResponseModelCopyWith<$Res> {
   ) = _$AuthErrorResponseModelCopyWithImpl<$Res, AuthErrorResponseModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'message') String message,
-    @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'isExpired') bool isExpired,
+    @JsonKey(name: SecurityJsonKeys.message) String message,
+    @JsonKey(name: SecurityJsonKeys.email) String? email,
+    @JsonKey(name: SecurityJsonKeys.isExpired) bool isExpired,
   });
 }
 
@@ -109,9 +109,9 @@ abstract class _$$AuthErrorResponseModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'message') String message,
-    @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'isExpired') bool isExpired,
+    @JsonKey(name: SecurityJsonKeys.message) String message,
+    @JsonKey(name: SecurityJsonKeys.email) String? email,
+    @JsonKey(name: SecurityJsonKeys.isExpired) bool isExpired,
   });
 }
 
@@ -161,22 +161,22 @@ class __$$AuthErrorResponseModelImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AuthErrorResponseModelImpl extends _AuthErrorResponseModel {
   const _$AuthErrorResponseModelImpl({
-    @JsonKey(name: 'message') required this.message,
-    @JsonKey(name: 'email') this.email,
-    @JsonKey(name: 'isExpired') this.isExpired = false,
+    @JsonKey(name: SecurityJsonKeys.message) required this.message,
+    @JsonKey(name: SecurityJsonKeys.email) this.email,
+    @JsonKey(name: SecurityJsonKeys.isExpired) this.isExpired = false,
   }) : super._();
 
   factory _$AuthErrorResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthErrorResponseModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'message')
+  @JsonKey(name: SecurityJsonKeys.message)
   final String message;
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   final String? email;
   @override
-  @JsonKey(name: 'isExpired')
+  @JsonKey(name: SecurityJsonKeys.isExpired)
   final bool isExpired;
 
   @override
@@ -219,9 +219,9 @@ class _$AuthErrorResponseModelImpl extends _AuthErrorResponseModel {
 
 abstract class _AuthErrorResponseModel extends AuthErrorResponseModel {
   const factory _AuthErrorResponseModel({
-    @JsonKey(name: 'message') required final String message,
-    @JsonKey(name: 'email') final String? email,
-    @JsonKey(name: 'isExpired') final bool isExpired,
+    @JsonKey(name: SecurityJsonKeys.message) required final String message,
+    @JsonKey(name: SecurityJsonKeys.email) final String? email,
+    @JsonKey(name: SecurityJsonKeys.isExpired) final bool isExpired,
   }) = _$AuthErrorResponseModelImpl;
   const _AuthErrorResponseModel._() : super._();
 
@@ -229,13 +229,13 @@ abstract class _AuthErrorResponseModel extends AuthErrorResponseModel {
       _$AuthErrorResponseModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'message')
+  @JsonKey(name: SecurityJsonKeys.message)
   String get message;
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String? get email;
   @override
-  @JsonKey(name: 'isExpired')
+  @JsonKey(name: SecurityJsonKeys.isExpired)
   bool get isExpired;
 
   /// Create a copy of AuthErrorResponseModel

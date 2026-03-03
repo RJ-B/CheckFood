@@ -1,18 +1,29 @@
 package com.checkfood.checkfoodservice.security.module.auth.email;
 
 /**
- * Šablony HTML emailů pro autentizační proces.
- * Centralizuje email markup pro snadnou údržbu a konzistentní design.
+ * Utility class poskytující HTML email templates pro authentication workflow.
+ *
+ * Centralizuje email markup pro consistent branding a easy maintenance.
+ * Všechny templates jsou responsive a obsahují fallback text links
+ * pro accessibility a email client compatibility.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class EmailTemplates {
 
     /**
-     * Vytvoří HTML šablonu pro verifikační email s aktivačním odkazem.
-     * Email obsahuje tlačítko pro aktivaci účtu a alternativní textový odkaz.
-     * Odkaz je platný 24 hodin.
+     * Vytvoří HTML template pro verification email s branded design.
      *
-     * @param activationLink kompletní URL pro aktivaci účtu
-     * @return HTML string s formátovaným emailem
+     * Template obsahuje:
+     * - CheckFood branding s green color scheme
+     * - Primary action button pro activation
+     * - Fallback text link pro email clients bez CSS support
+     * - Security notice o 24-hour expiration
+     * - Responsive design pro mobile compatibility
+     *
+     * @param activationLink complete verification URL s token parameter
+     * @return formatted HTML string ready pro email sending
      */
     public static String createVerificationEmail(String activationLink) {
         return String.format("""
@@ -27,6 +38,9 @@ public class EmailTemplates {
             """, activationLink, activationLink);
     }
 
+    /**
+     * Private constructor - utility class nesmí být instantiated.
+     */
     private EmailTemplates() {
         throw new UnsupportedOperationException("Utility class");
     }

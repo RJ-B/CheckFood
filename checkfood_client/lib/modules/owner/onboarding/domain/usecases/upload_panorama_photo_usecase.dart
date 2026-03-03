@@ -1,0 +1,19 @@
+import 'dart:typed_data';
+
+import '../entities/panorama_photo.dart';
+import '../repositories/onboarding_repository.dart';
+
+class UploadPanoramaPhotoUseCase {
+  final OnboardingRepository _repository;
+
+  UploadPanoramaPhotoUseCase(this._repository);
+
+  Future<PanoramaPhoto> call({
+    required String sessionId,
+    required int angleIndex,
+    required double actualAngle,
+    required Uint8List fileBytes,
+    required String filename,
+  }) =>
+      _repository.uploadPhoto(sessionId, angleIndex, actualAngle, fileBytes, filename);
+}

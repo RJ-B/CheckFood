@@ -23,22 +23,24 @@ UserProfileResponseModel _$UserProfileResponseModelFromJson(
 
 /// @nodoc
 mixin _$UserProfileResponseModel {
-  @JsonKey(name: 'id')
+  @JsonKey(name: SecurityJsonKeys.id)
   int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   String? get firstName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   String? get lastName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'isActive')
+  @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+  String? get profileImageUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.isActive)
   bool get isActive => throw _privateConstructorUsedError;
-  @JsonKey(name: 'createdAt')
+  @JsonKey(name: SecurityJsonKeys.lastLogin)
+  DateTime? get lastLogin => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.createdAt)
   DateTime get createdAt => throw _privateConstructorUsedError;
-  @JsonKey(name: 'roles')
-  List<String> get roles => throw _privateConstructorUsedError; // Používáme náš sjednocený DeviceResponseModel
-  @JsonKey(name: 'devices')
-  List<DeviceResponseModel> get devices => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.role)
+  String get role => throw _privateConstructorUsedError;
 
   /// Serializes this UserProfileResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,14 +60,15 @@ abstract class $UserProfileResponseModelCopyWith<$Res> {
   ) = _$UserProfileResponseModelCopyWithImpl<$Res, UserProfileResponseModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'id') int id,
-    @JsonKey(name: 'email') String email,
-    @JsonKey(name: 'firstName') String? firstName,
-    @JsonKey(name: 'lastName') String? lastName,
-    @JsonKey(name: 'isActive') bool isActive,
-    @JsonKey(name: 'createdAt') DateTime createdAt,
-    @JsonKey(name: 'roles') List<String> roles,
-    @JsonKey(name: 'devices') List<DeviceResponseModel> devices,
+    @JsonKey(name: SecurityJsonKeys.id) int id,
+    @JsonKey(name: SecurityJsonKeys.email) String email,
+    @JsonKey(name: SecurityJsonKeys.firstName) String? firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) String? lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
+    @JsonKey(name: SecurityJsonKeys.isActive) bool isActive,
+    @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
+    @JsonKey(name: SecurityJsonKeys.createdAt) DateTime createdAt,
+    @JsonKey(name: SecurityJsonKeys.role) String role,
   });
 }
 
@@ -91,10 +94,11 @@ class _$UserProfileResponseModelCopyWithImpl<
     Object? email = null,
     Object? firstName = freezed,
     Object? lastName = freezed,
+    Object? profileImageUrl = freezed,
     Object? isActive = null,
+    Object? lastLogin = freezed,
     Object? createdAt = null,
-    Object? roles = null,
-    Object? devices = null,
+    Object? role = null,
   }) {
     return _then(
       _value.copyWith(
@@ -118,26 +122,31 @@ class _$UserProfileResponseModelCopyWithImpl<
                     ? _value.lastName
                     : lastName // ignore: cast_nullable_to_non_nullable
                         as String?,
+            profileImageUrl:
+                freezed == profileImageUrl
+                    ? _value.profileImageUrl
+                    : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
             isActive:
                 null == isActive
                     ? _value.isActive
                     : isActive // ignore: cast_nullable_to_non_nullable
                         as bool,
+            lastLogin:
+                freezed == lastLogin
+                    ? _value.lastLogin
+                    : lastLogin // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
             createdAt:
                 null == createdAt
                     ? _value.createdAt
                     : createdAt // ignore: cast_nullable_to_non_nullable
                         as DateTime,
-            roles:
-                null == roles
-                    ? _value.roles
-                    : roles // ignore: cast_nullable_to_non_nullable
-                        as List<String>,
-            devices:
-                null == devices
-                    ? _value.devices
-                    : devices // ignore: cast_nullable_to_non_nullable
-                        as List<DeviceResponseModel>,
+            role:
+                null == role
+                    ? _value.role
+                    : role // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -154,14 +163,15 @@ abstract class _$$UserProfileResponseModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'id') int id,
-    @JsonKey(name: 'email') String email,
-    @JsonKey(name: 'firstName') String? firstName,
-    @JsonKey(name: 'lastName') String? lastName,
-    @JsonKey(name: 'isActive') bool isActive,
-    @JsonKey(name: 'createdAt') DateTime createdAt,
-    @JsonKey(name: 'roles') List<String> roles,
-    @JsonKey(name: 'devices') List<DeviceResponseModel> devices,
+    @JsonKey(name: SecurityJsonKeys.id) int id,
+    @JsonKey(name: SecurityJsonKeys.email) String email,
+    @JsonKey(name: SecurityJsonKeys.firstName) String? firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) String? lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
+    @JsonKey(name: SecurityJsonKeys.isActive) bool isActive,
+    @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
+    @JsonKey(name: SecurityJsonKeys.createdAt) DateTime createdAt,
+    @JsonKey(name: SecurityJsonKeys.role) String role,
   });
 }
 
@@ -187,10 +197,11 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
     Object? email = null,
     Object? firstName = freezed,
     Object? lastName = freezed,
+    Object? profileImageUrl = freezed,
     Object? isActive = null,
+    Object? lastLogin = freezed,
     Object? createdAt = null,
-    Object? roles = null,
-    Object? devices = null,
+    Object? role = null,
   }) {
     return _then(
       _$UserProfileResponseModelImpl(
@@ -214,26 +225,31 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
                 ? _value.lastName
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String?,
+        profileImageUrl:
+            freezed == profileImageUrl
+                ? _value.profileImageUrl
+                : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
         isActive:
             null == isActive
                 ? _value.isActive
                 : isActive // ignore: cast_nullable_to_non_nullable
                     as bool,
+        lastLogin:
+            freezed == lastLogin
+                ? _value.lastLogin
+                : lastLogin // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
         createdAt:
             null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                     as DateTime,
-        roles:
-            null == roles
-                ? _value._roles
-                : roles // ignore: cast_nullable_to_non_nullable
-                    as List<String>,
-        devices:
-            null == devices
-                ? _value._devices
-                : devices // ignore: cast_nullable_to_non_nullable
-                    as List<DeviceResponseModel>,
+        role:
+            null == role
+                ? _value.role
+                : role // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -243,62 +259,51 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
   const _$UserProfileResponseModelImpl({
-    @JsonKey(name: 'id') required this.id,
-    @JsonKey(name: 'email') required this.email,
-    @JsonKey(name: 'firstName') this.firstName,
-    @JsonKey(name: 'lastName') this.lastName,
-    @JsonKey(name: 'isActive') required this.isActive,
-    @JsonKey(name: 'createdAt') required this.createdAt,
-    @JsonKey(name: 'roles') required final List<String> roles,
-    @JsonKey(name: 'devices') required final List<DeviceResponseModel> devices,
-  }) : _roles = roles,
-       _devices = devices,
-       super._();
+    @JsonKey(name: SecurityJsonKeys.id) required this.id,
+    @JsonKey(name: SecurityJsonKeys.email) required this.email,
+    @JsonKey(name: SecurityJsonKeys.firstName) this.firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) this.lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) this.profileImageUrl,
+    @JsonKey(name: SecurityJsonKeys.isActive) this.isActive = false,
+    @JsonKey(name: SecurityJsonKeys.lastLogin) this.lastLogin,
+    @JsonKey(name: SecurityJsonKeys.createdAt) required this.createdAt,
+    @JsonKey(name: SecurityJsonKeys.role) required this.role,
+  }) : super._();
 
   factory _$UserProfileResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserProfileResponseModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'id')
+  @JsonKey(name: SecurityJsonKeys.id)
   final int id;
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   final String email;
   @override
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   final String? firstName;
   @override
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   final String? lastName;
   @override
-  @JsonKey(name: 'isActive')
+  @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+  final String? profileImageUrl;
+  @override
+  @JsonKey(name: SecurityJsonKeys.isActive)
   final bool isActive;
   @override
-  @JsonKey(name: 'createdAt')
+  @JsonKey(name: SecurityJsonKeys.lastLogin)
+  final DateTime? lastLogin;
+  @override
+  @JsonKey(name: SecurityJsonKeys.createdAt)
   final DateTime createdAt;
-  final List<String> _roles;
   @override
-  @JsonKey(name: 'roles')
-  List<String> get roles {
-    if (_roles is EqualUnmodifiableListView) return _roles;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_roles);
-  }
-
-  // Používáme náš sjednocený DeviceResponseModel
-  final List<DeviceResponseModel> _devices;
-  // Používáme náš sjednocený DeviceResponseModel
-  @override
-  @JsonKey(name: 'devices')
-  List<DeviceResponseModel> get devices {
-    if (_devices is EqualUnmodifiableListView) return _devices;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_devices);
-  }
+  @JsonKey(name: SecurityJsonKeys.role)
+  final String role;
 
   @override
   String toString() {
-    return 'UserProfileResponseModel(id: $id, email: $email, firstName: $firstName, lastName: $lastName, isActive: $isActive, createdAt: $createdAt, roles: $roles, devices: $devices)';
+    return 'UserProfileResponseModel(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, role: $role)';
   }
 
   @override
@@ -312,12 +317,15 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
+            (identical(other.lastLogin, lastLogin) ||
+                other.lastLogin == lastLogin) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            const DeepCollectionEquality().equals(other._roles, _roles) &&
-            const DeepCollectionEquality().equals(other._devices, _devices));
+            (identical(other.role, role) || other.role == role));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -328,10 +336,11 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
     email,
     firstName,
     lastName,
+    profileImageUrl,
     isActive,
+    lastLogin,
     createdAt,
-    const DeepCollectionEquality().hash(_roles),
-    const DeepCollectionEquality().hash(_devices),
+    role,
   );
 
   /// Create a copy of UserProfileResponseModel
@@ -352,14 +361,17 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
 
 abstract class _UserProfileResponseModel extends UserProfileResponseModel {
   const factory _UserProfileResponseModel({
-    @JsonKey(name: 'id') required final int id,
-    @JsonKey(name: 'email') required final String email,
-    @JsonKey(name: 'firstName') final String? firstName,
-    @JsonKey(name: 'lastName') final String? lastName,
-    @JsonKey(name: 'isActive') required final bool isActive,
-    @JsonKey(name: 'createdAt') required final DateTime createdAt,
-    @JsonKey(name: 'roles') required final List<String> roles,
-    @JsonKey(name: 'devices') required final List<DeviceResponseModel> devices,
+    @JsonKey(name: SecurityJsonKeys.id) required final int id,
+    @JsonKey(name: SecurityJsonKeys.email) required final String email,
+    @JsonKey(name: SecurityJsonKeys.firstName) final String? firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) final String? lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+    final String? profileImageUrl,
+    @JsonKey(name: SecurityJsonKeys.isActive) final bool isActive,
+    @JsonKey(name: SecurityJsonKeys.lastLogin) final DateTime? lastLogin,
+    @JsonKey(name: SecurityJsonKeys.createdAt)
+    required final DateTime createdAt,
+    @JsonKey(name: SecurityJsonKeys.role) required final String role,
   }) = _$UserProfileResponseModelImpl;
   const _UserProfileResponseModel._() : super._();
 
@@ -367,29 +379,32 @@ abstract class _UserProfileResponseModel extends UserProfileResponseModel {
       _$UserProfileResponseModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'id')
+  @JsonKey(name: SecurityJsonKeys.id)
   int get id;
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String get email;
   @override
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   String? get firstName;
   @override
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   String? get lastName;
   @override
-  @JsonKey(name: 'isActive')
+  @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+  String? get profileImageUrl;
+  @override
+  @JsonKey(name: SecurityJsonKeys.isActive)
   bool get isActive;
   @override
-  @JsonKey(name: 'createdAt')
+  @JsonKey(name: SecurityJsonKeys.lastLogin)
+  DateTime? get lastLogin;
+  @override
+  @JsonKey(name: SecurityJsonKeys.createdAt)
   DateTime get createdAt;
   @override
-  @JsonKey(name: 'roles')
-  List<String> get roles; // Používáme náš sjednocený DeviceResponseModel
-  @override
-  @JsonKey(name: 'devices')
-  List<DeviceResponseModel> get devices;
+  @JsonKey(name: SecurityJsonKeys.role)
+  String get role;
 
   /// Create a copy of UserProfileResponseModel
   /// with the given fields replaced by the non-null parameter values.

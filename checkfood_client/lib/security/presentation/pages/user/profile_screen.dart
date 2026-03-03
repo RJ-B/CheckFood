@@ -1,17 +1,23 @@
-import 'package:checkfood_client/security/domain/entities/device.dart';
-import 'package:checkfood_client/security/domain/entities/user_profile.dart';
-import 'package:checkfood_client/security/presentation/bloc/user/user_bloc.dart';
-import 'package:checkfood_client/security/presentation/bloc/user/user_event.dart';
-import 'package:checkfood_client/security/presentation/bloc/user/user_state.dart';
-import 'package:checkfood_client/security/presentation/pages/user/personal_data_screen.dart';
-import 'package:checkfood_client/security/presentation/widgets/user/device/device_item_tile.dart';
-import 'package:checkfood_client/security/presentation/widgets/user/logout_button.dart';
-import 'package:checkfood_client/security/presentation/widgets/user/profile/profile_header.dart';
-import 'package:checkfood_client/security/presentation/widgets/user/profile/profile_menu_item.dart';
-import 'package:checkfood_client/security/presentation/widgets/user/change_password_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+
+// Domain Entities
+import '../../../domain/entities/device.dart';
+import '../../../domain/entities/user_profile.dart';
+
+// Bloc
+import '../../bloc/user/user_bloc.dart';
+import '../../bloc/user/user_event.dart';
+import '../../bloc/user/user_state.dart';
+
+// Widgets
+import '../../widgets/user/change_password_form.dart';
+import '../../widgets/user/device/device_item_tile.dart';
+import '../../widgets/user/logout_button.dart';
+import '../../widgets/user/profile/profile_header.dart';
+import '../../widgets/user/profile/profile_menu_item.dart';
+import 'personal_data_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,7 +30,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    // ✅ 1. Načteme profil
     context.read<UserBloc>().add(const UserEvent.profileRequested());
+    // ✅ 2. Načteme i zařízení (protože je zobrazujeme v menu)
+    context.read<UserBloc>().add(const UserEvent.devicesRequested());
   }
 
   // --- 1. ZMĚNA HESLA ---
@@ -84,16 +93,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             final device = devices[index];
                             return DeviceItemTile(
                               device: device,
-                              // Předpokládáme, že entita Device má isCurrentDevice,
-                              // kterou nastavil backend nebo mapper.
+                              // ✅ Model Device má nyní property isCurrentDevice
                               isCurrentDevice: device.isCurrentDevice,
+
                               onLogout: () {
-                                // OPRAVA: Přidáno .toString(), protože device.id je int,
-                                // ale UserEvent očekává String.
                                 context.read<UserBloc>().add(
-                                  UserEvent.deviceLoggedOut(
-                                    device.id.toString(),
-                                  ),
+                                  UserEvent.deviceLoggedOut(device.id),
                                 );
                                 Navigator.pop(ctx);
                               },
@@ -156,11 +161,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         builder: (context, state) {
           return state.maybeWhen(
-            loaded: (profile) {
+            // ✅ OPRAVA: loaded nyní vrací (profile, devices)
+            loaded: (profile, devices) {
               return RefreshIndicator(
                 onRefresh: () async {
                   context.read<UserBloc>().add(
                     const UserEvent.profileRequested(),
+                  );
+                  context.read<UserBloc>().add(
+                    const UserEvent.devicesRequested(),
                   );
                 },
                 child: SingleChildScrollView(
@@ -169,7 +178,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ProfileHeader(profile: profile),
                       const Gap(24),
-                      _buildMenuSection(context, profile),
+                      // ✅ Předáváme profil I zařízení
+                      _buildMenuSection(context, profile, devices),
                       const Gap(32),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -200,10 +210,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const Gap(16),
                       ElevatedButton(
-                        onPressed:
-                            () => context.read<UserBloc>().add(
-                              const UserEvent.profileRequested(),
-                            ),
+                        onPressed: () {
+                          context.read<UserBloc>().add(
+                            const UserEvent.profileRequested(),
+                          );
+                          context.read<UserBloc>().add(
+                            const UserEvent.devicesRequested(),
+                          );
+                        },
                         child: const Text('Zkusit znovu'),
                       ),
                     ],
@@ -216,7 +230,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildMenuSection(BuildContext context, UserProfile profile) {
+  Widget _buildMenuSection(
+    BuildContext context,
+    UserProfile profile,
+    List<Device> devices,
+  ) {
     return Column(
       children: [
         // --- SEKCE: MŮJ ÚČET ---
@@ -232,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (context) => const PersonalDataScreen(),
               ),
             ).then((_) {
-              // Volitelné obnovení dat po návratu
+              // Po návratu volitelně refresh
             });
           },
         ),
@@ -261,8 +279,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ProfileMenuItem(
           icon: Icons.devices,
           title: 'Správa zařízení',
-          subtitle: '${profile.devices.length} aktivních zařízení',
-          onTap: () => _showDevicesDialog(context, profile.devices),
+          // ✅ Zde už používáme samostatný seznam devices
+          subtitle: '${devices.length} aktivních zařízení',
+          // ✅ A ten samý seznam posíláme do dialogu
+          onTap: () => _showDevicesDialog(context, devices),
         ),
 
         const Gap(16),
@@ -272,23 +292,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ProfileMenuItem(
           icon: Icons.notifications_none,
           title: 'Notifikace',
-          onTap: () {
-            // TODO: Implementovat nastavení notifikací
-          },
+          onTap: () {},
         ),
         ProfileMenuItem(
           icon: Icons.help_outline,
           title: 'Nápověda',
-          onTap: () {
-            // TODO: Otevřít nápovědu
-          },
+          onTap: () {},
         ),
         ProfileMenuItem(
           icon: Icons.support_agent,
           title: 'Kontaktovat podporu',
-          onTap: () {
-            // TODO: Kontakt
-          },
+          onTap: () {},
         ),
       ],
     );

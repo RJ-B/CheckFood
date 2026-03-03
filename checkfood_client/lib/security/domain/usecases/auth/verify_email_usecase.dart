@@ -1,4 +1,3 @@
-import '../../../data/models/auth/request/verify_email_request_model.dart';
 import '../../repositories/auth_repository.dart';
 
 /// UseCase pro potvrzení registrace.
@@ -11,7 +10,7 @@ class VerifyEmailUseCase {
   VerifyEmailUseCase(this._repository);
 
   /// Odešle požadavek na ověření na backend.
-  Future<void> call(VerifyEmailRequestModel request) async {
-    await _repository.verifyEmail(request);
+  Future<void> call(String token) async {
+    await _repository.verifyEmail(token);
   }
 }

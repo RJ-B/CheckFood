@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../config/security_json_keys.dart';
 
 part 'update_profile_request_model.freezed.dart';
 part 'update_profile_request_model.g.dart';
@@ -6,10 +7,8 @@ part 'update_profile_request_model.g.dart';
 @freezed
 class UpdateProfileRequestModel with _$UpdateProfileRequestModel {
   const factory UpdateProfileRequestModel({
-    @JsonKey(name: 'firstName') required String firstName,
-    @JsonKey(name: 'lastName') required String lastName,
-    // Zde můžete přidat další pole, která backend dovoluje měnit
-    // např. @JsonKey(name: 'phoneNumber') String? phoneNumber,
+    @JsonKey(name: SecurityJsonKeys.firstName) required String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) required String lastName,
   }) = _UpdateProfileRequestModel;
 
   factory UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) =>

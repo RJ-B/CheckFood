@@ -11,37 +11,49 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementace email servisu pro odesílání emailů prostřednictvím SMTP.
- * Všechny operace probíhají asynchronně pro minimalizaci dopadu na hlavní flow aplikace.
+ * SMTP implementace email service pro asynchronní email delivery.
  *
+ * Využívá Spring JavaMailSender pro SMTP communication s configurable
+ * backend URL pro environment-specific verification links. Všechny operace
+ * běží asynchronně pro minimalizaci impact na authentication flow.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see EmailService
  * @see JavaMailSender
- * @see EmailTemplates
  */
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
+    /**
+     * Spring JavaMailSender pro SMTP communication.
+     */
     private final JavaMailSender mailSender;
 
+    /**
+     * SMTP sender email address z configuration.
+     */
     @Value("${spring.mail.username}")
     private String senderEmail;
 
     /**
-     * URL backendu pro sestavení verifikačních odkazů.
-     * Defaultně localhost:8081, v produkci se nastaví z konfigurace.
+     * Backend URL pro verification link construction.
+     * Environment-specific configuration pro development vs production.
      */
     @Value("${app.backend.url:http://localhost:8081}")
     private String backendUrl;
 
     /**
-     * Asynchronně odešle verifikační email s aktivačním odkazem.
-     * Email obsahuje HTML formátovanou zprávu s tlačítkem pro aktivaci účtu.
-     * Odkaz je platný 24 hodin.
+     * Asynchronně odešle HTML verification email s activation link.
      *
-     * @param to emailová adresa příjemce
-     * @param token verifikační token pro sestavení aktivačního odkazu
-     * @throws AuthException při chybě odesílání emailu
+     * Costruuje verification URL s backend endpoint a token parameter.
+     * Používá EmailTemplates pro consistent branding a HTML formatting.
+     * Exception handling transformuje MessagingException na AuthException.
+     *
+     * @param to recipient email address
+     * @param token verification token pro URL construction
+     * @throws AuthException při SMTP delivery failures
      */
     @Async
     @Override
@@ -50,9 +62,11 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
+            // Verification URL construction s backend endpoint
             String link = backendUrl + "/api/auth/verify?token=" + token;
             String htmlMsg = EmailTemplates.createVerificationEmail(link);
 
+            // Email configuration s HTML content type
             helper.setText(htmlMsg, true);
             helper.setTo(to);
             helper.setSubject("CheckFood - Potvrzení registrace");
@@ -61,6 +75,7 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
+            // Transform SMTP exception na AuthException pro consistent error handling
             throw AuthException.internalError("Chyba při odesílání verifikačního emailu: " + e.getMessage());
         }
     }

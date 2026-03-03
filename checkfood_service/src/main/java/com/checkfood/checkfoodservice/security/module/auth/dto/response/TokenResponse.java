@@ -3,8 +3,13 @@ package com.checkfood.checkfoodservice.security.module.auth.dto.response;
 import lombok.*;
 
 /**
- * Odpověď obsahující pouze tokeny a metadata o jejich platnosti.
- * Používá se pro refresh endpoint, kde již není potřeba přenášet informace o uživateli.
+ * Response DTO pro token refresh operations obsahující pouze token metadata.
+ *
+ * Lightweight response používaná pro refresh endpoint kde user information
+ * není potřeba - client již má user state z původního login response.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -13,16 +18,25 @@ import lombok.*;
 @Builder
 public class TokenResponse {
 
+    /**
+     * Nový JWT access token s extended expiration.
+     */
     private String accessToken;
 
     /**
-     * Nový refresh token při použití strategie rotace tokenů.
-     * Starý refresh token je po úspěšném obnovení invalidován.
+     * Nový refresh token při token rotation strategy.
+     * Starý refresh token je invalidován po successful refresh operation.
      */
     private String refreshToken;
 
+    /**
+     * Token type pro consistent Authorization header formatting.
+     */
     @Builder.Default
     private String tokenType = "Bearer";
 
+    /**
+     * Nový access token expiration time v sekundách.
+     */
     private Long expiresIn;
 }

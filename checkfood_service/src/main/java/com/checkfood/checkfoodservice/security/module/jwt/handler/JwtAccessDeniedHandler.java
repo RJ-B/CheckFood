@@ -11,12 +11,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * Handler pro zpracování výjimek odepření přístupu (HTTP 403 Forbidden) na úrovni Spring Security filtrů.
- * Aktivuje se když je uživatel autentizován přes JWT, ale nemá dostatečná oprávnění pro přístup k zdroji.
- * Vrací JSON odpověď s detaily o zamítnutém požadavku.
- *
- * @see SecurityErrorResponseWriter
- * @see JwtLogger
+ * Handler pro zpracování výjimek odepření přístupu (HTTP 403 Forbidden).
+ * Vyvolá se, když je uživatel autentizován, ale postrádá potřebná oprávnění (Role/Authority).
  */
 @Component
 @RequiredArgsConstructor
@@ -25,15 +21,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     private final SecurityErrorResponseWriter errorResponseWriter;
     private final JwtLogger jwtLogger;
 
-    /**
-     * Zpracuje situaci, kdy autentizovaný uživatel nemá dostatečná oprávnění.
-     * Loguje pokus o neoprávněný přístup a vrací standardizovanou JSON odpověď s HTTP 403.
-     *
-     * @param request HTTP požadavek
-     * @param response HTTP odpověď
-     * @param accessDeniedException výjimka odepření přístupu
-     * @throws IOException při chybě zápisu odpovědi
-     */
     @Override
     public void handle(
             HttpServletRequest request,
@@ -41,6 +28,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             AccessDeniedException accessDeniedException
     ) throws IOException {
 
+        // Logování incidentu do bezpečnostního auditu
         jwtLogger.logAccessDenied(request.getRequestURI(), accessDeniedException.getMessage());
 
         errorResponseWriter.writeErrorResponse(

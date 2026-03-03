@@ -1,10 +1,11 @@
 package com.checkfood.checkfoodservice.exception;
 
-import com.checkfood.checkfoodservice.logging.ServiceLogger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * Základní exception handler pro celou aplikaci.
@@ -12,14 +13,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * Slouží jako rodičovská třída pro specifické exception handlery jednotlivých vrstev.
  *
  * @see ErrorResponseBuilder
- * @see ServiceLogger
  * @see ServiceException
  */
 @RequiredArgsConstructor
 public abstract class ServiceExceptionHandler {
 
     protected final ErrorResponseBuilder errorResponseBuilder;
-    protected final ServiceLogger serviceLogger;
 
     /**
      * Zpracuje jakoukoli aplikační výjimku děděnou ze ServiceException.
@@ -30,54 +29,58 @@ public abstract class ServiceExceptionHandler {
      */
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
-        serviceLogger.error("Aplikační chyba: {}", ex.getMessage());
-
         ErrorResponse response = errorResponseBuilder.build(
                 ex.getErrorCode(),
                 ex.getMessage(),
                 ex.getStatus()
         );
-
         return new ResponseEntity<>(response, ex.getStatus());
     }
 
     /**
      * Zpracuje obecnou neošetřenou výjimku.
-     * Loguje kompletní stack trace a vrací obecnou chybovou zprávu klientovi.
+     * Vrací obecnou chybovou zprávu klientovi.
      *
      * @param ex výjimka
      * @return chybová odpověď s HTTP 500
      */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex) {
+        ErrorResponse response = errorResponseBuilder.build(
+                ErrorCode.NOT_FOUND,
+                "Endpoint nenalezen: " + ex.getResourcePath(),
+                HttpStatus.NOT_FOUND
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        serviceLogger.error("Neočekávaná chyba: ", ex);
-
         ErrorResponse response = errorResponseBuilder.build(
                 ErrorCode.INTERNAL_SERVER_ERROR,
                 "Došlo k interní chybě serveru. Zkuste to prosím později.",
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
-
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    /**
-     * Zpracuje výjimku neplatných argumentů.
-     * Zajišťuje, že validační chyby vrací HTTP 400 namísto 500.
-     *
-     * @param ex výjimka neplatného argumentu
-     * @return chybová odpověď s HTTP 400
-     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        ErrorResponse response = errorResponseBuilder.build(
+                ErrorCode.VALIDATION_ERROR,
+                "Neplatný formát požadavku.",
+                HttpStatus.BAD_REQUEST
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        serviceLogger.warn("Validační chyba: {}", ex.getMessage());
-
         ErrorResponse response = errorResponseBuilder.build(
                 ErrorCode.VALIDATION_ERROR,
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST
         );
-
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

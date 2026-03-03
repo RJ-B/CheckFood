@@ -1,0 +1,68 @@
+import 'dart:typed_data';
+
+import '../entities/onboarding_menu_category.dart';
+import '../entities/onboarding_menu_item.dart';
+import '../entities/onboarding_status.dart';
+import '../entities/onboarding_table.dart';
+import '../entities/panorama_photo.dart';
+import '../entities/panorama_session.dart';
+import '../../data/models/restaurant_response_model.dart';
+import '../../data/models/address_model.dart';
+import '../../data/models/opening_hours_model.dart';
+
+abstract class OnboardingRepository {
+  // Restaurant
+  Future<OwnerRestaurantResponseModel> getMyRestaurant();
+  Future<OwnerRestaurantResponseModel> updateInfo({
+    required String name,
+    String? description,
+    String? phone,
+    String? email,
+    AddressModel? address,
+    String? cuisineType,
+  });
+  Future<OwnerRestaurantResponseModel> updateHours(List<OpeningHoursModel> hours);
+
+  // Tables
+  Future<List<OnboardingTable>> getTables();
+  Future<OnboardingTable> addTable({required String label, required int capacity, bool active = true});
+  Future<OnboardingTable> updateTable(String id, {required String label, required int capacity, bool active = true});
+  Future<void> deleteTable(String id);
+
+  // Menu
+  Future<List<OnboardingMenuCategory>> getMenu();
+  Future<OnboardingMenuCategory> createCategory({required String name, int sortOrder = 0});
+  Future<OnboardingMenuCategory> updateCategory(String id, {required String name, int sortOrder = 0});
+  Future<void> deleteCategory(String id);
+  Future<OnboardingMenuItem> createItem(String categoryId, {
+    required String name,
+    String? description,
+    int priceMinor = 0,
+    String currency = 'CZK',
+    String? imageUrl,
+    bool available = true,
+    int sortOrder = 0,
+  });
+  Future<OnboardingMenuItem> updateItem(String id, {
+    required String name,
+    String? description,
+    int priceMinor = 0,
+    String currency = 'CZK',
+    String? imageUrl,
+    bool available = true,
+    int sortOrder = 0,
+  });
+  Future<void> deleteItem(String id);
+
+  // Onboarding status
+  Future<OnboardingStatus> getOnboardingStatus();
+  Future<OwnerRestaurantResponseModel> publish();
+
+  // Panorama
+  Future<PanoramaSession> createPanoramaSession();
+  Future<PanoramaPhoto> uploadPhoto(String sessionId, int angleIndex, double actualAngle, Uint8List fileBytes, String filename);
+  Future<PanoramaSession> finalizePanoramaSession(String sessionId);
+  Future<PanoramaSession> getPanoramaSessionStatus(String sessionId);
+  Future<List<PanoramaSession>> listPanoramaSessions();
+  Future<void> activatePanorama(String sessionId);
+}

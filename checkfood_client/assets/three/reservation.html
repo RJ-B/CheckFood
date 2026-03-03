@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Reservation Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    #scene {
+      position: absolute;
+      inset: 0;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="scene"></div>
+  <script src="three.min.js"></script>
+  <script src="reservation_app.js"></script>
+</body>
+</html>

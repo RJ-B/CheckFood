@@ -23,9 +23,9 @@ UpdateProfileRequestModel _$UpdateProfileRequestModelFromJson(
 
 /// @nodoc
 mixin _$UpdateProfileRequestModel {
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   String get firstName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateProfileRequestModel to a JSON map.
@@ -46,8 +46,8 @@ abstract class $UpdateProfileRequestModelCopyWith<$Res> {
   ) = _$UpdateProfileRequestModelCopyWithImpl<$Res, UpdateProfileRequestModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'firstName') String firstName,
-    @JsonKey(name: 'lastName') String lastName,
+    @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
   });
 }
 
@@ -97,8 +97,8 @@ abstract class _$$UpdateProfileRequestModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'firstName') String firstName,
-    @JsonKey(name: 'lastName') String lastName,
+    @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
   });
 }
 
@@ -141,18 +141,18 @@ class __$$UpdateProfileRequestModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
   const _$UpdateProfileRequestModelImpl({
-    @JsonKey(name: 'firstName') required this.firstName,
-    @JsonKey(name: 'lastName') required this.lastName,
+    @JsonKey(name: SecurityJsonKeys.firstName) required this.firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) required this.lastName,
   });
 
   factory _$UpdateProfileRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UpdateProfileRequestModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   final String firstName;
   @override
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   final String lastName;
 
   @override
@@ -193,18 +193,18 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
 
 abstract class _UpdateProfileRequestModel implements UpdateProfileRequestModel {
   const factory _UpdateProfileRequestModel({
-    @JsonKey(name: 'firstName') required final String firstName,
-    @JsonKey(name: 'lastName') required final String lastName,
+    @JsonKey(name: SecurityJsonKeys.firstName) required final String firstName,
+    @JsonKey(name: SecurityJsonKeys.lastName) required final String lastName,
   }) = _$UpdateProfileRequestModelImpl;
 
   factory _UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) =
       _$UpdateProfileRequestModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'firstName')
+  @JsonKey(name: SecurityJsonKeys.firstName)
   String get firstName;
   @override
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName;
 
   /// Create a copy of UpdateProfileRequestModel

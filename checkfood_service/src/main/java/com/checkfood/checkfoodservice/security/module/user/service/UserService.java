@@ -8,103 +8,95 @@ import java.util.List;
 
 /**
  * Service interface pro správu uživatelských účtů a profilů.
- * Poskytuje operace pro CRUD, autentizaci, správu hesel a přiřazování rolí.
+ * Definuje operace pro manipulaci s identitou uživatele, správu hesel a řízení přístupu.
  */
 public interface UserService {
 
     /**
-     * Uloží nebo aktualizuje uživatelskou entitu.
+     * Uloží nebo aktualizuje uživatelskou entitu v perzistentním úložišti.
      *
      * @param user uživatelská entita k uložení
-     * @return uložená entita s vygenerovaným ID
+     * @return uložená entita s vygenerovaným ID a časovými razítky
      */
     UserEntity save(UserEntity user);
 
     /**
-     * Najde uživatele podle ID.
+     * Vyhledá uživatele podle jeho unikátního ID.
      *
      * @param id ID uživatele
      * @return nalezená uživatelská entita
-     * @throws UserException pokud uživatel není nalezen
+     * @throws UserException pokud uživatel s daným ID neexistuje
      */
     UserEntity findById(Long id);
 
     /**
-     * Najde uživatele podle emailové adresy.
-     * Načítá pouze základní data bez vztahů (lazy loading).
+     * Vyhledá uživatele podle e-mailové adresy s využitím líného načítání.
      *
      * @param email emailová adresa uživatele
      * @return nalezená uživatelská entita
-     * @throws UserException pokud uživatel není nalezen
+     * @throws UserException pokud uživatel s daným e-mailem neexistuje
      */
     UserEntity findByEmail(String email);
 
     /**
-     * Najde uživatele včetně rolí v jednom dotazu.
-     * Kritické pro Spring Security autentizaci a autorizaci.
-     * Používá EntityGraph pro prevenci N+1 problému.
+     * Vyhledá uživatele včetně jeho rolí v rámci jednoho databázového dotazu.
+     * Klíčové pro procesy autentizace a autorizace (Spring Security).
      *
      * @param email emailová adresa uživatele
-     * @return nalezená uživatelská entita s eager načtenými rolemi
-     * @throws UserException pokud uživatel není nalezen
+     * @return nalezená uživatelská entita s načtenými rolemi
      */
     UserEntity findWithRolesByEmail(String email);
 
     /**
-     * Najde uživatele včetně všech vztahů (role, zařízení) v jednom dotazu.
-     * Používá se pro endpoint /api/auth/me a další operace vyžadující kompletní profil.
-     * Používá EntityGraph pro optimalizaci výkonu (prevence N+1).
+     * Vyhledá uživatele včetně všech přidružených detailů (role, zařízení).
+     * Optimalizováno pro zobrazení kompletního profilu a správu relací.
      *
      * @param email emailová adresa uživatele
-     * @return nalezená uživatelská entita s eager načtenými vztahy
-     * @throws UserException pokud uživatel není nalezen
+     * @return nalezená uživatelská entita s kompletními daty
      */
     UserEntity findWithAllDetailsByEmail(String email);
 
     /**
-     * Ověří existenci uživatele s danou emailovou adresou.
+     * Ověří, zda v systému již existuje účet se zadanou e-mailovou adresou.
      *
-     * @param email emailová adresa k ověření
-     * @return true pokud uživatel existuje, jinak false
+     * @param email e-mailová adresa k ověření
+     * @return true, pokud je e-mail již registrován, jinak false
      */
     boolean existsByEmail(String email);
 
     /**
-     * Vrátí seznam všech uživatelů v systému.
+     * Vrátí seznam všech registrovaných uživatelů.
      *
-     * @return seznam všech uživatelů
+     * @return seznam uživatelských entit
      */
     List<UserEntity> findAll();
 
     /**
-     * Změní heslo uživatele po ověření současného hesla.
-     * Validuje sílu nového hesla a zajišťuje shodu s potvrzením.
-     * Operace je auditována pro bezpečnostní účely.
+     * Provede bezpečnou změnu hesla uživatele.
+     * Před změnou dochází k ověření stávajícího hesla a validaci síly nového hesla.
+     * Shoda hesel je garantována volající stranou (frontendem).
      *
      * @param userId ID uživatele
-     * @param currentPassword současné heslo pro ověření
-     * @param newPassword nové heslo
-     * @param confirmPassword potvrzení nového hesla
-     * @throws UserException pokud současné heslo není správné nebo nová hesla se neshodují
+     * @param currentPassword stávající heslo pro verifikaci identity
+     * @param newPassword nové heslo splňující bezpečnostní kritéria
+     * @throws UserException pokud je stávající heslo neplatné nebo nové heslo nevyhovuje pravidlům
      */
-    void changePassword(Long userId, String currentPassword, String newPassword, String confirmPassword);
+    void changePassword(Long userId, String currentPassword, String newPassword);
 
     /**
-     * Aktualizuje profilové informace uživatele.
-     * Načítá uživatele včetně vztahů pro úplnou aktualizaci.
+     * Aktualizuje osobní údaje uživatele na základě požadavku.
      *
-     * @param email emailová adresa uživatele
-     * @param request data pro aktualizaci profilu
+     * @param email emailová adresa uživatele, jehož profil se aktualizuje
+     * @param request DTO obsahující nové profilové údaje
      * @return aktualizovaná uživatelská entita
      */
     UserEntity updateProfile(String email, UpdateProfileRequest request);
 
     /**
-     * Přiřadí roli uživateli.
-     * Používá se v admin rozhraní pro správu oprávnění.
+     * Přiřadí uživateli novou roli pro rozšíření jeho oprávnění.
      *
      * @param userId ID uživatele
-     * @param roleName název role k přiřazení
+     * @param roleName název role (např. "ADMIN", "MODERATOR")
      */
     void assignRole(Long userId, String roleName);
 }

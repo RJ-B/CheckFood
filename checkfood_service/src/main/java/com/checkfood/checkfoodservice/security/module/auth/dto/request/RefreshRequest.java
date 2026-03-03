@@ -6,9 +6,14 @@ import lombok.*;
 
 /**
  * DTO pro obnovení access tokenu pomocí refresh tokenu.
- * Umožňuje uživateli zůstat přihlášený bez nutnosti opakovaného zadávání přihlašovacích údajů.
  *
- * @see AuthService#refreshToken(RefreshRequest)
+ * Implementuje token refresh workflow pro seamless user experience
+ * bez nutnosti re-authentication. Zahrnuje device binding validation
+ * pro security protection proti token theft.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see AuthService
  */
 @Getter
 @Setter
@@ -18,15 +23,15 @@ import lombok.*;
 public class RefreshRequest {
 
     /**
-     * Platný refresh token uložený v bezpečném úložišti klienta.
-     * Používá se k vygenerování nového páru access a refresh tokenů.
+     * Platný refresh token ze secure client storage.
+     * Používá se pro generování nového token pair s extended expiration.
      */
     @NotBlank(message = "Refresh token nesmí být prázdný.")
     private String refreshToken;
 
     /**
-     * Jedinečný identifikátor zařízení pro validaci vazby tokenu na konkrétní relaci.
-     * Zajišťuje, že token může být použit pouze na zařízení, pro které byl vydán.
+     * Device identifier pro token-device binding validation.
+     * Security measure zajišťující že token lze použít pouze na původním zařízení.
      */
     @NotBlank(message = "Identifikátor zařízení je povinný.")
     private String deviceIdentifier;

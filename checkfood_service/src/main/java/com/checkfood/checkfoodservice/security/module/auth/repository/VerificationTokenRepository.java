@@ -12,47 +12,61 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * JPA repository pro správu verifikačních tokenů v databázi.
- * Poskytuje operace pro vyhledávání, mazání a údržbu tokenů používaných při aktivaci účtů.
+ * JPA repository pro verification token persistence a lifecycle management.
  *
+ * Provides CRUD operations a specialized queries pro email verification
+ * token workflow including token rotation, expiration cleanup a user
+ * association management.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see VerificationTokenEntity
+ * @see UserEntity
  */
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationTokenEntity, Long> {
 
     /**
-     * Vyhledá verifikační token podle jeho hodnoty.
-     * Používá se při validaci tokenu z emailového odkazu.
+     * Finds verification token by its string value.
      *
-     * @param token hodnota tokenu
-     * @return Optional obsahující token pokud existuje
+     * Primary lookup method pro email verification workflow when processing
+     * verification links. Token values jsou unique across system.
+     *
+     * @param token unique token string from verification email
+     * @return Optional containing token entity pokud exists
      */
     Optional<VerificationTokenEntity> findByToken(String token);
 
     /**
-     * Vyhledá verifikační token přiřazený konkrétnímu uživateli.
-     * Používá se pro kontrolu existence před generováním nového tokenu.
+     * Finds verification token associated s specific user.
      *
-     * @param user entita uživatele
-     * @return Optional obsahující token pokud existuje
+     * Used pro checking existing token před generating new one during
+     * token rotation nebo resend operations. Supports one-token-per-user policy.
+     *
+     * @param user UserEntity pro token lookup
+     * @return Optional containing user's current token pokud exists
      */
     Optional<VerificationTokenEntity> findByUser(UserEntity user);
 
     /**
-     * Odstraní všechny verifikační tokeny přiřazené danému uživateli.
-     * Používá se při rotaci tokenů - nový token zneplatní všechny předchozí.
+     * Removes all verification tokens associated s specific user.
      *
-     * @param user entita uživatele
+     * Token rotation operation ensuring pouze jeden token per user
+     * is active at any time. Called před generating new verification token.
+     *
+     * @param user UserEntity whose tokens should be removed
      */
     @Modifying
     @Query("DELETE FROM VerificationTokenEntity v WHERE v.user = :user")
     void deleteByUser(@Param("user") UserEntity user);
 
     /**
-     * Hromadně odstraní všechny tokeny, které již vypršely.
-     * Určeno pro pravidelný úklid databáze prostřednictvím naplánovaných úloh.
+     * Bulk removal of expired verification tokens.
      *
-     * @param now aktuální timestamp pro porovnání s expiryDate
+     * Maintenance operation designed pro scheduled cleanup jobs removing
+     * stale tokens z database. Improves storage efficiency a query performance.
+     *
+     * @param now current timestamp pro expiration comparison
      */
     @Modifying
     @Query("DELETE FROM VerificationTokenEntity v WHERE v.expiryDate <= :now")

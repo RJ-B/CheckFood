@@ -1,5 +1,6 @@
 package com.checkfood.checkfoodservice.security.module.user.service;
 
+import com.checkfood.checkfoodservice.security.module.user.dto.response.DeviceResponse;
 import com.checkfood.checkfoodservice.security.module.user.entity.DeviceEntity;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import com.checkfood.checkfoodservice.security.module.user.exception.UserException;
@@ -11,6 +12,8 @@ import java.util.Optional;
  * Kontrakt pro správu životního cyklu klientských zařízení a jejich relací.
  * Definuje operace pro orchestraci bezpečnostních mechanismů navázaných na konkrétní terminály.
  * Zajišťuje integritu Refresh tokenů skrze perzistentní sledování aktivních session.
+ *
+ * ✅ UPRAVENO: Rozšířeno o podporu String deviceIdentifier pro konzistenci s JWT tokeny.
  */
 public interface DeviceService {
 
@@ -49,6 +52,16 @@ public interface DeviceService {
     List<DeviceEntity> findAllByUser(UserEntity user);
 
     /**
+     * ✅ UPRAVENO: Vrátí seznam zařízení převedený na DTO s příznakem aktuálního zařízení.
+     * Porovná deviceIdentifier s identifikátorem v Access Tokenu a označí současné zařízení.
+     *
+     * @param email emailová adresa uživatele
+     * @param accessToken JWT access token obsahující deviceIdentifier
+     * @return seznam zařízení s označením aktuálního terminálu
+     */
+    List<DeviceResponse> findAllUserDevicesWithStatus(String email, String accessToken);
+
+    /**
      * Verifikuje vazbu mezi identifikátorem relace a uživatelským subjektem.
      * Kritická komponenta pro prevenci "Session Hijacking" při rotaci Refresh tokenů.
      *
@@ -85,10 +98,30 @@ public interface DeviceService {
     void removeByIdAndUser(Long deviceId, UserEntity user);
 
     /**
+     * ✅ NOVÁ METODA: Autorizované odstranění relace pomocí String identifikátoru.
+     * Bezpečnější alternativa k removeByIdAndUser, která neodhaluje interní Long ID.
+     * Umožňuje frontendové aplikaci odstranit zařízení pomocí UUID identifikátoru.
+     *
+     * @param deviceIdentifier String identifikátor zařízení (UUID)
+     * @param user subjekt provádějící operaci
+     * @throws UserException pokud cílová relace neexistuje nebo nepatří danému uživateli
+     */
+    void removeByIdentifierAndUser(String deviceIdentifier, UserEntity user);
+
+    /**
      * Hromadná invalidace veškerých aktivních relací uživatele.
      * Využívá se pro bezpečnostní "Emergency Logout" napříč všemi terminály.
      *
      * @param user uživatel, jehož relace mají být terminovány
      */
     void removeAllByUser(UserEntity user);
+
+    /**
+     * Odhlásí všechna zařízení uživatele kromě aktuálního.
+     * Používá se v profilu při akci "Odhlásit ostatní zařízení".
+     *
+     * @param user uživatel
+     * @param currentDeviceIdentifier identifikátor aktuálního zařízení (zachová se)
+     */
+    void removeAllByUserExceptCurrent(UserEntity user, String currentDeviceIdentifier);
 }

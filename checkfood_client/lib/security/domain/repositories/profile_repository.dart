@@ -4,21 +4,21 @@ import '../../data/models/profile/request/update_profile_request_model.dart';
 import '../../data/models/profile/request/change_password_request_model.dart';
 
 abstract class ProfileRepository {
-  /// Načte profil uživatele.
+  /// Načte personu uživatele.
   Future<UserProfile> getUserProfile();
 
-  /// Aktualizuje profil pomocí Request modelu.
+  /// Aktualizuje údaje persony.
   Future<UserProfile> updateProfile(UpdateProfileRequestModel request);
 
-  /// Změní heslo pomocí Request modelu.
+  /// Provede změnu hesla.
   Future<void> changePassword(ChangePasswordRequestModel request);
 
-  /// Načte seznam aktivních zařízení.
+  /// Načte seznam zařízení spojených s účtem.
   Future<List<Device>> getActiveDevices();
 
-  /// Odhlásí konkrétní zařízení.
-  Future<void> logoutDevice(String deviceId);
+  /// Odhlásí konkrétní zařízení podle jeho technického ID.
+  Future<void> logoutDevice(int deviceId);
 
-  /// Odhlásí všechna ostatní zařízení.
+  /// Odhlásí všechna zařízení kromě aktuálního.
   Future<void> logoutAllDevices();
 }

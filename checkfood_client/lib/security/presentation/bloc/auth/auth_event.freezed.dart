@@ -20,29 +20,37 @@ mixin _$AuthEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -51,8 +59,12 @@ mixin _$AuthEvent {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,8 +72,11 @@ mixin _$AuthEvent {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,8 +84,11 @@ mixin _$AuthEvent {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -140,11 +158,13 @@ class _$AppStartedImpl implements AppStarted {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) {
     return appStarted();
@@ -154,10 +174,13 @@ class _$AppStartedImpl implements AppStarted {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) {
     return appStarted?.call();
@@ -167,10 +190,13 @@ class _$AppStartedImpl implements AppStarted {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) {
@@ -186,8 +212,12 @@ class _$AppStartedImpl implements AppStarted {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) {
     return appStarted(this);
@@ -199,8 +229,11 @@ class _$AppStartedImpl implements AppStarted {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) {
     return appStarted?.call(this);
@@ -212,8 +245,11 @@ class _$AppStartedImpl implements AppStarted {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) {
@@ -235,9 +271,7 @@ abstract class _$$LoginRequestedImplCopyWith<$Res> {
     $Res Function(_$LoginRequestedImpl) then,
   ) = __$$LoginRequestedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({LoginRequestModel request});
-
-  $LoginRequestModelCopyWith<$Res> get request;
+  $Res call({LoginParams params});
 }
 
 /// @nodoc
@@ -253,39 +287,29 @@ class __$$LoginRequestedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? request = null}) {
+  $Res call({Object? params = null}) {
     return _then(
       _$LoginRequestedImpl(
-        null == request
-            ? _value.request
-            : request // ignore: cast_nullable_to_non_nullable
-                as LoginRequestModel,
+        null == params
+            ? _value.params
+            : params // ignore: cast_nullable_to_non_nullable
+                as LoginParams,
       ),
     );
-  }
-
-  /// Create a copy of AuthEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $LoginRequestModelCopyWith<$Res> get request {
-    return $LoginRequestModelCopyWith<$Res>(_value.request, (value) {
-      return _then(_value.copyWith(request: value));
-    });
   }
 }
 
 /// @nodoc
 
 class _$LoginRequestedImpl implements LoginRequested {
-  const _$LoginRequestedImpl(this.request);
+  const _$LoginRequestedImpl(this.params);
 
   @override
-  final LoginRequestModel request;
+  final LoginParams params;
 
   @override
   String toString() {
-    return 'AuthEvent.loginRequested(request: $request)';
+    return 'AuthEvent.loginRequested(params: $params)';
   }
 
   @override
@@ -293,11 +317,11 @@ class _$LoginRequestedImpl implements LoginRequested {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginRequestedImpl &&
-            (identical(other.request, request) || other.request == request));
+            (identical(other.params, params) || other.params == params));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, request);
+  int get hashCode => Object.hash(runtimeType, params);
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -314,42 +338,50 @@ class _$LoginRequestedImpl implements LoginRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) {
-    return loginRequested(request);
+    return loginRequested(params);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) {
-    return loginRequested?.call(request);
+    return loginRequested?.call(params);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) {
     if (loginRequested != null) {
-      return loginRequested(request);
+      return loginRequested(params);
     }
     return orElse();
   }
@@ -360,8 +392,12 @@ class _$LoginRequestedImpl implements LoginRequested {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) {
     return loginRequested(this);
@@ -373,8 +409,11 @@ class _$LoginRequestedImpl implements LoginRequested {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) {
     return loginRequested?.call(this);
@@ -386,8 +425,11 @@ class _$LoginRequestedImpl implements LoginRequested {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) {
@@ -399,10 +441,9 @@ class _$LoginRequestedImpl implements LoginRequested {
 }
 
 abstract class LoginRequested implements AuthEvent {
-  const factory LoginRequested(final LoginRequestModel request) =
-      _$LoginRequestedImpl;
+  const factory LoginRequested(final LoginParams params) = _$LoginRequestedImpl;
 
-  LoginRequestModel get request;
+  LoginParams get params;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -418,9 +459,7 @@ abstract class _$$RegisterRequestedImplCopyWith<$Res> {
     $Res Function(_$RegisterRequestedImpl) then,
   ) = __$$RegisterRequestedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({RegisterRequestModel request});
-
-  $RegisterRequestModelCopyWith<$Res> get request;
+  $Res call({RegisterParams params});
 }
 
 /// @nodoc
@@ -436,39 +475,29 @@ class __$$RegisterRequestedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? request = null}) {
+  $Res call({Object? params = null}) {
     return _then(
       _$RegisterRequestedImpl(
-        null == request
-            ? _value.request
-            : request // ignore: cast_nullable_to_non_nullable
-                as RegisterRequestModel,
+        null == params
+            ? _value.params
+            : params // ignore: cast_nullable_to_non_nullable
+                as RegisterParams,
       ),
     );
-  }
-
-  /// Create a copy of AuthEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RegisterRequestModelCopyWith<$Res> get request {
-    return $RegisterRequestModelCopyWith<$Res>(_value.request, (value) {
-      return _then(_value.copyWith(request: value));
-    });
   }
 }
 
 /// @nodoc
 
 class _$RegisterRequestedImpl implements RegisterRequested {
-  const _$RegisterRequestedImpl(this.request);
+  const _$RegisterRequestedImpl(this.params);
 
   @override
-  final RegisterRequestModel request;
+  final RegisterParams params;
 
   @override
   String toString() {
-    return 'AuthEvent.registerRequested(request: $request)';
+    return 'AuthEvent.registerRequested(params: $params)';
   }
 
   @override
@@ -476,11 +505,11 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RegisterRequestedImpl &&
-            (identical(other.request, request) || other.request == request));
+            (identical(other.params, params) || other.params == params));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, request);
+  int get hashCode => Object.hash(runtimeType, params);
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -497,42 +526,50 @@ class _$RegisterRequestedImpl implements RegisterRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) {
-    return registerRequested(request);
+    return registerRequested(params);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) {
-    return registerRequested?.call(request);
+    return registerRequested?.call(params);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) {
     if (registerRequested != null) {
-      return registerRequested(request);
+      return registerRequested(params);
     }
     return orElse();
   }
@@ -543,8 +580,12 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) {
     return registerRequested(this);
@@ -556,8 +597,11 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) {
     return registerRequested?.call(this);
@@ -569,8 +613,11 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) {
@@ -582,10 +629,10 @@ class _$RegisterRequestedImpl implements RegisterRequested {
 }
 
 abstract class RegisterRequested implements AuthEvent {
-  const factory RegisterRequested(final RegisterRequestModel request) =
+  const factory RegisterRequested(final RegisterParams params) =
       _$RegisterRequestedImpl;
 
-  RegisterRequestModel get request;
+  RegisterParams get params;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -595,15 +642,203 @@ abstract class RegisterRequested implements AuthEvent {
 }
 
 /// @nodoc
+abstract class _$$RegisterOwnerRequestedImplCopyWith<$Res> {
+  factory _$$RegisterOwnerRequestedImplCopyWith(
+    _$RegisterOwnerRequestedImpl value,
+    $Res Function(_$RegisterOwnerRequestedImpl) then,
+  ) = __$$RegisterOwnerRequestedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({RegisterParams params});
+}
+
+/// @nodoc
+class __$$RegisterOwnerRequestedImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$RegisterOwnerRequestedImpl>
+    implements _$$RegisterOwnerRequestedImplCopyWith<$Res> {
+  __$$RegisterOwnerRequestedImplCopyWithImpl(
+    _$RegisterOwnerRequestedImpl _value,
+    $Res Function(_$RegisterOwnerRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? params = null}) {
+    return _then(
+      _$RegisterOwnerRequestedImpl(
+        null == params
+            ? _value.params
+            : params // ignore: cast_nullable_to_non_nullable
+                as RegisterParams,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
+  const _$RegisterOwnerRequestedImpl(this.params);
+
+  @override
+  final RegisterParams params;
+
+  @override
+  String toString() {
+    return 'AuthEvent.registerOwnerRequested(params: $params)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterOwnerRequestedImpl &&
+            (identical(other.params, params) || other.params == params));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, params);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RegisterOwnerRequestedImplCopyWith<_$RegisterOwnerRequestedImpl>
+  get copyWith =>
+      __$$RegisterOwnerRequestedImplCopyWithImpl<_$RegisterOwnerRequestedImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() appStarted,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
+    required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
+    required TResult Function() logoutRequested,
+  }) {
+    return registerOwnerRequested(params);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? appStarted,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
+    TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
+    TResult? Function()? logoutRequested,
+  }) {
+    return registerOwnerRequested?.call(params);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? appStarted,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
+    TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
+    TResult Function()? logoutRequested,
+    required TResult orElse(),
+  }) {
+    if (registerOwnerRequested != null) {
+      return registerOwnerRequested(params);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppStarted value) appStarted,
+    required TResult Function(LoginRequested value) loginRequested,
+    required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
+    required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
+    required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
+    required TResult Function(LogoutRequested value) logoutRequested,
+  }) {
+    return registerOwnerRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppStarted value)? appStarted,
+    TResult? Function(LoginRequested value)? loginRequested,
+    TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult? Function(LogoutRequested value)? logoutRequested,
+  }) {
+    return registerOwnerRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppStarted value)? appStarted,
+    TResult Function(LoginRequested value)? loginRequested,
+    TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult Function(LogoutRequested value)? logoutRequested,
+    required TResult orElse(),
+  }) {
+    if (registerOwnerRequested != null) {
+      return registerOwnerRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RegisterOwnerRequested implements AuthEvent {
+  const factory RegisterOwnerRequested(final RegisterParams params) =
+      _$RegisterOwnerRequestedImpl;
+
+  RegisterParams get params;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RegisterOwnerRequestedImplCopyWith<_$RegisterOwnerRequestedImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 abstract class _$$VerifyEmailRequestedImplCopyWith<$Res> {
   factory _$$VerifyEmailRequestedImplCopyWith(
     _$VerifyEmailRequestedImpl value,
     $Res Function(_$VerifyEmailRequestedImpl) then,
   ) = __$$VerifyEmailRequestedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({VerifyEmailRequestModel request});
-
-  $VerifyEmailRequestModelCopyWith<$Res> get request;
+  $Res call({String token});
 }
 
 /// @nodoc
@@ -619,39 +854,30 @@ class __$$VerifyEmailRequestedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? request = null}) {
+  $Res call({Object? token = null}) {
     return _then(
       _$VerifyEmailRequestedImpl(
-        null == request
-            ? _value.request
-            : request // ignore: cast_nullable_to_non_nullable
-                as VerifyEmailRequestModel,
+        token:
+            null == token
+                ? _value.token
+                : token // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
-  }
-
-  /// Create a copy of AuthEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $VerifyEmailRequestModelCopyWith<$Res> get request {
-    return $VerifyEmailRequestModelCopyWith<$Res>(_value.request, (value) {
-      return _then(_value.copyWith(request: value));
-    });
   }
 }
 
 /// @nodoc
 
 class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
-  const _$VerifyEmailRequestedImpl(this.request);
+  const _$VerifyEmailRequestedImpl({required this.token});
 
   @override
-  final VerifyEmailRequestModel request;
+  final String token;
 
   @override
   String toString() {
-    return 'AuthEvent.verifyEmailRequested(request: $request)';
+    return 'AuthEvent.verifyEmailRequested(token: $token)';
   }
 
   @override
@@ -659,11 +885,11 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$VerifyEmailRequestedImpl &&
-            (identical(other.request, request) || other.request == request));
+            (identical(other.token, token) || other.token == token));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, request);
+  int get hashCode => Object.hash(runtimeType, token);
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -681,42 +907,50 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) {
-    return verifyEmailRequested(request);
+    return verifyEmailRequested(token);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) {
-    return verifyEmailRequested?.call(request);
+    return verifyEmailRequested?.call(token);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) {
     if (verifyEmailRequested != null) {
-      return verifyEmailRequested(request);
+      return verifyEmailRequested(token);
     }
     return orElse();
   }
@@ -727,8 +961,12 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) {
     return verifyEmailRequested(this);
@@ -740,8 +978,11 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) {
     return verifyEmailRequested?.call(this);
@@ -753,8 +994,11 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) {
@@ -766,10 +1010,10 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
 }
 
 abstract class VerifyEmailRequested implements AuthEvent {
-  const factory VerifyEmailRequested(final VerifyEmailRequestModel request) =
+  const factory VerifyEmailRequested({required final String token}) =
       _$VerifyEmailRequestedImpl;
 
-  VerifyEmailRequestModel get request;
+  String get token;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -804,10 +1048,11 @@ class __$$ResendCodeRequestedImplCopyWithImpl<$Res>
   $Res call({Object? email = null}) {
     return _then(
       _$ResendCodeRequestedImpl(
-        null == email
-            ? _value.email
-            : email // ignore: cast_nullable_to_non_nullable
-                as String,
+        email:
+            null == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -816,7 +1061,7 @@ class __$$ResendCodeRequestedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ResendCodeRequestedImpl implements ResendCodeRequested {
-  const _$ResendCodeRequestedImpl(this.email);
+  const _$ResendCodeRequestedImpl({required this.email});
 
   @override
   final String email;
@@ -852,11 +1097,13 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) {
     return resendCodeRequested(email);
@@ -866,10 +1113,13 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) {
     return resendCodeRequested?.call(email);
@@ -879,10 +1129,13 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) {
@@ -898,8 +1151,12 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) {
     return resendCodeRequested(this);
@@ -911,8 +1168,11 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) {
     return resendCodeRequested?.call(this);
@@ -924,8 +1184,11 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) {
@@ -937,7 +1200,7 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
 }
 
 abstract class ResendCodeRequested implements AuthEvent {
-  const factory ResendCodeRequested(final String email) =
+  const factory ResendCodeRequested({required final String email}) =
       _$ResendCodeRequestedImpl;
 
   String get email;
@@ -947,6 +1210,308 @@ abstract class ResendCodeRequested implements AuthEvent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResendCodeRequestedImplCopyWith<_$ResendCodeRequestedImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GoogleLoginRequestedImplCopyWith<$Res> {
+  factory _$$GoogleLoginRequestedImplCopyWith(
+    _$GoogleLoginRequestedImpl value,
+    $Res Function(_$GoogleLoginRequestedImpl) then,
+  ) = __$$GoogleLoginRequestedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GoogleLoginRequestedImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$GoogleLoginRequestedImpl>
+    implements _$$GoogleLoginRequestedImplCopyWith<$Res> {
+  __$$GoogleLoginRequestedImplCopyWithImpl(
+    _$GoogleLoginRequestedImpl _value,
+    $Res Function(_$GoogleLoginRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
+  const _$GoogleLoginRequestedImpl();
+
+  @override
+  String toString() {
+    return 'AuthEvent.googleLoginRequested()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GoogleLoginRequestedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() appStarted,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
+    required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
+    required TResult Function() logoutRequested,
+  }) {
+    return googleLoginRequested();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? appStarted,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
+    TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
+    TResult? Function()? logoutRequested,
+  }) {
+    return googleLoginRequested?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? appStarted,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
+    TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
+    TResult Function()? logoutRequested,
+    required TResult orElse(),
+  }) {
+    if (googleLoginRequested != null) {
+      return googleLoginRequested();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppStarted value) appStarted,
+    required TResult Function(LoginRequested value) loginRequested,
+    required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
+    required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
+    required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
+    required TResult Function(LogoutRequested value) logoutRequested,
+  }) {
+    return googleLoginRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppStarted value)? appStarted,
+    TResult? Function(LoginRequested value)? loginRequested,
+    TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult? Function(LogoutRequested value)? logoutRequested,
+  }) {
+    return googleLoginRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppStarted value)? appStarted,
+    TResult Function(LoginRequested value)? loginRequested,
+    TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult Function(LogoutRequested value)? logoutRequested,
+    required TResult orElse(),
+  }) {
+    if (googleLoginRequested != null) {
+      return googleLoginRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GoogleLoginRequested implements AuthEvent {
+  const factory GoogleLoginRequested() = _$GoogleLoginRequestedImpl;
+}
+
+/// @nodoc
+abstract class _$$AppleLoginRequestedImplCopyWith<$Res> {
+  factory _$$AppleLoginRequestedImplCopyWith(
+    _$AppleLoginRequestedImpl value,
+    $Res Function(_$AppleLoginRequestedImpl) then,
+  ) = __$$AppleLoginRequestedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$AppleLoginRequestedImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$AppleLoginRequestedImpl>
+    implements _$$AppleLoginRequestedImplCopyWith<$Res> {
+  __$$AppleLoginRequestedImplCopyWithImpl(
+    _$AppleLoginRequestedImpl _value,
+    $Res Function(_$AppleLoginRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$AppleLoginRequestedImpl implements AppleLoginRequested {
+  const _$AppleLoginRequestedImpl();
+
+  @override
+  String toString() {
+    return 'AuthEvent.appleLoginRequested()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppleLoginRequestedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() appStarted,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
+    required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
+    required TResult Function() logoutRequested,
+  }) {
+    return appleLoginRequested();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? appStarted,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
+    TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
+    TResult? Function()? logoutRequested,
+  }) {
+    return appleLoginRequested?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? appStarted,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
+    TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
+    TResult Function()? logoutRequested,
+    required TResult orElse(),
+  }) {
+    if (appleLoginRequested != null) {
+      return appleLoginRequested();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppStarted value) appStarted,
+    required TResult Function(LoginRequested value) loginRequested,
+    required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
+    required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
+    required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
+    required TResult Function(LogoutRequested value) logoutRequested,
+  }) {
+    return appleLoginRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppStarted value)? appStarted,
+    TResult? Function(LoginRequested value)? loginRequested,
+    TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult? Function(LogoutRequested value)? logoutRequested,
+  }) {
+    return appleLoginRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppStarted value)? appStarted,
+    TResult Function(LoginRequested value)? loginRequested,
+    TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult Function(LogoutRequested value)? logoutRequested,
+    required TResult orElse(),
+  }) {
+    if (appleLoginRequested != null) {
+      return appleLoginRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AppleLoginRequested implements AuthEvent {
+  const factory AppleLoginRequested() = _$AppleLoginRequestedImpl;
 }
 
 /// @nodoc
@@ -993,11 +1558,13 @@ class _$LogoutRequestedImpl implements LogoutRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() appStarted,
-    required TResult Function(LoginRequestModel request) loginRequested,
-    required TResult Function(RegisterRequestModel request) registerRequested,
-    required TResult Function(VerifyEmailRequestModel request)
-    verifyEmailRequested,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
     required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
   }) {
     return logoutRequested();
@@ -1007,10 +1574,13 @@ class _$LogoutRequestedImpl implements LogoutRequested {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? appStarted,
-    TResult? Function(LoginRequestModel request)? loginRequested,
-    TResult? Function(RegisterRequestModel request)? registerRequested,
-    TResult? Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
     TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
   }) {
     return logoutRequested?.call();
@@ -1020,10 +1590,13 @@ class _$LogoutRequestedImpl implements LogoutRequested {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? appStarted,
-    TResult Function(LoginRequestModel request)? loginRequested,
-    TResult Function(RegisterRequestModel request)? registerRequested,
-    TResult Function(VerifyEmailRequestModel request)? verifyEmailRequested,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
     TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
     required TResult orElse(),
   }) {
@@ -1039,8 +1612,12 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     required TResult Function(AppStarted value) appStarted,
     required TResult Function(LoginRequested value) loginRequested,
     required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
     required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
     required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
   }) {
     return logoutRequested(this);
@@ -1052,8 +1629,11 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     TResult? Function(AppStarted value)? appStarted,
     TResult? Function(LoginRequested value)? loginRequested,
     TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
   }) {
     return logoutRequested?.call(this);
@@ -1065,8 +1645,11 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     TResult Function(AppStarted value)? appStarted,
     TResult Function(LoginRequested value)? loginRequested,
     TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
     TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
     TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
     required TResult orElse(),
   }) {

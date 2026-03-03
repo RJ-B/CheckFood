@@ -21,15 +21,15 @@ LoginRequestModel _$LoginRequestModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LoginRequestModel {
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'password')
+  @JsonKey(name: SecurityJsonKeys.password)
   String get password => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceIdentifier')
+  @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
   String get deviceIdentifier => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceName')
+  @JsonKey(name: SecurityJsonKeys.deviceName)
   String get deviceName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceType')
+  @JsonKey(name: SecurityJsonKeys.deviceType)
   String get deviceType => throw _privateConstructorUsedError;
 
   /// Serializes this LoginRequestModel to a JSON map.
@@ -50,11 +50,11 @@ abstract class $LoginRequestModelCopyWith<$Res> {
   ) = _$LoginRequestModelCopyWithImpl<$Res, LoginRequestModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'email') String email,
-    @JsonKey(name: 'password') String password,
-    @JsonKey(name: 'deviceIdentifier') String deviceIdentifier,
-    @JsonKey(name: 'deviceName') String deviceName,
-    @JsonKey(name: 'deviceType') String deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) String email,
+    @JsonKey(name: SecurityJsonKeys.password) String password,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier) String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.deviceName) String deviceName,
+    @JsonKey(name: SecurityJsonKeys.deviceType) String deviceType,
   });
 }
 
@@ -122,11 +122,11 @@ abstract class _$$LoginRequestModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'email') String email,
-    @JsonKey(name: 'password') String password,
-    @JsonKey(name: 'deviceIdentifier') String deviceIdentifier,
-    @JsonKey(name: 'deviceName') String deviceName,
-    @JsonKey(name: 'deviceType') String deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) String email,
+    @JsonKey(name: SecurityJsonKeys.password) String password,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier) String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.deviceName) String deviceName,
+    @JsonKey(name: SecurityJsonKeys.deviceType) String deviceType,
   });
 }
 
@@ -186,30 +186,31 @@ class __$$LoginRequestModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LoginRequestModelImpl implements _LoginRequestModel {
   const _$LoginRequestModelImpl({
-    @JsonKey(name: 'email') required this.email,
-    @JsonKey(name: 'password') required this.password,
-    @JsonKey(name: 'deviceIdentifier') required this.deviceIdentifier,
-    @JsonKey(name: 'deviceName') required this.deviceName,
-    @JsonKey(name: 'deviceType') required this.deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) required this.email,
+    @JsonKey(name: SecurityJsonKeys.password) required this.password,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
+    required this.deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.deviceName) required this.deviceName,
+    @JsonKey(name: SecurityJsonKeys.deviceType) required this.deviceType,
   });
 
   factory _$LoginRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginRequestModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   final String email;
   @override
-  @JsonKey(name: 'password')
+  @JsonKey(name: SecurityJsonKeys.password)
   final String password;
   @override
-  @JsonKey(name: 'deviceIdentifier')
+  @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
   final String deviceIdentifier;
   @override
-  @JsonKey(name: 'deviceName')
+  @JsonKey(name: SecurityJsonKeys.deviceName)
   final String deviceName;
   @override
-  @JsonKey(name: 'deviceType')
+  @JsonKey(name: SecurityJsonKeys.deviceType)
   final String deviceType;
 
   @override
@@ -263,30 +264,33 @@ class _$LoginRequestModelImpl implements _LoginRequestModel {
 
 abstract class _LoginRequestModel implements LoginRequestModel {
   const factory _LoginRequestModel({
-    @JsonKey(name: 'email') required final String email,
-    @JsonKey(name: 'password') required final String password,
-    @JsonKey(name: 'deviceIdentifier') required final String deviceIdentifier,
-    @JsonKey(name: 'deviceName') required final String deviceName,
-    @JsonKey(name: 'deviceType') required final String deviceType,
+    @JsonKey(name: SecurityJsonKeys.email) required final String email,
+    @JsonKey(name: SecurityJsonKeys.password) required final String password,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
+    required final String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.deviceName)
+    required final String deviceName,
+    @JsonKey(name: SecurityJsonKeys.deviceType)
+    required final String deviceType,
   }) = _$LoginRequestModelImpl;
 
   factory _LoginRequestModel.fromJson(Map<String, dynamic> json) =
       _$LoginRequestModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'email')
+  @JsonKey(name: SecurityJsonKeys.email)
   String get email;
   @override
-  @JsonKey(name: 'password')
+  @JsonKey(name: SecurityJsonKeys.password)
   String get password;
   @override
-  @JsonKey(name: 'deviceIdentifier')
+  @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
   String get deviceIdentifier;
   @override
-  @JsonKey(name: 'deviceName')
+  @JsonKey(name: SecurityJsonKeys.deviceName)
   String get deviceName;
   @override
-  @JsonKey(name: 'deviceType')
+  @JsonKey(name: SecurityJsonKeys.deviceType)
   String get deviceType;
 
   /// Create a copy of LoginRequestModel

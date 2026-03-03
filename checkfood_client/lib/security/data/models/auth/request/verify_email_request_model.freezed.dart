@@ -23,6 +23,7 @@ VerifyEmailRequestModel _$VerifyEmailRequestModelFromJson(
 
 /// @nodoc
 mixin _$VerifyEmailRequestModel {
+  @JsonKey(name: SecurityJsonKeys.token)
   String get token => throw _privateConstructorUsedError;
 
   /// Serializes this VerifyEmailRequestModel to a JSON map.
@@ -42,7 +43,7 @@ abstract class $VerifyEmailRequestModelCopyWith<$Res> {
     $Res Function(VerifyEmailRequestModel) then,
   ) = _$VerifyEmailRequestModelCopyWithImpl<$Res, VerifyEmailRequestModel>;
   @useResult
-  $Res call({String token});
+  $Res call({@JsonKey(name: SecurityJsonKeys.token) String token});
 }
 
 /// @nodoc
@@ -85,7 +86,7 @@ abstract class _$$VerifyEmailRequestModelImplCopyWith<$Res>
   ) = __$$VerifyEmailRequestModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String token});
+  $Res call({@JsonKey(name: SecurityJsonKeys.token) String token});
 }
 
 /// @nodoc
@@ -121,12 +122,15 @@ class __$$VerifyEmailRequestModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$VerifyEmailRequestModelImpl implements _VerifyEmailRequestModel {
-  const _$VerifyEmailRequestModelImpl({required this.token});
+  const _$VerifyEmailRequestModelImpl({
+    @JsonKey(name: SecurityJsonKeys.token) required this.token,
+  });
 
   factory _$VerifyEmailRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$VerifyEmailRequestModelImplFromJson(json);
 
   @override
+  @JsonKey(name: SecurityJsonKeys.token)
   final String token;
 
   @override
@@ -163,13 +167,15 @@ class _$VerifyEmailRequestModelImpl implements _VerifyEmailRequestModel {
 }
 
 abstract class _VerifyEmailRequestModel implements VerifyEmailRequestModel {
-  const factory _VerifyEmailRequestModel({required final String token}) =
-      _$VerifyEmailRequestModelImpl;
+  const factory _VerifyEmailRequestModel({
+    @JsonKey(name: SecurityJsonKeys.token) required final String token,
+  }) = _$VerifyEmailRequestModelImpl;
 
   factory _VerifyEmailRequestModel.fromJson(Map<String, dynamic> json) =
       _$VerifyEmailRequestModelImpl.fromJson;
 
   @override
+  @JsonKey(name: SecurityJsonKeys.token)
   String get token;
 
   /// Create a copy of VerifyEmailRequestModel

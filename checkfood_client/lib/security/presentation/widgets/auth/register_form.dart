@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:uuid/uuid.dart';
+// Services
 
 // BLoC a State
 import '../../../validators/auth_validators.dart';
@@ -10,12 +8,14 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 
-// Modely
-import '../../../data/models/auth/request/register_request_model.dart';
+// Domain Params
+import '../../../domain/usecases/auth/params/auth_params.dart';
 import 'password_strength_indicator.dart';
 
 class RegisterForm extends StatefulWidget {
-  const RegisterForm({super.key});
+  final void Function(RegisterParams params)? onSubmit;
+
+  const RegisterForm({super.key, this.onSubmit});
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -42,51 +42,24 @@ class _RegisterFormState extends State<RegisterForm> {
     super.dispose();
   }
 
-  Future<Map<String, String>> _getDeviceData() async {
-    final deviceInfoPlugin = DeviceInfoPlugin();
-    String identifier = const Uuid().v4();
-    String name = 'Unknown Device';
-    String type = 'UNKNOWN';
-
-    try {
-      if (Platform.isAndroid) {
-        final androidInfo = await deviceInfoPlugin.androidInfo;
-        name = '${androidInfo.brand} ${androidInfo.model}';
-        identifier = androidInfo.id;
-        type = 'ANDROID';
-      } else if (Platform.isIOS) {
-        final iosInfo = await deviceInfoPlugin.iosInfo;
-        name = iosInfo.name;
-        identifier = iosInfo.identifierForVendor ?? const Uuid().v4();
-        type = 'IOS';
-      }
-    } catch (e) {
-      debugPrint('Chyba při získávání informací o zařízení: $e');
-    }
-
-    return {'id': identifier, 'name': name, 'type': type};
-  }
-
   Future<void> _onRegisterPressed() async {
-    // ✅ MANUÁLNÍ VALIDACE: Tady se poprvé aktivují a zobrazí chyby v polích
+    // 1. Validace UI formuláře (včetně shody hesel)
     if (_formKey.currentState?.validate() ?? false) {
       FocusScope.of(context).unfocus();
 
-      final deviceData = await _getDeviceData();
-
-      final request = RegisterRequestModel(
+      final params = RegisterParams(
         email: _emailController.text.trim(),
         password: _passwordController.text,
-        confirmPassword: _confirmPasswordController.text,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
-        deviceIdentifier: deviceData['id']!,
-        deviceName: deviceData['name']!,
-        deviceType: deviceData['type']!,
       );
 
       if (mounted) {
-        context.read<AuthBloc>().add(AuthEvent.registerRequested(request));
+        if (widget.onSubmit != null) {
+          widget.onSubmit!(params);
+        } else {
+          context.read<AuthBloc>().add(AuthEvent.registerRequested(params));
+        }
       }
     }
   }
@@ -95,7 +68,6 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      // 🛠️ KLÍČOVÁ ZMĚNA: Vypnuto automatické ověřování při interakci
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,7 +111,6 @@ class _RegisterFormState extends State<RegisterForm> {
             label: 'Heslo',
             icon: Icons.lock_outline,
             obscureText: !_isPasswordVisible,
-            // 💡 REAKTIVITA: Tento setState zajišťuje, že se indikátor síly hesla překresluje v reálném čase
             onChanged: (_) => setState(() {}),
             suffixIcon: IconButton(
               icon: Icon(
@@ -153,7 +124,6 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           const SizedBox(height: 8),
 
-          // Indikátor síly hesla se mění hned, protože poslouchá controller a reaguje na setState výše
           PasswordStrengthIndicator(password: _passwordController.text),
           const SizedBox(height: 16),
 
@@ -162,6 +132,7 @@ class _RegisterFormState extends State<RegisterForm> {
             label: 'Potvrzení hesla',
             icon: Icons.lock_reset,
             obscureText: !_isPasswordVisible,
+            // Validace shody hesel probíhá ZDE na klientovi
             validator:
                 (v) => AuthValidators.validateConfirmPassword(
                   v,

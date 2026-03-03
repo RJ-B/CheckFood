@@ -21,14 +21,14 @@ AuthResponseModel _$AuthResponseModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthResponseModel {
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: SecurityJsonKeys.accessToken)
   String get accessToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   String get refreshToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'expiresIn')
+  @JsonKey(name: SecurityJsonKeys.expiresIn)
   @DurationEpochConverter()
-  Duration get expiresIn => throw _privateConstructorUsedError; // Používáme UserResponseModel místo UserModel
-  @JsonKey(name: 'user')
+  Duration get expiresIn => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.user)
   UserResponseModel get user => throw _privateConstructorUsedError;
 
   /// Serializes this AuthResponseModel to a JSON map.
@@ -49,10 +49,12 @@ abstract class $AuthResponseModelCopyWith<$Res> {
   ) = _$AuthResponseModelCopyWithImpl<$Res, AuthResponseModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'accessToken') String accessToken,
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    @JsonKey(name: 'expiresIn') @DurationEpochConverter() Duration expiresIn,
-    @JsonKey(name: 'user') UserResponseModel user,
+    @JsonKey(name: SecurityJsonKeys.accessToken) String accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
+    @DurationEpochConverter()
+    Duration expiresIn,
+    @JsonKey(name: SecurityJsonKeys.user) UserResponseModel user,
   });
 
   $UserResponseModelCopyWith<$Res> get user;
@@ -126,10 +128,12 @@ abstract class _$$AuthResponseModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'accessToken') String accessToken,
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    @JsonKey(name: 'expiresIn') @DurationEpochConverter() Duration expiresIn,
-    @JsonKey(name: 'user') UserResponseModel user,
+    @JsonKey(name: SecurityJsonKeys.accessToken) String accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
+    @DurationEpochConverter()
+    Duration expiresIn,
+    @JsonKey(name: SecurityJsonKeys.user) UserResponseModel user,
   });
 
   @override
@@ -187,30 +191,29 @@ class __$$AuthResponseModelImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AuthResponseModelImpl extends _AuthResponseModel {
   const _$AuthResponseModelImpl({
-    @JsonKey(name: 'accessToken') required this.accessToken,
-    @JsonKey(name: 'refreshToken') required this.refreshToken,
-    @JsonKey(name: 'expiresIn')
+    @JsonKey(name: SecurityJsonKeys.accessToken) required this.accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) required this.refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
     @DurationEpochConverter()
     required this.expiresIn,
-    @JsonKey(name: 'user') required this.user,
+    @JsonKey(name: SecurityJsonKeys.user) required this.user,
   }) : super._();
 
   factory _$AuthResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthResponseModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: SecurityJsonKeys.accessToken)
   final String accessToken;
   @override
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   final String refreshToken;
   @override
-  @JsonKey(name: 'expiresIn')
+  @JsonKey(name: SecurityJsonKeys.expiresIn)
   @DurationEpochConverter()
   final Duration expiresIn;
-  // Používáme UserResponseModel místo UserModel
   @override
-  @JsonKey(name: 'user')
+  @JsonKey(name: SecurityJsonKeys.user)
   final UserResponseModel user;
 
   @override
@@ -256,12 +259,14 @@ class _$AuthResponseModelImpl extends _AuthResponseModel {
 
 abstract class _AuthResponseModel extends AuthResponseModel {
   const factory _AuthResponseModel({
-    @JsonKey(name: 'accessToken') required final String accessToken,
-    @JsonKey(name: 'refreshToken') required final String refreshToken,
-    @JsonKey(name: 'expiresIn')
+    @JsonKey(name: SecurityJsonKeys.accessToken)
+    required final String accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken)
+    required final String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
     @DurationEpochConverter()
     required final Duration expiresIn,
-    @JsonKey(name: 'user') required final UserResponseModel user,
+    @JsonKey(name: SecurityJsonKeys.user) required final UserResponseModel user,
   }) = _$AuthResponseModelImpl;
   const _AuthResponseModel._() : super._();
 
@@ -269,17 +274,17 @@ abstract class _AuthResponseModel extends AuthResponseModel {
       _$AuthResponseModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: SecurityJsonKeys.accessToken)
   String get accessToken;
   @override
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   String get refreshToken;
   @override
-  @JsonKey(name: 'expiresIn')
+  @JsonKey(name: SecurityJsonKeys.expiresIn)
   @DurationEpochConverter()
-  Duration get expiresIn; // Používáme UserResponseModel místo UserModel
+  Duration get expiresIn;
   @override
-  @JsonKey(name: 'user')
+  @JsonKey(name: SecurityJsonKeys.user)
   UserResponseModel get user;
 
   /// Create a copy of AuthResponseModel

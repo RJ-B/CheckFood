@@ -13,13 +13,14 @@ _$UserProfileResponseModelImpl _$$UserProfileResponseModelImplFromJson(
   email: json['email'] as String,
   firstName: json['firstName'] as String?,
   lastName: json['lastName'] as String?,
-  isActive: json['isActive'] as bool,
+  profileImageUrl: json['profileImageUrl'] as String?,
+  isActive: json['isActive'] as bool? ?? false,
+  lastLogin:
+      json['lastLogin'] == null
+          ? null
+          : DateTime.parse(json['lastLogin'] as String),
   createdAt: DateTime.parse(json['createdAt'] as String),
-  roles: (json['roles'] as List<dynamic>).map((e) => e as String).toList(),
-  devices:
-      (json['devices'] as List<dynamic>)
-          .map((e) => DeviceResponseModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+  role: json['role'] as String,
 );
 
 Map<String, dynamic> _$$UserProfileResponseModelImplToJson(
@@ -29,8 +30,9 @@ Map<String, dynamic> _$$UserProfileResponseModelImplToJson(
   'email': instance.email,
   'firstName': instance.firstName,
   'lastName': instance.lastName,
+  'profileImageUrl': instance.profileImageUrl,
   'isActive': instance.isActive,
+  'lastLogin': instance.lastLogin?.toIso8601String(),
   'createdAt': instance.createdAt.toIso8601String(),
-  'roles': instance.roles,
-  'devices': instance.devices,
+  'role': instance.role,
 };

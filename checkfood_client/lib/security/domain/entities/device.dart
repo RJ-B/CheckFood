@@ -8,7 +8,8 @@ class Device with _$Device {
     required int id,
     required String deviceName,
     required String deviceType,
+    required String deviceIdentifier,
     required DateTime lastLogin,
-    @Default(false) bool isCurrentDevice,
+    required bool isCurrentDevice,
   }) = _Device;
 }

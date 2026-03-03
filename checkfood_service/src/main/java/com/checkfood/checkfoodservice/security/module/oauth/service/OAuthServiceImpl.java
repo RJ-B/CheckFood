@@ -1,218 +1,145 @@
 package com.checkfood.checkfoodservice.security.module.oauth.service;
 
-import com.checkfood.checkfoodservice.security.audit.event.AuditAction;
-import com.checkfood.checkfoodservice.security.audit.event.AuditEvent;
-import com.checkfood.checkfoodservice.security.audit.event.AuditStatus;
-
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
-import com.checkfood.checkfoodservice.security.module.auth.dto.response.UserResponse;
-
 import com.checkfood.checkfoodservice.security.module.jwt.service.JwtService;
-
 import com.checkfood.checkfoodservice.security.module.oauth.dto.request.OAuthLoginRequest;
-import com.checkfood.checkfoodservice.security.module.oauth.exception.OAuthEmailMissingException;
-
-import com.checkfood.checkfoodservice.security.module.oauth.mapper.OAuthUserMapper;
-
-import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthClient;
+import com.checkfood.checkfoodservice.security.module.oauth.exception.OAuthException;
+import com.checkfood.checkfoodservice.security.module.oauth.logging.OAuthLogger;
+import com.checkfood.checkfoodservice.security.module.oauth.mapper.OAuthMapper;
 import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthClientFactory;
 import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthUserInfo;
-import com.checkfood.checkfoodservice.security.module.oauth.provider.*;
-
-import com.checkfood.checkfoodservice.security.module.user.entity.RoleEntity;
+import com.checkfood.checkfoodservice.security.module.user.entity.DeviceEntity;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
-
-import com.checkfood.checkfoodservice.security.module.user.mapper.UserMapper;
-import com.checkfood.checkfoodservice.security.module.user.service.RoleService;
-import com.checkfood.checkfoodservice.security.module.user.service.UserService;
-
+import com.checkfood.checkfoodservice.security.module.user.service.DeviceService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.context.ApplicationEventPublisher;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 /**
- * Implementace OAuth autentizace (Google / Apple).
+ * Implementace OAuth flow.
+ *
+ * Změny pro JDK 21:
+ * - Odstraněny try-catch bloky pro logování chyb.
+ * - Výjimky se propagují (nebo balí do OAuthException) a řeší je Handler.
+ * - Logování pouze happy path (pokus, verifikace OK, login OK).
  */
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class OAuthServiceImpl implements OAuthService {
 
-    private final OAuthClientFactory clientFactory;
-
-    private final UserService userService;
-    private final RoleService roleService;
-
+    private final OAuthClientFactory oauthClientFactory;
+    private final OAuthUserService oauthUserService;
+    private final DeviceService deviceService;
     private final JwtService jwtService;
+    private final OAuthMapper oauthMapper;
+    private final OAuthLogger oauthLogger;
+    private final HttpServletRequest httpServletRequest;
 
-    private final PasswordEncoder passwordEncoder;
-
-    private final OAuthUserMapper userMapper;
-    private final UserMapper userMapperInternal;
-
-    // Audit
-    private final ApplicationEventPublisher eventPublisher;
-    private final HttpServletRequest request;
-
-
-    // =====================================================
-    // LOGIN
-    // =====================================================
+    @Value("${security.jwt.access-token-expiration-seconds:3600}")
+    private Long accessTokenExpiration;
 
     @Override
-    public AuthResponse login(OAuthLoginRequest requestDto) {
+    @Transactional
+    public AuthResponse login(OAuthLoginRequest request) {
+        // 1. Logování pokusu (Info)
+        oauthLogger.logAuthenticationAttempt(request.getProvider());
 
-        OAuthClient client =
-                clientFactory.getClient(
-                        requestDto.getProviderType()
-                );
-
+        // 2. Verifikace u providera
         OAuthUserInfo userInfo;
-
         try {
-
-            userInfo =
-                    client.verifyAndExtractUserInfo(
-                            requestDto.getIdToken()
-                    );
-
-        } catch (Exception ex) {
-
-            publishAudit(
-                    null,
-                    AuditStatus.FAILED
-            );
-
-            throw ex;
+            var client = oauthClientFactory.getClient(request.getProvider());
+            userInfo = client.verifyAndGetUserInfo(request.getIdToken());
+        } catch (IllegalArgumentException e) {
+            // Factory nenašla klienta -> Nepodporovaný provider (Handler zaloguje)
+            throw OAuthException.providerNotSupported(request.getProvider().toString());
+        } catch (Exception e) {
+            // Chyba knihovny nebo neplatný token (Handler zaloguje i s cause)
+            throw OAuthException.invalidToken(e.getMessage());
         }
 
-        if (userInfo.getEmail() == null ||
-                userInfo.getEmail().isBlank()) {
+        // Logování úspěšné verifikace
+        oauthLogger.logProviderVerificationSuccess(request.getProvider(), userInfo.getProviderUserId());
 
-            publishAudit(
-                    null,
-                    AuditStatus.FAILED
-            );
-
-            throw new OAuthEmailMissingException(
-                    "OAuth provider did not return email"
-            );
+        // Kontrola dat
+        if (userInfo.getEmail() == null || userInfo.getEmail().isBlank()) {
+            throw OAuthException.userDataMissing(request.getProvider().toString());
         }
 
-        boolean isNewUser = false;
-
-        UserEntity user;
-
-        if (userService.existsByEmail(userInfo.getEmail())) {
-
-            user =
-                    userService.findByEmail(
-                            userInfo.getEmail()
-                    );
-
-        } else {
-
-            user =
-                    createNewUser(userInfo);
-
-            isNewUser = true;
+        // Doplnění jména
+        if (isNameMissing(userInfo)) {
+            userInfo = enrichUserInfoWithRequestData(userInfo, request);
         }
 
-        publishAudit(
-                user.getId(),
-                AuditStatus.SUCCESS
-        );
+        // 3. Získání/Vytvoření uživatele
+        var user = oauthUserService.getOrCreateUser(userInfo);
 
-        if (isNewUser) {
-
-            publishAuditRegister(user);
+        // 4. Registrace zařízení
+        // Zde nespouštíme chybu, pokud selže statistika zařízení (silent fail),
+        // ale ani nelogujeme chybu (clean logs).
+        String finalDeviceIdentifier = request.getDeviceIdentifier();
+        try {
+            var device = registerOrUpdateDevice(user, request);
+            if (device != null) {
+                finalDeviceIdentifier = device.getDeviceIdentifier();
+            }
+        } catch (Exception ignored) {
+            // Ignorujeme chybu zařízení, nechceme blokovat login
         }
 
-        return buildAuthResponse(user);
+        // 5. Generování tokenů
+        try {
+            String accessToken = jwtService.generateAccessToken(user, finalDeviceIdentifier);
+            String refreshToken = jwtService.generateRefreshToken(user, finalDeviceIdentifier);
+
+            oauthLogger.logSuccessfulOAuthLogin(user.getEmail(), request.getProvider());
+
+            return oauthMapper.toResponse(accessToken, refreshToken, accessTokenExpiration, user);
+        } catch (Exception e) {
+            throw OAuthException.internalError("Chyba při generování tokenů.", e);
+        }
     }
 
+    private DeviceEntity registerOrUpdateDevice(UserEntity user, OAuthLoginRequest dto) {
+        if (dto.getDeviceIdentifier() == null) return null;
 
-    // =====================================================
-    // HELPERS
-    // =====================================================
+        var device = deviceService.findByIdentifier(dto.getDeviceIdentifier())
+                .orElseGet(() -> {
+                    var newDevice = new DeviceEntity();
+                    newDevice.setDeviceIdentifier(dto.getDeviceIdentifier());
+                    return newDevice;
+                });
 
-    private UserEntity createNewUser(OAuthUserInfo userInfo) {
+        device.setUser(user);
+        device.setDeviceName(dto.getDeviceName() != null ? dto.getDeviceName() : "Neznámé OAuth zařízení");
+        device.setDeviceType(dto.getDeviceType() != null ? dto.getDeviceType() : "UNKNOWN");
+        device.setLastLogin(LocalDateTime.now());
 
-        UserEntity user =
-                userMapper.toNewUser(userInfo);
+        if (httpServletRequest != null) {
+            try {
+                device.setLastIpAddress(httpServletRequest.getRemoteAddr());
+                device.setUserAgent(httpServletRequest.getHeader("User-Agent"));
+            } catch (Exception ignored) {}
+        }
 
-        String randomPassword =
-                UUID.randomUUID().toString().replace("-", "") +
-                        UUID.randomUUID().toString().replace("-", "");
-
-        user.setPassword(
-                passwordEncoder.encode(randomPassword)
-        );
-
-        RoleEntity userRole =
-                roleService.findByName("USER");
-
-        user.getRoles().add(userRole);
-
-        return userService.save(user);
+        return deviceService.save(device);
     }
 
-
-    private AuthResponse buildAuthResponse(UserEntity user) {
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
-        Long expiresIn = jwtService.getAccessTokenExpirationSeconds();
-
-        UserResponse userResponse = userMapperInternal.toAuth(user);
-
-        return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .expiresIn(expiresIn)
-                .user(userResponse)
-                .build(); // tokenType se doplní automaticky jako "Bearer"
+    private boolean isNameMissing(OAuthUserInfo userInfo) {
+        return userInfo.getFirstName() == null || userInfo.getFirstName().isBlank();
     }
 
-
-    private void publishAudit(
-            Long userId,
-            AuditStatus status
-    ) {
-
-        eventPublisher.publishEvent(
-                new AuditEvent(
-                        this,
-                        userId,
-                        AuditAction.OAUTH_LOGIN,
-                        status,
-                        request.getRemoteAddr(),
-                        request.getHeader("User-Agent")
-                )
-        );
+    private OAuthUserInfo enrichUserInfoWithRequestData(OAuthUserInfo info, OAuthLoginRequest request) {
+        return OAuthUserInfo.builder()
+                .providerUserId(info.getProviderUserId())
+                .email(info.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .profileImageUrl(info.getProfileImageUrl())
+                .providerType(info.getProviderType())
+                .build();
     }
-
-
-    private void publishAuditRegister(UserEntity user) {
-
-        eventPublisher.publishEvent(
-                new AuditEvent(
-                        this,
-                        user.getId(),
-                        AuditAction.REGISTER,
-                        AuditStatus.SUCCESS,
-                        request.getRemoteAddr(),
-                        request.getHeader("User-Agent")
-                )
-        );
-    }
-
 }

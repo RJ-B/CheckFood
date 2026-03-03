@@ -1,14 +1,12 @@
 services:
+  # --- DATABÁZE (PostgreSQL + PostGIS) ---
   db:
-    image: postgres:15-alpine
+    image: postgis/postgis:15-3.4-alpine
     container_name: checkfood-db
     restart: always
-    # Načtení proměnných ze specifického souboru
     env_file:
       - .env
     environment:
-      # Zde zůstávají klíče, které Postgres očekává,
-      # hodnoty se vezmou z .env.example.local
       POSTGRES_DB: checkfood
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -16,7 +14,7 @@ services:
       - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d checkfood"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
     volumes:
@@ -24,6 +22,32 @@ services:
     networks:
       - checkfood-network
 
+  # --- BACKEND (Java Spring Boot) ---
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: checkfood-service
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      # Propojení na DB kontejner přes název služby 'db'
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/checkfood
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-local}
+      # Virtual Threads (Java 21)
+      SPRING_THREADS_VIRTUAL_ENABLED: "true"
+    ports:
+      - "8081:8081"
+    networks:
+      - checkfood-network
+
+# --- DEFINICE VOLUME A SÍTÍ ---
 volumes:
   postgres_data:
 

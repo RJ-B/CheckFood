@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/profile/request/change_password_request_model.dart';
+import '../../../validators/password_validator.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
 import '../../bloc/user/user_state.dart';
-
-// Import modelu
 
 class ChangePasswordForm extends StatefulWidget {
   const ChangePasswordForm({super.key});
@@ -41,7 +40,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       final request = ChangePasswordRequestModel(
         currentPassword: _oldPasswordController.text,
         newPassword: _newPasswordController.text,
-        confirmNewPassword: _confirmPasswordController.text,
+        confirmPassword: _confirmPasswordController.text,
       );
 
       context.read<UserBloc>().add(UserEvent.passwordChangeRequested(request));
@@ -97,8 +96,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.lock),
               ),
-              validator:
-                  (v) => (v?.length ?? 0) < 6 ? 'Minimálně 6 znaků' : null,
+              validator: PasswordValidator.validate,
             ),
             const SizedBox(height: 16),
 
@@ -117,12 +115,10 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                   onPressed: () => setState(() => _obscureText = !_obscureText),
                 ),
               ),
-              validator: (v) {
-                if (v != _newPasswordController.text) {
-                  return 'Hesla se neshodují';
-                }
-                return null;
-              },
+              validator: (v) => PasswordValidator.validateMatch(
+                v,
+                _newPasswordController.text,
+              ),
             ),
             const SizedBox(height: 24),
 

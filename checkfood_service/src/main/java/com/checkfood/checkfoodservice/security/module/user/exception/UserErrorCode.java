@@ -1,33 +1,48 @@
 package com.checkfood.checkfoodservice.security.module.user.exception;
 
 /**
- * Enumrace chybových kódů pro user modul.
- * Poskytuje standardizované identifikátory chyb pro správu uživatelů a jejich dat.
+ * Enumerace chybových kódů pro User modul.
+ * Obsahuje metadata pro automatické rozhodování o logování (Severity) v ExceptionHandleru.
  */
 public enum UserErrorCode {
 
-    /**
-     * Uživatel nebyl nalezen v systému.
-     */
-    USER_NOT_FOUND,
+    // --- SECURITY INCIDENTS (WARN) ---
+    /** Pokus o přístup k cizím datům. */
+    USER_ACCESS_DENIED("SECURITY_INCIDENT"),
+    /** Neoprávněná operace (např. admin akce běžným uživatelem). */
+    USER_INSUFFICIENT_PERMISSIONS("SECURITY_INCIDENT"),
 
-    /**
-     * Role nebyla nalezena v systému.
-     */
-    ROLE_NOT_FOUND,
+    // --- NOT FOUND (INFO) ---
+    /** Uživatel nenalezen. */
+    USER_NOT_FOUND("NOT_FOUND"),
+    /** Role nenalezena. */
+    ROLE_NOT_FOUND("NOT_FOUND"),
 
-    /**
-     * Pokus o přístup k datům jiného uživatele.
-     */
-    USER_ACCESS_DENIED,
+    // --- DATA CONFLICT / VALIDATION (INFO) ---
+    /** Email již existuje (duplicita). */
+    USER_EMAIL_EXISTS("DATA_CONFLICT"),
+    /** Neplatná operace (validace vstupu). */
+    USER_INVALID_OPERATION("VALIDATION"),
 
-    /**
-     * Email je již používán jiným uživatelem.
-     */
-    USER_EMAIL_EXISTS,
+    // --- SYSTEM ERRORS (ERROR) ---
+    /** Chyba databáze nebo systému. */
+    USER_SYSTEM_ERROR("SYSTEM");
 
-    /**
-     * Neplatná operace nad uživatelským účtem.
-     */
-    USER_INVALID_OPERATION
+    private final String category;
+
+    UserErrorCode(String category) {
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public boolean isSecurityEvent() {
+        return "SECURITY_INCIDENT".equals(category);
+    }
+
+    public boolean isSystemError() {
+        return "SYSTEM".equals(category);
+    }
 }

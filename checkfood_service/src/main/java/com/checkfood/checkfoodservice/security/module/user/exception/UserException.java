@@ -4,105 +4,115 @@ import com.checkfood.checkfoodservice.security.exception.SecurityException;
 import org.springframework.http.HttpStatus;
 
 /**
- * Výjimka pro user modul.
- * Poskytuje tovární metody pro nejčastější user chyby s přednastavenými HTTP stavy a error kódy.
- *
- * @see SecurityException
- * @see UserErrorCode
+ * Výjimka pro modul User.
+ * Poskytuje tovární metody pro chyby správy uživatelů.
  */
 public class UserException extends SecurityException {
 
-    /**
-     * Vytvoří novou user výjimku.
-     *
-     * @param errorCode user error kód
-     * @param message lidsky čitelná chybová zpráva
-     * @param status HTTP status kód odpovědi
-     */
     public UserException(UserErrorCode errorCode, String message, HttpStatus status) {
         super(errorCode, message, status);
     }
 
-    /**
-     * Uživatel nebyl nalezen v systému.
-     *
-     * @param email email nenalezeného uživatele
-     * @return výjimka s HTTP 404 Not Found
-     */
-    public static UserException userNotFound(String email) {
-        return new UserException(
-                UserErrorCode.USER_NOT_FOUND,
-                "Uživatel s emailem " + email + " nebyl nalezen.",
-                HttpStatus.NOT_FOUND
-        );
+    public UserException(UserErrorCode errorCode, String message, HttpStatus status, Throwable cause) {
+        super(errorCode, message, status, cause);
     }
 
-    /**
-     * Uživatel s daným ID nebyl nalezen.
-     *
-     * @param userId ID nenalezeného uživatele
-     * @return výjimka s HTTP 404 Not Found
-     */
-    public static UserException userNotFoundById(Long userId) {
-        return new UserException(
-                UserErrorCode.USER_NOT_FOUND,
-                "Uživatel s ID " + userId + " nebyl nalezen.",
-                HttpStatus.NOT_FOUND
-        );
-    }
+// --- ROLE NOT FOUND ---
 
-    /**
-     * Role nebyla nalezena v systému.
-     *
-     * @param roleName název nenalezené role
-     * @return výjimka s HTTP 404 Not Found
-     */
     public static UserException roleNotFound(String roleName) {
         return new UserException(
                 UserErrorCode.ROLE_NOT_FOUND,
-                "Role " + roleName + " nebyla nalezena.",
+                "Role nenalezena: " + roleName,
                 HttpStatus.NOT_FOUND
         );
     }
 
-    /**
-     * Pokus o přístup k datům jiného uživatele.
-     *
-     * @return výjimka s HTTP 403 Forbidden
-     */
+    public static UserException roleNotFoundById(Long id) {
+        return new UserException(
+                UserErrorCode.ROLE_NOT_FOUND,
+                "Role s ID " + id + " nebyla nalezena.",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    // --- NOT FOUND ---
+
+    public static UserException userNotFound(String identifier) {
+        return new UserException(
+                UserErrorCode.USER_NOT_FOUND,
+                "Uživatel nenalezen: " + identifier,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    public static UserException userNotFoundById(Long id) {
+        return new UserException(
+                UserErrorCode.USER_NOT_FOUND,
+                "Uživatel s ID " + id + " nebyl nalezen.",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    public static UserException userWithDetailsNotFound(String email) {
+        return new UserException(
+                UserErrorCode.USER_NOT_FOUND,
+                "Uživatel '" + email + "' nebyl nalezen (nebo se nepodařilo načíst detaily).",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    public static UserException userWithRolesNotFound(String email) {
+        return new UserException(
+                UserErrorCode.USER_NOT_FOUND,
+                "Uživatel '" + email + "' nebyl nalezen (nebo se nepodařilo načíst role).",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    // --- SECURITY ---
+
     public static UserException accessDenied() {
         return new UserException(
                 UserErrorCode.USER_ACCESS_DENIED,
-                "Nemáte oprávnění k přístupu k datům tohoto uživatele.",
+                "Nemáte oprávnění k přístupu k těmto datům.",
                 HttpStatus.FORBIDDEN
         );
     }
 
-    /**
-     * Email je již používán jiným uživatelem.
-     *
-     * @param email duplicitní email
-     * @return výjimka s HTTP 409 Conflict
-     */
+    public static UserException insufficientPermissions(String operation) {
+        return new UserException(
+                UserErrorCode.USER_INSUFFICIENT_PERMISSIONS,
+                "Nedostatečná oprávnění pro operaci: " + operation,
+                HttpStatus.FORBIDDEN
+        );
+    }
+
+    // --- CONFLICTS & VALIDATION ---
+
     public static UserException emailExists(String email) {
         return new UserException(
                 UserErrorCode.USER_EMAIL_EXISTS,
-                "Email " + email + " je již používán.",
+                "Email '" + email + "' je již používán jiným uživatelem.",
                 HttpStatus.CONFLICT
         );
     }
 
-    /**
-     * Neplatná operace nad uživatelským účtem.
-     *
-     * @param message popis neplatné operace
-     * @return výjimka s HTTP 400 Bad Request
-     */
     public static UserException invalidOperation(String message) {
         return new UserException(
                 UserErrorCode.USER_INVALID_OPERATION,
                 message,
                 HttpStatus.BAD_REQUEST
+        );
+    }
+
+    // --- SYSTEM ---
+
+    public static UserException systemError(String message, Throwable cause) {
+        return new UserException(
+                UserErrorCode.USER_SYSTEM_ERROR,
+                "Chyba systému uživatelů: " + message,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                cause
         );
     }
 }

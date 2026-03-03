@@ -15,17 +15,17 @@ import lombok.*;
 @Builder
 public class UpdateProfileRequest {
 
-    /**
-     * Křestní jméno uživatele.
-     */
     @NotBlank(message = "Jméno nesmí být prázdné.")
     @Size(max = 50, message = "Jméno nesmí být delší než 50 znaků.")
     private String firstName;
 
-    /**
-     * Příjmení uživatele.
-     */
     @NotBlank(message = "Příjmení nesmí být prázdné.")
     @Size(max = 50, message = "Příjmení nesmí být delší než 50 znaků.")
     private String lastName;
+
+    /**
+     * URL adresa profilového obrázku.
+     */
+    @Size(max = 512, message = "URL obrázku nesmí být delší než 512 znaků.")
+    private String profileImageUrl;
 }

@@ -1,5 +1,6 @@
 package com.checkfood.checkfoodservice.security.module.user.entity;
 
+import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,13 +15,14 @@ import java.util.stream.Collectors;
 
 /**
  * Centrální doménová entita reprezentující uživatelský subjekt.
- * Implementace UserDetails zajišťuje kompatibilitu s bezpečnostním kontextem Spring Security.
+ * Aktualizována o podporu profilových obrázků z OAuth2.
  */
 @Entity
 @Table(
         name = "users",
         indexes = {
-                @Index(name = "idx_user_email", columnList = "email", unique = true)
+                @Index(name = "idx_user_email", columnList = "email", unique = true),
+                @Index(name = "idx_user_provider_identity", columnList = "auth_provider, provider_id")
         }
 )
 @Getter
@@ -44,33 +46,30 @@ public class UserEntity implements UserDetails {
     private String lastName;
 
     /**
-     * Hashované heslo (BCrypt).
+     * URL adresa profilového obrázku získaná z OAuth poskytovatele (např. Google).
      */
-    @Column(nullable = false, length = 255)
+    @Column(name = "profile_image_url", length = 512) // Zvětšená délka pro dlouhé URL tokeny
+    private String profileImageUrl;
+
+    @Column(length = 255)
     private String password;
 
-    /**
-     * Stav aktivace účtu. Řídí přístup k systému před dokončením verifikace identity.
-     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider", nullable = false, length = 20)
+    private AuthProvider authProvider;
+
+    @Column(name = "provider_id", nullable = false)
+    private String providerId;
+
     @Builder.Default
     @Column(nullable = false)
     private boolean enabled = false;
 
-    /**
-     * Auditní záznam o vytvoření identity.
-     */
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * Auditní záznam o poslední modifikaci stavu entity.
-     */
     private LocalDateTime updatedAt;
 
-    /**
-     * RBAC (Role-Based Access Control) vazba.
-     * Používá se Lazy loading pro eliminaci zbytečné zátěže persistence contextu.
-     */
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -80,19 +79,21 @@ public class UserEntity implements UserDetails {
     )
     private Set<RoleEntity> roles = new HashSet<>();
 
-    /**
-     * Kolekce registrovaných klientských zařízení a jejich session kontextů.
-     */
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DeviceEntity> devices = new HashSet<>();
 
-    // --- Persistence Lifecycle Callbacks ---
+    // --- Lifecycle Callbacks ---
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+
+        if (this.authProvider == AuthProvider.LOCAL && this.providerId == null) {
+            this.providerId = this.email;
+        }
     }
 
     @PreUpdate
@@ -102,17 +103,11 @@ public class UserEntity implements UserDetails {
 
     // --- Synchronization Helpers ---
 
-    /**
-     * Zajišťuje konzistenci obousměrné vazby mezi uživatelem a zařízením.
-     */
     public void addDevice(DeviceEntity device) {
         devices.add(device);
         device.setUser(this);
     }
 
-    /**
-     * Terminace vazby na zařízení při odstranění session.
-     */
     public void removeDevice(DeviceEntity device) {
         devices.remove(device);
         device.setUser(null);
@@ -120,10 +115,6 @@ public class UserEntity implements UserDetails {
 
     // --- UserDetails Implementation ---
 
-    /**
-     * Transformuje persistované role na granulární autority Spring Security.
-     * Každá role je prefixována standardním identifikátorem "ROLE_".
-     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -137,19 +128,13 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    public boolean isAccountNonExpired() { return true; }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    public boolean isAccountNonLocked() { return true; }
 
     @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    public boolean isCredentialsNonExpired() { return true; }
 
     @Override
     public boolean isEnabled() {

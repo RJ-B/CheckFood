@@ -23,9 +23,9 @@ RefreshTokenRequestModel _$RefreshTokenRequestModelFromJson(
 
 /// @nodoc
 mixin _$RefreshTokenRequestModel {
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   String get refreshToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'deviceIdentifier')
+  @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
   String get deviceIdentifier => throw _privateConstructorUsedError;
 
   /// Serializes this RefreshTokenRequestModel to a JSON map.
@@ -46,8 +46,8 @@ abstract class $RefreshTokenRequestModelCopyWith<$Res> {
   ) = _$RefreshTokenRequestModelCopyWithImpl<$Res, RefreshTokenRequestModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    @JsonKey(name: 'deviceIdentifier') String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier) String deviceIdentifier,
   });
 }
 
@@ -97,8 +97,8 @@ abstract class _$$RefreshTokenRequestModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    @JsonKey(name: 'deviceIdentifier') String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier) String deviceIdentifier,
   });
 }
 
@@ -141,18 +141,19 @@ class __$$RefreshTokenRequestModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RefreshTokenRequestModelImpl implements _RefreshTokenRequestModel {
   const _$RefreshTokenRequestModelImpl({
-    @JsonKey(name: 'refreshToken') required this.refreshToken,
-    @JsonKey(name: 'deviceIdentifier') required this.deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) required this.refreshToken,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
+    required this.deviceIdentifier,
   });
 
   factory _$RefreshTokenRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RefreshTokenRequestModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   final String refreshToken;
   @override
-  @JsonKey(name: 'deviceIdentifier')
+  @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
   final String deviceIdentifier;
 
   @override
@@ -193,18 +194,20 @@ class _$RefreshTokenRequestModelImpl implements _RefreshTokenRequestModel {
 
 abstract class _RefreshTokenRequestModel implements RefreshTokenRequestModel {
   const factory _RefreshTokenRequestModel({
-    @JsonKey(name: 'refreshToken') required final String refreshToken,
-    @JsonKey(name: 'deviceIdentifier') required final String deviceIdentifier,
+    @JsonKey(name: SecurityJsonKeys.refreshToken)
+    required final String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
+    required final String deviceIdentifier,
   }) = _$RefreshTokenRequestModelImpl;
 
   factory _RefreshTokenRequestModel.fromJson(Map<String, dynamic> json) =
       _$RefreshTokenRequestModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   String get refreshToken;
   @override
-  @JsonKey(name: 'deviceIdentifier')
+  @JsonKey(name: SecurityJsonKeys.deviceIdentifier)
   String get deviceIdentifier;
 
   /// Create a copy of RefreshTokenRequestModel

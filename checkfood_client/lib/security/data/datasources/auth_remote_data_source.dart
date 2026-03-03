@@ -1,32 +1,39 @@
 import 'package:dio/dio.dart';
+import '../../config/security_endpoints.dart';
 
+// Request Models
 import '../models/auth/request/login_request_model.dart';
 import '../models/auth/request/register_request_model.dart';
 import '../models/auth/request/refresh_token_request_model.dart';
 import '../models/auth/request/verify_email_request_model.dart';
+import '../models/auth/request/logout_request_model.dart';
+import '../models/auth/request/resend_verification_request_model.dart';
 
+// Response Models
 import '../models/auth/response/auth_response_model.dart';
 import '../models/auth/response/token_response_model.dart';
 
+/// Rozhraní pro vzdálený zdroj dat autentizace.
+/// V Cestě A každá metoda striktně vyžaduje svůj Request Model.
 abstract class AuthRemoteDataSource {
   Future<AuthResponseModel> login(LoginRequestModel request);
   Future<void> register(RegisterRequestModel request);
+  Future<void> registerOwner(RegisterRequestModel request);
   Future<void> verifyEmail(VerifyEmailRequestModel request);
-  Future<void> resendVerificationCode(String email);
+  Future<void> resendVerificationCode(ResendVerificationRequestModel request);
   Future<TokenResponseModel> refreshToken(RefreshTokenRequestModel request);
-  Future<void> logout();
+  Future<void> logout(LogoutRequestModel request);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
-  static const String _authPath = '/api/auth';
 
   AuthRemoteDataSourceImpl(this._dio);
 
   @override
   Future<AuthResponseModel> login(LoginRequestModel request) async {
     final response = await _dio.post(
-      '$_authPath/login',
+      SecurityEndpoints.login,
       data: request.toJson(),
     );
     return AuthResponseModel.fromJson(response.data);
@@ -34,28 +41,31 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> register(RegisterRequestModel request) async {
-    await _dio.post('$_authPath/register', data: request.toJson());
+    await _dio.post(SecurityEndpoints.register, data: request.toJson());
+  }
+
+  @override
+  Future<void> registerOwner(RegisterRequestModel request) async {
+    await _dio.post(SecurityEndpoints.registerOwner, data: request.toJson());
   }
 
   @override
   Future<void> verifyEmail(VerifyEmailRequestModel request) async {
-    // ✅ OPRAVA: Backend používá @GetMapping("/verify") s @RequestParam("token")
-    // Proto měníme POST na GET a posíláme token v query parametrech.
+    // GET požadavek s tokenem v query parametrech
     await _dio.get(
-      '$_authPath/verify',
-      queryParameters: {
-        'token':
-            request
-                .token, // Předpokládám, že VerifyEmailRequestModel má pole 'token'
-      },
+      SecurityEndpoints.verifyEmail,
+      queryParameters: {'token': request.token},
     );
   }
 
   @override
-  Future<void> resendVerificationCode(String email) async {
-    // ✅ KONSTRUKCE: Backend používá @PostMapping("/resend-code") s @RequestBody
-    // To odpovídá tvé konstrukci s Mapou, kterou Dio převede na JSON.
-    await _dio.post('$_authPath/resend-code', data: {'email': email});
+  Future<void> resendVerificationCode(
+    ResendVerificationRequestModel request,
+  ) async {
+    await _dio.post(
+      SecurityEndpoints.resendVerification,
+      data: request.toJson(),
+    );
   }
 
   @override
@@ -63,14 +73,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     RefreshTokenRequestModel request,
   ) async {
     final response = await _dio.post(
-      '$_authPath/refresh',
+      SecurityEndpoints.refreshToken,
       data: request.toJson(),
     );
     return TokenResponseModel.fromJson(response.data);
   }
 
   @override
-  Future<void> logout() async {
-    await _dio.post('$_authPath/logout');
+  Future<void> logout(LogoutRequestModel request) async {
+    await _dio.post(SecurityEndpoints.logout, data: request.toJson());
   }
 }

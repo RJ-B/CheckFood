@@ -20,58 +20,70 @@ mixin _$UserEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
     required TResult Function(UpdateProfileRequestModel request) profileUpdated,
     required TResult Function(ChangePasswordRequestModel request)
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
-    required TResult Function(String deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
     TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult? Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
-    TResult? Function(String deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
     TResult Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
-    TResult Function(String deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
     required TResult Function(ProfileUpdated value) profileUpdated,
     required TResult Function(PasswordChangeRequested value)
     passwordChangeRequested,
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
     TResult? Function(ProfileUpdated value)? profileUpdated,
     TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
     TResult Function(ProfileUpdated value)? profileUpdated,
     TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -140,11 +152,13 @@ class _$ProfileRequestedImpl implements ProfileRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
     required TResult Function(UpdateProfileRequestModel request) profileUpdated,
     required TResult Function(ChangePasswordRequestModel request)
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
-    required TResult Function(String deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
   }) {
     return profileRequested();
   }
@@ -153,11 +167,13 @@ class _$ProfileRequestedImpl implements ProfileRequested {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
     TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult? Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
-    TResult? Function(String deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
   }) {
     return profileRequested?.call();
   }
@@ -166,11 +182,13 @@ class _$ProfileRequestedImpl implements ProfileRequested {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
     TResult Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
-    TResult Function(String deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
     required TResult orElse(),
   }) {
     if (profileRequested != null) {
@@ -183,12 +201,14 @@ class _$ProfileRequestedImpl implements ProfileRequested {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
     required TResult Function(ProfileUpdated value) profileUpdated,
     required TResult Function(PasswordChangeRequested value)
     passwordChangeRequested,
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
   }) {
     return profileRequested(this);
   }
@@ -197,11 +217,13 @@ class _$ProfileRequestedImpl implements ProfileRequested {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
     TResult? Function(ProfileUpdated value)? profileUpdated,
     TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
   }) {
     return profileRequested?.call(this);
   }
@@ -210,11 +232,13 @@ class _$ProfileRequestedImpl implements ProfileRequested {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
     TResult Function(ProfileUpdated value)? profileUpdated,
     TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
     required TResult orElse(),
   }) {
     if (profileRequested != null) {
@@ -226,6 +250,150 @@ class _$ProfileRequestedImpl implements ProfileRequested {
 
 abstract class ProfileRequested implements UserEvent {
   const factory ProfileRequested() = _$ProfileRequestedImpl;
+}
+
+/// @nodoc
+abstract class _$$DevicesRequestedImplCopyWith<$Res> {
+  factory _$$DevicesRequestedImplCopyWith(
+    _$DevicesRequestedImpl value,
+    $Res Function(_$DevicesRequestedImpl) then,
+  ) = __$$DevicesRequestedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$DevicesRequestedImplCopyWithImpl<$Res>
+    extends _$UserEventCopyWithImpl<$Res, _$DevicesRequestedImpl>
+    implements _$$DevicesRequestedImplCopyWith<$Res> {
+  __$$DevicesRequestedImplCopyWithImpl(
+    _$DevicesRequestedImpl _value,
+    $Res Function(_$DevicesRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$DevicesRequestedImpl implements DevicesRequested {
+  const _$DevicesRequestedImpl();
+
+  @override
+  String toString() {
+    return 'UserEvent.devicesRequested()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$DevicesRequestedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
+    required TResult Function(UpdateProfileRequestModel request) profileUpdated,
+    required TResult Function(ChangePasswordRequestModel request)
+    passwordChangeRequested,
+    required TResult Function() allDevicesLogoutRequested,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
+  }) {
+    return devicesRequested();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
+    TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult? Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult? Function()? allDevicesLogoutRequested,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
+  }) {
+    return devicesRequested?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
+    TResult Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult Function()? allDevicesLogoutRequested,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
+    required TResult orElse(),
+  }) {
+    if (devicesRequested != null) {
+      return devicesRequested();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
+    required TResult Function(ProfileUpdated value) profileUpdated,
+    required TResult Function(PasswordChangeRequested value)
+    passwordChangeRequested,
+    required TResult Function(AllDevicesLogoutRequested value)
+    allDevicesLogoutRequested,
+    required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
+  }) {
+    return devicesRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
+    TResult? Function(ProfileUpdated value)? profileUpdated,
+    TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult? Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
+  }) {
+    return devicesRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
+    TResult Function(ProfileUpdated value)? profileUpdated,
+    TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
+    required TResult orElse(),
+  }) {
+    if (devicesRequested != null) {
+      return devicesRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DevicesRequested implements UserEvent {
+  const factory DevicesRequested() = _$DevicesRequestedImpl;
 }
 
 /// @nodoc
@@ -314,11 +482,13 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
     required TResult Function(UpdateProfileRequestModel request) profileUpdated,
     required TResult Function(ChangePasswordRequestModel request)
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
-    required TResult Function(String deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
   }) {
     return profileUpdated(request);
   }
@@ -327,11 +497,13 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
     TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult? Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
-    TResult? Function(String deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
   }) {
     return profileUpdated?.call(request);
   }
@@ -340,11 +512,13 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
     TResult Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
-    TResult Function(String deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
     required TResult orElse(),
   }) {
     if (profileUpdated != null) {
@@ -357,12 +531,14 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
     required TResult Function(ProfileUpdated value) profileUpdated,
     required TResult Function(PasswordChangeRequested value)
     passwordChangeRequested,
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
   }) {
     return profileUpdated(this);
   }
@@ -371,11 +547,13 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
     TResult? Function(ProfileUpdated value)? profileUpdated,
     TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
   }) {
     return profileUpdated?.call(this);
   }
@@ -384,11 +562,13 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
     TResult Function(ProfileUpdated value)? profileUpdated,
     TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
     required TResult orElse(),
   }) {
     if (profileUpdated != null) {
@@ -496,11 +676,13 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
     required TResult Function(UpdateProfileRequestModel request) profileUpdated,
     required TResult Function(ChangePasswordRequestModel request)
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
-    required TResult Function(String deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
   }) {
     return passwordChangeRequested(request);
   }
@@ -509,11 +691,13 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
     TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult? Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
-    TResult? Function(String deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
   }) {
     return passwordChangeRequested?.call(request);
   }
@@ -522,11 +706,13 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
     TResult Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
-    TResult Function(String deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
     required TResult orElse(),
   }) {
     if (passwordChangeRequested != null) {
@@ -539,12 +725,14 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
     required TResult Function(ProfileUpdated value) profileUpdated,
     required TResult Function(PasswordChangeRequested value)
     passwordChangeRequested,
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
   }) {
     return passwordChangeRequested(this);
   }
@@ -553,11 +741,13 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
     TResult? Function(ProfileUpdated value)? profileUpdated,
     TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
   }) {
     return passwordChangeRequested?.call(this);
   }
@@ -566,11 +756,13 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
     TResult Function(ProfileUpdated value)? profileUpdated,
     TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
     required TResult orElse(),
   }) {
     if (passwordChangeRequested != null) {
@@ -639,11 +831,13 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
     required TResult Function(UpdateProfileRequestModel request) profileUpdated,
     required TResult Function(ChangePasswordRequestModel request)
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
-    required TResult Function(String deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
   }) {
     return allDevicesLogoutRequested();
   }
@@ -652,11 +846,13 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
     TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult? Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
-    TResult? Function(String deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
   }) {
     return allDevicesLogoutRequested?.call();
   }
@@ -665,11 +861,13 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
     TResult Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
-    TResult Function(String deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
     required TResult orElse(),
   }) {
     if (allDevicesLogoutRequested != null) {
@@ -682,12 +880,14 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
     required TResult Function(ProfileUpdated value) profileUpdated,
     required TResult Function(PasswordChangeRequested value)
     passwordChangeRequested,
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
   }) {
     return allDevicesLogoutRequested(this);
   }
@@ -696,11 +896,13 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
     TResult? Function(ProfileUpdated value)? profileUpdated,
     TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
   }) {
     return allDevicesLogoutRequested?.call(this);
   }
@@ -709,11 +911,13 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
     TResult Function(ProfileUpdated value)? profileUpdated,
     TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
     required TResult orElse(),
   }) {
     if (allDevicesLogoutRequested != null) {
@@ -734,7 +938,7 @@ abstract class _$$DeviceLoggedOutImplCopyWith<$Res> {
     $Res Function(_$DeviceLoggedOutImpl) then,
   ) = __$$DeviceLoggedOutImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String deviceId});
+  $Res call({int deviceId});
 }
 
 /// @nodoc
@@ -756,7 +960,7 @@ class __$$DeviceLoggedOutImplCopyWithImpl<$Res>
         null == deviceId
             ? _value.deviceId
             : deviceId // ignore: cast_nullable_to_non_nullable
-                as String,
+                as int,
       ),
     );
   }
@@ -768,7 +972,7 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   const _$DeviceLoggedOutImpl(this.deviceId);
 
   @override
-  final String deviceId;
+  final int deviceId;
 
   @override
   String toString() {
@@ -802,11 +1006,13 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
     required TResult Function(UpdateProfileRequestModel request) profileUpdated,
     required TResult Function(ChangePasswordRequestModel request)
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
-    required TResult Function(String deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
   }) {
     return deviceLoggedOut(deviceId);
   }
@@ -815,11 +1021,13 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
     TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult? Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
-    TResult? Function(String deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
   }) {
     return deviceLoggedOut?.call(deviceId);
   }
@@ -828,11 +1036,13 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
     TResult Function(UpdateProfileRequestModel request)? profileUpdated,
     TResult Function(ChangePasswordRequestModel request)?
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
-    TResult Function(String deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
     required TResult orElse(),
   }) {
     if (deviceLoggedOut != null) {
@@ -845,12 +1055,14 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
     required TResult Function(ProfileUpdated value) profileUpdated,
     required TResult Function(PasswordChangeRequested value)
     passwordChangeRequested,
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
   }) {
     return deviceLoggedOut(this);
   }
@@ -859,11 +1071,13 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
     TResult? Function(ProfileUpdated value)? profileUpdated,
     TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
   }) {
     return deviceLoggedOut?.call(this);
   }
@@ -872,11 +1086,13 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
     TResult Function(ProfileUpdated value)? profileUpdated,
     TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
     required TResult orElse(),
   }) {
     if (deviceLoggedOut != null) {
@@ -887,13 +1103,157 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
 }
 
 abstract class DeviceLoggedOut implements UserEvent {
-  const factory DeviceLoggedOut(final String deviceId) = _$DeviceLoggedOutImpl;
+  const factory DeviceLoggedOut(final int deviceId) = _$DeviceLoggedOutImpl;
 
-  String get deviceId;
+  int get deviceId;
 
   /// Create a copy of UserEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DeviceLoggedOutImplCopyWith<_$DeviceLoggedOutImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ClearDataRequestedImplCopyWith<$Res> {
+  factory _$$ClearDataRequestedImplCopyWith(
+    _$ClearDataRequestedImpl value,
+    $Res Function(_$ClearDataRequestedImpl) then,
+  ) = __$$ClearDataRequestedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ClearDataRequestedImplCopyWithImpl<$Res>
+    extends _$UserEventCopyWithImpl<$Res, _$ClearDataRequestedImpl>
+    implements _$$ClearDataRequestedImplCopyWith<$Res> {
+  __$$ClearDataRequestedImplCopyWithImpl(
+    _$ClearDataRequestedImpl _value,
+    $Res Function(_$ClearDataRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ClearDataRequestedImpl implements ClearDataRequested {
+  const _$ClearDataRequestedImpl();
+
+  @override
+  String toString() {
+    return 'UserEvent.clearDataRequested()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ClearDataRequestedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
+    required TResult Function(UpdateProfileRequestModel request) profileUpdated,
+    required TResult Function(ChangePasswordRequestModel request)
+    passwordChangeRequested,
+    required TResult Function() allDevicesLogoutRequested,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
+  }) {
+    return clearDataRequested();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
+    TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult? Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult? Function()? allDevicesLogoutRequested,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
+  }) {
+    return clearDataRequested?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
+    TResult Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult Function()? allDevicesLogoutRequested,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
+    required TResult orElse(),
+  }) {
+    if (clearDataRequested != null) {
+      return clearDataRequested();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
+    required TResult Function(ProfileUpdated value) profileUpdated,
+    required TResult Function(PasswordChangeRequested value)
+    passwordChangeRequested,
+    required TResult Function(AllDevicesLogoutRequested value)
+    allDevicesLogoutRequested,
+    required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
+  }) {
+    return clearDataRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
+    TResult? Function(ProfileUpdated value)? profileUpdated,
+    TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult? Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
+  }) {
+    return clearDataRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
+    TResult Function(ProfileUpdated value)? profileUpdated,
+    TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
+    required TResult orElse(),
+  }) {
+    if (clearDataRequested != null) {
+      return clearDataRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ClearDataRequested implements UserEvent {
+  const factory ClearDataRequested() = _$ClearDataRequestedImpl;
 }

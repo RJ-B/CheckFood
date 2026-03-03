@@ -3,172 +3,158 @@ package com.checkfood.checkfoodservice.security.exception;
 import com.checkfood.checkfoodservice.exception.ErrorResponse;
 import com.checkfood.checkfoodservice.exception.ErrorResponseBuilder;
 import com.checkfood.checkfoodservice.exception.ServiceExceptionHandler;
-import com.checkfood.checkfoodservice.logging.ServiceLogger;
-import com.checkfood.checkfoodservice.security.module.auth.exception.AuthException;
-import com.checkfood.checkfoodservice.security.module.auth.logging.AuthLogger;
-import com.checkfood.checkfoodservice.security.module.jwt.exception.JwtException;
-import com.checkfood.checkfoodservice.security.module.jwt.logging.JwtLogger;
-import com.checkfood.checkfoodservice.security.logging.SecurityLogger;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.stereotype.Component;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.WebRequest;
 
 /**
- * Exception handler pro bezpečnostní modul.
- * Rozšiřuje základní ServiceExceptionHandler o security specifické handlery.
- * Zpracovává všechny bezpečnostní výjimky a transformuje je na standardizované ErrorResponse objekty.
+ * Abstraktní základ pro security exception handlery poskytující společnou funkcionalitu
+ * pro zpracování bezpečnostních výjimek napříč security moduly.
  *
+ * Architektonické rozhodnutí: Není anotována @RestControllerAdvice pro prevenci
+ * duplicitní registrace handlerů. Potomci musí být explicitně označeni jako
+ * @RestControllerAdvice pro aktivaci exception handling.
+ *
+ * Hierarchie exception handling:
+ * 1. Specifické moduly (AuthExceptionHandler, JwtExceptionHandler)
+ * 2. Tento abstraktní handler (společné security exceptions)
+ * 3. ServiceExceptionHandler (aplikační base handler)
+ * 4. Spring default handlers
+ *
+ * Poskytuje standardizované zpracování Spring Security exceptions a utility
+ * metody pro extrakci request metadata pro bezpečnostní auditování.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see ServiceExceptionHandler
- * @see SecurityException
- * @see SecurityLogger
+ * @see AuthenticationException
  */
-@RestControllerAdvice
-@Component
-public class SecurityExceptionHandler extends ServiceExceptionHandler {
+@Slf4j
+public abstract class SecurityExceptionHandler extends ServiceExceptionHandler {
 
-    protected final SecurityLogger securityLogger;
-    protected final AuthLogger authLogger;
-    protected final JwtLogger jwtLogger;
-
-    public SecurityExceptionHandler(
-            ErrorResponseBuilder errorResponseBuilder,
-            ServiceLogger serviceLogger,
-            SecurityLogger securityLogger,
-            AuthLogger authLogger,
-            JwtLogger jwtLogger
-    ) {
-        super(errorResponseBuilder, serviceLogger);
-        this.securityLogger = securityLogger;
-        this.authLogger = authLogger;
-        this.jwtLogger = jwtLogger;
+    /**
+     * ErrorResponseBuilder pro konzistentní formátování error responses.
+     * Injektovaný přes constructor z parent třídy pro dependency consistency.
+     */
+    public SecurityExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
+        super(errorResponseBuilder);
     }
 
     /**
-     * Zpracovává vlastní security výjimky obsahující error kód a HTTP status.
+     * Fallback handler pro obecné security výjimky bez specifického handleru.
      *
-     * @param ex security výjimka
-     * @return standardizovaná chybová odpověď
+     * @param ex custom SecurityException s business error details
+     * @param request WebRequest pro extrakci kontextových informací
+     * @return ResponseEntity s strukturovanou error response
      */
     @ExceptionHandler(SecurityException.class)
-    public ResponseEntity<ErrorResponse> handleSecurityException(SecurityException ex) {
-        securityLogger.error("Security chyba: {}", ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleSecurityException(SecurityException ex, WebRequest request) {
+        String uri = extractRequestUri(request);
+        log.error("Security Exception na URI {}: {} (Status: {})", uri, ex.getMessage(), ex.getStatus());
 
         ErrorResponse response = errorResponseBuilder.build(
                 ex.getErrorCode(),
                 ex.getMessage(),
                 ex.getStatus()
         );
-
         return new ResponseEntity<>(response, ex.getStatus());
     }
 
     /**
-     * Zpracovává autentizační výjimky z auth modulu.
-     * Používá AuthLogger pro specifické logování autentizačních chyb.
+     * Zpracovává authentication failures na úrovni Spring Security AuthenticationManager.
+     * Generická error message pro prevenci user enumeration.
      *
-     * @param ex autentizační výjimka
-     * @return standardizovaná chybová odpověď
-     */
-    @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ErrorResponse> handleAuthException(AuthException ex) {
-        authLogger.logAuthenticationError(ex.getMessage());
-
-        ErrorResponse response = errorResponseBuilder.build(
-                ex.getErrorCode(),
-                ex.getMessage(),
-                ex.getStatus()
-        );
-
-        return new ResponseEntity<>(response, ex.getStatus());
-    }
-
-    /**
-     * Zpracovává JWT výjimky z JWT modulu.
-     * Používá JwtLogger pro specifické logování JWT chyb.
-     *
-     * @param ex JWT výjimka
-     * @return standardizovaná chybová odpověď
-     */
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex) {
-        jwtLogger.logAuthenticationError(ex.getMessage());
-
-        ErrorResponse response = errorResponseBuilder.build(
-                ex.getErrorCode(),
-                ex.getMessage(),
-                ex.getStatus()
-        );
-
-        return new ResponseEntity<>(response, ex.getStatus());
-    }
-
-    /**
-     * Zpracovává výjimku Spring Security při neplatných přihlašovacích údajích.
-     *
-     * @param ex výjimka při špatném heslu nebo emailu
-     * @return chybová odpověď s HTTP 401
+     * @param ex BadCredentialsException z Spring Security
+     * @param request WebRequest context pro audit trail
+     * @return ResponseEntity s authentication error response
      */
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
-        securityLogger.warn("Neplatné přihlašovací údaje");
-
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex, WebRequest request) {
         ErrorResponse response = errorResponseBuilder.build(
                 "AUTH_INVALID_CREDENTIALS",
-                "Neplatný email nebo heslo.",
+                "Neplatné přihlašovací údaje.",
                 HttpStatus.UNAUTHORIZED
         );
-
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     /**
-     * Zpracovává výjimku při nedostatečných oprávněních.
+     * Zpracovává authorization failures z Spring Security access control.
+     * Rozlišuje mezi authentication (401) a authorization (403) failures.
      *
-     * @param ex výjimka odepření přístupu
-     * @return chybová odpověď s HTTP 403
+     * @param ex AccessDeniedException z Spring Security authorization
+     * @param request WebRequest context pro security audit
+     * @return ResponseEntity s authorization error response
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
-        securityLogger.warn("Přístup odepřen: {}", ex.getMessage());
-
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
         ErrorResponse response = errorResponseBuilder.build(
                 "ACCESS_DENIED",
-                "Přístup odepřen: Nemáte dostatečná oprávnění.",
+                "Nemáte dostatečná oprávnění pro tuto operaci.",
                 HttpStatus.FORBIDDEN
         );
-
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
     /**
-     * Zpracovává validační chyby z @Valid anotace na controller metodách.
-     * Extrahuje první validační chybu a vrací ji klientovi.
+     * Zpracovává Bean Validation errors z @Valid annotated DTO parameters.
+     * Extrahuje první validation error pro user-friendly response.
      *
-     * @param ex výjimka validace argumentů
-     * @return chybová odpověď s HTTP 400
+     * @param ex MethodArgumentNotValidException s validation details
+     * @param request WebRequest context
+     * @return ResponseEntity s first validation error message
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
         String message = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .findFirst()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                .orElse("Validation error");
-
-        securityLogger.warn("Validační chyba: {}", message);
+                .orElse("Chyba validity dat.");
 
         ErrorResponse response = errorResponseBuilder.build(
                 "VALIDATION_ERROR",
                 message,
                 HttpStatus.BAD_REQUEST
         );
-
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // =========================================================================
+    // PROTECTED UTILITY METHODS - Shared infrastructure pro potomky
+    // =========================================================================
+
+    /**
+     * Extrahuje URI path z WebRequest pro audit logging a error tracking.
+     * Parsuje "uri=/api/auth/login" format na clean URI path.
+     *
+     * @param request WebRequest instance s request metadata
+     * @return clean URI path nebo "unknown" při parsing failure
+     */
+    protected String extractRequestUri(WebRequest request) {
+        String description = request.getDescription(false);
+        return (description != null && description.startsWith("uri=")) ? description.substring(4) : "unknown";
+    }
+
+    /**
+     * Extrahuje client IP adresu s podporou proxy headers pro accurate logging.
+     * Priority: X-Forwarded-For -> RemoteUser -> "unknown".
+     *
+     * @param request WebRequest s HTTP headers
+     * @return client IP adresa nebo "unknown"
+     */
+    protected String getRemoteAddress(WebRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+        return request.getRemoteUser() != null ? request.getRemoteUser() : "unknown";
     }
 }

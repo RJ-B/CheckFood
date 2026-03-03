@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../../config/security_endpoints.dart';
+
 // Importy Response Modelů
 import '../models/profile/response/user_profile_response_model.dart';
 import '../models/device/response/device_response_model.dart';
@@ -9,6 +11,7 @@ import '../models/profile/request/update_profile_request_model.dart';
 import '../models/profile/request/change_password_request_model.dart';
 
 abstract class ProfileRemoteDataSource {
+  /// Načte profil uživatele (GET /api/user/me).
   Future<UserProfileResponseModel> getUserProfile();
 
   Future<UserProfileResponseModel> updateProfile(
@@ -17,25 +20,23 @@ abstract class ProfileRemoteDataSource {
 
   Future<void> changePassword(ChangePasswordRequestModel request);
 
+  /// Načte samostatný seznam zařízení (GET /api/user/devices).
   Future<List<DeviceResponseModel>> getDevices();
 
   Future<void> logoutAllDevices();
 
-  Future<void> logoutDevice(String deviceId);
+  /// Odhlásí konkrétní zařízení (DELETE /api/user/devices/{id}).
+  Future<void> logoutDevice(int deviceId);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final Dio _dio;
 
-  // Definice base cesty pro Profile modul.
-  // Všechny endpointy pro správu uživatele začínají tímto prefixem.
-  static const String _userPath = '/api/user';
-
   ProfileRemoteDataSourceImpl(this._dio);
 
   @override
   Future<UserProfileResponseModel> getUserProfile() async {
-    final response = await _dio.get('$_userPath/me');
+    final response = await _dio.get(SecurityEndpoints.profileMe);
     return UserProfileResponseModel.fromJson(response.data);
   }
 
@@ -43,9 +44,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UserProfileResponseModel> updateProfile(
     UpdateProfileRequestModel request,
   ) async {
-    // Používáme PATCH pro částečnou úpravu profilu
     final response = await _dio.patch(
-      '$_userPath/profile',
+      SecurityEndpoints.updateProfile,
       data: request.toJson(),
     );
     return UserProfileResponseModel.fromJson(response.data);
@@ -53,14 +53,16 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<void> changePassword(ChangePasswordRequestModel request) async {
-    await _dio.post('$_userPath/change-password', data: request.toJson());
+    await _dio.post(
+      SecurityEndpoints.changePassword,
+      data: request.toJson(),
+    );
   }
 
   @override
   Future<List<DeviceResponseModel>> getDevices() async {
-    final response = await _dio.get('$_userPath/devices');
+    final response = await _dio.get(SecurityEndpoints.devices);
 
-    // Mapování seznamu zařízení z JSON pole
     return (response.data as List)
         .map((device) => DeviceResponseModel.fromJson(device))
         .toList();
@@ -68,12 +70,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<void> logoutAllDevices() async {
-    await _dio.post('$_userPath/logout-all');
+    await _dio.post(SecurityEndpoints.logoutAllDevices);
   }
 
   @override
-  Future<void> logoutDevice(String deviceId) async {
-    // Dynamické doplnění ID do URL cesty
-    await _dio.delete('$_userPath/devices/$deviceId');
+  Future<void> logoutDevice(int deviceId) async {
+    await _dio.delete(SecurityEndpoints.logoutDevice(deviceId));
   }
 }

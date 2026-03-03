@@ -1,8 +1,10 @@
 package com.checkfood.checkfoodservice.security.module.user.controller;
 
+import com.checkfood.checkfoodservice.security.module.jwt.service.JwtService;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.AssignRoleRequest;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.ChangePasswordRequest;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.UpdateProfileRequest;
+import com.checkfood.checkfoodservice.security.module.user.dto.response.DeviceResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserAdminResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserProfileResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserSummaryResponse;
@@ -14,6 +16,7 @@ import com.checkfood.checkfoodservice.security.module.user.validator.ChangePassw
 import com.checkfood.checkfoodservice.security.module.user.validator.UpdateProfileValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,16 +40,14 @@ public class UserController {
 
     private final UserService userService;
     private final DeviceService deviceService;
+    private final JwtService jwtService;
     private final UserMapper userMapper;
     private final ChangePasswordValidator changePasswordValidator;
     private final UpdateProfileValidator updateProfileValidator;
 
     /**
-     * Vrátí kompletní profil přihlášeného uživatele.
-     * Načítá data včetně rolí a registrovaných zařízení pomocí optimalizovaného dotazu.
-     *
-     * @param userDetails autentizační detaily z Security kontextu
-     * @return profilová odpověď s kompletními informacemi o uživateli
+     * Vrátí pouze profilové informace o uživateli.
+     * Seznam zařízení se již neposílá (je dostupný přes /devices).
      */
     @GetMapping("/me")
     public ResponseEntity<UserProfileResponse> getProfile(
@@ -72,11 +73,11 @@ public class UserController {
         changePasswordValidator.validate(request);
         UserEntity user = userService.findByEmail(userDetails.getUsername());
 
+        // FIX: Removed confirmPassword, as service only expects (id, oldPass, newPass)
         userService.changePassword(
                 user.getId(),
                 request.getCurrentPassword(),
-                request.getNewPassword(),
-                request.getConfirmPassword()
+                request.getNewPassword()
         );
 
         return ResponseEntity.noContent().build();
@@ -148,18 +149,39 @@ public class UserController {
     }
 
     /**
-     * Odhlásí uživatele ze všech zařízení najednou.
-     * Invaliduje všechny refresh tokeny smazáním všech záznamů o zařízeních.
-     * Používá se při podezření na kompromitaci účtu.
+     * Odhlásí uživatele ze všech ostatních zařízení.
+     * Zachová aktuální zařízení (identifikované z JWT tokenu).
+     * Invaliduje refresh tokeny ostatních zařízení.
      *
      * @param userDetails autentizační detaily z Security kontextu
+     * @param token Authorization header pro identifikaci aktuálního zařízení
      * @return HTTP 204 No Content po úspěšném odhlášení
      */
     @PostMapping("/logout-all")
-    public ResponseEntity<Void> logoutAll(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> logoutAll(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
         UserEntity user = userService.findByEmail(userDetails.getUsername());
-        deviceService.removeAllByUser(user);
+        String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(token);
+        deviceService.removeAllByUserExceptCurrent(user, currentDeviceIdentifier);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * ✅ NOVÝ ENDPOINT: Vrátí samostatný seznam zařízení.
+     * Vypočítá, které zařízení je aktuální (isCurrentDevice = true) na základě tokenu.
+     */
+    @GetMapping("/devices")
+    public ResponseEntity<List<DeviceResponse>> getUserDevices(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        List<DeviceResponse> devices = deviceService.findAllUserDevicesWithStatus(
+                userDetails.getUsername(),
+                token
+        );
+        return ResponseEntity.ok(devices);
     }
 
     /**

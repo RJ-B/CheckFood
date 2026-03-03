@@ -44,5 +44,10 @@ public enum ErrorCode {
     /**
      * Konflikt s existujícími daty.
      */
-    CONFLICT
+    CONFLICT,
+
+    /**
+     * Nedostatečná oprávnění pro operaci.
+     */
+    FORBIDDEN
 }

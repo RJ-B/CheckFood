@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../data/local/token_storage.dart';
 import 'refresh_token_manager.dart';
@@ -52,14 +53,14 @@ class AuthInterceptor extends QueuedInterceptor {
         return handler.next(err);
       }
 
-      print('🔒 [Interceptor] 401 zachyceno. Spouštím refresh proces...');
+      debugPrint('[Interceptor] 401 zachyceno. Spouštím refresh proces...');
 
       try {
         // Pokus o obnovu tokenu přes Manager (řeší zámky a Device ID)
         final newToken = await _tokenManager.refreshToken();
 
         if (newToken != null) {
-          print('🔓 [Interceptor] Token obnoven. Opakuji původní požadavek.');
+          debugPrint('[Interceptor] Token obnoven. Opakuji původní požadavek.');
 
           // Vytvoříme novou konfiguraci s novým tokenem
           final opts = Options(
@@ -82,7 +83,7 @@ class AuthInterceptor extends QueuedInterceptor {
           return handler.resolve(response);
         }
       } catch (e) {
-        print('⛔ [Interceptor] Chyba při obnově nebo opakování requestu: $e');
+        debugPrint('[Interceptor] Chyba při obnově nebo opakování requestu: $e');
         // Pokud se to nepovede, pošleme původní chybu dál (UI zareaguje logoutem)
         return handler.next(err);
       }

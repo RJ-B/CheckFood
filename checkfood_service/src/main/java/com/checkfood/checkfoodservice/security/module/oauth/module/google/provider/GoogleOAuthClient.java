@@ -1,35 +1,62 @@
-package com.checkfood.checkfoodservice.security.module.oauth.provider.google;
+package com.checkfood.checkfoodservice.security.module.oauth.module.google.provider;
 
 import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider;
+import com.checkfood.checkfoodservice.security.module.oauth.exception.OAuthException;
+import com.checkfood.checkfoodservice.security.module.oauth.logging.OAuthLogger;
 import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthClient;
 import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthUserInfo;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 /**
- * Implementace OAuth klienta pro poskytovatele Google.
- * Transformuje specifický GoogleIdToken na sjednocený OAuthUserInfo.
+ * Implementace Google OAuth klienta (JDK 21).
  */
 @Component
 @RequiredArgsConstructor
 public class GoogleOAuthClient implements OAuthClient {
 
-    private final GoogleIdTokenVerifier googleVerifier;
+    private final GoogleIdTokenProvider googleTokenProvider;
+    private final OAuthLogger oauthLogger;
 
     @Override
     public OAuthUserInfo verifyAndGetUserInfo(String idToken) {
-        // 1. Kryptografické ověření tokenu
-        GoogleIdToken verifiedToken = googleVerifier.verify(idToken);
-        GoogleIdToken.Payload payload = verifiedToken.getPayload();
+        try {
+            var googleIdToken = googleTokenProvider.verify(idToken);
 
-        // 2. Extrakce a mapování dat do sjednoceného modelu
-        return OAuthUserInfo.builder()
-                .providerUserId(payload.getSubject()) // Unikátní Google ID (sub)
-                .email(payload.getEmail())
-                .fullName((String) payload.get("name"))
-                .providerType(getProviderType())
-                .build();
+            if (googleIdToken == null) {
+                throw OAuthException.invalidToken("Google ID Token je neplatný nebo expirovaný.");
+            }
+
+            var payload = googleIdToken.getPayload();
+
+            // Bezpečnostní kontrola: Google email musí být verifikovaný
+            if (!payload.getEmailVerified()) {
+                throw OAuthException.invalidToken("Email u Google účtu není verifikován.");
+            }
+
+            var providerUserId = payload.getSubject();
+
+            // Logujeme úspěch (Happy Path)
+            oauthLogger.logProviderVerificationSuccess(getProviderType(), providerUserId);
+
+            return OAuthUserInfo.builder()
+                    .providerUserId(providerUserId)
+                    .email(payload.getEmail())
+                    .firstName((String) payload.get("given_name"))
+                    .lastName((String) payload.get("family_name"))
+                    .profileImageUrl((String) payload.get("picture"))
+                    .providerType(getProviderType())
+                    .build();
+
+        } catch (GeneralSecurityException | IOException e) {
+            throw OAuthException.communicationError("GOOGLE", "Chyba při komunikaci s Google API: " + e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            throw OAuthException.invalidToken("Formát Google ID Tokenu je neplatný.");
+        }
     }
 
     @Override

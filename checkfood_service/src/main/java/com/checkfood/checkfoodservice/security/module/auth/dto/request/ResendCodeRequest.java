@@ -9,7 +9,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * DTO pro požadavek na znovuzaslání verifikačního emailu.
- * Používá se když uživateli nevyprší platnost nebo nedorazí původní verifikační odkaz.
+ *
+ * Minimalistické DTO obsahující pouze email pro identification účtu
+ * vyžadujícího resend verification token. Rate limiting je aplikován
+ * na controller level pro abuse prevention.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Data
 @Builder
@@ -17,6 +23,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResendCodeRequest {
 
+    /**
+     * Email adresa uživatele pro account lookup a token resend.
+     */
     @NotBlank(message = "Email nesmí být prázdný.")
     @Email(message = "Zadejte platnou emailovou adresu.")
     private String email;

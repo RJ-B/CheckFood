@@ -1,32 +1,36 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../../security/data/models/auth/request/login_request_model.dart';
-import '../../../../security/data/models/auth/request/register_request_model.dart';
-import '../../../../security/data/models/auth/request/verify_email_request_model.dart';
+import '../../../domain/usecases/auth/params/auth_params.dart';
 
 part 'auth_event.freezed.dart';
 
 @freezed
 class AuthEvent with _$AuthEvent {
-  /// Inicializace aplikace a kontrola persistence tokenů
+  /// Inicializace aplikace a kontrola perzistentního přihlášení.
   const factory AuthEvent.appStarted() = AppStarted;
 
-  /// Požadavek na přihlášení uživatele
-  const factory AuthEvent.loginRequested(LoginRequestModel request) =
-      LoginRequested;
+  /// Požadavek na login s využitím doménových parametrů.
+  const factory AuthEvent.loginRequested(LoginParams params) = LoginRequested;
 
-  /// Požadavek na registraci nového uživatele
-  const factory AuthEvent.registerRequested(RegisterRequestModel request) =
+  /// Požadavek na registraci s využitím doménových parametrů.
+  const factory AuthEvent.registerRequested(RegisterParams params) =
       RegisterRequested;
 
-  /// Požadavek na verifikaci e-mailu pomocí tokenu
-  const factory AuthEvent.verifyEmailRequested(
-    VerifyEmailRequestModel request,
-  ) = VerifyEmailRequested;
+  /// Požadavek na registraci majitele restaurace (role OWNER).
+  const factory AuthEvent.registerOwnerRequested(RegisterParams params) =
+      RegisterOwnerRequested;
 
-  /// Požadavek na znovuodeslání verifikačního e-mailu
-  const factory AuthEvent.resendCodeRequested(String email) =
+  /// Verifikace emailu (pojmenovaný parametr pro lepší čitelnost v Bloku).
+  const factory AuthEvent.verifyEmailRequested({required String token}) =
+      VerifyEmailRequested;
+
+  /// Znovuodeslání kódu (pojmenovaný parametr).
+  const factory AuthEvent.resendCodeRequested({required String email}) =
       ResendCodeRequested;
 
-  /// Požadavek na bezpečné odhlášení a zneplatnění relace
+  /// OAuth události.
+  const factory AuthEvent.googleLoginRequested() = GoogleLoginRequested;
+  const factory AuthEvent.appleLoginRequested() = AppleLoginRequested;
+
+  /// Odhlášení ze systému.
   const factory AuthEvent.logoutRequested() = LogoutRequested;
 }

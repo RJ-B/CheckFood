@@ -3,30 +3,46 @@ package com.checkfood.checkfoodservice.security.module.auth.policy;
 import org.springframework.stereotype.Component;
 
 /**
- * Validátor hesel pro kontrolu bezpečnostních požadavků na hesla uživatelů.
- * Definuje pravidla pro minimální délku, složitost a další bezpečnostní aspekty hesel.
+ * Password policy validator implementující security requirements pro user passwords.
+ *
+ * Definuje a enforces minimum security standards pro password complexity
+ * podle industry best practices. Poskytuje both validation logic a
+ * user-friendly requirement descriptions.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class PasswordPolicy {
 
+    /**
+     * Minimum password length podle security guidelines.
+     */
     private static final int MIN_LENGTH = 8;
+
+    /**
+     * Maximum password length pro DoS protection a database constraints.
+     */
     private static final int MAX_LENGTH = 64;
 
     /**
-     * Regex pro silné heslo:
-     * - Minimálně jedno velké písmeno
-     * - Minimálně jedno malé písmeno
-     * - Minimálně jedna číslice
-     * - Minimálně jeden speciální znak
+     * Strong password regex requiring:
+     * - Alespoň jedno lowercase letter
+     * - Alespoň jedno uppercase letter
+     * - Alespoň jednu digit
+     * - Alespoň jeden special character
+     * - Minimum 8 characters total
      */
     private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 
     /**
-     * Validuje heslo podle definované bezpečnostní politiky.
-     * Heslo musí splňovat minimální délku a obsahovat kombinaci různých typů znaků.
+     * Validuje password podle defined security policy.
      *
-     * @param password heslo k validaci
-     * @return true pokud heslo splňuje všechny požadavky, jinak false
+     * Checks length constraints a character complexity requirements.
+     * Used v registration a password change workflows.
+     *
+     * @param password password string pro validation
+     * @return true pokud password meets všechny requirements
      */
     public boolean isValid(String password) {
         if (password == null) {
@@ -41,9 +57,12 @@ public class PasswordPolicy {
     }
 
     /**
-     * Vrací chybovou zprávu popisující požadavky na heslo.
+     * Provides user-friendly description of password requirements.
      *
-     * @return lidsky čitelný popis požadavků na heslo
+     * Used pro validation error messages a UI hint text
+     * pro clear user guidance na password creation.
+     *
+     * @return localized requirements message
      */
     public String getRequirementsMessage() {
         return String.format(

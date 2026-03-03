@@ -1,68 +1,95 @@
 package com.checkfood.checkfoodservice.security.module.auth.exception;
 
 /**
- * Enumrace chybových kódů pro autentizační modul.
- * Poskytuje standardizované identifikátory chyb pro registraci, přihlašování a verifikaci účtů.
+ * Enumerace error codes pro autentizační modul s category-based metadata
+ * pro automated logging strategy determination.
+ *
+ * Každý error code má assigned category určující logging level a handling
+ * strategy v AuthExceptionHandler. Categories umožňují consistent
+ * error processing napříč security incidents, business logic a system failures.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see AuthException
+ * @see AuthExceptionHandler
  */
 public enum AuthErrorCode {
 
-    /**
-     * Neplatné přihlašovací údaje (email nebo heslo).
-     */
-    AUTH_INVALID_CREDENTIALS,
+    // Security incidents requiring monitoring a potential response
+    AUTH_INVALID_CREDENTIALS("SECURITY_INCIDENT"),
+    AUTH_ACCOUNT_LOCKED("SECURITY_INCIDENT"),
+    AUTH_INVALID_TOKEN("SECURITY_INCIDENT"),
+    AUTH_DEVICE_MISMATCH("SECURITY_INCIDENT"),
+    AUTH_INSUFFICIENT_PRIVILEGES("SECURITY_INCIDENT"),
+    AUTH_TOO_MANY_ATTEMPTS("SECURITY_INCIDENT"),
+
+    // Account state conditions requiring user awareness
+    AUTH_ACCOUNT_DISABLED("SECURITY_ACCOUNT_STATE"),
+
+    // Business logic validation a user input errors
+    AUTH_EMAIL_EXISTS("VALIDATION"),
+    AUTH_ACCOUNT_ALREADY_ACTIVATED("VALIDATION"),
+    AUTH_ACCOUNT_NOT_VERIFIED("VALIDATION"),
+    AUTH_TOKEN_EXPIRED("VALIDATION"),
+    AUTH_SESSION_EXPIRED("VALIDATION"),
+    AUTH_PASSWORD_MISMATCH("VALIDATION"),
+    AUTH_WEAK_PASSWORD("VALIDATION"),
+    AUTH_INVALID_EMAIL_FORMAT("VALIDATION"),
+    AUTH_VALIDATION_ERROR("VALIDATION"),
+    AUTH_PASSWORD_EXPIRED("VALIDATION"),
+    AUTH_ACCOUNT_EXPIRED("VALIDATION"),
+
+    // System errors requiring immediate attention
+    AUTH_REGISTRATION_FAILED("SYSTEM"),
+    AUTH_ROLE_NOT_FOUND("SYSTEM"),
+    AUTH_SYSTEM_ERROR("SYSTEM");
 
     /**
-     * Email je již registrován v systému.
+     * Error category pro logging strategy determination.
      */
-    AUTH_EMAIL_EXISTS,
+    private final String category;
 
     /**
-     * Uživatelský účet byl deaktivován administrátorem.
+     * Constructor s category assignment.
+     *
+     * @param category error category pro handler logic
      */
-    AUTH_ACCOUNT_DISABLED,
+    AuthErrorCode(String category) {
+        this.category = category;
+    }
 
     /**
-     * Uživatelský účet byl uzamčen z bezpečnostních důvodů.
+     * Getter pro category access.
+     *
+     * @return error category string
      */
-    AUTH_ACCOUNT_LOCKED,
+    public String getCategory() {
+        return category;
+    }
 
     /**
-     * Uživatelský účet nebyl aktivován prostřednictvím verifikačního emailu.
+     * Identifies security events requiring elevated logging attention.
+     *
+     * Security events jsou logged jako WARN level pro security monitoring
+     * a potential incident response. Includes both active security threats
+     * a account state security conditions.
+     *
+     * @return true pro security incident categories
      */
-    AUTH_ACCOUNT_NOT_VERIFIED,
+    public boolean isSecurityEvent() {
+        return "SECURITY_INCIDENT".equals(category) || "SECURITY_ACCOUNT_STATE".equals(category);
+    }
 
     /**
-     * Verifikační token je neplatný nebo neexistuje.
+     * Identifies system errors requiring immediate technical attention.
+     *
+     * System errors jsou logged jako ERROR level s full stack traces
+     * pro debugging a system health monitoring. Usually indicate
+     * configuration problems nebo infrastructure issues.
+     *
+     * @return true pro system error category
      */
-    AUTH_TOKEN_INVALID,
-
-    /**
-     * Verifikační token vypršel.
-     */
-    AUTH_TOKEN_EXPIRED,
-
-    /**
-     * Hesla se neshodují.
-     */
-    AUTH_PASSWORD_MISMATCH,
-
-    /**
-     * Heslo nesplňuje bezpečnostní požadavky.
-     */
-    AUTH_WEAK_PASSWORD,
-
-    /**
-     * Neplatný formát emailové adresy.
-     */
-    AUTH_INVALID_EMAIL_FORMAT,
-
-    /**
-     * Refresh token je neplatný nebo vypršel.
-     */
-    AUTH_SESSION_EXPIRED,
-
-    /**
-     * Token nepatří danému zařízení.
-     */
-    AUTH_DEVICE_MISMATCH
+    public boolean isSystemError() {
+        return "SYSTEM".equals(category);
+    }
 }

@@ -1,111 +1,76 @@
 package com.checkfood.checkfoodservice.security.module.user.logging;
 
 import com.checkfood.checkfoodservice.security.logging.SecurityLogger;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * Specializovaný logger pro user operace.
- * Poskytuje metody pro logování událostí specifických pro správu uživatelů a jejich dat.
- *
- * @see SecurityLogger
+ * Specializovaný logger pro operace v modulu User.
+ * Slouží POUZE pro logování úspěšných operací (Happy Path).
  */
 @Component
-@RequiredArgsConstructor
-public class UserLogger {
+public class UserLogger extends SecurityLogger {
 
-    private final SecurityLogger securityLogger;
+    // --- USER OPERATIONS ---
 
-    /**
-     * Loguje načtení uživatele z databáze.
-     *
-     * @param email email načteného uživatele
-     */
-    public void logUserLoaded(String email) {
-        securityLogger.debug("Načten uživatel: {}", email);
-    }
-
-    /**
-     * Loguje vytvoření nového uživatele.
-     *
-     * @param email email vytvořeného uživatele
-     */
     public void logUserCreated(String email) {
-        securityLogger.info("Vytvořen nový uživatel: {}", email);
+        this.info("Vytvořen nový uživatel: {}", email);
     }
 
-    /**
-     * Loguje aktualizaci uživatelských dat.
-     *
-     * @param email email aktualizovaného uživatele
-     */
     public void logUserUpdated(String email) {
-        securityLogger.info("Aktualizován uživatel: {}", email);
+        this.info("Aktualizována data uživatele: {}", email);
     }
 
-    /**
-     * Loguje smazání uživatele.
-     *
-     * @param email email smazaného uživatele
-     */
     public void logUserDeleted(String email) {
-        securityLogger.info("Smazán uživatel: {}", email);
+        this.info("Smazán uživatel: {}", email);
     }
 
-    /**
-     * Loguje nenalezení uživatele.
-     *
-     * @param email email hledaného uživatele
-     */
-    public void logUserNotFound(String email) {
-        securityLogger.warn("Uživatel {} nebyl nalezen", email);
-    }
-
-    /**
-     * Loguje pokus o přístup k datům jiného uživatele.
-     *
-     * @param attemptingUser email uživatele, který se pokouší o přístup
-     * @param targetUser email cílového uživatele
-     */
-    public void logUnauthorizedAccess(String attemptingUser, String targetUser) {
-        securityLogger.warn("Uživatel {} se pokusil o přístup k datům uživatele {}", attemptingUser, targetUser);
-    }
-
-    /**
-     * Loguje chybu při práci s uživateli.
-     *
-     * @param message popis chyby
-     */
-    public void logUserError(String message) {
-        securityLogger.error("Chyba při práci s uživatelem: {}", message);
-    }
-
-    /**
-     * Loguje změnu hesla uživatele.
-     *
-     * @param email email uživatele
-     */
     public void logPasswordChanged(String email) {
-        securityLogger.info("Změněno heslo pro uživatele: {}", email);
+        this.info("Uživatel '{}' si úspěšně změnil heslo.", email);
     }
 
-    /**
-     * Loguje změnu emailu uživatele.
-     *
-     * @param oldEmail původní email
-     * @param newEmail nový email
-     */
-    public void logEmailChanged(String oldEmail, String newEmail) {
-        securityLogger.info("Změněn email z {} na {}", oldEmail, newEmail);
+    // --- ROLE ASSIGNMENT ---
+
+    public void logRoleAssigned(String email, String role) {
+        this.info("Uživateli '{}' byla přidělena role '{}'.", email, role);
     }
 
-    /**
-     * Loguje debug zprávu o user operaci.
-     *
-     * @param message debug zpráva
-     * @param args argumenty pro formátování zprávy
-     */
-    public void debug(String message, Object... args) {
-        securityLogger.debug(message, args);
+    // ✅ PŘIDÁNO: Chybějící metoda pro UserService
+    public void logRoleAlreadyAssigned(String email, String role, Long userId) {
+        this.info("Role '{}' již byla uživateli '{}' (ID: {}) přidělena.", role, email, userId);
+    }
+
+    public void logRoleRemoved(String email, String role) {
+        this.info("Uživateli '{}' byla odebrána role '{}'.", email, role);
+    }
+
+    // --- ROLE MANAGEMENT (RoleService) ---
+
+    // ✅ PŘIDÁNO: Chybějící metody pro RoleService
+    public void logRoleCreated(String name, Long id) {
+        this.info("Vytvořena nová role: {} (ID: {}).", name, id);
+    }
+
+    // ✅ PŘIDÁNO
+    public void logRoleUpdated(String name, Long id) {
+        this.info("Aktualizována role: {} (ID: {}).", name, id);
+    }
+
+    // ✅ PŘIDÁNO
+    public void logRoleDeleted(String name, Long id) {
+        this.info("Smazána role: {} (ID: {}).", name, id);
+    }
+
+    // --- DEVICE MANAGEMENT ---
+
+    public void logDeviceRegistered(String deviceId, String email) {
+        this.info("Registrováno nové zařízení '{}' pro uživatele '{}'.", deviceId, email);
+    }
+
+    public void logDeviceRemoved(String deviceId, String email) {
+        this.info("Odstraněno zařízení '{}' uživatele '{}'.", deviceId, email);
+    }
+
+    public void logAllDevicesRemoved(String email, int count) {
+        this.info("Odstraněno {} zařízení uživatele '{}'.", count, email);
     }
 }

@@ -8,9 +8,14 @@ import lombok.*;
 
 /**
  * DTO pro registraci nového uživatele do systému.
- * Obsahuje osobní údaje, přihlašovací údaje a informace o zařízení pro vytvoření první relace.
  *
- * @see AuthService#register(RegisterRequest)
+ * Obsahuje pouze základní osobní a přihlašovací údaje. Device metadata
+ * nejsou součástí registrace protože session se vytváří až po email
+ * verification během prvního login procesu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see AuthService
  */
 @Getter
 @Setter
@@ -19,32 +24,33 @@ import lombok.*;
 @Builder
 public class RegisterRequest {
 
+    /**
+     * Křestní jméno uživatele pro profile a personalizaci.
+     */
     @NotBlank(message = "Jméno nesmí být prázdné.")
     @Size(max = 50, message = "Jméno nesmí být delší než 50 znaků.")
     private String firstName;
 
+    /**
+     * Příjmení uživatele pro kompletní profile information.
+     */
     @NotBlank(message = "Příjmení nesmí být prázdné.")
     @Size(max = 50, message = "Příjmení nesmí být delší než 50 znaků.")
     private String lastName;
 
+    /**
+     * Email adresa sloužící jako username a pro email verification workflow.
+     */
     @NotBlank(message = "Email nesmí být prázdný.")
     @Email(message = "Zadejte platnou emailovou adresu.")
     @Size(max = 254, message = "Email nesmí překročit délku 254 znaků.")
     private String email;
 
+    /**
+     * Plain text heslo pro hash generation. Síla hesla je validována
+     * PasswordValidator komponentou v service layer.
+     */
     @NotBlank(message = "Heslo nesmí být prázdné.")
     @Size(min = 8, max = 64, message = "Heslo musí mít 8 až 64 znaků.")
     private String password;
-
-    @NotBlank(message = "Potvrzení hesla je povinné.")
-    private String confirmPassword;
-
-    @NotBlank(message = "Identifikátor zařízení je povinný.")
-    private String deviceIdentifier;
-
-    @NotBlank(message = "Název zařízení je povinný.")
-    private String deviceName;
-
-    @NotBlank(message = "Typ zařízení je povinný.")
-    private String deviceType;
 }

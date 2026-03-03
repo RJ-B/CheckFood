@@ -1,23 +1,27 @@
 package com.checkfood.checkfoodservice.security.module.oauth.provider;
 
+import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider;
+
 /**
- * Kontrakt pro OAuth providery.
- *
- * Implementace (Google/Apple) ověří token a vrátí sjednocená data uživatele.
+ * Kontrakt pro implementaci specifických OAuth2 klientů.
+ * Definuje sjednocené rozhraní pro ověřování externích identit.
  */
 public interface OAuthClient {
 
     /**
-     * Vrátí typ providera.
+     * Provede kryptografické ověření přijatého ID tokenu a extrahuje data.
+     * Každý poskytovatel (Google/Apple) implementuje vlastní logiku verifikace.
+     *
+     * @param idToken Surový token získaný z mobilní aplikace
+     * @return Normalizovaný objekt OAuthUserInfo s daty uživatele
      */
-    OAuthProviderType getProviderType();
+    OAuthUserInfo verifyAndGetUserInfo(String idToken);
 
     /**
-     * Ověří OAuth token (typicky ID token) a vrátí sjednocené informace o uživateli.
+     * Vrací typ poskytovatele, kterého tento klient obsluhuje.
+     * Klíčové pro správné směrování v rámci OAuthClientFactory.
      *
-     * @param idToken ID token získaný z klienta (Google/Apple).
-     * @return sjednocené informace o uživateli.
+     * @return AuthProvider (GOOGLE nebo APPLE)
      */
-    OAuthUserInfo verifyAndExtractUserInfo(String idToken);
-
+    AuthProvider getProviderType();
 }

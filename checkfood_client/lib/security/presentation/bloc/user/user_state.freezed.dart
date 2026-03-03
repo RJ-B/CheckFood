@@ -21,28 +21,28 @@ mixin _$UserState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,28 +50,28 @@ mixin _$UserState {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
     required TResult Function(_PasswordChangeSuccess value)
     passwordChangeSuccess,
     required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
     TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
     TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -141,10 +141,10 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
   }) {
     return initial();
   }
@@ -154,10 +154,10 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
   }) {
     return initial?.call();
   }
@@ -167,10 +167,10 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -185,10 +185,10 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
     required TResult Function(_PasswordChangeSuccess value)
     passwordChangeSuccess,
     required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
   }) {
     return initial(this);
   }
@@ -199,9 +199,9 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
     TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
   }) {
     return initial?.call(this);
   }
@@ -212,9 +212,9 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
     TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -273,10 +273,10 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
   }) {
     return loading();
   }
@@ -286,10 +286,10 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
   }) {
     return loading?.call();
   }
@@ -299,10 +299,10 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -317,10 +317,10 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
     required TResult Function(_PasswordChangeSuccess value)
     passwordChangeSuccess,
     required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
   }) {
     return loading(this);
   }
@@ -331,9 +331,9 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
     TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
   }) {
     return loading?.call(this);
   }
@@ -344,9 +344,9 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
     TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -367,7 +367,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
     $Res Function(_$LoadedImpl) then,
   ) = __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({UserProfile profile});
+  $Res call({UserProfile profile, List<Device> devices});
 
   $UserProfileCopyWith<$Res> get profile;
 }
@@ -385,13 +385,19 @@ class __$$LoadedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? profile = null}) {
+  $Res call({Object? profile = null, Object? devices = null}) {
     return _then(
       _$LoadedImpl(
-        null == profile
-            ? _value.profile
-            : profile // ignore: cast_nullable_to_non_nullable
-                as UserProfile,
+        profile:
+            null == profile
+                ? _value.profile
+                : profile // ignore: cast_nullable_to_non_nullable
+                    as UserProfile,
+        devices:
+            null == devices
+                ? _value._devices
+                : devices // ignore: cast_nullable_to_non_nullable
+                    as List<Device>,
       ),
     );
   }
@@ -410,14 +416,25 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(this.profile);
+  const _$LoadedImpl({
+    required this.profile,
+    final List<Device> devices = const [],
+  }) : _devices = devices;
 
   @override
   final UserProfile profile;
+  final List<Device> _devices;
+  @override
+  @JsonKey()
+  List<Device> get devices {
+    if (_devices is EqualUnmodifiableListView) return _devices;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_devices);
+  }
 
   @override
   String toString() {
-    return 'UserState.loaded(profile: $profile)';
+    return 'UserState.loaded(profile: $profile, devices: $devices)';
   }
 
   @override
@@ -425,11 +442,16 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            (identical(other.profile, profile) || other.profile == profile));
+            (identical(other.profile, profile) || other.profile == profile) &&
+            const DeepCollectionEquality().equals(other._devices, _devices));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, profile);
+  int get hashCode => Object.hash(
+    runtimeType,
+    profile,
+    const DeepCollectionEquality().hash(_devices),
+  );
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.
@@ -444,12 +466,12 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
   }) {
-    return loaded(profile);
+    return loaded(profile, devices);
   }
 
   @override
@@ -457,12 +479,12 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
   }) {
-    return loaded?.call(profile);
+    return loaded?.call(profile, devices);
   }
 
   @override
@@ -470,14 +492,14 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(profile);
+      return loaded(profile, devices);
     }
     return orElse();
   }
@@ -488,10 +510,10 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
     required TResult Function(_PasswordChangeSuccess value)
     passwordChangeSuccess,
     required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
   }) {
     return loaded(this);
   }
@@ -502,9 +524,9 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
     TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
   }) {
     return loaded?.call(this);
   }
@@ -515,9 +537,9 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
     TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -528,281 +550,19 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements UserState {
-  const factory _Loaded(final UserProfile profile) = _$LoadedImpl;
+  const factory _Loaded({
+    required final UserProfile profile,
+    final List<Device> devices,
+  }) = _$LoadedImpl;
 
   UserProfile get profile;
+  List<Device> get devices;
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$PasswordChangeSuccessImplCopyWith<$Res> {
-  factory _$$PasswordChangeSuccessImplCopyWith(
-    _$PasswordChangeSuccessImpl value,
-    $Res Function(_$PasswordChangeSuccessImpl) then,
-  ) = __$$PasswordChangeSuccessImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$PasswordChangeSuccessImplCopyWithImpl<$Res>
-    extends _$UserStateCopyWithImpl<$Res, _$PasswordChangeSuccessImpl>
-    implements _$$PasswordChangeSuccessImplCopyWith<$Res> {
-  __$$PasswordChangeSuccessImplCopyWithImpl(
-    _$PasswordChangeSuccessImpl _value,
-    $Res Function(_$PasswordChangeSuccessImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of UserState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$PasswordChangeSuccessImpl implements _PasswordChangeSuccess {
-  const _$PasswordChangeSuccessImpl();
-
-  @override
-  String toString() {
-    return 'UserState.passwordChangeSuccess()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PasswordChangeSuccessImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
-    required TResult Function() passwordChangeSuccess,
-    required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
-  }) {
-    return passwordChangeSuccess();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
-    TResult? Function()? passwordChangeSuccess,
-    TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
-  }) {
-    return passwordChangeSuccess?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
-    TResult Function()? passwordChangeSuccess,
-    TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
-    required TResult orElse(),
-  }) {
-    if (passwordChangeSuccess != null) {
-      return passwordChangeSuccess();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_PasswordChangeSuccess value)
-    passwordChangeSuccess,
-    required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
-  }) {
-    return passwordChangeSuccess(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
-    TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
-  }) {
-    return passwordChangeSuccess?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
-    TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (passwordChangeSuccess != null) {
-      return passwordChangeSuccess(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PasswordChangeSuccess implements UserState {
-  const factory _PasswordChangeSuccess() = _$PasswordChangeSuccessImpl;
-}
-
-/// @nodoc
-abstract class _$$DevicesLogoutSuccessImplCopyWith<$Res> {
-  factory _$$DevicesLogoutSuccessImplCopyWith(
-    _$DevicesLogoutSuccessImpl value,
-    $Res Function(_$DevicesLogoutSuccessImpl) then,
-  ) = __$$DevicesLogoutSuccessImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$DevicesLogoutSuccessImplCopyWithImpl<$Res>
-    extends _$UserStateCopyWithImpl<$Res, _$DevicesLogoutSuccessImpl>
-    implements _$$DevicesLogoutSuccessImplCopyWith<$Res> {
-  __$$DevicesLogoutSuccessImplCopyWithImpl(
-    _$DevicesLogoutSuccessImpl _value,
-    $Res Function(_$DevicesLogoutSuccessImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of UserState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$DevicesLogoutSuccessImpl implements _DevicesLogoutSuccess {
-  const _$DevicesLogoutSuccessImpl();
-
-  @override
-  String toString() {
-    return 'UserState.devicesLogoutSuccess()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DevicesLogoutSuccessImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
-    required TResult Function() passwordChangeSuccess,
-    required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
-  }) {
-    return devicesLogoutSuccess();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
-    TResult? Function()? passwordChangeSuccess,
-    TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
-  }) {
-    return devicesLogoutSuccess?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
-    TResult Function()? passwordChangeSuccess,
-    TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
-    required TResult orElse(),
-  }) {
-    if (devicesLogoutSuccess != null) {
-      return devicesLogoutSuccess();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_PasswordChangeSuccess value)
-    passwordChangeSuccess,
-    required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
-  }) {
-    return devicesLogoutSuccess(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
-    TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
-  }) {
-    return devicesLogoutSuccess?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
-    TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (devicesLogoutSuccess != null) {
-      return devicesLogoutSuccess(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _DevicesLogoutSuccess implements UserState {
-  const factory _DevicesLogoutSuccess() = _$DevicesLogoutSuccessImpl;
 }
 
 /// @nodoc
@@ -877,10 +637,10 @@ class _$FailureImpl implements _Failure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile) loaded,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
-    required TResult Function(String message) failure,
   }) {
     return failure(message);
   }
@@ -890,10 +650,10 @@ class _$FailureImpl implements _Failure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile)? loaded,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
-    TResult? Function(String message)? failure,
   }) {
     return failure?.call(message);
   }
@@ -903,10 +663,10 @@ class _$FailureImpl implements _Failure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile)? loaded,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
-    TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
     if (failure != null) {
@@ -921,10 +681,10 @@ class _$FailureImpl implements _Failure {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
     required TResult Function(_PasswordChangeSuccess value)
     passwordChangeSuccess,
     required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
-    required TResult Function(_Failure value) failure,
   }) {
     return failure(this);
   }
@@ -935,9 +695,9 @@ class _$FailureImpl implements _Failure {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
     TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult? Function(_Failure value)? failure,
   }) {
     return failure?.call(this);
   }
@@ -948,9 +708,9 @@ class _$FailureImpl implements _Failure {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
     TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
     TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
-    TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
     if (failure != null) {
@@ -970,4 +730,270 @@ abstract class _Failure implements UserState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PasswordChangeSuccessImplCopyWith<$Res> {
+  factory _$$PasswordChangeSuccessImplCopyWith(
+    _$PasswordChangeSuccessImpl value,
+    $Res Function(_$PasswordChangeSuccessImpl) then,
+  ) = __$$PasswordChangeSuccessImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PasswordChangeSuccessImplCopyWithImpl<$Res>
+    extends _$UserStateCopyWithImpl<$Res, _$PasswordChangeSuccessImpl>
+    implements _$$PasswordChangeSuccessImplCopyWith<$Res> {
+  __$$PasswordChangeSuccessImplCopyWithImpl(
+    _$PasswordChangeSuccessImpl _value,
+    $Res Function(_$PasswordChangeSuccessImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$PasswordChangeSuccessImpl implements _PasswordChangeSuccess {
+  const _$PasswordChangeSuccessImpl();
+
+  @override
+  String toString() {
+    return 'UserState.passwordChangeSuccess()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PasswordChangeSuccessImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
+    required TResult Function() passwordChangeSuccess,
+    required TResult Function() devicesLogoutSuccess,
+  }) {
+    return passwordChangeSuccess();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
+    TResult? Function()? passwordChangeSuccess,
+    TResult? Function()? devicesLogoutSuccess,
+  }) {
+    return passwordChangeSuccess?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
+    TResult Function()? passwordChangeSuccess,
+    TResult Function()? devicesLogoutSuccess,
+    required TResult orElse(),
+  }) {
+    if (passwordChangeSuccess != null) {
+      return passwordChangeSuccess();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+    required TResult Function(_PasswordChangeSuccess value)
+    passwordChangeSuccess,
+    required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
+  }) {
+    return passwordChangeSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+    TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
+    TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
+  }) {
+    return passwordChangeSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
+    TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
+    required TResult orElse(),
+  }) {
+    if (passwordChangeSuccess != null) {
+      return passwordChangeSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PasswordChangeSuccess implements UserState {
+  const factory _PasswordChangeSuccess() = _$PasswordChangeSuccessImpl;
+}
+
+/// @nodoc
+abstract class _$$DevicesLogoutSuccessImplCopyWith<$Res> {
+  factory _$$DevicesLogoutSuccessImplCopyWith(
+    _$DevicesLogoutSuccessImpl value,
+    $Res Function(_$DevicesLogoutSuccessImpl) then,
+  ) = __$$DevicesLogoutSuccessImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$DevicesLogoutSuccessImplCopyWithImpl<$Res>
+    extends _$UserStateCopyWithImpl<$Res, _$DevicesLogoutSuccessImpl>
+    implements _$$DevicesLogoutSuccessImplCopyWith<$Res> {
+  __$$DevicesLogoutSuccessImplCopyWithImpl(
+    _$DevicesLogoutSuccessImpl _value,
+    $Res Function(_$DevicesLogoutSuccessImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$DevicesLogoutSuccessImpl implements _DevicesLogoutSuccess {
+  const _$DevicesLogoutSuccessImpl();
+
+  @override
+  String toString() {
+    return 'UserState.devicesLogoutSuccess()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DevicesLogoutSuccessImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(String message) failure,
+    required TResult Function() passwordChangeSuccess,
+    required TResult Function() devicesLogoutSuccess,
+  }) {
+    return devicesLogoutSuccess();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(String message)? failure,
+    TResult? Function()? passwordChangeSuccess,
+    TResult? Function()? devicesLogoutSuccess,
+  }) {
+    return devicesLogoutSuccess?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(String message)? failure,
+    TResult Function()? passwordChangeSuccess,
+    TResult Function()? devicesLogoutSuccess,
+    required TResult orElse(),
+  }) {
+    if (devicesLogoutSuccess != null) {
+      return devicesLogoutSuccess();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+    required TResult Function(_PasswordChangeSuccess value)
+    passwordChangeSuccess,
+    required TResult Function(_DevicesLogoutSuccess value) devicesLogoutSuccess,
+  }) {
+    return devicesLogoutSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+    TResult? Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
+    TResult? Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
+  }) {
+    return devicesLogoutSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    TResult Function(_PasswordChangeSuccess value)? passwordChangeSuccess,
+    TResult Function(_DevicesLogoutSuccess value)? devicesLogoutSuccess,
+    required TResult orElse(),
+  }) {
+    if (devicesLogoutSuccess != null) {
+      return devicesLogoutSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DevicesLogoutSuccess implements UserState {
+  const factory _DevicesLogoutSuccess() = _$DevicesLogoutSuccessImpl;
 }

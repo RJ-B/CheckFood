@@ -19,9 +19,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$User {
   int get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  String get role =>
-      throw _privateConstructorUsedError; // Role pro řízení přístupu v UI
+  UserRole get role => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  List<String> get permissions => throw _privateConstructorUsedError;
+  bool get needsRestaurantClaim => throw _privateConstructorUsedError;
+  bool get needsOnboarding => throw _privateConstructorUsedError;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -34,7 +36,15 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({int id, String email, String role, bool isActive});
+  $Res call({
+    int id,
+    String email,
+    UserRole role,
+    bool isActive,
+    List<String> permissions,
+    bool needsRestaurantClaim,
+    bool needsOnboarding,
+  });
 }
 
 /// @nodoc
@@ -56,6 +66,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? email = null,
     Object? role = null,
     Object? isActive = null,
+    Object? permissions = null,
+    Object? needsRestaurantClaim = null,
+    Object? needsOnboarding = null,
   }) {
     return _then(
       _value.copyWith(
@@ -73,11 +86,26 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
                 null == role
                     ? _value.role
                     : role // ignore: cast_nullable_to_non_nullable
-                        as String,
+                        as UserRole,
             isActive:
                 null == isActive
                     ? _value.isActive
                     : isActive // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            permissions:
+                null == permissions
+                    ? _value.permissions
+                    : permissions // ignore: cast_nullable_to_non_nullable
+                        as List<String>,
+            needsRestaurantClaim:
+                null == needsRestaurantClaim
+                    ? _value.needsRestaurantClaim
+                    : needsRestaurantClaim // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            needsOnboarding:
+                null == needsOnboarding
+                    ? _value.needsOnboarding
+                    : needsOnboarding // ignore: cast_nullable_to_non_nullable
                         as bool,
           )
           as $Val,
@@ -93,7 +121,15 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   ) = __$$UserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String email, String role, bool isActive});
+  $Res call({
+    int id,
+    String email,
+    UserRole role,
+    bool isActive,
+    List<String> permissions,
+    bool needsRestaurantClaim,
+    bool needsOnboarding,
+  });
 }
 
 /// @nodoc
@@ -112,6 +148,9 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? email = null,
     Object? role = null,
     Object? isActive = null,
+    Object? permissions = null,
+    Object? needsRestaurantClaim = null,
+    Object? needsOnboarding = null,
   }) {
     return _then(
       _$UserImpl(
@@ -129,11 +168,26 @@ class __$$UserImplCopyWithImpl<$Res>
             null == role
                 ? _value.role
                 : role // ignore: cast_nullable_to_non_nullable
-                    as String,
+                    as UserRole,
         isActive:
             null == isActive
                 ? _value.isActive
                 : isActive // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        permissions:
+            null == permissions
+                ? _value._permissions
+                : permissions // ignore: cast_nullable_to_non_nullable
+                    as List<String>,
+        needsRestaurantClaim:
+            null == needsRestaurantClaim
+                ? _value.needsRestaurantClaim
+                : needsRestaurantClaim // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        needsOnboarding:
+            null == needsOnboarding
+                ? _value.needsOnboarding
+                : needsOnboarding // ignore: cast_nullable_to_non_nullable
                     as bool,
       ),
     );
@@ -142,27 +196,45 @@ class __$$UserImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UserImpl implements _User {
+class _$UserImpl extends _User {
   const _$UserImpl({
     required this.id,
     required this.email,
     required this.role,
     required this.isActive,
-  });
+    final List<String> permissions = const [],
+    this.needsRestaurantClaim = false,
+    this.needsOnboarding = false,
+  }) : _permissions = permissions,
+       super._();
 
   @override
   final int id;
   @override
   final String email;
   @override
-  final String role;
-  // Role pro řízení přístupu v UI
+  final UserRole role;
   @override
   final bool isActive;
+  final List<String> _permissions;
+  @override
+  @JsonKey()
+  List<String> get permissions {
+    if (_permissions is EqualUnmodifiableListView) return _permissions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_permissions);
+  }
+
+  @override
+  @JsonKey()
+  final bool needsRestaurantClaim;
+  @override
+  @JsonKey()
+  final bool needsOnboarding;
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, role: $role, isActive: $isActive)';
+    return 'User(id: $id, email: $email, role: $role, isActive: $isActive, permissions: $permissions, needsRestaurantClaim: $needsRestaurantClaim, needsOnboarding: $needsOnboarding)';
   }
 
   @override
@@ -174,11 +246,28 @@ class _$UserImpl implements _User {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.isActive, isActive) ||
-                other.isActive == isActive));
+                other.isActive == isActive) &&
+            const DeepCollectionEquality().equals(
+              other._permissions,
+              _permissions,
+            ) &&
+            (identical(other.needsRestaurantClaim, needsRestaurantClaim) ||
+                other.needsRestaurantClaim == needsRestaurantClaim) &&
+            (identical(other.needsOnboarding, needsOnboarding) ||
+                other.needsOnboarding == needsOnboarding));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, email, role, isActive);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    email,
+    role,
+    isActive,
+    const DeepCollectionEquality().hash(_permissions),
+    needsRestaurantClaim,
+    needsOnboarding,
+  );
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -189,22 +278,32 @@ class _$UserImpl implements _User {
       __$$UserImplCopyWithImpl<_$UserImpl>(this, _$identity);
 }
 
-abstract class _User implements User {
+abstract class _User extends User {
   const factory _User({
     required final int id,
     required final String email,
-    required final String role,
+    required final UserRole role,
     required final bool isActive,
+    final List<String> permissions,
+    final bool needsRestaurantClaim,
+    final bool needsOnboarding,
   }) = _$UserImpl;
+  const _User._() : super._();
 
   @override
   int get id;
   @override
   String get email;
   @override
-  String get role; // Role pro řízení přístupu v UI
+  UserRole get role;
   @override
   bool get isActive;
+  @override
+  List<String> get permissions;
+  @override
+  bool get needsRestaurantClaim;
+  @override
+  bool get needsOnboarding;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.

@@ -1,0 +1,24 @@
+package com.checkfood.checkfoodservice.module.reservation.exception;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum ReservationErrorCode {
+    RESERVATION_NOT_FOUND("BUSINESS"),
+    SLOT_CONFLICT("BUSINESS"),
+    INVALID_RESERVATION_TIME("VALIDATION"),
+    RESTAURANT_CLOSED("VALIDATION"),
+    TABLE_NOT_IN_RESTAURANT("VALIDATION"),
+    RESERVATION_CANNOT_EDIT("BUSINESS"),
+    RESERVATION_CANNOT_CANCEL("BUSINESS"),
+    RESERVATION_ALREADY_CANCELLED("BUSINESS"),
+    RESERVATION_ACCESS_DENIED("SECURITY"),
+    PARTY_SIZE_EXCEEDS_CAPACITY("VALIDATION"),
+    INVALID_STATUS_TRANSITION("BUSINESS"),
+    NOT_RESTAURANT_STAFF("SECURITY"),
+    RESERVATION_SYSTEM_ERROR("SYSTEM");
+
+    private final String category;
+}

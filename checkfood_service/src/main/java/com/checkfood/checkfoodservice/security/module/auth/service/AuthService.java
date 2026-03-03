@@ -6,7 +6,7 @@ import com.checkfood.checkfoodservice.security.module.auth.dto.request.RefreshRe
 import com.checkfood.checkfoodservice.security.module.auth.dto.request.RegisterRequest;
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.TokenResponse;
-import com.checkfood.checkfoodservice.security.module.auth.dto.response.UserResponse;
+import com.checkfood.checkfoodservice.security.module.user.dto.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -25,6 +25,14 @@ public interface AuthService {
      * @param requestDto registrační data včetně osobních údajů a informací o zařízení
      */
     void register(RegisterRequest requestDto);
+
+    /**
+     * Zaregistruje nového uživatele s rolí OWNER a zahájí verifikaci emailu.
+     * Po přihlášení bude uživatel přesměrován na claim restaurace.
+     *
+     * @param requestDto registrační data
+     */
+    void registerOwner(RegisterRequest requestDto);
 
     /**
      * Aktivuje uživatelský účet na základě verifikačního tokenu z emailu.
@@ -65,10 +73,12 @@ public interface AuthService {
     /**
      * Provede odhlášení uživatele a ukončí relaci na daném zařízení.
      * Invaliduje refresh token a odstraní záznam o zařízení z databáze.
+     * Ověřuje, že refresh token patří přihlášenému uživateli (prevence logout hijack).
      *
      * @param request obsahuje refresh token a identifikátor zařízení
+     * @param authenticatedEmail email přihlášeného uživatele z Security kontextu
      */
-    void logout(LogoutRequest request);
+    void logout(LogoutRequest request, String authenticatedEmail);
 
     /**
      * Vrátí informace o aktuálně přihlášeném uživateli ze Security kontextu.

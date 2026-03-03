@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../config/security_json_keys.dart';
 
 part 'change_password_request_model.freezed.dart';
 part 'change_password_request_model.g.dart';
@@ -6,9 +7,11 @@ part 'change_password_request_model.g.dart';
 @freezed
 class ChangePasswordRequestModel with _$ChangePasswordRequestModel {
   const factory ChangePasswordRequestModel({
-    @JsonKey(name: 'currentPassword') required String currentPassword,
-    @JsonKey(name: 'newPassword') required String newPassword,
-    @JsonKey(name: 'confirmNewPassword') required String confirmNewPassword,
+    @JsonKey(name: SecurityJsonKeys.currentPassword)
+    required String currentPassword,
+    @JsonKey(name: SecurityJsonKeys.newPassword) required String newPassword,
+    @JsonKey(name: SecurityJsonKeys.confirmPassword)
+    required String confirmPassword,
   }) = _ChangePasswordRequestModel;
 
   factory ChangePasswordRequestModel.fromJson(Map<String, dynamic> json) =>

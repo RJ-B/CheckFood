@@ -5,37 +5,45 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 /**
- * Validátor pro kontrolu formátu emailových adres.
- * V systému slouží email jako přihlašovací jméno (username).
+ * Email format validator pro username validation v authentication systému.
+ *
+ * V systému funguje email jako primary username identifier. Validuje
+ * email format podle RFC standards s additional security constraints
+ * pro DoS protection a database compatibility.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class UsernamePolicy {
 
     /**
-     * RFC-kompatibilní regex pro validaci emailových adres.
-     * Zjednodušená verze pokrývající běžné formáty.
+     * RFC-compatible email regex covering common email formats.
+     * Simplified version avoiding complex edge cases pro performance a security.
      */
-    private static final String EMAIL_REGEX =
-            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-
-    private static final Pattern EMAIL_PATTERN =
-            Pattern.compile(EMAIL_REGEX);
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
     /**
-     * Maximální délka emailové adresy podle RFC 5321.
-     * Ochrana proti DoS útokům s extrémně dlouhými emaily.
+     * Compiled pattern pro performance optimization v repeated validations.
+     */
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
+    /**
+     * Maximum email length podle RFC 5321 standard.
+     * Provides DoS protection proti extrémně dlouhé email addresses.
      */
     private static final int MAX_LENGTH = 254;
 
     /**
-     * Ověří, zda je email validní podle pravidel systému.
-     * Kontroluje formát podle regex a maximální délku.
+     * Validates email format podle system requirements.
      *
-     * @param email emailová adresa k validaci
-     * @return true pokud email splňuje všechny požadavky, jinak false
+     * Checks both regex pattern compliance a length constraints
+     * pro comprehensive email validation.
+     *
+     * @param email email address pro validation
+     * @return true pokud email meets všechny format requirements
      */
     public boolean isValid(String email) {
-
         if (email == null) {
             return false;
         }

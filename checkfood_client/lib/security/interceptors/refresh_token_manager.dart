@@ -1,18 +1,22 @@
 import 'dart:async';
-
-import '../data/models/auth/request/refresh_token_request_model.dart';
 import '../domain/repositories/auth_repository.dart';
-import '../data/local/token_storage.dart';
 
+/**
+ * Manažer pro synchronizovanou obnovu Access Tokenu.
+ * Zajišťuje, že pokud vyprší token u více paralelních požadavků,
+ * refresh proběhne pouze jednou skrze AuthRepository.
+ */
 class RefreshTokenManager {
   final AuthRepository _authRepository;
-  final TokenStorage _tokenStorage;
 
+  // Completer slouží k synchronizaci paralelních volání
   Completer<String?>? _refreshCompleter;
 
-  RefreshTokenManager(this._authRepository, this._tokenStorage);
+  RefreshTokenManager(this._authRepository);
 
+  /// Hlavní metoda pro získání nového Access Tokenu.
   Future<String?> refreshToken() async {
+    // 1. Pokud již refresh probíhá, nezačínáme nový, ale čekáme na výsledek rozpracovaného
     if (_refreshCompleter != null && !_refreshCompleter!.isCompleted) {
       return _refreshCompleter!.future;
     }
@@ -20,33 +24,24 @@ class RefreshTokenManager {
     _refreshCompleter = Completer<String?>();
 
     try {
-      final refreshToken = await _tokenStorage.getRefreshToken();
-      // Musíme získat i Device ID, protože model ho vyžaduje
-      final deviceId = await _tokenStorage.getDeviceId();
+      // 2. Delegujeme odpovědnost na Repozitář.
+      // Repozitář si sám vytáhne Refresh Token i Device ID a provede volání na API.
+      final authTokens = await _authRepository.refreshToken();
 
-      if (refreshToken == null) {
-        _refreshCompleter!.complete(null);
-        return null;
-      }
+      // 3. Po úspěšném refreshi vrátíme nový Access Token všem čekajícím požadavkům
+      final newAccessToken = authTokens.accessToken;
+      _refreshCompleter!.complete(newAccessToken);
 
-      // OPRAVA: Naplníme OBĚ povinná pole
-      final requestModel = RefreshTokenRequestModel(
-        refreshToken: refreshToken,
-        deviceIdentifier: deviceId,
-      );
-
-      final newTokens = await _authRepository.refreshToken(requestModel);
-
-      _refreshCompleter!.complete(newTokens.accessToken);
-      return newTokens.accessToken;
+      return newAccessToken;
     } catch (e) {
-      await _tokenStorage.clearAuthData();
+      // 4. Pokud refresh selže, repozitář již vyčistil auth data.
+      // Vrátíme null, což Interceptoru řekne, že má uživatele odhlásit.
       _refreshCompleter!.complete(null);
+
       return null;
     } finally {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        _refreshCompleter = null;
-      });
+      // 5. Uvolníme completer pro budoucí potřebu (např. po příštím přihlášení)
+      _refreshCompleter = null;
     }
   }
 }

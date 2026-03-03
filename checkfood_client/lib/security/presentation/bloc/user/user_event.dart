@@ -1,28 +1,30 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../data/models/profile/request/change_password_request_model.dart';
 import '../../../data/models/profile/request/update_profile_request_model.dart';
+import '../../../data/models/profile/request/change_password_request_model.dart';
 
 part 'user_event.freezed.dart';
 
 @freezed
 class UserEvent with _$UserEvent {
-  /// Požadavek na načtení profilu.
+  // Načtení profilu (GET /me)
   const factory UserEvent.profileRequested() = ProfileRequested;
 
-  /// Aktualizace profilu pomocí Request Modelu.
+  // ✅ Načtení zařízení (GET /devices)
+  const factory UserEvent.devicesRequested() = DevicesRequested;
+
   const factory UserEvent.profileUpdated(UpdateProfileRequestModel request) =
       ProfileUpdated;
 
-  /// Změna hesla pomocí Request Modelu.
   const factory UserEvent.passwordChangeRequested(
     ChangePasswordRequestModel request,
   ) = PasswordChangeRequested;
 
-  /// Odhlášení ze všech zařízení.
   const factory UserEvent.allDevicesLogoutRequested() =
       AllDevicesLogoutRequested;
 
-  /// Odhlášení konkrétního zařízení (ID je String).
-  const factory UserEvent.deviceLoggedOut(String deviceId) = DeviceLoggedOut;
+  // ✅ ID je int
+  const factory UserEvent.deviceLoggedOut(int deviceId) = DeviceLoggedOut;
+
+  // 🧹 ✅ NOVÝ EVENT: Vyčištění dat při odhlášení (aby nezůstala v paměti)
+  const factory UserEvent.clearDataRequested() = ClearDataRequested;
 }

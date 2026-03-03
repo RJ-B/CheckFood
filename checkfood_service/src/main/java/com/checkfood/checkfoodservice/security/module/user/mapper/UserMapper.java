@@ -1,6 +1,5 @@
 package com.checkfood.checkfoodservice.security.module.user.mapper;
 
-import com.checkfood.checkfoodservice.security.module.auth.dto.response.UserResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.UpdateProfileRequest;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.*;
 import com.checkfood.checkfoodservice.security.module.user.entity.DeviceEntity;
@@ -17,32 +16,41 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Komponentní mapper pro transformaci uživatelských entit na DTO.
- * Implementuje logiku pro agregaci dat z distribuovaných relací a normalizaci bezpečnostních autorit.
+ * Centrální mapper pro transformaci uživatelských dat.
+ * Zajišťuje konzistentní převod mezi entitami a DTO s ohledem na bezpečnost a výkon.
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UserMapper {
 
     /**
-     * Mapování identity na klientský profil.
-     * Atribut 'lastLogin' je agregován z historie všech asociovaných terminálů.
+     * Mapování identity na klientský profil (pro endpoint /api/user/me).
      */
     @Mapping(target = "isActive", source = "enabled")
-    @Mapping(target = "roles", source = "roles", qualifiedByName = "mapRolesToList")
+    @Mapping(target = "role", source = "roles", qualifiedByName = "mapPrimaryRole")
     @Mapping(target = "lastLogin", source = "devices", qualifiedByName = "calculateGlobalLastLogin")
     UserProfileResponse toProfile(UserEntity user);
 
     /**
-     * Mapování relace zařízení.
-     * Atributy se párují automaticky na základě shody názvů (lastLogin).
+     * Mapování pro autentizační odpověď (použito v AuthMapper).
+     * Sjednoceno s Flutter modelem: vrací primární roli a technická oprávnění.
      */
-    DeviceResponse toDeviceResponse(DeviceEntity device);
+    @Mapping(target = "isActive", source = "enabled")
+    @Mapping(target = "role", source = "roles", qualifiedByName = "mapPrimaryRole")
+    @Mapping(target = "authorities", source = "authorities", qualifiedByName = "mapAuthoritiesToSet")
+    @Mapping(target = "needsRestaurantClaim", ignore = true)
+    @Mapping(target = "needsOnboarding", ignore = true)
+    UserResponse toAuth(UserEntity user);
 
+    /**
+     * Zjednodušená transformace pro seznamy uživatelů.
+     * Ponecháno pro budoucí využití v seznamech či vyhledávání.
+     */
     @Mapping(target = "isActive", source = "enabled")
     UserSummaryResponse toSummary(UserEntity user);
 
     /**
-     * Administrativní reprezentace s úplným auditním a bezpečnostním kontextem.
+     * Úplná reprezentace pro systémovou administraci.
+     * Obsahuje detailní sety rolí i oprávnění.
      */
     @Mapping(target = "isActive", source = "enabled")
     @Mapping(target = "roles", source = "roles", qualifiedByName = "mapRolesToSet")
@@ -51,18 +59,24 @@ public interface UserMapper {
     UserAdminResponse toAdmin(UserEntity user);
 
     /**
-     * Transformace subjektu pro autentizační payload.
-     * Zdroj 'authorities' je automaticky resolvován z metody getAuthorities() v UserEntity.
+     * Mapování zařízení s detekcí aktuální session.
      */
-    @Mapping(target = "isActive", source = "enabled")
-    @Mapping(target = "role", source = "roles", qualifiedByName = "mapPrimaryRole")
-    @Mapping(target = "authorities", source = "authorities", qualifiedByName = "mapAuthoritiesToSet")
-    @Mapping(target = "lastLogin", source = "devices", qualifiedByName = "calculateGlobalLastLogin")
-    UserResponse toAuth(UserEntity user);
+    @Mapping(target = "currentDevice", expression = "java(device.getDeviceIdentifier().equals(currentDeviceIdentifier))")
+    @Mapping(target = "deviceIdentifier", source = "device.deviceIdentifier")
+    DeviceResponse toDeviceResponse(DeviceEntity device, String currentDeviceIdentifier);
 
     /**
-     * Aktualizace perzistentní entity z požadavku.
-     * Ignoruje pole, která nesmí být měněna skrze profilový update request.
+     * Pomocná metoda pro mapování kolekce zařízení.
+     */
+    default List<DeviceResponse> toDeviceResponseList(Collection<DeviceEntity> devices, String currentDeviceIdentifier) {
+        if (devices == null) return Collections.emptyList();
+        return devices.stream()
+                .map(device -> toDeviceResponse(device, currentDeviceIdentifier))
+                .toList();
+    }
+
+    /**
+     * Bezpečná aktualizace entity z požadavku na změnu profilu.
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
@@ -73,12 +87,12 @@ public interface UserMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "authProvider", ignore = true)
+    @Mapping(target = "providerId", ignore = true)
     void updateEntityFromRequest(UpdateProfileRequest request, @MappingTarget UserEntity entity);
 
-    /**
-     * Výpočetní logika pro určení termínu poslední interakce uživatele se systémem.
-     * Iteruje skrze všechna zařízení a vrací nejnovější časovou značku.
-     */
+    // --- Implementace pomocných (Named) metod ---
+
     @Named("calculateGlobalLastLogin")
     default LocalDateTime calculateGlobalLastLogin(Set<DeviceEntity> devices) {
         if (devices == null || devices.isEmpty()) return null;
@@ -89,21 +103,16 @@ public interface UserMapper {
                 .orElse(null);
     }
 
-    @Named("mapRolesToList")
-    default List<String> mapRolesToList(Set<RoleEntity> roles) {
-        if (roles == null) return Collections.emptyList();
-        return roles.stream().map(RoleEntity::getName).toList();
+    @Named("mapPrimaryRole")
+    default String mapPrimaryRole(Set<RoleEntity> roles) {
+        if (roles == null || roles.isEmpty()) return "USER";
+        var names = roles.stream().map(RoleEntity::getName).collect(Collectors.toSet());
+        if (names.contains("ADMIN")) return "ADMIN";
+        if (names.contains("OWNER")) return "OWNER";
+        if (names.contains("MANAGER")) return "MANAGER";
+        return "USER";
     }
 
-    @Named("mapRolesToSet")
-    default Set<String> mapRolesToSet(Set<RoleEntity> roles) {
-        if (roles == null) return Collections.emptySet();
-        return roles.stream().map(RoleEntity::getName).collect(Collectors.toSet());
-    }
-
-    /**
-     * Transformuje kolekci GrantedAuthority (SimpleGrantedAuthority) na sadu textových řetězců.
-     */
     @Named("mapAuthoritiesToSet")
     default Set<String> mapAuthoritiesToSet(Collection<? extends GrantedAuthority> authorities) {
         if (authorities == null) return Collections.emptySet();
@@ -112,12 +121,9 @@ public interface UserMapper {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Extrahuje název primární role uživatele.
-     */
-    @Named("mapPrimaryRole")
-    default String mapPrimaryRole(Set<RoleEntity> roles) {
-        if (roles == null || roles.isEmpty()) return "ROLE_USER";
-        return roles.iterator().next().getName();
+    @Named("mapRolesToSet")
+    default Set<String> mapRolesToSet(Set<RoleEntity> roles) {
+        if (roles == null) return Collections.emptySet();
+        return roles.stream().map(RoleEntity::getName).collect(Collectors.toSet());
     }
 }

@@ -1,43 +1,54 @@
 package com.checkfood.checkfoodservice.security.module.jwt.exception;
 
 /**
- * Enumrace chybových kódů pro JWT modul.
- * Poskytuje standardizované identifikátory chyb pro JWT tokeny a jejich validaci.
+ * Enumerace chybových kódů pro JWT modul.
+ * Obsahuje metadata pro automatické rozhodování o logování (Severity) v ExceptionHandleru.
  */
 public enum JwtErrorCode {
 
-    /**
-     * JWT token je neplatný (špatný formát, podpis nebo claims).
-     */
-    JWT_INVALID,
+    // --- SECURITY INCIDENTS (WARN) ---
+    /** Podpis nesedí (kritické - někdo token změnil). */
+    JWT_INVALID_SIGNATURE("SECURITY_INCIDENT"),
+    /** Token je na blacklistu (pokus o použití odhlášeného tokenu). */
+    JWT_BLACKLISTED("SECURITY_INCIDENT"),
+    /** Token nepatří k zařízení/uživateli. */
+    JWT_INVALID_CLAIMS("SECURITY_INCIDENT"),
+    /** Token má nepodporovaný formát (útok fuzzingem). */
+    JWT_UNSUPPORTED("SECURITY_INCIDENT"),
 
-    /**
-     * JWT token vypršel.
-     */
-    JWT_EXPIRED,
+    // --- VALIDATION (INFO) ---
+    /** Token vypršel (běžný stav). */
+    JWT_EXPIRED("VALIDATION"),
+    /** Token chybí v headeru. */
+    JWT_MISSING("VALIDATION"),
+    /** Token je neplatný (malformed). */
+    JWT_INVALID("VALIDATION"),
+    /** Uživatel z tokenu nenalezen. */
+    JWT_USER_NOT_FOUND("VALIDATION"),
+    /** Účet deaktivován. */
+    JWT_ACCOUNT_DISABLED("VALIDATION"),
 
-    /**
-     * JWT token chybí v požadavku.
-     */
-    JWT_MISSING,
+    // --- SYSTEM ERRORS (ERROR) ---
+    /** Chyba při generování (kryptografie). */
+    JWT_GENERATION_ERROR("SYSTEM"),
+    /** Chyba při čtení (interní chyba parseru). */
+    JWT_PARSE_ERROR("SYSTEM");
 
-    /**
-     * JWT token má neplatný podpis.
-     */
-    JWT_INVALID_SIGNATURE,
+    private final String category;
 
-    /**
-     * JWT token má neplatné claims.
-     */
-    JWT_INVALID_CLAIMS,
+    JwtErrorCode(String category) {
+        this.category = category;
+    }
 
-    /**
-     * Chyba při generování JWT tokenu.
-     */
-    JWT_GENERATION_ERROR,
+    public String getCategory() {
+        return category;
+    }
 
-    /**
-     * Chyba při parsování JWT tokenu.
-     */
-    JWT_PARSE_ERROR
+    public boolean isSecurityEvent() {
+        return "SECURITY_INCIDENT".equals(category);
+    }
+
+    public boolean isSystemError() {
+        return "SYSTEM".equals(category);
+    }
 }

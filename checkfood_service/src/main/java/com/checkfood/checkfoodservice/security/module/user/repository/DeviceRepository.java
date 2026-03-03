@@ -17,6 +17,8 @@ import java.util.Optional;
  * Zajišťuje perzistenci dat pro bezpečnostní audit, správu refresh tokenů a session management.
  * Každé zařízení je jednoznačně identifikováno device identifierem a vázáno na uživatele.
  *
+ * ✅ ROZŠÍŘENO: Obsahuje metody countByUser a existsByIdAndUser pro Service vrstvu.
+ *
  * @see DeviceEntity
  * @see UserEntity
  */
@@ -53,6 +55,44 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
      */
     List<DeviceEntity> findAllByUser(UserEntity user);
 
+    // =================================================================================
+    // ✅ NOVÉ METODY PRO SERVICE LAYER (Fix pro "Cannot resolve method")
+    // =================================================================================
+
+    /**
+     * Zjistí, zda existuje zařízení s daným ID, které patří konkrétnímu uživateli.
+     * Klíčové pro bezpečné mazání podle ID (prevence smazání cizího zařízení).
+     *
+     * @param id ID zařízení
+     * @param user vlastník
+     * @return true pokud zařízení existuje a patří uživateli
+     */
+    boolean existsByIdAndUser(Long id, UserEntity user);
+
+    /**
+     * Spočítá počet aktivních zařízení uživatele.
+     * Používá se pro logování při hromadném odhlášení (např. "Odhlášeno 5 zařízení").
+     *
+     * @param user uživatel
+     * @return počet zařízení
+     */
+    long countByUser(UserEntity user);
+
+    /**
+     * Zjistí, zda uživatel již má registrované konkrétní zařízení.
+     * Efektivnější než findByDeviceIdentifierAndUser pro pouhé ověření existence.
+     * Používá se při login pro rozhodnutí mezi update a insert zařízení.
+     *
+     * @param deviceIdentifier unikátní identifikátor zařízení
+     * @param user vlastník zařízení
+     * @return true pokud zařízení existuje, jinak false
+     */
+    boolean existsByDeviceIdentifierAndUser(String deviceIdentifier, UserEntity user);
+
+    // =================================================================================
+    // DELETE METODY
+    // =================================================================================
+
     /**
      * Smaže zařízení podle jeho identifikátoru.
      * Používá se při logout operaci pro invalidaci refresh tokenů.
@@ -77,6 +117,20 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     void deleteByIdAndUser(@Param("id") Long id, @Param("user") UserEntity user);
 
     /**
+     * Bezpečně smaže zařízení podle identifikátoru pouze pokud patří danému uživateli.
+     * Alternativa k deleteByIdAndUser, která používá String identifier místo Long ID.
+     * Bezpečnější pro frontend API, které nepracuje s interními databázovými ID.
+     * Používá se v metodě removeByIdentifierAndUser v DeviceService.
+     *
+     * @param deviceIdentifier unikátní identifikátor zařízení
+     * @param user vlastník zařízení (bezpečnostní kontrola)
+     */
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM DeviceEntity d WHERE d.deviceIdentifier = :deviceIdentifier AND d.user = :user")
+    void deleteByDeviceIdentifierAndUser(@Param("deviceIdentifier") String deviceIdentifier, @Param("user") UserEntity user);
+
+    /**
      * Hromadné smazání všech zařízení uživatele.
      * Používá se při kompletním odhlášení ze všech zařízení najednou.
      * Invaliduje všechny refresh tokeny uživatele.
@@ -89,13 +143,14 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     void deleteAllByUser(@Param("user") UserEntity user);
 
     /**
-     * Zjistí, zda uživatel již má registrované konkrétní zařízení.
-     * Efektivnější než findByDeviceIdentifierAndUser pro pouhé ověření existence.
-     * Používá se při login pro rozhodnutí mezi update a insert zařízení.
+     * Smaže všechna zařízení uživatele kromě aktuálního.
+     * Používá se při odhlášení ostatních zařízení z profilu.
      *
-     * @param deviceIdentifier unikátní identifikátor zařízení
-     * @param user vlastník zařízení
-     * @return true pokud zařízení existuje, jinak false
+     * @param user uživatel, jehož zařízení mají být smazána
+     * @param currentIdentifier identifikátor aktuálního zařízení, které se zachová
      */
-    boolean existsByDeviceIdentifierAndUser(String deviceIdentifier, UserEntity user);
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM DeviceEntity d WHERE d.user = :user AND d.deviceIdentifier <> :currentIdentifier")
+    void deleteAllByUserExceptDevice(@Param("user") UserEntity user, @Param("currentIdentifier") String currentIdentifier);
 }

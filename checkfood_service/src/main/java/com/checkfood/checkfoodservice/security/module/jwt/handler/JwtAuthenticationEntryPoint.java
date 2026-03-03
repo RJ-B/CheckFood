@@ -11,12 +11,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * Handler pro zpracování chyb autentizace (HTTP 401 Unauthorized) na úrovni Spring Security filtrů.
- * Aktivuje se když uživatel není autentizován nebo má neplatný/expirovaný JWT token.
- * Vrací JSON odpověď s výzvou k přihlášení.
- *
- * @see SecurityErrorResponseWriter
- * @see JwtLogger
+ * Handler pro zpracování chyb autentizace (HTTP 401 Unauthorized).
+ * Využívá dedikovaný JwtLogger pro záznam incidentu.
  */
 @Component
 @RequiredArgsConstructor
@@ -25,15 +21,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final SecurityErrorResponseWriter errorResponseWriter;
     private final JwtLogger jwtLogger;
 
-    /**
-     * Zpracuje situaci, kdy požadavek nemá platnou JWT autentizaci.
-     * Loguje pokus o neautorizovaný přístup a vrací standardizovanou JSON odpověď s HTTP 401.
-     *
-     * @param request HTTP požadavek
-     * @param response HTTP odpověď
-     * @param authException výjimka autentizace
-     * @throws IOException při chybě zápisu odpovědi
-     */
     @Override
     public void commence(
             HttpServletRequest request,

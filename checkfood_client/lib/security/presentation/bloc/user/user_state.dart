@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../domain/entities/user_profile.dart';
+import '../../../domain/entities/device.dart';
 
 part 'user_state.freezed.dart';
 
@@ -8,15 +9,14 @@ class UserState with _$UserState {
   const factory UserState.initial() = _Initial;
   const factory UserState.loading() = _Loading;
 
-  /// Profil byl úspěšně načten nebo aktualizován.
-  const factory UserState.loaded(UserProfile profile) = _Loaded;
+  const factory UserState.loaded({
+    required UserProfile profile,
+    @Default([]) List<Device> devices,
+  }) = _Loaded;
 
-  /// Heslo bylo úspěšně změněno (jednorázový signál pro UI).
-  const factory UserState.passwordChangeSuccess() = _PasswordChangeSuccess;
-
-  /// Zařízení byla úspěšně odhlášena.
-  const factory UserState.devicesLogoutSuccess() = _DevicesLogoutSuccess;
-
-  /// Selhání operace.
   const factory UserState.failure(String message) = _Failure;
+
+  // Speciální stavy pro jednorázové akce (Toast/Snackbar)
+  const factory UserState.passwordChangeSuccess() = _PasswordChangeSuccess;
+  const factory UserState.devicesLogoutSuccess() = _DevicesLogoutSuccess;
 }

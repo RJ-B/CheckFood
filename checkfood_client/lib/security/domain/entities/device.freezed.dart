@@ -20,6 +20,7 @@ mixin _$Device {
   int get id => throw _privateConstructorUsedError;
   String get deviceName => throw _privateConstructorUsedError;
   String get deviceType => throw _privateConstructorUsedError;
+  String get deviceIdentifier => throw _privateConstructorUsedError;
   DateTime get lastLogin => throw _privateConstructorUsedError;
   bool get isCurrentDevice => throw _privateConstructorUsedError;
 
@@ -38,6 +39,7 @@ abstract class $DeviceCopyWith<$Res> {
     int id,
     String deviceName,
     String deviceType,
+    String deviceIdentifier,
     DateTime lastLogin,
     bool isCurrentDevice,
   });
@@ -61,6 +63,7 @@ class _$DeviceCopyWithImpl<$Res, $Val extends Device>
     Object? id = null,
     Object? deviceName = null,
     Object? deviceType = null,
+    Object? deviceIdentifier = null,
     Object? lastLogin = null,
     Object? isCurrentDevice = null,
   }) {
@@ -80,6 +83,11 @@ class _$DeviceCopyWithImpl<$Res, $Val extends Device>
                 null == deviceType
                     ? _value.deviceType
                     : deviceType // ignore: cast_nullable_to_non_nullable
+                        as String,
+            deviceIdentifier:
+                null == deviceIdentifier
+                    ? _value.deviceIdentifier
+                    : deviceIdentifier // ignore: cast_nullable_to_non_nullable
                         as String,
             lastLogin:
                 null == lastLogin
@@ -109,6 +117,7 @@ abstract class _$$DeviceImplCopyWith<$Res> implements $DeviceCopyWith<$Res> {
     int id,
     String deviceName,
     String deviceType,
+    String deviceIdentifier,
     DateTime lastLogin,
     bool isCurrentDevice,
   });
@@ -131,6 +140,7 @@ class __$$DeviceImplCopyWithImpl<$Res>
     Object? id = null,
     Object? deviceName = null,
     Object? deviceType = null,
+    Object? deviceIdentifier = null,
     Object? lastLogin = null,
     Object? isCurrentDevice = null,
   }) {
@@ -150,6 +160,11 @@ class __$$DeviceImplCopyWithImpl<$Res>
             null == deviceType
                 ? _value.deviceType
                 : deviceType // ignore: cast_nullable_to_non_nullable
+                    as String,
+        deviceIdentifier:
+            null == deviceIdentifier
+                ? _value.deviceIdentifier
+                : deviceIdentifier // ignore: cast_nullable_to_non_nullable
                     as String,
         lastLogin:
             null == lastLogin
@@ -173,8 +188,9 @@ class _$DeviceImpl implements _Device {
     required this.id,
     required this.deviceName,
     required this.deviceType,
+    required this.deviceIdentifier,
     required this.lastLogin,
-    this.isCurrentDevice = false,
+    required this.isCurrentDevice,
   });
 
   @override
@@ -184,14 +200,15 @@ class _$DeviceImpl implements _Device {
   @override
   final String deviceType;
   @override
+  final String deviceIdentifier;
+  @override
   final DateTime lastLogin;
   @override
-  @JsonKey()
   final bool isCurrentDevice;
 
   @override
   String toString() {
-    return 'Device(id: $id, deviceName: $deviceName, deviceType: $deviceType, lastLogin: $lastLogin, isCurrentDevice: $isCurrentDevice)';
+    return 'Device(id: $id, deviceName: $deviceName, deviceType: $deviceType, deviceIdentifier: $deviceIdentifier, lastLogin: $lastLogin, isCurrentDevice: $isCurrentDevice)';
   }
 
   @override
@@ -204,6 +221,8 @@ class _$DeviceImpl implements _Device {
                 other.deviceName == deviceName) &&
             (identical(other.deviceType, deviceType) ||
                 other.deviceType == deviceType) &&
+            (identical(other.deviceIdentifier, deviceIdentifier) ||
+                other.deviceIdentifier == deviceIdentifier) &&
             (identical(other.lastLogin, lastLogin) ||
                 other.lastLogin == lastLogin) &&
             (identical(other.isCurrentDevice, isCurrentDevice) ||
@@ -216,6 +235,7 @@ class _$DeviceImpl implements _Device {
     id,
     deviceName,
     deviceType,
+    deviceIdentifier,
     lastLogin,
     isCurrentDevice,
   );
@@ -234,8 +254,9 @@ abstract class _Device implements Device {
     required final int id,
     required final String deviceName,
     required final String deviceType,
+    required final String deviceIdentifier,
     required final DateTime lastLogin,
-    final bool isCurrentDevice,
+    required final bool isCurrentDevice,
   }) = _$DeviceImpl;
 
   @override
@@ -244,6 +265,8 @@ abstract class _Device implements Device {
   String get deviceName;
   @override
   String get deviceType;
+  @override
+  String get deviceIdentifier;
   @override
   DateTime get lastLogin;
   @override

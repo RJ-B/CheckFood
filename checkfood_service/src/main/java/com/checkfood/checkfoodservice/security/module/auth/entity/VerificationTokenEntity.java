@@ -10,9 +10,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * JPA entita pro verifikační tokeny při registraci uživatelů.
- * Udržuje vazbu mezi tokenem a uživatelským účtem včetně času expirace.
+ * JPA entita pro email verification tokens s time-based expiration.
  *
+ * Implementuje one-to-one relationship s UserEntity pro account activation
+ * workflow. Token lifecycle je managed přes expiration timestamp a automatic
+ * cleanup po successful verification.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see UserEntity
  */
 @Entity
@@ -23,38 +28,45 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VerificationTokenEntity {
 
+    /**
+     * Primary key pro database identity.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * Jedinečný verifikační token zaslaný v emailu.
-     * Typicky UUID nebo jiný náhodně vygenerovaný řetězec.
+     * Unique verification token sent v email link.
+     * Typically UUID for high entropy a unpredictability.
      */
     @Column(nullable = false, unique = true)
     private String token;
 
     /**
-     * Uživatel, kterému token náleží.
-     * EAGER fetch je zde vhodný, protože při načtení tokenu
-     * téměř vždy potřebujeme znát přiřazeného uživatele.
+     * User association pro token ownership.
+     *
+     * EAGER fetch je appropriate protože token operations téměř vždy
+     * potřebují user information pro verification process.
      */
     @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity user;
 
     /**
-     * Timestamp expirace tokenu.
-     * Po tomto datu již token nelze použít k aktivaci účtu.
+     * Token expiration timestamp pro security policy enforcement.
+     * Po expiraci token cannot be used pro account activation.
      */
     @Column(nullable = false)
     private LocalDateTime expiryDate;
 
     /**
-     * Vypočítá datum expirace tokenu od aktuálního času.
+     * Utility method pro expiration date calculation.
      *
-     * @param expiryTimeInMinutes počet minut platnosti tokenu
-     * @return timestamp expirace
+     * Poskytuje consistent expiration logic across token generation.
+     * Default 24-hour window provides balance mezi user convenience a security.
+     *
+     * @param expiryTimeInMinutes token validity duration
+     * @return calculated expiration timestamp
      */
     public static LocalDateTime calculateExpiryDate(int expiryTimeInMinutes) {
         return LocalDateTime.now().plusMinutes(expiryTimeInMinutes);

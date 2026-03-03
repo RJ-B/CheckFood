@@ -21,11 +21,11 @@ TokenResponseModel _$TokenResponseModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TokenResponseModel {
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: SecurityJsonKeys.accessToken)
   String get accessToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   String get refreshToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'expiresIn')
+  @JsonKey(name: SecurityJsonKeys.expiresIn)
   @DurationEpochConverter()
   Duration get expiresIn => throw _privateConstructorUsedError;
 
@@ -47,9 +47,11 @@ abstract class $TokenResponseModelCopyWith<$Res> {
   ) = _$TokenResponseModelCopyWithImpl<$Res, TokenResponseModel>;
   @useResult
   $Res call({
-    @JsonKey(name: 'accessToken') String accessToken,
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    @JsonKey(name: 'expiresIn') @DurationEpochConverter() Duration expiresIn,
+    @JsonKey(name: SecurityJsonKeys.accessToken) String accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
+    @DurationEpochConverter()
+    Duration expiresIn,
   });
 }
 
@@ -105,9 +107,11 @@ abstract class _$$TokenResponseModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'accessToken') String accessToken,
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    @JsonKey(name: 'expiresIn') @DurationEpochConverter() Duration expiresIn,
+    @JsonKey(name: SecurityJsonKeys.accessToken) String accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
+    @DurationEpochConverter()
+    Duration expiresIn,
   });
 }
 
@@ -155,9 +159,9 @@ class __$$TokenResponseModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TokenResponseModelImpl extends _TokenResponseModel {
   const _$TokenResponseModelImpl({
-    @JsonKey(name: 'accessToken') required this.accessToken,
-    @JsonKey(name: 'refreshToken') required this.refreshToken,
-    @JsonKey(name: 'expiresIn')
+    @JsonKey(name: SecurityJsonKeys.accessToken) required this.accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken) required this.refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
     @DurationEpochConverter()
     required this.expiresIn,
   }) : super._();
@@ -166,13 +170,13 @@ class _$TokenResponseModelImpl extends _TokenResponseModel {
       _$$TokenResponseModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: SecurityJsonKeys.accessToken)
   final String accessToken;
   @override
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   final String refreshToken;
   @override
-  @JsonKey(name: 'expiresIn')
+  @JsonKey(name: SecurityJsonKeys.expiresIn)
   @DurationEpochConverter()
   final Duration expiresIn;
 
@@ -218,9 +222,11 @@ class _$TokenResponseModelImpl extends _TokenResponseModel {
 
 abstract class _TokenResponseModel extends TokenResponseModel {
   const factory _TokenResponseModel({
-    @JsonKey(name: 'accessToken') required final String accessToken,
-    @JsonKey(name: 'refreshToken') required final String refreshToken,
-    @JsonKey(name: 'expiresIn')
+    @JsonKey(name: SecurityJsonKeys.accessToken)
+    required final String accessToken,
+    @JsonKey(name: SecurityJsonKeys.refreshToken)
+    required final String refreshToken,
+    @JsonKey(name: SecurityJsonKeys.expiresIn)
     @DurationEpochConverter()
     required final Duration expiresIn,
   }) = _$TokenResponseModelImpl;
@@ -230,13 +236,13 @@ abstract class _TokenResponseModel extends TokenResponseModel {
       _$TokenResponseModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'accessToken')
+  @JsonKey(name: SecurityJsonKeys.accessToken)
   String get accessToken;
   @override
-  @JsonKey(name: 'refreshToken')
+  @JsonKey(name: SecurityJsonKeys.refreshToken)
   String get refreshToken;
   @override
-  @JsonKey(name: 'expiresIn')
+  @JsonKey(name: SecurityJsonKeys.expiresIn)
   @DurationEpochConverter()
   Duration get expiresIn;
 

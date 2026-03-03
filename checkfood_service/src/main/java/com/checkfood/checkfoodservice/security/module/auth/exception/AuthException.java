@@ -4,30 +4,37 @@ import com.checkfood.checkfoodservice.security.exception.SecurityException;
 import org.springframework.http.HttpStatus;
 
 /**
- * Výjimka pro autentizační modul.
- * Poskytuje tovární metody pro nejčastější autentizační chyby s přednastavenými HTTP stavy a error kódy.
+ * Specializovaná výjimka pro autentizační modul poskytující tovární metody
+ * pro vytváření specifických auth error scenarios.
  *
+ * Implementuje factory pattern pro konzistentní error handling napříč
+ * autentizačním modulem. Každá tovární metoda kombinuje AuthErrorCode
+ * s appropriate HTTP status a user-friendly message.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see SecurityException
  * @see AuthErrorCode
  */
 public class AuthException extends SecurityException {
 
     /**
-     * Vytvoří novou autentizační výjimku.
+     * Vytvoří novou autentizační výjimku s typed error code.
      *
-     * @param errorCode aplikační error kód pro identifikaci typu chyby
-     * @param message lidsky čitelná chybová zpráva
-     * @param status HTTP status kód odpovědi
+     * @param errorCode AuthErrorCode pro category a severity determination
+     * @param message user-friendly chybová zpráva
+     * @param status HTTP status kód pro REST response
      */
     public AuthException(AuthErrorCode errorCode, String message, HttpStatus status) {
         super(errorCode, message, status);
     }
 
+    // =========================================================================
+    // CREDENTIALS & LOGIN FACTORY METHODS
+    // =========================================================================
+
     /**
-     * Neplatné přihlašovací údaje.
-     * Používá se při nesprávném emailu nebo heslu.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
+     * Invalid login credentials - generic message pro user enumeration prevention.
      */
     public static AuthException invalidCredentials() {
         return new AuthException(
@@ -38,23 +45,33 @@ public class AuthException extends SecurityException {
     }
 
     /**
-     * Email je již registrován v systému.
-     * Používá se při pokusu o registraci s existujícím emailem.
-     *
-     * @return výjimka s HTTP 409 Conflict
+     * Rate limiting exceeded - brute force protection triggered.
      */
-    public static AuthException emailExists() {
+    public static AuthException tooManyAttempts() {
         return new AuthException(
-                AuthErrorCode.AUTH_EMAIL_EXISTS,
-                "Uživatel s tímto emailem již existuje.",
-                HttpStatus.CONFLICT
+                AuthErrorCode.AUTH_TOO_MANY_ATTEMPTS,
+                "Překročen limit pokusů o přihlášení. Zkuste to prosím později.",
+                HttpStatus.TOO_MANY_REQUESTS
         );
     }
 
     /**
-     * Uživatelský účet byl deaktivován administrátorem.
-     *
-     * @return výjimka s HTTP 403 Forbidden
+     * Authorization failure - user lacks required permissions.
+     */
+    public static AuthException insufficientPrivileges() {
+        return new AuthException(
+                AuthErrorCode.AUTH_INSUFFICIENT_PRIVILEGES,
+                "Nemáte oprávnění k provedení této akce.",
+                HttpStatus.FORBIDDEN
+        );
+    }
+
+    // =========================================================================
+    // ACCOUNT STATUS FACTORY METHODS
+    // =========================================================================
+
+    /**
+     * Account disabled by administrator - contact support required.
      */
     public static AuthException accountDisabled() {
         return new AuthException(
@@ -65,64 +82,18 @@ public class AuthException extends SecurityException {
     }
 
     /**
-     * Uživatelský účet byl uzamčen z bezpečnostních důvodů.
-     * Typicky po několika neúspěšných pokusech o přihlášení.
-     *
-     * @return výjimka s HTTP 423 Locked
+     * Account locked due to security policy - too many failed attempts.
      */
     public static AuthException accountLocked() {
         return new AuthException(
                 AuthErrorCode.AUTH_ACCOUNT_LOCKED,
-                "Váš účet byl uzamčen z bezpečnostních důvodů.",
+                "Váš účet byl uzamčen z bezpečnostních důvodů (příliš mnoho pokusů).",
                 HttpStatus.LOCKED
         );
     }
 
     /**
-     * Refresh token je neplatný nebo vypršel.
-     * Uživatel musí provést nové přihlášení.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
-     */
-    public static AuthException sessionExpired() {
-        return new AuthException(
-                AuthErrorCode.AUTH_SESSION_EXPIRED,
-                "Vaše relace vypršela nebo byla ukončena. Přihlaste se prosím znovu.",
-                HttpStatus.UNAUTHORIZED
-        );
-    }
-
-    /**
-     * Verifikační token neexistuje nebo není platný.
-     *
-     * @return výjimka s HTTP 400 Bad Request
-     */
-    public static AuthException invalidVerificationToken() {
-        return new AuthException(
-                AuthErrorCode.AUTH_TOKEN_INVALID,
-                "Neplatný nebo neexistující verifikační token.",
-                HttpStatus.BAD_REQUEST
-        );
-    }
-
-    /**
-     * Verifikační token vypršel a již nemůže být použit.
-     * Uživatel musí požádat o nový verifikační email.
-     *
-     * @return výjimka s HTTP 410 Gone
-     */
-    public static AuthException verificationTokenExpired() {
-        return new AuthException(
-                AuthErrorCode.AUTH_TOKEN_EXPIRED,
-                "Verifikační token vypršel. Požádejte o nový.",
-                HttpStatus.GONE
-        );
-    }
-
-    /**
-     * Uživatelský účet nebyl aktivován prostřednictvím verifikačního emailu.
-     *
-     * @return výjimka s HTTP 403 Forbidden
+     * Account requires email verification before login.
      */
     public static AuthException accountNotVerified() {
         return new AuthException(
@@ -133,23 +104,92 @@ public class AuthException extends SecurityException {
     }
 
     /**
-     * Obecná interní chyba serveru při zpracování autentizační operace.
-     *
-     * @param message popis chyby
-     * @return výjimka s HTTP 500 Internal Server Error
+     * Account activation attempted on already active account.
      */
-    public static AuthException internalError(String message) {
+    public static AuthException accountAlreadyActivated() {
         return new AuthException(
-                AuthErrorCode.AUTH_ACCOUNT_DISABLED,
-                message,
-                HttpStatus.INTERNAL_SERVER_ERROR
+                AuthErrorCode.AUTH_ACCOUNT_ALREADY_ACTIVATED,
+                "Účet je již aktivován. Můžete se přihlásit.",
+                HttpStatus.BAD_REQUEST
         );
     }
 
     /**
-     * Hesla v registračním formuláři se neshodují.
-     *
-     * @return výjimka s HTTP 400 Bad Request
+     * Email address already registered - duplicate registration attempt.
+     */
+    public static AuthException emailExists() {
+        return new AuthException(
+                AuthErrorCode.AUTH_EMAIL_EXISTS,
+                "Uživatel s tímto emailem již existuje.",
+                HttpStatus.CONFLICT
+        );
+    }
+
+    // =========================================================================
+    // TOKEN MANAGEMENT FACTORY METHODS
+    // =========================================================================
+
+    /**
+     * JWT nebo auth token je invalid nebo compromised.
+     */
+    public static AuthException invalidToken() {
+        return new AuthException(
+                AuthErrorCode.AUTH_INVALID_TOKEN,
+                "Neplatný nebo podvržený autentizační token.",
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Session nebo JWT token expiroval - re-authentication required.
+     */
+    public static AuthException sessionExpired() {
+        return new AuthException(
+                AuthErrorCode.AUTH_SESSION_EXPIRED,
+                "Vaše relace vypršela. Přihlaste se prosím znovu.",
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Token-device binding mismatch - potential token theft.
+     */
+    public static AuthException deviceMismatch() {
+        return new AuthException(
+                AuthErrorCode.AUTH_DEVICE_MISMATCH,
+                "Token nepatří tomuto zařízení. Z bezpečnostních důvodů se přihlaste znovu.",
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Email verification token neexistuje nebo je invalid.
+     */
+    public static AuthException invalidVerificationToken() {
+        return new AuthException(
+                AuthErrorCode.AUTH_INVALID_TOKEN,
+                "Neplatný nebo neexistující verifikační token.",
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    /**
+     * Email verification token vypršel - request new verification.
+     */
+    public static AuthException verificationTokenExpired() {
+        return new AuthException(
+                AuthErrorCode.AUTH_TOKEN_EXPIRED,
+                "Verifikační token vypršel. Požádejte o nový.",
+                HttpStatus.GONE
+        );
+    }
+
+    // =========================================================================
+    // VALIDATION FACTORY METHODS
+    // =========================================================================
+
+    /**
+     * Password confirmation mismatch during registration.
      */
     public static AuthException passwordMismatch() {
         return new AuthException(
@@ -160,22 +200,18 @@ public class AuthException extends SecurityException {
     }
 
     /**
-     * Heslo nesplňuje bezpečnostní požadavky.
-     *
-     * @return výjimka s HTTP 400 Bad Request
+     * Password doesn't meet security requirements.
      */
     public static AuthException weakPassword() {
         return new AuthException(
                 AuthErrorCode.AUTH_WEAK_PASSWORD,
-                "Heslo nesplňuje bezpečnostní požadavky.",
+                "Heslo nesplňuje bezpečnostní požadavky (délka, znaky).",
                 HttpStatus.BAD_REQUEST
         );
     }
 
     /**
-     * Neplatný formát emailové adresy.
-     *
-     * @return výjimka s HTTP 400 Bad Request
+     * Email format validation failure.
      */
     public static AuthException invalidEmailFormat() {
         return new AuthException(
@@ -185,17 +221,40 @@ public class AuthException extends SecurityException {
         );
     }
 
+    // =========================================================================
+    // SYSTEM ERROR FACTORY METHODS
+    // =========================================================================
+
     /**
-     * Refresh token nepatří zadanému zařízení.
-     * Možný pokus o zneužití tokenu.
-     *
-     * @return výjimka s HTTP 401 Unauthorized
+     * Required system role missing - configuration error.
      */
-    public static AuthException deviceMismatch() {
+    public static AuthException roleNotFound(String roleName) {
         return new AuthException(
-                AuthErrorCode.AUTH_DEVICE_MISMATCH,
-                "Token nepatří tomuto zařízení.",
-                HttpStatus.UNAUTHORIZED
+                AuthErrorCode.AUTH_ROLE_NOT_FOUND,
+                "Kritická chyba konfigurace: Role '" + roleName + "' nebyla nalezena.",
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    /**
+     * Generic internal auth system error.
+     */
+    public static AuthException internalError(String message) {
+        return new AuthException(
+                AuthErrorCode.AUTH_SYSTEM_ERROR,
+                "Interní chyba autentizace: " + message,
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    /**
+     * Registration process failed due to system error.
+     */
+    public static AuthException registrationFailed(String message) {
+        return new AuthException(
+                AuthErrorCode.AUTH_REGISTRATION_FAILED,
+                "Registrace selhala: " + message,
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 }

@@ -25,7 +25,7 @@ mixin _$AuthState {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -35,7 +35,7 @@ mixin _$AuthState {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -45,7 +45,7 @@ mixin _$AuthState {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -150,7 +150,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
     return initial();
   }
@@ -164,7 +164,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
     return initial?.call();
   }
@@ -178,7 +178,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -287,7 +287,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
     return loading();
   }
@@ -301,7 +301,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
     return loading?.call();
   }
@@ -315,7 +315,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -463,7 +463,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
     return authenticated(user);
   }
@@ -477,7 +477,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
     return authenticated?.call(user);
   }
@@ -491,7 +491,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -608,7 +608,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
     return unauthenticated();
   }
@@ -622,7 +622,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
     return unauthenticated?.call();
   }
@@ -636,7 +636,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -776,7 +776,7 @@ class _$VerificationRequiredImpl implements _VerificationRequired {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
     return verificationRequired(email);
   }
@@ -790,7 +790,7 @@ class _$VerificationRequiredImpl implements _VerificationRequired {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
     return verificationRequired?.call(email);
   }
@@ -804,7 +804,7 @@ class _$VerificationRequiredImpl implements _VerificationRequired {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (verificationRequired != null) {
@@ -922,7 +922,7 @@ class _$RegisterSuccessImpl implements _RegisterSuccess {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
     return registerSuccess();
   }
@@ -936,7 +936,7 @@ class _$RegisterSuccessImpl implements _RegisterSuccess {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
     return registerSuccess?.call();
   }
@@ -950,7 +950,7 @@ class _$RegisterSuccessImpl implements _RegisterSuccess {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (registerSuccess != null) {
@@ -1017,9 +1017,9 @@ abstract class _$$FailureImplCopyWith<$Res> {
     $Res Function(_$FailureImpl) then,
   ) = __$$FailureImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({AuthErrorResponseModel error});
+  $Res call({AuthFailure failure});
 
-  $AuthErrorResponseModelCopyWith<$Res> get error;
+  $AuthFailureCopyWith<$Res> get failure;
 }
 
 /// @nodoc
@@ -1035,13 +1035,13 @@ class __$$FailureImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? error = null}) {
+  $Res call({Object? failure = null}) {
     return _then(
       _$FailureImpl(
-        null == error
-            ? _value.error
-            : error // ignore: cast_nullable_to_non_nullable
-                as AuthErrorResponseModel,
+        null == failure
+            ? _value.failure
+            : failure // ignore: cast_nullable_to_non_nullable
+                as AuthFailure,
       ),
     );
   }
@@ -1050,9 +1050,9 @@ class __$$FailureImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AuthErrorResponseModelCopyWith<$Res> get error {
-    return $AuthErrorResponseModelCopyWith<$Res>(_value.error, (value) {
-      return _then(_value.copyWith(error: value));
+  $AuthFailureCopyWith<$Res> get failure {
+    return $AuthFailureCopyWith<$Res>(_value.failure, (value) {
+      return _then(_value.copyWith(failure: value));
     });
   }
 }
@@ -1060,14 +1060,14 @@ class __$$FailureImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$FailureImpl implements _Failure {
-  const _$FailureImpl(this.error);
+  const _$FailureImpl(this.failure);
 
   @override
-  final AuthErrorResponseModel error;
+  final AuthFailure failure;
 
   @override
   String toString() {
-    return 'AuthState.failure(error: $error)';
+    return 'AuthState.failure(failure: $failure)';
   }
 
   @override
@@ -1075,11 +1075,11 @@ class _$FailureImpl implements _Failure {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FailureImpl &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.failure, failure) || other.failure == failure));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, failure);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -1098,9 +1098,9 @@ class _$FailureImpl implements _Failure {
     required TResult Function() unauthenticated,
     required TResult Function(String email) verificationRequired,
     required TResult Function() registerSuccess,
-    required TResult Function(AuthErrorResponseModel error) failure,
+    required TResult Function(AuthFailure failure) failure,
   }) {
-    return failure(error);
+    return failure(this.failure);
   }
 
   @override
@@ -1112,9 +1112,9 @@ class _$FailureImpl implements _Failure {
     TResult? Function()? unauthenticated,
     TResult? Function(String email)? verificationRequired,
     TResult? Function()? registerSuccess,
-    TResult? Function(AuthErrorResponseModel error)? failure,
+    TResult? Function(AuthFailure failure)? failure,
   }) {
-    return failure?.call(error);
+    return failure?.call(this.failure);
   }
 
   @override
@@ -1126,11 +1126,11 @@ class _$FailureImpl implements _Failure {
     TResult Function()? unauthenticated,
     TResult Function(String email)? verificationRequired,
     TResult Function()? registerSuccess,
-    TResult Function(AuthErrorResponseModel error)? failure,
+    TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
     if (failure != null) {
-      return failure(error);
+      return failure(this.failure);
     }
     return orElse();
   }
@@ -1183,9 +1183,9 @@ class _$FailureImpl implements _Failure {
 }
 
 abstract class _Failure implements AuthState {
-  const factory _Failure(final AuthErrorResponseModel error) = _$FailureImpl;
+  const factory _Failure(final AuthFailure failure) = _$FailureImpl;
 
-  AuthErrorResponseModel get error;
+  AuthFailure get failure;
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.

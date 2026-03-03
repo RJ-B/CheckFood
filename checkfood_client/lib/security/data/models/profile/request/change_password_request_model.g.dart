@@ -11,7 +11,7 @@ _$ChangePasswordRequestModelImpl _$$ChangePasswordRequestModelImplFromJson(
 ) => _$ChangePasswordRequestModelImpl(
   currentPassword: json['currentPassword'] as String,
   newPassword: json['newPassword'] as String,
-  confirmNewPassword: json['confirmNewPassword'] as String,
+  confirmPassword: json['confirmPassword'] as String,
 );
 
 Map<String, dynamic> _$$ChangePasswordRequestModelImplToJson(
@@ -19,5 +19,5 @@ Map<String, dynamic> _$$ChangePasswordRequestModelImplToJson(
 ) => <String, dynamic>{
   'currentPassword': instance.currentPassword,
   'newPassword': instance.newPassword,
-  'confirmNewPassword': instance.confirmNewPassword,
+  'confirmPassword': instance.confirmPassword,
 };

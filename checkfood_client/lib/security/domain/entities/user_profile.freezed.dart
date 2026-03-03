@@ -21,10 +21,11 @@ mixin _$UserProfile {
   String get email => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
+  String? get profileImageUrl => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  DateTime? get lastLogin => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  List<String> get roles => throw _privateConstructorUsedError;
-  List<Device> get devices => throw _privateConstructorUsedError;
+  String get roleName => throw _privateConstructorUsedError;
 
   /// Create a copy of UserProfile
   /// with the given fields replaced by the non-null parameter values.
@@ -45,10 +46,11 @@ abstract class $UserProfileCopyWith<$Res> {
     String email,
     String firstName,
     String lastName,
+    String? profileImageUrl,
     bool isActive,
+    DateTime? lastLogin,
     DateTime createdAt,
-    List<String> roles,
-    List<Device> devices,
+    String roleName,
   });
 }
 
@@ -71,10 +73,11 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? email = null,
     Object? firstName = null,
     Object? lastName = null,
+    Object? profileImageUrl = freezed,
     Object? isActive = null,
+    Object? lastLogin = freezed,
     Object? createdAt = null,
-    Object? roles = null,
-    Object? devices = null,
+    Object? roleName = null,
   }) {
     return _then(
       _value.copyWith(
@@ -98,26 +101,31 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
                     ? _value.lastName
                     : lastName // ignore: cast_nullable_to_non_nullable
                         as String,
+            profileImageUrl:
+                freezed == profileImageUrl
+                    ? _value.profileImageUrl
+                    : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
             isActive:
                 null == isActive
                     ? _value.isActive
                     : isActive // ignore: cast_nullable_to_non_nullable
                         as bool,
+            lastLogin:
+                freezed == lastLogin
+                    ? _value.lastLogin
+                    : lastLogin // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
             createdAt:
                 null == createdAt
                     ? _value.createdAt
                     : createdAt // ignore: cast_nullable_to_non_nullable
                         as DateTime,
-            roles:
-                null == roles
-                    ? _value.roles
-                    : roles // ignore: cast_nullable_to_non_nullable
-                        as List<String>,
-            devices:
-                null == devices
-                    ? _value.devices
-                    : devices // ignore: cast_nullable_to_non_nullable
-                        as List<Device>,
+            roleName:
+                null == roleName
+                    ? _value.roleName
+                    : roleName // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -138,10 +146,11 @@ abstract class _$$UserProfileImplCopyWith<$Res>
     String email,
     String firstName,
     String lastName,
+    String? profileImageUrl,
     bool isActive,
+    DateTime? lastLogin,
     DateTime createdAt,
-    List<String> roles,
-    List<Device> devices,
+    String roleName,
   });
 }
 
@@ -163,10 +172,11 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     Object? email = null,
     Object? firstName = null,
     Object? lastName = null,
+    Object? profileImageUrl = freezed,
     Object? isActive = null,
+    Object? lastLogin = freezed,
     Object? createdAt = null,
-    Object? roles = null,
-    Object? devices = null,
+    Object? roleName = null,
   }) {
     return _then(
       _$UserProfileImpl(
@@ -190,26 +200,31 @@ class __$$UserProfileImplCopyWithImpl<$Res>
                 ? _value.lastName
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String,
+        profileImageUrl:
+            freezed == profileImageUrl
+                ? _value.profileImageUrl
+                : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
         isActive:
             null == isActive
                 ? _value.isActive
                 : isActive // ignore: cast_nullable_to_non_nullable
                     as bool,
+        lastLogin:
+            freezed == lastLogin
+                ? _value.lastLogin
+                : lastLogin // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
         createdAt:
             null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                     as DateTime,
-        roles:
-            null == roles
-                ? _value._roles
-                : roles // ignore: cast_nullable_to_non_nullable
-                    as List<String>,
-        devices:
-            null == devices
-                ? _value._devices
-                : devices // ignore: cast_nullable_to_non_nullable
-                    as List<Device>,
+        roleName:
+            null == roleName
+                ? _value.roleName
+                : roleName // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -223,13 +238,12 @@ class _$UserProfileImpl extends _UserProfile {
     required this.email,
     required this.firstName,
     required this.lastName,
+    this.profileImageUrl,
     required this.isActive,
+    this.lastLogin,
     required this.createdAt,
-    required final List<String> roles,
-    required final List<Device> devices,
-  }) : _roles = roles,
-       _devices = devices,
-       super._();
+    required this.roleName,
+  }) : super._();
 
   @override
   final int id;
@@ -240,28 +254,19 @@ class _$UserProfileImpl extends _UserProfile {
   @override
   final String lastName;
   @override
+  final String? profileImageUrl;
+  @override
   final bool isActive;
   @override
+  final DateTime? lastLogin;
+  @override
   final DateTime createdAt;
-  final List<String> _roles;
   @override
-  List<String> get roles {
-    if (_roles is EqualUnmodifiableListView) return _roles;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_roles);
-  }
-
-  final List<Device> _devices;
-  @override
-  List<Device> get devices {
-    if (_devices is EqualUnmodifiableListView) return _devices;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_devices);
-  }
+  final String roleName;
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, email: $email, firstName: $firstName, lastName: $lastName, isActive: $isActive, createdAt: $createdAt, roles: $roles, devices: $devices)';
+    return 'UserProfile(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, roleName: $roleName)';
   }
 
   @override
@@ -275,12 +280,16 @@ class _$UserProfileImpl extends _UserProfile {
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
+            (identical(other.lastLogin, lastLogin) ||
+                other.lastLogin == lastLogin) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            const DeepCollectionEquality().equals(other._roles, _roles) &&
-            const DeepCollectionEquality().equals(other._devices, _devices));
+            (identical(other.roleName, roleName) ||
+                other.roleName == roleName));
   }
 
   @override
@@ -290,10 +299,11 @@ class _$UserProfileImpl extends _UserProfile {
     email,
     firstName,
     lastName,
+    profileImageUrl,
     isActive,
+    lastLogin,
     createdAt,
-    const DeepCollectionEquality().hash(_roles),
-    const DeepCollectionEquality().hash(_devices),
+    roleName,
   );
 
   /// Create a copy of UserProfile
@@ -311,10 +321,11 @@ abstract class _UserProfile extends UserProfile {
     required final String email,
     required final String firstName,
     required final String lastName,
+    final String? profileImageUrl,
     required final bool isActive,
+    final DateTime? lastLogin,
     required final DateTime createdAt,
-    required final List<String> roles,
-    required final List<Device> devices,
+    required final String roleName,
   }) = _$UserProfileImpl;
   const _UserProfile._() : super._();
 
@@ -327,13 +338,15 @@ abstract class _UserProfile extends UserProfile {
   @override
   String get lastName;
   @override
+  String? get profileImageUrl;
+  @override
   bool get isActive;
+  @override
+  DateTime? get lastLogin;
   @override
   DateTime get createdAt;
   @override
-  List<String> get roles;
-  @override
-  List<Device> get devices;
+  String get roleName;
 
   /// Create a copy of UserProfile
   /// with the given fields replaced by the non-null parameter values.

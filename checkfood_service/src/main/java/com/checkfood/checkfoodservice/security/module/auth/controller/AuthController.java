@@ -1,10 +1,9 @@
 package com.checkfood.checkfoodservice.security.module.auth.controller;
 
 import com.checkfood.checkfoodservice.security.module.auth.dto.request.*;
-import com.checkfood.checkfoodservice.security.module.auth.dto.request.*;
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.TokenResponse;
-import com.checkfood.checkfoodservice.security.module.auth.dto.response.UserResponse;
+import com.checkfood.checkfoodservice.security.module.user.dto.response.UserResponse;
 import com.checkfood.checkfoodservice.security.module.auth.service.AuthService;
 import com.checkfood.checkfoodservice.security.ratelimit.annotation.RateLimited;
 import jakarta.validation.Valid;
@@ -13,18 +12,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
- * REST kontroler pro autentizaci a správu uživatelských účtů.
- * Poskytuje endpointy pro registraci, přihlášení, verifikaci emailu a správu tokenů.
- * Všechny veřejné endpointy jsou chráněny rate limitingem proti zneužití.
+ * REST controller pro autentizaci a správu uživatelských účtů.
  *
+ * Poskytuje HTTP API endpointy pro kompletní authentication workflow včetně
+ * registrace, verifikace, přihlášení a session managementu. Implementuje
+ * rate limiting pro security protection a deep link integration pro mobile app.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuthService
  * @see RateLimited
  */
@@ -33,14 +36,19 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthController {
 
+    /**
+     * Authentication service pro business logic execution.
+     */
     private final AuthService authService;
 
     /**
-     * Registruje nového uživatele a zasílá verifikační email.
-     * Rate limit: max 5 registrací za 15 minut z jedné IP adresy.
+     * Registruje nového uživatele do systému s rate limiting protection.
      *
-     * @param request registrační data včetně emailu, hesla a jména
-     * @return HTTP 202 Accepted po úspěšné registraci
+     * Asynchronní proces - vrací 202 Accepted protože registrace pokračuje
+     * email verification workflow. Rate limiting 5 pokusů per 15 minut per IP.
+     *
+     * @param request validované registrační data
+     * @return ResponseEntity s HTTP 202 status
      */
     @RateLimited(
             key = "auth:register",
@@ -55,12 +63,26 @@ public class AuthController {
         return ResponseEntity.accepted().build();
     }
 
+    @RateLimited(
+            key = "auth:register-owner",
+            limit = 5,
+            duration = 15,
+            unit = TimeUnit.MINUTES,
+            perIp = true
+    )
+    @PostMapping("/register-owner")
+    public ResponseEntity<Void> registerOwner(@Valid @RequestBody RegisterRequest request) {
+        authService.registerOwner(request);
+        return ResponseEntity.accepted().build();
+    }
+
     /**
-     * Znovu odešle verifikační email pro neověřený účet.
-     * Rate limit: max 3 pokusy za 5 minut z jedné IP adresy pro prevenci spamování.
+     * Znovu odešle verifikační email pro account activation.
      *
-     * @param request obsahuje email účtu, pro který má být kód znovu odeslán
-     * @return HTTP 200 OK po úspěšném odeslání
+     * Rate limiting 3 pokusy per 5 minut per IP pro prevenci spam abuse.
+     *
+     * @param request request s email adresou
+     * @return ResponseEntity s HTTP 200 status
      */
     @RateLimited(
             key = "auth:resend",
@@ -76,32 +98,41 @@ public class AuthController {
     }
 
     /**
-     * Zpracovává verifikaci účtu prostřednictvím tokenu z emailu.
-     * Přesměruje uživatele do mobilní aplikace s výsledkem verifikace.
-     * V případě úspěchu přesměruje na checkfood://app/login?status=success,
-     * při chybě na checkfood://app/login?status=error&message=encoded_error_message.
+     * Verifikuje účet přes email link a přesměrovává do mobile app.
      *
-     * @param token verifikační token z emailového odkazu
-     * @param response HTTP odpověď pro přesměrování
-     * @throws IOException při chybě přesměrování
+     * Implementuje deep link integration pro seamless UX - úspěch i chyby
+     * jsou handleovány přes custom URL scheme pro Flutter app.
+     *
+     * @param token verification token z email linku
+     * @param response HTTP response pro redirect functionality
+     * @throws IOException při redirect failures
      */
     @GetMapping("/verify")
     public void verifyAccount(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
         try {
             authService.verifyAccount(token);
+            // Deep link pro úspěšnou verifikaci
             response.sendRedirect("checkfood://app/login?status=success");
         } catch (Exception e) {
+            // Error handling s URL encoding pro safe parameter passing
+            String errorType = "VERIFICATION_ERROR";
             String encodedMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
-            response.sendRedirect("checkfood://app/login?status=error&message=" + encodedMessage);
+
+            response.sendRedirect(String.format(
+                    "checkfood://app/login?status=error&type=%s&message=%s",
+                    errorType,
+                    encodedMessage
+            ));
         }
     }
 
     /**
-     * Přihlásí uživatele a vrátí autentizační tokeny.
-     * Rate limit: max 10 pokusů za minutu z jedné IP adresy.
+     * Autentizuje uživatele a vytvoří JWT session tokens.
      *
-     * @param request přihlašovací údaje (email a heslo)
-     * @return autentizační odpověď obsahující access token, refresh token a informace o uživateli
+     * Rate limiting 10 pokusů per minuta per IP pro brute force protection.
+     *
+     * @param request login credentials s optional device metadata
+     * @return AuthResponse s JWT tokens a user profile
      */
     @RateLimited(
             key = "auth:login",
@@ -116,33 +147,54 @@ public class AuthController {
     }
 
     /**
-     * Obnoví platnost access tokenu pomocí refresh tokenu.
+     * Obnovuje JWT access token pomocí refresh token.
      *
-     * @param request obsahuje refresh token
-     * @return nový access token a refresh token
+     * Rate limiting 30 pokusů per minuta per IP pro ochranu proti zneužití ukradeného tokenu.
+     * Dodatečná security je zajištěna device binding validation v service layer.
+     *
+     * @param request refresh request s refresh token a device identifier
+     * @return TokenResponse s novými JWT tokens
      */
+    @RateLimited(
+            key = "auth:refresh",
+            limit = 30,
+            duration = 1,
+            unit = TimeUnit.MINUTES,
+            perIp = true
+    )
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refreshToken(@Valid @RequestBody RefreshRequest request) {
         return ResponseEntity.ok(authService.refreshToken(request));
     }
 
     /**
-     * Odhlásí uživatele a invaliduje jeho tokeny.
+     * Odhlašuje uživatele a invaliduje session tokens.
      *
-     * @param request obsahuje refresh token k invalidaci
-     * @return HTTP 204 No Content po úspěšném odhlášení
+     * HTTP 204 No Content - successful logout bez response body.
+     * Ověřuje, že refresh token patří přihlášenému uživateli (prevence logout hijack).
+     *
+     * @param request logout request s refresh token a device identifier
+     * @param userDetails přihlášený uživatel z Security kontextu (může být null pro permitAll)
+     * @return ResponseEntity s HTTP 204 status
      */
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest request) {
-        authService.logout(request);
+    public ResponseEntity<Void> logout(
+            @Valid @RequestBody LogoutRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String email = (userDetails != null) ? userDetails.getUsername() : null;
+        authService.logout(request, email);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * Vrátí informace o aktuálně přihlášeném uživateli.
+     * Získává profile information pro aktuálně autentizovaného uživatele.
      *
-     * @param userDetails autentizační detaily z Security Contextu
-     * @return informace o uživateli (ID, email, jméno, role)
+     * @AuthenticationPrincipal extrahuje UserDetails ze security contextu,
+     * eliminuje potřebu manual JWT token parsing.
+     *
+     * @param userDetails Spring Security principal z authentication context
+     * @return UserResponse s user profile data
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
