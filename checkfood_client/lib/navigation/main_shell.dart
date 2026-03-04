@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Core & Security
 import '../core/di/injection_container.dart';
 import '../core/theme/colors.dart';
-import '../../security/domain/enums/user_role.dart';
 import '../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../security/presentation/bloc/auth/auth_state.dart';
 import '../../security/presentation/pages/auth/login_page.dart';
@@ -23,8 +22,6 @@ import '../modules/management/my_restaurant/presentation/pages/my_restaurant_pag
 import '../modules/customer/orders/presentation/bloc/orders_bloc.dart';
 import '../modules/customer/orders/presentation/pages/orders_page.dart';
 
-// Ostatní Features (placeholders)
-import '../features/favorites/favorites_screen.dart';
 import '../modules/customer/restaurant/presentation/bloc/explore_bloc.dart';
 
 // Reservation Module
@@ -47,10 +44,10 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 
-  bool _isManagerOrOwner(BuildContext context) {
+  bool _isRestaurantStaff(BuildContext context) {
     final authState = context.read<AuthBloc>().state;
     return authState.maybeWhen(
-      authenticated: (user) => user.role.isAtLeastManager,
+      authenticated: (user) => user.role.isAtLeastEmployee,
       orElse: () => false,
     );
   }
@@ -74,7 +71,6 @@ class _MainShellState extends State<MainShell> {
           create: (context) => sl<MyRestaurantBloc>(),
           child: const MyRestaurantPage(),
         ),
-      const FavoritesScreen(),
       const ProfileScreen(),
     ];
   }
@@ -95,10 +91,6 @@ class _MainShellState extends State<MainShell> {
           icon: Icon(Icons.store),
           label: 'My Restaurant',
         ),
-      const NavigationDestination(
-        icon: Icon(Icons.favorite),
-        label: 'Favorites',
-      ),
       const NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
     ];
   }
@@ -129,7 +121,7 @@ class _MainShellState extends State<MainShell> {
           return prev.runtimeType != curr.runtimeType;
         },
         builder: (context, authState) {
-          final showMyRestaurant = _isManagerOrOwner(context);
+          final showMyRestaurant = _isRestaurantStaff(context);
           final tabs = _buildTabs(showMyRestaurant);
           final destinations = _buildDestinations(showMyRestaurant);
 

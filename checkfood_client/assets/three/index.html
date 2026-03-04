@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, user-scalable=no"
   />
 
-  <title>Table Selection</title>
+  <title>Table Editor</title>
 
   <style>
     html, body {
@@ -49,6 +49,7 @@
       top: 16px;
       right: 16px;
       background: #22c55e;
+      display: none;
     }
 
     #btn-done {
@@ -65,10 +66,10 @@
   <!-- Three.js canvas -->
   <div id="scene"></div>
 
-  <!-- UI -->
+  <!-- UI (hidden by default, controlled via Flutter bridge) -->
   <div id="ui">
-    <button id="btn-add" class="btn">➕ Přidat stůl</button>
-    <button id="btn-done" class="btn">✔ Hotovo</button>
+    <button id="btn-add" class="btn">Pridat stul</button>
+    <button id="btn-done" class="btn">Hotovo</button>
   </div>
 
   <!-- Libs -->

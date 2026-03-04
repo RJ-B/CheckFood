@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'restaurant.dart';
+import 'restaurant_filters.dart';
 import 'restaurant_marker.dart';
 
 part 'explore_data.freezed.dart';
@@ -27,7 +28,10 @@ class ExploreData with _$ExploreData {
     required bool isPaginationLoading,
 
     /// Zda probíhá aktualizace markerů na mapě (pro plynulé UI)
-    @Default(false) bool isMapLoading, // ✅ NOVÉ
+    @Default(false) bool isMapLoading,
+
+    /// Aktivní filtry
+    @Default(RestaurantFilters()) RestaurantFilters filters,
   }) = _ExploreData;
 
   // Defaultní stav pro init

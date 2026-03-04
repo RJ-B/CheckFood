@@ -1,5 +1,6 @@
 package com.checkfood.checkfoodservice.module.restaurant.controller;
 
+import com.checkfood.checkfoodservice.module.favourite.service.FavouriteService;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantTableRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
@@ -13,9 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -28,6 +32,7 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final TableManagementService tableManagementService;
+    private final FavouriteService favouriteService;
 
     // --- GEO / MAP ENDPOINTS (PUBLIC & OPTIMIZED FOR BIG DATA) ---
 
@@ -68,18 +73,35 @@ public class RestaurantController {
             @RequestParam(required = false) String q,
             @RequestParam(required = false) List<String> cuisineTypes,
             @RequestParam(required = false) Double minRating,
-            @RequestParam(required = false) Boolean openNow
+            @RequestParam(required = false) Boolean openNow,
+            @RequestParam(required = false) Boolean favouritesOnly,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
+        Set<UUID> favouriteIds = null;
+        if (Boolean.TRUE.equals(favouritesOnly) && userDetails != null) {
+            var user = restaurantService.resolveUser(userDetails.getUsername());
+            favouriteIds = favouriteService.getFavouriteIds(user.getId());
+            if (favouriteIds.isEmpty()) {
+                return ResponseEntity.ok(List.of());
+            }
+        }
         return ResponseEntity.ok(
-                restaurantService.getNearestRestaurants(lat, lng, page, size, q, cuisineTypes, minRating, openNow)
+                restaurantService.getNearestRestaurants(lat, lng, page, size, q, cuisineTypes, minRating, openNow, favouriteIds)
         );
     }
 
     // --- PUBLIC DETAIL ENDPOINT ---
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantResponse> getRestaurant(@PathVariable UUID id) {
-        return ResponseEntity.ok(restaurantService.getRestaurantById(id));
+    public ResponseEntity<RestaurantResponse> getRestaurant(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        RestaurantResponse response = restaurantService.getRestaurantById(id);
+        if (userDetails != null) {
+            response.setIsFavourite(favouriteService.isFavourite(userDetails.getUsername(), id));
+        }
+        return ResponseEntity.ok(response);
     }
 
     // --- MANAGEMENT ENDPOINTS (OWNER ONLY) ---

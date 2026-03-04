@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -5,19 +6,25 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 /// Generates and caches cluster marker bitmaps for the map.
 ///
-/// Icon size scales with the real cluster count so that denser areas
-/// are visually distinguishable even when the label reads "99+".
+/// Cluster diameter formula:
+///   diameterPx = clamp(36, 68, base + k * log10(count) - zoomScale * zoom)
+/// Produces icons between 36px and 68px diameter (18-34px radius).
 class MapMarkerHelper {
-  /// Cache keyed by "{size}_{label}" to avoid regenerating identical bitmaps.
   static final Map<String, BitmapDescriptor> _clusterCache = {};
 
-  /// Returns the pixel size for a cluster icon based on the real point count.
-  /// Small clusters (2-9) get baseSize, large ones scale up to baseSize*1.5.
-  static int clusterIconSize(int count, {int baseSize = 90}) {
-    if (count < 10) return baseSize;
-    if (count < 50) return (baseSize * 1.15).round();
-    if (count < 200) return (baseSize * 1.3).round();
-    return (baseSize * 1.5).round(); // 200+
+  static const double _minDiameter = 36;
+  static const double _maxDiameter = 68;
+  static const double _base = 30;
+  static const double _k = 20;
+  static const double _zoomScale = 0.8;
+
+  /// Returns the pixel diameter for a cluster icon.
+  /// [count] — number of restaurants in the cluster.
+  /// [zoom] — current map zoom level.
+  static int clusterIconSize(int count, {int zoom = 14}) {
+    final logPart = count > 1 ? math.log(count) / math.ln10 : 0.0;
+    final raw = _base + _k * logPart - _zoomScale * zoom;
+    return raw.clamp(_minDiameter, _maxDiameter).round();
   }
 
   /// Creates a cluster bitmap (green circle with label).
@@ -34,30 +41,36 @@ class MapMarkerHelper {
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
     final Paint paint = Paint()..color = const Color(0xFF00C853);
-    final TextPainter textPainter = TextPainter(
-      textDirection: TextDirection.ltr,
-    );
 
     final double radius = size / 2;
 
     // Background circle
     canvas.drawCircle(Offset(radius, radius), radius, paint);
 
-    // White border ring
+    // White border ring — scales proportionally with icon size
+    final borderWidth = (size * 0.06).clamp(1.5, 3.0);
     final Paint strokePaint =
         Paint()
           ..color = Colors.white
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 3;
-    canvas.drawCircle(Offset(radius, radius), radius - 1.5, strokePaint);
+          ..strokeWidth = borderWidth;
+    canvas.drawCircle(
+      Offset(radius, radius),
+      radius - borderWidth / 2,
+      strokePaint,
+    );
 
-    // Label text
-    textPainter.text = TextSpan(
-      text: text,
-      style: TextStyle(
-        fontSize: radius * 0.55,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
+    // Label text — font size proportional to diameter
+    final fontSize = (radius * 0.55).clamp(8.0, 16.0);
+    final textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
       ),
     );
 

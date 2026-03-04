@@ -8,11 +8,13 @@ import 'package:device_info_plus/device_info_plus.dart';
 // Core Services
 
 // Data Sources
+import '../../modules/customer/restaurant/data/datasources/favourite_remote_datasource.dart';
 import '../../modules/customer/restaurant/data/datasources/restaurant_remote_datasource.dart';
 import '../../modules/customer/restaurant/data/repositories/restaurant_repository_impl.dart';
 import '../../modules/customer/restaurant/domain/repositories/restaurant_repository.dart';
 import '../../modules/customer/restaurant/domain/usecases/explore_usecases.dart';
 import '../../modules/customer/restaurant/domain/usecases/get_restaurant_by_id_usecase.dart';
+import '../../modules/customer/restaurant/domain/usecases/toggle_favourite_usecase.dart';
 import '../../modules/customer/restaurant/presentation/bloc/explore_bloc.dart';
 import '../../modules/customer/restaurant/presentation/bloc/restaurant_detail_bloc.dart';
 
@@ -96,6 +98,17 @@ import '../../modules/customer/orders/domain/usecases/get_menu_usecase.dart';
 import '../../modules/customer/orders/domain/usecases/create_order_usecase.dart';
 import '../../modules/customer/orders/domain/usecases/get_current_orders_usecase.dart';
 import '../../modules/customer/orders/presentation/bloc/orders_bloc.dart';
+
+// Staff Reservations Module (Management)
+import '../../modules/management/staff_reservations/data/datasources/staff_reservation_remote_datasource.dart';
+import '../../modules/management/staff_reservations/data/repositories/staff_reservation_repository_impl.dart';
+import '../../modules/management/staff_reservations/domain/repositories/staff_reservation_repository.dart';
+import '../../modules/management/staff_reservations/domain/usecases/get_staff_reservations_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/confirm_reservation_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/reject_reservation_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/check_in_reservation_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/complete_reservation_usecase.dart';
+import '../../modules/management/staff_reservations/presentation/bloc/staff_reservations_bloc.dart';
 
 // Owner Claim Module
 import '../../modules/owner/data/datasources/owner_claim_remote_datasource.dart';
@@ -330,6 +343,9 @@ Future<void> init() async {
   sl.registerLazySingleton<RestaurantRemoteDataSource>(
     () => RestaurantRemoteDataSourceImpl(sl()),
   );
+  sl.registerLazySingleton<FavouriteRemoteDataSource>(
+    () => FavouriteRemoteDataSourceImpl(sl()),
+  );
 
   // --- Repositories ---
   sl.registerLazySingleton<RestaurantRepository>(
@@ -338,14 +354,14 @@ Future<void> init() async {
 
   // --- Use Cases ---
 
-  // LocationService už je registrován v sekci 1. Zde registrujeme jen UseCase.
+  // LocationService uz je registrovan v sekci 1. Zde registrujeme jen UseCase.
   sl.registerLazySingleton(() => GetLocationUseCase(sl()));
 
   sl.registerLazySingleton(() => GetRestaurantMarkersUseCase(sl()));
   sl.registerLazySingleton(() => GetNearestRestaurantsUseCase(sl()));
 
-  // Ostatní
   sl.registerLazySingleton(() => GetRestaurantByIdUseCase(sl()));
+  sl.registerLazySingleton(() => ToggleFavouriteUseCase(sl()));
 
   // --- Blocs ---
   sl.registerFactory(
@@ -359,6 +375,7 @@ Future<void> init() async {
   sl.registerFactory(
     () => RestaurantDetailBloc(
       getRestaurantByIdUseCase: sl(),
+      toggleFavouriteUseCase: sl(),
     ),
   );
 
@@ -438,6 +455,38 @@ Future<void> init() async {
       addEmployeeUseCase: sl(),
       updateEmployeeRoleUseCase: sl(),
       removeEmployeeUseCase: sl(),
+    ),
+  );
+
+  // ===========================================================================
+  // 9b. STAFF RESERVATIONS MODULE (Management)
+  // ===========================================================================
+
+  // --- Data Sources ---
+  sl.registerLazySingleton<StaffReservationRemoteDataSource>(
+    () => StaffReservationRemoteDataSourceImpl(sl()),
+  );
+
+  // --- Repositories ---
+  sl.registerLazySingleton<StaffReservationRepository>(
+    () => StaffReservationRepositoryImpl(sl()),
+  );
+
+  // --- Use Cases ---
+  sl.registerLazySingleton(() => GetStaffReservationsUseCase(sl()));
+  sl.registerLazySingleton(() => ConfirmReservationUseCase(sl()));
+  sl.registerLazySingleton(() => RejectReservationUseCase(sl()));
+  sl.registerLazySingleton(() => CheckInReservationUseCase(sl()));
+  sl.registerLazySingleton(() => CompleteReservationUseCase(sl()));
+
+  // --- Blocs ---
+  sl.registerFactory(
+    () => StaffReservationsBloc(
+      getReservations: sl(),
+      confirm: sl(),
+      reject: sl(),
+      checkIn: sl(),
+      complete: sl(),
     ),
   );
 

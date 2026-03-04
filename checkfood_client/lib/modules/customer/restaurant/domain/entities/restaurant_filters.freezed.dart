@@ -21,6 +21,7 @@ mixin _$RestaurantFilters {
   List<CuisineType> get cuisineTypes => throw _privateConstructorUsedError;
   double? get minRating => throw _privateConstructorUsedError;
   bool get openNow => throw _privateConstructorUsedError;
+  bool get favouritesOnly => throw _privateConstructorUsedError;
 
   /// Create a copy of RestaurantFilters
   /// with the given fields replaced by the non-null parameter values.
@@ -41,6 +42,7 @@ abstract class $RestaurantFiltersCopyWith<$Res> {
     List<CuisineType> cuisineTypes,
     double? minRating,
     bool openNow,
+    bool favouritesOnly,
   });
 }
 
@@ -63,6 +65,7 @@ class _$RestaurantFiltersCopyWithImpl<$Res, $Val extends RestaurantFilters>
     Object? cuisineTypes = null,
     Object? minRating = freezed,
     Object? openNow = null,
+    Object? favouritesOnly = null,
   }) {
     return _then(
       _value.copyWith(
@@ -86,6 +89,11 @@ class _$RestaurantFiltersCopyWithImpl<$Res, $Val extends RestaurantFilters>
                     ? _value.openNow
                     : openNow // ignore: cast_nullable_to_non_nullable
                         as bool,
+            favouritesOnly:
+                null == favouritesOnly
+                    ? _value.favouritesOnly
+                    : favouritesOnly // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -106,6 +114,7 @@ abstract class _$$RestaurantFiltersImplCopyWith<$Res>
     List<CuisineType> cuisineTypes,
     double? minRating,
     bool openNow,
+    bool favouritesOnly,
   });
 }
 
@@ -127,6 +136,7 @@ class __$$RestaurantFiltersImplCopyWithImpl<$Res>
     Object? cuisineTypes = null,
     Object? minRating = freezed,
     Object? openNow = null,
+    Object? favouritesOnly = null,
   }) {
     return _then(
       _$RestaurantFiltersImpl(
@@ -150,6 +160,11 @@ class __$$RestaurantFiltersImplCopyWithImpl<$Res>
                 ? _value.openNow
                 : openNow // ignore: cast_nullable_to_non_nullable
                     as bool,
+        favouritesOnly:
+            null == favouritesOnly
+                ? _value.favouritesOnly
+                : favouritesOnly // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -163,6 +178,7 @@ class _$RestaurantFiltersImpl extends _RestaurantFilters {
     final List<CuisineType> cuisineTypes = const [],
     this.minRating,
     this.openNow = false,
+    this.favouritesOnly = false,
   }) : _cuisineTypes = cuisineTypes,
        super._();
 
@@ -182,10 +198,13 @@ class _$RestaurantFiltersImpl extends _RestaurantFilters {
   @override
   @JsonKey()
   final bool openNow;
+  @override
+  @JsonKey()
+  final bool favouritesOnly;
 
   @override
   String toString() {
-    return 'RestaurantFilters(searchQuery: $searchQuery, cuisineTypes: $cuisineTypes, minRating: $minRating, openNow: $openNow)';
+    return 'RestaurantFilters(searchQuery: $searchQuery, cuisineTypes: $cuisineTypes, minRating: $minRating, openNow: $openNow, favouritesOnly: $favouritesOnly)';
   }
 
   @override
@@ -201,7 +220,9 @@ class _$RestaurantFiltersImpl extends _RestaurantFilters {
             ) &&
             (identical(other.minRating, minRating) ||
                 other.minRating == minRating) &&
-            (identical(other.openNow, openNow) || other.openNow == openNow));
+            (identical(other.openNow, openNow) || other.openNow == openNow) &&
+            (identical(other.favouritesOnly, favouritesOnly) ||
+                other.favouritesOnly == favouritesOnly));
   }
 
   @override
@@ -211,6 +232,7 @@ class _$RestaurantFiltersImpl extends _RestaurantFilters {
     const DeepCollectionEquality().hash(_cuisineTypes),
     minRating,
     openNow,
+    favouritesOnly,
   );
 
   /// Create a copy of RestaurantFilters
@@ -231,6 +253,7 @@ abstract class _RestaurantFilters extends RestaurantFilters {
     final List<CuisineType> cuisineTypes,
     final double? minRating,
     final bool openNow,
+    final bool favouritesOnly,
   }) = _$RestaurantFiltersImpl;
   const _RestaurantFilters._() : super._();
 
@@ -242,6 +265,8 @@ abstract class _RestaurantFilters extends RestaurantFilters {
   double? get minRating;
   @override
   bool get openNow;
+  @override
+  bool get favouritesOnly;
 
   /// Create a copy of RestaurantFilters
   /// with the given fields replaced by the non-null parameter values.

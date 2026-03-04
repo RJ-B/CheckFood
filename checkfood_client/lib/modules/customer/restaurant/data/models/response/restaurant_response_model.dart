@@ -26,6 +26,7 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     AddressModel? address,
     @Default([]) List<OpeningHoursModel> openingHours,
     @Default([]) List<String> tags,
+    @Default(false) bool isFavourite,
   }) = _RestaurantResponseModel;
 
   factory RestaurantResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -47,5 +48,6 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
         address?.toEntity() ?? const Address(street: '', city: '', country: ''),
     openingHours: openingHours.map((e) => e.toEntity()).toList(),
     tags: tags,
+    isFavourite: isFavourite,
   );
 }

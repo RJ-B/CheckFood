@@ -30,6 +30,7 @@ mixin _$Restaurant {
   Address get address => throw _privateConstructorUsedError;
   List<OpeningHours> get openingHours => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
+  bool get isFavourite => throw _privateConstructorUsedError;
 
   /// Create a copy of Restaurant
   /// with the given fields replaced by the non-null parameter values.
@@ -59,6 +60,7 @@ abstract class $RestaurantCopyWith<$Res> {
     Address address,
     List<OpeningHours> openingHours,
     List<String> tags,
+    bool isFavourite,
   });
 
   $AddressCopyWith<$Res> get address;
@@ -92,6 +94,7 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
     Object? address = null,
     Object? openingHours = null,
     Object? tags = null,
+    Object? isFavourite = null,
   }) {
     return _then(
       _value.copyWith(
@@ -160,6 +163,11 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
                     ? _value.tags
                     : tags // ignore: cast_nullable_to_non_nullable
                         as List<String>,
+            isFavourite:
+                null == isFavourite
+                    ? _value.isFavourite
+                    : isFavourite // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -199,6 +207,7 @@ abstract class _$$RestaurantImplCopyWith<$Res>
     Address address,
     List<OpeningHours> openingHours,
     List<String> tags,
+    bool isFavourite,
   });
 
   @override
@@ -232,6 +241,7 @@ class __$$RestaurantImplCopyWithImpl<$Res>
     Object? address = null,
     Object? openingHours = null,
     Object? tags = null,
+    Object? isFavourite = null,
   }) {
     return _then(
       _$RestaurantImpl(
@@ -300,6 +310,11 @@ class __$$RestaurantImplCopyWithImpl<$Res>
                 ? _value._tags
                 : tags // ignore: cast_nullable_to_non_nullable
                     as List<String>,
+        isFavourite:
+            null == isFavourite
+                ? _value.isFavourite
+                : isFavourite // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -322,6 +337,7 @@ class _$RestaurantImpl extends _Restaurant {
     required this.address,
     required final List<OpeningHours> openingHours,
     final List<String> tags = const [],
+    this.isFavourite = false,
   }) : _openingHours = openingHours,
        _tags = tags,
        super._();
@@ -366,8 +382,12 @@ class _$RestaurantImpl extends _Restaurant {
   }
 
   @override
+  @JsonKey()
+  final bool isFavourite;
+
+  @override
   String toString() {
-    return 'Restaurant(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags)';
+    return 'Restaurant(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite)';
   }
 
   @override
@@ -394,7 +414,9 @@ class _$RestaurantImpl extends _Restaurant {
               other._openingHours,
               _openingHours,
             ) &&
-            const DeepCollectionEquality().equals(other._tags, _tags));
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
+            (identical(other.isFavourite, isFavourite) ||
+                other.isFavourite == isFavourite));
   }
 
   @override
@@ -413,6 +435,7 @@ class _$RestaurantImpl extends _Restaurant {
     address,
     const DeepCollectionEquality().hash(_openingHours),
     const DeepCollectionEquality().hash(_tags),
+    isFavourite,
   );
 
   /// Create a copy of Restaurant
@@ -439,6 +462,7 @@ abstract class _Restaurant extends Restaurant {
     required final Address address,
     required final List<OpeningHours> openingHours,
     final List<String> tags,
+    final bool isFavourite,
   }) = _$RestaurantImpl;
   const _Restaurant._() : super._();
 
@@ -468,6 +492,8 @@ abstract class _Restaurant extends Restaurant {
   List<OpeningHours> get openingHours;
   @override
   List<String> get tags;
+  @override
+  bool get isFavourite;
 
   /// Create a copy of Restaurant
   /// with the given fields replaced by the non-null parameter values.

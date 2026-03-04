@@ -34,4 +34,5 @@ public class RestaurantResponse {
     private List<OpeningHoursDto> openingHours;
     private Set<String> tags;
     private boolean onboardingCompleted;
+    private Boolean isFavourite;
 }

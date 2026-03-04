@@ -16,4 +16,5 @@ public class PanoramaSessionResponse {
     private String resultUrl;
     private LocalDateTime createdAt;
     private LocalDateTime completedAt;
+    private String errorMessage;
 }

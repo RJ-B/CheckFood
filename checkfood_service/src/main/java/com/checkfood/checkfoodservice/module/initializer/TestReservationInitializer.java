@@ -22,6 +22,10 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Seeds realistic 90-minute test reservations across multiple tables and dates.
+ * Only runs in "local" profile, after TestDataInitializer (100).
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -38,14 +42,14 @@ public class TestReservationInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     @Order(102)
-    public void seedTestReservation() {
+    public void seedTestReservations() {
         // Find test restaurant
         Optional<Restaurant> restaurantOpt = restaurantRepository.findAll().stream()
                 .filter(r -> TEST_RESTAURANT_NAME.equals(r.getName()))
                 .findFirst();
 
         if (restaurantOpt.isEmpty()) {
-            log.info("[ReservationSeed] Testovací restaurace neexistuje, přeskakuji.");
+            log.info("[ReservationSeed] Test restaurant not found, skipping.");
             return;
         }
 
@@ -54,51 +58,110 @@ public class TestReservationInitializer {
         // Find test user
         Optional<UserEntity> userOpt = userRepository.findByEmail(TEST_USER_EMAIL);
         if (userOpt.isEmpty()) {
-            log.info("[ReservationSeed] Testovací uživatel {} neexistuje, přeskakuji.", TEST_USER_EMAIL);
+            log.info("[ReservationSeed] Test user {} not found, skipping.", TEST_USER_EMAIL);
             return;
         }
 
         Long userId = userOpt.get().getId();
 
-        // Find first table
-        List<RestaurantTable> tables = tableRepository.findAllByRestaurantIdAndActiveTrue(restaurant.getId());
-        if (tables.isEmpty()) {
-            log.info("[ReservationSeed] Restaurace nemá stoly, přeskakuji.");
+        // Load tables sorted by label
+        List<RestaurantTable> tables = tableRepository
+                .findAllByRestaurantIdAndActiveTrue(restaurant.getId());
+        if (tables.size() < 4) {
+            log.info("[ReservationSeed] Not enough tables ({}), skipping.", tables.size());
             return;
         }
 
-        RestaurantTable table = tables.get(0);
-        LocalDate today = LocalDate.now();
-
-        // Check if reservation already exists for today
+        // Check if reservations already seeded (idempotent)
         List<Reservation> existing = reservationRepository
                 .findAllByUserIdOrderByDateDescStartTimeDesc(userId);
-        boolean hasToday = existing.stream().anyMatch(r ->
-                r.getDate().equals(today)
-                        && r.getRestaurantId().equals(restaurant.getId())
-                        && r.getStatus() != ReservationStatus.CANCELLED
-        );
-
-        if (hasToday) {
-            log.info("[ReservationSeed] Rezervace pro dnešek již existuje, přeskakuji.");
+        long activeCount = existing.stream()
+                .filter(r -> r.getRestaurantId().equals(restaurant.getId()))
+                .filter(r -> r.getStatus() != ReservationStatus.CANCELLED)
+                .count();
+        if (activeCount >= 3) {
+            log.info("[ReservationSeed] Already {} reservations, skipping.", activeCount);
             return;
         }
 
-        // Create all-day reservation for dev testing (10:00 - 22:00)
-        Reservation reservation = Reservation.builder()
-                .restaurantId(restaurant.getId())
-                .tableId(table.getId())
+        // Tables: Stul 1 (2-cap), Stul 2 (4-cap), Stul 3 (4-cap), Stul 4 (6-cap), ...
+        RestaurantTable table1 = tables.get(0);
+        RestaurantTable table2 = tables.get(1);
+        RestaurantTable table3 = tables.get(2);
+        RestaurantTable table4 = tables.get(3);
+
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        var rid = restaurant.getId();
+
+        // --- TODAY ---
+        // Stul 1: 12:00-13:30 CONFIRMED
+        save(rid, table1.getId(), userId, today,
+                LocalTime.of(12, 0), LocalTime.of(13, 30),
+                ReservationStatus.CONFIRMED, 2);
+
+        // Stul 1: 18:00-19:30 PENDING_CONFIRMATION
+        save(rid, table1.getId(), userId, today,
+                LocalTime.of(18, 0), LocalTime.of(19, 30),
+                ReservationStatus.PENDING_CONFIRMATION, 2);
+
+        // Stul 2: 11:00-12:30 RESERVED
+        save(rid, table2.getId(), userId, today,
+                LocalTime.of(11, 0), LocalTime.of(12, 30),
+                ReservationStatus.RESERVED, 3);
+
+        // Stul 3: 14:00-15:30 CONFIRMED
+        save(rid, table3.getId(), userId, today,
+                LocalTime.of(14, 0), LocalTime.of(15, 30),
+                ReservationStatus.CONFIRMED, 4);
+
+        // --- TOMORROW ---
+        // Stul 2: 12:00-13:30 CONFIRMED
+        save(rid, table2.getId(), userId, tomorrow,
+                LocalTime.of(12, 0), LocalTime.of(13, 30),
+                ReservationStatus.CONFIRMED, 2);
+
+        // Stul 4: 19:00-20:30 PENDING_CONFIRMATION
+        save(rid, table4.getId(), userId, tomorrow,
+                LocalTime.of(19, 0), LocalTime.of(20, 30),
+                ReservationStatus.PENDING_CONFIRMATION, 5);
+
+        // Stul 1: 10:00-11:30 RESERVED
+        save(rid, table1.getId(), userId, tomorrow,
+                LocalTime.of(10, 0), LocalTime.of(11, 30),
+                ReservationStatus.RESERVED, 2);
+
+        // --- EXTRA: near-current-time for check-in testing ---
+        // Stul 4: now-rounded CONFIRMED (staff can check-in immediately)
+        LocalTime nowRounded = LocalTime.now().withSecond(0).withNano(0);
+        LocalTime nearStart = nowRounded.getMinute() < 30
+                ? nowRounded.withMinute(0) : nowRounded.withMinute(30);
+        save(rid, table4.getId(), userId, today,
+                nearStart, nearStart.plusMinutes(90),
+                ReservationStatus.CONFIRMED, 4);
+
+        // Stul 3: 20:00-21:30 CHECKED_IN (already checked-in, for complete testing)
+        save(rid, table3.getId(), userId, today,
+                LocalTime.of(20, 0), LocalTime.of(21, 30),
+                ReservationStatus.CHECKED_IN, 3);
+
+        log.info("[ReservationSeed] Created 9 test reservations for restaurant '{}' (today + tomorrow).",
+                restaurant.getName());
+    }
+
+    private void save(java.util.UUID restaurantId, java.util.UUID tableId,
+                      Long userId, LocalDate date,
+                      LocalTime start, LocalTime end,
+                      ReservationStatus status, int partySize) {
+        reservationRepository.save(Reservation.builder()
+                .restaurantId(restaurantId)
+                .tableId(tableId)
                 .userId(userId)
-                .date(today)
-                .startTime(LocalTime.of(10, 0))
-                .endTime(LocalTime.of(22, 0))
-                .status(ReservationStatus.RESERVED)
-                .partySize(2)
-                .build();
-
-        reservationRepository.save(reservation);
-
-        log.info("[ReservationSeed] Vytvořena testovací rezervace: user={}, restaurant={}, table={}, date={}",
-                TEST_USER_EMAIL, restaurant.getName(), table.getLabel(), today);
+                .date(date)
+                .startTime(start)
+                .endTime(end)
+                .status(status)
+                .partySize(partySize)
+                .build());
     }
 }

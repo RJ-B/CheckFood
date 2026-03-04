@@ -3,12 +3,11 @@ import 'package:stream_transform/stream_transform.dart';
 import 'dart:developer' as dev;
 
 import '../../domain/entities/explore_data.dart';
+import '../../domain/entities/restaurant_filters.dart';
 import '../../domain/usecases/explore_usecases.dart';
 import 'explore_event.dart';
 import 'explore_state.dart';
 
-/// BLoC zodpovědný za logiku obrazovky Explore.
-/// Spravuje stav vyhledávání, polohu uživatele a koordinaci UseCasů.
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   final GetLocationUseCase _getLocationUseCase;
   final GetRestaurantMarkersUseCase _getMarkersUseCase;
@@ -26,13 +25,21 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<PermissionResultReceived>(_onPermissionResultReceived);
     on<LoadMoreRequested>(_onLoadMoreRequested);
     on<RefreshRequested>(_onRefreshRequested);
+    on<FiltersChanged>(_onFiltersChanged);
 
-    // Optimalizace pohybu mapy: Debounce zabraňuje zahlcení API při plynulém posunu.
     on<MapBoundsChanged>(
       _onMapBoundsChanged,
       transformer:
           (events, mapper) => events
               .debounce(const Duration(milliseconds: 300))
+              .switchMap(mapper),
+    );
+
+    on<SearchChanged>(
+      _onSearchChanged,
+      transformer:
+          (events, mapper) => events
+              .debounce(const Duration(milliseconds: 400))
               .switchMap(mapper),
     );
   }
@@ -57,8 +64,6 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     }
   }
 
-  /// ✅ OPRAVENO: Plynulá aktualizace mapy na pozadí.
-  /// Namísto emitování ExploreState.loading() pouze přepínáme flag isMapLoading.
   Future<void> _onMapBoundsChanged(
     MapBoundsChanged event,
     Emitter<ExploreState> emit,
@@ -104,6 +109,80 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     }
   }
 
+  Future<void> _onSearchChanged(
+    SearchChanged event,
+    Emitter<ExploreState> emit,
+  ) async {
+    if (state is! Loaded) return;
+    final currentState = state as Loaded;
+    final data = currentState.data;
+
+    final newFilters = data.filters.copyWith(
+      searchQuery: event.query.isEmpty ? null : event.query,
+    );
+
+    await _reloadWithFilters(data, newFilters, emit);
+  }
+
+  Future<void> _onFiltersChanged(
+    FiltersChanged event,
+    Emitter<ExploreState> emit,
+  ) async {
+    if (state is! Loaded) return;
+    final currentState = state as Loaded;
+    final data = currentState.data;
+
+    await _reloadWithFilters(data, event.filters, emit);
+  }
+
+  Future<void> _reloadWithFilters(
+    ExploreData data,
+    RestaurantFilters filters,
+    Emitter<ExploreState> emit,
+  ) async {
+    emit(
+      ExploreState.loaded(
+        data: data.copyWith(
+          filters: filters,
+          isPaginationLoading: true,
+          nearestRestaurants: [],
+          currentPage: 0,
+        ),
+      ),
+    );
+
+    try {
+      final restaurants = await _getNearestUseCase.execute(
+        lat: data.userPosition.latitude,
+        lng: data.userPosition.longitude,
+        page: 0,
+        filters: filters,
+      );
+
+      emit(
+        ExploreState.loaded(
+          data: data.copyWith(
+            filters: filters,
+            nearestRestaurants: restaurants,
+            currentPage: 0,
+            hasMore: restaurants.length >= 10,
+            isPaginationLoading: false,
+          ),
+        ),
+      );
+    } catch (e) {
+      dev.log('Filter Error: $e', error: e, name: 'CheckFood.Explore');
+      emit(
+        ExploreState.loaded(
+          data: data.copyWith(
+            filters: filters,
+            isPaginationLoading: false,
+          ),
+        ),
+      );
+    }
+  }
+
   Future<void> _onLoadMoreRequested(
     LoadMoreRequested event,
     Emitter<ExploreState> emit,
@@ -122,6 +201,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
         lat: data.userPosition.latitude,
         lng: data.userPosition.longitude,
         page: nextPage,
+        filters: data.filters,
       );
 
       emit(

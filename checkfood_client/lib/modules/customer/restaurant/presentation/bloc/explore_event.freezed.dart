@@ -24,6 +24,8 @@ mixin _$ExploreEvent {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -32,6 +34,8 @@ mixin _$ExploreEvent {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -40,6 +44,8 @@ mixin _$ExploreEvent {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,6 +56,8 @@ mixin _$ExploreEvent {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -58,6 +66,8 @@ mixin _$ExploreEvent {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -66,6 +76,8 @@ mixin _$ExploreEvent {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -141,6 +153,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
   }) {
     return initializeRequested();
   }
@@ -153,6 +167,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
   }) {
     return initializeRequested?.call();
   }
@@ -165,6 +181,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     required TResult orElse(),
   }) {
     if (initializeRequested != null) {
@@ -182,6 +200,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
   }) {
     return initializeRequested(this);
   }
@@ -194,6 +214,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
   }) {
     return initializeRequested?.call(this);
   }
@@ -206,6 +228,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     required TResult orElse(),
   }) {
     if (initializeRequested != null) {
@@ -297,6 +321,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
   }) {
     return permissionResultReceived(granted);
   }
@@ -309,6 +335,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
   }) {
     return permissionResultReceived?.call(granted);
   }
@@ -321,6 +349,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     required TResult orElse(),
   }) {
     if (permissionResultReceived != null) {
@@ -338,6 +368,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
   }) {
     return permissionResultReceived(this);
   }
@@ -350,6 +382,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
   }) {
     return permissionResultReceived?.call(this);
   }
@@ -362,6 +396,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     required TResult orElse(),
   }) {
     if (permissionResultReceived != null) {
@@ -475,6 +511,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
   }) {
     return mapBoundsChanged(params);
   }
@@ -487,6 +525,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
   }) {
     return mapBoundsChanged?.call(params);
   }
@@ -499,6 +539,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     required TResult orElse(),
   }) {
     if (mapBoundsChanged != null) {
@@ -516,6 +558,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
   }) {
     return mapBoundsChanged(this);
   }
@@ -528,6 +572,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
   }) {
     return mapBoundsChanged?.call(this);
   }
@@ -540,6 +586,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     required TResult orElse(),
   }) {
     if (mapBoundsChanged != null) {
@@ -610,6 +658,8 @@ class _$LoadMoreRequestedImpl implements LoadMoreRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
   }) {
     return loadMoreRequested();
   }
@@ -622,6 +672,8 @@ class _$LoadMoreRequestedImpl implements LoadMoreRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
   }) {
     return loadMoreRequested?.call();
   }
@@ -634,6 +686,8 @@ class _$LoadMoreRequestedImpl implements LoadMoreRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     required TResult orElse(),
   }) {
     if (loadMoreRequested != null) {
@@ -651,6 +705,8 @@ class _$LoadMoreRequestedImpl implements LoadMoreRequested {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
   }) {
     return loadMoreRequested(this);
   }
@@ -663,6 +719,8 @@ class _$LoadMoreRequestedImpl implements LoadMoreRequested {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
   }) {
     return loadMoreRequested?.call(this);
   }
@@ -675,6 +733,8 @@ class _$LoadMoreRequestedImpl implements LoadMoreRequested {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     required TResult orElse(),
   }) {
     if (loadMoreRequested != null) {
@@ -736,6 +796,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
   }) {
     return refreshRequested();
   }
@@ -748,6 +810,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
   }) {
     return refreshRequested?.call();
   }
@@ -760,6 +824,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     required TResult orElse(),
   }) {
     if (refreshRequested != null) {
@@ -777,6 +843,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
   }) {
     return refreshRequested(this);
   }
@@ -789,6 +857,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
   }) {
     return refreshRequested?.call(this);
   }
@@ -801,6 +871,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     required TResult orElse(),
   }) {
     if (refreshRequested != null) {
@@ -812,4 +884,369 @@ class _$RefreshRequestedImpl implements RefreshRequested {
 
 abstract class RefreshRequested implements ExploreEvent {
   const factory RefreshRequested() = _$RefreshRequestedImpl;
+}
+
+/// @nodoc
+abstract class _$$SearchChangedImplCopyWith<$Res> {
+  factory _$$SearchChangedImplCopyWith(
+    _$SearchChangedImpl value,
+    $Res Function(_$SearchChangedImpl) then,
+  ) = __$$SearchChangedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String query});
+}
+
+/// @nodoc
+class __$$SearchChangedImplCopyWithImpl<$Res>
+    extends _$ExploreEventCopyWithImpl<$Res, _$SearchChangedImpl>
+    implements _$$SearchChangedImplCopyWith<$Res> {
+  __$$SearchChangedImplCopyWithImpl(
+    _$SearchChangedImpl _value,
+    $Res Function(_$SearchChangedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? query = null}) {
+    return _then(
+      _$SearchChangedImpl(
+        query:
+            null == query
+                ? _value.query
+                : query // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$SearchChangedImpl implements SearchChanged {
+  const _$SearchChangedImpl({required this.query});
+
+  @override
+  final String query;
+
+  @override
+  String toString() {
+    return 'ExploreEvent.searchChanged(query: $query)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SearchChangedImpl &&
+            (identical(other.query, query) || other.query == query));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, query);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SearchChangedImplCopyWith<_$SearchChangedImpl> get copyWith =>
+      __$$SearchChangedImplCopyWithImpl<_$SearchChangedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializeRequested,
+    required TResult Function(bool granted) permissionResultReceived,
+    required TResult Function(MapParamsModel params) mapBoundsChanged,
+    required TResult Function() loadMoreRequested,
+    required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
+  }) {
+    return searchChanged(query);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializeRequested,
+    TResult? Function(bool granted)? permissionResultReceived,
+    TResult? Function(MapParamsModel params)? mapBoundsChanged,
+    TResult? Function()? loadMoreRequested,
+    TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
+  }) {
+    return searchChanged?.call(query);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializeRequested,
+    TResult Function(bool granted)? permissionResultReceived,
+    TResult Function(MapParamsModel params)? mapBoundsChanged,
+    TResult Function()? loadMoreRequested,
+    TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
+    required TResult orElse(),
+  }) {
+    if (searchChanged != null) {
+      return searchChanged(query);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(InitializeRequested value) initializeRequested,
+    required TResult Function(PermissionResultReceived value)
+    permissionResultReceived,
+    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
+    required TResult Function(LoadMoreRequested value) loadMoreRequested,
+    required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
+  }) {
+    return searchChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(InitializeRequested value)? initializeRequested,
+    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
+    TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
+  }) {
+    return searchChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(InitializeRequested value)? initializeRequested,
+    TResult Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult Function(LoadMoreRequested value)? loadMoreRequested,
+    TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
+    required TResult orElse(),
+  }) {
+    if (searchChanged != null) {
+      return searchChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SearchChanged implements ExploreEvent {
+  const factory SearchChanged({required final String query}) =
+      _$SearchChangedImpl;
+
+  String get query;
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SearchChangedImplCopyWith<_$SearchChangedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FiltersChangedImplCopyWith<$Res> {
+  factory _$$FiltersChangedImplCopyWith(
+    _$FiltersChangedImpl value,
+    $Res Function(_$FiltersChangedImpl) then,
+  ) = __$$FiltersChangedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({RestaurantFilters filters});
+
+  $RestaurantFiltersCopyWith<$Res> get filters;
+}
+
+/// @nodoc
+class __$$FiltersChangedImplCopyWithImpl<$Res>
+    extends _$ExploreEventCopyWithImpl<$Res, _$FiltersChangedImpl>
+    implements _$$FiltersChangedImplCopyWith<$Res> {
+  __$$FiltersChangedImplCopyWithImpl(
+    _$FiltersChangedImpl _value,
+    $Res Function(_$FiltersChangedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? filters = null}) {
+    return _then(
+      _$FiltersChangedImpl(
+        filters:
+            null == filters
+                ? _value.filters
+                : filters // ignore: cast_nullable_to_non_nullable
+                    as RestaurantFilters,
+      ),
+    );
+  }
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RestaurantFiltersCopyWith<$Res> get filters {
+    return $RestaurantFiltersCopyWith<$Res>(_value.filters, (value) {
+      return _then(_value.copyWith(filters: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$FiltersChangedImpl implements FiltersChanged {
+  const _$FiltersChangedImpl({required this.filters});
+
+  @override
+  final RestaurantFilters filters;
+
+  @override
+  String toString() {
+    return 'ExploreEvent.filtersChanged(filters: $filters)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FiltersChangedImpl &&
+            (identical(other.filters, filters) || other.filters == filters));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, filters);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FiltersChangedImplCopyWith<_$FiltersChangedImpl> get copyWith =>
+      __$$FiltersChangedImplCopyWithImpl<_$FiltersChangedImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializeRequested,
+    required TResult Function(bool granted) permissionResultReceived,
+    required TResult Function(MapParamsModel params) mapBoundsChanged,
+    required TResult Function() loadMoreRequested,
+    required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
+  }) {
+    return filtersChanged(filters);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializeRequested,
+    TResult? Function(bool granted)? permissionResultReceived,
+    TResult? Function(MapParamsModel params)? mapBoundsChanged,
+    TResult? Function()? loadMoreRequested,
+    TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
+  }) {
+    return filtersChanged?.call(filters);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializeRequested,
+    TResult Function(bool granted)? permissionResultReceived,
+    TResult Function(MapParamsModel params)? mapBoundsChanged,
+    TResult Function()? loadMoreRequested,
+    TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
+    required TResult orElse(),
+  }) {
+    if (filtersChanged != null) {
+      return filtersChanged(filters);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(InitializeRequested value) initializeRequested,
+    required TResult Function(PermissionResultReceived value)
+    permissionResultReceived,
+    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
+    required TResult Function(LoadMoreRequested value) loadMoreRequested,
+    required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
+  }) {
+    return filtersChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(InitializeRequested value)? initializeRequested,
+    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
+    TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
+  }) {
+    return filtersChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(InitializeRequested value)? initializeRequested,
+    TResult Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult Function(LoadMoreRequested value)? loadMoreRequested,
+    TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
+    required TResult orElse(),
+  }) {
+    if (filtersChanged != null) {
+      return filtersChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class FiltersChanged implements ExploreEvent {
+  const factory FiltersChanged({required final RestaurantFilters filters}) =
+      _$FiltersChangedImpl;
+
+  RestaurantFilters get filters;
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FiltersChangedImplCopyWith<_$FiltersChangedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

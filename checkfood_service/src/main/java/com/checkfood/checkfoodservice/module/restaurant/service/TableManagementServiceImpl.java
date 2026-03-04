@@ -54,6 +54,8 @@ public class TableManagementServiceImpl implements TableManagementService {
         table.setLabel(request.getLabel());
         table.setCapacity(request.getCapacity());
         table.setActive(request.isActive());
+        table.setYaw(request.getYaw());
+        table.setPitch(request.getPitch());
 
         return tableMapper.toResponse(tableRepository.save(table));
     }

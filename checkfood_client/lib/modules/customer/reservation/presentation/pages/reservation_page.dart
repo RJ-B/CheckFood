@@ -204,6 +204,11 @@ class _ReservationPageState extends State<ReservationPage> {
           elevation: 0,
         ),
         body: BlocConsumer<ReservationBloc, ReservationState>(
+          buildWhen: (prev, curr) =>
+              prev.sceneLoading != curr.sceneLoading ||
+              prev.sceneError != curr.sceneError ||
+              prev.selectedTableId != curr.selectedTableId ||
+              prev.selectedDate != curr.selectedDate,
           listener: (context, state) {
             // Push statuses to JS only when they actually change
             if (state.tableStatuses.isNotEmpty &&

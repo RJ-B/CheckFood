@@ -72,6 +72,7 @@ class OnboardingWizardEvent with _$OnboardingWizardEvent {
   const factory OnboardingWizardEvent.finalizePanorama(String sessionId) = FinalizePanorama;
   const factory OnboardingWizardEvent.activatePanorama(String sessionId) = ActivatePanorama;
   const factory OnboardingWizardEvent.loadPanoramaSessions() = LoadPanoramaSessions;
+  const factory OnboardingWizardEvent.pollPanoramaStatus(String sessionId) = PollPanoramaStatus;
 
   // Step 6: Publish
   const factory OnboardingWizardEvent.publish() = Publish;

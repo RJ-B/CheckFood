@@ -24,6 +24,7 @@ abstract class RestaurantRepository {
     List<String>? cuisineTypes,
     double? minRating,
     bool? openNow,
+    bool? favouritesOnly,
   });
 
   // --- SPRÁVA RESTAURACÍ (PUBLIC & OWNER) ---

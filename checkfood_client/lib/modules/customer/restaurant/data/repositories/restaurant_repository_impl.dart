@@ -37,6 +37,7 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
     List<String>? cuisineTypes,
     double? minRating,
     bool? openNow,
+    bool? favouritesOnly,
   }) async {
     final models = await _remoteDataSource.getNearestRestaurants(
       lat: lat,
@@ -47,6 +48,7 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
       cuisineTypes: cuisineTypes,
       minRating: minRating,
       openNow: openNow,
+      favouritesOnly: favouritesOnly,
     );
     return models.map((m) => m.toEntity()).toList();
   }

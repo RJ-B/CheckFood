@@ -11,6 +11,7 @@ class MyRestaurant {
   final List<OpeningHours> openingHours;
   final String status;
   final bool isActive;
+  final String? panoramaUrl;
 
   const MyRestaurant({
     required this.id,
@@ -22,5 +23,6 @@ class MyRestaurant {
     required this.openingHours,
     required this.status,
     required this.isActive,
+    this.panoramaUrl,
   });
 }

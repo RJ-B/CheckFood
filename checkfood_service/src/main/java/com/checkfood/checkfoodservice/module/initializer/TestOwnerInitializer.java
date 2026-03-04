@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * Seeds a test owner user (owner@test.cz / Test123!) with OWNER role
- * and an ACTIVE membership to the test restaurant (ICO 12345678).
+ * and an ACTIVE membership to "Testovací Restaurace Plzeň".
  * Only runs in "local" profile.
  */
 @Slf4j
@@ -38,7 +38,7 @@ public class TestOwnerInitializer {
     private static final String TEST_OWNER_PASSWORD = "Test123!";
     private static final String TEST_OWNER_FIRST_NAME = "Test";
     private static final String TEST_OWNER_LAST_NAME = "Owner";
-    private static final String TEST_RESTAURANT_ICO = "12345678";
+    private static final String TEST_RESTAURANT_NAME = "Testovací Restaurace Plzeň";
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -77,17 +77,17 @@ public class TestOwnerInitializer {
         owner = userRepository.save(owner);
         log.info("[TestOwner] Created test owner: email={}, id={}", TEST_OWNER_EMAIL, owner.getId());
 
-        // Link to test restaurant (ICO 12345678) if it exists
-        Optional<Restaurant> restaurantOpt = restaurantRepository.findByIco(TEST_RESTAURANT_ICO);
+        // Link to test restaurant by name
+        Optional<Restaurant> restaurantOpt = restaurantRepository.findAll().stream()
+                .filter(r -> TEST_RESTAURANT_NAME.equals(r.getName()))
+                .findFirst();
         if (restaurantOpt.isEmpty()) {
-            log.info("[TestOwner] Test restaurant (ICO {}) not found, no membership created.", TEST_RESTAURANT_ICO);
+            log.info("[TestOwner] Test restaurant '{}' not found, no membership created.", TEST_RESTAURANT_NAME);
             return;
         }
 
         Restaurant restaurant = restaurantOpt.get();
 
-        // Update restaurant ownerId to this user's UUID
-        // (ownerId is UUID-based but user has Long id — use restaurant's existing ownerId pattern)
         // Create employee membership
         RestaurantEmployee membership = RestaurantEmployee.builder()
                 .user(owner)
@@ -96,7 +96,7 @@ public class TestOwnerInitializer {
                 .build();
 
         employeeRepository.save(membership);
-        log.info("[TestOwner] Created OWNER membership: user={} -> restaurant={} (ICO {})",
-                TEST_OWNER_EMAIL, restaurant.getName(), TEST_RESTAURANT_ICO);
+        log.info("[TestOwner] Created OWNER membership: user={} -> restaurant='{}'",
+                TEST_OWNER_EMAIL, restaurant.getName());
     }
 }

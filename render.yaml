@@ -1,0 +1,43 @@
+databases:
+  - name: checkfood-db
+    plan: free
+    databaseName: checkfood
+    user: checkfood
+
+services:
+  - type: web
+    name: checkfood-api
+    runtime: docker
+    dockerfilePath: ./checkfood_service/Dockerfile
+    dockerContext: ./checkfood_service
+    plan: free
+    autoDeploy: true
+    branch: main
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_RENDER_HOST
+        fromDatabase:
+          name: checkfood-db
+          property: host
+      - key: DB_RENDER_PORT
+        fromDatabase:
+          name: checkfood-db
+          property: port
+      - key: DB_RENDER_NAME
+        fromDatabase:
+          name: checkfood-db
+          property: database
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: checkfood-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: checkfood-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: "10000"

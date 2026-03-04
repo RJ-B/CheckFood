@@ -23,7 +23,6 @@ class Restaurant with _$Restaurant {
     required Address address,
     required List<OpeningHours> openingHours,
     @Default([]) List<String> tags,
-    // Pokud tvá verze vyžadovala tyto parametry, přidej je sem:
-    // double? distance,
+    @Default(false) bool isFavourite,
   }) = _Restaurant;
 }

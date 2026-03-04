@@ -83,6 +83,25 @@ class _DetailContent extends StatelessWidget {
           ),
         ),
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            backgroundColor: Colors.white.withValues(alpha: 0.9),
+            child: IconButton(
+              icon: Icon(
+                restaurant.isFavourite
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: restaurant.isFavourite ? Colors.red : Colors.black87,
+              ),
+              onPressed: () => context
+                  .read<RestaurantDetailBloc>()
+                  .add(const RestaurantDetailEvent.toggleFavourite()),
+            ),
+          ),
+        ),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         background: restaurant.coverImageUrl != null
             ? CachedNetworkImage(

@@ -1,7 +1,7 @@
 # ===============================================================
 # 1. FÁZE: SESTAVENÍ (BUILD STAGE)
 # ===============================================================
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -14,16 +14,14 @@ RUN mvn clean package -DskipTests
 # ===============================================================
 # 2. FÁZE: RUNTIME (RUN STAGE)
 # ===============================================================
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8081
+ENV PORT=8081
 
-ENTRYPOINT ["java", \
-            "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", \
-            "-Dfile.encoding=UTF-8", \
-            "-jar", \
-            "app.jar"]
+EXPOSE ${PORT}
+
+ENTRYPOINT java -jar app.jar --server.port=${PORT} --server.address=0.0.0.0

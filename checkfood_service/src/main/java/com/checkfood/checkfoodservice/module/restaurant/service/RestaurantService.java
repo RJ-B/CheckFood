@@ -4,7 +4,10 @@ import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRe
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantResponse;
 
+import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
+
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -65,4 +68,11 @@ public interface RestaurantService {
     List<RestaurantResponse> getNearestRestaurants(double userLat, double userLng, int page, int size,
                                                      String searchQuery, List<String> cuisineTypes,
                                                      Double minRating, Boolean openNow);
+
+    List<RestaurantResponse> getNearestRestaurants(double userLat, double userLng, int page, int size,
+                                                     String searchQuery, List<String> cuisineTypes,
+                                                     Double minRating, Boolean openNow,
+                                                     Set<UUID> favouriteIds);
+
+    UserEntity resolveUser(String email);
 }

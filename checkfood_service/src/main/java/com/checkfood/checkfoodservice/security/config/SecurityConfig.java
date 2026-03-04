@@ -73,6 +73,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
 
+                        .requestMatchers("/api/v1/internal/**").permitAll()
                         .requestMatchers("/panoramas/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
 

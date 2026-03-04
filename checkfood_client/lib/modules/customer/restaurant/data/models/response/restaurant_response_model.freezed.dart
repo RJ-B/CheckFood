@@ -38,6 +38,7 @@ mixin _$RestaurantResponseModel {
   List<OpeningHoursModel> get openingHours =>
       throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
+  bool get isFavourite => throw _privateConstructorUsedError;
 
   /// Serializes this RestaurantResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -70,6 +71,7 @@ abstract class $RestaurantResponseModelCopyWith<$Res> {
     AddressModel? address,
     List<OpeningHoursModel> openingHours,
     List<String> tags,
+    bool isFavourite,
   });
 
   $AddressModelCopyWith<$Res>? get address;
@@ -106,6 +108,7 @@ class _$RestaurantResponseModelCopyWithImpl<
     Object? address = freezed,
     Object? openingHours = null,
     Object? tags = null,
+    Object? isFavourite = null,
   }) {
     return _then(
       _value.copyWith(
@@ -174,6 +177,11 @@ class _$RestaurantResponseModelCopyWithImpl<
                     ? _value.tags
                     : tags // ignore: cast_nullable_to_non_nullable
                         as List<String>,
+            isFavourite:
+                null == isFavourite
+                    ? _value.isFavourite
+                    : isFavourite // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -217,6 +225,7 @@ abstract class _$$RestaurantResponseModelImplCopyWith<$Res>
     AddressModel? address,
     List<OpeningHoursModel> openingHours,
     List<String> tags,
+    bool isFavourite,
   });
 
   @override
@@ -254,6 +263,7 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
     Object? address = freezed,
     Object? openingHours = null,
     Object? tags = null,
+    Object? isFavourite = null,
   }) {
     return _then(
       _$RestaurantResponseModelImpl(
@@ -322,6 +332,11 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
                 ? _value._tags
                 : tags // ignore: cast_nullable_to_non_nullable
                     as List<String>,
+        isFavourite:
+            null == isFavourite
+                ? _value.isFavourite
+                : isFavourite // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -344,6 +359,7 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     this.address,
     final List<OpeningHoursModel> openingHours = const [],
     final List<String> tags = const [],
+    this.isFavourite = false,
   }) : _openingHours = openingHours,
        _tags = tags,
        super._();
@@ -393,8 +409,12 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
   }
 
   @override
+  @JsonKey()
+  final bool isFavourite;
+
+  @override
   String toString() {
-    return 'RestaurantResponseModel(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags)';
+    return 'RestaurantResponseModel(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite)';
   }
 
   @override
@@ -421,7 +441,9 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
               other._openingHours,
               _openingHours,
             ) &&
-            const DeepCollectionEquality().equals(other._tags, _tags));
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
+            (identical(other.isFavourite, isFavourite) ||
+                other.isFavourite == isFavourite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -441,6 +463,7 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     address,
     const DeepCollectionEquality().hash(_openingHours),
     const DeepCollectionEquality().hash(_tags),
+    isFavourite,
   );
 
   /// Create a copy of RestaurantResponseModel
@@ -474,6 +497,7 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
     final AddressModel? address,
     final List<OpeningHoursModel> openingHours,
     final List<String> tags,
+    final bool isFavourite,
   }) = _$RestaurantResponseModelImpl;
   const _RestaurantResponseModel._() : super._();
 
@@ -507,6 +531,8 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
   List<OpeningHoursModel> get openingHours;
   @override
   List<String> get tags;
+  @override
+  bool get isFavourite;
 
   /// Create a copy of RestaurantResponseModel
   /// with the given fields replaced by the non-null parameter values.

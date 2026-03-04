@@ -13,6 +13,7 @@ class MyRestaurantResponseModel {
   final List<OpeningHoursModel> openingHours;
   final String? status;
   final bool? isActive;
+  final String? panoramaUrl;
 
   const MyRestaurantResponseModel({
     this.id,
@@ -24,6 +25,7 @@ class MyRestaurantResponseModel {
     this.openingHours = const [],
     this.status,
     this.isActive,
+    this.panoramaUrl,
   });
 
   factory MyRestaurantResponseModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class MyRestaurantResponseModel {
           [],
       status: json['status'] as String?,
       isActive: json['active'] as bool?,
+      panoramaUrl: json['panoramaUrl'] as String?,
     );
   }
 
@@ -55,5 +58,6 @@ class MyRestaurantResponseModel {
         openingHours: openingHours.map((e) => e.toEntity()).toList(),
         status: status ?? 'INACTIVE',
         isActive: isActive ?? false,
+        panoramaUrl: panoramaUrl,
       );
 }

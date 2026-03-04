@@ -67,6 +67,7 @@ mixin _$OnboardingWizardEvent {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -118,6 +119,7 @@ mixin _$OnboardingWizardEvent {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -169,6 +171,7 @@ mixin _$OnboardingWizardEvent {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -195,6 +198,7 @@ mixin _$OnboardingWizardEvent {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -219,6 +223,7 @@ mixin _$OnboardingWizardEvent {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -243,6 +248,7 @@ mixin _$OnboardingWizardEvent {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -364,6 +370,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return loadOnboarding();
@@ -419,6 +426,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return loadOnboarding?.call();
@@ -474,6 +482,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -507,6 +516,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return loadOnboarding(this);
@@ -535,6 +545,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return loadOnboarding?.call(this);
@@ -563,6 +574,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -695,6 +707,7 @@ class _$GoToStepImpl implements GoToStep {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return goToStep(step);
@@ -750,6 +763,7 @@ class _$GoToStepImpl implements GoToStep {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return goToStep?.call(step);
@@ -805,6 +819,7 @@ class _$GoToStepImpl implements GoToStep {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -838,6 +853,7 @@ class _$GoToStepImpl implements GoToStep {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return goToStep(this);
@@ -866,6 +882,7 @@ class _$GoToStepImpl implements GoToStep {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return goToStep?.call(this);
@@ -894,6 +911,7 @@ class _$GoToStepImpl implements GoToStep {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -1122,6 +1140,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return updateInfo(name, description, phone, email, address, cuisineType);
@@ -1177,6 +1196,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return updateInfo?.call(
@@ -1239,6 +1259,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -1272,6 +1293,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return updateInfo(this);
@@ -1300,6 +1322,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return updateInfo?.call(this);
@@ -1328,6 +1351,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -1486,6 +1510,7 @@ class _$UpdateHoursImpl implements UpdateHours {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return updateHours(hours);
@@ -1541,6 +1566,7 @@ class _$UpdateHoursImpl implements UpdateHours {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return updateHours?.call(hours);
@@ -1596,6 +1622,7 @@ class _$UpdateHoursImpl implements UpdateHours {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -1629,6 +1656,7 @@ class _$UpdateHoursImpl implements UpdateHours {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return updateHours(this);
@@ -1657,6 +1685,7 @@ class _$UpdateHoursImpl implements UpdateHours {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return updateHours?.call(this);
@@ -1685,6 +1714,7 @@ class _$UpdateHoursImpl implements UpdateHours {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -1799,6 +1829,7 @@ class _$LoadTablesImpl implements LoadTables {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return loadTables();
@@ -1854,6 +1885,7 @@ class _$LoadTablesImpl implements LoadTables {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return loadTables?.call();
@@ -1909,6 +1941,7 @@ class _$LoadTablesImpl implements LoadTables {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -1942,6 +1975,7 @@ class _$LoadTablesImpl implements LoadTables {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return loadTables(this);
@@ -1970,6 +2004,7 @@ class _$LoadTablesImpl implements LoadTables {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return loadTables?.call(this);
@@ -1998,6 +2033,7 @@ class _$LoadTablesImpl implements LoadTables {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -2140,6 +2176,7 @@ class _$AddTableImpl implements AddTable {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return addTable(label, capacity);
@@ -2195,6 +2232,7 @@ class _$AddTableImpl implements AddTable {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return addTable?.call(label, capacity);
@@ -2250,6 +2288,7 @@ class _$AddTableImpl implements AddTable {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -2283,6 +2322,7 @@ class _$AddTableImpl implements AddTable {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return addTable(this);
@@ -2311,6 +2351,7 @@ class _$AddTableImpl implements AddTable {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return addTable?.call(this);
@@ -2339,6 +2380,7 @@ class _$AddTableImpl implements AddTable {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -2509,6 +2551,7 @@ class _$UpdateTableImpl implements UpdateTable {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return updateTable(id, label, capacity);
@@ -2564,6 +2607,7 @@ class _$UpdateTableImpl implements UpdateTable {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return updateTable?.call(id, label, capacity);
@@ -2619,6 +2663,7 @@ class _$UpdateTableImpl implements UpdateTable {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -2652,6 +2697,7 @@ class _$UpdateTableImpl implements UpdateTable {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return updateTable(this);
@@ -2680,6 +2726,7 @@ class _$UpdateTableImpl implements UpdateTable {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return updateTable?.call(this);
@@ -2708,6 +2755,7 @@ class _$UpdateTableImpl implements UpdateTable {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -2854,6 +2902,7 @@ class _$DeleteTableImpl implements DeleteTable {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return deleteTable(id);
@@ -2909,6 +2958,7 @@ class _$DeleteTableImpl implements DeleteTable {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return deleteTable?.call(id);
@@ -2964,6 +3014,7 @@ class _$DeleteTableImpl implements DeleteTable {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -2997,6 +3048,7 @@ class _$DeleteTableImpl implements DeleteTable {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return deleteTable(this);
@@ -3025,6 +3077,7 @@ class _$DeleteTableImpl implements DeleteTable {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return deleteTable?.call(this);
@@ -3053,6 +3106,7 @@ class _$DeleteTableImpl implements DeleteTable {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -3166,6 +3220,7 @@ class _$LoadMenuImpl implements LoadMenu {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return loadMenu();
@@ -3221,6 +3276,7 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return loadMenu?.call();
@@ -3276,6 +3332,7 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -3309,6 +3366,7 @@ class _$LoadMenuImpl implements LoadMenu {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return loadMenu(this);
@@ -3337,6 +3395,7 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return loadMenu?.call(this);
@@ -3365,6 +3424,7 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -3500,6 +3560,7 @@ class _$CreateCategoryImpl implements CreateCategory {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return createCategory(name);
@@ -3555,6 +3616,7 @@ class _$CreateCategoryImpl implements CreateCategory {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return createCategory?.call(name);
@@ -3610,6 +3672,7 @@ class _$CreateCategoryImpl implements CreateCategory {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -3643,6 +3706,7 @@ class _$CreateCategoryImpl implements CreateCategory {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return createCategory(this);
@@ -3671,6 +3735,7 @@ class _$CreateCategoryImpl implements CreateCategory {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return createCategory?.call(this);
@@ -3699,6 +3764,7 @@ class _$CreateCategoryImpl implements CreateCategory {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -3851,6 +3917,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return updateCategory(id, name);
@@ -3906,6 +3973,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return updateCategory?.call(id, name);
@@ -3961,6 +4029,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -3994,6 +4063,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return updateCategory(this);
@@ -4022,6 +4092,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return updateCategory?.call(this);
@@ -4050,6 +4121,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -4197,6 +4269,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return deleteCategory(id);
@@ -4252,6 +4325,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return deleteCategory?.call(id);
@@ -4307,6 +4381,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -4340,6 +4415,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return deleteCategory(this);
@@ -4368,6 +4444,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return deleteCategory?.call(this);
@@ -4396,6 +4473,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -4580,6 +4658,7 @@ class _$CreateItemImpl implements CreateItem {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return createItem(categoryId, name, description, priceMinor);
@@ -4635,6 +4714,7 @@ class _$CreateItemImpl implements CreateItem {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return createItem?.call(categoryId, name, description, priceMinor);
@@ -4690,6 +4770,7 @@ class _$CreateItemImpl implements CreateItem {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -4723,6 +4804,7 @@ class _$CreateItemImpl implements CreateItem {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return createItem(this);
@@ -4751,6 +4833,7 @@ class _$CreateItemImpl implements CreateItem {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return createItem?.call(this);
@@ -4779,6 +4862,7 @@ class _$CreateItemImpl implements CreateItem {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -4965,6 +5049,7 @@ class _$UpdateItemImpl implements UpdateItem {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return updateItem(id, name, description, priceMinor);
@@ -5020,6 +5105,7 @@ class _$UpdateItemImpl implements UpdateItem {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return updateItem?.call(id, name, description, priceMinor);
@@ -5075,6 +5161,7 @@ class _$UpdateItemImpl implements UpdateItem {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -5108,6 +5195,7 @@ class _$UpdateItemImpl implements UpdateItem {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return updateItem(this);
@@ -5136,6 +5224,7 @@ class _$UpdateItemImpl implements UpdateItem {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return updateItem?.call(this);
@@ -5164,6 +5253,7 @@ class _$UpdateItemImpl implements UpdateItem {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -5312,6 +5402,7 @@ class _$DeleteItemImpl implements DeleteItem {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return deleteItem(id);
@@ -5367,6 +5458,7 @@ class _$DeleteItemImpl implements DeleteItem {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return deleteItem?.call(id);
@@ -5422,6 +5514,7 @@ class _$DeleteItemImpl implements DeleteItem {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -5455,6 +5548,7 @@ class _$DeleteItemImpl implements DeleteItem {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return deleteItem(this);
@@ -5483,6 +5577,7 @@ class _$DeleteItemImpl implements DeleteItem {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return deleteItem?.call(this);
@@ -5511,6 +5606,7 @@ class _$DeleteItemImpl implements DeleteItem {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -5626,6 +5722,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return createPanoramaSession();
@@ -5681,6 +5778,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return createPanoramaSession?.call();
@@ -5736,6 +5834,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -5769,6 +5868,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return createPanoramaSession(this);
@@ -5797,6 +5897,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return createPanoramaSession?.call(this);
@@ -5825,6 +5926,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -6019,6 +6121,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return uploadPhoto(sessionId, angleIndex, actualAngle, fileBytes, filename);
@@ -6074,6 +6177,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return uploadPhoto?.call(
@@ -6135,6 +6239,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -6174,6 +6279,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return uploadPhoto(this);
@@ -6202,6 +6308,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return uploadPhoto?.call(this);
@@ -6230,6 +6337,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -6384,6 +6492,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return finalizePanorama(sessionId);
@@ -6439,6 +6548,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return finalizePanorama?.call(sessionId);
@@ -6494,6 +6604,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -6527,6 +6638,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return finalizePanorama(this);
@@ -6555,6 +6667,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return finalizePanorama?.call(this);
@@ -6583,6 +6696,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -6728,6 +6842,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return activatePanorama(sessionId);
@@ -6783,6 +6898,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return activatePanorama?.call(sessionId);
@@ -6838,6 +6954,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -6871,6 +6988,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return activatePanorama(this);
@@ -6899,6 +7017,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return activatePanorama?.call(this);
@@ -6927,6 +7046,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -7043,6 +7163,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return loadPanoramaSessions();
@@ -7098,6 +7219,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return loadPanoramaSessions?.call();
@@ -7153,6 +7275,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -7186,6 +7309,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return loadPanoramaSessions(this);
@@ -7214,6 +7338,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return loadPanoramaSessions?.call(this);
@@ -7242,6 +7367,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {
@@ -7254,6 +7380,356 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
 
 abstract class LoadPanoramaSessions implements OnboardingWizardEvent {
   const factory LoadPanoramaSessions() = _$LoadPanoramaSessionsImpl;
+}
+
+/// @nodoc
+abstract class _$$PollPanoramaStatusImplCopyWith<$Res> {
+  factory _$$PollPanoramaStatusImplCopyWith(
+    _$PollPanoramaStatusImpl value,
+    $Res Function(_$PollPanoramaStatusImpl) then,
+  ) = __$$PollPanoramaStatusImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String sessionId});
+}
+
+/// @nodoc
+class __$$PollPanoramaStatusImplCopyWithImpl<$Res>
+    extends _$OnboardingWizardEventCopyWithImpl<$Res, _$PollPanoramaStatusImpl>
+    implements _$$PollPanoramaStatusImplCopyWith<$Res> {
+  __$$PollPanoramaStatusImplCopyWithImpl(
+    _$PollPanoramaStatusImpl _value,
+    $Res Function(_$PollPanoramaStatusImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OnboardingWizardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? sessionId = null}) {
+    return _then(
+      _$PollPanoramaStatusImpl(
+        null == sessionId
+            ? _value.sessionId
+            : sessionId // ignore: cast_nullable_to_non_nullable
+                as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$PollPanoramaStatusImpl implements PollPanoramaStatus {
+  const _$PollPanoramaStatusImpl(this.sessionId);
+
+  @override
+  final String sessionId;
+
+  @override
+  String toString() {
+    return 'OnboardingWizardEvent.pollPanoramaStatus(sessionId: $sessionId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PollPanoramaStatusImpl &&
+            (identical(other.sessionId, sessionId) ||
+                other.sessionId == sessionId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, sessionId);
+
+  /// Create a copy of OnboardingWizardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PollPanoramaStatusImplCopyWith<_$PollPanoramaStatusImpl> get copyWith =>
+      __$$PollPanoramaStatusImplCopyWithImpl<_$PollPanoramaStatusImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadOnboarding,
+    required TResult Function(int step) goToStep,
+    required TResult Function(
+      String name,
+      String? description,
+      String? phone,
+      String? email,
+      AddressModel? address,
+      String? cuisineType,
+    )
+    updateInfo,
+    required TResult Function(List<OpeningHoursModel> hours) updateHours,
+    required TResult Function() loadTables,
+    required TResult Function(String label, int capacity) addTable,
+    required TResult Function(String id, String label, int capacity)
+    updateTable,
+    required TResult Function(String id) deleteTable,
+    required TResult Function() loadMenu,
+    required TResult Function(String name) createCategory,
+    required TResult Function(String id, String name) updateCategory,
+    required TResult Function(String id) deleteCategory,
+    required TResult Function(
+      String categoryId,
+      String name,
+      String? description,
+      int priceMinor,
+    )
+    createItem,
+    required TResult Function(
+      String id,
+      String name,
+      String? description,
+      int priceMinor,
+    )
+    updateItem,
+    required TResult Function(String id) deleteItem,
+    required TResult Function() createPanoramaSession,
+    required TResult Function(
+      String sessionId,
+      int angleIndex,
+      double actualAngle,
+      Uint8List fileBytes,
+      String filename,
+    )
+    uploadPhoto,
+    required TResult Function(String sessionId) finalizePanorama,
+    required TResult Function(String sessionId) activatePanorama,
+    required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
+    required TResult Function() publish,
+  }) {
+    return pollPanoramaStatus(sessionId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadOnboarding,
+    TResult? Function(int step)? goToStep,
+    TResult? Function(
+      String name,
+      String? description,
+      String? phone,
+      String? email,
+      AddressModel? address,
+      String? cuisineType,
+    )?
+    updateInfo,
+    TResult? Function(List<OpeningHoursModel> hours)? updateHours,
+    TResult? Function()? loadTables,
+    TResult? Function(String label, int capacity)? addTable,
+    TResult? Function(String id, String label, int capacity)? updateTable,
+    TResult? Function(String id)? deleteTable,
+    TResult? Function()? loadMenu,
+    TResult? Function(String name)? createCategory,
+    TResult? Function(String id, String name)? updateCategory,
+    TResult? Function(String id)? deleteCategory,
+    TResult? Function(
+      String categoryId,
+      String name,
+      String? description,
+      int priceMinor,
+    )?
+    createItem,
+    TResult? Function(
+      String id,
+      String name,
+      String? description,
+      int priceMinor,
+    )?
+    updateItem,
+    TResult? Function(String id)? deleteItem,
+    TResult? Function()? createPanoramaSession,
+    TResult? Function(
+      String sessionId,
+      int angleIndex,
+      double actualAngle,
+      Uint8List fileBytes,
+      String filename,
+    )?
+    uploadPhoto,
+    TResult? Function(String sessionId)? finalizePanorama,
+    TResult? Function(String sessionId)? activatePanorama,
+    TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
+    TResult? Function()? publish,
+  }) {
+    return pollPanoramaStatus?.call(sessionId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadOnboarding,
+    TResult Function(int step)? goToStep,
+    TResult Function(
+      String name,
+      String? description,
+      String? phone,
+      String? email,
+      AddressModel? address,
+      String? cuisineType,
+    )?
+    updateInfo,
+    TResult Function(List<OpeningHoursModel> hours)? updateHours,
+    TResult Function()? loadTables,
+    TResult Function(String label, int capacity)? addTable,
+    TResult Function(String id, String label, int capacity)? updateTable,
+    TResult Function(String id)? deleteTable,
+    TResult Function()? loadMenu,
+    TResult Function(String name)? createCategory,
+    TResult Function(String id, String name)? updateCategory,
+    TResult Function(String id)? deleteCategory,
+    TResult Function(
+      String categoryId,
+      String name,
+      String? description,
+      int priceMinor,
+    )?
+    createItem,
+    TResult Function(
+      String id,
+      String name,
+      String? description,
+      int priceMinor,
+    )?
+    updateItem,
+    TResult Function(String id)? deleteItem,
+    TResult Function()? createPanoramaSession,
+    TResult Function(
+      String sessionId,
+      int angleIndex,
+      double actualAngle,
+      Uint8List fileBytes,
+      String filename,
+    )?
+    uploadPhoto,
+    TResult Function(String sessionId)? finalizePanorama,
+    TResult Function(String sessionId)? activatePanorama,
+    TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
+    TResult Function()? publish,
+    required TResult orElse(),
+  }) {
+    if (pollPanoramaStatus != null) {
+      return pollPanoramaStatus(sessionId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadOnboarding value) loadOnboarding,
+    required TResult Function(GoToStep value) goToStep,
+    required TResult Function(UpdateInfo value) updateInfo,
+    required TResult Function(UpdateHours value) updateHours,
+    required TResult Function(LoadTables value) loadTables,
+    required TResult Function(AddTable value) addTable,
+    required TResult Function(UpdateTable value) updateTable,
+    required TResult Function(DeleteTable value) deleteTable,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(CreateCategory value) createCategory,
+    required TResult Function(UpdateCategory value) updateCategory,
+    required TResult Function(DeleteCategory value) deleteCategory,
+    required TResult Function(CreateItem value) createItem,
+    required TResult Function(UpdateItem value) updateItem,
+    required TResult Function(DeleteItem value) deleteItem,
+    required TResult Function(CreatePanoramaSession value)
+    createPanoramaSession,
+    required TResult Function(UploadPhoto value) uploadPhoto,
+    required TResult Function(FinalizePanorama value) finalizePanorama,
+    required TResult Function(ActivatePanorama value) activatePanorama,
+    required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
+    required TResult Function(Publish value) publish,
+  }) {
+    return pollPanoramaStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadOnboarding value)? loadOnboarding,
+    TResult? Function(GoToStep value)? goToStep,
+    TResult? Function(UpdateInfo value)? updateInfo,
+    TResult? Function(UpdateHours value)? updateHours,
+    TResult? Function(LoadTables value)? loadTables,
+    TResult? Function(AddTable value)? addTable,
+    TResult? Function(UpdateTable value)? updateTable,
+    TResult? Function(DeleteTable value)? deleteTable,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(CreateCategory value)? createCategory,
+    TResult? Function(UpdateCategory value)? updateCategory,
+    TResult? Function(DeleteCategory value)? deleteCategory,
+    TResult? Function(CreateItem value)? createItem,
+    TResult? Function(UpdateItem value)? updateItem,
+    TResult? Function(DeleteItem value)? deleteItem,
+    TResult? Function(CreatePanoramaSession value)? createPanoramaSession,
+    TResult? Function(UploadPhoto value)? uploadPhoto,
+    TResult? Function(FinalizePanorama value)? finalizePanorama,
+    TResult? Function(ActivatePanorama value)? activatePanorama,
+    TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
+    TResult? Function(Publish value)? publish,
+  }) {
+    return pollPanoramaStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadOnboarding value)? loadOnboarding,
+    TResult Function(GoToStep value)? goToStep,
+    TResult Function(UpdateInfo value)? updateInfo,
+    TResult Function(UpdateHours value)? updateHours,
+    TResult Function(LoadTables value)? loadTables,
+    TResult Function(AddTable value)? addTable,
+    TResult Function(UpdateTable value)? updateTable,
+    TResult Function(DeleteTable value)? deleteTable,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(CreateCategory value)? createCategory,
+    TResult Function(UpdateCategory value)? updateCategory,
+    TResult Function(DeleteCategory value)? deleteCategory,
+    TResult Function(CreateItem value)? createItem,
+    TResult Function(UpdateItem value)? updateItem,
+    TResult Function(DeleteItem value)? deleteItem,
+    TResult Function(CreatePanoramaSession value)? createPanoramaSession,
+    TResult Function(UploadPhoto value)? uploadPhoto,
+    TResult Function(FinalizePanorama value)? finalizePanorama,
+    TResult Function(ActivatePanorama value)? activatePanorama,
+    TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
+    TResult Function(Publish value)? publish,
+    required TResult orElse(),
+  }) {
+    if (pollPanoramaStatus != null) {
+      return pollPanoramaStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PollPanoramaStatus implements OnboardingWizardEvent {
+  const factory PollPanoramaStatus(final String sessionId) =
+      _$PollPanoramaStatusImpl;
+
+  String get sessionId;
+
+  /// Create a copy of OnboardingWizardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PollPanoramaStatusImplCopyWith<_$PollPanoramaStatusImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -7347,6 +7823,7 @@ class _$PublishImpl implements Publish {
     required TResult Function(String sessionId) finalizePanorama,
     required TResult Function(String sessionId) activatePanorama,
     required TResult Function() loadPanoramaSessions,
+    required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
     return publish();
@@ -7402,6 +7879,7 @@ class _$PublishImpl implements Publish {
     TResult? Function(String sessionId)? finalizePanorama,
     TResult? Function(String sessionId)? activatePanorama,
     TResult? Function()? loadPanoramaSessions,
+    TResult? Function(String sessionId)? pollPanoramaStatus,
     TResult? Function()? publish,
   }) {
     return publish?.call();
@@ -7457,6 +7935,7 @@ class _$PublishImpl implements Publish {
     TResult Function(String sessionId)? finalizePanorama,
     TResult Function(String sessionId)? activatePanorama,
     TResult Function()? loadPanoramaSessions,
+    TResult Function(String sessionId)? pollPanoramaStatus,
     TResult Function()? publish,
     required TResult orElse(),
   }) {
@@ -7490,6 +7969,7 @@ class _$PublishImpl implements Publish {
     required TResult Function(FinalizePanorama value) finalizePanorama,
     required TResult Function(ActivatePanorama value) activatePanorama,
     required TResult Function(LoadPanoramaSessions value) loadPanoramaSessions,
+    required TResult Function(PollPanoramaStatus value) pollPanoramaStatus,
     required TResult Function(Publish value) publish,
   }) {
     return publish(this);
@@ -7518,6 +7998,7 @@ class _$PublishImpl implements Publish {
     TResult? Function(FinalizePanorama value)? finalizePanorama,
     TResult? Function(ActivatePanorama value)? activatePanorama,
     TResult? Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult? Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult? Function(Publish value)? publish,
   }) {
     return publish?.call(this);
@@ -7546,6 +8027,7 @@ class _$PublishImpl implements Publish {
     TResult Function(FinalizePanorama value)? finalizePanorama,
     TResult Function(ActivatePanorama value)? activatePanorama,
     TResult Function(LoadPanoramaSessions value)? loadPanoramaSessions,
+    TResult Function(PollPanoramaStatus value)? pollPanoramaStatus,
     TResult Function(Publish value)? publish,
     required TResult orElse(),
   }) {

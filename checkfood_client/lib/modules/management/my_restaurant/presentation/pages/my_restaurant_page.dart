@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/di/injection_container.dart';
 import '../../../../../security/domain/enums/user_role.dart';
 import '../../../../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../data/models/request/update_employee_role_request_model.dart';
@@ -9,7 +10,11 @@ import '../bloc/my_restaurant_event.dart';
 import '../bloc/my_restaurant_state.dart';
 import '../widgets/add_employee_dialog.dart';
 import '../widgets/employees_list.dart';
+import '../widgets/panorama_tab.dart';
 import '../widgets/restaurant_info_form.dart';
+
+import '../../../../management/staff_reservations/presentation/bloc/staff_reservations_bloc.dart';
+import '../../../../management/staff_reservations/presentation/pages/staff_reservations_page.dart';
 
 class MyRestaurantPage extends StatefulWidget {
   const MyRestaurantPage({super.key});
@@ -74,33 +79,46 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
     if (state is MyRestaurantLoaded) {
       final userRole = _getCurrentUserRole(context);
       final isOwner = userRole == UserRole.owner;
+      final isManagerOrOwner = userRole.isAtLeastManager;
+
+      final tabs = <Tab>[
+        const Tab(icon: Icon(Icons.calendar_today), text: 'Reservations'),
+        const Tab(icon: Icon(Icons.info_outline), text: 'Info'),
+        if (isManagerOrOwner)
+          const Tab(icon: Icon(Icons.people_outline), text: 'Employees'),
+        if (isOwner)
+          const Tab(icon: Icon(Icons.panorama), text: 'Panorama'),
+      ];
+
+      final tabViews = <Widget>[
+        // Tab 1: Staff Reservations
+        BlocProvider(
+          create: (_) => sl<StaffReservationsBloc>(),
+          child: const StaffReservationsPage(),
+        ),
+        // Tab 2: Restaurant Info
+        RestaurantInfoForm(
+          restaurant: state.restaurant,
+          isUpdating: state.isUpdating,
+          onSubmit: (request) {
+            context.read<MyRestaurantBloc>().add(UpdateRestaurant(request));
+          },
+        ),
+        if (isManagerOrOwner)
+          // Tab 3: Employees (manager/owner only)
+          _buildEmployeesTab(context, state, isOwner),
+        if (isOwner)
+          // Tab 4: Panorama (owner only)
+          PanoramaTab(activePanoramaUrl: state.restaurant.panoramaUrl),
+      ];
 
       return DefaultTabController(
-        length: 2,
+        length: tabs.length,
         child: Column(
           children: [
-            const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.info_outline), text: 'Info'),
-                Tab(icon: Icon(Icons.people_outline), text: 'Employees'),
-              ],
-            ),
+            TabBar(tabs: tabs),
             Expanded(
-              child: TabBarView(
-                children: [
-                  // Tab 1: Restaurant Info
-                  RestaurantInfoForm(
-                    restaurant: state.restaurant,
-                    isUpdating: state.isUpdating,
-                    onSubmit: (request) {
-                      context.read<MyRestaurantBloc>().add(UpdateRestaurant(request));
-                    },
-                  ),
-
-                  // Tab 2: Employees
-                  _buildEmployeesTab(context, state, isOwner),
-                ],
-              ),
+              child: TabBarView(children: tabViews),
             ),
           ],
         ),

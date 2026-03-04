@@ -42,4 +42,7 @@ public class PanoramaSession {
 
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
+
+    @Column(name = "error_message", length = 500)
+    private String errorMessage;
 }

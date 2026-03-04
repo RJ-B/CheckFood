@@ -34,4 +34,12 @@ public class ReservationLogger {
     public void logReservationRejected(UUID reservationId, LocalDate date) {
         log.info("Reservation rejected: id={}, date={}", reservationId, date);
     }
+
+    public void logReservationCheckedIn(UUID reservationId, LocalDate date) {
+        log.info("Reservation checked-in: id={}, date={}", reservationId, date);
+    }
+
+    public void logReservationCompleted(UUID reservationId, LocalDate date) {
+        log.info("Reservation completed: id={}, date={}", reservationId, date);
+    }
 }

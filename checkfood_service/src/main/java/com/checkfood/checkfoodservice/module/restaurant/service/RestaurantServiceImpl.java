@@ -8,6 +8,8 @@ import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restau
 import com.checkfood.checkfoodservice.module.restaurant.exception.RestaurantException;
 import com.checkfood.checkfoodservice.module.restaurant.mapper.RestaurantMapper;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
+import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
+import com.checkfood.checkfoodservice.security.module.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final RestaurantMapper restaurantMapper;
+    private final UserService userService;
 
     // ── Zoom-adaptive clustering configuration ──────────────────────────
     // Each bucket defines: maxZoom (inclusive), radiusPx for DBSCAN, inputLimit
@@ -193,12 +197,27 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<RestaurantResponse> getNearestRestaurants(double userLat, double userLng, int page, int size,
                                                           String searchQuery, List<String> cuisineTypes,
                                                           Double minRating, Boolean openNow) {
+        return getNearestRestaurants(userLat, userLng, page, size, searchQuery, cuisineTypes, minRating, openNow, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RestaurantResponse> getNearestRestaurants(double userLat, double userLng, int page, int size,
+                                                          String searchQuery, List<String> cuisineTypes,
+                                                          Double minRating, Boolean openNow,
+                                                          Set<UUID> favouriteIds) {
         Pageable pageable = PageRequest.of(page, size);
 
         return restaurantRepository.findNearestWithFilters(
-                        userLat, userLng, searchQuery, cuisineTypes, minRating, openNow, pageable)
+                        userLat, userLng, searchQuery, cuisineTypes, minRating, openNow, favouriteIds, pageable)
                 .stream()
                 .map(restaurantMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserEntity resolveUser(String email) {
+        return userService.findByEmail(email);
     }
 }

@@ -34,4 +34,20 @@ public class PanoramaException extends AppException {
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+
+    public static PanoramaException stitchingFailed(String message) {
+        return new PanoramaException(
+                PanoramaErrorCode.STITCHING_FAILED,
+                "Stitching selhal: " + message,
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    public static PanoramaException stitcherUnavailable(String message) {
+        return new PanoramaException(
+                PanoramaErrorCode.STITCHER_UNAVAILABLE,
+                "Stitching služba není dostupná: " + message,
+                HttpStatus.SERVICE_UNAVAILABLE
+        );
+    }
 }

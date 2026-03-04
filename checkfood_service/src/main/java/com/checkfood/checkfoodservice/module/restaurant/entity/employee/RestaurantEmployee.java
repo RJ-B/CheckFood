@@ -42,6 +42,11 @@ public class RestaurantEmployee {
     @Column(name = "role", nullable = false, length = 20)
     private RestaurantEmployeeRole role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "membership_status", nullable = false, length = 20)
+    @Builder.Default
+    private MembershipStatus membershipStatus = MembershipStatus.ACTIVE;
+
     @Builder.Default
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

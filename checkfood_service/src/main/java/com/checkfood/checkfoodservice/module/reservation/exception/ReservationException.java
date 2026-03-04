@@ -106,4 +106,12 @@ public class ReservationException extends AppException {
                 HttpStatus.FORBIDDEN
         );
     }
+
+    public static ReservationException checkInOutsideWindow() {
+        return new ReservationException(
+                ReservationErrorCode.CHECKIN_OUTSIDE_WINDOW,
+                "Check-in je možný pouze 30 minut před až 60 minut po začátku rezervace.",
+                HttpStatus.CONFLICT
+        );
+    }
 }

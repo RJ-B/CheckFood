@@ -12,13 +12,15 @@ class RestaurantFilters with _$RestaurantFilters {
     @Default([]) List<CuisineType> cuisineTypes,
     double? minRating,
     @Default(false) bool openNow,
+    @Default(false) bool favouritesOnly,
   }) = _RestaurantFilters;
 
   bool get hasActiveFilters =>
-      cuisineTypes.isNotEmpty || minRating != null || openNow;
+      cuisineTypes.isNotEmpty || minRating != null || openNow || favouritesOnly;
 
   int get activeFilterCount =>
       (cuisineTypes.isNotEmpty ? 1 : 0) +
       (minRating != null ? 1 : 0) +
-      (openNow ? 1 : 0);
+      (openNow ? 1 : 0) +
+      (favouritesOnly ? 1 : 0);
 }

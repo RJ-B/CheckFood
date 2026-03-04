@@ -39,13 +39,15 @@ public class ReservationServiceImpl implements ReservationService {
     private static final Set<ReservationStatus> ACTIVE_STATUSES = Set.of(
             ReservationStatus.PENDING_CONFIRMATION,
             ReservationStatus.CONFIRMED,
-            ReservationStatus.RESERVED   // backward compat with existing DB rows
+            ReservationStatus.RESERVED,   // backward compat with existing DB rows
+            ReservationStatus.CHECKED_IN
     );
 
     /** Statuses excluded from slot availability and table status queries. */
     private static final List<ReservationStatus> EXCLUDED_STATUSES = List.of(
             ReservationStatus.CANCELLED,
-            ReservationStatus.REJECTED
+            ReservationStatus.REJECTED,
+            ReservationStatus.COMPLETED
     );
 
     private final ReservationRepository reservationRepository;
@@ -105,8 +107,8 @@ public class ReservationServiceImpl implements ReservationService {
             String status;
             if (tableReservations.isEmpty()) {
                 status = "FREE";
-            } else if (date.equals(today) && tableReservations.stream()
-                    .anyMatch(r -> !now.isBefore(r.getStartTime()) && now.isBefore(r.getEndTime()))) {
+            } else if (tableReservations.stream()
+                    .anyMatch(r -> r.getStatus() == ReservationStatus.CHECKED_IN)) {
                 status = "OCCUPIED";
             } else {
                 status = "RESERVED";
@@ -423,74 +425,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     // ========================================================================
-    // 9. CONFIRM RESERVATION (staff only)
-    // ========================================================================
-
-    @Override
-    @Transactional
-    public ReservationResponse confirmReservation(UUID id, UUID staffOwnerId) {
-        var reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> ReservationException.notFound(id));
-
-        // Verify staff belongs to the restaurant
-        verifyRestaurantStaff(reservation.getRestaurantId(), staffOwnerId);
-
-        // Verify status allows confirmation
-        if (reservation.getStatus() != ReservationStatus.PENDING_CONFIRMATION
-                && reservation.getStatus() != ReservationStatus.RESERVED) {
-            throw ReservationException.invalidStatusTransition(
-                    reservation.getStatus().name(), ReservationStatus.CONFIRMED.name()
-            );
-        }
-
-        reservation.setStatus(ReservationStatus.CONFIRMED);
-        var saved = reservationRepository.save(reservation);
-
-        reservationLogger.logReservationConfirmed(saved.getId(), saved.getDate());
-
-        var restaurantName = restaurantRepository.findById(saved.getRestaurantId())
-                .map(Restaurant::getName).orElse(null);
-        var tableLabel = tableRepository.findById(saved.getTableId())
-                .map(RestaurantTable::getLabel).orElse(null);
-
-        return toResponse(saved, restaurantName, tableLabel, false);
-    }
-
-    // ========================================================================
-    // 10. REJECT RESERVATION (staff only)
-    // ========================================================================
-
-    @Override
-    @Transactional
-    public ReservationResponse rejectReservation(UUID id, UUID staffOwnerId) {
-        var reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> ReservationException.notFound(id));
-
-        // Verify staff belongs to the restaurant
-        verifyRestaurantStaff(reservation.getRestaurantId(), staffOwnerId);
-
-        // Verify status allows rejection
-        if (reservation.getStatus() != ReservationStatus.PENDING_CONFIRMATION
-                && reservation.getStatus() != ReservationStatus.RESERVED) {
-            throw ReservationException.invalidStatusTransition(
-                    reservation.getStatus().name(), ReservationStatus.REJECTED.name()
-            );
-        }
-
-        reservation.setStatus(ReservationStatus.REJECTED);
-        var saved = reservationRepository.save(reservation);
-
-        reservationLogger.logReservationRejected(saved.getId(), saved.getDate());
-
-        var restaurantName = restaurantRepository.findById(saved.getRestaurantId())
-                .map(Restaurant::getName).orElse(null);
-        var tableLabel = tableRepository.findById(saved.getTableId())
-                .map(RestaurantTable::getLabel).orElse(null);
-
-        return toResponse(saved, restaurantName, tableLabel, false);
-    }
-
-    // ========================================================================
     // HELPERS
     // ========================================================================
 
@@ -507,13 +441,6 @@ public class ReservationServiceImpl implements ReservationService {
     private RestaurantTable findTableInRestaurant(UUID tableId, UUID restaurantId) {
         return tableRepository.findByIdAndRestaurantId(tableId, restaurantId)
                 .orElseThrow(ReservationException::tableNotInRestaurant);
-    }
-
-    private void verifyRestaurantStaff(UUID restaurantId, UUID ownerId) {
-        var restaurant = findRestaurant(restaurantId);
-        if (!restaurant.getOwnerId().equals(ownerId)) {
-            throw ReservationException.notRestaurantStaff();
-        }
     }
 
     private boolean isUpcoming(Reservation r) {

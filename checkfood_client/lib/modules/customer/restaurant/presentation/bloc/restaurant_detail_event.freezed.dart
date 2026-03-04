@@ -17,39 +17,38 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RestaurantDetailEvent {
-  String get restaurantId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String restaurantId) loadRequested,
+    required TResult Function() toggleFavourite,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String restaurantId)? loadRequested,
+    TResult? Function()? toggleFavourite,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String restaurantId)? loadRequested,
+    TResult Function()? toggleFavourite,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadDetailRequested value) loadRequested,
+    required TResult Function(ToggleFavourite value) toggleFavourite,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadDetailRequested value)? loadRequested,
+    TResult? Function(ToggleFavourite value)? toggleFavourite,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadDetailRequested value)? loadRequested,
+    TResult Function(ToggleFavourite value)? toggleFavourite,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
-
-  /// Create a copy of RestaurantDetailEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $RestaurantDetailEventCopyWith<RestaurantDetailEvent> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -58,8 +57,6 @@ abstract class $RestaurantDetailEventCopyWith<$Res> {
     RestaurantDetailEvent value,
     $Res Function(RestaurantDetailEvent) then,
   ) = _$RestaurantDetailEventCopyWithImpl<$Res, RestaurantDetailEvent>;
-  @useResult
-  $Res call({String restaurantId});
 }
 
 /// @nodoc
@@ -77,30 +74,14 @@ class _$RestaurantDetailEventCopyWithImpl<
 
   /// Create a copy of RestaurantDetailEvent
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? restaurantId = null}) {
-    return _then(
-      _value.copyWith(
-            restaurantId:
-                null == restaurantId
-                    ? _value.restaurantId
-                    : restaurantId // ignore: cast_nullable_to_non_nullable
-                        as String,
-          )
-          as $Val,
-    );
-  }
 }
 
 /// @nodoc
-abstract class _$$LoadDetailRequestedImplCopyWith<$Res>
-    implements $RestaurantDetailEventCopyWith<$Res> {
+abstract class _$$LoadDetailRequestedImplCopyWith<$Res> {
   factory _$$LoadDetailRequestedImplCopyWith(
     _$LoadDetailRequestedImpl value,
     $Res Function(_$LoadDetailRequestedImpl) then,
   ) = __$$LoadDetailRequestedImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String restaurantId});
 }
@@ -171,6 +152,7 @@ class _$LoadDetailRequestedImpl implements LoadDetailRequested {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String restaurantId) loadRequested,
+    required TResult Function() toggleFavourite,
   }) {
     return loadRequested(restaurantId);
   }
@@ -179,6 +161,7 @@ class _$LoadDetailRequestedImpl implements LoadDetailRequested {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String restaurantId)? loadRequested,
+    TResult? Function()? toggleFavourite,
   }) {
     return loadRequested?.call(restaurantId);
   }
@@ -187,6 +170,7 @@ class _$LoadDetailRequestedImpl implements LoadDetailRequested {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String restaurantId)? loadRequested,
+    TResult Function()? toggleFavourite,
     required TResult orElse(),
   }) {
     if (loadRequested != null) {
@@ -199,6 +183,7 @@ class _$LoadDetailRequestedImpl implements LoadDetailRequested {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadDetailRequested value) loadRequested,
+    required TResult Function(ToggleFavourite value) toggleFavourite,
   }) {
     return loadRequested(this);
   }
@@ -207,6 +192,7 @@ class _$LoadDetailRequestedImpl implements LoadDetailRequested {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadDetailRequested value)? loadRequested,
+    TResult? Function(ToggleFavourite value)? toggleFavourite,
   }) {
     return loadRequested?.call(this);
   }
@@ -215,6 +201,7 @@ class _$LoadDetailRequestedImpl implements LoadDetailRequested {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadDetailRequested value)? loadRequested,
+    TResult Function(ToggleFavourite value)? toggleFavourite,
     required TResult orElse(),
   }) {
     if (loadRequested != null) {
@@ -228,13 +215,118 @@ abstract class LoadDetailRequested implements RestaurantDetailEvent {
   const factory LoadDetailRequested({required final String restaurantId}) =
       _$LoadDetailRequestedImpl;
 
-  @override
   String get restaurantId;
 
   /// Create a copy of RestaurantDetailEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadDetailRequestedImplCopyWith<_$LoadDetailRequestedImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ToggleFavouriteImplCopyWith<$Res> {
+  factory _$$ToggleFavouriteImplCopyWith(
+    _$ToggleFavouriteImpl value,
+    $Res Function(_$ToggleFavouriteImpl) then,
+  ) = __$$ToggleFavouriteImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ToggleFavouriteImplCopyWithImpl<$Res>
+    extends _$RestaurantDetailEventCopyWithImpl<$Res, _$ToggleFavouriteImpl>
+    implements _$$ToggleFavouriteImplCopyWith<$Res> {
+  __$$ToggleFavouriteImplCopyWithImpl(
+    _$ToggleFavouriteImpl _value,
+    $Res Function(_$ToggleFavouriteImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of RestaurantDetailEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ToggleFavouriteImpl implements ToggleFavourite {
+  const _$ToggleFavouriteImpl();
+
+  @override
+  String toString() {
+    return 'RestaurantDetailEvent.toggleFavourite()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ToggleFavouriteImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String restaurantId) loadRequested,
+    required TResult Function() toggleFavourite,
+  }) {
+    return toggleFavourite();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String restaurantId)? loadRequested,
+    TResult? Function()? toggleFavourite,
+  }) {
+    return toggleFavourite?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String restaurantId)? loadRequested,
+    TResult Function()? toggleFavourite,
+    required TResult orElse(),
+  }) {
+    if (toggleFavourite != null) {
+      return toggleFavourite();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadDetailRequested value) loadRequested,
+    required TResult Function(ToggleFavourite value) toggleFavourite,
+  }) {
+    return toggleFavourite(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadDetailRequested value)? loadRequested,
+    TResult? Function(ToggleFavourite value)? toggleFavourite,
+  }) {
+    return toggleFavourite?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadDetailRequested value)? loadRequested,
+    TResult Function(ToggleFavourite value)? toggleFavourite,
+    required TResult orElse(),
+  }) {
+    if (toggleFavourite != null) {
+      return toggleFavourite(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ToggleFavourite implements RestaurantDetailEvent {
+  const factory ToggleFavourite() = _$ToggleFavouriteImpl;
 }

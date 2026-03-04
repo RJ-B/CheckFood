@@ -41,6 +41,7 @@ public class RoleDataLoader implements CommandLineRunner {
         ensureRoleExists("ADMIN");
         ensureRoleExists("OWNER");
         ensureRoleExists("MANAGER");
+        ensureRoleExists("STAFF");
 
         userLogger.logUserCreated("Inicializace rolí dokončena");
     }

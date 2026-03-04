@@ -46,6 +46,7 @@ class GetNearestRestaurantsUseCase {
       cuisineTypes: filters?.cuisineTypes.map((e) => e.name).toList(),
       minRating: filters?.minRating,
       openNow: filters?.openNow,
+      favouritesOnly: filters?.favouritesOnly,
     );
   }
 }

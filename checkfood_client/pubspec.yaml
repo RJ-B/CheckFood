@@ -53,6 +53,10 @@ dependencies:
   url_launcher: ^6.3.0
   io: ^1.0.4
 
+  # --- Kamera a Senzory ---
+  camera: ^0.11.0+2
+  sensors_plus: ^6.1.1
+
   # --- Média a Zobrazování ---
   cached_network_image: ^3.3.1
   qr_flutter: ^4.1.0
@@ -123,4 +127,5 @@ flutter:
     - assets/animations/
     - assets/three/
     - assets/panoramas/
+    - assets/map_style.json
     - .env

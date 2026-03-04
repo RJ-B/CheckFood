@@ -25,6 +25,7 @@ abstract class RestaurantRemoteDataSource {
     List<String>? cuisineTypes,
     double? minRating,
     bool? openNow,
+    bool? favouritesOnly,
   });
 
   // --- STANDARDNÍ CRUD ENDPOINTY ---
@@ -92,6 +93,7 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
     List<String>? cuisineTypes,
     double? minRating,
     bool? openNow,
+    bool? favouritesOnly,
   }) async {
     final queryParams = <String, dynamic>{
       'lat': lat,
@@ -110,6 +112,9 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
     }
     if (openNow == true) {
       queryParams['openNow'] = true;
+    }
+    if (favouritesOnly == true) {
+      queryParams['favouritesOnly'] = true;
     }
 
     final response = await _dio.get(

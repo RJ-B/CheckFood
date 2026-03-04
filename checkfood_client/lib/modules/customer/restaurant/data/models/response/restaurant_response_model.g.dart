@@ -31,6 +31,7 @@ _$RestaurantResponseModelImpl _$$RestaurantResponseModelImplFromJson(
   tags:
       (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
       const [],
+  isFavourite: json['isFavourite'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$$RestaurantResponseModelImplToJson(
@@ -49,6 +50,7 @@ Map<String, dynamic> _$$RestaurantResponseModelImplToJson(
   'address': instance.address,
   'openingHours': instance.openingHours,
   'tags': instance.tags,
+  'isFavourite': instance.isFavourite,
 };
 
 const _$CuisineTypeEnumMap = {

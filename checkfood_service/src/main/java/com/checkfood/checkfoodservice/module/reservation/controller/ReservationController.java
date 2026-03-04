@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -102,40 +101,10 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.cancelReservation(id, userId));
     }
 
-    // ── Confirm reservation (staff only) ─────────────────────────────────
-
-    @PatchMapping("/api/v1/reservations/{id}/confirm")
-    @PreAuthorize("hasAnyRole('RESTAURANT_OWNER', 'RESTAURANT_MANAGER')")
-    public ResponseEntity<ReservationResponse> confirmReservation(
-            @PathVariable UUID id,
-            Authentication authentication) {
-        UUID ownerId = extractOwnerUuid(authentication);
-        return ResponseEntity.ok(reservationService.confirmReservation(id, ownerId));
-    }
-
-    // ── Reject reservation (staff only) ────────────────────────────────
-
-    @PatchMapping("/api/v1/reservations/{id}/reject")
-    @PreAuthorize("hasAnyRole('RESTAURANT_OWNER', 'RESTAURANT_MANAGER')")
-    public ResponseEntity<ReservationResponse> rejectReservation(
-            @PathVariable UUID id,
-            Authentication authentication) {
-        UUID ownerId = extractOwnerUuid(authentication);
-        return ResponseEntity.ok(reservationService.rejectReservation(id, ownerId));
-    }
-
     // ── Helpers ─────────────────────────────────────────────────────────
 
     private Long extractUserId(Authentication authentication) {
         UserEntity user = (UserEntity) authentication.getPrincipal();
         return user.getId();
-    }
-
-    /**
-     * Extracts UUID from authentication name (consistent with RestaurantController).
-     * Used for staff endpoints where the owner ID is a UUID.
-     */
-    private UUID extractOwnerUuid(Authentication authentication) {
-        return UUID.fromString(authentication.getName());
     }
 }

@@ -110,6 +110,7 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
     on<FinalizePanorama>(_onFinalizePanorama);
     on<ActivatePanorama>(_onActivatePanorama);
     on<LoadPanoramaSessions>(_onLoadPanoramaSessions);
+    on<PollPanoramaStatus>(_onPollPanoramaStatus);
     on<Publish>(_onPublish);
   }
 
@@ -347,6 +348,28 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
       emit(state.copyWith(loading: false, sessions: sessions));
     } catch (e) {
       emit(state.copyWith(loading: false, error: e.toString()));
+    }
+  }
+
+  Future<void> _onPollPanoramaStatus(PollPanoramaStatus event, Emitter<OnboardingWizardState> emit) async {
+    try {
+      final session = await _getPanoramaStatus(event.sessionId);
+      final updatedSessions = state.sessions.map((s) => s.id == session.id ? session : s).toList();
+      emit(state.copyWith(activeSession: session, sessions: updatedSessions));
+
+      // Continue polling if still PROCESSING
+      if (session.status == 'PROCESSING') {
+        await Future.delayed(const Duration(seconds: 3));
+        if (!isClosed) {
+          add(OnboardingWizardEvent.pollPanoramaStatus(event.sessionId));
+        }
+      }
+    } catch (_) {
+      // Silently retry polling on error
+      await Future.delayed(const Duration(seconds: 5));
+      if (!isClosed) {
+        add(OnboardingWizardEvent.pollPanoramaStatus(event.sessionId));
+      }
     }
   }
 

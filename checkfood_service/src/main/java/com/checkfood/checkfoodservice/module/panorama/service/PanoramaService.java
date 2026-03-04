@@ -14,4 +14,5 @@ public interface PanoramaService {
     PanoramaSessionResponse getSessionStatus(String userEmail, UUID sessionId);
     List<PanoramaSessionResponse> listSessions(String userEmail);
     void setActivePanorama(String userEmail, UUID sessionId);
+    void handleStitchingCallback(com.checkfood.checkfoodservice.module.panorama.client.StitchCallbackRequest request);
 }

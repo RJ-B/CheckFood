@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
             SELECT COUNT(r) > 0 FROM Reservation r
             WHERE r.tableId = :tableId
               AND r.date = :date
-              AND r.status NOT IN ('CANCELLED', 'REJECTED')
+              AND r.status NOT IN ('CANCELLED', 'REJECTED', 'COMPLETED')
               AND r.startTime < :endTime
               AND r.endTime > :startTime
             """)
@@ -64,7 +65,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
             SELECT r FROM Reservation r
             WHERE r.userId = :userId
               AND r.date = :date
-              AND r.status IN ('CONFIRMED', 'RESERVED')
+              AND r.status IN ('CONFIRMED', 'RESERVED', 'CHECKED_IN')
               AND r.startTime <= :windowEnd
               AND r.endTime >= :windowStart
             ORDER BY r.startTime ASC
@@ -77,6 +78,20 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     );
 
     /**
+     * Najde všechny rezervace pro restauraci a datum, seřazené podle času začátku.
+     * Používáno staff endpointem.
+     */
+    List<Reservation> findAllByRestaurantIdAndDateOrderByStartTimeAsc(
+            UUID restaurantId, LocalDate date
+    );
+
+    /**
+     * Najde PENDING_CONFIRMATION rezervace starší než cutoff (pro auto-confirm scheduler).
+     */
+    @Query("SELECT r FROM Reservation r WHERE r.status = 'PENDING_CONFIRMATION' AND r.createdAt < :cutoff")
+    List<Reservation> findPendingOlderThan(@Param("cutoff") LocalDateTime cutoff);
+
+    /**
      * Kontrola kolize při úpravě: stejná logika jako existsOverlappingReservation,
      * ale vylučuje aktuálně upravovanou rezervaci (excludeId).
      */
@@ -84,7 +99,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
             SELECT COUNT(r) > 0 FROM Reservation r
             WHERE r.tableId = :tableId
               AND r.date = :date
-              AND r.status NOT IN ('CANCELLED', 'REJECTED')
+              AND r.status NOT IN ('CANCELLED', 'REJECTED', 'COMPLETED')
               AND r.id <> :excludeId
               AND r.startTime < :endTime
               AND r.endTime > :startTime

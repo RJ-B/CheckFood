@@ -79,6 +79,8 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
   }
 
   Future<void> _onChangeDate(ChangeDate event, Emitter<ReservationState> emit) async {
+    if (event.date == state.selectedDate) return;
+
     emit(state.copyWith(
       selectedDate: event.date,
       selectedStartTime: null,

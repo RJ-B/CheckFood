@@ -10,6 +10,7 @@ enum UserRole {
         return UserRole.owner;
       case 'MANAGER':
         return UserRole.manager;
+      case 'STAFF':
       case 'EMPLOYEE':
         return UserRole.employee;
       default:

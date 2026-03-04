@@ -110,6 +110,7 @@ public interface UserMapper {
         if (names.contains("ADMIN")) return "ADMIN";
         if (names.contains("OWNER")) return "OWNER";
         if (names.contains("MANAGER")) return "MANAGER";
+        if (names.contains("STAFF")) return "STAFF";
         return "USER";
     }
 

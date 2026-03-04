@@ -25,8 +25,4 @@ public interface ReservationService {
     ReservationResponse updateReservation(UUID id, UpdateReservationRequest request, Long userId);
 
     ReservationResponse cancelReservation(UUID id, Long userId);
-
-    ReservationResponse confirmReservation(UUID id, UUID staffOwnerId);
-
-    ReservationResponse rejectReservation(UUID id, UUID staffOwnerId);
 }

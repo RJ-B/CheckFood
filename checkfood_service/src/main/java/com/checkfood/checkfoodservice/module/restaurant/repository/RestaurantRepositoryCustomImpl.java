@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Implementation of custom repository using EntityManager for dynamic native SQL.
@@ -32,6 +34,21 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
             Boolean openNow,
             Pageable pageable
     ) {
+        return findNearestWithFilters(lat, lng, searchQuery, cuisineTypes, minRating, openNow, null, pageable);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Page<Restaurant> findNearestWithFilters(
+            double lat,
+            double lng,
+            String searchQuery,
+            List<String> cuisineTypes,
+            Double minRating,
+            Boolean openNow,
+            Set<UUID> favouriteIds,
+            Pageable pageable
+    ) {
         StringBuilder sql = new StringBuilder();
         StringBuilder countSql = new StringBuilder();
 
@@ -40,7 +57,7 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         countSql.append("SELECT COUNT(*) FROM restaurant r WHERE r.is_active = true");
 
         // Dynamic WHERE clauses
-        String filters = buildFilterClauses(searchQuery, cuisineTypes, minRating, openNow);
+        String filters = buildFilterClauses(searchQuery, cuisineTypes, minRating, openNow, favouriteIds);
         sql.append(filters);
         countSql.append(filters);
 
@@ -52,7 +69,7 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
 
         // Data query
         Query dataQuery = entityManager.createNativeQuery(sql.toString(), Restaurant.class);
-        setParameters(dataQuery, lat, lng, searchQuery, cuisineTypes, minRating, openNow);
+        setParameters(dataQuery, lat, lng, searchQuery, cuisineTypes, minRating, openNow, favouriteIds);
         dataQuery.setParameter("limit", pageable.getPageSize());
         dataQuery.setParameter("offset", (int) pageable.getOffset());
 
@@ -60,7 +77,7 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
 
         // Count query
         Query countQuery = entityManager.createNativeQuery(countSql.toString());
-        setParameters(countQuery, lat, lng, searchQuery, cuisineTypes, minRating, openNow);
+        setParameters(countQuery, lat, lng, searchQuery, cuisineTypes, minRating, openNow, favouriteIds);
         long total = ((Number) countQuery.getSingleResult()).longValue();
 
         return new PageImpl<>(results, pageable, total);
@@ -70,7 +87,8 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
             String searchQuery,
             List<String> cuisineTypes,
             Double minRating,
-            Boolean openNow
+            Boolean openNow,
+            Set<UUID> favouriteIds
     ) {
         StringBuilder clauses = new StringBuilder();
 
@@ -96,6 +114,10 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
                     .append(")");
         }
 
+        if (favouriteIds != null && !favouriteIds.isEmpty()) {
+            clauses.append(" AND r.id IN (:favouriteIds)");
+        }
+
         return clauses.toString();
     }
 
@@ -106,7 +128,8 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
             String searchQuery,
             List<String> cuisineTypes,
             Double minRating,
-            Boolean openNow
+            Boolean openNow,
+            Set<UUID> favouriteIds
     ) {
         // Always set lat/lng — count query doesn't use them but won't fail with extra params
         try {
@@ -131,6 +154,10 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         if (Boolean.TRUE.equals(openNow)) {
             query.setParameter("currentDay", DayOfWeek.from(java.time.LocalDate.now()).name());
             query.setParameter("currentTime", LocalTime.now());
+        }
+
+        if (favouriteIds != null && !favouriteIds.isEmpty()) {
+            query.setParameter("favouriteIds", favouriteIds);
         }
     }
 }
