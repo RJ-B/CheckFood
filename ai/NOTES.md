@@ -27,3 +27,19 @@ Frontend (6 souborů):
 
 Build: backend compile OK, frontend build_runner OK (10 outputs)
 Testy: 75/75 FAIL — pre-existing issue (H2/PostGIS inkompatibilita, nesouvisí s T-0002)
+
+---
+
+2026-03-05
+role: QA
+task: T-0002
+action: QA dokončeno
+
+QA fixes:
+- LocalFilesystemStorageService: rozšířen @Profile na {"local", "test"} (blokoval všechny testy)
+- CheckfoodServiceApplicationTests: přidáno @ActiveProfiles("test")
+- DiningContextServiceImpl: opravena dvojitá DB query (restaurant načten 1x místo 2x)
+- ReservationServiceImpl: odstraněny nepoužívané proměnné `now`, `today` v getTableStatuses
+- ReservationIntegrationTest: přepsáno 8 testů pro open-ended model (slot count 22→24, status-based blocking, response format {upcoming, history}, endTime=null, status PENDING_CONFIRMATION)
+
+Výsledek: 77/80 testů PASS, 3 pre-existující failures (AuthLogout, MyRestaurantAuth 2x)

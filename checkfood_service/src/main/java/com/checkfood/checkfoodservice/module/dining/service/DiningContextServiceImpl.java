@@ -61,9 +61,10 @@ public class DiningContextServiceImpl implements DiningContextService {
 
         Reservation reservation = candidates.get(0);
 
-        String restaurantName = restaurantRepository.findById(reservation.getRestaurantId())
-                .map(Restaurant::getName)
-                .orElse("Neznámá restaurace");
+        Restaurant restaurant = restaurantRepository.findById(reservation.getRestaurantId())
+                .orElse(null);
+
+        String restaurantName = restaurant != null ? restaurant.getName() : "Neznámá restaurace";
 
         String tableLabel = restaurantTableRepository.findById(reservation.getTableId())
                 .map(RestaurantTable::getLabel)
@@ -76,7 +77,7 @@ public class DiningContextServiceImpl implements DiningContextService {
         if (reservation.getEndTime() != null) {
             validToTime = reservation.getEndTime();
         } else {
-            validToTime = restaurantRepository.findById(reservation.getRestaurantId())
+            validToTime = Optional.ofNullable(restaurant)
                     .map(Restaurant::getOpeningHours)
                     .flatMap(hours -> hours.stream()
                             .filter(h -> h.getDayOfWeek() == today.getDayOfWeek())

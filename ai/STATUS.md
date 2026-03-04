@@ -7,4 +7,4 @@ CURRENT_TASK: T-0002
 | DIRECTOR  | IDLE   |
 | ARCHITECT | DONE   |
 | DEVELOPER | DONE   |
-| QA        | TODO   |
+| QA        | DONE   |

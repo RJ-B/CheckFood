@@ -95,9 +95,6 @@ public class ReservationServiceImpl implements ReservationService {
                 restaurantId, date, EXCLUDED_STATUSES
         );
 
-        var now = LocalTime.now(clock);
-        var today = LocalDate.now(clock);
-
         var statusList = tables.stream().map(table -> {
             var tableReservations = reservations.stream()
                     .filter(r -> r.getTableId().equals(table.getId()))

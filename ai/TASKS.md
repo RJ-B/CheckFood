@@ -15,7 +15,7 @@
 
 ## [T-0002] Refaktor rezervací — odstranění endTime, ukončení staffem
 
-- **status:** IN_QA
+- **status:** DONE
 - **priority:** P0
 - **owner:** DEVELOPER
 - **description:** Změnit logiku rezervací tak, že:
@@ -25,11 +25,13 @@
   - V budoucnu automatické ukončení při zaplacení přes pokladní systém — nyní pouze manuální
   - Po ukončení se rezervace zobrazí v historii se statusem COMPLETED
 - **akceptační kritéria:**
-  - [ ] `Reservation.endTime` není povinné pole (nullable)
-  - [ ] Vytvoření rezervace nevyžaduje endTime (backend ani frontend)
-  - [ ] Staff může ukončit rezervaci přes `/complete` → status COMPLETED + endTime=now()
-  - [ ] Ukončená rezervace se zobrazí v historii zákazníka
-  - [ ] Available-slots logika funguje bez endTime
-  - [ ] Stávající testy projdou (nebo jsou upraveny)
+  - [x] `Reservation.endTime` není povinné pole (nullable)
+  - [x] Vytvoření rezervace nevyžaduje endTime (backend ani frontend)
+  - [x] Staff může ukončit rezervaci přes `/complete` → status COMPLETED + endTime=now()
+  - [x] Ukončená rezervace se zobrazí v historii zákazníka
+  - [x] Available-slots logika funguje bez endTime
+  - [x] Stávající testy projdou (nebo jsou upraveny)
 - **architect decision:** D-0009
 - **implementation plan:** IMPLEMENTATION.md
+- **qa report:** QA.md
+- **completed:** 2026-03-05
