@@ -5,7 +5,7 @@ class StaffReservation {
   final int userId;
   final String date;
   final String startTime;
-  final String endTime;
+  final String? endTime;
   final int partySize;
   final String status;
   final String createdAt;
@@ -21,7 +21,7 @@ class StaffReservation {
     required this.userId,
     required this.date,
     required this.startTime,
-    required this.endTime,
+    this.endTime,
     required this.partySize,
     required this.status,
     required this.createdAt,

@@ -15,6 +15,5 @@ public class AvailableSlotsResponse {
     private LocalDate date;
     private UUID tableId;
     private int slotMinutes;
-    private int durationMinutes;
     private List<LocalTime> availableStartTimes;
 }

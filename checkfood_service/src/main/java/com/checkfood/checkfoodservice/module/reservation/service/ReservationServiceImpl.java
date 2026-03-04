@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 public class ReservationServiceImpl implements ReservationService {
 
     private static final int SLOT_INTERVAL_MINUTES = 30;
-    private static final int DEFAULT_DURATION_MINUTES = 90;
     private static final int BOOKING_BUFFER_MINUTES = 30;
     private static final int EDIT_CUTOFF_MINUTES = 120;
     private static final int HISTORY_PREVIEW_LIMIT = 10;
@@ -148,12 +147,11 @@ public class ReservationServiceImpl implements ReservationService {
                     .date(date)
                     .tableId(tableId)
                     .slotMinutes(SLOT_INTERVAL_MINUTES)
-                    .durationMinutes(DEFAULT_DURATION_MINUTES)
                     .availableStartTimes(List.of())
                     .build();
         }
 
-        // 2) Get existing reservations for this table+date (excluding cancelled/rejected)
+        // 2) Get existing ACTIVE reservations for this table+date
         var existingReservations = reservationRepository.findAllByTableIdAndDateAndStatusNotIn(
                 tableId, date, EXCLUDED_STATUSES
         );
@@ -165,10 +163,10 @@ public class ReservationServiceImpl implements ReservationService {
                     .toList();
         }
 
-        // 3) Generate candidate start times
+        // 3) Generate candidate start times (open-ended: last slot = closeAt - one interval)
         LocalTime openAt = hours.getOpenAt();
         LocalTime closeAt = hours.getCloseAt();
-        LocalTime lastPossibleStart = closeAt.minusMinutes(DEFAULT_DURATION_MINUTES);
+        LocalTime lastPossibleStart = closeAt.minusMinutes(SLOT_INTERVAL_MINUTES);
 
         // If today, skip past slots (with BOOKING_BUFFER_MINUTES ahead)
         LocalTime earliestStart = openAt;
@@ -186,13 +184,10 @@ public class ReservationServiceImpl implements ReservationService {
         LocalTime candidate = earliestStart;
 
         while (!candidate.isAfter(lastPossibleStart)) {
-            LocalTime candidateEnd = candidate.plusMinutes(DEFAULT_DURATION_MINUTES);
-
-            // 4) Check overlap with existing reservations
-            final LocalTime start = candidate;
-            final LocalTime end = candidateEnd;
+            // Open-ended model: slot is blocked if any active reservation has startTime <= candidate
+            final LocalTime slot = candidate;
             boolean hasConflict = existingReservations.stream()
-                    .anyMatch(r -> r.getStartTime().isBefore(end) && r.getEndTime().isAfter(start));
+                    .anyMatch(r -> !r.getStartTime().isAfter(slot));
 
             if (!hasConflict) {
                 availableSlots.add(candidate);
@@ -205,7 +200,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .date(date)
                 .tableId(tableId)
                 .slotMinutes(SLOT_INTERVAL_MINUTES)
-                .durationMinutes(DEFAULT_DURATION_MINUTES)
                 .availableStartTimes(availableSlots)
                 .build();
     }
@@ -228,14 +222,11 @@ public class ReservationServiceImpl implements ReservationService {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
         }
 
-        LocalTime endTime = request.getStartTime().plusMinutes(DEFAULT_DURATION_MINUTES);
-
-        // Race-safe overlap check inside transaction
+        // Race-safe overlap check inside transaction (open-ended reservations)
         boolean conflict = reservationRepository.existsOverlappingReservation(
                 request.getTableId(),
                 request.getDate(),
-                request.getStartTime(),
-                endTime
+                request.getStartTime()
         );
 
         if (conflict) {
@@ -249,7 +240,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .userId(userId)
                 .date(request.getDate())
                 .startTime(request.getStartTime())
-                .endTime(endTime)
                 .status(ReservationStatus.PENDING_CONFIRMATION)
                 .partySize(request.getPartySize())
                 .build();
@@ -347,14 +337,11 @@ public class ReservationServiceImpl implements ReservationService {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
         }
 
-        LocalTime endTime = request.getStartTime().plusMinutes(DEFAULT_DURATION_MINUTES);
-
-        // Race-safe overlap check excluding self
+        // Race-safe overlap check excluding self (open-ended reservations)
         boolean conflict = reservationRepository.existsOverlappingReservationExcluding(
                 request.getTableId(),
                 request.getDate(),
                 request.getStartTime(),
-                endTime,
                 id
         );
 
@@ -367,7 +354,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setTableId(request.getTableId());
         reservation.setDate(request.getDate());
         reservation.setStartTime(request.getStartTime());
-        reservation.setEndTime(endTime);
+        reservation.setEndTime(null);
         reservation.setPartySize(request.getPartySize());
         reservation.setStatus(ReservationStatus.PENDING_CONFIRMATION);
 

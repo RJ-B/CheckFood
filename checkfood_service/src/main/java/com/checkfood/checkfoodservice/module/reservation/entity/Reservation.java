@@ -43,7 +43,7 @@ public class Reservation {
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time", nullable = true)
     private LocalTime endTime;
 
     @Enumerated(EnumType.STRING)

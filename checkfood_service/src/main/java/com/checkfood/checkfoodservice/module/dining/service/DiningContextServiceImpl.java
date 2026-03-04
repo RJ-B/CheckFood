@@ -6,6 +6,7 @@ import com.checkfood.checkfoodservice.module.dining.exception.DiningContextExcep
 import com.checkfood.checkfoodservice.module.dining.logging.DiningContextLogger;
 import com.checkfood.checkfoodservice.module.reservation.entity.Reservation;
 import com.checkfood.checkfoodservice.module.reservation.repository.ReservationRepository;
+import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.OpeningHours;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.table.RestaurantTable;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
@@ -70,6 +71,21 @@ public class DiningContextServiceImpl implements DiningContextService {
 
         logger.logContextResolved(userId, reservation.getId());
 
+        // Open-ended model: if endTime is null, use restaurant closing time as validTo
+        LocalTime validToTime;
+        if (reservation.getEndTime() != null) {
+            validToTime = reservation.getEndTime();
+        } else {
+            validToTime = restaurantRepository.findById(reservation.getRestaurantId())
+                    .map(Restaurant::getOpeningHours)
+                    .flatMap(hours -> hours.stream()
+                            .filter(h -> h.getDayOfWeek() == today.getDayOfWeek())
+                            .filter(h -> !h.isClosed() && h.getCloseAt() != null)
+                            .map(OpeningHours::getCloseAt)
+                            .findFirst())
+                    .orElse(LocalTime.of(23, 59));
+        }
+
         DiningContextResponse response = DiningContextResponse.builder()
                 .restaurantId(reservation.getRestaurantId())
                 .tableId(reservation.getTableId())
@@ -79,7 +95,7 @@ public class DiningContextServiceImpl implements DiningContextService {
                 .restaurantName(restaurantName)
                 .tableLabel(tableLabel)
                 .validFrom(LocalDateTime.of(reservation.getDate(), reservation.getStartTime()))
-                .validTo(LocalDateTime.of(reservation.getDate(), reservation.getEndTime()))
+                .validTo(LocalDateTime.of(reservation.getDate(), validToTime))
                 .build();
 
         return Optional.of(response);

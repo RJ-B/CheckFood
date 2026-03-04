@@ -166,6 +166,7 @@ public class StaffReservationServiceImpl implements StaffReservationService {
                     reservation.getStatus().name(), ReservationStatus.COMPLETED.name());
         }
 
+        reservation.setEndTime(LocalTime.now(clock));
         reservation.setStatus(ReservationStatus.COMPLETED);
         var saved = reservationRepository.save(reservation);
         reservationLogger.logReservationCompleted(saved.getId(), saved.getDate());

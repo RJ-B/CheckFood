@@ -74,7 +74,9 @@ class ReservationCard extends StatelessWidget {
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Text(
-                  '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime)}',
+                  reservation.endTime != null
+                      ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
+                      : '${_formatDate(reservation.date)}  od ${_formatTime(reservation.startTime)}',
                   style: TextStyle(color: Colors.grey[700], fontSize: 13),
                 ),
               ],

@@ -62,8 +62,9 @@ class StaffReservationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeRange = '${reservation.startTime.substring(0, 5)}'
-        ' - ${reservation.endTime.substring(0, 5)}';
+    final timeRange = reservation.endTime != null
+        ? '${reservation.startTime.substring(0, 5)} - ${reservation.endTime!.substring(0, 5)}'
+        : 'od ${reservation.startTime.substring(0, 5)}';
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),

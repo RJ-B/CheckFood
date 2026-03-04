@@ -7,7 +7,7 @@ class StaffReservationModel {
   final int userId;
   final String date;
   final String startTime;
-  final String endTime;
+  final String? endTime;
   final int partySize;
   final String status;
   final String createdAt;
@@ -23,7 +23,7 @@ class StaffReservationModel {
     required this.userId,
     required this.date,
     required this.startTime,
-    required this.endTime,
+    this.endTime,
     required this.partySize,
     required this.status,
     required this.createdAt,
@@ -41,7 +41,7 @@ class StaffReservationModel {
       userId: json['userId'] as int,
       date: json['date'] as String,
       startTime: json['startTime'] as String,
-      endTime: json['endTime'] as String,
+      endTime: json['endTime'] as String?,
       partySize: json['partySize'] as int,
       status: json['status'] as String,
       createdAt: (json['createdAt'] as String?) ?? '',

@@ -35,7 +35,7 @@ class ReservationResponseModel with _$ReservationResponseModel {
         tableLabel: tableLabel,
         date: date ?? '',
         startTime: startTime ?? '',
-        endTime: endTime ?? '',
+        endTime: endTime,
         status: status ?? 'RESERVED',
         partySize: partySize ?? 2,
         canEdit: canEdit,

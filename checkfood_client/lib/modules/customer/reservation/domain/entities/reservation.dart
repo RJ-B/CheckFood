@@ -14,7 +14,7 @@ class Reservation with _$Reservation {
     String? tableLabel,
     required String date,
     required String startTime,
-    required String endTime,
+    String? endTime,
     required String status,
     required int partySize,
     @Default(false) bool canEdit,

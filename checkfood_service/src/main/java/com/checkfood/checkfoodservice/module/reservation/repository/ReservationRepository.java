@@ -33,23 +33,20 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     );
 
     /**
-     * Kontrola kolize: existuje aktivní rezervace pro daný stůl, datum a překrývající se čas?
-     * Overlap: existingStart < newEnd AND existingEnd > newStart
-     * Vylučuje CANCELLED a REJECTED.
+     * Kontrola kolize (open-ended model): existuje aktivní rezervace pro daný stůl a datum,
+     * jejíž startTime <= nový startTime? Aktivní rezervace blokuje stůl do ukončení staffem.
      */
     @Query("""
             SELECT COUNT(r) > 0 FROM Reservation r
             WHERE r.tableId = :tableId
               AND r.date = :date
               AND r.status NOT IN ('CANCELLED', 'REJECTED', 'COMPLETED')
-              AND r.startTime < :endTime
-              AND r.endTime > :startTime
+              AND r.startTime <= :startTime
             """)
     boolean existsOverlappingReservation(
             @Param("tableId") UUID tableId,
             @Param("date") LocalDate date,
-            @Param("startTime") LocalTime startTime,
-            @Param("endTime") LocalTime endTime
+            @Param("startTime") LocalTime startTime
     );
 
     /**
@@ -58,8 +55,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     List<Reservation> findAllByUserIdOrderByDateDescStartTimeDesc(Long userId);
 
     /**
-     * Najde potvrzené rezervace uživatele v daném časovém okně (pro DiningContext).
-     * Pouze CONFIRMED a RESERVED (backward compat) mohou vytvořit dining context.
+     * Najde aktivní dining rezervace uživatele (open-ended model).
+     * Rezervace je aktivní pokud startTime <= windowEnd a není ukončena (endTime IS NULL).
+     * Ukončené rezervace (endTime IS NOT NULL) se zahrnou jen pokud endTime >= windowStart.
      */
     @Query("""
             SELECT r FROM Reservation r
@@ -67,7 +65,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
               AND r.date = :date
               AND r.status IN ('CONFIRMED', 'RESERVED', 'CHECKED_IN')
               AND r.startTime <= :windowEnd
-              AND r.endTime >= :windowStart
+              AND (r.endTime IS NULL OR r.endTime >= :windowStart)
             ORDER BY r.startTime ASC
             """)
     List<Reservation> findActiveDiningReservations(
@@ -92,7 +90,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     List<Reservation> findPendingOlderThan(@Param("cutoff") LocalDateTime cutoff);
 
     /**
-     * Kontrola kolize při úpravě: stejná logika jako existsOverlappingReservation,
+     * Kontrola kolize při úpravě (open-ended model): stejná logika jako existsOverlappingReservation,
      * ale vylučuje aktuálně upravovanou rezervaci (excludeId).
      */
     @Query("""
@@ -101,14 +99,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
               AND r.date = :date
               AND r.status NOT IN ('CANCELLED', 'REJECTED', 'COMPLETED')
               AND r.id <> :excludeId
-              AND r.startTime < :endTime
-              AND r.endTime > :startTime
+              AND r.startTime <= :startTime
             """)
     boolean existsOverlappingReservationExcluding(
             @Param("tableId") UUID tableId,
             @Param("date") LocalDate date,
             @Param("startTime") LocalTime startTime,
-            @Param("endTime") LocalTime endTime,
             @Param("excludeId") UUID excludeId
     );
 }

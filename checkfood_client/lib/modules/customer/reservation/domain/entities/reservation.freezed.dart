@@ -24,7 +24,7 @@ mixin _$Reservation {
   String? get tableLabel => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
   String get startTime => throw _privateConstructorUsedError;
-  String get endTime => throw _privateConstructorUsedError;
+  String? get endTime => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   int get partySize => throw _privateConstructorUsedError;
   bool get canEdit => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $ReservationCopyWith<$Res> {
     String? tableLabel,
     String date,
     String startTime,
-    String endTime,
+    String? endTime,
     String status,
     int partySize,
     bool canEdit,
@@ -82,7 +82,7 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
     Object? tableLabel = freezed,
     Object? date = null,
     Object? startTime = null,
-    Object? endTime = null,
+    Object? endTime = freezed,
     Object? status = null,
     Object? partySize = null,
     Object? canEdit = null,
@@ -126,10 +126,10 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
                     : startTime // ignore: cast_nullable_to_non_nullable
                         as String,
             endTime:
-                null == endTime
+                freezed == endTime
                     ? _value.endTime
                     : endTime // ignore: cast_nullable_to_non_nullable
-                        as String,
+                        as String?,
             status:
                 null == status
                     ? _value.status
@@ -173,7 +173,7 @@ abstract class _$$ReservationImplCopyWith<$Res>
     String? tableLabel,
     String date,
     String startTime,
-    String endTime,
+    String? endTime,
     String status,
     int partySize,
     bool canEdit,
@@ -202,7 +202,7 @@ class __$$ReservationImplCopyWithImpl<$Res>
     Object? tableLabel = freezed,
     Object? date = null,
     Object? startTime = null,
-    Object? endTime = null,
+    Object? endTime = freezed,
     Object? status = null,
     Object? partySize = null,
     Object? canEdit = null,
@@ -246,10 +246,10 @@ class __$$ReservationImplCopyWithImpl<$Res>
                 : startTime // ignore: cast_nullable_to_non_nullable
                     as String,
         endTime:
-            null == endTime
+            freezed == endTime
                 ? _value.endTime
                 : endTime // ignore: cast_nullable_to_non_nullable
-                    as String,
+                    as String?,
         status:
             null == status
                 ? _value.status
@@ -286,7 +286,7 @@ class _$ReservationImpl extends _Reservation {
     this.tableLabel,
     required this.date,
     required this.startTime,
-    required this.endTime,
+    this.endTime,
     required this.status,
     required this.partySize,
     this.canEdit = false,
@@ -308,7 +308,7 @@ class _$ReservationImpl extends _Reservation {
   @override
   final String startTime;
   @override
-  final String endTime;
+  final String? endTime;
   @override
   final String status;
   @override
@@ -385,7 +385,7 @@ abstract class _Reservation extends Reservation {
     final String? tableLabel,
     required final String date,
     required final String startTime,
-    required final String endTime,
+    final String? endTime,
     required final String status,
     required final int partySize,
     final bool canEdit,
@@ -408,7 +408,7 @@ abstract class _Reservation extends Reservation {
   @override
   String get startTime;
   @override
-  String get endTime;
+  String? get endTime;
   @override
   String get status;
   @override
