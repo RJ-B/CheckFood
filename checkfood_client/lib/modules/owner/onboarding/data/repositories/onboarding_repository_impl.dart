@@ -75,11 +75,15 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
     required String label,
     required int capacity,
     bool active = true,
+    double? yaw,
+    double? pitch,
   }) async {
     final model = await _remoteDataSource.updateTable(id, {
       'label': label,
       'capacity': capacity,
       'active': active,
+      if (yaw != null) 'yaw': yaw,
+      if (pitch != null) 'pitch': pitch,
     });
     return model.toEntity();
   }

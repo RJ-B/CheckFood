@@ -26,7 +26,7 @@ abstract class OnboardingRepository {
   // Tables
   Future<List<OnboardingTable>> getTables();
   Future<OnboardingTable> addTable({required String label, required int capacity, bool active = true});
-  Future<OnboardingTable> updateTable(String id, {required String label, required int capacity, bool active = true});
+  Future<OnboardingTable> updateTable(String id, {required String label, required int capacity, bool active = true, double? yaw, double? pitch});
   Future<void> deleteTable(String id);
 
   // Menu

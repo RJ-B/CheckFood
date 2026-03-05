@@ -10,7 +10,6 @@ import '../../../components/buttons/secondary_button.dart';
 import '../domain/restaurant_model.dart';
 import 'menu_screen.dart';
 
-import 'table_selection_screen.dart';
 
 class RestaurantDetailScreen extends StatelessWidget {
   final Restaurant restaurant;
@@ -148,11 +147,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                   child: SecondaryButton(
                     label: 'Reserve Table',
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const TableSelectionScreen(),
-                        ),
-                      );
+                      // TODO: Navigate to reservation flow
                     },
                   ),
                 ),

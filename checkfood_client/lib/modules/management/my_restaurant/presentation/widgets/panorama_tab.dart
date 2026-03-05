@@ -6,7 +6,12 @@ import '../../../../../core/di/injection_container.dart';
 import '../../../../owner/onboarding/domain/entities/panorama_session.dart';
 import '../../../../owner/onboarding/domain/repositories/onboarding_repository.dart';
 import '../../../../owner/onboarding/domain/usecases/activate_panorama_usecase.dart';
+import '../../../../owner/onboarding/domain/usecases/create_panorama_session_usecase.dart';
+import '../../../../owner/onboarding/domain/usecases/finalize_panorama_usecase.dart';
 import '../../../../owner/onboarding/domain/usecases/get_panorama_status_usecase.dart';
+import '../../../../owner/onboarding/domain/usecases/get_tables_usecase.dart';
+import '../../../../owner/onboarding/domain/usecases/update_table_usecase.dart';
+import '../../../../owner/onboarding/presentation/widgets/panorama_capture_screen.dart';
 import '../../../../owner/onboarding/presentation/widgets/panorama_editor_screen.dart';
 
 class PanoramaTab extends StatefulWidget {
@@ -21,6 +26,7 @@ class PanoramaTab extends StatefulWidget {
 class _PanoramaTabState extends State<PanoramaTab> {
   List<PanoramaSession> _sessions = [];
   bool _loading = false;
+  bool _creating = false;
   String? _error;
   Timer? _pollTimer;
 
@@ -84,6 +90,40 @@ class _PanoramaTabState extends State<PanoramaTab> {
     } catch (_) {}
   }
 
+  Future<void> _createNewPanorama() async {
+    setState(() => _creating = true);
+    try {
+      final createSession = sl<CreatePanoramaSessionUseCase>();
+      final session = await createSession();
+
+      if (!mounted) return;
+
+      // Navigate to capture screen
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PanoramaCaptureScreen(sessionId: session.id),
+        ),
+      );
+
+      if (!mounted) return;
+
+      // Finalize after returning from capture
+      final finalize = sl<FinalizePanoramaUseCase>();
+      await finalize(session.id);
+
+      // Reload sessions and start polling
+      await _loadSessions();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Chyba: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _creating = false);
+    }
+  }
+
   Future<void> _activatePanorama(String sessionId) async {
     final activate = sl<ActivatePanoramaUseCase>();
     await activate(sessionId);
@@ -95,21 +135,63 @@ class _PanoramaTabState extends State<PanoramaTab> {
     }
   }
 
-  void _openEditor(PanoramaSession session) {
-    if (session.resultUrl == null) return;
+  Future<void> _openEditorWithTables(String panoramaUrl) async {
+    // Fetch existing tables and map those with yaw/pitch to EditorTable
+    List<EditorTable> editorTables = [];
+    try {
+      final getTables = sl<GetTablesUseCase>();
+      final tables = await getTables();
+      editorTables = tables
+          .where((t) => t.yaw != null && t.pitch != null)
+          .map((t) => EditorTable(
+                id: t.id,
+                label: t.label,
+                capacity: t.capacity,
+                yaw: t.yaw!,
+                pitch: t.pitch!,
+                isNew: false,
+              ))
+          .toList();
+    } catch (e) {
+      debugPrint('[PanoramaTab] Failed to load tables: $e');
+    }
+
+    if (!mounted) return;
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => PanoramaEditorScreen(
-          panoramaUrl: session.resultUrl!,
-          existingTables: const [],
+          panoramaUrl: panoramaUrl,
+          existingTables: editorTables,
           onSave: (tables) async {
-            // Tables saved via API calls in the editor
-            debugPrint('[PanoramaTab] Saved ${tables.length} tables');
+            final updateTable = sl<UpdateTableUseCase>();
+            for (final t in tables) {
+              if (t.isNew) continue; // new tables need create flow — skip for now
+              await updateTable(
+                t.id,
+                label: t.label,
+                capacity: t.capacity,
+                yaw: t.yaw,
+                pitch: t.pitch,
+              );
+            }
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Pozice stolu uloženy!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
           },
         ),
       ),
     );
+  }
+
+  void _openEditor(PanoramaSession session) {
+    if (session.resultUrl == null) return;
+    _openEditorWithTables(session.resultUrl!);
   }
 
   @override
@@ -147,30 +229,30 @@ class _PanoramaTabState extends State<PanoramaTab> {
                 subtitle: const Text('Panorama je nastaveno a zobrazuje se zakaznikum.'),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => PanoramaEditorScreen(
-                        panoramaUrl: widget.activePanoramaUrl!,
-                        existingTables: const [],
-                        onSave: (tables) async {
-                          debugPrint('[PanoramaTab] Saved ${tables.length} tables');
-                        },
-                      ),
-                    ),
-                  ),
+                  onPressed: () => _openEditorWithTables(widget.activePanoramaUrl!),
                 ),
               ),
             ),
             const SizedBox(height: 16),
           ],
 
-          const SizedBox(height: 8),
+          // "Nové panorama" button
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: FilledButton.icon(
+              onPressed: _creating ? null : _createNewPanorama,
+              icon: _creating
+                  ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Icon(Icons.add_a_photo),
+              label: Text(_creating ? 'Vytvarim...' : 'Nove panorama'),
+            ),
+          ),
 
-          if (_sessions.isEmpty)
+          if (_sessions.isEmpty && widget.activePanoramaUrl == null)
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(32),
-                child: Text('Zatim zadne panorama. Vytvorte ho v onboarding wizard.'),
+                child: Text('Zatim zadne panorama. Kliknete na tlacitko vyse.'),
               ),
             ),
 

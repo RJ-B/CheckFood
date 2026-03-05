@@ -11,6 +11,8 @@ class UpdateTableUseCase {
     required String label,
     required int capacity,
     bool active = true,
+    double? yaw,
+    double? pitch,
   }) =>
-      _repository.updateTable(id, label: label, capacity: capacity, active: active);
+      _repository.updateTable(id, label: label, capacity: capacity, active: active, yaw: yaw, pitch: pitch);
 }
