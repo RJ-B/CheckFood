@@ -161,8 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         builder: (context, state) {
           return state.maybeWhen(
-            // ✅ OPRAVA: loaded nyní vrací (profile, devices)
-            loaded: (profile, devices) {
+            loaded: (profile, devices, notificationsEnabled, notificationsLoading) {
               return RefreshIndicator(
                 onRefresh: () async {
                   context.read<UserBloc>().add(
@@ -289,10 +288,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         // --- SEKCE: APLIKACE ---
         _buildSectionHeader('Aplikace'),
-        ProfileMenuItem(
-          icon: Icons.notifications_none,
-          title: 'Notifikace',
-          onTap: () {},
+        // --- PUSH NOTIFIKACE SWITCH ---
+        BlocSelector<UserBloc, UserState, ({bool enabled, bool loading})>(
+          selector: (state) => state.maybeWhen(
+            loaded: (_, __, notificationsEnabled, notificationsLoading) =>
+                (enabled: notificationsEnabled, loading: notificationsLoading),
+            orElse: () => (enabled: false, loading: false),
+          ),
+          builder: (context, notifState) {
+            return SwitchListTile(
+              secondary: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.notifications_none,
+                  size: 20,
+                  color: Colors.grey.shade700,
+                ),
+              ),
+              title: const Text(
+                'Push notifikace',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  notifState.enabled ? 'Zapnuto' : 'Vypnuto',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                ),
+              ),
+              value: notifState.enabled,
+              onChanged: notifState.loading
+                  ? null
+                  : (value) {
+                      context.read<UserBloc>().add(
+                        UserEvent.notificationToggled(value),
+                      );
+                    },
+            );
+          },
         ),
         ProfileMenuItem(
           icon: Icons.help_outline,

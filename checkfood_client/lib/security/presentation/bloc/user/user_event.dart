@@ -27,4 +27,8 @@ class UserEvent with _$UserEvent {
 
   // 🧹 ✅ NOVÝ EVENT: Vyčištění dat při odhlášení (aby nezůstala v paměti)
   const factory UserEvent.clearDataRequested() = ClearDataRequested;
+
+  // Push notifikace
+  const factory UserEvent.notificationPreferenceRequested() = NotificationPreferenceRequested;
+  const factory UserEvent.notificationToggled(bool enabled) = NotificationToggled;
 }

@@ -53,6 +53,9 @@ import '../../security/domain/usecases/profile/get_user_profile_usecase.dart';
 import '../../security/domain/usecases/profile/logout_all_devices_usecase.dart';
 import '../../security/domain/usecases/profile/logout_device_usecase.dart';
 import '../../security/domain/usecases/profile/update_profile_usecase.dart';
+import '../../security/domain/usecases/profile/update_notification_preference_usecase.dart';
+import '../../security/domain/usecases/profile/get_notification_preference_usecase.dart';
+import '../../security/data/services/notification_service.dart';
 
 // Interceptors & Managers
 import '../../security/interceptors/auth_interceptor.dart';
@@ -168,6 +171,9 @@ Future<void> init() async {
   // Location Service (Potřebné pro GetLocationUseCase)
   // Zde registrujeme službu jako singleton.
   sl.registerLazySingleton(() => LocationService());
+
+  // Notification Service (Firebase Messaging wrapper)
+  sl.registerLazySingleton(() => NotificationService());
 
   // Environment
   final String apiBaseUrl = dotenv.get(
@@ -304,6 +310,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetActiveDevicesUseCase(sl()));
   sl.registerLazySingleton(() => LogoutDeviceUseCase(sl()));
   sl.registerLazySingleton(() => LogoutAllDevicesUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateNotificationPreferenceUseCase(sl()));
+  sl.registerLazySingleton(() => GetNotificationPreferenceUseCase(sl()));
 
   // ===========================================================================
   // 6. BLOCS
@@ -332,6 +340,10 @@ Future<void> init() async {
       changePasswordUseCase: sl(),
       logoutDeviceUseCase: sl(),
       logoutAllDevicesUseCase: sl(),
+      updateNotificationPreferenceUseCase: sl(),
+      getNotificationPreferenceUseCase: sl(),
+      notificationService: sl(),
+      deviceInfoService: sl(),
     ),
   );
 

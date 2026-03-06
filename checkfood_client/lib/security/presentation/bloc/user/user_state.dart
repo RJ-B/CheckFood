@@ -12,6 +12,8 @@ class UserState with _$UserState {
   const factory UserState.loaded({
     required UserProfile profile,
     @Default([]) List<Device> devices,
+    @Default(false) bool notificationsEnabled,
+    @Default(false) bool notificationsLoading,
   }) = _Loaded;
 
   const factory UserState.failure(String message) = _Failure;

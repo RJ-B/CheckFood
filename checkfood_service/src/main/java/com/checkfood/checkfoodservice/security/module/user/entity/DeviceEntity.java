@@ -42,6 +42,22 @@ public class DeviceEntity {
     private String userAgent;
 
     /**
+     * Firebase Cloud Messaging token pro push notifikace.
+     * Nullable — stare zarizeni nemaji FCM token.
+     * Nastavuje se pri zapnuti notifikaci uzivatelem.
+     */
+    @Column(name = "fcm_token", length = 512)
+    private String fcmToken;
+
+    /**
+     * Uzivatelska preference pro push notifikace na tomto zarizeni.
+     * false = uzivatel nechce notifikace (default).
+     */
+    @Builder.Default
+    @Column(name = "notifications_enabled", nullable = false)
+    private boolean notificationsEnabled = false;
+
+    /**
      * Časová značka posledního úspěšného přihlášení nebo interakce skrze toto zařízení.
      */
     @Column(name = "last_login", nullable = false)

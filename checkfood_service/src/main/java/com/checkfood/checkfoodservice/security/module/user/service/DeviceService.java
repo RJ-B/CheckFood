@@ -1,6 +1,7 @@
 package com.checkfood.checkfoodservice.security.module.user.service;
 
 import com.checkfood.checkfoodservice.security.module.user.dto.response.DeviceResponse;
+import com.checkfood.checkfoodservice.security.module.user.dto.response.NotificationPreferenceResponse;
 import com.checkfood.checkfoodservice.security.module.user.entity.DeviceEntity;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import com.checkfood.checkfoodservice.security.module.user.exception.UserException;
@@ -124,4 +125,25 @@ public interface DeviceService {
      * @param currentDeviceIdentifier identifikátor aktuálního zařízení (zachová se)
      */
     void removeAllByUserExceptCurrent(UserEntity user, String currentDeviceIdentifier);
+
+    /**
+     * Aktualizuje FCM token a preference notifikaci pro dane zarizeni.
+     *
+     * @param deviceIdentifier identifikator zarizeni
+     * @param user vlastnik zarizeni
+     * @param fcmToken FCM token (muze byt null pri vypnuti)
+     * @param notificationsEnabled true = zapnout, false = vypnout
+     * @return aktualni stav notifikaci
+     */
+    NotificationPreferenceResponse updateNotificationPreference(
+            String deviceIdentifier, UserEntity user, String fcmToken, boolean notificationsEnabled);
+
+    /**
+     * Zjisti stav notifikaci pro dane zarizeni.
+     *
+     * @param deviceIdentifier identifikator zarizeni
+     * @param user vlastnik zarizeni
+     * @return aktualni stav notifikaci
+     */
+    NotificationPreferenceResponse getNotificationPreference(String deviceIdentifier, UserEntity user);
 }

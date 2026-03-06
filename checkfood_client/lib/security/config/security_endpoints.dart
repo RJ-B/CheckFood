@@ -55,4 +55,7 @@ class SecurityEndpoints {
 
   // --- UPLOADS ---
   static const String upload = '/v1/uploads';
+
+  // --- NOTIFICATIONS ---
+  static const String notificationPreference = '/user/devices/notifications';
 }

@@ -74,6 +74,36 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
+  @override
+  Future<Map<String, dynamic>> updateNotificationPreference({
+    required String deviceIdentifier,
+    required bool notificationsEnabled,
+    String? fcmToken,
+  }) async {
+    try {
+      return await _remoteDataSource.updateNotificationPreference(
+        deviceIdentifier: deviceIdentifier,
+        notificationsEnabled: notificationsEnabled,
+        fcmToken: fcmToken,
+      );
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getNotificationPreference({
+    required String deviceIdentifier,
+  }) async {
+    try {
+      return await _remoteDataSource.getNotificationPreference(
+        deviceIdentifier: deviceIdentifier,
+      );
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
   // --- Helper metody ---
 
   SecurityException _handleDioException(DioException e) {

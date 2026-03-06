@@ -35,7 +35,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
     // Protože sem jdeme z profilu, kde jsou data načtená, můžeme je rovnou vzít.
     final state = context.read<UserBloc>().state;
     state.maybeWhen(
-      loaded: (profile, _) {
+      loaded: (profile, _, __, ___) {
         // Ignorujeme devices
         _firstNameController.text = profile.firstName;
         _lastNameController.text = profile.lastName;
@@ -77,7 +77,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         },
         listener: (context, state) {
           state.maybeWhen(
-            loaded: (profile, _) {
+            loaded: (profile, _, __, ___) {
               if (ModalRoute.of(context)?.isCurrent ?? false) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

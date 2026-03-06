@@ -21,7 +21,13 @@ mixin _$UserState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
@@ -30,7 +36,13 @@ mixin _$UserState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
@@ -39,7 +51,13 @@ mixin _$UserState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
@@ -141,7 +159,13 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
@@ -154,7 +178,13 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
@@ -167,7 +197,13 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
@@ -273,7 +309,13 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
@@ -286,7 +328,13 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
@@ -299,7 +347,13 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
@@ -367,7 +421,12 @@ abstract class _$$LoadedImplCopyWith<$Res> {
     $Res Function(_$LoadedImpl) then,
   ) = __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({UserProfile profile, List<Device> devices});
+  $Res call({
+    UserProfile profile,
+    List<Device> devices,
+    bool notificationsEnabled,
+    bool notificationsLoading,
+  });
 
   $UserProfileCopyWith<$Res> get profile;
 }
@@ -385,7 +444,12 @@ class __$$LoadedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? profile = null, Object? devices = null}) {
+  $Res call({
+    Object? profile = null,
+    Object? devices = null,
+    Object? notificationsEnabled = null,
+    Object? notificationsLoading = null,
+  }) {
     return _then(
       _$LoadedImpl(
         profile:
@@ -398,6 +462,16 @@ class __$$LoadedImplCopyWithImpl<$Res>
                 ? _value._devices
                 : devices // ignore: cast_nullable_to_non_nullable
                     as List<Device>,
+        notificationsEnabled:
+            null == notificationsEnabled
+                ? _value.notificationsEnabled
+                : notificationsEnabled // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        notificationsLoading:
+            null == notificationsLoading
+                ? _value.notificationsLoading
+                : notificationsLoading // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -419,6 +493,8 @@ class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl({
     required this.profile,
     final List<Device> devices = const [],
+    this.notificationsEnabled = false,
+    this.notificationsLoading = false,
   }) : _devices = devices;
 
   @override
@@ -433,8 +509,15 @@ class _$LoadedImpl implements _Loaded {
   }
 
   @override
+  @JsonKey()
+  final bool notificationsEnabled;
+  @override
+  @JsonKey()
+  final bool notificationsLoading;
+
+  @override
   String toString() {
-    return 'UserState.loaded(profile: $profile, devices: $devices)';
+    return 'UserState.loaded(profile: $profile, devices: $devices, notificationsEnabled: $notificationsEnabled, notificationsLoading: $notificationsLoading)';
   }
 
   @override
@@ -443,7 +526,11 @@ class _$LoadedImpl implements _Loaded {
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
             (identical(other.profile, profile) || other.profile == profile) &&
-            const DeepCollectionEquality().equals(other._devices, _devices));
+            const DeepCollectionEquality().equals(other._devices, _devices) &&
+            (identical(other.notificationsEnabled, notificationsEnabled) ||
+                other.notificationsEnabled == notificationsEnabled) &&
+            (identical(other.notificationsLoading, notificationsLoading) ||
+                other.notificationsLoading == notificationsLoading));
   }
 
   @override
@@ -451,6 +538,8 @@ class _$LoadedImpl implements _Loaded {
     runtimeType,
     profile,
     const DeepCollectionEquality().hash(_devices),
+    notificationsEnabled,
+    notificationsLoading,
   );
 
   /// Create a copy of UserState
@@ -466,12 +555,18 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
   }) {
-    return loaded(profile, devices);
+    return loaded(profile, devices, notificationsEnabled, notificationsLoading);
   }
 
   @override
@@ -479,12 +574,23 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
   }) {
-    return loaded?.call(profile, devices);
+    return loaded?.call(
+      profile,
+      devices,
+      notificationsEnabled,
+      notificationsLoading,
+    );
   }
 
   @override
@@ -492,14 +598,25 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(profile, devices);
+      return loaded(
+        profile,
+        devices,
+        notificationsEnabled,
+        notificationsLoading,
+      );
     }
     return orElse();
   }
@@ -553,10 +670,14 @@ abstract class _Loaded implements UserState {
   const factory _Loaded({
     required final UserProfile profile,
     final List<Device> devices,
+    final bool notificationsEnabled,
+    final bool notificationsLoading,
   }) = _$LoadedImpl;
 
   UserProfile get profile;
   List<Device> get devices;
+  bool get notificationsEnabled;
+  bool get notificationsLoading;
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.
@@ -637,7 +758,13 @@ class _$FailureImpl implements _Failure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
@@ -650,7 +777,13 @@ class _$FailureImpl implements _Failure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
@@ -663,7 +796,13 @@ class _$FailureImpl implements _Failure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
@@ -778,7 +917,13 @@ class _$PasswordChangeSuccessImpl implements _PasswordChangeSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
@@ -791,7 +936,13 @@ class _$PasswordChangeSuccessImpl implements _PasswordChangeSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
@@ -804,7 +955,13 @@ class _$PasswordChangeSuccessImpl implements _PasswordChangeSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,
@@ -911,7 +1068,13 @@ class _$DevicesLogoutSuccessImpl implements _DevicesLogoutSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserProfile profile, List<Device> devices) loaded,
+    required TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )
+    loaded,
     required TResult Function(String message) failure,
     required TResult Function() passwordChangeSuccess,
     required TResult Function() devicesLogoutSuccess,
@@ -924,7 +1087,13 @@ class _$DevicesLogoutSuccessImpl implements _DevicesLogoutSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult? Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult? Function(String message)? failure,
     TResult? Function()? passwordChangeSuccess,
     TResult? Function()? devicesLogoutSuccess,
@@ -937,7 +1106,13 @@ class _$DevicesLogoutSuccessImpl implements _DevicesLogoutSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserProfile profile, List<Device> devices)? loaded,
+    TResult Function(
+      UserProfile profile,
+      List<Device> devices,
+      bool notificationsEnabled,
+      bool notificationsLoading,
+    )?
+    loaded,
     TResult Function(String message)? failure,
     TResult Function()? passwordChangeSuccess,
     TResult Function()? devicesLogoutSuccess,

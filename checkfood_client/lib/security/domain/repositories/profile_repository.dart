@@ -21,4 +21,16 @@ abstract class ProfileRepository {
 
   /// Odhlásí všechna zařízení kromě aktuálního.
   Future<void> logoutAllDevices();
+
+  /// Aktualizuje preferenci push notifikaci.
+  Future<Map<String, dynamic>> updateNotificationPreference({
+    required String deviceIdentifier,
+    required bool notificationsEnabled,
+    String? fcmToken,
+  });
+
+  /// Nacte stav push notifikaci pro dane zarizeni.
+  Future<Map<String, dynamic>> getNotificationPreference({
+    required String deviceIdentifier,
+  });
 }

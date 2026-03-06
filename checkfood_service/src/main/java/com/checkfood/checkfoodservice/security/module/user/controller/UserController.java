@@ -3,8 +3,10 @@ package com.checkfood.checkfoodservice.security.module.user.controller;
 import com.checkfood.checkfoodservice.security.module.jwt.service.JwtService;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.AssignRoleRequest;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.ChangePasswordRequest;
+import com.checkfood.checkfoodservice.security.module.user.dto.request.UpdateNotificationRequest;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.UpdateProfileRequest;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.DeviceResponse;
+import com.checkfood.checkfoodservice.security.module.user.dto.response.NotificationPreferenceResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserAdminResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserProfileResponse;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserSummaryResponse;
@@ -201,5 +203,48 @@ public class UserController {
         UserEntity user = userService.findByEmail(userDetails.getUsername());
         deviceService.removeByIdAndUser(deviceId, user);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Aktualizuje preferenci push notifikaci a FCM token pro dane zarizeni.
+     * Pouziva se pri zapnuti/vypnuti notifikaci v profilu uzivatele.
+     *
+     * @param userDetails autentizacni detaily z Security kontextu
+     * @param request obsahuje deviceIdentifier, fcmToken a notificationsEnabled
+     * @return aktualni stav notifikaci pro zarizeni
+     */
+    @PutMapping("/devices/notifications")
+    public ResponseEntity<NotificationPreferenceResponse> updateNotificationPreference(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody UpdateNotificationRequest request
+    ) {
+        UserEntity user = userService.findByEmail(userDetails.getUsername());
+        NotificationPreferenceResponse response = deviceService.updateNotificationPreference(
+                request.getDeviceIdentifier(),
+                user,
+                request.getFcmToken(),
+                request.getNotificationsEnabled()
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Zjisti stav push notifikaci pro dane zarizeni.
+     * Pouziva se pri inicializaci profilu pro nastaveni stavu switche.
+     *
+     * @param userDetails autentizacni detaily z Security kontextu
+     * @param deviceIdentifier identifikator zarizeni (query param)
+     * @return aktualni stav notifikaci
+     */
+    @GetMapping("/devices/notifications")
+    public ResponseEntity<NotificationPreferenceResponse> getNotificationPreference(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam String deviceIdentifier
+    ) {
+        UserEntity user = userService.findByEmail(userDetails.getUsername());
+        NotificationPreferenceResponse response = deviceService.getNotificationPreference(
+                deviceIdentifier, user
+        );
+        return ResponseEntity.ok(response);
     }
 }

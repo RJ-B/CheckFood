@@ -53,7 +53,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         listener: (context, state) {
           state.maybeWhen(
             // Pokud jsme načetli data, vypneme refresh
-            loaded: (_, __) {
+            loaded: (_, __, ___, ____) {
               if (_isRefreshing) {
                 setState(() {
                   _isRefreshing = false;
@@ -75,8 +75,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         },
         builder: (context, state) {
           return state.maybeWhen(
-            // ✅ 4. Destrukce stavu (profile, devices)
-            loaded: (profile, devices) {
+            // ✅ 4. Destrukce stavu (profile, devices, notificationsEnabled, notificationsLoading)
+            loaded: (profile, devices, _, __) {
               if (devices.isEmpty && !_isRefreshing) {
                 return Center(
                   child: Column(

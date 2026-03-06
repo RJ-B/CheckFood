@@ -27,6 +27,18 @@ abstract class ProfileRemoteDataSource {
 
   /// Odhlásí konkrétní zařízení (DELETE /api/user/devices/{id}).
   Future<void> logoutDevice(int deviceId);
+
+  /// Aktualizuje preferenci notifikaci pro zarizeni (PUT /api/user/devices/notifications).
+  Future<Map<String, dynamic>> updateNotificationPreference({
+    required String deviceIdentifier,
+    required bool notificationsEnabled,
+    String? fcmToken,
+  });
+
+  /// Nacte stav notifikaci pro zarizeni (GET /api/user/devices/notifications).
+  Future<Map<String, dynamic>> getNotificationPreference({
+    required String deviceIdentifier,
+  });
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -76,5 +88,33 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<void> logoutDevice(int deviceId) async {
     await _dio.delete(SecurityEndpoints.logoutDevice(deviceId));
+  }
+
+  @override
+  Future<Map<String, dynamic>> updateNotificationPreference({
+    required String deviceIdentifier,
+    required bool notificationsEnabled,
+    String? fcmToken,
+  }) async {
+    final response = await _dio.put(
+      SecurityEndpoints.notificationPreference,
+      data: {
+        'deviceIdentifier': deviceIdentifier,
+        'notificationsEnabled': notificationsEnabled,
+        if (fcmToken != null) 'fcmToken': fcmToken,
+      },
+    );
+    return response.data as Map<String, dynamic>;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getNotificationPreference({
+    required String deviceIdentifier,
+  }) async {
+    final response = await _dio.get(
+      SecurityEndpoints.notificationPreference,
+      queryParameters: {'deviceIdentifier': deviceIdentifier},
+    );
+    return response.data as Map<String, dynamic>;
   }
 }

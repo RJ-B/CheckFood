@@ -53,6 +53,10 @@ dependencies:
   url_launcher: ^6.3.0
   io: ^1.0.4
 
+  # --- Push Notifikace (Firebase) ---
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.2.1
+
   # --- Kamera a Senzory ---
   camera: ^0.11.0+2
   sensors_plus: ^6.1.1

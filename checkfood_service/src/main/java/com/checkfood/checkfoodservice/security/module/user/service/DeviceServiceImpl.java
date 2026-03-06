@@ -2,6 +2,7 @@ package com.checkfood.checkfoodservice.security.module.user.service;
 
 import com.checkfood.checkfoodservice.security.module.jwt.service.JwtService;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.DeviceResponse;
+import com.checkfood.checkfoodservice.security.module.user.dto.response.NotificationPreferenceResponse;
 import com.checkfood.checkfoodservice.security.module.user.entity.DeviceEntity;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import com.checkfood.checkfoodservice.security.module.user.exception.UserException;
@@ -177,5 +178,47 @@ public class DeviceServiceImpl implements DeviceService {
         deviceRepository.deleteByIdAndUser(deviceId, user);
 
         userLogger.logDeviceRemoved("ID:" + deviceId, user.getEmail());
+    }
+
+    @Override
+    public NotificationPreferenceResponse updateNotificationPreference(
+            String deviceIdentifier, UserEntity user, String fcmToken, boolean notificationsEnabled) {
+
+        DeviceEntity device = deviceRepository.findByDeviceIdentifierAndUser(deviceIdentifier, user)
+                .orElseThrow(() -> UserException.invalidOperation(
+                        "Zarizeni s identifikatorem '" + deviceIdentifier + "' nebylo nalezeno."));
+
+        device.setNotificationsEnabled(notificationsEnabled);
+
+        if (notificationsEnabled) {
+            // Pri zapnuti: ulozit FCM token
+            device.setFcmToken(fcmToken);
+        } else {
+            // Pri vypnuti: smazat FCM token (GDPR — neodesílat na deaktivovany token)
+            device.setFcmToken(null);
+        }
+
+        deviceRepository.save(device);
+
+        userLogger.logDeviceRegistered(deviceIdentifier, user.getEmail());
+
+        return NotificationPreferenceResponse.builder()
+                .notificationsEnabled(device.isNotificationsEnabled())
+                .hasFcmToken(device.getFcmToken() != null && !device.getFcmToken().isBlank())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public NotificationPreferenceResponse getNotificationPreference(String deviceIdentifier, UserEntity user) {
+
+        DeviceEntity device = deviceRepository.findByDeviceIdentifierAndUser(deviceIdentifier, user)
+                .orElseThrow(() -> UserException.invalidOperation(
+                        "Zarizeni s identifikatorem '" + deviceIdentifier + "' nebylo nalezeno."));
+
+        return NotificationPreferenceResponse.builder()
+                .notificationsEnabled(device.isNotificationsEnabled())
+                .hasFcmToken(device.getFcmToken() != null && !device.getFcmToken().isBlank())
+                .build();
     }
 }
