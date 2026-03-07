@@ -13,5 +13,7 @@ public class PanoramaPhotoResponse {
     private int angleIndex;
     private double targetAngle;
     private double actualAngle;
+    private Double targetPitch;
+    private Double actualPitch;
     private String photoUrl;
 }

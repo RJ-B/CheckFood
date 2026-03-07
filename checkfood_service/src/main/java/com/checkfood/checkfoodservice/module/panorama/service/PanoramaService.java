@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface PanoramaService {
     PanoramaSessionResponse createSession(String userEmail);
-    PanoramaPhotoResponse uploadPhoto(String userEmail, UUID sessionId, int angleIndex, double actualAngle, MultipartFile file);
+    PanoramaPhotoResponse uploadPhoto(String userEmail, UUID sessionId, int angleIndex, double actualAngle, Double actualPitch, MultipartFile file);
     PanoramaSessionResponse finalizeSession(String userEmail, UUID sessionId);
     PanoramaSessionResponse getSessionStatus(String userEmail, UUID sessionId);
     List<PanoramaSessionResponse> listSessions(String userEmail);

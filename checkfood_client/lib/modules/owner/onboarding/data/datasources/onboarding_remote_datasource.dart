@@ -28,7 +28,7 @@ abstract class OnboardingRemoteDataSource {
   Future<OnboardingStatusResponseModel> getOnboardingStatus();
   Future<OwnerRestaurantResponseModel> publish();
   Future<PanoramaSessionResponseModel> createPanoramaSession();
-  Future<PanoramaPhotoResponseModel> uploadPhoto(String sessionId, int angleIndex, double actualAngle, Uint8List fileBytes, String filename);
+  Future<PanoramaPhotoResponseModel> uploadPhoto(String sessionId, int angleIndex, double actualAngle, double? actualPitch, Uint8List fileBytes, String filename);
   Future<PanoramaSessionResponseModel> finalizePanoramaSession(String sessionId);
   Future<PanoramaSessionResponseModel> getPanoramaSessionStatus(String sessionId);
   Future<List<PanoramaSessionResponseModel>> listPanoramaSessions();
@@ -148,6 +148,7 @@ class OnboardingRemoteDataSourceImpl implements OnboardingRemoteDataSource {
     String sessionId,
     int angleIndex,
     double actualAngle,
+    double? actualPitch,
     Uint8List fileBytes,
     String filename,
   ) async {
@@ -155,6 +156,7 @@ class OnboardingRemoteDataSourceImpl implements OnboardingRemoteDataSource {
       'file': MultipartFile.fromBytes(fileBytes, filename: filename),
       'angleIndex': angleIndex,
       'actualAngle': actualAngle,
+      if (actualPitch != null) 'actualPitch': actualPitch,
     });
     final response = await _dio.post(
       SecurityEndpoints.ownerPanoramaPhotos(sessionId),

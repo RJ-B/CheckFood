@@ -1,30 +1,60 @@
-# 🍽️ CheckFood
+# CheckFood
 
-Mobilní aplikace pro restaurace – prohlížení menu, objednávání jídla, rezervace stolů (včetně 3D panoramatického výběru) a správa uživatelského účtu.
+Mobilni aplikace pro restaurace — vyhledavani restauraci, prohlidka menu, objednavani jidla, rezervace stolu (vcetne 3D panoramatickeho vyberu) a sprava uzivatelskeho uctu.
 
 | Vrstva | Technologie |
 |--------|-------------|
-| **Backend** | Java 17, Spring Boot 3.5.7, PostgreSQL, JWT, OAuth2 |
-| **Frontend** | Flutter 3.7+, Dart, BLoC, Dio |
-| **Infrastruktura** | Docker, Docker Compose |
+| Backend | Java 17, Spring Boot 3.5.7, PostgreSQL 15 + PostGIS 3.4, JWT, OAuth2 |
+| Frontend | Flutter 3.7+, Dart, BLoC, Dio, Freezed |
+| Panorama Stitcher | Python 3.12, FastAPI, OpenCV |
+| Infrastruktura | Docker, Docker Compose, GitHub Actions CI |
 
 ---
 
-## Předpoklady
+## Obsah
 
-Než začnete, ujistěte se, že máte nainstalované:
-
-- **Git**
-- **Docker** a **Docker Compose**
-- **Java 17** (JDK) – doporučeno Eclipse Temurin
-- **Maven 3.8+** (nebo použijte přibalený `mvnw`)
-- **Flutter SDK** ≥ 3.7.2 ([instalace](https://docs.flutter.dev/get-started/install))
-- **Android Studio** nebo **VS Code** s Flutter pluginem
-- **Android Emulator** nebo fyzické zařízení
+1. [Predpoklady](#1-predpoklady)
+2. [Klonovani repozitare](#2-klonovani-repozitare)
+3. [Backend — spusteni](#3-backend--spusteni)
+4. [Frontend — spusteni](#4-frontend--spusteni)
+5. [Docker Compose — cely stack najednou](#5-docker-compose--cely-stack-najednou)
+6. [Overeni ze vse bezi](#6-overeni-ze-vse-bezi)
+7. [Struktura projektu](#7-struktura-projektu)
+8. [API endpointy](#8-api-endpointy)
+9. [Architektura](#9-architektura)
+10. [Testovani](#10-testovani)
+11. [Reseni problemu](#11-reseni-problemu)
+12. [Licence](#12-licence)
 
 ---
 
-## 1. Klonování repozitáře
+## 1. Predpoklady
+
+Nainstalujte nasledujici nastroje:
+
+| Nastroj | Verze | Odkaz |
+|---------|-------|-------|
+| Git | libovolna | https://git-scm.com |
+| Docker + Docker Compose | Docker 20+ | https://docs.docker.com/get-docker |
+| Java JDK | 17 | https://adoptium.net (Eclipse Temurin) |
+| Flutter SDK | 3.7.2+ | https://docs.flutter.dev/get-started/install |
+| Android Studio nebo VS Code | libovolna | https://developer.android.com/studio |
+| Android Emulator nebo fyzicke zarizeni | — | Nastavit pres Android Studio |
+
+Overeni instalace:
+
+```bash
+git --version
+docker --version
+docker compose version
+java -version          # musi byt 17+
+flutter --version      # musi byt 3.7.2+
+flutter doctor         # zkontroluje zavislosti
+```
+
+---
+
+## 2. Klonovani repozitare
 
 ```bash
 git clone https://github.com/RJ-B/CheckFood.git
@@ -33,46 +63,53 @@ cd CheckFood
 
 ---
 
-## 2. Backend (`checkfood_service`)
+## 3. Backend — spusteni
 
-### 2.1 Spuštění databáze
-
-Přejděte do složky backendu a vytvořte soubor `.env` ze šablony:
+### 3.1 Spusteni databaze (PostgreSQL + PostGIS)
 
 ```bash
 cd checkfood_service
 cp .env.example .env
 ```
 
-Otevřete `.env` a vyplňte přihlašovací údaje k databázi:
+Otevrete `.env` v editoru a vyplnte minimalne tyto hodnoty:
 
 ```dotenv
+# Databaze
 DB_USERNAME=checkfood
 DB_PASSWORD=heslo123
+
+# JWT — vygenerujte libovolny retezec (min 32 znaku)
+JWT_SECRET=tady-vlozte-nahodny-retezec-minimalne-32-znaku-dlouhy
+JWT_EXPIRES=900
+JWT_REFRESH=2592000
+JWT_ISSUER=checkfood-local
+
+# Profil
+SPRING_PROFILES_ACTIVE=local
 ```
 
-Spusťte PostgreSQL kontejner:
+> **Poznamka k emailu (SMTP):** Pokud nechcete nastavovat SMTP, nechte puvodni placeholder hodnoty. Backend se spusti i bez nej — jen nebudou fungovat verifikacni emaily. Ucet muzete aktivovat primo v databazi:
+> ```sql
+> UPDATE users SET enabled = true WHERE email = 'vas@email.cz';
+> ```
+
+Spustte databazi:
 
 ```bash
-docker compose up -d
+docker compose up -d db
 ```
 
-Ověřte, že databáze běží:
+Overeni:
 
 ```bash
 docker compose ps
-# Stav by měl být "running" / "healthy"
+# Sloupec STATUS by mel ukazovat "healthy"
 ```
 
-### 2.2 Konfigurace prostředí
+### 3.2 Spusteni backend serveru
 
-Ve stejném `.env` souboru nastavte zbývající proměnné.
-
-> **Tip:** Pokud nechcete řešit SMTP, backend se spustí i bez něj – jen nebudou fungovat verifikační emaily. Můžete účet aktivovat přímo v databázi: `UPDATE users SET enabled = true WHERE email = '...';`
-
-### 2.3 Spuštění backendu
-
-Pomocí Maven Wrapperu (není třeba instalovat Maven):
+V novem terminalu (zustanou v `checkfood_service/`):
 
 ```bash
 # Linux / macOS
@@ -82,189 +119,468 @@ Pomocí Maven Wrapperu (není třeba instalovat Maven):
 mvnw.cmd spring-boot:run
 ```
 
-Nebo klasicky přes Maven:
-
-```bash
-mvn spring-boot:run
-```
-
 Backend nastartuje na **http://localhost:8081**.
 
-### 2.4 Ověření
+Prvni start muze trvat 1–2 minuty (stahuje zavislosti).
+
+### 3.3 Overeni backendu
 
 ```bash
 curl http://localhost:8081/actuator/health
-# Očekávaná odpověď: {"status":"UP"}
 ```
 
-API dokumentace (Swagger UI) je dostupná na:
+Ocekavana odpoved:
+
+```json
+{"status":"UP"}
+```
+
+Swagger UI (interaktivni API dokumentace):
 **http://localhost:8081/swagger-ui.html**
-
-### 2.5 Spuštění testů
-
-```bash
-./mvnw test
-```
-
-Testy používají in-memory H2 databázi – není potřeba běžící PostgreSQL.
 
 ---
 
-## 3. Frontend (`checkfood_client`)
+## 4. Frontend — spusteni
 
-### 3.1 Konfigurace prostředí
+### 4.1 Konfigurace
 
 ```bash
-cd ../checkfood_client
-cp .env.example .env
+cd checkfood_client
 ```
 
-Vytvořte/upravte soubor `.env` v kořeni `checkfood_client/`:
+Vytvorte soubor `.env` v koreni `checkfood_client/` s obsahem:
 
-> **Poznámka k adrese:**
-> - `10.0.2.2` – Android Emulator (mapuje na localhost hostitelského PC)
-> - `localhost` – Web
-> - `192.168.x.x` – Fyzické zařízení (použijte IP adresu vašeho PC v lokální síti)
+```dotenv
+API_BASE_URL=http://10.0.2.2:8081/api
+```
 
-### 3.2 Instalace závislostí
+> **Dulezite — spravna adresa podle zarizeni:**
+>
+> | Zarizeni | API_BASE_URL |
+> |----------|-------------|
+> | Android Emulator | `http://10.0.2.2:8081/api` |
+> | iOS Simulator | `http://localhost:8081/api` |
+> | Fyzicke zarizeni (WiFi) | `http://192.168.X.X:8081/api` (IP vaseho PC) |
+>
+> Adresa `10.0.2.2` je specialni alias v Android Emuleru, ktery odkazuje na localhost hostitelskeho PC.
+
+### 4.2 Instalace zavislosti
 
 ```bash
 flutter pub get
 ```
 
-### 3.3 Generování kódu (Freezed / JSON serializace)
+### 4.3 Generovani kodu (Freezed + JSON serializace)
 
-Projekt používá `freezed` a `json_serializable` pro modely. Po prvním stažení musíte spustit code generation:
+Projekt pouziva `freezed` a `json_serializable` pro datove modely. Po kazdem klonovani je nutne vygenerovat kod:
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-### 3.4 Spuštění aplikace
+> Tento krok je **povinny**. Bez nej projekt nepujde zkompilovat.
 
-Ujistěte se, že máte spuštěný emulátor nebo připojené zařízení:
+### 4.4 Spusteni aplikace
+
+Overeni pripojenych zarizeni:
 
 ```bash
 flutter devices
 ```
 
-Spusťte aplikaci:
+Spusteni:
 
 ```bash
 flutter run
 ```
 
-Nebo z Android Studio / VS Code: otevřete `checkfood_client/`, vyberte zařízení a stiskněte Run.
+Nebo v Android Studio / VS Code: otevrete slozku `checkfood_client/`, vyberte zarizeni a spustte pres Run.
 
 ---
 
-## 4. Rychlý start (vše najednou)
+## 5. Docker Compose — cely stack najednou
+
+Pokud chcete spustit backend + databazi + panorama stitcher najednou:
 
 ```bash
-# 1. Klonovat
-git clone https://github.com/RJ-B/CheckFood.git
-cd CheckFood
-
-# 2. Databáze
 cd checkfood_service
 cp .env.example .env
-# ... upravte .env (viz sekce 2.2) ...
+# ... vyplnte .env (viz sekce 3.1) ...
+
 docker compose up -d
-
-# 3. Backend (nový terminál)
-cd checkfood_service
-./mvnw spring-boot:run
-
-# 4. Frontend (nový terminál)
-cd checkfood_client
-cp .env.example .env
-# ... upravte .env (viz sekce 3.1) ...
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter run
 ```
+
+Tim se spusti 3 sluzby:
+
+| Sluzba | Port | Popis |
+|--------|------|-------|
+| db | 5432 | PostgreSQL 15 + PostGIS 3.4 |
+| stitcher | 8090 | Panorama stitcher (Python/FastAPI/OpenCV) |
+| app | 8081 | Spring Boot API |
+
+Kontrola:
+
+```bash
+docker compose ps
+docker compose logs -f app    # logy backendu
+```
+
+Zastaveni:
+
+```bash
+docker compose down            # zastavi kontejnery
+docker compose down -v         # zastavi + smaze data databaze
+```
+
+> **Poznamka:** Frontend (Flutter) se nespousti pres Docker — vzdy se spousti lokalne pres `flutter run`.
 
 ---
 
-## Struktura projektu
+## 6. Overeni ze vse bezi
+
+| Co overit | Jak | Ocekavany vysledek |
+|-----------|-----|-------------------|
+| Databaze | `docker compose ps` | db: healthy |
+| Backend health | `curl http://localhost:8081/actuator/health` | `{"status":"UP"}` |
+| Swagger UI | Otevrit v prohlizeci: `http://localhost:8081/swagger-ui.html` | Interaktivni API dokumentace |
+| Frontend | `flutter run` na emuleru | Aplikace se spusti, zobrazi splash screen |
+| Pripojeni FE→BE | V aplikaci zkusit registraci nebo login | Odpoved z API (uspech nebo chybova hlaska) |
+
+---
+
+## 7. Struktura projektu
 
 ```
 CheckFood/
-├── checkfood_service/          # Backend (Spring Boot)
-│   ├── src/main/java/          # Zdrojový kód
-│   │   └── com/checkfood/
-│   │       ├── client/         # Klienti (mail, platby)
-│   │       ├── config/         # Aplikační konfigurace
-│   │       ├── event/          # Domain events
-│   │       ├── exception/      # Globální exception handling
-│   │       ├── feature/        # Feature flags
-│   │       ├── listener/       # Event listeners
-│   │       ├── logging/        # Structured logging
-│   │       ├── monitoring/     # Health checks, metriky
-│   │       ├── scheduler/      # Cron joby
-│   │       └── security/       # Auth, JWT, MFA, OAuth, Users
-│   ├── src/main/resources/     # Konfigurace (properties)
-│   ├── src/test/               # Testy
-│   ├── docker-compose.yml      # PostgreSQL kontejner
-│   ├── Dockerfile              # Multi-stage build
-│   └── pom.xml                 # Maven závislosti
+├── checkfood_service/                # Backend (Spring Boot)
+│   ├── src/main/java/com/checkfood/checkfoodservice/
+│   │   ├── config/                   # Konfigurace (OpenAPI, Jackson, PostGIS)
+│   │   ├── exception/                # Globalni exception handling + ErrorCode
+│   │   ├── feature/                  # Feature flags
+│   │   ├── security/                 # Autentizace a autorizace
+│   │   │   ├── module/auth/          #   Registrace, login, verifikace emailem
+│   │   │   ├── module/jwt/           #   JWT generace, validace, filter
+│   │   │   ├── module/mfa/           #   TOTP multi-factor autentizace
+│   │   │   ├── module/oauth/         #   Google + Apple OAuth2
+│   │   │   ├── module/user/          #   UserEntity, role, zarizeni
+│   │   │   └── ratelimit/            #   Rate limiting (AOP)
+│   │   ├── module/                   # Business domeny
+│   │   │   ├── restaurant/           #   Vyhledavani restauraci, CRUD, geolokace
+│   │   │   ├── menu/                 #   Sprava jidelnich listku
+│   │   │   ├── order/                #   Objednavky
+│   │   │   ├── reservation/          #   Rezervace stolu
+│   │   │   ├── favourite/            #   Oblibene restaurace
+│   │   │   ├── owner/                #   Owner portal (onboarding, claim)
+│   │   │   ├── panorama/             #   Panorama stitching integrace
+│   │   │   ├── dining/               #   Dining context
+│   │   │   └── storage/              #   Upload souboru
+│   │   └── scheduler/                # Planovane ulohy (cron joby)
+│   ├── src/main/resources/
+│   │   ├── application.properties    # Zakladni konfigurace
+│   │   ├── application-local.properties  # Vyvojovy profil
+│   │   └── application-prod.properties   # Produkcni profil
+│   ├── src/test/                     # Integracni testy (JUnit 5)
+│   ├── stitcher/                     # Panorama microservice (Python)
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── .env.example
 │
-├── checkfood_client/           # Frontend (Flutter)
+├── checkfood_client/                 # Frontend (Flutter)
 │   ├── lib/
-│   │   ├── components/         # Znovupoužitelné UI komponenty
-│   │   ├── core/               # DI, theme, utils, services
-│   │   ├── features/           # Obrazovky (explore, cart, orders...)
-│   │   ├── models/             # Datové modely
-│   │   ├── navigation/         # Router, guards, shell
-│   │   └── security/           # Auth BLoC, interceptory, repozitáře
-│   ├── assets/                 # Ikony, obrázky, 3D scéna
-│   └── pubspec.yaml            # Flutter závislosti
+│   │   ├── main.dart                 # Vstupni bod + DI inicializace
+│   │   ├── app.dart                  # MaterialApp + BLoC providery
+│   │   ├── core/                     # Sdilena infrastruktura
+│   │   │   ├── di/                   #   Dependency injection (GetIt)
+│   │   │   ├── network/              #   Dio interceptory
+│   │   │   └── theme/                #   Barvy, typografie, spacing
+│   │   ├── security/                 # Auth (data/domain/presentation vrstvy)
+│   │   ├── modules/
+│   │   │   ├── customer/             #   Explore, reservation, orders
+│   │   │   ├── management/           #   My restaurant, staff reservations
+│   │   │   └── owner/                #   Onboarding wizard, claim restaurace
+│   │   ├── navigation/               # Router, guards, hlavni shell
+│   │   └── components/               # Znovupouzitelne UI komponenty
+│   ├── pubspec.yaml
+│   └── test/
 │
-└── README.md
+├── .github/workflows/                # CI pipelines
+│   ├── backend.yml                   # Backend build + testy
+│   ├── flutter-android.yml           # Flutter APK build
+│   └── flutter-android-release.yml   # Flutter release + GitHub Release
+│
+├── ai/                               # Workflow AI agentu (ridici soubory)
+├── CLAUDE.md                         # Operacni manual pro AI agenty
+├── render.yaml                       # Render.com deployment
+├── LICENSE                           # MIT
+└── README.md                         # Tento soubor
 ```
 
 ---
 
-## API Endpointy (přehled)
+## 8. API endpointy
 
-### Autentizace (`/api/auth`)
-| Metoda | Endpoint | Popis |
-|--------|----------|-------|
-| POST | `/register` | Registrace nového uživatele |
-| POST | `/login` | Přihlášení |
-| GET | `/verify?token=...` | Verifikace emailu |
-| POST | `/resend-code` | Znovuzaslání verifikačního emailu |
-| POST | `/refresh` | Obnova access tokenu |
-| POST | `/logout` | Odhlášení |
-| GET | `/me` | Aktuální uživatel |
+Kompletni interaktivni dokumentace: **http://localhost:8081/swagger-ui.html**
 
-### Uživatel (`/api/user`)
-| Metoda | Endpoint | Popis |
-|--------|----------|-------|
-| GET | `/me` | Profil uživatele |
-| PATCH | `/profile` | Aktualizace profilu |
-| POST | `/change-password` | Změna hesla |
-| POST | `/logout-all` | Odhlášení ze všech zařízení |
-| DELETE | `/devices/{id}` | Odhlášení konkrétního zařízení |
-| GET | `/` | Seznam uživatelů (ADMIN) |
-| POST | `/assign-role` | Přiřazení role (ADMIN) |
+### Autentizace (`/api/auth/`)
 
-### OAuth (`/api/oauth`)
-| Metoda | Endpoint | Popis |
-|--------|----------|-------|
-| POST | `/login` | OAuth přihlášení (Google/Apple) |
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| POST | `/register` | Registrace noveho uzivatele | Verejna |
+| POST | `/register-owner` | Registrace majitele restaurace | Verejna |
+| POST | `/login` | Prihlaseni (vraci access + refresh token) | Verejna |
+| GET | `/verify?token=...` | Verifikace emailu | Verejna |
+| POST | `/resend-code` | Znovu zaslani verifikacniho emailu | Verejna |
+| POST | `/refresh` | Obnova access tokenu | Verejna |
+| POST | `/logout` | Odhlaseni | Prihlaseny |
+| GET | `/me` | Aktualni uzivatel | Prihlaseny |
 
-### MFA (`/api/mfa`)
-| Metoda | Endpoint | Popis |
-|--------|----------|-------|
-| POST | `/setup/start` | Zahájení MFA nastavení |
-| POST | `/setup/verify` | Dokončení MFA nastavení |
-| POST | `/challenge/verify` | Ověření MFA kódu při přihlášení |
-| POST | `/disable` | Vypnutí MFA |
-| GET | `/status` | Stav MFA |
+### Uzivatel (`/api/user/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| GET | `/me` | Profil uzivatele | Prihlaseny |
+| PATCH | `/profile` | Aktualizace profilu | Prihlaseny |
+| POST | `/change-password` | Zmena hesla | Prihlaseny |
+| POST | `/logout-all` | Odhlaseni ze vsech zarizeni | Prihlaseny |
+| GET | `/devices` | Seznam zarizeni | Prihlaseny |
+| DELETE | `/devices/{id}` | Smazani zarizeni | Prihlaseny |
+| GET | `/` | Seznam uzivatelu | ADMIN |
+| POST | `/assign-role` | Prirazeni role | ADMIN |
+
+### Restaurace (`/api/v1/restaurants/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| GET | `/markers` | Markery restauraci pro mapu | Verejna |
+| GET | `/nearest` | Nejblizsi restaurace (geolokace) | Verejna |
+| GET | `/{id}` | Detail restaurace | Verejna |
+| POST | `/` | Vytvoreni restaurace | OWNER |
+| PUT | `/{id}` | Uprava restaurace | OWNER |
+| DELETE | `/{id}` | Smazani restaurace | OWNER |
+
+### Rezervace (`/api/v1/reservations/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| POST | `/` | Vytvoreni rezervace | Prihlaseny |
+| GET | `/me` | Moje aktivni rezervace | Prihlaseny |
+| GET | `/me/history` | Historie rezervaci | Prihlaseny |
+| PUT | `/{id}` | Uprava rezervace | Prihlaseny |
+| PATCH | `/{id}/cancel` | Zruseni rezervace | Prihlaseny |
+
+### Rezervace — staff (`/api/v1/staff/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| GET | `/my-restaurant/reservations` | Rezervace restaurace | OWNER/MANAGER/STAFF |
+| POST | `/reservations/{id}/confirm` | Potvrdit | OWNER/MANAGER/STAFF |
+| POST | `/reservations/{id}/reject` | Zamitnout | OWNER/MANAGER/STAFF |
+| POST | `/reservations/{id}/check-in` | Check-in hosta | OWNER/MANAGER/STAFF |
+| POST | `/reservations/{id}/complete` | Ukoncit rezervaci | OWNER/MANAGER/STAFF |
+
+### Objednavky (`/api/v1/orders/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| POST | `/` | Vytvoreni objednavky | Prihlaseny |
+| GET | `/me/current` | Aktualni objednavky | Prihlaseny |
+
+### Menu (`/api/v1/restaurants/{id}/menu`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| GET | `/` | Jidelni listek restaurace | Verejna |
+
+### Oblibene (`/api/v1/users/me/favourites/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| GET | `/` | Moje oblibene restaurace | Prihlaseny |
+| PUT | `/{restaurantId}` | Pridat do oblibenych | Prihlaseny |
+| DELETE | `/{restaurantId}` | Odebrat z oblibenych | Prihlaseny |
+
+### MFA (`/api/mfa/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| POST | `/setup/start` | Zahajeni MFA nastaveni | Prihlaseny |
+| POST | `/setup/verify` | Dokonceni MFA nastaveni | Prihlaseny |
+| POST | `/challenge/verify` | Overeni MFA kodu | Prihlaseny |
+| POST | `/disable` | Vypnuti MFA | Prihlaseny |
+| GET | `/status` | Stav MFA | Prihlaseny |
+
+### OAuth (`/api/oauth/`)
+
+| Metoda | Endpoint | Popis | Autorizace |
+|--------|----------|-------|------------|
+| POST | `/login` | Prihlaseni pres Google/Apple | Verejna |
 
 ---
 
-## Licence
+## 9. Architektura
 
-Tento projekt je licencován pod MIT licencí.
+### System overview
+
+```
+┌─────────────────┐       ┌──────────────────┐       ┌──────────────────┐
+│  Flutter App     │──────>│  Spring Boot API  │──────>│  PostgreSQL      │
+│  (mobilni        │<──────│  port 8081        │<──────│  + PostGIS       │
+│   klient)        │ REST  │                  │  JPA  │  port 5432       │
+└─────────────────┘       └────────┬──────────┘       └──────────────────┘
+                                   │
+                              HTTP (async)
+                                   │
+                           ┌───────v──────────┐
+                           │  Panorama        │
+                           │  Stitcher        │
+                           │  port 8090       │
+                           └──────────────────┘
+```
+
+### Backend — vrstveni (kazdy modul)
+
+```
+Controller (@RestController)     ← prijima HTTP requesty, validuje vstup
+    │
+Service (@Service)               ← business logika, domain eventy
+    │
+Repository (JpaRepository)       ← pristup k databazi
+    │
+Entity (@Entity)                 ← JPA entita, mapovani na DB tabulku
+```
+
+DTO mapovani: MapStruct (`@Mapper(componentModel = "spring")`)
+
+### Frontend — Clean Architecture (kazdy modul)
+
+```
+data/
+├── datasources/     # API volani (Dio)
+├── models/          # Freezed DTO s fromJson/toJson
+└── repositories/    # Implementace repozitaru
+
+domain/
+├── entities/        # Business modely (Freezed, immutable)
+├── repositories/    # Abstraktni kontrakty
+└── usecases/        # Jednotlive business operace
+
+presentation/
+├── bloc/            # Stavovy automat (events → states)
+├── pages/           # Cele obrazovky
+└── widgets/         # Komponenty specificke pro modul
+```
+
+State management: BLoC pattern (flutter_bloc).
+
+### Databazovy model — klicove entity
+
+```
+UserEntity ──── RoleEntity ──── PermissionEntity
+     │
+     ├── DeviceEntity (zarizeni uzivatele)
+     ├── MfaSecretEntity (TOTP)
+     └── VerificationTokenEntity
+
+Restaurant ──── RestaurantTable ──── TableGroup
+     │
+     ├── MenuCategory ──── MenuItem
+     ├── RestaurantEmployee
+     └── PanoramaSession ──── PanoramaPhoto
+
+Reservation (FK: restaurant, table, user)
+Order ──── OrderItem (FK: restaurant, table, user, menuItem)
+UserFavouriteRestaurant (FK: user, restaurant)
+```
+
+### Autentizace
+
+- JWT tokeny: access (15 min) + refresh (30 dni)
+- Tokeny obsahuji device identifier pro spravou vice zarizeni
+- Refresh token rotace pri kazdem pouziti
+- Rate limiting na vsech verejnych endpointech
+
+### Role uzivatelu
+
+| Role | Opravneni |
+|------|-----------|
+| CUSTOMER | Prohlizeni restauraci, rezervace, objednavky |
+| OWNER | Sprava vlastni restaurace, menu, zamestnancu |
+| MANAGER | Sprava rezervaci a objednavek restaurace |
+| STAFF | Potvrzovani rezervaci, obsluhaa |
+| ADMIN | Sprava uzivatelu, audit logy |
+
+---
+
+## 10. Testovani
+
+### Backend
+
+```bash
+cd checkfood_service
+./mvnw test                              # vsechny testy
+./mvnw test -Dtest=AuthLoginIntegrationTest  # konkretni trida
+```
+
+Testy pouzivaji H2 in-memory databazi — neni potreba bezici PostgreSQL.
+
+Existujici testove tridy:
+- `AuthRegistrationIntegrationTest`
+- `AuthLoginIntegrationTest`
+- `AuthRefreshIntegrationTest`
+- `AuthLogoutIntegrationTest`
+- `AuthOAuthIntegrationTest`
+- `FavouriteIntegrationTest`
+- `ReservationIntegrationTest`
+- `MyRestaurantAuthorizationTest`
+
+### Frontend
+
+```bash
+cd checkfood_client
+flutter test                   # vsechny testy
+flutter test test/unit/        # jen unit testy
+```
+
+---
+
+## 11. Reseni problemu
+
+### Backend se nespusti
+
+**Chyba:** `Connection refused` na port 5432
+- Overit ze databaze bezi: `docker compose ps`
+- Overit ze port 5432 neni obsazeny: `netstat -an | grep 5432`
+
+**Chyba:** `JWT_SECRET` error
+- Zkontrolovat ze `.env` obsahuje `JWT_SECRET` s minimalne 32 znaky
+
+### Frontend — build error
+
+**Chyba:** `Could not find the generated implementation`
+- Spustit code generation: `dart run build_runner build --delete-conflicting-outputs`
+
+**Chyba:** `Connection refused` z aplikace
+- Zkontrolovat `API_BASE_URL` v `.env`
+- Pro Android Emulator musi byt `10.0.2.2` (ne `localhost`)
+- Overit ze backend bezi na portu 8081
+
+### Docker
+
+**Chyba:** Port 5432 uz je obsazeny
+- Zastavit lokalni PostgreSQL: `sudo systemctl stop postgresql`
+- Nebo zmenit port v `docker-compose.yml`: `"5433:5432"`
+
+**Reset databaze:**
+```bash
+cd checkfood_service
+docker compose down -v     # smaze vsechna data
+docker compose up -d db    # znovu spusti s cistou DB
+```
+
+---
+
+## 12. Licence
+
+Tento projekt je licencovan pod [MIT licenci](LICENSE).
+
+Copyright 2025 RJ-B

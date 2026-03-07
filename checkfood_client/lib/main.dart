@@ -1,4 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
+// TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,8 +20,8 @@ void main() async {
     // Nutné pro volání nativních pluginů a asynchronních operací před runApp.
     WidgetsFlutterBinding.ensureInitialized();
 
-    // 1b. Inicializace Firebase (nutne pred DI a FCM)
-    await Firebase.initializeApp();
+    // TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
+    // await Firebase.initializeApp();
 
     // 2. Načtení konfigurace z .env souboru
     // Tato operace musí předcházet inicializaci DI, protože DI využívá

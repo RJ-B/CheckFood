@@ -60,7 +60,7 @@ abstract class OnboardingRepository {
 
   // Panorama
   Future<PanoramaSession> createPanoramaSession();
-  Future<PanoramaPhoto> uploadPhoto(String sessionId, int angleIndex, double actualAngle, Uint8List fileBytes, String filename);
+  Future<PanoramaPhoto> uploadPhoto(String sessionId, int angleIndex, double actualAngle, double? actualPitch, Uint8List fileBytes, String filename);
   Future<PanoramaSession> finalizePanoramaSession(String sessionId);
   Future<PanoramaSession> getPanoramaSessionStatus(String sessionId);
   Future<List<PanoramaSession>> listPanoramaSessions();

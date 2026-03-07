@@ -54,7 +54,7 @@ public class PanoramaServiceImpl implements PanoramaService {
     }
 
     @Override
-    public PanoramaPhotoResponse uploadPhoto(String userEmail, UUID sessionId, int angleIndex, double actualAngle, MultipartFile file) {
+    public PanoramaPhotoResponse uploadPhoto(String userEmail, UUID sessionId, int angleIndex, double actualAngle, Double actualPitch, MultipartFile file) {
         UUID restaurantId = findOwnerRestaurantId(userEmail);
         var session = sessionRepository.findByIdAndRestaurantId(sessionId, restaurantId)
                 .orElseThrow(() -> PanoramaException.sessionNotFound(sessionId));
@@ -63,9 +63,21 @@ public class PanoramaServiceImpl implements PanoramaService {
             throw PanoramaException.invalidState("Session není ve stavu UPLOADING.");
         }
 
-        double[] targetAngles = {0, 45, 90, 135, 180, 225, 270, 315};
-        double targetAngle = (angleIndex >= 0 && angleIndex < targetAngles.length)
-                ? targetAngles[angleIndex] : 0;
+        // 20 capture points: 8 horizon + 6 upper (+30°) + 6 lower (-30°)
+        double[] targetYaws = {
+                0, 45, 90, 135, 180, 225, 270, 315,       // horizon (0-7)
+                0, 60, 120, 180, 240, 300,                 // upper (8-13)
+                0, 60, 120, 180, 240, 300                  // lower (14-19)
+        };
+        double[] targetPitches = {
+                0, 0, 0, 0, 0, 0, 0, 0,                   // horizon
+                30, 30, 30, 30, 30, 30,                    // upper
+                -30, -30, -30, -30, -30, -30               // lower
+        };
+        double targetAngle = (angleIndex >= 0 && angleIndex < targetYaws.length)
+                ? targetYaws[angleIndex] : 0;
+        Double targetPitch = (angleIndex >= 0 && angleIndex < targetPitches.length)
+                ? targetPitches[angleIndex] : null;
 
         String directory = "panorama/" + sessionId;
         String extension = ".jpg";
@@ -84,6 +96,8 @@ public class PanoramaServiceImpl implements PanoramaService {
                     .angleIndex(angleIndex)
                     .targetAngle(targetAngle)
                     .actualAngle(actualAngle)
+                    .targetPitch(targetPitch)
+                    .actualPitch(actualPitch)
                     .photoUrl(url)
                     .build();
             var savedPhoto = photoRepository.save(photo);
@@ -96,6 +110,8 @@ public class PanoramaServiceImpl implements PanoramaService {
                     .angleIndex(savedPhoto.getAngleIndex())
                     .targetAngle(savedPhoto.getTargetAngle())
                     .actualAngle(savedPhoto.getActualAngle())
+                    .targetPitch(savedPhoto.getTargetPitch())
+                    .actualPitch(savedPhoto.getActualPitch())
                     .photoUrl(savedPhoto.getPhotoUrl())
                     .build();
         } catch (IOException e) {
@@ -113,9 +129,10 @@ public class PanoramaServiceImpl implements PanoramaService {
             throw PanoramaException.invalidState("Session není ve stavu UPLOADING.");
         }
 
+        int minPhotos = 8; // minimum = full horizon ring
         int photoCount = photoRepository.countBySessionId(sessionId);
-        if (photoCount < 8) {
-            throw PanoramaException.invalidState("Session vyžaduje 8 fotografií, nahráno: " + photoCount);
+        if (photoCount < minPhotos) {
+            throw PanoramaException.invalidState("Session vyžaduje " + minPhotos + " fotografií, nahráno: " + photoCount);
         }
 
         // Async stitching: set PROCESSING and delegate to Python service

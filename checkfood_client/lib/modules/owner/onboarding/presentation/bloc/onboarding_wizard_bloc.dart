@@ -309,6 +309,7 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
         sessionId: event.sessionId,
         angleIndex: event.angleIndex,
         actualAngle: event.actualAngle,
+        actualPitch: event.actualPitch,
         fileBytes: event.fileBytes,
         filename: event.filename,
       );

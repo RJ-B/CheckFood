@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/injection_container.dart';
 import '../../../../owner/onboarding/domain/entities/panorama_session.dart';
 import '../../../../owner/onboarding/domain/repositories/onboarding_repository.dart';
 import '../../../../owner/onboarding/domain/usecases/activate_panorama_usecase.dart';
 import '../../../../owner/onboarding/domain/usecases/create_panorama_session_usecase.dart';
-import '../../../../owner/onboarding/domain/usecases/finalize_panorama_usecase.dart';
 import '../../../../owner/onboarding/domain/usecases/get_panorama_status_usecase.dart';
 import '../../../../owner/onboarding/domain/usecases/get_tables_usecase.dart';
 import '../../../../owner/onboarding/domain/usecases/update_table_usecase.dart';
+import '../../../../owner/onboarding/presentation/bloc/onboarding_wizard_bloc.dart';
 import '../../../../owner/onboarding/presentation/widgets/panorama_capture_screen.dart';
 import '../../../../owner/onboarding/presentation/widgets/panorama_editor_screen.dart';
 
@@ -98,20 +99,22 @@ class _PanoramaTabState extends State<PanoramaTab> {
 
       if (!mounted) return;
 
-      // Navigate to capture screen
-      await Navigator.of(context).push(
+      // PanoramaCaptureScreen requires OnboardingWizardBloc for photo upload and finalize.
+      // Finalize is handled inside capture screen via BLoC — no need to call it again here.
+      await Navigator.of(context).push<bool>(
         MaterialPageRoute(
-          builder: (_) => PanoramaCaptureScreen(sessionId: session.id),
+          builder: (_) => BlocProvider(
+            create: (_) => sl<OnboardingWizardBloc>(),
+            child: PanoramaCaptureScreen(sessionId: session.id),
+          ),
         ),
       );
 
       if (!mounted) return;
 
-      // Finalize after returning from capture
-      final finalize = sl<FinalizePanoramaUseCase>();
-      await finalize(session.id);
-
-      // Reload sessions and start polling
+      // result == true means user finalized in capture screen (BLoC already called finalize)
+      // result == null means user pressed back without finalizing
+      // In both cases, reload sessions to pick up any changes
       await _loadSessions();
     } catch (e) {
       if (mounted) {

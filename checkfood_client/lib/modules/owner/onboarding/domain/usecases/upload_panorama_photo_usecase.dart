@@ -12,8 +12,9 @@ class UploadPanoramaPhotoUseCase {
     required String sessionId,
     required int angleIndex,
     required double actualAngle,
+    double? actualPitch,
     required Uint8List fileBytes,
     required String filename,
   }) =>
-      _repository.uploadPhoto(sessionId, angleIndex, actualAngle, fileBytes, filename);
+      _repository.uploadPhoto(sessionId, angleIndex, actualAngle, actualPitch, fileBytes, filename);
 }

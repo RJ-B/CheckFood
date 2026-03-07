@@ -6,7 +6,8 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services")
+    // TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
+    // id("com.google.gms.google-services")
 }
 
 // --- 1. ČÁST: Načtení local.properties (Kotlin styl) ---

@@ -35,9 +35,10 @@ public class PanoramaController {
             @PathVariable UUID id,
             @RequestParam("angleIndex") int angleIndex,
             @RequestParam("actualAngle") double actualAngle,
+            @RequestParam(value = "actualPitch", required = false) Double actualPitch,
             @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(panoramaService.uploadPhoto(
-                userDetails.getUsername(), id, angleIndex, actualAngle, file));
+                userDetails.getUsername(), id, angleIndex, actualAngle, actualPitch, file));
     }
 
     @PostMapping("/sessions/{id}/finalize")

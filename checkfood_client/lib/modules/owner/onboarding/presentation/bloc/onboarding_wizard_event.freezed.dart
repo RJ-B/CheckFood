@@ -60,6 +60,7 @@ mixin _$OnboardingWizardEvent {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -112,6 +113,7 @@ mixin _$OnboardingWizardEvent {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -164,6 +166,7 @@ mixin _$OnboardingWizardEvent {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -363,6 +366,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -419,6 +423,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -475,6 +480,7 @@ class _$LoadOnboardingImpl implements LoadOnboarding {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -700,6 +706,7 @@ class _$GoToStepImpl implements GoToStep {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -756,6 +763,7 @@ class _$GoToStepImpl implements GoToStep {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -812,6 +820,7 @@ class _$GoToStepImpl implements GoToStep {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -1133,6 +1142,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -1189,6 +1199,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -1252,6 +1263,7 @@ class _$UpdateInfoImpl implements UpdateInfo {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -1503,6 +1515,7 @@ class _$UpdateHoursImpl implements UpdateHours {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -1559,6 +1572,7 @@ class _$UpdateHoursImpl implements UpdateHours {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -1615,6 +1629,7 @@ class _$UpdateHoursImpl implements UpdateHours {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -1822,6 +1837,7 @@ class _$LoadTablesImpl implements LoadTables {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -1878,6 +1894,7 @@ class _$LoadTablesImpl implements LoadTables {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -1934,6 +1951,7 @@ class _$LoadTablesImpl implements LoadTables {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -2169,6 +2187,7 @@ class _$AddTableImpl implements AddTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -2225,6 +2244,7 @@ class _$AddTableImpl implements AddTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -2281,6 +2301,7 @@ class _$AddTableImpl implements AddTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -2544,6 +2565,7 @@ class _$UpdateTableImpl implements UpdateTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -2600,6 +2622,7 @@ class _$UpdateTableImpl implements UpdateTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -2656,6 +2679,7 @@ class _$UpdateTableImpl implements UpdateTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -2895,6 +2919,7 @@ class _$DeleteTableImpl implements DeleteTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -2951,6 +2976,7 @@ class _$DeleteTableImpl implements DeleteTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -3007,6 +3033,7 @@ class _$DeleteTableImpl implements DeleteTable {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -3213,6 +3240,7 @@ class _$LoadMenuImpl implements LoadMenu {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -3269,6 +3297,7 @@ class _$LoadMenuImpl implements LoadMenu {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -3325,6 +3354,7 @@ class _$LoadMenuImpl implements LoadMenu {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -3553,6 +3583,7 @@ class _$CreateCategoryImpl implements CreateCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -3609,6 +3640,7 @@ class _$CreateCategoryImpl implements CreateCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -3665,6 +3697,7 @@ class _$CreateCategoryImpl implements CreateCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -3910,6 +3943,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -3966,6 +4000,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -4022,6 +4057,7 @@ class _$UpdateCategoryImpl implements UpdateCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -4262,6 +4298,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -4318,6 +4355,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -4374,6 +4412,7 @@ class _$DeleteCategoryImpl implements DeleteCategory {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -4651,6 +4690,7 @@ class _$CreateItemImpl implements CreateItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -4707,6 +4747,7 @@ class _$CreateItemImpl implements CreateItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -4763,6 +4804,7 @@ class _$CreateItemImpl implements CreateItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5042,6 +5084,7 @@ class _$UpdateItemImpl implements UpdateItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -5098,6 +5141,7 @@ class _$UpdateItemImpl implements UpdateItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5154,6 +5198,7 @@ class _$UpdateItemImpl implements UpdateItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5395,6 +5440,7 @@ class _$DeleteItemImpl implements DeleteItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -5451,6 +5497,7 @@ class _$DeleteItemImpl implements DeleteItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5507,6 +5554,7 @@ class _$DeleteItemImpl implements DeleteItem {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5715,6 +5763,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -5771,6 +5820,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5827,6 +5877,7 @@ class _$CreatePanoramaSessionImpl implements CreatePanoramaSession {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -5952,6 +6003,7 @@ abstract class _$$UploadPhotoImplCopyWith<$Res> {
     String sessionId,
     int angleIndex,
     double actualAngle,
+    double? actualPitch,
     Uint8List fileBytes,
     String filename,
   });
@@ -5974,6 +6026,7 @@ class __$$UploadPhotoImplCopyWithImpl<$Res>
     Object? sessionId = null,
     Object? angleIndex = null,
     Object? actualAngle = null,
+    Object? actualPitch = freezed,
     Object? fileBytes = null,
     Object? filename = null,
   }) {
@@ -5994,6 +6047,11 @@ class __$$UploadPhotoImplCopyWithImpl<$Res>
                 ? _value.actualAngle
                 : actualAngle // ignore: cast_nullable_to_non_nullable
                     as double,
+        actualPitch:
+            freezed == actualPitch
+                ? _value.actualPitch
+                : actualPitch // ignore: cast_nullable_to_non_nullable
+                    as double?,
         fileBytes:
             null == fileBytes
                 ? _value.fileBytes
@@ -6016,6 +6074,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     required this.sessionId,
     required this.angleIndex,
     required this.actualAngle,
+    this.actualPitch,
     required this.fileBytes,
     required this.filename,
   });
@@ -6027,13 +6086,15 @@ class _$UploadPhotoImpl implements UploadPhoto {
   @override
   final double actualAngle;
   @override
+  final double? actualPitch;
+  @override
   final Uint8List fileBytes;
   @override
   final String filename;
 
   @override
   String toString() {
-    return 'OnboardingWizardEvent.uploadPhoto(sessionId: $sessionId, angleIndex: $angleIndex, actualAngle: $actualAngle, fileBytes: $fileBytes, filename: $filename)';
+    return 'OnboardingWizardEvent.uploadPhoto(sessionId: $sessionId, angleIndex: $angleIndex, actualAngle: $actualAngle, actualPitch: $actualPitch, fileBytes: $fileBytes, filename: $filename)';
   }
 
   @override
@@ -6047,6 +6108,8 @@ class _$UploadPhotoImpl implements UploadPhoto {
                 other.angleIndex == angleIndex) &&
             (identical(other.actualAngle, actualAngle) ||
                 other.actualAngle == actualAngle) &&
+            (identical(other.actualPitch, actualPitch) ||
+                other.actualPitch == actualPitch) &&
             const DeepCollectionEquality().equals(other.fileBytes, fileBytes) &&
             (identical(other.filename, filename) ||
                 other.filename == filename));
@@ -6058,6 +6121,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
     sessionId,
     angleIndex,
     actualAngle,
+    actualPitch,
     const DeepCollectionEquality().hash(fileBytes),
     filename,
   );
@@ -6114,6 +6178,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -6124,7 +6189,14 @@ class _$UploadPhotoImpl implements UploadPhoto {
     required TResult Function(String sessionId) pollPanoramaStatus,
     required TResult Function() publish,
   }) {
-    return uploadPhoto(sessionId, angleIndex, actualAngle, fileBytes, filename);
+    return uploadPhoto(
+      sessionId,
+      angleIndex,
+      actualAngle,
+      actualPitch,
+      fileBytes,
+      filename,
+    );
   }
 
   @override
@@ -6170,6 +6242,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -6184,6 +6257,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
       sessionId,
       angleIndex,
       actualAngle,
+      actualPitch,
       fileBytes,
       filename,
     );
@@ -6232,6 +6306,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -6248,6 +6323,7 @@ class _$UploadPhotoImpl implements UploadPhoto {
         sessionId,
         angleIndex,
         actualAngle,
+        actualPitch,
         fileBytes,
         filename,
       );
@@ -6353,6 +6429,7 @@ abstract class UploadPhoto implements OnboardingWizardEvent {
     required final String sessionId,
     required final int angleIndex,
     required final double actualAngle,
+    final double? actualPitch,
     required final Uint8List fileBytes,
     required final String filename,
   }) = _$UploadPhotoImpl;
@@ -6360,6 +6437,7 @@ abstract class UploadPhoto implements OnboardingWizardEvent {
   String get sessionId;
   int get angleIndex;
   double get actualAngle;
+  double? get actualPitch;
   Uint8List get fileBytes;
   String get filename;
 
@@ -6485,6 +6563,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -6541,6 +6620,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -6597,6 +6677,7 @@ class _$FinalizePanoramaImpl implements FinalizePanorama {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -6835,6 +6916,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -6891,6 +6973,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -6947,6 +7030,7 @@ class _$ActivatePanoramaImpl implements ActivatePanorama {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -7156,6 +7240,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -7212,6 +7297,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -7268,6 +7354,7 @@ class _$LoadPanoramaSessionsImpl implements LoadPanoramaSessions {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -7497,6 +7584,7 @@ class _$PollPanoramaStatusImpl implements PollPanoramaStatus {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -7553,6 +7641,7 @@ class _$PollPanoramaStatusImpl implements PollPanoramaStatus {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -7609,6 +7698,7 @@ class _$PollPanoramaStatusImpl implements PollPanoramaStatus {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -7816,6 +7906,7 @@ class _$PublishImpl implements Publish {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )
@@ -7872,6 +7963,7 @@ class _$PublishImpl implements Publish {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?
@@ -7928,6 +8020,7 @@ class _$PublishImpl implements Publish {
       String sessionId,
       int angleIndex,
       double actualAngle,
+      double? actualPitch,
       Uint8List fileBytes,
       String filename,
     )?

@@ -194,11 +194,12 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
     String sessionId,
     int angleIndex,
     double actualAngle,
+    double? actualPitch,
     Uint8List fileBytes,
     String filename,
   ) async {
     final model = await _remoteDataSource.uploadPhoto(
-      sessionId, angleIndex, actualAngle, fileBytes, filename,
+      sessionId, angleIndex, actualAngle, actualPitch, fileBytes, filename,
     );
     return model.toEntity();
   }

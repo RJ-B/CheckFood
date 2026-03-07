@@ -66,6 +66,7 @@ class OnboardingWizardEvent with _$OnboardingWizardEvent {
     required String sessionId,
     required int angleIndex,
     required double actualAngle,
+    double? actualPitch,
     required Uint8List fileBytes,
     required String filename,
   }) = UploadPhoto;

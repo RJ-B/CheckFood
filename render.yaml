@@ -1,8 +1,6 @@
-databases:
-  - name: checkfood-db
-    plan: free
-    databaseName: checkfood
-    user: checkfood
+# Render.com deployment config
+# DB: Supabase (external PostgreSQL + PostGIS)
+# App: Spring Boot Docker container
 
 services:
   - type: web
@@ -17,27 +15,15 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: DB_RENDER_HOST
-        fromDatabase:
-          name: checkfood-db
-          property: host
-      - key: DB_RENDER_PORT
-        fromDatabase:
-          name: checkfood-db
-          property: port
-      - key: DB_RENDER_NAME
-        fromDatabase:
-          name: checkfood-db
-          property: database
+      - key: SPRING_DATASOURCE_URL
+        sync: false  # set manually in Render dashboard
       - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: checkfood-db
-          property: user
+        sync: false
       - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: checkfood-db
-          property: password
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: PORT
         value: "10000"
+      - key: APP_BACKEND_URL
+        sync: false  # set to https://checkfood-api.onrender.com

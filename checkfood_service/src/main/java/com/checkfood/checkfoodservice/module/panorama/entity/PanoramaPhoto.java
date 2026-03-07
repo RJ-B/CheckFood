@@ -33,6 +33,12 @@ public class PanoramaPhoto {
     @Column(name = "actual_angle", nullable = false)
     private double actualAngle;
 
+    @Column(name = "target_pitch")
+    private Double targetPitch;
+
+    @Column(name = "actual_pitch")
+    private Double actualPitch;
+
     @Column(name = "photo_url", nullable = false)
     private String photoUrl;
 
