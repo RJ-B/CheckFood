@@ -8,6 +8,7 @@ services:
     runtime: docker
     rootDir: ./checkfood_service
     dockerfilePath: ./Dockerfile
+    dockerContext: ./checkfood_service
     plan: free
     autoDeploy: true
     branch: main
