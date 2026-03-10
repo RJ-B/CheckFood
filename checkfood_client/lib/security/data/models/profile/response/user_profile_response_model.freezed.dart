@@ -41,6 +41,8 @@ mixin _$UserProfileResponseModel {
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.role)
   String get role => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.authProvider)
+  String get authProvider => throw _privateConstructorUsedError;
 
   /// Serializes this UserProfileResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -69,6 +71,7 @@ abstract class $UserProfileResponseModelCopyWith<$Res> {
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) DateTime createdAt,
     @JsonKey(name: SecurityJsonKeys.role) String role,
+    @JsonKey(name: SecurityJsonKeys.authProvider) String authProvider,
   });
 }
 
@@ -99,6 +102,7 @@ class _$UserProfileResponseModelCopyWithImpl<
     Object? lastLogin = freezed,
     Object? createdAt = null,
     Object? role = null,
+    Object? authProvider = null,
   }) {
     return _then(
       _value.copyWith(
@@ -147,6 +151,11 @@ class _$UserProfileResponseModelCopyWithImpl<
                     ? _value.role
                     : role // ignore: cast_nullable_to_non_nullable
                         as String,
+            authProvider:
+                null == authProvider
+                    ? _value.authProvider
+                    : authProvider // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -172,6 +181,7 @@ abstract class _$$UserProfileResponseModelImplCopyWith<$Res>
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) DateTime createdAt,
     @JsonKey(name: SecurityJsonKeys.role) String role,
+    @JsonKey(name: SecurityJsonKeys.authProvider) String authProvider,
   });
 }
 
@@ -202,6 +212,7 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
     Object? lastLogin = freezed,
     Object? createdAt = null,
     Object? role = null,
+    Object? authProvider = null,
   }) {
     return _then(
       _$UserProfileResponseModelImpl(
@@ -250,6 +261,11 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
                 ? _value.role
                 : role // ignore: cast_nullable_to_non_nullable
                     as String,
+        authProvider:
+            null == authProvider
+                ? _value.authProvider
+                : authProvider // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -268,6 +284,7 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
     @JsonKey(name: SecurityJsonKeys.lastLogin) this.lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) required this.createdAt,
     @JsonKey(name: SecurityJsonKeys.role) required this.role,
+    @JsonKey(name: SecurityJsonKeys.authProvider) this.authProvider = 'LOCAL',
   }) : super._();
 
   factory _$UserProfileResponseModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -300,10 +317,13 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
   @override
   @JsonKey(name: SecurityJsonKeys.role)
   final String role;
+  @override
+  @JsonKey(name: SecurityJsonKeys.authProvider)
+  final String authProvider;
 
   @override
   String toString() {
-    return 'UserProfileResponseModel(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, role: $role)';
+    return 'UserProfileResponseModel(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, role: $role, authProvider: $authProvider)';
   }
 
   @override
@@ -325,7 +345,9 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
                 other.lastLogin == lastLogin) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.authProvider, authProvider) ||
+                other.authProvider == authProvider));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -341,6 +363,7 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
     lastLogin,
     createdAt,
     role,
+    authProvider,
   );
 
   /// Create a copy of UserProfileResponseModel
@@ -372,6 +395,7 @@ abstract class _UserProfileResponseModel extends UserProfileResponseModel {
     @JsonKey(name: SecurityJsonKeys.createdAt)
     required final DateTime createdAt,
     @JsonKey(name: SecurityJsonKeys.role) required final String role,
+    @JsonKey(name: SecurityJsonKeys.authProvider) final String authProvider,
   }) = _$UserProfileResponseModelImpl;
   const _UserProfileResponseModel._() : super._();
 
@@ -405,6 +429,9 @@ abstract class _UserProfileResponseModel extends UserProfileResponseModel {
   @override
   @JsonKey(name: SecurityJsonKeys.role)
   String get role;
+  @override
+  @JsonKey(name: SecurityJsonKeys.authProvider)
+  String get authProvider;
 
   /// Create a copy of UserProfileResponseModel
   /// with the given fields replaced by the non-null parameter values.

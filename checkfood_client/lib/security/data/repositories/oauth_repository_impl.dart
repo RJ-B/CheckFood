@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../config/security_claims.dart';
-import '../../config/security_json_keys.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/enums/user_role.dart';
 import '../../domain/repositories/oauth_repository.dart';
@@ -117,7 +115,6 @@ class OAuthRepositoryImpl implements OAuthRepository {
     }
   }
 
-  @override
   Future<User?> getAuthenticatedUser() async {
     if (_currentUser != null) return _currentUser;
 

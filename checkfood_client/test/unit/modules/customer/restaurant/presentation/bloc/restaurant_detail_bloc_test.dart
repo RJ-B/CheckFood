@@ -139,9 +139,10 @@ void main() {
       // Toggle
       bloc.add(const RestaurantDetailEvent.toggleFavourite());
 
-      final state = await bloc.stream.firstWhere(
-        (s) => s is DetailLoaded && (s as DetailLoaded).restaurant.isFavourite,
-      ) as DetailLoaded;
+      final rawState = await bloc.stream.firstWhere(
+        (s) => s is DetailLoaded && s.restaurant.isFavourite,
+      );
+      final state = rawState as DetailLoaded;
 
       expect(state.restaurant.isFavourite, true);
       expect(fakeFavDs.addCalled, true);
@@ -174,9 +175,10 @@ void main() {
       // Toggle
       bloc.add(const RestaurantDetailEvent.toggleFavourite());
 
-      final state = await bloc.stream.firstWhere(
-        (s) => s is DetailLoaded && !(s as DetailLoaded).restaurant.isFavourite,
-      ) as DetailLoaded;
+      final rawState = await bloc.stream.firstWhere(
+        (s) => s is DetailLoaded && !s.restaurant.isFavourite,
+      );
+      final state = rawState as DetailLoaded;
 
       expect(state.restaurant.isFavourite, false);
       expect(fakeFavDs.removeCalled, true);

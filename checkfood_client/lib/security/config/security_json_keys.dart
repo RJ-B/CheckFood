@@ -37,6 +37,8 @@ class SecurityJsonKeys {
   static const String idToken = 'idToken';
   static const String provider = 'provider';
 
+  static const String authProvider = 'authProvider';
+
   static const String currentPassword = 'currentPassword';
   static const String newPassword = 'newPassword';
   static const String confirmPassword = 'confirmPassword';

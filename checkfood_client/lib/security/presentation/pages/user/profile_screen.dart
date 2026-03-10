@@ -270,11 +270,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         // --- SEKCE: ZABEZPEČENÍ ---
         _buildSectionHeader('Zabezpečení'),
-        ProfileMenuItem(
-          icon: Icons.lock_outline,
-          title: 'Změna hesla',
-          onTap: () => _showChangePasswordDialog(context),
-        ),
+        if (profile.authProvider == 'LOCAL')
+          ProfileMenuItem(
+            icon: Icons.lock_outline,
+            title: 'Změna hesla',
+            onTap: () => _showChangePasswordDialog(context),
+          ),
+        if (profile.authProvider != 'LOCAL')
+          ProfileMenuItem(
+            icon: Icons.lock_outline,
+            title: 'Přihlášení přes ${profile.authProvider == 'GOOGLE' ? 'Google' : 'Apple'}',
+            subtitle: 'Heslo spravuje externí poskytovatel',
+            onTap: () {},
+          ),
         ProfileMenuItem(
           icon: Icons.devices,
           title: 'Správa zařízení',

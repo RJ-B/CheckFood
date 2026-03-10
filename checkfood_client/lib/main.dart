@@ -1,5 +1,7 @@
 // TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
 // import 'package:firebase_core/firebase_core.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,30 +14,53 @@ import 'security/presentation/bloc/auth/auth_bloc.dart';
 import 'security/presentation/bloc/auth/auth_event.dart';
 import 'security/presentation/bloc/user/user_bloc.dart';
 
+/// Zkusí připojení na lokální backend. Vrací true pokud odpovídá.
+Future<bool> _isLocalBackendReachable() async {
+  try {
+    final client = HttpClient()
+      ..connectionTimeout = const Duration(seconds: 2);
+    final request = await client.getUrl(
+      Uri.parse('http://192.168.1.199:8081/actuator/health'),
+    );
+    final response = await request.close();
+    client.close();
+    return response.statusCode < 500;
+  } catch (_) {
+    return false;
+  }
+}
+
 /// Hlavní vstupní bod aplikace.
 /// Zajišťuje sekvenční inicializaci asynchronních služeb a konfigurace.
 void main() async {
   try {
     // 1. Zajištění inicializace vazeb Flutteru
-    // Nutné pro volání nativních pluginů a asynchronních operací před runApp.
     WidgetsFlutterBinding.ensureInitialized();
 
     // TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
     // await Firebase.initializeApp();
 
-    // 2. Načtení konfigurace z .env souboru
-    // Tato operace musí předcházet inicializaci DI, protože DI využívá
-    // tyto proměnné pro nastavení BaseOptions u Dio klienta.
-    await dotenv.load(fileName: ".env");
+    // 2. Auto-detekce prostředí: zkusí lokální backend, jinak Render server
+    const forceEnv = String.fromEnvironment('ENV');
+    String envFile;
+    if (forceEnv == 'prod') {
+      envFile = '.env.prod';
+    } else if (forceEnv == 'local') {
+      envFile = '.env.local';
+    } else {
+      // Auto-detekce: ping lokální backend
+      final localReachable = await _isLocalBackendReachable();
+      envFile = localReachable ? '.env.local' : '.env.prod';
+      debugPrint('ENV auto-detect: ${localReachable ? "LOCAL" : "PROD (Render)"}');
+    }
+    await dotenv.load(fileName: envFile);
 
     // 3. Spuštění Dependency Injection (Service Locator)
-    // Registruje všechnyRepository, UseCases, BLoCs a externí klienty.
     await di.init();
 
     // 4. Spuštění aplikace
     runApp(const AppBootstrapper());
   } catch (e, stackTrace) {
-    // Diagnostické logování fatální chyby při startu aplikace
     debugPrint('FATAL_ERROR_STARTUP: $e');
     debugPrint('STACK_TRACE: $stackTrace');
   }

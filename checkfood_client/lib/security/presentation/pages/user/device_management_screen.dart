@@ -19,7 +19,6 @@ class DeviceManagementScreen extends StatefulWidget {
 
 class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   bool _isRefreshing = false;
-  int? _loggingOutDeviceId;
 
   @override
   void initState() {
@@ -37,10 +36,6 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   }
 
   void _onLogoutDevice(int deviceId) {
-    setState(() {
-      _loggingOutDeviceId = deviceId;
-    });
-
     // ✅ 3. Logout s ID (int)
     context.read<UserBloc>().add(UserEvent.deviceLoggedOut(deviceId));
   }
@@ -57,14 +52,12 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
               if (_isRefreshing) {
                 setState(() {
                   _isRefreshing = false;
-                  _loggingOutDeviceId = null;
                 });
               }
             },
             failure: (message) {
               setState(() {
                 _isRefreshing = false;
-                _loggingOutDeviceId = null;
               });
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message), backgroundColor: Colors.red),

@@ -67,3 +67,6 @@ T-0005 implementace DONE (paralelně). Frontend: 9 souborů (image_picker dep, P
 
 2026-03-10 TESTER
 T-0005 QA PASS. Žádné bugy. Backend compile OK, 77/80 (3 pre-existing), Frontend build_runner OK, analyze 0 errors, testy 27/27 PASS. Supabase Storage migrace kompletní.
+
+2026-03-10 DIRECTOR
+T-0005 DONE. Supabase Storage migrace — 28 souborů, 1069 insertions. Commit 4b62142 pushnut na main. Celý flow: Architect (D-0013) → Frontend Dev + Backend Dev (paralelně) → Tester. Zero bugy nalezeny.

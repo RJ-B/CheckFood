@@ -1,10 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Domain Layer - Entities
-import '../../../domain/entities/user.dart';
 import '../../../domain/entities/auth_failure.dart';
-import '../../../domain/usecases/auth/params/auth_params.dart';
 
 // Domain Layer - UseCases
 import '../../../domain/usecases/auth/check_auth_status_usecase.dart';

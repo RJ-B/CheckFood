@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class _StartEditorButton extends StatelessWidget {
+class StartEditorButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const _StartEditorButton({required this.onPressed});
+  const StartEditorButton({required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -26,6 +26,7 @@ mixin _$UserProfile {
   DateTime? get lastLogin => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   String get roleName => throw _privateConstructorUsedError;
+  String get authProvider => throw _privateConstructorUsedError;
 
   /// Create a copy of UserProfile
   /// with the given fields replaced by the non-null parameter values.
@@ -51,6 +52,7 @@ abstract class $UserProfileCopyWith<$Res> {
     DateTime? lastLogin,
     DateTime createdAt,
     String roleName,
+    String authProvider,
   });
 }
 
@@ -78,6 +80,7 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? lastLogin = freezed,
     Object? createdAt = null,
     Object? roleName = null,
+    Object? authProvider = null,
   }) {
     return _then(
       _value.copyWith(
@@ -126,6 +129,11 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
                     ? _value.roleName
                     : roleName // ignore: cast_nullable_to_non_nullable
                         as String,
+            authProvider:
+                null == authProvider
+                    ? _value.authProvider
+                    : authProvider // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -151,6 +159,7 @@ abstract class _$$UserProfileImplCopyWith<$Res>
     DateTime? lastLogin,
     DateTime createdAt,
     String roleName,
+    String authProvider,
   });
 }
 
@@ -177,6 +186,7 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     Object? lastLogin = freezed,
     Object? createdAt = null,
     Object? roleName = null,
+    Object? authProvider = null,
   }) {
     return _then(
       _$UserProfileImpl(
@@ -225,6 +235,11 @@ class __$$UserProfileImplCopyWithImpl<$Res>
                 ? _value.roleName
                 : roleName // ignore: cast_nullable_to_non_nullable
                     as String,
+        authProvider:
+            null == authProvider
+                ? _value.authProvider
+                : authProvider // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -243,6 +258,7 @@ class _$UserProfileImpl extends _UserProfile {
     this.lastLogin,
     required this.createdAt,
     required this.roleName,
+    this.authProvider = 'LOCAL',
   }) : super._();
 
   @override
@@ -263,10 +279,13 @@ class _$UserProfileImpl extends _UserProfile {
   final DateTime createdAt;
   @override
   final String roleName;
+  @override
+  @JsonKey()
+  final String authProvider;
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, roleName: $roleName)';
+    return 'UserProfile(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, roleName: $roleName, authProvider: $authProvider)';
   }
 
   @override
@@ -289,7 +308,9 @@ class _$UserProfileImpl extends _UserProfile {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.roleName, roleName) ||
-                other.roleName == roleName));
+                other.roleName == roleName) &&
+            (identical(other.authProvider, authProvider) ||
+                other.authProvider == authProvider));
   }
 
   @override
@@ -304,6 +325,7 @@ class _$UserProfileImpl extends _UserProfile {
     lastLogin,
     createdAt,
     roleName,
+    authProvider,
   );
 
   /// Create a copy of UserProfile
@@ -326,6 +348,7 @@ abstract class _UserProfile extends UserProfile {
     final DateTime? lastLogin,
     required final DateTime createdAt,
     required final String roleName,
+    final String authProvider,
   }) = _$UserProfileImpl;
   const _UserProfile._() : super._();
 
@@ -347,6 +370,8 @@ abstract class _UserProfile extends UserProfile {
   DateTime get createdAt;
   @override
   String get roleName;
+  @override
+  String get authProvider;
 
   /// Create a copy of UserProfile
   /// with the given fields replaced by the non-null parameter values.

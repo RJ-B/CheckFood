@@ -21,6 +21,7 @@ _$UserProfileResponseModelImpl _$$UserProfileResponseModelImplFromJson(
           : DateTime.parse(json['lastLogin'] as String),
   createdAt: DateTime.parse(json['createdAt'] as String),
   role: json['role'] as String,
+  authProvider: json['authProvider'] as String? ?? 'LOCAL',
 );
 
 Map<String, dynamic> _$$UserProfileResponseModelImplToJson(
@@ -35,4 +36,5 @@ Map<String, dynamic> _$$UserProfileResponseModelImplToJson(
   'lastLogin': instance.lastLogin?.toIso8601String(),
   'createdAt': instance.createdAt.toIso8601String(),
   'role': instance.role,
+  'authProvider': instance.authProvider,
 };

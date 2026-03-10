@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class _FinishEditorButton extends StatelessWidget {
+class FinishEditorButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const _FinishEditorButton({required this.onPressed});
+  const FinishEditorButton({required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

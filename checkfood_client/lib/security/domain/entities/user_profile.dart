@@ -16,6 +16,7 @@ class UserProfile with _$UserProfile {
     DateTime? lastLogin,
     required DateTime createdAt,
     required String roleName,
+    @Default('LOCAL') String authProvider,
   }) = _UserProfile;
 
   String get fullName => '$firstName $lastName'.trim();

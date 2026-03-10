@@ -19,6 +19,7 @@ class UserProfileResponseModel with _$UserProfileResponseModel {
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) required DateTime createdAt,
     @JsonKey(name: SecurityJsonKeys.role) required String role,
+    @JsonKey(name: SecurityJsonKeys.authProvider) @Default('LOCAL') String authProvider,
   }) = _UserProfileResponseModel;
 
   factory UserProfileResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -34,8 +35,8 @@ class UserProfileResponseModel with _$UserProfileResponseModel {
       isActive: isActive,
       lastLogin: lastLogin,
       createdAt: createdAt,
-      roleName:
-          role, // Zde stačí String, je to pro vizuální zobrazení "Jsi Administrátor"
+      roleName: role,
+      authProvider: authProvider,
     );
   }
 }

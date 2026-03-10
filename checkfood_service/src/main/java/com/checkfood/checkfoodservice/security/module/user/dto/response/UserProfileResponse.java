@@ -23,4 +23,5 @@ public class UserProfileResponse {
     private LocalDateTime lastLogin;
     private LocalDateTime createdAt;
     private String role;
+    private String authProvider;
 }
