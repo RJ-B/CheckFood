@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 
 import '../../config/security_json_keys.dart';
@@ -99,6 +100,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return await _remoteDataSource.getNotificationPreference(
         deviceIdentifier: deviceIdentifier,
       );
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
+  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename) async {
+    try {
+      return await _remoteDataSource.uploadProfilePhoto(imageBytes, filename);
     } on DioException catch (e) {
       throw _handleDioException(e);
     }

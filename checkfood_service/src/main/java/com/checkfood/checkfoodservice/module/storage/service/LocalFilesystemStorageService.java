@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 @Slf4j
 @Service
-@Profile({"local", "test", "prod"})
+@Profile({"local", "test"})
 public class LocalFilesystemStorageService implements StorageService {
 
     private final Path uploadDir;

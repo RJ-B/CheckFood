@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../entities/user_profile.dart';
 import '../entities/device.dart';
 import '../../data/models/profile/request/update_profile_request_model.dart';
@@ -33,4 +35,7 @@ abstract class ProfileRepository {
   Future<Map<String, dynamic>> getNotificationPreference({
     required String deviceIdentifier,
   });
+
+  /// Uploaduje profilovou fotku a vraci URL.
+  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
 }

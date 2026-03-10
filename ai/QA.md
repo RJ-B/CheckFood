@@ -2,6 +2,68 @@
 
 ---
 
+## T-0005 — Supabase Storage: migrace fotek z lokálního disku do cloudu
+
+**Datum:** 2026-03-10
+**Výsledek:** PASS
+
+### Akceptační kritéria
+
+- [x] Backend má `SupabaseStorageService` implementující `StorageService`
+- [x] `SupabaseStorageService` aktivní pro `@Profile("prod")`, `LocalFilesystemStorageService` pro `@Profile("local","test")`
+- [x] Panorama fotky se nahrávají do Supabase Storage (upload + stitcher výsledek)
+- [x] Generic upload endpoint (`POST /api/v1/uploads`) funguje se Supabase Storage
+- [x] Frontend: uživatel může vybrat profilovou fotku z galerie a nahrát ji (`GestureDetector` na avataru v `ProfileHeader`)
+- [x] Nahrané fotky mají public URL přístupný z mobilní aplikace (`getPublicUrl()` vrací plnou Supabase URL)
+- [x] Stávající testy projdou (lokální profil = LocalFilesystemStorageService) — 77/80 PASS
+- [x] Stitcher dokáže číst/zapisovat z/do Supabase Storage (dual mode v `main.py`)
+- [x] `.env.example` aktualizován o Supabase Storage config
+- [ ] Supabase Storage bucket vytvořen a nakonfigurován — MIMO SCOPE TESTERA (ruční krok v Supabase Dashboard)
+
+### Build
+
+- Backend compile: OK (0 errors)
+- Backend testy: 77/80 PASS (3 pre-existující failures)
+- Frontend build_runner: OK (0 nových výstupů — vše aktuální)
+- Frontend analyze: 0 errors, 90 info (pre-existující linting hints)
+- Frontend testy: 27/27 PASS
+
+### Opravené problémy
+
+Žádné — implementace Frontend Dev i Backend Dev byla bezchybná, žádné bugy nalezeny.
+
+### Pre-existující problémy (mimo scope T-0005)
+
+| # | Problém | Soubor |
+|---|---------|--------|
+| 1 | `AuthLogoutIntegrationTest.logoutAll_RemovesAllDevices` — logout-all neodstraní všechny devices | `AuthLogoutIntegrationTest.java` |
+| 2 | `MyRestaurantAuthorizationTest` (2x) — expects 404, gets 409 | `MyRestaurantAuthorizationTest.java` |
+
+### API Contract
+
+- `POST /api/v1/uploads`: frontend posílá multipart `file` + `directory: 'profile'` → backend vrací `{ "url": string, "filename": string }` — backend endpoint existuje v `UploadController.java` ✓
+- `PATCH /api/user/profile`: frontend posílá `{ "firstName", "lastName", "profileImageUrl?" }` → backend `UpdateProfileRequest` obsahuje `profileImageUrl` pole ✓
+- `SupabaseStorageService.store()` vrací `objectPath` (relativní cesta) — stejná konvence jako `LocalFilesystemStorageService` ✓
+- `SupabaseStorageService.getPublicUrl()` vrací plnou Supabase URL → frontend ji může použít přímo ✓
+- `StitcherClientImpl` posílá `photo_urls` (JSON key), `StitchRequest` v `main.py` akceptuje `photo_urls` ✓
+
+### Kontrola kvality
+
+- Žádné debug printy (kromě catch bloků s `debugPrint` — správný pattern)
+- Žádný zakomentovaný kód
+- Nová DI registrace: `profileRepository: sl()` přidáno do `UserBloc` factory — OK
+- `@Profile("prod")` na `SupabaseStorageService` a `SupabaseStorageConfig` — správná izolace
+- `LocalFilesystemStorageService` omezen na `{"local", "test"}` — testy projdou bez Supabase
+- Stitcher `main.py` verze 2.0.0 — dual mode (HTTP/Supabase vs lokální volume) — zpětná kompatibilita zachována
+- `image_picker: ^1.1.2` přidán do pubspec.yaml — plugin registranty pro Linux, macOS, Windows vygenerovány automaticky
+
+### Poznámky
+
+- RBAC omezení: `POST /api/v1/uploads` vyžaduje roli OWNER nebo MANAGER. Profilové fotky mohou uploadovat zatím jen owneri/manageři. Pro rozšíření na CUSTOMER je potřeba backend RBAC úprava — eskalováno jako known limitation.
+- `SupabaseStorageConfig` bean `"supabaseRestTemplate"` je `@Profile("prod")` — v lokálním vývoji a testech se nenačítá, žádné konflikty s `stitcherRestTemplate`.
+
+---
+
 ## T-0002 — Refaktor rezervací: odstranění endTime
 
 **Datum:** 2026-03-05

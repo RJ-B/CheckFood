@@ -14,6 +14,8 @@ import '../../../domain/usecases/profile/update_notification_preference_usecase.
 import '../../../domain/usecases/profile/get_notification_preference_usecase.dart';
 import '../../../data/services/notification_service.dart';
 import '../../../data/services/device_info_service.dart';
+import '../../../domain/repositories/profile_repository.dart';
+import '../../../data/models/profile/request/update_profile_request_model.dart';
 
 // ✅ Nutný import pro typ <Device>
 import '../../../domain/entities/device.dart';
@@ -29,6 +31,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetNotificationPreferenceUseCase _getNotificationPreferenceUseCase;
   final NotificationService _notificationService;
   final DeviceInfoService _deviceInfoService;
+  final ProfileRepository _profileRepository;
 
   UserBloc({
     required GetUserProfileUseCase getUserProfileUseCase,
@@ -41,6 +44,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     required GetNotificationPreferenceUseCase getNotificationPreferenceUseCase,
     required NotificationService notificationService,
     required DeviceInfoService deviceInfoService,
+    required ProfileRepository profileRepository,
   }) : _getUserProfileUseCase = getUserProfileUseCase,
        _getActiveDevicesUseCase = getActiveDevicesUseCase,
        _updateProfileUseCase = updateProfileUseCase,
@@ -51,6 +55,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
        _getNotificationPreferenceUseCase = getNotificationPreferenceUseCase,
        _notificationService = notificationService,
        _deviceInfoService = deviceInfoService,
+       _profileRepository = profileRepository,
        super(const UserState.initial()) {
     // Registrace handlerů
     on<ProfileRequested>(_onProfileRequested);
@@ -66,6 +71,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Push notifikace
     on<NotificationPreferenceRequested>(_onNotificationPreferenceRequested);
     on<NotificationToggled>(_onNotificationToggled);
+
+    // Profile photo upload
+    on<ProfilePhotoUploadRequested>(_onProfilePhotoUploadRequested);
   }
 
   /// 1. Načtení profilu
@@ -190,6 +198,37 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       add(const UserEvent.devicesRequested());
     } catch (e) {
       emit(UserState.failure(e.toString()));
+    }
+  }
+
+  /// 10. Upload profilove fotky: upload souboru → ziskat URL → aktualizovat profil
+  Future<void> _onProfilePhotoUploadRequested(
+    ProfilePhotoUploadRequested event,
+    Emitter<UserState> emit,
+  ) async {
+    final currentState = state.mapOrNull(loaded: (s) => s);
+    if (currentState == null) return;
+
+    try {
+      // 1. Upload fotky
+      final photoUrl = await _profileRepository.uploadProfilePhoto(
+        event.imageBytes,
+        event.filename,
+      );
+
+      // 2. Aktualizovat profil s novou URL
+      await _updateProfileUseCase(UpdateProfileRequestModel(
+        firstName: currentState.profile.firstName,
+        lastName: currentState.profile.lastName,
+        profileImageUrl: photoUrl,
+      ));
+
+      // 3. Znovu nacist profil pro aktualizaci UI
+      add(const UserEvent.profileRequested());
+    } catch (e) {
+      emit(UserState.failure('Nahrání fotky selhalo: $e'));
+      // Znovu emitovat loaded stav
+      add(const UserEvent.profileRequested());
     }
   }
 

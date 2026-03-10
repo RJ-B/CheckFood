@@ -31,6 +31,10 @@ services:
     restart: always
     ports:
       - "8090:8090"
+    environment:
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-checkfood-public}
     volumes:
       - ./uploads:/app/uploads
     networks:

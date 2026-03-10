@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 
 import '../../config/security_endpoints.dart';
@@ -39,6 +41,10 @@ abstract class ProfileRemoteDataSource {
   Future<Map<String, dynamic>> getNotificationPreference({
     required String deviceIdentifier,
   });
+
+  /// Uploaduje profilovou fotku pres generic upload endpoint.
+  /// Vraci URL uploadovane fotky.
+  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -116,5 +122,19 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       queryParameters: {'deviceIdentifier': deviceIdentifier},
     );
     return response.data as Map<String, dynamic>;
+  }
+
+  @override
+  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename) async {
+    final formData = FormData.fromMap({
+      'file': MultipartFile.fromBytes(imageBytes, filename: filename),
+      'directory': 'profile',
+    });
+    final response = await _dio.post(
+      SecurityEndpoints.upload,
+      data: formData,
+    );
+    final data = response.data as Map<String, dynamic>;
+    return data['url'] as String;
   }
 }

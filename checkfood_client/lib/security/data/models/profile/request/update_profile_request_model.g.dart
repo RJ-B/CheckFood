@@ -11,6 +11,7 @@ _$UpdateProfileRequestModelImpl _$$UpdateProfileRequestModelImplFromJson(
 ) => _$UpdateProfileRequestModelImpl(
   firstName: json['firstName'] as String,
   lastName: json['lastName'] as String,
+  profileImageUrl: json['profileImageUrl'] as String?,
 );
 
 Map<String, dynamic> _$$UpdateProfileRequestModelImplToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$UpdateProfileRequestModelImplToJson(
 ) => <String, dynamic>{
   'firstName': instance.firstName,
   'lastName': instance.lastName,
+  'profileImageUrl': instance.profileImageUrl,
 };

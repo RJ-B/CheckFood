@@ -29,7 +29,7 @@ public class StitcherClientImpl implements StitcherClient {
         try {
             var body = Map.of(
                     "session_id", sessionId.toString(),
-                    "photo_paths", photoPaths,
+                    "photo_urls", photoPaths,
                     "callback_url", callbackUrl
             );
             stitcherRestTemplate.postForEntity(url, body, Map.class);

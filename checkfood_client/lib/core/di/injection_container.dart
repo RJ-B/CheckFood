@@ -344,6 +344,7 @@ Future<void> init() async {
       getNotificationPreferenceUseCase: sl(),
       notificationService: sl(),
       deviceInfoService: sl(),
+      profileRepository: sl(),
     ),
   );
 

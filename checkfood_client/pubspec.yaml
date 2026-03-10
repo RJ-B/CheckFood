@@ -61,6 +61,9 @@ dependencies:
   camera: ^0.11.0+2
   sensors_plus: ^6.1.1
 
+  # --- Vyber fotek ---
+  image_picker: ^1.1.2
+
   # --- Média a Zobrazování ---
   cached_network_image: ^3.3.1
   qr_flutter: ^4.1.0
@@ -133,3 +136,5 @@ flutter:
     - assets/panoramas/
     - assets/map_style.json
     - .env
+    - .env.local
+    - .env.prod

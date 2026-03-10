@@ -28,3 +28,9 @@ services:
         value: "10000"
       - key: APP_BACKEND_URL
         sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: checkfood-public

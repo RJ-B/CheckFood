@@ -29,6 +29,8 @@ mixin _$UserEvent {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -42,6 +44,8 @@ mixin _$UserEvent {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -55,6 +59,8 @@ mixin _$UserEvent {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -71,6 +77,8 @@ mixin _$UserEvent {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -85,6 +93,8 @@ mixin _$UserEvent {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -99,6 +109,8 @@ mixin _$UserEvent {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -176,6 +188,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return profileRequested();
   }
@@ -193,6 +207,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return profileRequested?.call();
   }
@@ -210,6 +226,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (profileRequested != null) {
@@ -233,6 +251,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return profileRequested(this);
   }
@@ -251,6 +271,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return profileRequested?.call(this);
   }
@@ -269,6 +291,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (profileRequested != null) {
@@ -335,6 +359,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return devicesRequested();
   }
@@ -352,6 +378,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return devicesRequested?.call();
   }
@@ -369,6 +397,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (devicesRequested != null) {
@@ -392,6 +422,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return devicesRequested(this);
   }
@@ -410,6 +442,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return devicesRequested?.call(this);
   }
@@ -428,6 +462,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (devicesRequested != null) {
@@ -536,6 +572,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return profileUpdated(request);
   }
@@ -553,6 +591,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return profileUpdated?.call(request);
   }
@@ -570,6 +610,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (profileUpdated != null) {
@@ -593,6 +635,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return profileUpdated(this);
   }
@@ -611,6 +655,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return profileUpdated?.call(this);
   }
@@ -629,6 +675,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (profileUpdated != null) {
@@ -745,6 +793,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return passwordChangeRequested(request);
   }
@@ -762,6 +812,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return passwordChangeRequested?.call(request);
   }
@@ -779,6 +831,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (passwordChangeRequested != null) {
@@ -802,6 +856,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return passwordChangeRequested(this);
   }
@@ -820,6 +876,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return passwordChangeRequested?.call(this);
   }
@@ -838,6 +896,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (passwordChangeRequested != null) {
@@ -915,6 +975,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return allDevicesLogoutRequested();
   }
@@ -932,6 +994,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return allDevicesLogoutRequested?.call();
   }
@@ -949,6 +1013,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (allDevicesLogoutRequested != null) {
@@ -972,6 +1038,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return allDevicesLogoutRequested(this);
   }
@@ -990,6 +1058,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return allDevicesLogoutRequested?.call(this);
   }
@@ -1008,6 +1078,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (allDevicesLogoutRequested != null) {
@@ -1105,6 +1177,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return deviceLoggedOut(deviceId);
   }
@@ -1122,6 +1196,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return deviceLoggedOut?.call(deviceId);
   }
@@ -1139,6 +1215,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (deviceLoggedOut != null) {
@@ -1162,6 +1240,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return deviceLoggedOut(this);
   }
@@ -1180,6 +1260,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return deviceLoggedOut?.call(this);
   }
@@ -1198,6 +1280,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (deviceLoggedOut != null) {
@@ -1272,6 +1356,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return clearDataRequested();
   }
@@ -1289,6 +1375,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return clearDataRequested?.call();
   }
@@ -1306,6 +1394,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (clearDataRequested != null) {
@@ -1329,6 +1419,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return clearDataRequested(this);
   }
@@ -1347,6 +1439,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return clearDataRequested?.call(this);
   }
@@ -1365,6 +1459,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (clearDataRequested != null) {
@@ -1433,6 +1529,8 @@ class _$NotificationPreferenceRequestedImpl
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return notificationPreferenceRequested();
   }
@@ -1450,6 +1548,8 @@ class _$NotificationPreferenceRequestedImpl
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return notificationPreferenceRequested?.call();
   }
@@ -1467,6 +1567,8 @@ class _$NotificationPreferenceRequestedImpl
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (notificationPreferenceRequested != null) {
@@ -1490,6 +1592,8 @@ class _$NotificationPreferenceRequestedImpl
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return notificationPreferenceRequested(this);
   }
@@ -1508,6 +1612,8 @@ class _$NotificationPreferenceRequestedImpl
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return notificationPreferenceRequested?.call(this);
   }
@@ -1526,6 +1632,8 @@ class _$NotificationPreferenceRequestedImpl
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (notificationPreferenceRequested != null) {
@@ -1623,6 +1731,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
   }) {
     return notificationToggled(enabled);
   }
@@ -1640,6 +1750,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
   }) {
     return notificationToggled?.call(enabled);
   }
@@ -1657,6 +1769,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (notificationToggled != null) {
@@ -1680,6 +1794,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
     required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
   }) {
     return notificationToggled(this);
   }
@@ -1698,6 +1814,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
   }) {
     return notificationToggled?.call(this);
   }
@@ -1716,6 +1834,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
     TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
     required TResult orElse(),
   }) {
     if (notificationToggled != null) {
@@ -1736,4 +1856,231 @@ abstract class NotificationToggled implements UserEvent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NotificationToggledImplCopyWith<_$NotificationToggledImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ProfilePhotoUploadRequestedImplCopyWith<$Res> {
+  factory _$$ProfilePhotoUploadRequestedImplCopyWith(
+    _$ProfilePhotoUploadRequestedImpl value,
+    $Res Function(_$ProfilePhotoUploadRequestedImpl) then,
+  ) = __$$ProfilePhotoUploadRequestedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Uint8List imageBytes, String filename});
+}
+
+/// @nodoc
+class __$$ProfilePhotoUploadRequestedImplCopyWithImpl<$Res>
+    extends _$UserEventCopyWithImpl<$Res, _$ProfilePhotoUploadRequestedImpl>
+    implements _$$ProfilePhotoUploadRequestedImplCopyWith<$Res> {
+  __$$ProfilePhotoUploadRequestedImplCopyWithImpl(
+    _$ProfilePhotoUploadRequestedImpl _value,
+    $Res Function(_$ProfilePhotoUploadRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? imageBytes = null, Object? filename = null}) {
+    return _then(
+      _$ProfilePhotoUploadRequestedImpl(
+        null == imageBytes
+            ? _value.imageBytes
+            : imageBytes // ignore: cast_nullable_to_non_nullable
+                as Uint8List,
+        null == filename
+            ? _value.filename
+            : filename // ignore: cast_nullable_to_non_nullable
+                as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
+  const _$ProfilePhotoUploadRequestedImpl(this.imageBytes, this.filename);
+
+  @override
+  final Uint8List imageBytes;
+  @override
+  final String filename;
+
+  @override
+  String toString() {
+    return 'UserEvent.profilePhotoUploadRequested(imageBytes: $imageBytes, filename: $filename)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ProfilePhotoUploadRequestedImpl &&
+            const DeepCollectionEquality().equals(
+              other.imageBytes,
+              imageBytes,
+            ) &&
+            (identical(other.filename, filename) ||
+                other.filename == filename));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    const DeepCollectionEquality().hash(imageBytes),
+    filename,
+  );
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ProfilePhotoUploadRequestedImplCopyWith<_$ProfilePhotoUploadRequestedImpl>
+  get copyWith => __$$ProfilePhotoUploadRequestedImplCopyWithImpl<
+    _$ProfilePhotoUploadRequestedImpl
+  >(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
+    required TResult Function(UpdateProfileRequestModel request) profileUpdated,
+    required TResult Function(ChangePasswordRequestModel request)
+    passwordChangeRequested,
+    required TResult Function() allDevicesLogoutRequested,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function() clearDataRequested,
+    required TResult Function() notificationPreferenceRequested,
+    required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
+  }) {
+    return profilePhotoUploadRequested(imageBytes, filename);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
+    TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult? Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult? Function()? allDevicesLogoutRequested,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function()? clearDataRequested,
+    TResult? Function()? notificationPreferenceRequested,
+    TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
+  }) {
+    return profilePhotoUploadRequested?.call(imageBytes, filename);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
+    TResult Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult Function()? allDevicesLogoutRequested,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function()? clearDataRequested,
+    TResult Function()? notificationPreferenceRequested,
+    TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
+    required TResult orElse(),
+  }) {
+    if (profilePhotoUploadRequested != null) {
+      return profilePhotoUploadRequested(imageBytes, filename);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
+    required TResult Function(ProfileUpdated value) profileUpdated,
+    required TResult Function(PasswordChangeRequested value)
+    passwordChangeRequested,
+    required TResult Function(AllDevicesLogoutRequested value)
+    allDevicesLogoutRequested,
+    required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
+    required TResult Function(NotificationPreferenceRequested value)
+    notificationPreferenceRequested,
+    required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
+  }) {
+    return profilePhotoUploadRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
+    TResult? Function(ProfileUpdated value)? profileUpdated,
+    TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult? Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
+    TResult? Function(NotificationPreferenceRequested value)?
+    notificationPreferenceRequested,
+    TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
+  }) {
+    return profilePhotoUploadRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
+    TResult Function(ProfileUpdated value)? profileUpdated,
+    TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
+    TResult Function(NotificationPreferenceRequested value)?
+    notificationPreferenceRequested,
+    TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
+    required TResult orElse(),
+  }) {
+    if (profilePhotoUploadRequested != null) {
+      return profilePhotoUploadRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ProfilePhotoUploadRequested implements UserEvent {
+  const factory ProfilePhotoUploadRequested(
+    final Uint8List imageBytes,
+    final String filename,
+  ) = _$ProfilePhotoUploadRequestedImpl;
+
+  Uint8List get imageBytes;
+  String get filename;
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProfilePhotoUploadRequestedImplCopyWith<_$ProfilePhotoUploadRequestedImpl>
+  get copyWith => throw _privateConstructorUsedError;
 }

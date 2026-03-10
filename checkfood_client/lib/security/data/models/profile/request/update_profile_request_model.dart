@@ -9,6 +9,7 @@ class UpdateProfileRequestModel with _$UpdateProfileRequestModel {
   const factory UpdateProfileRequestModel({
     @JsonKey(name: SecurityJsonKeys.firstName) required String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) required String lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
   }) = _UpdateProfileRequestModel;
 
   factory UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) =>

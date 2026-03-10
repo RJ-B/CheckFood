@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../data/models/profile/request/update_profile_request_model.dart';
 import '../../../data/models/profile/request/change_password_request_model.dart';
@@ -31,4 +33,10 @@ class UserEvent with _$UserEvent {
   // Push notifikace
   const factory UserEvent.notificationPreferenceRequested() = NotificationPreferenceRequested;
   const factory UserEvent.notificationToggled(bool enabled) = NotificationToggled;
+
+  // Profile photo upload
+  const factory UserEvent.profilePhotoUploadRequested(
+    Uint8List imageBytes,
+    String filename,
+  ) = ProfilePhotoUploadRequested;
 }

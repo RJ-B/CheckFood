@@ -112,3 +112,48 @@
 - **implementation plan:** IMPLEMENTATION_FRONTEND.md + IMPLEMENTATION_BACKEND.md
 - **qa report:** QA.md
 - **completed:** 2026-03-06
+
+---
+
+## [T-0005] Supabase Storage — migrace fotek z lokálního disku do cloudu
+
+- **status:** DONE
+- **priority:** P0
+- **owner:** ARCHITECT → FRONTEND DEV + BACKEND DEV → TESTER
+- **description:** Migrovat veškeré ukládání fotek z lokálního filesystému (`LocalFilesystemStorageService` → `./uploads/`) na **Supabase Storage**. Zahrnuje:
+  1. **Backend**: Vytvořit `SupabaseStorageService` implementující `StorageService` interface. Nahrávání souborů přes Supabase Storage REST API. Produkční profil použije Supabase, lokální profil může zůstat na lokálním disku.
+  2. **Panorama fotky**: `PanoramaServiceImpl` nahrává jednotlivé fotky + stitcher generuje výsledek → oba musí jít do Supabase Storage.
+  3. **Profil uživatele**: Upload profilové fotky → uložení URL z Supabase Storage do `profileImageUrl`.
+  4. **Restaurant obrázky**: `logoUrl`, `coverImageUrl` → Supabase Storage.
+  5. **Menu item obrázky**: `imageUrl` → Supabase Storage.
+  6. **Frontend**: Přidat upload flow pro profilovou fotku (image picker → upload na backend → backend uloží do Supabase Storage → vrátí public URL).
+  7. **Stitcher**: Python stitcher musí číst fotky ze Supabase Storage a zapisovat výsledek zpět.
+- **audit findings:**
+  - `StorageService.java` interface (store, delete, getPublicUrl) — zachovat kontrakt
+  - `LocalFilesystemStorageService.java` — `@Profile("local","test","prod")` — aktivní na VŠECH profilech
+  - `StorageConfig.java` — `@Profile("local")` only → v produkci `/uploads/**` nefunguje (broken)
+  - `UploadController.java` — `POST /api/v1/uploads` (generic upload, OWNER/MANAGER only)
+  - `PanoramaServiceImpl.java` — volá `storageService.store()` pro panorama fotky
+  - `PanoramaCallbackController.java` — přijímá výsledek ze stitcheru
+  - `UserEntity.profileImageUrl` — string URL field
+  - `Restaurant.logoUrl`, `Restaurant.coverImageUrl`, `Restaurant.panoramaUrl` — string URL fields
+  - `MenuItem.imageUrl` — string URL field
+  - Frontend: žádný upload flow pro profilové fotky zatím neexistuje
+  - Frontend: `onboarding_remote_datasource.dart` — jediný multipart upload (panorama)
+  - Supabase projekt: `ixglwaqetbbwwrxrimby` (AWS EU-West-1)
+- **akceptační kritéria:**
+  - [ ] Backend má `SupabaseStorageService` implementující `StorageService`
+  - [ ] Supabase Storage bucket vytvořen a nakonfigurován
+  - [ ] `SupabaseStorageService` aktivní pro `@Profile("prod")`, `LocalFilesystemStorageService` pro `@Profile("local","test")`
+  - [ ] Panorama fotky se nahrávají do Supabase Storage (upload + stitcher výsledek)
+  - [ ] Generic upload endpoint (`POST /api/v1/uploads`) funguje se Supabase Storage
+  - [ ] Frontend: uživatel může vybrat profilovou fotku z galerie a nahrát ji
+  - [ ] Nahrané fotky mají public URL přístupný z mobilní aplikace
+  - [ ] Stávající testy projdou (lokální profil = LocalFilesystemStorageService)
+  - [ ] Stitcher dokáže číst/zapisovat z/do Supabase Storage
+  - [ ] `.env.example` aktualizován o Supabase Storage config
+- **rizika:**
+  - Stitcher (Python) musí přistupovat k Supabase Storage → nutná změna v stitcher/main.py
+  - Supabase Storage free tier má limity (1GB storage, 2GB bandwidth)
+  - CORS pro Supabase Storage bucket musí povolit mobilní app
+  - Sdílený volume mezi Spring Boot a Stitcherem se nahrazuje Supabase Storage API

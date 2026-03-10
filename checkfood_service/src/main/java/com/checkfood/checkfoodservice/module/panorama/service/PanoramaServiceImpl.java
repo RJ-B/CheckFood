@@ -137,15 +137,15 @@ public class PanoramaServiceImpl implements PanoramaService {
 
         // Async stitching: set PROCESSING and delegate to Python service
         var photos = photoRepository.findAllBySessionIdOrderByAngleIndexAsc(sessionId);
-        List<String> photoPaths = photos.stream()
-                .map(p -> p.getPhotoUrl().replaceFirst("^/uploads/", ""))
+        List<String> photoUrls = photos.stream()
+                .map(PanoramaPhoto::getPhotoUrl)
                 .toList();
 
         session.setStatus(PanoramaSessionStatus.PROCESSING);
         var saved = sessionRepository.save(session);
 
         try {
-            stitcherClient.requestStitching(sessionId, photoPaths, panoramaProperties.getCallbackUrl());
+            stitcherClient.requestStitching(sessionId, photoUrls, panoramaProperties.getCallbackUrl());
         } catch (Exception e) {
             log.error("[Panorama] Failed to request stitching: session={}", sessionId, e);
             // Don't fail the request — session is PROCESSING, stitcher will retry or admin can re-trigger

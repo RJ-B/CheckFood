@@ -27,6 +27,8 @@ mixin _$UpdateProfileRequestModel {
   String get firstName => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+  String? get profileImageUrl => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateProfileRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,6 +50,7 @@ abstract class $UpdateProfileRequestModelCopyWith<$Res> {
   $Res call({
     @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
   });
 }
 
@@ -68,7 +71,11 @@ class _$UpdateProfileRequestModelCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? firstName = null, Object? lastName = null}) {
+  $Res call({
+    Object? firstName = null,
+    Object? lastName = null,
+    Object? profileImageUrl = freezed,
+  }) {
     return _then(
       _value.copyWith(
             firstName:
@@ -81,6 +88,11 @@ class _$UpdateProfileRequestModelCopyWithImpl<
                     ? _value.lastName
                     : lastName // ignore: cast_nullable_to_non_nullable
                         as String,
+            profileImageUrl:
+                freezed == profileImageUrl
+                    ? _value.profileImageUrl
+                    : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -99,6 +111,7 @@ abstract class _$$UpdateProfileRequestModelImplCopyWith<$Res>
   $Res call({
     @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
   });
 }
 
@@ -119,7 +132,11 @@ class __$$UpdateProfileRequestModelImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? firstName = null, Object? lastName = null}) {
+  $Res call({
+    Object? firstName = null,
+    Object? lastName = null,
+    Object? profileImageUrl = freezed,
+  }) {
     return _then(
       _$UpdateProfileRequestModelImpl(
         firstName:
@@ -132,6 +149,11 @@ class __$$UpdateProfileRequestModelImplCopyWithImpl<$Res>
                 ? _value.lastName
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String,
+        profileImageUrl:
+            freezed == profileImageUrl
+                ? _value.profileImageUrl
+                : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -143,6 +165,7 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
   const _$UpdateProfileRequestModelImpl({
     @JsonKey(name: SecurityJsonKeys.firstName) required this.firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) required this.lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl) this.profileImageUrl,
   });
 
   factory _$UpdateProfileRequestModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -154,10 +177,13 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
   @override
   @JsonKey(name: SecurityJsonKeys.lastName)
   final String lastName;
+  @override
+  @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+  final String? profileImageUrl;
 
   @override
   String toString() {
-    return 'UpdateProfileRequestModel(firstName: $firstName, lastName: $lastName)';
+    return 'UpdateProfileRequestModel(firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl)';
   }
 
   @override
@@ -168,12 +194,15 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
-                other.lastName == lastName));
+                other.lastName == lastName) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, firstName, lastName);
+  int get hashCode =>
+      Object.hash(runtimeType, firstName, lastName, profileImageUrl);
 
   /// Create a copy of UpdateProfileRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -195,6 +224,8 @@ abstract class _UpdateProfileRequestModel implements UpdateProfileRequestModel {
   const factory _UpdateProfileRequestModel({
     @JsonKey(name: SecurityJsonKeys.firstName) required final String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) required final String lastName,
+    @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+    final String? profileImageUrl,
   }) = _$UpdateProfileRequestModelImpl;
 
   factory _UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) =
@@ -206,6 +237,9 @@ abstract class _UpdateProfileRequestModel implements UpdateProfileRequestModel {
   @override
   @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName;
+  @override
+  @JsonKey(name: SecurityJsonKeys.profileImageUrl)
+  String? get profileImageUrl;
 
   /// Create a copy of UpdateProfileRequestModel
   /// with the given fields replaced by the non-null parameter values.

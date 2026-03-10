@@ -6,5 +6,28 @@
 Testováno: backend compile, backend testy (77/80), frontend build_runner, frontend analyze (0 errors), frontend testy (27/28), API contract verification, acceptance criteria review, DI check
 Bugy nalezeny: 0 (opraveno: 0)
 Výsledek: PASS
-Commit: viz níže
+Commit: a805358
+
+---
+2026-03-10 | T-0005 | TESTER
+
+Testováno: backend compile (./mvnw compile -q), backend testy (./mvnw test), frontend build_runner (OK, 0 new outputs), flutter analyze (0 errors, 90 info pre-existing), flutter test (27/27 PASS), code review všech 11 backend souborů + 9 frontend souborů, API contract verification, acceptance criteria review, DI check.
+
+Bugy nalezeny: 0 (opraveno: 0)
+Backend testy: 77/80 PASS (3 failures — všechny pre-existující, žádná nová selhání z T-0005)
+Frontend testy: 27/27 PASS (widget_test.dart byl smazán v předchozím tasku)
+
+Klíčové ověření:
+- SupabaseStorageService @Profile("prod") implementuje StorageService správně ✓
+- LocalFilesystemStorageService @Profile({"local","test"}) — testy projdou bez Supabase ✓
+- StitcherClientImpl.requestStitching() používá "photo_urls" JSON key (sync s main.py) ✓
+- PanoramaServiceImpl.finalizeSession() předává photoUrls přímo bez transformace ✓
+- stitcher/main.py dual mode: HTTP (Supabase) vs lokální filesystem ✓
+- ProfileHeader: GestureDetector + ImagePicker + UserEvent.profilePhotoUploadRequested ✓
+- UserBloc._onProfilePhotoUploadRequested: upload → updateProfile → profileRequested ✓
+- DI: profileRepository: sl() přidáno do UserBloc factory v injection_container.dart ✓
+- application.properties: supabase.url, supabase.service-role-key, supabase.storage.bucket ✓
+- render.yaml: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_STORAGE_BUCKET ✓
+
+Výsledek: PASS
 
