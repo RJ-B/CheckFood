@@ -6,7 +6,7 @@
     android:viewportWidth="512"
     android:viewportHeight="512">
 
-    <!-- Cloche dome -->
+    <!-- Dome -->
     <path android:pathData="M80,310 C80,175 165,100 256,100 C347,100 432,175 432,310 Z">
         <aapt:attr name="android:fillColor">
             <gradient
@@ -20,19 +20,19 @@
         </aapt:attr>
     </path>
 
-    <!-- Knob on top -->
+    <!-- Knob -->
     <path
-        android:pathData="M256,96 m-24,0 a24,20 0 1,1 48,0 a24,20 0 1,1 -48,0"
+        android:pathData="M234,96 a22,18 0 1,0 44,0 a22,18 0 1,0 -44,0"
         android:fillColor="#0E3854" />
 
-    <!-- Plate base -->
-    <path android:pathData="M55,310 L457,310 L457,325 C457,333.3 450.3,340 442,340 L70,340 C61.7,340 55,333.3 55,325 Z">
+    <!-- Plate -->
+    <path android:pathData="M66,308 L446,308 C454.8,308 462,315.2 462,324 C462,332.8 454.8,340 446,340 L66,340 C57.2,340 50,332.8 50,324 C50,315.2 57.2,308 66,308 Z">
         <aapt:attr name="android:fillColor">
             <gradient
                 android:type="linear"
-                android:startX="55"
+                android:startX="50"
                 android:startY="325"
-                android:endX="457"
+                android:endX="462"
                 android:endY="325"
                 android:startColor="#0A2540"
                 android:centerColor="#1B4F72"
