@@ -20,10 +20,12 @@ class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   // The native Android 12 splash renders the vector drawable at this size.
   // Our Flutter logo must start at exactly this size and at screen center.
-  static const double _nativeLogoSize = 200;
-  static const double _finalLogoSize = 140;
+  // Android 12 renders windowSplashScreenAnimatedIcon at 288dp.
+  // We must start at the same size so the handoff is invisible.
+  static const double _nativeLogoSize = 288;
+  static const double _finalLogoSize = 150;
   // How many dp the logo moves up from true center to its final position.
-  static const double _logoRiseDistance = 90;
+  static const double _logoRiseDistance = 100;
 
   // Master transition: logo scale + position + background
   late final AnimationController _transitionCtrl;
