@@ -18,25 +18,32 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  // Logo starts visible (matching native splash), then pulses
-  late final AnimationController _logoPulseController;
-  late final Animation<double> _logoPulse;
+  // Phase 1: Background solid → gradient
+  late final AnimationController _bgController;
+  late final Animation<double> _bgProgress;
 
-  // Logo glow expands after initial appearance
+  // Phase 1: Logo moves from center upward
+  late final AnimationController _logoMoveController;
+  late final Animation<double> _logoOffset;
+
+  // Phase 2: Glow expands behind logo
   late final AnimationController _glowController;
   late final Animation<double> _glowOpacity;
-  late final Animation<double> _glowScale;
 
-  // Text "CheckFood" slides up + fades in
+  // Continuous: Logo gentle breathing pulse
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulse;
+
+  // Phase 3: Text slides up + fades in
   late final AnimationController _textController;
   late final Animation<double> _textSlide;
   late final Animation<double> _textOpacity;
 
-  // Tagline fades in
+  // Phase 4: Tagline fades in
   late final AnimationController _taglineController;
   late final Animation<double> _taglineOpacity;
 
-  // Loader fades in last
+  // Phase 5: Loader fades in
   late final AnimationController _loaderController;
   late final Animation<double> _loaderOpacity;
 
@@ -44,28 +51,44 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Logo gentle pulse (continuous, subtle breathing effect)
-    _logoPulseController = AnimationController(
+    // Background: solid #0F2027 → gradient
+    _bgController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _bgProgress = CurvedAnimation(
+      parent: _bgController,
+      curve: Curves.easeInOut,
+    );
+
+    // Logo: slides upward from center
+    _logoMoveController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _logoOffset = Tween<double>(begin: 0, end: -80).animate(
+      CurvedAnimation(parent: _logoMoveController, curve: Curves.easeInOutCubic),
+    );
+
+    // Glow behind logo
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _glowOpacity = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _glowController, curve: Curves.easeOut),
+    );
+
+    // Continuous breathing pulse
+    _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2400),
     )..repeat(reverse: true);
-    _logoPulse = Tween<double>(begin: 1.0, end: 1.06).animate(
-      CurvedAnimation(parent: _logoPulseController, curve: Curves.easeInOut),
+    _pulse = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
-    // Glow behind logo: expands outward
-    _glowController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    _glowOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _glowController, curve: Curves.easeOut),
-    );
-    _glowScale = Tween<double>(begin: 0.6, end: 1.0).animate(
-      CurvedAnimation(parent: _glowController, curve: Curves.easeOutCubic),
-    );
-
-    // Text: slides up from below + fades in
+    // Text: slide up + fade in
     _textController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
@@ -78,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen>
       curve: Curves.easeIn,
     );
 
-    // Tagline: simple fade in
+    // Tagline: fade in
     _taglineController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -102,36 +125,41 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _startAnimationSequence() async {
-    // Short pause — logo is already visible, matching native splash
-    await Future.delayed(const Duration(milliseconds: 300));
+    // Frame 0: logo centered on solid dark bg — identical to native splash
+    // Small pause to let Flutter settle and ensure seamless handoff
+    await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
 
-    // Glow expands behind logo
+    // Phase 1: Background fades to gradient + logo slides upward (simultaneously)
+    _bgController.forward();
+    _logoMoveController.forward();
     _glowController.forward();
 
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 
-    // Text slides up
+    // Phase 2: Text slides up
     _textController.forward();
 
     await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
 
-    // Tagline fades in
+    // Phase 3: Tagline fades in
     _taglineController.forward();
 
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
 
-    // Loader appears
+    // Phase 4: Loader appears
     _loaderController.forward();
   }
 
   @override
   void dispose() {
-    _logoPulseController.dispose();
+    _bgController.dispose();
+    _logoMoveController.dispose();
     _glowController.dispose();
+    _pulseController.dispose();
     _textController.dispose();
     _taglineController.dispose();
     _loaderController.dispose();
@@ -142,8 +170,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-        // Wait for animations to mostly finish
-        await Future.delayed(const Duration(milliseconds: 2400));
+        await Future.delayed(const Duration(milliseconds: 2800));
         if (!mounted) return;
 
         await state.maybeMap(
@@ -167,155 +194,171 @@ class _SplashScreenState extends State<SplashScreen>
         );
       },
       child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF0F2027),
-                Color(0xFF203A43),
-                Color(0xFF2C5364),
-              ],
-            ),
-          ),
-          child: SafeArea(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(flex: 3),
-
-                  // -- Animated Logo with Glow --
-                  SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Glow layer behind logo
-                        AnimatedBuilder(
-                          animation: _glowController,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _glowOpacity.value,
-                              child: Transform.scale(
-                                scale: _glowScale.value,
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 180,
-                            height: 180,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFF10B981)
-                                      .withValues(alpha: 0.25),
-                                  blurRadius: 60,
-                                  spreadRadius: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Logo with pulse
-                        AnimatedBuilder(
-                          animation: _logoPulse,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: _logoPulse.value,
-                              child: child,
-                            );
-                          },
-                          child: SvgPicture.asset(
-                            'assets/icons/logo.svg',
-                            width: 150,
-                            height: 150,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 36),
-
-                  // -- Animated "CheckFood" Text --
-                  AnimatedBuilder(
-                    animation: _textController,
-                    builder: (context, child) {
-                      return Opacity(
-                        opacity: _textOpacity.value,
-                        child: Transform.translate(
-                          offset: Offset(0, _textSlide.value),
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Check',
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Food',
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFF10B981),
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  // -- Animated Tagline --
-                  FadeTransition(
-                    opacity: _taglineOpacity,
-                    child: const Text(
-                      'Reservations & Orders. Simplified.',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0x99FFFFFF),
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                  ),
-
-                  const Spacer(flex: 2),
-
-                  // -- Loading indicator --
-                  FadeTransition(
-                    opacity: _loaderOpacity,
-                    child: BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        return state.maybeWhen(
-                          initial: () => _buildLoader(),
-                          loading: () => _buildLoader(),
-                          orElse: () => const SizedBox(height: 24),
-                        );
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 48),
-                ],
+        body: AnimatedBuilder(
+          animation: _bgProgress,
+          builder: (context, child) {
+            // Interpolate from solid #0F2027 to gradient
+            final t = _bgProgress.value;
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.lerp(
+                      const Color(0xFF0F2027),
+                      const Color(0xFF0F2027),
+                      t,
+                    )!,
+                    Color.lerp(
+                      const Color(0xFF0F2027),
+                      const Color(0xFF203A43),
+                      t,
+                    )!,
+                    Color.lerp(
+                      const Color(0xFF0F2027),
+                      const Color(0xFF2C5364),
+                      t,
+                    )!,
+                  ],
+                ),
               ),
+              child: child,
+            );
+          },
+          child: SafeArea(
+            child: Stack(
+              children: [
+                // -- Logo layer: starts centered, moves up --
+                AnimatedBuilder(
+                  animation: Listenable.merge([
+                    _logoMoveController,
+                    _pulseController,
+                    _glowController,
+                  ]),
+                  builder: (context, child) {
+                    return Center(
+                      child: Transform.translate(
+                        offset: Offset(0, _logoOffset.value),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Logo + glow
+                            SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  // Glow
+                                  Opacity(
+                                    opacity: _glowOpacity.value,
+                                    child: Container(
+                                      width: 180,
+                                      height: 180,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFF10B981)
+                                                .withValues(alpha: 0.25),
+                                            blurRadius: 60,
+                                            spreadRadius: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  // Logo SVG with pulse
+                                  Transform.scale(
+                                    scale: _pulse.value,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/logo.svg',
+                                      width: 150,
+                                      height: 150,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 36),
+
+                            // Text "CheckFood"
+                            Opacity(
+                              opacity: _textOpacity.value,
+                              child: Transform.translate(
+                                offset: Offset(0, _textSlide.value),
+                                child: RichText(
+                                  text: const TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Check',
+                                        style: TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.white,
+                                          letterSpacing: 1.5,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'Food',
+                                        style: TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.w800,
+                                          color: Color(0xFF10B981),
+                                          letterSpacing: 1.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            // Tagline
+                            FadeTransition(
+                              opacity: _taglineOpacity,
+                              child: const Text(
+                                'Reservations & Orders. Simplified.',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0x99FFFFFF),
+                                  letterSpacing: 0.8,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                // -- Loader at bottom --
+                Positioned(
+                  bottom: 48,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: FadeTransition(
+                      opacity: _loaderOpacity,
+                      child: BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          return state.maybeWhen(
+                            initial: () => _buildLoader(),
+                            loading: () => _buildLoader(),
+                            orElse: () => const SizedBox(height: 24),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
