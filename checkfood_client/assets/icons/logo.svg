@@ -1,105 +1,60 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <!-- Dome gradient: deep navy to steel blue -->
-    <linearGradient id="dome" x1="0" y1="0" x2="0.3" y2="1">
+    <linearGradient id="dome" x1="80" y1="100" x2="350" y2="310" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#1B4F72"/>
-      <stop offset="40%" stop-color="#0E3854"/>
       <stop offset="100%" stop-color="#0A2540"/>
     </linearGradient>
-
-    <!-- Dome highlight: subtle top-left shine -->
-    <radialGradient id="domeShine" cx="0.35" cy="0.3" r="0.5">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18"/>
-      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.03"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    <radialGradient id="knob" cx="248" cy="90" r="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1B4F72"/>
+      <stop offset="100%" stop-color="#0A2540"/>
     </radialGradient>
-
-    <!-- Checkmark gradient: rich emerald -->
-    <linearGradient id="check" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="plate" x1="55" y1="325" x2="457" y2="325" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0A2540"/>
+      <stop offset="50%" stop-color="#1B4F72"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="check" x1="168" y1="335" x2="368" y2="185" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#34D399"/>
       <stop offset="50%" stop-color="#10B981"/>
       <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
-
-    <!-- Checkmark glow -->
-    <filter id="checkGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
-      <feColorMatrix in="blur" type="matrix"
-        values="0 0 0 0 0.06  0 0 0 0 0.73  0 0 0 0 0.51  0 0 0 0.35 0" result="glow"/>
-      <feMerge>
-        <feMergeNode in="glow"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <!-- Plate gradient: navy to teal blend -->
-    <linearGradient id="plate" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0A2540"/>
-      <stop offset="40%" stop-color="#1B4F72"/>
-      <stop offset="80%" stop-color="#0E7363"/>
-      <stop offset="100%" stop-color="#10B981"/>
-    </linearGradient>
-
-    <!-- Plate highlight -->
-    <linearGradient id="plateShine" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-    </linearGradient>
-
-    <!-- Knob gradient -->
-    <radialGradient id="knob" cx="0.4" cy="0.35" r="0.6">
-      <stop offset="0%" stop-color="#1B4F72"/>
-      <stop offset="100%" stop-color="#0A2540"/>
-    </radialGradient>
-
-    <!-- Knob highlight -->
-    <radialGradient id="knobShine" cx="0.35" cy="0.3" r="0.4">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-    </radialGradient>
-
-    <!-- Drop shadow for dome -->
-    <filter id="domeShadow" x="-10%" y="-5%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.3"/>
-    </filter>
-
-    <!-- Plate shadow -->
-    <filter id="plateShadow" x="-5%" y="-20%" width="110%" height="160%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.25"/>
-    </filter>
   </defs>
 
-  <!-- === Cloche Dome (with shadow) === -->
-  <g filter="url(#domeShadow)">
-    <!-- Dome body -->
-    <path d="M80 310 C80 175, 165 100, 256 100 C347 100, 432 175, 432 310 Z"
-          fill="url(#dome)"/>
-    <!-- Dome shine overlay -->
-    <path d="M80 310 C80 175, 165 100, 256 100 C347 100, 432 175, 432 310 Z"
-          fill="url(#domeShine)"/>
-  </g>
+  <!-- Cloche dome -->
+  <path d="M80 310 C80 175, 165 100, 256 100 C347 100, 432 175, 432 310 Z"
+        fill="url(#dome)"/>
 
-  <!-- === Knob on top === -->
-  <ellipse cx="256" cy="96" rx="24" ry="20" fill="url(#knob)"/>
-  <ellipse cx="256" cy="96" rx="24" ry="20" fill="url(#knobShine)"/>
+  <!-- Dome highlight -->
+  <path d="M130 280 C130 195, 185 135, 256 135 C300 135, 340 160, 365 200 C340 155, 300 125, 256 125 C190 125, 115 190, 110 290 Z"
+        fill="white" fill-opacity="0.08"/>
 
-  <!-- === Rim detail: thin line between dome and plate === -->
-  <rect x="65" y="306" width="382" height="4" rx="2" fill="#1B4F72" opacity="0.6"/>
+  <!-- Knob on top -->
+  <path d="M256 96 m-24 0 a24 20 0 1 1 48 0 a24 20 0 1 1 -48 0"
+        fill="url(#knob)"/>
 
-  <!-- === Plate base (with shadow) === -->
-  <g filter="url(#plateShadow)">
-    <rect x="55" y="310" width="402" height="30" rx="15" fill="url(#plate)"/>
-    <rect x="55" y="310" width="402" height="15" rx="8" fill="url(#plateShine)"/>
-  </g>
+  <!-- Knob highlight -->
+  <path d="M244 88 a14 10 0 1 1 16 0 a14 10 0 1 1 -16 0"
+        fill="white" fill-opacity="0.15"/>
 
-  <!-- === Checkmark (with glow) === -->
+  <!-- Rim line between dome and plate -->
+  <path d="M65 306 L447 306 L447 310 C447 312.2, 445.2 314, 443 314 L69 314 C66.8 314, 65 312.2, 65 310 Z"
+        fill="#1B4F72" fill-opacity="0.6"/>
+
+  <!-- Plate base -->
+  <path d="M55 310 L457 310 L457 325 C457 333.3, 450.3 340, 442 340 L70 340 C61.7 340, 55 333.3, 55 325 Z"
+        fill="url(#plate)"/>
+
+  <!-- Plate top highlight -->
+  <path d="M55 310 L457 310 L457 320 C457 324.4, 454.4 327, 450 327 L62 327 C57.6 327, 55 324.4, 55 320 Z"
+        fill="white" fill-opacity="0.1"/>
+
+  <!-- Checkmark -->
   <path d="M168 265 L232 335 L368 185"
         fill="none" stroke="url(#check)" stroke-width="44"
-        stroke-linecap="round" stroke-linejoin="round"
-        filter="url(#checkGlow)"/>
+        stroke-linecap="round" stroke-linejoin="round"/>
 
   <!-- Checkmark inner highlight -->
   <path d="M172 260 L234 328 L364 182"
-        fill="none" stroke="white" stroke-width="6" stroke-opacity="0.12"
+        fill="none" stroke="white" stroke-width="5" stroke-opacity="0.1"
         stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
