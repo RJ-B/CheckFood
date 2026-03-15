@@ -133,14 +133,15 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 
-    // Phase 1: logo shrinks + rises + bg gradient + glow
+    // Phase 1: logo shrinks + rises + bg gradient (NO glow yet — must
+    // match native splash which has no glow)
     _transitionCtrl.forward();
-    _glowCtrl.forward();
 
     await Future.delayed(const Duration(milliseconds: 750));
     if (!mounted) return;
 
-    // Phase 2: text appears + start pulse
+    // Phase 2: text appears + glow + pulse (glow starts AFTER transition)
+    _glowCtrl.forward();
     _textCtrl.forward();
     _pulseCtrl.repeat(reverse: true);
 
