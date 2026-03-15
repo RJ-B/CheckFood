@@ -17,10 +17,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  // Android 12 renders windowSplashScreenAnimatedIcon at 288dp.
-  static const double _nativeLogoSize = 288;
-  static const double _finalLogoSize = 150;
-  static const double _logoRiseDistance = 100;
+  // Android 12 renders the icon at 288dp but with 25% padding the
+  // visible logo is 216dp. Match this exactly for seamless handoff.
+  static const double _nativeLogoSize = 216;
+  static const double _finalLogoSize = 120;
+  static const double _logoRiseDistance = 80;
 
   // Master transition: logo scale + position + background
   late final AnimationController _transitionCtrl;
