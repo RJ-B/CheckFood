@@ -31,3 +31,16 @@ Klíčové ověření:
 
 Výsledek: PASS
 
+---
+2026-03-15 | T-0006 | TESTER
+
+Testováno: ověření všech 7 souborů (pom.xml, backend.yml, CLAUDE.md, RestaurantRepository.java, PasswordPolicy.java, DiningContextServiceImpl.java, TestReservationInitializer.java), backend compile s JDK 21.0.10 (Microsoft), backend testy (./mvnw test).
+
+Akceptační kritéria: všechna splněna (config + text blocks + getFirst).
+Backend compile: BUILD SUCCESS — 420 souborů, javac release 21.
+Backend testy: 73/80 PASS — 7 selhání, všechna pre-existující (ověřeno git stash + test na předchozím commitu eac0dd4: identické selhání).
+
+Žádné nové selhání způsobené T-0006.
+
+Výsledek: PASS
+

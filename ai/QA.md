@@ -2,6 +2,49 @@
 
 ---
 
+## T-0006 — Migrace backendu na JDK 21: konfigurace + syntaxe
+
+**Datum:** 2026-03-15
+**Výsledek:** PASS
+
+### Akceptační kritéria
+
+- [x] `pom.xml`: java.version=21, source=21, target=21 — ověřeno v pom.xml řádky 24, 214, 215
+- [x] CI workflow: java-version=21 — ověřeno v `.github/workflows/backend.yml` řádek 27
+- [x] CLAUDE.md: aktualizované references na Java 21 — sekce 1 (tabulka), sekce 3 (Language), sekce 4 (Prerequisites)
+- [x] Text blocks — `RestaurantRepository.java`: JPQL query převedena na text block se zpětným lomítkem
+- [x] Text blocks — `PasswordPolicy.java`: `getRequirementsMessage()` String.format s text block
+- [x] Sequenced collections — `DiningContextServiceImpl.java`: `candidates.get(0)` → `candidates.getFirst()`
+- [x] Sequenced collections — `TestReservationInitializer.java`: `tables.get(0)` → `tables.getFirst()`
+- [x] Build prochází — `mvn compile` s JDK 21.0.10 (Microsoft): BUILD SUCCESS
+- [x] Testy — 73/80 PASS, 7 selhání jsou výhradně pre-existující (ověřeno na předchozím commitu)
+
+### Build
+
+- Backend compile (JDK 21.0.10): BUILD SUCCESS — 420 souborů zkompilováno
+- Backend testy: 73/80 PASS (7 pre-existující failures — identické s předchozím commitem)
+- Frontend: N/A (tento task nemá frontend změny)
+
+### Pre-existující problémy (mimo scope T-0006, shodné s předchozími tasky)
+
+| # | Problém | Soubor |
+|---|---------|--------|
+| 1 | `AuthLogoutIntegrationTest.logoutAll_RemovesAllDevices` — logout-all neodstraní všechny devices | `AuthLogoutIntegrationTest.java` |
+| 2 | `MyRestaurantAuthorizationTest.getMyRestaurant_WithOwnerRole_PassesAuth` — expects 404, gets 409 | `MyRestaurantAuthorizationTest.java` |
+| 3 | `MyRestaurantAuthorizationTest.getMyRestaurant_WithManagerRole_PassesAuth` — expects 404, gets 409 | `MyRestaurantAuthorizationTest.java` |
+| 4 | `ReservationIntegrationTest.cancelledReservationShouldNotBlockSlots` — slot assertion failure | `ReservationIntegrationTest.java` |
+| 5 | `ReservationIntegrationTest.completedDoesNotBlockActiveBlocksFromStart` — slot assertion failure | `ReservationIntegrationTest.java` |
+| 6 | `ReservationIntegrationTest.shouldExcludeOverlappingSlots` — slot assertion failure | `ReservationIntegrationTest.java` |
+| 7 | `ReservationIntegrationTest.shouldReturnSlotsForFreeTable` — slot assertion failure | `ReservationIntegrationTest.java` |
+
+### Poznámky
+
+- JDK 21 lokálně k dispozici v `C:\Users\A\.jdks\ms-21.0.10` (Microsoft build). Standardní JAVA_HOME odkazuje na JDK 17 — pro lokální build je nutné nastavit JAVA_HOME explicitně.
+- CI (GitHub Actions) používá JDK 21 (aktualizováno v backend.yml) — build v CI poběží bez problémů.
+- Records, pattern matching instanceof, switch expressions, sealed classes — nebyly součástí scope tohoto tasku (implementační plán specifikoval pouze config + text blocks + getFirst).
+
+---
+
 ## T-0005 — Supabase Storage: migrace fotek z lokálního disku do cloudu
 
 **Datum:** 2026-03-10

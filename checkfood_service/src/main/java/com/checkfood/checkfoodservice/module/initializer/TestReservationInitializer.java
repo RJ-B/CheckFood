@@ -85,7 +85,7 @@ public class TestReservationInitializer {
         }
 
         // Tables: Stul 1 (2-cap), Stul 2 (4-cap), Stul 3 (4-cap), Stul 4 (6-cap), ...
-        RestaurantTable table1 = tables.get(0);
+        RestaurantTable table1 = tables.getFirst();
         RestaurantTable table2 = tables.get(1);
         RestaurantTable table3 = tables.get(2);
         RestaurantTable table4 = tables.get(3);

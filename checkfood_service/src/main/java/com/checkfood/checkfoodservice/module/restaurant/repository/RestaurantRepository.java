@@ -46,8 +46,10 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
      * Hibernate 6 automaticky přeloží řetězec 'CLOSED' na odpovídající Enum hodnotu.
      */
     @Modifying
-    @Query("UPDATE Restaurant r SET r.active = false, r.status = 'CLOSED', r.updatedAt = CURRENT_TIMESTAMP " +
-            "WHERE r.overtureId IS NOT NULL AND r.updatedAt < :syncStartTime")
+    @Query("""
+            UPDATE Restaurant r SET r.active = false, r.status = 'CLOSED', \
+            r.updatedAt = CURRENT_TIMESTAMP \
+            WHERE r.overtureId IS NOT NULL AND r.updatedAt < :syncStartTime""")
     int deactivateObsoleteOvertureRestaurants(@Param("syncStartTime") LocalDateTime syncStartTime);
 
     // ===================================================================================

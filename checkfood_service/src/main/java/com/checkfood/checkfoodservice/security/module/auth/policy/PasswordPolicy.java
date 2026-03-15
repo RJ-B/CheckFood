@@ -65,9 +65,9 @@ public class PasswordPolicy {
      * @return localized requirements message
      */
     public String getRequirementsMessage() {
-        return String.format(
-                "Heslo musí mít %d až %d znaků a obsahovat alespoň jedno velké písmeno, " +
-                        "malé písmeno, číslici a speciální znak (@$!%%*?&).",
+        return String.format("""
+                Heslo musí mít %d až %d znaků a obsahovat alespoň jedno velké písmeno, \
+                malé písmeno, číslici a speciální znak (@$!%%*?&).""",
                 MIN_LENGTH, MAX_LENGTH
         );
     }

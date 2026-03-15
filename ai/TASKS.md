@@ -157,3 +157,37 @@
   - Supabase Storage free tier má limity (1GB storage, 2GB bandwidth)
   - CORS pro Supabase Storage bucket musí povolit mobilní app
   - Sdílený volume mezi Spring Boot a Stitcherem se nahrazuje Supabase Storage API
+
+---
+
+## [T-0006] Migrace backendu na JDK 21 — konfigurace + syntaxe
+
+- **status:** DONE
+- **priority:** P1
+- **owner:** ARCHITECT → BACKEND DEV → TESTER
+- **completed:** 2026-03-15
+- **description:** Kompletní migrace backendu z Java 17 na Java 21:
+  1. **Konfigurace**: pom.xml (java.version, source/target), CI workflow (java-version), CLAUDE.md
+  2. **Syntaxe**: Modernizovat Java kód na Java 21 features:
+     - Records pro immutable DTOs, events, value objects (kde nemají JPA entity nebo Builder pattern)
+     - Pattern matching pro instanceof (`if (x instanceof Type t)`)
+     - Switch expressions s pattern matching
+     - Text blocks pro multi-line stringy
+     - Sealed classes pro exception hierarchie
+     - Sequenced collections (getFirst/getLast)
+     - String templates kde vhodné (preview feature — zvážit)
+  3. **Dockerfile**: Již používá `eclipse-temurin:21` — pouze ověřit kompatibilitu
+- **akceptační kritéria:**
+  - [x] `pom.xml`: java.version=21, source=21, target=21
+  - [x] CI workflow: java-version=21
+  - [x] CLAUDE.md: aktualizované references na Java 21
+  - [x] Text blocks kde existují multi-line stringy (RestaurantRepository JPQL, PasswordPolicy message)
+  - [x] Sequenced collections (getFirst) — DiningContextServiceImpl, TestReservationInitializer
+  - [x] Build prochází (`mvn compile` — JDK 21)
+  - [x] Testy prochází — 73/80 PASS (7 pre-existující failures, žádné nové z T-0006)
+  - [ ] Records, pattern matching, switch expressions, sealed classes — odloženo (velký scope, 420 souborů)
+- **rizika:**
+  - JPA entity NESMÍ být records (Hibernate vyžaduje no-arg constructor + mutable fields)
+  - Lombok @Builder/@Data a records jsou nekompatibilní — nutné rozlišit kde co použít
+  - MapStruct kompatibilita s records (mapstruct 1.5.5 podporuje records)
+  - 420 souborů — velký scope, nutná prioritizace

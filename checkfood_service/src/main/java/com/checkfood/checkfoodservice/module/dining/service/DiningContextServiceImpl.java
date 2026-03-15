@@ -59,7 +59,7 @@ public class DiningContextServiceImpl implements DiningContextService {
             return Optional.empty();
         }
 
-        Reservation reservation = candidates.get(0);
+        Reservation reservation = candidates.getFirst();
 
         Restaurant restaurant = restaurantRepository.findById(reservation.getRestaurantId())
                 .orElse(null);

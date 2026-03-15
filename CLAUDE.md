@@ -10,7 +10,7 @@ This file is the single source of truth for Claude Code when working on the Chec
 
 | Component         | Location                      | Tech                                                    |
 | ----------------- | ----------------------------- | ------------------------------------------------------- |
-| Backend API       | `checkfood_service/`          | Java 17, Spring Boot 3.5.7, PostgreSQL 15 + PostGIS 3.4 |
+| Backend API       | `checkfood_service/`          | Java 21, Spring Boot 3.5.7, PostgreSQL 15 + PostGIS 3.4 |
 | Mobile App        | `checkfood_client/`           | Flutter 3.7+, Dart, BLoC pattern                        |
 | Panorama Stitcher | `checkfood_service/stitcher/` | Python 3.12, FastAPI, OpenCV                            |
 | Root POM          | `pom.xml`                     | Maven aggregator (backend module only)                  |
@@ -111,7 +111,7 @@ CheckFood/
 
 | Category        | Technology                        | Version                       |
 | --------------- | --------------------------------- | ----------------------------- |
-| Language        | Java                              | 17 (runtime Docker image: 21) |
+| Language        | Java                              | 21                            |
 | Framework       | Spring Boot                       | 3.5.7                         |
 | Security        | Spring Security                   | 6.4.3                         |
 | ORM             | Hibernate JPA + Hibernate Spatial | —                             |
@@ -157,7 +157,7 @@ CheckFood/
 
 ### Prerequisites
 
-- Java 17 JDK (Eclipse Temurin), Maven 3.8+ or mvnw
+- Java 21 JDK (Eclipse Temurin), Maven 3.8+ or mvnw
 - Flutter SDK >= 3.7.2
 - Docker + Docker Compose
 - PostgreSQL 15 (or use Docker)
