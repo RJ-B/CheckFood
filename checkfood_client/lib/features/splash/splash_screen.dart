@@ -18,14 +18,14 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  // The native Android 12 splash renders the vector drawable at this size.
-  // Our Flutter logo must start at exactly this size and at screen center.
   // Android 12 renders windowSplashScreenAnimatedIcon at 288dp.
   // We must start at the same size so the handoff is invisible.
   static const double _nativeLogoSize = 288;
   static const double _finalLogoSize = 150;
-  // How many dp the logo moves up from true center to its final position.
   static const double _logoRiseDistance = 100;
+
+  // Start with PNG (identical to native splash), switch to SVG during animation.
+  bool _usePng = true;
 
   // Master transition: logo scale + position + background
   late final AnimationController _transitionCtrl;
@@ -133,8 +133,10 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 
-    // Phase 1: logo shrinks + rises + bg gradient (NO glow yet — must
-    // match native splash which has no glow)
+    // Switch to SVG during motion — any micro-difference is hidden by animation.
+    setState(() => _usePng = false);
+
+    // Phase 1: logo shrinks + rises + bg gradient
     _transitionCtrl.forward();
 
     await Future.delayed(const Duration(milliseconds: 750));
@@ -249,14 +251,21 @@ class _SplashScreenState extends State<SplashScreen>
                                   ),
                                 ),
                               ),
-                              // SVG logo — scale drives the shrink
+                              // Logo — starts as PNG (identical to native splash),
+                              // switches to SVG during animation.
                               Transform.scale(
                                 scale: scale,
-                                child: SvgPicture.asset(
-                                  'assets/icons/logo.svg',
-                                  width: _nativeLogoSize,
-                                  height: _nativeLogoSize,
-                                ),
+                                child: _usePng
+                                    ? Image.asset(
+                                        'assets/icons/splash_logo.png',
+                                        width: _nativeLogoSize,
+                                        height: _nativeLogoSize,
+                                      )
+                                    : SvgPicture.asset(
+                                        'assets/icons/logo.svg',
+                                        width: _nativeLogoSize,
+                                        height: _nativeLogoSize,
+                                      ),
                               ),
                             ],
                           ),
