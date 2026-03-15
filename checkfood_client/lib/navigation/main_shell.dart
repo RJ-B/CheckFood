@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Core & Security
 import '../core/di/injection_container.dart';
 import '../core/theme/colors.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../security/presentation/bloc/auth/auth_state.dart';
 import '../../security/presentation/pages/auth/login_page.dart';
@@ -75,23 +76,23 @@ class _MainShellState extends State<MainShell> {
     ];
   }
 
-  List<NavigationDestination> _buildDestinations(bool showMyRestaurant) {
+  List<NavigationDestination> _buildDestinations(bool showMyRestaurant, S l) {
     return [
-      const NavigationDestination(icon: Icon(Icons.search), label: 'Explore'),
-      const NavigationDestination(
-        icon: Icon(Icons.calendar_today),
-        label: 'Reservations',
+      NavigationDestination(icon: const Icon(Icons.search), label: l.explore),
+      NavigationDestination(
+        icon: const Icon(Icons.calendar_today),
+        label: l.myReservations,
       ),
-      const NavigationDestination(
-        icon: Icon(Icons.shopping_bag),
-        label: 'Orders',
+      NavigationDestination(
+        icon: const Icon(Icons.shopping_bag),
+        label: l.orders,
       ),
       if (showMyRestaurant)
-        const NavigationDestination(
-          icon: Icon(Icons.store),
-          label: 'My Restaurant',
+        NavigationDestination(
+          icon: const Icon(Icons.store),
+          label: l.myRestaurant,
         ),
-      const NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
+      NavigationDestination(icon: const Icon(Icons.person), label: l.profile),
     ];
   }
 
@@ -123,7 +124,7 @@ class _MainShellState extends State<MainShell> {
         builder: (context, authState) {
           final showMyRestaurant = _isRestaurantStaff(context);
           final tabs = _buildTabs(showMyRestaurant);
-          final destinations = _buildDestinations(showMyRestaurant);
+          final destinations = _buildDestinations(showMyRestaurant, S.of(context));
 
           // Clamp index to valid range
           final safeIndex = _currentIndex.clamp(0, tabs.length - 1);

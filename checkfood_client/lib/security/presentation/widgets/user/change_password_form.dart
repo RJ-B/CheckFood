@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/profile/request/change_password_request_model.dart';
 import '../../../validators/password_validator.dart';
 import '../../bloc/user/user_bloc.dart';
@@ -49,13 +50,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return BlocListener<UserBloc, UserState>(
       listener: (context, state) {
         state.maybeWhen(
           passwordChangeSuccess: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Heslo bylo úspěšně změněno.'),
+              SnackBar(
+                content: Text(l.changePasswordSuccess),
                 backgroundColor: Colors.green,
               ),
             );
@@ -73,39 +75,36 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         key: _formKey,
         child: Column(
           children: [
-            // 1. Staré heslo
             TextFormField(
               controller: _oldPasswordController,
               obscureText: _obscureText,
-              decoration: const InputDecoration(
-                labelText: 'Staré heslo',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock_outline),
+              decoration: InputDecoration(
+                labelText: l.oldPassword,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.lock_outline),
               ),
               validator:
-                  (v) => v?.isEmpty == true ? 'Zadejte staré heslo' : null,
+                  (v) => v?.isEmpty == true ? l.enterOldPassword : null,
             ),
             const SizedBox(height: 16),
 
-            // 2. Nové heslo
             TextFormField(
               controller: _newPasswordController,
               obscureText: _obscureText,
-              decoration: const InputDecoration(
-                labelText: 'Nové heslo',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
+              decoration: InputDecoration(
+                labelText: l.newPassword,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.lock),
               ),
               validator: PasswordValidator.validate,
             ),
             const SizedBox(height: 16),
 
-            // 3. Potvrzení hesla
             TextFormField(
               controller: _confirmPasswordController,
               obscureText: _obscureText,
               decoration: InputDecoration(
-                labelText: 'Potvrzení hesla',
+                labelText: l.confirmPassword,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
@@ -122,7 +121,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             ),
             const SizedBox(height: 24),
 
-            // Tlačítko
             BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 return state.maybeWhen(
@@ -134,7 +132,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: _onSubmit,
-                          child: const Text('Změnit heslo'),
+                          child: Text(l.changePasswordButton),
                         ),
                       ),
                 );

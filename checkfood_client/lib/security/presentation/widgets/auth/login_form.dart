@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
+
 // Domain Params
 import '../../../domain/usecases/auth/params/auth_params.dart';
 
@@ -51,6 +53,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return Form(
       key: _formKey,
       child: Column(
@@ -61,18 +64,18 @@ class _LoginFormState extends State<LoginForm> {
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
-              labelText: 'E-mail',
-              hintText: 'vase@adresa.cz',
-              prefixIcon: Icon(Icons.email_outlined),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l.email,
+              hintText: l.emailHint,
+              prefixIcon: const Icon(Icons.email_outlined),
+              border: const OutlineInputBorder(),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty) return 'Zadejte e-mail';
+              if (value == null || value.isEmpty) return l.enterEmail;
               if (!RegExp(
                 r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
               ).hasMatch(value)) {
-                return 'Zadejte platný formát e-mailu';
+                return l.enterValidEmail;
               }
               return null;
             },
@@ -86,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (_) => _onLoginPressed(),
             decoration: InputDecoration(
-              labelText: 'Heslo',
+              labelText: l.password,
               prefixIcon: const Icon(Icons.lock_outline),
               border: const OutlineInputBorder(),
               suffixIcon: IconButton(
@@ -100,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             validator:
                 (value) =>
-                    (value == null || value.isEmpty) ? 'Zadejte heslo' : null,
+                    (value == null || value.isEmpty) ? l.enterPassword : null,
           ),
 
           const SizedBox(height: 12),
@@ -112,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: () {
                 // TODO: Implementovat navigaci pro reset hesla
               },
-              child: const Text('Zapomněli jste heslo?'),
+              child: Text(l.forgotPassword),
             ),
           ),
 
@@ -145,7 +148,7 @@ class _LoginFormState extends State<LoginForm> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: const Text('PŘIHLÁSIT SE'),
+                        child: Text(l.loginTitle),
                       ),
                     ),
               );

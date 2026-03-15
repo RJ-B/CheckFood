@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../security/presentation/bloc/auth/auth_event.dart';
@@ -12,10 +13,11 @@ class OwnerRegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrace majitele'),
+        title: Text(l.ownerRegisterTitle),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -28,9 +30,7 @@ class OwnerRegisterPage extends StatelessWidget {
               FocusScope.of(context).unfocus();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text(
-                    'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail.',
-                  ),
+                  content: Text(l.registerSuccess),
                   backgroundColor: Colors.green.shade600,
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -70,7 +70,7 @@ class OwnerRegisterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Registrace majitele restaurace',
+                        l.ownerRegisterHeading,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class OwnerRegisterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Vytvořte si účet pro správu vaší restaurace',
+                        l.ownerRegisterSubtitle,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
@@ -104,7 +104,7 @@ class OwnerRegisterPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Již máte účet?",
+                                l.alreadyHaveAccount,
                                 style: TextStyle(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -123,7 +123,7 @@ class OwnerRegisterPage extends StatelessWidget {
                                         }
                                       },
                                 child: Text(
-                                  'Přihlaste se',
+                                  l.loginAction,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: isLoading

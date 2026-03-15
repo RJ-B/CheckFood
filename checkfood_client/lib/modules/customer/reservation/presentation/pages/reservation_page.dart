@@ -11,6 +11,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import '../../../../../core/di/injection_container.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../../../../navigation/main_shell.dart';
 import '../../presentation/bloc/my_reservations_bloc.dart';
 import '../../presentation/bloc/my_reservations_event.dart';
@@ -198,7 +199,7 @@ class _ReservationPageState extends State<ReservationPage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text('Rezervace stolu'),
+          title: Text(S.of(context).tableReservation),
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           elevation: 0,
@@ -231,8 +232,8 @@ class _ReservationPageState extends State<ReservationPage> {
                 MainShell.switchToTab(1);
                 sl<MyReservationsBloc>().add(const MyReservationsEvent.refresh());
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Rezervace vytvořena! Čeká na potvrzení.'),
+                  SnackBar(
+                    content: Text(S.of(context).reservationCreated),
                     backgroundColor: Colors.green,
                   ),
                 );
@@ -241,8 +242,8 @@ class _ReservationPageState extends State<ReservationPage> {
             // Show conflict toast
             if (state.submitConflict) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Termín už není volný. Vyberte jiný čas.'),
+                SnackBar(
+                  content: Text(S.of(context).slotUnavailable),
                   backgroundColor: Colors.orange,
                 ),
               );
@@ -263,7 +264,7 @@ class _ReservationPageState extends State<ReservationPage> {
                     const Icon(Icons.error_outline, color: Colors.red, size: 48),
                     const SizedBox(height: 16),
                     Text(
-                      'Nepodařilo se načíst scénu.',
+                      S.of(context).sceneLoadFailed,
                       style: TextStyle(color: Colors.grey[400]),
                     ),
                     const SizedBox(height: 16),
@@ -271,7 +272,7 @@ class _ReservationPageState extends State<ReservationPage> {
                       onPressed: () => _bloc.add(
                         ReservationEvent.loadScene(restaurantId: widget.restaurantId),
                       ),
-                      child: const Text('Zkusit znovu'),
+                      child: Text(S.of(context).retry),
                     ),
                   ],
                 ),
@@ -311,9 +312,9 @@ class _ReservationPageState extends State<ReservationPage> {
                           color: Colors.black54,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text(
-                          'Klepněte na stůl pro zobrazení volných termínů',
-                          style: TextStyle(color: Colors.white, fontSize: 13),
+                        child: Text(
+                          S.of(context).tapTableHint,
+                          style: const TextStyle(color: Colors.white, fontSize: 13),
                         ),
                       ),
                     ),
@@ -365,7 +366,7 @@ class _DatePickerRow extends StatelessWidget {
                 onDateChanged(picked.toIso8601String().substring(0, 10));
               }
             },
-            child: const Text('Změnit', style: TextStyle(color: Colors.tealAccent)),
+            child: Text(S.of(context).change, style: const TextStyle(color: Colors.tealAccent)),
           ),
         ],
       ),

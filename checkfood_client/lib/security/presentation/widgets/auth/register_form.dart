@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// Services
 
-// BLoC a State
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../validators/auth_validators.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
-
-// Domain Params
 import '../../../domain/usecases/auth/params/auth_params.dart';
 import 'password_strength_indicator.dart';
 
@@ -66,6 +63,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.disabled,
@@ -78,19 +76,19 @@ class _RegisterFormState extends State<RegisterForm> {
               Expanded(
                 child: _buildTextField(
                   controller: _firstNameController,
-                  label: 'Jméno',
+                  label: l.firstName,
                   icon: Icons.person_outline,
-                  validator: (v) => AuthValidators.validateRequired(v, 'Jméno'),
+                  validator: (v) => AuthValidators.validateRequired(v, l.firstName),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: _buildTextField(
                   controller: _lastNameController,
-                  label: 'Příjmení',
+                  label: l.lastName,
                   icon: Icons.person,
                   validator:
-                      (v) => AuthValidators.validateRequired(v, 'Příjmení'),
+                      (v) => AuthValidators.validateRequired(v, l.lastName),
                 ),
               ),
             ],
@@ -99,7 +97,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
           _buildTextField(
             controller: _emailController,
-            label: 'Email',
+            label: l.email,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
             validator: AuthValidators.validateEmail,
@@ -108,7 +106,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
           _buildTextField(
             controller: _passwordController,
-            label: 'Heslo',
+            label: l.password,
             icon: Icons.lock_outline,
             obscureText: !_isPasswordVisible,
             onChanged: (_) => setState(() {}),
@@ -129,10 +127,9 @@ class _RegisterFormState extends State<RegisterForm> {
 
           _buildTextField(
             controller: _confirmPasswordController,
-            label: 'Potvrzení hesla',
+            label: l.confirmPassword,
             icon: Icons.lock_reset,
             obscureText: !_isPasswordVisible,
-            // Validace shody hesel probíhá ZDE na klientovi
             validator:
                 (v) => AuthValidators.validateConfirmPassword(
                   v,
@@ -163,9 +160,9 @@ class _RegisterFormState extends State<RegisterForm> {
                           width: 24,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                        : const Text(
-                          'Vytvořit účet',
-                          style: TextStyle(
+                        : Text(
+                          l.createAccount,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

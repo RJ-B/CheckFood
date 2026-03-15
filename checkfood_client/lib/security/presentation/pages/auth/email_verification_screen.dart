@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../bloc/auth/auth_event.dart';
-
-// ... importy zůstávají stejné
 
 class EmailVerificationScreen extends StatelessWidget {
   final String? email;
@@ -22,12 +21,13 @@ class EmailVerificationScreen extends StatelessWidget {
       ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
+          final l = S.of(context);
           state.maybeWhen(
             authenticated: (user) {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('E-mail byl úspěšně ověřen!'),
+                SnackBar(
+                  content: Text(l.emailVerified),
                   backgroundColor: Colors.green,
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -41,7 +41,6 @@ class EmailVerificationScreen extends StatelessWidget {
                   error.isExpired ||
                   error.message.toLowerCase().contains('vypršel');
 
-              // ✅ Bezpečné získání e-mailu pro resend
               final String? effectiveEmail = email ?? error.email;
 
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -54,7 +53,7 @@ class EmailVerificationScreen extends StatelessWidget {
                   action:
                       isExpired && effectiveEmail != null
                           ? SnackBarAction(
-                            label: 'ZNOVU ODESLAT',
+                            label: l.resendCode,
                             textColor: Colors.white,
                             onPressed: () {
                               context.read<AuthBloc>().add(
@@ -71,7 +70,7 @@ class EmailVerificationScreen extends StatelessWidget {
         },
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            // ✅ Přidán indikátor načítání, pokud se právě odesílá nová žádost
+            final l = S.of(context);
             final isLoading = state.maybeWhen(
               loading: () => true,
               orElse: () => false,
@@ -89,9 +88,9 @@ class EmailVerificationScreen extends StatelessWidget {
                       color: Colors.green,
                     ),
                     const SizedBox(height: 32),
-                    const Text(
-                      "Zkontrolujte si e-mail",
-                      style: TextStyle(
+                    Text(
+                      l.checkEmail,
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
@@ -99,7 +98,7 @@ class EmailVerificationScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      "Na adresu ${email ?? 'vaši e-mailovou adresu'} jsme odeslali potvrzovací odkaz.",
+                      l.verificationEmailSent(email ?? 'email'),
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black54,
@@ -124,11 +123,11 @@ class EmailVerificationScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text("Zpět na přihlášení"),
+                      child: Text(l.backToLogin),
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      "Nedostal jste e-mail nebo odkaz vypršel?",
+                      l.emailNotReceived,
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                     const SizedBox(height: 8),
@@ -144,9 +143,9 @@ class EmailVerificationScreen extends StatelessWidget {
                                   );
                                 }
                                 : null,
-                        child: const Text(
-                          "Odeslat znovu",
-                          style: TextStyle(
+                        child: Text(
+                          l.resend,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
                           ),

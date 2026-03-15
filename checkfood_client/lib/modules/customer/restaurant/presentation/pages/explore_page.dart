@@ -9,6 +9,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../components/dialogs/location_permission_dialog.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../data/models/request/map_params_model.dart';
 import '../../domain/entities/cuisine_type.dart';
 import '../../domain/entities/restaurant_filters.dart';
@@ -240,9 +241,9 @@ class _ExplorePageState extends State<ExplorePage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Nelze zjistit polohu. Zkontrolujte opravneni.'),
+            content: Text(S.of(context).cannotGetLocation),
             action: SnackBarAction(
-              label: 'Nastaveni',
+              label: S.of(context).settings,
               onPressed: () => Geolocator.openAppSettings(),
             ),
           ),
@@ -444,11 +445,11 @@ class _ExplorePageState extends State<ExplorePage> {
           Expanded(
             child: TextField(
               controller: _searchController,
-              decoration: const InputDecoration(
-                hintText: 'Hledat restaurace...',
+              decoration: InputDecoration(
+                hintText: S.of(context).searchRestaurants,
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
               ),
               onChanged: (value) {
                 context.read<ExploreBloc>().add(
@@ -497,7 +498,7 @@ class _ExplorePageState extends State<ExplorePage> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           _buildToggleChip(
-            label: 'Oblibene',
+            label: S.of(context).favorites,
             icon: Icons.favorite,
             selected: filters.favouritesOnly,
             onTap: () {
@@ -511,7 +512,7 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
           const SizedBox(width: 8),
           _buildToggleChip(
-            label: 'Otevreno',
+            label: S.of(context).open,
             icon: Icons.access_time,
             selected: filters.openNow,
             onTap: () {
@@ -681,7 +682,7 @@ class _ExplorePageState extends State<ExplorePage> {
               if (filters.minRating != null)
                 ListTile(
                   leading: const Icon(Icons.clear),
-                  title: const Text('Zrusit filtr'),
+                  title: Text(S.of(context).clearFilter),
                   onTap: () {
                     Navigator.pop(ctx);
                     final newFilters = filters.copyWith(minRating: null);
@@ -739,7 +740,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                   ),
                                 );
                               },
-                              child: const Text('Potvrdit'),
+                              child: Text(S.of(context).confirm),
                             ),
                           ],
                         ),
@@ -794,14 +795,14 @@ class _ExplorePageState extends State<ExplorePage> {
         children: [
           const Icon(Icons.error_outline, size: 48, color: Colors.red),
           const Gap(16),
-          Text("Chyba: $message"),
+          Text(S.of(context).errorGeneric(message)),
           const Gap(16),
           ElevatedButton(
             onPressed:
                 () => context.read<ExploreBloc>().add(
                   const ExploreEvent.initializeRequested(),
                 ),
-            child: const Text("Zkusit znovu"),
+            child: Text(S.of(context).retry),
           ),
         ],
       ),

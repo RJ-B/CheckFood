@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../l10n/generated/app_localizations.dart';
+
 class LocationPermissionDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
@@ -13,22 +15,23 @@ class LocationPermissionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text('Povolení polohy'),
+      title: Text(l.locationPermissionTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.location_on_outlined, size: 64, color: Colors.blue),
           const Gap(16),
-          const Text(
-            'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.',
+          Text(
+            l.locationPermissionDesc,
             textAlign: TextAlign.center,
           ),
         ],
       ),
       actions: [
-        TextButton(onPressed: onCancel, child: const Text('Zadat ručně')),
+        TextButton(onPressed: onCancel, child: Text(l.enterManually)),
         ElevatedButton(
           onPressed: onConfirm,
           style: ElevatedButton.styleFrom(
@@ -36,7 +39,7 @@ class LocationPermissionDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          child: const Text('Povolit v systému'),
+          child: Text(l.allowInSystem),
         ),
       ],
     );

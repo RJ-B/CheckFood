@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-// Request Model
-
-// Bloc
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/profile/request/update_profile_request_model.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
@@ -68,10 +66,10 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Osobní údaje'), centerTitle: true),
+      appBar: AppBar(title: Text(l.personalData), centerTitle: true),
       body: BlocConsumer<UserBloc, UserState>(
-        // ✅ KLÍČOVÁ ÚPRAVA: Reagujeme jen na přechod Loading -> Loaded
         listenWhen: (previous, current) {
           return previous.maybeMap(loading: (_) => true, orElse: () => false);
         },
@@ -80,13 +78,11 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
             loaded: (profile, _, __, ___) {
               if (ModalRoute.of(context)?.isCurrent ?? false) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Údaje byly úspěšně aktualizovány'),
+                  SnackBar(
+                    content: Text(l.profileUpdated),
                     backgroundColor: Colors.green,
                   ),
                 );
-                // Volitelně: Můžeme uživatele vrátit zpět na profil
-                // Navigator.pop(context);
               }
             },
             failure: (message) {
@@ -98,7 +94,6 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
           );
         },
         builder: (context, state) {
-          // Zjištění, zda se načítá (pro disable inputů)
           final bool isLoading = state.maybeMap(
             loading: (_) => true,
             orElse: () => false,
@@ -111,13 +106,13 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Základní informace',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Text(
+                    l.basicInfo,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const Text(
-                    'Zde můžete upravit své jméno a příjmení.',
-                    style: TextStyle(color: Colors.grey),
+                  Text(
+                    l.basicInfoSubtitle,
+                    style: const TextStyle(color: Colors.grey),
                   ),
                   const Gap(24),
 
@@ -125,14 +120,14 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                     controller: _firstNameController,
                     enabled: !isLoading,
                     textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      labelText: 'Jméno',
-                      prefixIcon: Icon(Icons.person_outline),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l.firstName,
+                      prefixIcon: const Icon(Icons.person_outline),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Prosím zadejte jméno';
+                        return l.enterFirstName;
                       }
                       return null;
                     },
@@ -143,14 +138,14 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                     controller: _lastNameController,
                     enabled: !isLoading,
                     textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      labelText: 'Příjmení',
-                      prefixIcon: Icon(Icons.person_outline),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l.lastName,
+                      prefixIcon: const Icon(Icons.person_outline),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Prosím zadejte příjmení';
+                        return l.enterLastName;
                       }
                       return null;
                     },
@@ -161,10 +156,10 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                     controller: _emailController,
                     readOnly: true,
                     enabled: false,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l.email,
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: const OutlineInputBorder(),
                       filled: true,
                     ),
                   ),
@@ -184,7 +179,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                              : const Text('Uložit změny'),
+                              : Text(l.saveChanges),
                     ),
                   ),
                 ],

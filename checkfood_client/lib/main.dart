@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'app.dart';
 import 'core/di/injection_container.dart' as di;
+import 'core/locale/locale_cubit.dart';
 
 // Importy BLoCů a Eventů
 import 'security/presentation/bloc/auth/auth_bloc.dart';
@@ -75,8 +76,10 @@ class AppBootstrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // LocaleCubit: Spravuje aktuální jazyk aplikace.
+        BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()),
+
         // AuthBloc: Zpracovává persistence tokenů a globální stav přihlášení.
-        // Událost appStarted iniciuje kontrolu uloženého JWT v Secure Storage.
         BlocProvider<AuthBloc>(
           create:
               (context) => di.sl<AuthBloc>()..add(const AuthEvent.appStarted()),

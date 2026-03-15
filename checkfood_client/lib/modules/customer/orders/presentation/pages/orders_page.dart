@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
@@ -32,9 +33,10 @@ class _OrdersPageState extends State<OrdersPage> {
           prev.contextError != curr.contextError,
       builder: (context, state) {
         // Loading context
+        final l = S.of(context);
         if (state.contextLoading) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Objednávky')),
+            appBar: AppBar(title: Text(l.ordersTitle)),
             body: const Center(child: CircularProgressIndicator()),
           );
         }
@@ -42,7 +44,7 @@ class _OrdersPageState extends State<OrdersPage> {
         // No active context
         if (state.noActiveContext) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Objednávky')),
+            appBar: AppBar(title: Text(l.ordersTitle)),
             body: const NoContextWidget(),
           );
         }
@@ -50,7 +52,7 @@ class _OrdersPageState extends State<OrdersPage> {
         // Context error
         if (state.contextError != null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Objednávky')),
+            appBar: AppBar(title: Text(l.ordersTitle)),
             body: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -61,7 +63,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     onPressed: () => context
                         .read<OrdersBloc>()
                         .add(const OrdersEvent.loadContext()),
-                    child: const Text('Zkusit znovu'),
+                    child: Text(l.retry),
                   ),
                 ],
               ),
@@ -109,10 +111,10 @@ class _OrdersTabView extends StatelessWidget {
               ),
             ],
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.restaurant_menu), text: 'Menu'),
-              Tab(icon: Icon(Icons.receipt_long), text: 'Moje objednávky'),
+              Tab(icon: const Icon(Icons.restaurant_menu), text: S.of(context).menu),
+              Tab(icon: const Icon(Icons.receipt_long), text: S.of(context).myOrders),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../data/models/request/add_employee_request_model.dart';
 
 class AddEmployeeDialog extends StatefulWidget {
@@ -24,8 +25,9 @@ class _AddEmployeeDialogState extends State<AddEmployeeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return AlertDialog(
-      title: const Text('Add Employee'),
+      title: Text(l.addEmployee),
       content: Form(
         key: _formKey,
         child: Column(
@@ -33,19 +35,19 @@ class _AddEmployeeDialogState extends State<AddEmployeeDialog> {
           children: [
             TextFormField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                hintText: 'employee@example.com',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email_outlined),
+              decoration: InputDecoration(
+                labelText: l.email,
+                hintText: l.emailHint,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.email_outlined),
               ),
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Email is required';
+                  return l.emailRequired;
                 }
                 if (!value.contains('@')) {
-                  return 'Enter a valid email';
+                  return l.enterValidEmailShort;
                 }
                 return null;
               },
@@ -53,13 +55,13 @@ class _AddEmployeeDialogState extends State<AddEmployeeDialog> {
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               value: _selectedRole,
-              decoration: const InputDecoration(
-                labelText: 'Role',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l.role,
+                border: const OutlineInputBorder(),
               ),
-              items: const [
-                DropdownMenuItem(value: 'MANAGER', child: Text('Manager')),
-                DropdownMenuItem(value: 'STAFF', child: Text('Staff')),
+              items: [
+                DropdownMenuItem(value: 'MANAGER', child: Text(l.manager)),
+                DropdownMenuItem(value: 'STAFF', child: Text(l.staff)),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -73,11 +75,11 @@ class _AddEmployeeDialogState extends State<AddEmployeeDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l.cancel),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Add'),
+          child: Text(l.add),
         ),
       ],
     );

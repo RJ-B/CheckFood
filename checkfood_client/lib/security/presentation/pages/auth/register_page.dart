@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_state.dart';
@@ -13,11 +14,11 @@ class RegisterPage extends StatelessWidget {
     // Použití Theme pro konzistentní barvy
     final theme = Theme.of(context);
 
+    final l = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrace'),
+        title: Text(l.registerTitle),
         centerTitle: true,
-        // Barvy bereme z tématu, ne natvrdo
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: theme.colorScheme.onSurface,
@@ -25,16 +26,12 @@ class RegisterPage extends StatelessWidget {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.maybeWhen(
-            // 1. ÚSPĚCH -> Navigace
             registerSuccess: () {
-              // Skryjeme klávesnici, pokud zůstala otevřená
               FocusScope.of(context).unfocus();
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text(
-                    'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail.',
-                  ),
+                  content: Text(l.registerSuccess),
                   backgroundColor: Colors.green.shade600,
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -82,7 +79,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Vytvořte si účet',
+                        l.createAccount,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -91,7 +88,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Zadejte své údaje pro zahájení cesty s CheckFood',
+                        l.registerSubtitle,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
@@ -117,13 +114,12 @@ class RegisterPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Již máte účet?",
+                                l.alreadyHaveAccount,
                                 style: TextStyle(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
                               TextButton(
-                                // Pokud se načítá, tlačítko deaktivujeme (null)
                                 onPressed:
                                     isLoading
                                         ? null
@@ -139,7 +135,7 @@ class RegisterPage extends StatelessWidget {
                                           }
                                         },
                                 child: Text(
-                                  'Přihlaste se',
+                                  l.loginAction,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color:

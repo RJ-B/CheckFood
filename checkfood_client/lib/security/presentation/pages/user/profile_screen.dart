@@ -11,6 +11,10 @@ import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
 import '../../bloc/user/user_state.dart';
 
+// Locale
+import '../../../../core/locale/locale_cubit.dart';
+import '../../../../l10n/generated/app_localizations.dart';
+
 // Widgets
 import '../../widgets/user/change_password_form.dart';
 import '../../widgets/user/device/device_item_tile.dart';
@@ -38,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // --- 1. ZMĚNA HESLA ---
   void _showChangePasswordDialog(BuildContext context) {
+    final l = S.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -55,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Změna hesla',
+                    l.changePassword,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const Gap(16),
@@ -70,11 +75,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // --- 2. SPRÁVA ZAŘÍZENÍ (Dialog) ---
   void _showDevicesDialog(BuildContext context, List<Device> devices) {
+    final l = S.of(context);
     showDialog(
       context: context,
       builder:
           (ctx) => AlertDialog(
-            title: const Text('Aktivní zařízení'),
+            title: Text(l.activeDevices),
             content: SizedBox(
               width: double.maxFinite,
               child: ConstrainedBox(
@@ -83,9 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child:
                     devices.isEmpty
-                        ? const Center(
-                          child: Text('Žádná další aktivní zařízení.'),
-                        )
+                        ? Center(child: Text(l.noOtherDevices))
                         : ListView.builder(
                           shrinkWrap: true,
                           itemCount: devices.length,
@@ -93,9 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             final device = devices[index];
                             return DeviceItemTile(
                               device: device,
-                              // ✅ Model Device má nyní property isCurrentDevice
                               isCurrentDevice: device.isCurrentDevice,
-
                               onLogout: () {
                                 context.read<UserBloc>().add(
                                   UserEvent.deviceLoggedOut(device.id),
@@ -110,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('Zavřít'),
+                child: Text(l.close),
               ),
               if (devices.length > 1)
                 TextButton(
@@ -120,9 +122,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                     Navigator.pop(ctx);
                   },
-                  child: const Text(
-                    'Odhlásit ostatní',
-                    style: TextStyle(color: Colors.red),
+                  child: Text(
+                    l.logoutOthers,
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
             ],
@@ -134,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Můj Profil'),
+        title: Text(S.of(context).profile),
         centerTitle: true,
         scrolledUnderElevation: 0,
       ),
@@ -143,10 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           state.maybeWhen(
             devicesLogoutSuccess: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Byl jste odhlášen ze všech ostatních zařízení.',
-                  ),
+                SnackBar(
+                  content: Text(S.of(context).loggedOutFromDevices),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -217,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const UserEvent.devicesRequested(),
                           );
                         },
-                        child: const Text('Zkusit znovu'),
+                        child: Text(S.of(context).retry),
                       ),
                     ],
                   ),
@@ -234,34 +234,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     UserProfile profile,
     List<Device> devices,
   ) {
+    final l = S.of(context);
     return Column(
       children: [
         // --- SEKCE: MŮJ ÚČET ---
-        _buildSectionHeader('Můj Účet'),
+        _buildSectionHeader(l.sectionMyAccount),
         ProfileMenuItem(
           icon: Icons.person_outline,
-          title: 'Osobní údaje',
-          subtitle: 'Jméno, příjmení a kontaktní údaje',
+          title: l.personalData,
+          subtitle: l.personalDataSubtitle,
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const PersonalDataScreen(),
               ),
-            ).then((_) {
-              // Po návratu volitelně refresh
-            });
+            );
           },
         ),
         ProfileMenuItem(
           icon: Icons.calendar_month_outlined,
-          title: 'Moje rezervace',
-          subtitle: 'Historie a nadcházející rezervace',
+          title: l.myReservations,
+          subtitle: l.myReservationsSubtitle,
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Modul Rezervace bude brzy dostupný.'),
-              ),
+              SnackBar(content: Text(l.reservationsModuleSoon)),
             );
           },
         ),
@@ -269,33 +266,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const Gap(16),
 
         // --- SEKCE: ZABEZPEČENÍ ---
-        _buildSectionHeader('Zabezpečení'),
+        _buildSectionHeader(l.sectionSecurity),
         if (profile.authProvider == 'LOCAL')
           ProfileMenuItem(
             icon: Icons.lock_outline,
-            title: 'Změna hesla',
+            title: l.changePassword,
             onTap: () => _showChangePasswordDialog(context),
           ),
         if (profile.authProvider != 'LOCAL')
           ProfileMenuItem(
             icon: Icons.lock_outline,
-            title: 'Přihlášení přes ${profile.authProvider == 'GOOGLE' ? 'Google' : 'Apple'}',
-            subtitle: 'Heslo spravuje externí poskytovatel',
+            title: l.loginVia(profile.authProvider == 'GOOGLE' ? 'Google' : 'Apple'),
+            subtitle: l.passwordManagedByProvider,
             onTap: () {},
           ),
         ProfileMenuItem(
           icon: Icons.devices,
-          title: 'Správa zařízení',
-          // ✅ Zde už používáme samostatný seznam devices
-          subtitle: '${devices.length} aktivních zařízení',
-          // ✅ A ten samý seznam posíláme do dialogu
+          title: l.deviceManagement,
+          subtitle: l.activeDevicesCount(devices.length),
           onTap: () => _showDevicesDialog(context, devices),
         ),
 
         const Gap(16),
 
         // --- SEKCE: APLIKACE ---
-        _buildSectionHeader('Aplikace'),
+        _buildSectionHeader(l.sectionApp),
+        // --- JAZYK ---
+        ProfileMenuItem(
+          icon: Icons.language,
+          title: l.language,
+          subtitle: l.languageSubtitle,
+          onTap: () => _showLanguageDialog(context),
+        ),
         // --- PUSH NOTIFIKACE SWITCH ---
         BlocSelector<UserBloc, UserState, ({bool enabled, bool loading})>(
           selector: (state) => state.maybeWhen(
@@ -317,14 +319,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.grey.shade700,
                 ),
               ),
-              title: const Text(
-                'Push notifikace',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              title: Text(
+                l.pushNotifications,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  notifState.enabled ? 'Zapnuto' : 'Vypnuto',
+                  notifState.enabled ? l.enabled : l.disabled,
                   style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
                 ),
               ),
@@ -341,15 +343,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         ProfileMenuItem(
           icon: Icons.help_outline,
-          title: 'Nápověda',
+          title: l.help,
           onTap: () {},
         ),
         ProfileMenuItem(
           icon: Icons.support_agent,
-          title: 'Kontaktovat podporu',
+          title: l.contactSupport,
           onTap: () {},
         ),
       ],
+    );
+  }
+
+  // --- 3. VOLBA JAZYKA (Dialog) ---
+  void _showLanguageDialog(BuildContext context) {
+    final localeCubit = context.read<LocaleCubit>();
+    final l = S.of(context);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l.language),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<String>(
+              title: Text(l.czech),
+              value: 'cs',
+              groupValue: localeCubit.state.languageCode,
+              onChanged: (value) {
+                localeCubit.setLocale(const Locale('cs', 'CZ'));
+                Navigator.pop(ctx);
+              },
+            ),
+            RadioListTile<String>(
+              title: Text(l.english),
+              value: 'en',
+              groupValue: localeCubit.state.languageCode,
+              onChanged: (value) {
+                localeCubit.setLocale(const Locale('en', 'US'));
+                Navigator.pop(ctx);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 

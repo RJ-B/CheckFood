@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
@@ -45,13 +46,14 @@ class _LoginPageState extends State<LoginPage> {
   /// Zobrazí SnackBar na základě výsledku verifikace z Deep Linku
   void _handleVerificationFeedback() {
     final isSuccess = widget.verificationStatus == 'success';
+    final l = S.of(context);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           isSuccess
-              ? 'Váš účet byl úspěšně aktivován! Nyní se můžete přihlásit.'
-              : (widget.verificationMessage ?? 'Chyba při aktivaci účtu.'),
+              ? l.accountActivated
+              : (widget.verificationMessage ?? l.activationError),
         ),
         backgroundColor: isSuccess ? Colors.green : Colors.red,
         behavior: SnackBarBehavior.floating,
@@ -119,10 +121,10 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.green,
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'CheckFood',
+                  Text(
+                    S.of(context).appTitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
@@ -131,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Přihlaste se ke svému účtu',
+                    S.of(context).loginSubtitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
@@ -168,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            "NEBO",
+            S.of(context).or,
             style: TextStyle(
               color: Colors.grey.shade400,
               fontSize: 11,
@@ -219,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
         ).pushNamed(AppRouter.verifyEmail, arguments: _lastAttemptedEmail);
       },
       icon: const Icon(Icons.mail_outline),
-      label: const Text('VYŘEŠIT AKTIVACI ÚČTU'),
+      label: Text(S.of(context).resolveActivation),
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.orange.shade900,
         side: BorderSide(color: Colors.orange.shade900),
@@ -230,22 +232,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildRegisterLink() {
+    final l = S.of(context);
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Ještě nemáte účet?",
+              l.noAccountYet,
               style: TextStyle(color: Colors.grey.shade700),
             ),
             TextButton(
               onPressed: () =>
                   Navigator.of(context).pushNamed(AppRouter.register),
-              child: const Text(
-                'Zaregistrujte se',
+              child: Text(
+                l.signUp,
                 style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                    const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
               ),
             ),
           ],
@@ -254,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () =>
               Navigator.of(context).pushNamed(AppRouter.registerOwner),
           child: Text(
-            'Registrovat se jako majitel restaurace',
+            l.registerAsOwner,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               color: Colors.grey.shade600,
@@ -288,7 +291,7 @@ class _SocialButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: onPressed,
         icon: Icon(icon, size: 28, color: textColor),
-        label: Text('Pokračovat s $label'),
+        label: Text(S.of(context).continueWith(label)),
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
           foregroundColor: textColor,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
@@ -32,7 +33,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
         if (state.submitSuccess) {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Objednávka odeslána!')),
+            SnackBar(content: Text(S.of(context).orderSent)),
           );
         }
         if (state.submitError != null) {
@@ -68,7 +69,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Košík',
+                        S.of(context).cart,
                         style: theme.textTheme.titleLarge,
                       ),
                       if (state.cartItems.isNotEmpty)
@@ -76,7 +77,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                           onPressed: () => context
                               .read<OrdersBloc>()
                               .add(const OrdersEvent.clearCart()),
-                          child: const Text('Vyprázdnit'),
+                          child: Text(S.of(context).emptyCart),
                         ),
                     ],
                   ),
@@ -136,9 +137,9 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextField(
                     controller: _noteController,
-                    decoration: const InputDecoration(
-                      hintText: 'Poznámka k objednávce...',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      hintText: S.of(context).orderNote,
+                      border: const OutlineInputBorder(),
                       isDense: true,
                     ),
                     maxLines: 2,
@@ -155,7 +156,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Celkem:',
+                            S.of(context).total,
                             style: theme.textTheme.titleMedium,
                           ),
                           Text(
@@ -191,7 +192,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                     color: Colors.white,
                                   ),
                                 )
-                              : const Text('Odeslat objednávku'),
+                              : Text(S.of(context).sendOrder),
                         ),
                       ),
                     ],
