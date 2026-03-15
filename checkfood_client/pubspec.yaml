@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # --- Základní UI a Ikony ---
   cupertino_icons: ^1.0.8
@@ -116,10 +118,10 @@ flutter_launcher_icons:
 # Konfigurace Splash Screenu
 # --------------------------------------------------
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#0F2027"
   image: assets/icons/CheckFood_icon.png
   android_12:
-    color: "#FFFFFF"
+    color: "#0F2027"
     image: assets/icons/CheckFood_icon.png
 
 # --------------------------------------------------

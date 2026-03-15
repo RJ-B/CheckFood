@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'navigation/app_router.dart';
 
@@ -13,6 +14,18 @@ class CheckFoodApp extends StatelessWidget {
     return MaterialApp(
       title: 'CheckFood',
       debugShowCheckedModeBanner: false,
+
+      // Lokalizace — potřebné pro showDatePicker s českou locale
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('cs', 'CZ'),
+        Locale('en', 'US'),
+      ],
+      locale: const Locale('cs', 'CZ'),
 
       // Použití tvého definovaného tématu
       theme: AppTheme.light(),
