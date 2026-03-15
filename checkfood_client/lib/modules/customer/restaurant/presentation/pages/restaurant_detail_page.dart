@@ -10,6 +10,7 @@ import '../../../../customer/reservation/presentation/pages/reservation_page.dar
 import '../bloc/restaurant_detail_bloc.dart';
 import '../bloc/restaurant_detail_event.dart';
 import '../bloc/restaurant_detail_state.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 /// Celostránkový detail restaurace.
 /// Přijímá [restaurantId] a sám si načte data přes RestaurantDetailBloc.
@@ -187,7 +188,7 @@ class _DetailContent extends StatelessWidget {
               style: TextStyle(color: Colors.grey[700], fontSize: 14),
             ),
             _dot(),
-            _buildOpenNowBadge(),
+            _buildOpenNowBadge(context),
           ],
         ),
       ],
@@ -208,7 +209,8 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildOpenNowBadge() {
+  Widget _buildOpenNowBadge(BuildContext context) {
+    final l = S.of(context);
     final now = DateTime.now();
     final todayHours = _getTodayHours(now.weekday);
 
@@ -231,7 +233,7 @@ class _DetailContent extends StatelessWidget {
         ),
         const Gap(4),
         Text(
-          isOpen ? 'Otevřeno' : 'Zavřeno',
+          isOpen ? l.open : l.closed,
           style: TextStyle(
             color: isOpen ? Colors.green[700] : Colors.red[700],
             fontWeight: FontWeight.w600,
@@ -296,7 +298,7 @@ class _DetailContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'O restauraci',
+          S.of(context).aboutRestaurant,
           style: Theme.of(context)
               .textTheme
               .titleMedium
@@ -318,21 +320,22 @@ class _DetailContent extends StatelessWidget {
   // --- OPENING HOURS ---
 
   Widget _buildOpeningHours(BuildContext context) {
+    final l = S.of(context);
     final dayNames = [
-      'Pondělí',
-      'Úterý',
-      'Středa',
-      'Čtvrtek',
-      'Pátek',
-      'Sobota',
-      'Neděle',
+      l.dayMonday,
+      l.dayTuesday,
+      l.dayWednesday,
+      l.dayThursday,
+      l.dayFriday,
+      l.daySaturday,
+      l.daySunday,
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Otevírací doba',
+          l.openingHoursLabel,
           style: Theme.of(context)
               .textTheme
               .titleMedium
@@ -360,7 +363,7 @@ class _DetailContent extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  hours?.formattedHours ?? 'Zavřeno',
+                  hours?.formattedHours ?? l.closed,
                   style: TextStyle(
                     fontWeight: isToday ? FontWeight.w600 : FontWeight.normal,
                     fontSize: 14,
@@ -426,7 +429,7 @@ class _DetailContent extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        child: const Text('Rezervovat stůl'),
+        child: Text(S.of(context).reserveTable),
       ),
     );
   }
@@ -460,7 +463,7 @@ class _ErrorContent extends StatelessWidget {
             const Gap(16),
             ElevatedButton(
               onPressed: onRetry,
-              child: const Text('Zkusit znovu'),
+              child: Text(S.of(context).retry),
             ),
           ],
         ),

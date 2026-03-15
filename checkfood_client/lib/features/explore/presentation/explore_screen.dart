@@ -8,6 +8,7 @@ import '../../../components/cards/restaurant_card.dart';
 
 import '../domain/restaurant_model.dart';
 import 'restaurant_detail_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -45,8 +46,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Explore'), centerTitle: false),
+      appBar: AppBar(title: Text(l.explore), centerTitle: false),
       body:
           _isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -68,8 +70,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
                   /* ---------------------------------------------------------- */
                   /* SECTION HEADER */
-                  const SliverToBoxAdapter(
-                    child: SectionHeader(title: 'Popular near you'),
+                  SliverToBoxAdapter(
+                    child: SectionHeader(title: l.popularNearYou),
                   ),
 
                   /* ---------------------------------------------------------- */

@@ -702,4 +702,488 @@ class SEn extends S {
 
   @override
   String get locationPermissionDesc => 'To show you nearby restaurants and provide navigation, we need access to your location.';
+
+  @override
+  String get errorProfileLoad => 'Error loading user profile.';
+
+  @override
+  String get errorUnexpected => 'Unexpected server error.';
+
+  @override
+  String get errorRegisterFailed => 'Registration failed.';
+
+  @override
+  String get errorVerificationFailed => 'Verification failed.';
+
+  @override
+  String get errorGoogleLogin => 'Google login failed.';
+
+  @override
+  String get errorAppleLogin => 'Apple login failed.';
+
+  @override
+  String get deviceManagementTitle => 'Device management';
+
+  @override
+  String get noActiveDevices => 'No active devices.';
+
+  @override
+  String get thisDevice => 'This device';
+
+  @override
+  String lastActivity(String date) {
+    return 'Last activity: $date';
+  }
+
+  @override
+  String get logoutDevice => 'Log out device';
+
+  @override
+  String get firstNameRequired => 'First name is required';
+
+  @override
+  String get lastNameRequired => 'Last name is required';
+
+  @override
+  String photoUploadError(String error) {
+    return 'Photo upload failed: $error';
+  }
+
+  @override
+  String get userNoName => 'Unnamed user';
+
+  @override
+  String get inactiveAccount => 'Inactive account';
+
+  @override
+  String get aboutRestaurant => 'About the restaurant';
+
+  @override
+  String get openingHoursLabel => 'Opening hours';
+
+  @override
+  String get dayMonday => 'Monday';
+
+  @override
+  String get dayTuesday => 'Tuesday';
+
+  @override
+  String get dayWednesday => 'Wednesday';
+
+  @override
+  String get dayThursday => 'Thursday';
+
+  @override
+  String get dayFriday => 'Friday';
+
+  @override
+  String get daySaturday => 'Saturday';
+
+  @override
+  String get daySunday => 'Sunday';
+
+  @override
+  String get noUpcomingReservations => 'No upcoming reservations';
+
+  @override
+  String get noReservationHistory => 'No reservation history';
+
+  @override
+  String showAll(int count) {
+    return 'Show all ($count)';
+  }
+
+  @override
+  String get restaurant => 'Restaurant';
+
+  @override
+  String get table => 'Table';
+
+  @override
+  String partySizeShort(int count) {
+    return '$count pers.';
+  }
+
+  @override
+  String timeFrom(String time) {
+    return 'from $time';
+  }
+
+  @override
+  String get statusPending => 'Pending confirmation';
+
+  @override
+  String get statusConfirmed => 'Confirmed';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get statusRejected => 'Rejected';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusCheckedIn => 'Checked in';
+
+  @override
+  String get statusReserved => 'Confirmed';
+
+  @override
+  String get editReservation => 'Edit reservation';
+
+  @override
+  String get availableTimes => 'Available times';
+
+  @override
+  String get noSlotsForDay => 'No available slots for this day.';
+
+  @override
+  String get partyCount => 'Party size';
+
+  @override
+  String get guestsLabel => 'Number of guests:';
+
+  @override
+  String get freeTimes => 'Available times';
+
+  @override
+  String get confirmReservation => 'Confirm reservation';
+
+  @override
+  String get menuEmpty => 'Menu is empty.';
+
+  @override
+  String itemsShort(int count) {
+    return '$count items';
+  }
+
+  @override
+  String get reservationsTab => 'Reservations';
+
+  @override
+  String get infoTab => 'Info';
+
+  @override
+  String get employeesTab => 'Employees';
+
+  @override
+  String get restaurantInfo => 'Restaurant Info';
+
+  @override
+  String get nameLabel => 'Name';
+
+  @override
+  String get nameRequired => 'Name is required';
+
+  @override
+  String get descriptionLabel => 'Description';
+
+  @override
+  String get phoneLabel => 'Phone';
+
+  @override
+  String get contactEmailLabel => 'Contact Email';
+
+  @override
+  String get addressLabel => 'Address';
+
+  @override
+  String get streetLabel => 'Street';
+
+  @override
+  String get cityLabel => 'City';
+
+  @override
+  String get postalCodeLabel => 'Postal Code';
+
+  @override
+  String get countryLabel => 'Country';
+
+  @override
+  String get savingLabel => 'Saving...';
+
+  @override
+  String get noEmployeesYet => 'No employees yet';
+
+  @override
+  String get removeEmployeeTitle => 'Remove Employee';
+
+  @override
+  String removeEmployeeMessage(String name) {
+    return 'Are you sure you want to remove $name?';
+  }
+
+  @override
+  String get activePanoramaTitle => 'Active panorama';
+
+  @override
+  String get activePanoramaDesc => 'Panorama is set up and displayed to customers.';
+
+  @override
+  String get creatingPanorama => 'Creating...';
+
+  @override
+  String get newPanoramaButton => 'New panorama';
+
+  @override
+  String get noPanoramaYetLong => 'No panorama yet. Click the button above.';
+
+  @override
+  String sessionLabel(String id) {
+    return 'Session $id...';
+  }
+
+  @override
+  String photosProgress(int taken, int total) {
+    return '$taken/$total photos';
+  }
+
+  @override
+  String get statusUploading => 'Uploading';
+
+  @override
+  String get statusProcessing => 'Processing...';
+
+  @override
+  String get statusCompletedShort => 'Completed';
+
+  @override
+  String get statusFailed => 'Failed';
+
+  @override
+  String get panoramaActivatedSuccess => 'Panorama activated!';
+
+  @override
+  String get tablePositionsSavedSuccess => 'Table positions saved!';
+
+  @override
+  String get noReservationsForDayStaff => 'No reservations for this day.';
+
+  @override
+  String get statusWaiting => 'Waiting';
+
+  @override
+  String get complete => 'Complete';
+
+  @override
+  String get searchRestaurantTitle => 'Find your restaurant';
+
+  @override
+  String get searchRestaurantSubtitle => 'Enter your company ID to search in ARES';
+
+  @override
+  String get icoHint => 'e.g. 12345678';
+
+  @override
+  String get foundCompany => 'Found company';
+
+  @override
+  String get companyName => 'Name:';
+
+  @override
+  String get icoLabel => 'Company ID:';
+
+  @override
+  String get directors => 'Directors:';
+
+  @override
+  String get emailVerificationFallback => 'Email verification';
+
+  @override
+  String get emailVerificationFallbackDesc => 'Identity was not confirmed via BankID. You can verify ownership with a code sent to the restaurant\'s contact email.';
+
+  @override
+  String emailLabel(String email) {
+    return 'Email: $email';
+  }
+
+  @override
+  String get verificationCodeHint => '123456';
+
+  @override
+  String get stepInfo => 'Information';
+
+  @override
+  String get stepHours => 'Opening hours';
+
+  @override
+  String get stepTables => 'Tables';
+
+  @override
+  String get stepMenu => 'Menu';
+
+  @override
+  String get stepPanorama => 'Panorama';
+
+  @override
+  String get stepSummary => 'Summary';
+
+  @override
+  String get restaurantNameRequired => 'Restaurant name *';
+
+  @override
+  String get requiredField => 'Required field';
+
+  @override
+  String get cuisineType => 'Cuisine type';
+
+  @override
+  String get streetRequired => 'Street *';
+
+  @override
+  String get cityRequired => 'City *';
+
+  @override
+  String get postalCode => 'Postal code';
+
+  @override
+  String get closedDay => 'Closed';
+
+  @override
+  String tablesCount(int count) {
+    return 'Tables ($count)';
+  }
+
+  @override
+  String get tableLabel => 'Label';
+
+  @override
+  String categoriesCount(int count) {
+    return 'Categories ($count)';
+  }
+
+  @override
+  String get categoryName => 'Name';
+
+  @override
+  String get itemName => 'Name';
+
+  @override
+  String get itemDescription => 'Description';
+
+  @override
+  String get panoramaOptionalTitle => 'Panorama (optional)';
+
+  @override
+  String get panoramaHelpText => 'A panoramic photo of the restaurant will help customers explore the venue.';
+
+  @override
+  String get existingSessions => 'Existing sessions:';
+
+  @override
+  String statusLabel(String status, int taken, int total) {
+    return 'Status: $status, Photos: $taken/$total';
+  }
+
+  @override
+  String get panoramaIsActive => 'Panorama is active';
+
+  @override
+  String get summaryInfo => 'Restaurant information';
+
+  @override
+  String get summaryHours => 'Opening hours';
+
+  @override
+  String get summaryTables => 'At least 1 table';
+
+  @override
+  String get summaryMenu => 'At least 1 menu item';
+
+  @override
+  String get summaryPanorama => 'Panorama (optional)';
+
+  @override
+  String get publishedSuccess => 'Restaurant has been published successfully!';
+
+  @override
+  String get fillRequiredSteps => 'Complete all required steps before publishing.';
+
+  @override
+  String capturedPhotos(int count, int total) {
+    return '$count/$total photos';
+  }
+
+  @override
+  String get finalize => 'Finalize';
+
+  @override
+  String minPhotosHint(int count) {
+    return 'Min. $count photos to finalize';
+  }
+
+  @override
+  String get newTable => 'New table';
+
+  @override
+  String get editTable => 'Edit table';
+
+  @override
+  String get addTableTooltip => 'Add table';
+
+  @override
+  String get finishAddingTooltip => 'Finish adding';
+
+  @override
+  String get onboardingTitle4 => 'Track Everything';
+
+  @override
+  String get onboardingDesc4 => 'Real-time updates on orders and reservations';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get popularNearYou => 'Popular near you';
+
+  @override
+  String get searchHint => 'Search restaurants, cuisines...';
+
+  @override
+  String get restaurantDescription => 'This restaurant offers a curated menu made from fresh ingredients, a welcoming atmosphere and excellent service.';
+
+  @override
+  String get openingHoursInfo => 'Opening hours';
+
+  @override
+  String get openingHoursValue => '9:00 AM – 10:00 PM';
+
+  @override
+  String get phoneInfo => 'Phone';
+
+  @override
+  String get phoneValue => '+420 123 456 789';
+
+  @override
+  String get addressInfo => 'Address';
+
+  @override
+  String get addressValue => 'Main Street 12, Prague';
+
+  @override
+  String get reserveTableButton => 'Reserve Table';
+
+  @override
+  String get noItemsCategory => 'No items in this category';
+
+  @override
+  String itemsCount(int count) {
+    return '$count items';
+  }
+
+  @override
+  String get addToCartButton => 'Add to cart';
+
+  @override
+  String get editorSaved => 'Tables saved!';
+
+  @override
+  String editorSaveError(String error) {
+    return 'Error saving: $error';
+  }
 }

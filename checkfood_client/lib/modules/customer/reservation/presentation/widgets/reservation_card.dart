@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/reservation.dart';
+import '../../../../../../l10n/generated/app_localizations.dart';
 
 class ReservationCard extends StatelessWidget {
   final Reservation reservation;
@@ -18,6 +19,7 @@ class ReservationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     final showActions = (reservation.canEdit || reservation.canCancel);
 
     return Card(
@@ -34,7 +36,7 @@ class ReservationCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    reservation.restaurantName ?? 'Restaurace',
+                    reservation.restaurantName ?? l.restaurant,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -54,14 +56,14 @@ class ReservationCard extends StatelessWidget {
                 const Icon(Icons.table_restaurant, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Text(
-                  reservation.tableLabel ?? 'Stůl',
+                  reservation.tableLabel ?? l.table,
                   style: TextStyle(color: Colors.grey[700], fontSize: 13),
                 ),
                 const SizedBox(width: 16),
                 const Icon(Icons.people, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Text(
-                  '${reservation.partySize} os.',
+                  l.partySizeShort(reservation.partySize),
                   style: TextStyle(color: Colors.grey[700], fontSize: 13),
                 ),
               ],
@@ -76,7 +78,7 @@ class ReservationCard extends StatelessWidget {
                 Text(
                   reservation.endTime != null
                       ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
-                      : '${_formatDate(reservation.date)}  od ${_formatTime(reservation.startTime)}',
+                      : '${_formatDate(reservation.date)}  ${l.timeFrom(_formatTime(reservation.startTime))}',
                   style: TextStyle(color: Colors.grey[700], fontSize: 13),
                 ),
               ],
@@ -92,7 +94,7 @@ class ReservationCard extends StatelessWidget {
                     TextButton.icon(
                       onPressed: onEdit,
                       icon: const Icon(Icons.edit, size: 18),
-                      label: const Text('Upravit'),
+                      label: Text(l.edit),
                     ),
                   if (reservation.canCancel && onCancel != null) ...[
                     if (isCancelling)
@@ -108,7 +110,7 @@ class ReservationCard extends StatelessWidget {
                       TextButton.icon(
                         onPressed: onCancel,
                         icon: const Icon(Icons.cancel_outlined, size: 18),
-                        label: const Text('Zrušit'),
+                        label: Text(l.cancel),
                         style: TextButton.styleFrom(foregroundColor: Colors.red),
                       ),
                   ],
@@ -142,13 +144,14 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     final (label, color) = switch (status) {
-      'PENDING_CONFIRMATION' => ('Čeká na potvrzení', Colors.orange),
-      'CONFIRMED' => ('Potvrzeno', Colors.green),
-      'RESERVED' => ('Potvrzeno', Colors.green),
-      'CANCELLED' => ('Zrušeno', Colors.red),
-      'REJECTED' => ('Zamítnuto', Colors.red),
-      'COMPLETED' => ('Dokončeno', Colors.grey),
+      'PENDING_CONFIRMATION' => (l.statusPending, Colors.orange),
+      'CONFIRMED' => (l.statusConfirmed, Colors.green),
+      'RESERVED' => (l.statusConfirmed, Colors.green),
+      'CANCELLED' => (l.statusCancelled, Colors.red),
+      'REJECTED' => (l.statusRejected, Colors.red),
+      'COMPLETED' => (l.statusCompleted, Colors.grey),
       _ => (status, Colors.grey),
     };
 

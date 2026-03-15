@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 import '../bloc/staff_reservations_bloc.dart';
 import '../bloc/staff_reservations_event.dart';
 import '../bloc/staff_reservations_state.dart';
@@ -79,7 +81,7 @@ class _StaffReservationsPageState extends State<StaffReservationsPage> {
                   .read<StaffReservationsBloc>()
                   .add(LoadStaffReservations(state.selectedDate)),
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: Text(S.of(context).retry),
             ),
           ],
         ),
@@ -87,9 +89,9 @@ class _StaffReservationsPageState extends State<StaffReservationsPage> {
     }
 
     if (state.reservations.isEmpty) {
-      return const Center(
-        child: Text('Zadne rezervace pro tento den.',
-            style: TextStyle(color: Colors.grey)),
+      return Center(
+        child: Text(S.of(context).noReservationsForDayStaff,
+            style: const TextStyle(color: Colors.grey)),
       );
     }
 

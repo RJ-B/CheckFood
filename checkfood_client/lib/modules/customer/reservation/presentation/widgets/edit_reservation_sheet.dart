@@ -5,6 +5,7 @@ import '../../domain/entities/reservation_scene.dart';
 import '../bloc/my_reservations_bloc.dart';
 import '../bloc/my_reservations_event.dart';
 import '../bloc/my_reservations_state.dart';
+import '../../../../../../l10n/generated/app_localizations.dart';
 
 class EditReservationSheet extends StatelessWidget {
   const EditReservationSheet({super.key});
@@ -18,6 +19,7 @@ class EditReservationSheet extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final l = S.of(context);
         final reservation = state.editingReservation;
         if (reservation == null) return const SizedBox.shrink();
 
@@ -50,7 +52,7 @@ class EditReservationSheet extends StatelessWidget {
 
                 // Title
                 Text(
-                  'Upravit rezervaci',
+                  l.editReservation,
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -97,9 +99,9 @@ class EditReservationSheet extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Time slots
-                const Text(
-                  'Dostupné časy',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                Text(
+                  l.availableTimes,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
                 if (state.isLoadingEditSlots)
@@ -121,7 +123,7 @@ class EditReservationSheet extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Text(
-                      'Žádné volné termíny pro tento den.',
+                      l.noSlotsForDay,
                       style: TextStyle(color: Colors.grey[500]),
                       textAlign: TextAlign.center,
                     ),
@@ -138,9 +140,9 @@ class EditReservationSheet extends StatelessWidget {
                       color: Colors.orange.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text(
-                      'Termín už není volný. Vyberte jiný čas.',
-                      style: TextStyle(color: Colors.orange, fontSize: 13),
+                    child: Text(
+                      l.slotUnavailable,
+                      style: const TextStyle(color: Colors.orange, fontSize: 13),
                     ),
                   ),
                 if (state.editError != null)
@@ -179,7 +181,7 @@ class EditReservationSheet extends StatelessWidget {
                             color: Colors.white,
                           ),
                         )
-                      : const Text('Uložit změny'),
+                      : Text(l.saveChanges),
                 ),
                 const SizedBox(height: 8),
               ],
@@ -220,7 +222,7 @@ class _DatePickerField extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'Datum',
+          labelText: S.of(context).date,
           prefixIcon: const Icon(Icons.calendar_today),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
@@ -253,7 +255,7 @@ class _TablePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputDecorator(
       decoration: InputDecoration(
-        labelText: 'Stůl',
+        labelText: S.of(context).table,
         prefixIcon: const Icon(Icons.table_restaurant),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -292,7 +294,7 @@ class _PartySizePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputDecorator(
       decoration: InputDecoration(
-        labelText: 'Počet osob',
+        labelText: S.of(context).partyCount,
         prefixIcon: const Icon(Icons.people),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),

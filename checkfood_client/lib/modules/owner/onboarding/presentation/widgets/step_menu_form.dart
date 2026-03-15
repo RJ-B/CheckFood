@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
@@ -33,7 +35,7 @@ class _StepMenuFormState extends State<StepMenuForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Kategorie (${state.categories.length})',
+                  Text(S.of(context).categoriesCount(state.categories.length),
                       style: Theme.of(context).textTheme.titleMedium),
                   IconButton(
                     icon: const Icon(Icons.add),
@@ -44,7 +46,7 @@ class _StepMenuFormState extends State<StepMenuForm> {
               const SizedBox(height: 8),
               Expanded(
                 child: state.categories.isEmpty
-                    ? const Center(child: Text('Zatím žádné kategorie. Přidejte alespoň jednu.'))
+                    ? Center(child: Text(S.of(context).noCategoriesYet))
                     : ListView.builder(
                         itemCount: state.categories.length,
                         itemBuilder: (ctx, i) {
@@ -93,24 +95,27 @@ class _StepMenuFormState extends State<StepMenuForm> {
     final ctrl = TextEditingController();
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Nová kategorie'),
-        content: TextField(controller: ctrl, decoration: const InputDecoration(labelText: 'Název')),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Zrušit')),
-          FilledButton(
-            onPressed: () {
-              if (ctrl.text.trim().isNotEmpty) {
-                context.read<OnboardingWizardBloc>().add(
-                  OnboardingWizardEvent.createCategory(ctrl.text.trim()),
-                );
-                Navigator.pop(ctx);
-              }
-            },
-            child: const Text('Přidat'),
-          ),
-        ],
-      ),
+      builder: (ctx) {
+        final l = S.of(ctx);
+        return AlertDialog(
+          title: Text(l.newCategory),
+          content: TextField(controller: ctrl, decoration: InputDecoration(labelText: l.categoryName)),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.cancel)),
+            FilledButton(
+              onPressed: () {
+                if (ctrl.text.trim().isNotEmpty) {
+                  context.read<OnboardingWizardBloc>().add(
+                    OnboardingWizardEvent.createCategory(ctrl.text.trim()),
+                  );
+                  Navigator.pop(ctx);
+                }
+              },
+              child: Text(l.add),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -120,43 +125,46 @@ class _StepMenuFormState extends State<StepMenuForm> {
     final descCtrl = TextEditingController();
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Nová položka'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Název')),
-            const SizedBox(height: 8),
-            TextField(controller: descCtrl, decoration: const InputDecoration(labelText: 'Popis')),
-            const SizedBox(height: 8),
-            TextField(
-              controller: priceCtrl,
-              decoration: const InputDecoration(labelText: 'Cena (Kč)'),
-              keyboardType: TextInputType.number,
+      builder: (ctx) {
+        final l = S.of(ctx);
+        return AlertDialog(
+          title: Text(l.newItem),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: nameCtrl, decoration: InputDecoration(labelText: l.itemName)),
+              const SizedBox(height: 8),
+              TextField(controller: descCtrl, decoration: InputDecoration(labelText: l.itemDescription)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: priceCtrl,
+                decoration: InputDecoration(labelText: l.priceLabel),
+                keyboardType: TextInputType.number,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.cancel)),
+            FilledButton(
+              onPressed: () {
+                if (nameCtrl.text.trim().isNotEmpty) {
+                  final price = (double.tryParse(priceCtrl.text) ?? 0) * 100;
+                  context.read<OnboardingWizardBloc>().add(
+                    OnboardingWizardEvent.createItem(
+                      categoryId: categoryId,
+                      name: nameCtrl.text.trim(),
+                      description: descCtrl.text.trim().isNotEmpty ? descCtrl.text.trim() : null,
+                      priceMinor: price.round(),
+                    ),
+                  );
+                  Navigator.pop(ctx);
+                }
+              },
+              child: Text(l.add),
             ),
           ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Zrušit')),
-          FilledButton(
-            onPressed: () {
-              if (nameCtrl.text.trim().isNotEmpty) {
-                final price = (double.tryParse(priceCtrl.text) ?? 0) * 100;
-                context.read<OnboardingWizardBloc>().add(
-                  OnboardingWizardEvent.createItem(
-                    categoryId: categoryId,
-                    name: nameCtrl.text.trim(),
-                    description: descCtrl.text.trim().isNotEmpty ? descCtrl.text.trim() : null,
-                    priceMinor: price.round(),
-                  ),
-                );
-                Navigator.pop(ctx);
-              }
-            },
-            child: const Text('Přidat'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

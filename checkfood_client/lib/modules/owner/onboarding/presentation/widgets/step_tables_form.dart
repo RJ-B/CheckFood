@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
@@ -33,7 +35,7 @@ class _StepTablesFormState extends State<StepTablesForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Stoly (${state.tables.length})',
+                  Text(S.of(context).tablesCount(state.tables.length),
                       style: Theme.of(context).textTheme.titleMedium),
                   IconButton(
                     icon: const Icon(Icons.add),
@@ -44,7 +46,7 @@ class _StepTablesFormState extends State<StepTablesForm> {
               const SizedBox(height: 8),
               Expanded(
                 child: state.tables.isEmpty
-                    ? const Center(child: Text('Zatím žádné stoly. Přidejte alespoň jeden.'))
+                    ? Center(child: Text(S.of(context).noTablesYet))
                     : ListView.builder(
                         itemCount: state.tables.length,
                         itemBuilder: (ctx, i) {
@@ -52,7 +54,7 @@ class _StepTablesFormState extends State<StepTablesForm> {
                           return Card(
                             child: ListTile(
                               title: Text(table.label),
-                              subtitle: Text('Kapacita: ${table.capacity}'),
+                              subtitle: Text(S.of(ctx).capacityOf(table.capacity)),
                               trailing: IconButton(
                                 icon: const Icon(Icons.delete_outline, color: Colors.red),
                                 onPressed: () => context
@@ -76,37 +78,40 @@ class _StepTablesFormState extends State<StepTablesForm> {
     final capacityCtrl = TextEditingController(text: '4');
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Přidat stůl'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(controller: labelCtrl, decoration: const InputDecoration(labelText: 'Označení')),
-            const SizedBox(height: 8),
-            TextField(
-              controller: capacityCtrl,
-              decoration: const InputDecoration(labelText: 'Kapacita'),
-              keyboardType: TextInputType.number,
+      builder: (ctx) {
+        final l = S.of(ctx);
+        return AlertDialog(
+          title: Text(l.addTable),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: labelCtrl, decoration: InputDecoration(labelText: l.tableLabel)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: capacityCtrl,
+                decoration: InputDecoration(labelText: l.capacity),
+                keyboardType: TextInputType.number,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.cancel)),
+            FilledButton(
+              onPressed: () {
+                final label = labelCtrl.text.trim();
+                final capacity = int.tryParse(capacityCtrl.text) ?? 4;
+                if (label.isNotEmpty) {
+                  context.read<OnboardingWizardBloc>().add(
+                    OnboardingWizardEvent.addTable(label: label, capacity: capacity),
+                  );
+                  Navigator.pop(ctx);
+                }
+              },
+              child: Text(l.add),
             ),
           ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Zrušit')),
-          FilledButton(
-            onPressed: () {
-              final label = labelCtrl.text.trim();
-              final capacity = int.tryParse(capacityCtrl.text) ?? 4;
-              if (label.isNotEmpty) {
-                context.read<OnboardingWizardBloc>().add(
-                  OnboardingWizardEvent.addTable(label: label, capacity: capacity),
-                );
-                Navigator.pop(ctx);
-              }
-            },
-            child: const Text('Přidat'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../domain/entities/user_profile.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class ProfileForm extends StatefulWidget {
   final UserProfile userProfile;
@@ -43,6 +44,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return Form(
       key: _formKey,
       child: Column(
@@ -52,14 +54,14 @@ class _ProfileFormState extends State<ProfileForm> {
           TextFormField(
             controller: _firstNameController,
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
-              labelText: 'Jméno',
-              prefixIcon: Icon(Icons.person_outline),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l.firstName,
+              prefixIcon: const Icon(Icons.person_outline),
+              border: const OutlineInputBorder(),
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'Jméno nesmí být prázdné';
+                return l.firstNameRequired;
               }
               return null;
             },
@@ -71,14 +73,14 @@ class _ProfileFormState extends State<ProfileForm> {
           TextFormField(
             controller: _lastNameController,
             textInputAction: TextInputAction.done,
-            decoration: const InputDecoration(
-              labelText: 'Příjmení',
-              prefixIcon: Icon(Icons.person_outline),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l.lastName,
+              prefixIcon: const Icon(Icons.person_outline),
+              border: const OutlineInputBorder(),
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'Příjmení nesmí být prázdné';
+                return l.lastNameRequired;
               }
               return null;
             },
@@ -100,7 +102,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   );
                 }
               },
-              child: const Text('Uložit změny'),
+              child: Text(l.saveChanges),
             ),
           ),
         ],

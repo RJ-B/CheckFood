@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/orders_bloc.dart';
 import '../bloc/orders_state.dart';
 import 'cart_bottom_sheet.dart';
+import '../../../../../../l10n/generated/app_localizations.dart';
 
 class CartSummaryBar extends StatelessWidget {
   const CartSummaryBar({super.key});
@@ -14,6 +15,7 @@ class CartSummaryBar extends StatelessWidget {
           prev.cartItems != curr.cartItems ||
           prev.submitting != curr.submitting,
       builder: (context, state) {
+        final l = S.of(context);
         if (state.cartItems.isEmpty) {
           return const SizedBox.shrink();
         }
@@ -45,14 +47,14 @@ class CartSummaryBar extends StatelessWidget {
                       children: [
                         const Icon(Icons.shopping_bag_outlined, size: 20),
                         const SizedBox(width: 8),
-                        Text('${state.cartItemCount} pol.'),
+                        Text(l.itemsShort(state.cartItemCount)),
                       ],
                     ),
                     Text(
                       state.cartTotalFormatted,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    const Text('Objednat'),
+                    Text(l.order),
                   ],
                 ),
               ),

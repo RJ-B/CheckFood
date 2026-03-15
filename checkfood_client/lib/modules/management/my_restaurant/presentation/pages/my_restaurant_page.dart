@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 import '../../../../../core/di/injection_container.dart';
 import '../../../../../security/domain/enums/user_role.dart';
 import '../../../../../security/presentation/bloc/auth/auth_bloc.dart';
@@ -44,7 +46,7 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('My Restaurant'),
+            title: Text(S.of(context).myRestaurant),
           ),
           body: _buildBody(context, state),
         );
@@ -69,7 +71,7 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
             FilledButton.icon(
               onPressed: () => context.read<MyRestaurantBloc>().add(const LoadMyRestaurant()),
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: Text(S.of(context).retry),
             ),
           ],
         ),
@@ -81,13 +83,14 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
       final isOwner = userRole == UserRole.owner;
       final isManagerOrOwner = userRole.isAtLeastManager;
 
+      final l = S.of(context);
       final tabs = <Tab>[
-        const Tab(icon: Icon(Icons.calendar_today), text: 'Reservations'),
-        const Tab(icon: Icon(Icons.info_outline), text: 'Info'),
+        Tab(icon: const Icon(Icons.calendar_today), text: l.reservationsTab),
+        Tab(icon: const Icon(Icons.info_outline), text: l.infoTab),
         if (isManagerOrOwner)
-          const Tab(icon: Icon(Icons.people_outline), text: 'Employees'),
+          Tab(icon: const Icon(Icons.people_outline), text: l.employeesTab),
         if (isOwner)
-          const Tab(icon: Icon(Icons.panorama), text: 'Panorama'),
+          Tab(icon: const Icon(Icons.panorama), text: l.panorama),
       ];
 
       final tabViews = <Widget>[
@@ -153,7 +156,7 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
             child: FloatingActionButton.extended(
               onPressed: () => _showAddEmployeeDialog(context),
               icon: const Icon(Icons.person_add),
-              label: const Text('Add'),
+              label: Text(S.of(context).add),
             ),
           ),
       ],

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/bloc/reservation_bloc.dart';
 import '../../presentation/bloc/reservation_event.dart';
 import '../../presentation/bloc/reservation_state.dart';
+import '../../../../../../l10n/generated/app_localizations.dart';
 
 class TableBottomSheet extends StatelessWidget {
   const TableBottomSheet({super.key});
@@ -12,6 +13,7 @@ class TableBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ReservationBloc, ReservationState>(
       builder: (context, state) {
+        final l = S.of(context);
         return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -37,14 +39,14 @@ class TableBottomSheet extends StatelessWidget {
 
               // Table header
               Text(
-                state.selectedTableLabel ?? 'Stůl',
+                state.selectedTableLabel ?? l.table,
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               if (state.selectedTableCapacity != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Kapacita: ${state.selectedTableCapacity} míst',
+                    l.capacityOf(state.selectedTableCapacity!),
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ),
@@ -54,9 +56,9 @@ class TableBottomSheet extends StatelessWidget {
               // Party size selector
               Row(
                 children: [
-                  const Text(
-                    'Počet hostů:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  Text(
+                    l.guestsLabel,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   IconButton(
@@ -89,9 +91,9 @@ class TableBottomSheet extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Time slots
-              const Text(
-                'Volné časy',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              Text(
+                l.freeTimes,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
 
@@ -106,7 +108,7 @@ class TableBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: Center(
                     child: Text(
-                      'Žádné volné termíny pro tento den.',
+                      l.noSlotsForDay,
                       style: TextStyle(color: Colors.grey[500]),
                     ),
                   ),
@@ -150,9 +152,9 @@ class TableBottomSheet extends StatelessWidget {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'Potvrdit rezervaci',
-                          style: TextStyle(
+                      : Text(
+                          l.confirmReservation,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -162,11 +164,11 @@ class TableBottomSheet extends StatelessWidget {
 
               // Error messages
               if (state.submitConflict)
-                const Padding(
-                  padding: EdgeInsets.only(top: 12),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
                   child: Text(
-                    'Termín už není volný. Vyberte jiný čas.',
-                    style: TextStyle(color: Colors.orange, fontSize: 13),
+                    l.slotUnavailable,
+                    style: const TextStyle(color: Colors.orange, fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                 ),

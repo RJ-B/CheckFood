@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../data/models/request/update_restaurant_request_model.dart';
 import '../../domain/entities/my_restaurant.dart';
 
@@ -73,6 +74,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -81,28 +83,28 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Restaurant Info',
+              l.restaurantInfo,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 24),
 
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.restaurant),
+              decoration: InputDecoration(
+                labelText: l.nameLabel,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.restaurant),
               ),
-              validator: (v) => (v == null || v.isEmpty) ? 'Name is required' : null,
+              validator: (v) => (v == null || v.isEmpty) ? l.nameRequired : null,
             ),
             const SizedBox(height: 16),
 
             TextFormField(
               controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.description),
+              decoration: InputDecoration(
+                labelText: l.descriptionLabel,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.description),
               ),
               maxLines: 3,
             ),
@@ -110,10 +112,10 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
 
             TextFormField(
               controller: _phoneController,
-              decoration: const InputDecoration(
-                labelText: 'Phone',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.phone),
+              decoration: InputDecoration(
+                labelText: l.phoneLabel,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.phone),
               ),
               keyboardType: TextInputType.phone,
             ),
@@ -121,26 +123,26 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
 
             TextFormField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Contact Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
+              decoration: InputDecoration(
+                labelText: l.contactEmailLabel,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.email),
               ),
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 24),
 
             Text(
-              'Address',
+              l.addressLabel,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
 
             TextFormField(
               controller: _streetController,
-              decoration: const InputDecoration(
-                labelText: 'Street',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l.streetLabel,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
@@ -151,9 +153,9 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                   flex: 2,
                   child: TextFormField(
                     controller: _cityController,
-                    decoration: const InputDecoration(
-                      labelText: 'City',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l.cityLabel,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -161,9 +163,9 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                 Expanded(
                   child: TextFormField(
                     controller: _postalCodeController,
-                    decoration: const InputDecoration(
-                      labelText: 'Postal Code',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l.postalCodeLabel,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -173,9 +175,9 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
 
             TextFormField(
               controller: _countryController,
-              decoration: const InputDecoration(
-                labelText: 'Country',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l.countryLabel,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 32),
@@ -189,7 +191,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                       child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     )
                   : const Icon(Icons.save),
-              label: Text(widget.isUpdating ? 'Saving...' : 'Save Changes'),
+              label: Text(widget.isUpdating ? l.savingLabel : l.saveChanges),
             ),
           ],
         ),

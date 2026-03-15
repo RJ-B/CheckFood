@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../data/models/opening_hours_model.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
@@ -14,7 +16,6 @@ class StepHoursForm extends StatefulWidget {
 
 class _StepHoursFormState extends State<StepHoursForm> {
   static const _dayNames = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
-  static const _dayLabels = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
 
   final Map<String, bool> _closed = {};
   final Map<String, TimeOfDay> _openAt = {};
@@ -50,6 +51,11 @@ class _StepHoursFormState extends State<StepHoursForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
+    final dayLabels = [
+      l.dayMonday, l.dayTuesday, l.dayWednesday, l.dayThursday,
+      l.dayFriday, l.daySaturday, l.daySunday,
+    ];
     return BlocBuilder<OnboardingWizardBloc, OnboardingWizardState>(
       builder: (context, state) {
         _initFromState(state);
@@ -58,13 +64,13 @@ class _StepHoursFormState extends State<StepHoursForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var i = 0; i < _dayNames.length; i++) _buildDayRow(i),
+              for (var i = 0; i < _dayNames.length; i++) _buildDayRow(context, i, dayLabels),
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: state.loading ? null : _submit,
                 child: state.loading
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Uložit hodiny'),
+                    : Text(l.saveHours),
               ),
             ],
           ),
@@ -73,9 +79,9 @@ class _StepHoursFormState extends State<StepHoursForm> {
     );
   }
 
-  Widget _buildDayRow(int index) {
+  Widget _buildDayRow(BuildContext context, int index, List<String> dayLabels) {
     final day = _dayNames[index];
-    final label = _dayLabels[index];
+    final label = dayLabels[index];
     final closed = _closed[day]!;
 
     return Card(
@@ -95,7 +101,7 @@ class _StepHoursFormState extends State<StepHoursForm> {
               const Text(' - '),
               _timeButton(day, false),
             ] else
-              const Text('Zavřeno', style: TextStyle(color: Colors.grey)),
+              Text(S.of(context).closedDay, style: const TextStyle(color: Colors.grey)),
           ],
         ),
       ),

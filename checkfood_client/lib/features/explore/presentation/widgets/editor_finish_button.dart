@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class FinishEditorButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -7,13 +8,14 @@ class FinishEditorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
         backgroundColor: Colors.red,
       ),
       icon: const Icon(Icons.check),
-      label: const Text('Hotovo', style: TextStyle(fontSize: 16)),
+      label: Text(l.done, style: const TextStyle(fontSize: 16)),
       onPressed: onPressed,
     );
   }

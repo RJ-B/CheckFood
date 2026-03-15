@@ -6,6 +6,7 @@ import '../bloc/my_reservations_event.dart';
 import '../bloc/my_reservations_state.dart';
 import '../widgets/edit_reservation_sheet.dart';
 import '../widgets/reservation_card.dart';
+import '../../../../../../l10n/generated/app_localizations.dart';
 
 class ReservationsScreen extends StatefulWidget {
   const ReservationsScreen({super.key});
@@ -24,13 +25,14 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Moje rezervace')),
+      appBar: AppBar(title: Text(S.of(context).myReservations)),
       body: BlocConsumer<MyReservationsBloc, MyReservationsState>(
         listener: (context, state) {
+          final l = S.of(context);
           if (state.cancelSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Rezervace zrušena.'),
+              SnackBar(
+                content: Text(l.reservationCancelled),
                 backgroundColor: Colors.green,
               ),
             );
@@ -40,14 +42,15 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
               (route) => route.settings.name != null || route.isFirst,
             );
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Rezervace upravena.'),
+              SnackBar(
+                content: Text(l.reservationEdited),
                 backgroundColor: Colors.green,
               ),
             );
           }
         },
         builder: (context, state) {
+          final l = S.of(context);
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -68,7 +71,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                     onPressed: () => context
                         .read<MyReservationsBloc>()
                         .add(const MyReservationsEvent.load()),
-                    child: const Text('Zkusit znovu'),
+                    child: Text(l.retry),
                   ),
                 ],
               ),
@@ -86,12 +89,12 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
               children: [
                 // ── Upcoming section ──
                 _SectionHeader(
-                  title: 'Nadcházející',
+                  title: l.upcoming,
                   icon: Icons.event_available,
                 ),
                 if (state.upcoming.isEmpty)
-                  const _EmptyState(
-                    message: 'Žádné nadcházející rezervace',
+                  _EmptyState(
+                    message: l.noUpcomingReservations,
                     icon: Icons.calendar_today_outlined,
                   )
                 else
@@ -113,12 +116,12 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
 
                 // ── History section ──
                 _SectionHeader(
-                  title: 'Historie',
+                  title: l.history,
                   icon: Icons.history,
                 ),
                 if (state.history.isEmpty)
-                  const _EmptyState(
-                    message: 'Žádná historie rezervací',
+                  _EmptyState(
+                    message: l.noReservationHistory,
                     icon: Icons.history_outlined,
                   )
                 else ...[
@@ -147,7 +150,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                                   .add(const MyReservationsEvent
                                       .showAllHistory()),
                               child: Text(
-                                'Zobrazit vše (${state.totalHistoryCount})',
+                                l.showAll(state.totalHistoryCount),
                               ),
                             ),
                     ),
@@ -173,15 +176,16 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   }
 
   void _showCancelDialog(BuildContext context, String reservationId) {
+    final l = S.of(context);
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Zrušit rezervaci'),
-        content: const Text('Opravdu chcete zrušit tuto rezervaci?'),
+        title: Text(l.cancelReservation),
+        content: Text(l.cancelReservationConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Ne'),
+            child: Text(l.no),
           ),
           TextButton(
             onPressed: () {
@@ -191,7 +195,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                   );
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Ano, zrušit'),
+            child: Text(l.yesCancelIt),
           ),
         ],
       ),

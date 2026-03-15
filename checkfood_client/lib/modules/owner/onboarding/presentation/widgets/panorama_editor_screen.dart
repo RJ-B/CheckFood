@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../../../../../l10n/generated/app_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -113,8 +115,8 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
 
     // Show dialog to set label and capacity
     _showEditDialog(
-      title: 'Novy stul',
-      initialLabel: 'Stul',
+      title: S.of(context).newTable,
+      initialLabel: S.of(context).table,
       initialCapacity: 4,
       onConfirm: (label, capacity) {
         final table = EditorTable(
@@ -142,7 +144,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
     final capacity = (data['capacity'] as num).toInt();
 
     _showEditDialog(
-      title: 'Upravit stul',
+      title: S.of(context).editTable,
       initialLabel: label,
       initialCapacity: capacity,
       showDelete: true,
@@ -183,8 +185,8 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
       await widget.onSave(exportedTables);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Stoly ulozeny!'),
+          SnackBar(
+            content: Text(S.of(context).editorSaved),
             backgroundColor: Colors.green,
           ),
         );
@@ -194,7 +196,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Chyba pri ukladani: $e'),
+            content: Text(S.of(context).editorSaveError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -279,12 +281,12 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
           children: [
             TextField(
               controller: labelController,
-              decoration: const InputDecoration(labelText: 'Nazev stolu'),
+              decoration: InputDecoration(labelText: S.of(context).tableName),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: capacityController,
-              decoration: const InputDecoration(labelText: 'Kapacita'),
+              decoration: InputDecoration(labelText: S.of(context).capacity),
               keyboardType: TextInputType.number,
             ),
           ],
@@ -296,14 +298,14 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
                 Navigator.of(ctx).pop();
                 onDelete?.call();
               },
-              child: const Text('Smazat', style: TextStyle(color: Colors.red)),
+              child: Text(S.of(context).delete, style: const TextStyle(color: Colors.red)),
             ),
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
               onCancel?.call();
             },
-            child: const Text('Zrusit'),
+            child: Text(S.of(context).cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -313,7 +315,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
                 int.tryParse(capacityController.text) ?? initialCapacity,
               );
             },
-            child: const Text('Potvrdit'),
+            child: Text(S.of(context).confirm),
           ),
         ],
       ),
@@ -329,18 +331,18 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Editor stolu'),
+        title: Text(S.of(context).tableEditor),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle_outline),
-            tooltip: 'Pridat stul',
+            tooltip: S.of(context).addTableTooltip,
             onPressed: () => _webController.runJavaScript('window.enterEditMode()'),
           ),
           IconButton(
             icon: const Icon(Icons.done),
-            tooltip: 'Ukoncit pridavani',
+            tooltip: S.of(context).finishAddingTooltip,
             onPressed: () => _webController.runJavaScript('window.exitEditMode()'),
           ),
         ],
@@ -360,7 +362,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _saving ? null : _onSavePressed,
         icon: const Icon(Icons.save),
-        label: const Text('Ulozit'),
+        label: Text(S.of(context).save),
         backgroundColor: Colors.green,
       ),
     );

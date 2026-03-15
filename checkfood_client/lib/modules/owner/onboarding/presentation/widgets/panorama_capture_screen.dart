@@ -6,6 +6,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../l10n/generated/app_localizations.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../bloc/onboarding_wizard_bloc.dart';
@@ -245,7 +247,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('AR Photo Sphere'),
+        title: Text(S.of(context).arPhotoSphere),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
@@ -295,7 +297,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      '${_capturedIndices.length}/${sphereGrid.length} fotek',
+                      S.of(context).capturedPhotos(_capturedIndices.length, sphereGrid.length),
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -355,7 +357,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                       FilledButton.icon(
                         onPressed: _finalize,
                         icon: const Icon(Icons.check),
-                        label: const Text('Finalizovat'),
+                        label: Text(S.of(context).finalize),
                         style: FilledButton.styleFrom(
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
@@ -370,7 +372,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          'Min. $_minPhotosToFinalize fotek pro finalizaci',
+                          S.of(context).minPhotosHint(_minPhotosToFinalize),
                           style: const TextStyle(color: Colors.white70, fontSize: 13),
                         ),
                       ),

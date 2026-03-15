@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+
+import '../../../../l10n/generated/app_localizations.dart';
 import '../bloc/owner_claim_bloc.dart';
 import '../bloc/owner_claim_event.dart';
 import '../bloc/owner_claim_state.dart';
@@ -41,7 +43,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Přiřazení restaurace'),
+        title: Text(S.of(context).claimRestaurant),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -51,7 +53,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
           if (state.claimSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('Restaurace byla úspěšně přiřazena!'),
+                content: Text(S.of(context).restaurantAssigned),
                 backgroundColor: Colors.green.shade600,
                 behavior: SnackBarBehavior.floating,
               ),
@@ -92,7 +94,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Vyhledejte svou restauraci',
+                    S.of(context).searchRestaurantTitle,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -100,7 +102,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Zadejte IČO vaší firmy pro vyhledání v ARES',
+                    S.of(context).searchRestaurantSubtitle,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
@@ -146,10 +148,10 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
           children: [
             TextField(
               controller: _icoController,
-              decoration: const InputDecoration(
-                labelText: 'IČO firmy',
-                hintText: 'např. 12345678',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: S.of(context).companyId,
+                hintText: S.of(context).icoHint,
+                border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               maxLength: 8,
@@ -173,7 +175,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.search),
-              label: const Text('Vyhledat v ARES'),
+              label: Text(S.of(context).searchAres),
             ),
           ],
         ),
@@ -194,17 +196,17 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Nalezená firma',
+              S.of(context).foundCompany,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 12),
-            _infoRow('Název:', company.companyName),
-            _infoRow('IČO:', company.ico),
+            _infoRow(S.of(context).companyName, company.companyName),
+            _infoRow(S.of(context).icoLabel, company.ico),
             if (company.statutoryPersons.isNotEmpty)
               _infoRow(
-                'Jednatelé:',
+                S.of(context).directors,
                 company.statutoryPersons.join(', '),
               ),
             const SizedBox(height: 16),
@@ -223,7 +225,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.verified_user),
-              label: const Text('Ověřit identitu (BankID)'),
+              label: Text(S.of(context).verifyIdentity),
               style: ElevatedButton.styleFrom(
                 backgroundColor: theme.colorScheme.primary,
                 foregroundColor: theme.colorScheme.onPrimary,
@@ -247,21 +249,20 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Ověření e-mailem',
+              S.of(context).emailVerificationFallback,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'Identita nebyla potvrzena přes BankID. '
-              'Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.',
+              S.of(context).emailVerificationFallbackDesc,
               style: theme.textTheme.bodyMedium,
             ),
             if (state.claimResult?.emailHint != null) ...[
               const SizedBox(height: 4),
               Text(
-                'E-mail: ${state.claimResult!.emailHint}',
+                S.of(context).emailLabel(state.claimResult!.emailHint!),
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),
@@ -283,15 +284,15 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                         height: 16,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Odeslat ověřovací kód'),
+                    : Text(S.of(context).sendVerificationCode),
               ),
             ] else ...[
               TextField(
                 controller: _codeController,
-                decoration: const InputDecoration(
-                  labelText: 'Ověřovací kód',
-                  hintText: '123456',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: S.of(context).verificationCode,
+                  hintText: S.of(context).verificationCodeHint,
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
                 maxLength: 6,
@@ -314,7 +315,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                         height: 16,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Potvrdit kód'),
+                    : Text(S.of(context).confirmCode),
               ),
             ],
           ],

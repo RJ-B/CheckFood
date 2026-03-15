@@ -1432,6 +1432,906 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.'**
   String get locationPermissionDesc;
+
+  /// No description provided for @errorProfileLoad.
+  ///
+  /// In cs, this message translates to:
+  /// **'Chyba při načítání uživatelského profilu.'**
+  String get errorProfileLoad;
+
+  /// No description provided for @errorUnexpected.
+  ///
+  /// In cs, this message translates to:
+  /// **'Neočekávaná chyba serveru.'**
+  String get errorUnexpected;
+
+  /// No description provided for @errorRegisterFailed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Registrace selhala.'**
+  String get errorRegisterFailed;
+
+  /// No description provided for @errorVerificationFailed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Verifikace selhala.'**
+  String get errorVerificationFailed;
+
+  /// No description provided for @errorGoogleLogin.
+  ///
+  /// In cs, this message translates to:
+  /// **'Google přihlášení selhalo.'**
+  String get errorGoogleLogin;
+
+  /// No description provided for @errorAppleLogin.
+  ///
+  /// In cs, this message translates to:
+  /// **'Apple přihlášení selhalo.'**
+  String get errorAppleLogin;
+
+  /// No description provided for @deviceManagementTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Správa zařízení'**
+  String get deviceManagementTitle;
+
+  /// No description provided for @noActiveDevices.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádná aktivní zařízení.'**
+  String get noActiveDevices;
+
+  /// No description provided for @thisDevice.
+  ///
+  /// In cs, this message translates to:
+  /// **'Toto zařízení'**
+  String get thisDevice;
+
+  /// No description provided for @lastActivity.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poslední aktivita: {date}'**
+  String lastActivity(String date);
+
+  /// No description provided for @logoutDevice.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odhlásit zařízení'**
+  String get logoutDevice;
+
+  /// No description provided for @firstNameRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Jméno nesmí být prázdné'**
+  String get firstNameRequired;
+
+  /// No description provided for @lastNameRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Příjmení nesmí být prázdné'**
+  String get lastNameRequired;
+
+  /// No description provided for @photoUploadError.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nahrání fotky selhalo: {error}'**
+  String photoUploadError(String error);
+
+  /// No description provided for @userNoName.
+  ///
+  /// In cs, this message translates to:
+  /// **'Uživatel bez jména'**
+  String get userNoName;
+
+  /// No description provided for @inactiveAccount.
+  ///
+  /// In cs, this message translates to:
+  /// **'Neaktivní účet'**
+  String get inactiveAccount;
+
+  /// No description provided for @aboutRestaurant.
+  ///
+  /// In cs, this message translates to:
+  /// **'O restauraci'**
+  String get aboutRestaurant;
+
+  /// No description provided for @openingHoursLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevírací doba'**
+  String get openingHoursLabel;
+
+  /// No description provided for @dayMonday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Pondělí'**
+  String get dayMonday;
+
+  /// No description provided for @dayTuesday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Úterý'**
+  String get dayTuesday;
+
+  /// No description provided for @dayWednesday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Středa'**
+  String get dayWednesday;
+
+  /// No description provided for @dayThursday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Čtvrtek'**
+  String get dayThursday;
+
+  /// No description provided for @dayFriday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Pátek'**
+  String get dayFriday;
+
+  /// No description provided for @daySaturday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Sobota'**
+  String get daySaturday;
+
+  /// No description provided for @daySunday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Neděle'**
+  String get daySunday;
+
+  /// No description provided for @noUpcomingReservations.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádné nadcházející rezervace'**
+  String get noUpcomingReservations;
+
+  /// No description provided for @noReservationHistory.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádná historie rezervací'**
+  String get noReservationHistory;
+
+  /// No description provided for @showAll.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zobrazit vše ({count})'**
+  String showAll(int count);
+
+  /// No description provided for @restaurant.
+  ///
+  /// In cs, this message translates to:
+  /// **'Restaurace'**
+  String get restaurant;
+
+  /// No description provided for @table.
+  ///
+  /// In cs, this message translates to:
+  /// **'Stůl'**
+  String get table;
+
+  /// No description provided for @partySizeShort.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count} os.'**
+  String partySizeShort(int count);
+
+  /// No description provided for @timeFrom.
+  ///
+  /// In cs, this message translates to:
+  /// **'od {time}'**
+  String timeFrom(String time);
+
+  /// No description provided for @statusPending.
+  ///
+  /// In cs, this message translates to:
+  /// **'Čeká na potvrzení'**
+  String get statusPending;
+
+  /// No description provided for @statusConfirmed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Potvrzeno'**
+  String get statusConfirmed;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zrušeno'**
+  String get statusCancelled;
+
+  /// No description provided for @statusRejected.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zamítnuto'**
+  String get statusRejected;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In cs, this message translates to:
+  /// **'Dokončeno'**
+  String get statusCompleted;
+
+  /// No description provided for @statusCheckedIn.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přítomen'**
+  String get statusCheckedIn;
+
+  /// No description provided for @statusReserved.
+  ///
+  /// In cs, this message translates to:
+  /// **'Potvrzeno'**
+  String get statusReserved;
+
+  /// No description provided for @editReservation.
+  ///
+  /// In cs, this message translates to:
+  /// **'Upravit rezervaci'**
+  String get editReservation;
+
+  /// No description provided for @availableTimes.
+  ///
+  /// In cs, this message translates to:
+  /// **'Dostupné časy'**
+  String get availableTimes;
+
+  /// No description provided for @noSlotsForDay.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádné volné termíny pro tento den.'**
+  String get noSlotsForDay;
+
+  /// No description provided for @partyCount.
+  ///
+  /// In cs, this message translates to:
+  /// **'Počet osob'**
+  String get partyCount;
+
+  /// No description provided for @guestsLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Počet hostů:'**
+  String get guestsLabel;
+
+  /// No description provided for @freeTimes.
+  ///
+  /// In cs, this message translates to:
+  /// **'Volné časy'**
+  String get freeTimes;
+
+  /// No description provided for @confirmReservation.
+  ///
+  /// In cs, this message translates to:
+  /// **'Potvrdit rezervaci'**
+  String get confirmReservation;
+
+  /// No description provided for @menuEmpty.
+  ///
+  /// In cs, this message translates to:
+  /// **'Menu je prázdné.'**
+  String get menuEmpty;
+
+  /// No description provided for @itemsShort.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count} pol.'**
+  String itemsShort(int count);
+
+  /// No description provided for @reservationsTab.
+  ///
+  /// In cs, this message translates to:
+  /// **'Rezervace'**
+  String get reservationsTab;
+
+  /// No description provided for @infoTab.
+  ///
+  /// In cs, this message translates to:
+  /// **'Info'**
+  String get infoTab;
+
+  /// No description provided for @employeesTab.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zaměstnanci'**
+  String get employeesTab;
+
+  /// No description provided for @restaurantInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Informace o restauraci'**
+  String get restaurantInfo;
+
+  /// No description provided for @nameLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název'**
+  String get nameLabel;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název je povinný'**
+  String get nameRequired;
+
+  /// No description provided for @descriptionLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Popis'**
+  String get descriptionLabel;
+
+  /// No description provided for @phoneLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Telefon'**
+  String get phoneLabel;
+
+  /// No description provided for @contactEmailLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Kontaktní e-mail'**
+  String get contactEmailLabel;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Adresa'**
+  String get addressLabel;
+
+  /// No description provided for @streetLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Ulice'**
+  String get streetLabel;
+
+  /// No description provided for @cityLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Město'**
+  String get cityLabel;
+
+  /// No description provided for @postalCodeLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'PSČ'**
+  String get postalCodeLabel;
+
+  /// No description provided for @countryLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Země'**
+  String get countryLabel;
+
+  /// No description provided for @savingLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Ukládám...'**
+  String get savingLabel;
+
+  /// No description provided for @noEmployeesYet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádní zaměstnanci.'**
+  String get noEmployeesYet;
+
+  /// No description provided for @removeEmployeeTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odebrat zaměstnance'**
+  String get removeEmployeeTitle;
+
+  /// No description provided for @removeEmployeeMessage.
+  ///
+  /// In cs, this message translates to:
+  /// **'Opravdu chcete odebrat {name}?'**
+  String removeEmployeeMessage(String name);
+
+  /// No description provided for @activePanoramaTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Aktivní panorama'**
+  String get activePanoramaTitle;
+
+  /// No description provided for @activePanoramaDesc.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama je nastaveno a zobrazuje se zákazníkům.'**
+  String get activePanoramaDesc;
+
+  /// No description provided for @creatingPanorama.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vytvářím...'**
+  String get creatingPanorama;
+
+  /// No description provided for @newPanoramaButton.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nové panorama'**
+  String get newPanoramaButton;
+
+  /// No description provided for @noPanoramaYetLong.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zatím žádné panorama. Klikněte na tlačítko výše.'**
+  String get noPanoramaYetLong;
+
+  /// No description provided for @sessionLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Sezení {id}...'**
+  String sessionLabel(String id);
+
+  /// No description provided for @photosProgress.
+  ///
+  /// In cs, this message translates to:
+  /// **'{taken}/{total} fotek'**
+  String photosProgress(int taken, int total);
+
+  /// No description provided for @statusUploading.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nahrávání'**
+  String get statusUploading;
+
+  /// No description provided for @statusProcessing.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zpracování...'**
+  String get statusProcessing;
+
+  /// No description provided for @statusCompletedShort.
+  ///
+  /// In cs, this message translates to:
+  /// **'Dokončeno'**
+  String get statusCompletedShort;
+
+  /// No description provided for @statusFailed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Selhalo'**
+  String get statusFailed;
+
+  /// No description provided for @panoramaActivatedSuccess.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama aktivováno!'**
+  String get panoramaActivatedSuccess;
+
+  /// No description provided for @tablePositionsSavedSuccess.
+  ///
+  /// In cs, this message translates to:
+  /// **'Pozice stolu uloženy!'**
+  String get tablePositionsSavedSuccess;
+
+  /// No description provided for @noReservationsForDayStaff.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádné rezervace pro tento den.'**
+  String get noReservationsForDayStaff;
+
+  /// No description provided for @statusWaiting.
+  ///
+  /// In cs, this message translates to:
+  /// **'Čekající'**
+  String get statusWaiting;
+
+  /// No description provided for @complete.
+  ///
+  /// In cs, this message translates to:
+  /// **'Dokončit'**
+  String get complete;
+
+  /// No description provided for @searchRestaurantTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyhledejte svou restauraci'**
+  String get searchRestaurantTitle;
+
+  /// No description provided for @searchRestaurantSubtitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zadejte IČO vaší firmy pro vyhledání v ARES'**
+  String get searchRestaurantSubtitle;
+
+  /// No description provided for @icoHint.
+  ///
+  /// In cs, this message translates to:
+  /// **'např. 12345678'**
+  String get icoHint;
+
+  /// No description provided for @foundCompany.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nalezená firma'**
+  String get foundCompany;
+
+  /// No description provided for @companyName.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název:'**
+  String get companyName;
+
+  /// No description provided for @icoLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'IČO:'**
+  String get icoLabel;
+
+  /// No description provided for @directors.
+  ///
+  /// In cs, this message translates to:
+  /// **'Jednatelé:'**
+  String get directors;
+
+  /// No description provided for @emailVerificationFallback.
+  ///
+  /// In cs, this message translates to:
+  /// **'Ověření e-mailem'**
+  String get emailVerificationFallback;
+
+  /// No description provided for @emailVerificationFallbackDesc.
+  ///
+  /// In cs, this message translates to:
+  /// **'Identita nebyla potvrzena přes BankID. Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.'**
+  String get emailVerificationFallbackDesc;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'E-mail: {email}'**
+  String emailLabel(String email);
+
+  /// No description provided for @verificationCodeHint.
+  ///
+  /// In cs, this message translates to:
+  /// **'123456'**
+  String get verificationCodeHint;
+
+  /// No description provided for @stepInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Informace'**
+  String get stepInfo;
+
+  /// No description provided for @stepHours.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevírací hodiny'**
+  String get stepHours;
+
+  /// No description provided for @stepTables.
+  ///
+  /// In cs, this message translates to:
+  /// **'Stoly'**
+  String get stepTables;
+
+  /// No description provided for @stepMenu.
+  ///
+  /// In cs, this message translates to:
+  /// **'Menu'**
+  String get stepMenu;
+
+  /// No description provided for @stepPanorama.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama'**
+  String get stepPanorama;
+
+  /// No description provided for @stepSummary.
+  ///
+  /// In cs, this message translates to:
+  /// **'Souhrn'**
+  String get stepSummary;
+
+  /// No description provided for @restaurantNameRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název restaurace *'**
+  String get restaurantNameRequired;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In cs, this message translates to:
+  /// **'Povinné pole'**
+  String get requiredField;
+
+  /// No description provided for @cuisineType.
+  ///
+  /// In cs, this message translates to:
+  /// **'Typ kuchyně'**
+  String get cuisineType;
+
+  /// No description provided for @streetRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Ulice *'**
+  String get streetRequired;
+
+  /// No description provided for @cityRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Město *'**
+  String get cityRequired;
+
+  /// No description provided for @postalCode.
+  ///
+  /// In cs, this message translates to:
+  /// **'PSČ'**
+  String get postalCode;
+
+  /// No description provided for @closedDay.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zavřeno'**
+  String get closedDay;
+
+  /// No description provided for @tablesCount.
+  ///
+  /// In cs, this message translates to:
+  /// **'Stoly ({count})'**
+  String tablesCount(int count);
+
+  /// No description provided for @tableLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Označení'**
+  String get tableLabel;
+
+  /// No description provided for @categoriesCount.
+  ///
+  /// In cs, this message translates to:
+  /// **'Kategorie ({count})'**
+  String categoriesCount(int count);
+
+  /// No description provided for @categoryName.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název'**
+  String get categoryName;
+
+  /// No description provided for @itemName.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název'**
+  String get itemName;
+
+  /// No description provided for @itemDescription.
+  ///
+  /// In cs, this message translates to:
+  /// **'Popis'**
+  String get itemDescription;
+
+  /// No description provided for @panoramaOptionalTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama (volitelné)'**
+  String get panoramaOptionalTitle;
+
+  /// No description provided for @panoramaHelpText.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panoramatický snímek restaurace pomůže zákazníkům si místo prohlédnout.'**
+  String get panoramaHelpText;
+
+  /// No description provided for @existingSessions.
+  ///
+  /// In cs, this message translates to:
+  /// **'Existující sezení:'**
+  String get existingSessions;
+
+  /// No description provided for @statusLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Stav: {status}, Fotek: {taken}/{total}'**
+  String statusLabel(String status, int taken, int total);
+
+  /// No description provided for @panoramaIsActive.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama je aktivní'**
+  String get panoramaIsActive;
+
+  /// No description provided for @summaryInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Informace o restauraci'**
+  String get summaryInfo;
+
+  /// No description provided for @summaryHours.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevírací hodiny'**
+  String get summaryHours;
+
+  /// No description provided for @summaryTables.
+  ///
+  /// In cs, this message translates to:
+  /// **'Alespoň 1 stůl'**
+  String get summaryTables;
+
+  /// No description provided for @summaryMenu.
+  ///
+  /// In cs, this message translates to:
+  /// **'Alespoň 1 položka v menu'**
+  String get summaryMenu;
+
+  /// No description provided for @summaryPanorama.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama (volitelné)'**
+  String get summaryPanorama;
+
+  /// No description provided for @publishedSuccess.
+  ///
+  /// In cs, this message translates to:
+  /// **'Restaurace byla úspěšně publikována!'**
+  String get publishedSuccess;
+
+  /// No description provided for @fillRequiredSteps.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyplňte všechny povinné kroky před publikací.'**
+  String get fillRequiredSteps;
+
+  /// No description provided for @capturedPhotos.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count}/{total} fotek'**
+  String capturedPhotos(int count, int total);
+
+  /// No description provided for @finalize.
+  ///
+  /// In cs, this message translates to:
+  /// **'Finalizovat'**
+  String get finalize;
+
+  /// No description provided for @minPhotosHint.
+  ///
+  /// In cs, this message translates to:
+  /// **'Min. {count} fotek pro finalizaci'**
+  String minPhotosHint(int count);
+
+  /// No description provided for @newTable.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nový stůl'**
+  String get newTable;
+
+  /// No description provided for @editTable.
+  ///
+  /// In cs, this message translates to:
+  /// **'Upravit stůl'**
+  String get editTable;
+
+  /// No description provided for @addTableTooltip.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidat stůl'**
+  String get addTableTooltip;
+
+  /// No description provided for @finishAddingTooltip.
+  ///
+  /// In cs, this message translates to:
+  /// **'Ukončit přidávání'**
+  String get finishAddingTooltip;
+
+  /// No description provided for @onboardingTitle4.
+  ///
+  /// In cs, this message translates to:
+  /// **'Sledujte vše'**
+  String get onboardingTitle4;
+
+  /// No description provided for @onboardingDesc4.
+  ///
+  /// In cs, this message translates to:
+  /// **'Aktualizace objednávek a rezervací v reálném čase'**
+  String get onboardingDesc4;
+
+  /// No description provided for @skip.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přeskočit'**
+  String get skip;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In cs, this message translates to:
+  /// **'Začít'**
+  String get getStarted;
+
+  /// No description provided for @popularNearYou.
+  ///
+  /// In cs, this message translates to:
+  /// **'Populární poblíž'**
+  String get popularNearYou;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In cs, this message translates to:
+  /// **'Hledat restaurace, kuchyně...'**
+  String get searchHint;
+
+  /// No description provided for @restaurantDescription.
+  ///
+  /// In cs, this message translates to:
+  /// **'Tato restaurace nabízí pečlivě sestavené menu z čerstvých surovin, přívětivou atmosféru a vynikající servis.'**
+  String get restaurantDescription;
+
+  /// No description provided for @openingHoursInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevírací doba'**
+  String get openingHoursInfo;
+
+  /// No description provided for @openingHoursValue.
+  ///
+  /// In cs, this message translates to:
+  /// **'9:00 – 22:00'**
+  String get openingHoursValue;
+
+  /// No description provided for @phoneInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Telefon'**
+  String get phoneInfo;
+
+  /// No description provided for @phoneValue.
+  ///
+  /// In cs, this message translates to:
+  /// **'+420 123 456 789'**
+  String get phoneValue;
+
+  /// No description provided for @addressInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Adresa'**
+  String get addressInfo;
+
+  /// No description provided for @addressValue.
+  ///
+  /// In cs, this message translates to:
+  /// **'Hlavní ulice 12, Praha'**
+  String get addressValue;
+
+  /// No description provided for @reserveTableButton.
+  ///
+  /// In cs, this message translates to:
+  /// **'Rezervovat stůl'**
+  String get reserveTableButton;
+
+  /// No description provided for @noItemsCategory.
+  ///
+  /// In cs, this message translates to:
+  /// **'V této kategorii nejsou žádné položky'**
+  String get noItemsCategory;
+
+  /// No description provided for @itemsCount.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count} položek'**
+  String itemsCount(int count);
+
+  /// No description provided for @addToCartButton.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidat do košíku'**
+  String get addToCartButton;
+
+  /// No description provided for @editorSaved.
+  ///
+  /// In cs, this message translates to:
+  /// **'Stoly uloženy!'**
+  String get editorSaved;
+
+  /// No description provided for @editorSaveError.
+  ///
+  /// In cs, this message translates to:
+  /// **'Chyba při ukládání: {error}'**
+  String editorSaveError(String error);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

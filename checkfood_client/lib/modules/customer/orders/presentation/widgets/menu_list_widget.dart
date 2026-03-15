@@ -6,6 +6,7 @@ import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
 import 'menu_item_card.dart';
+import '../../../../../../l10n/generated/app_localizations.dart';
 
 class MenuListWidget extends StatelessWidget {
   const MenuListWidget({super.key});
@@ -18,6 +19,7 @@ class MenuListWidget extends StatelessWidget {
           prev.menuLoading != curr.menuLoading ||
           prev.cartItems != curr.cartItems,
       builder: (context, state) {
+        final l = S.of(context);
         if (state.menuLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -40,7 +42,7 @@ class MenuListWidget extends StatelessWidget {
                           );
                     }
                   },
-                  child: const Text('Zkusit znovu'),
+                  child: Text(l.retry),
                 ),
               ],
             ),
@@ -48,7 +50,7 @@ class MenuListWidget extends StatelessWidget {
         }
 
         if (state.menuCategories.isEmpty) {
-          return const Center(child: Text('Menu je prázdné.'));
+          return Center(child: Text(l.menuEmpty));
         }
 
         return ListView.builder(

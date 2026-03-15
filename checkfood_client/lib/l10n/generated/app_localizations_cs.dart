@@ -702,4 +702,488 @@ class SCs extends S {
 
   @override
   String get locationPermissionDesc => 'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.';
+
+  @override
+  String get errorProfileLoad => 'Chyba při načítání uživatelského profilu.';
+
+  @override
+  String get errorUnexpected => 'Neočekávaná chyba serveru.';
+
+  @override
+  String get errorRegisterFailed => 'Registrace selhala.';
+
+  @override
+  String get errorVerificationFailed => 'Verifikace selhala.';
+
+  @override
+  String get errorGoogleLogin => 'Google přihlášení selhalo.';
+
+  @override
+  String get errorAppleLogin => 'Apple přihlášení selhalo.';
+
+  @override
+  String get deviceManagementTitle => 'Správa zařízení';
+
+  @override
+  String get noActiveDevices => 'Žádná aktivní zařízení.';
+
+  @override
+  String get thisDevice => 'Toto zařízení';
+
+  @override
+  String lastActivity(String date) {
+    return 'Poslední aktivita: $date';
+  }
+
+  @override
+  String get logoutDevice => 'Odhlásit zařízení';
+
+  @override
+  String get firstNameRequired => 'Jméno nesmí být prázdné';
+
+  @override
+  String get lastNameRequired => 'Příjmení nesmí být prázdné';
+
+  @override
+  String photoUploadError(String error) {
+    return 'Nahrání fotky selhalo: $error';
+  }
+
+  @override
+  String get userNoName => 'Uživatel bez jména';
+
+  @override
+  String get inactiveAccount => 'Neaktivní účet';
+
+  @override
+  String get aboutRestaurant => 'O restauraci';
+
+  @override
+  String get openingHoursLabel => 'Otevírací doba';
+
+  @override
+  String get dayMonday => 'Pondělí';
+
+  @override
+  String get dayTuesday => 'Úterý';
+
+  @override
+  String get dayWednesday => 'Středa';
+
+  @override
+  String get dayThursday => 'Čtvrtek';
+
+  @override
+  String get dayFriday => 'Pátek';
+
+  @override
+  String get daySaturday => 'Sobota';
+
+  @override
+  String get daySunday => 'Neděle';
+
+  @override
+  String get noUpcomingReservations => 'Žádné nadcházející rezervace';
+
+  @override
+  String get noReservationHistory => 'Žádná historie rezervací';
+
+  @override
+  String showAll(int count) {
+    return 'Zobrazit vše ($count)';
+  }
+
+  @override
+  String get restaurant => 'Restaurace';
+
+  @override
+  String get table => 'Stůl';
+
+  @override
+  String partySizeShort(int count) {
+    return '$count os.';
+  }
+
+  @override
+  String timeFrom(String time) {
+    return 'od $time';
+  }
+
+  @override
+  String get statusPending => 'Čeká na potvrzení';
+
+  @override
+  String get statusConfirmed => 'Potvrzeno';
+
+  @override
+  String get statusCancelled => 'Zrušeno';
+
+  @override
+  String get statusRejected => 'Zamítnuto';
+
+  @override
+  String get statusCompleted => 'Dokončeno';
+
+  @override
+  String get statusCheckedIn => 'Přítomen';
+
+  @override
+  String get statusReserved => 'Potvrzeno';
+
+  @override
+  String get editReservation => 'Upravit rezervaci';
+
+  @override
+  String get availableTimes => 'Dostupné časy';
+
+  @override
+  String get noSlotsForDay => 'Žádné volné termíny pro tento den.';
+
+  @override
+  String get partyCount => 'Počet osob';
+
+  @override
+  String get guestsLabel => 'Počet hostů:';
+
+  @override
+  String get freeTimes => 'Volné časy';
+
+  @override
+  String get confirmReservation => 'Potvrdit rezervaci';
+
+  @override
+  String get menuEmpty => 'Menu je prázdné.';
+
+  @override
+  String itemsShort(int count) {
+    return '$count pol.';
+  }
+
+  @override
+  String get reservationsTab => 'Rezervace';
+
+  @override
+  String get infoTab => 'Info';
+
+  @override
+  String get employeesTab => 'Zaměstnanci';
+
+  @override
+  String get restaurantInfo => 'Informace o restauraci';
+
+  @override
+  String get nameLabel => 'Název';
+
+  @override
+  String get nameRequired => 'Název je povinný';
+
+  @override
+  String get descriptionLabel => 'Popis';
+
+  @override
+  String get phoneLabel => 'Telefon';
+
+  @override
+  String get contactEmailLabel => 'Kontaktní e-mail';
+
+  @override
+  String get addressLabel => 'Adresa';
+
+  @override
+  String get streetLabel => 'Ulice';
+
+  @override
+  String get cityLabel => 'Město';
+
+  @override
+  String get postalCodeLabel => 'PSČ';
+
+  @override
+  String get countryLabel => 'Země';
+
+  @override
+  String get savingLabel => 'Ukládám...';
+
+  @override
+  String get noEmployeesYet => 'Žádní zaměstnanci.';
+
+  @override
+  String get removeEmployeeTitle => 'Odebrat zaměstnance';
+
+  @override
+  String removeEmployeeMessage(String name) {
+    return 'Opravdu chcete odebrat $name?';
+  }
+
+  @override
+  String get activePanoramaTitle => 'Aktivní panorama';
+
+  @override
+  String get activePanoramaDesc => 'Panorama je nastaveno a zobrazuje se zákazníkům.';
+
+  @override
+  String get creatingPanorama => 'Vytvářím...';
+
+  @override
+  String get newPanoramaButton => 'Nové panorama';
+
+  @override
+  String get noPanoramaYetLong => 'Zatím žádné panorama. Klikněte na tlačítko výše.';
+
+  @override
+  String sessionLabel(String id) {
+    return 'Sezení $id...';
+  }
+
+  @override
+  String photosProgress(int taken, int total) {
+    return '$taken/$total fotek';
+  }
+
+  @override
+  String get statusUploading => 'Nahrávání';
+
+  @override
+  String get statusProcessing => 'Zpracování...';
+
+  @override
+  String get statusCompletedShort => 'Dokončeno';
+
+  @override
+  String get statusFailed => 'Selhalo';
+
+  @override
+  String get panoramaActivatedSuccess => 'Panorama aktivováno!';
+
+  @override
+  String get tablePositionsSavedSuccess => 'Pozice stolu uloženy!';
+
+  @override
+  String get noReservationsForDayStaff => 'Žádné rezervace pro tento den.';
+
+  @override
+  String get statusWaiting => 'Čekající';
+
+  @override
+  String get complete => 'Dokončit';
+
+  @override
+  String get searchRestaurantTitle => 'Vyhledejte svou restauraci';
+
+  @override
+  String get searchRestaurantSubtitle => 'Zadejte IČO vaší firmy pro vyhledání v ARES';
+
+  @override
+  String get icoHint => 'např. 12345678';
+
+  @override
+  String get foundCompany => 'Nalezená firma';
+
+  @override
+  String get companyName => 'Název:';
+
+  @override
+  String get icoLabel => 'IČO:';
+
+  @override
+  String get directors => 'Jednatelé:';
+
+  @override
+  String get emailVerificationFallback => 'Ověření e-mailem';
+
+  @override
+  String get emailVerificationFallbackDesc => 'Identita nebyla potvrzena přes BankID. Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.';
+
+  @override
+  String emailLabel(String email) {
+    return 'E-mail: $email';
+  }
+
+  @override
+  String get verificationCodeHint => '123456';
+
+  @override
+  String get stepInfo => 'Informace';
+
+  @override
+  String get stepHours => 'Otevírací hodiny';
+
+  @override
+  String get stepTables => 'Stoly';
+
+  @override
+  String get stepMenu => 'Menu';
+
+  @override
+  String get stepPanorama => 'Panorama';
+
+  @override
+  String get stepSummary => 'Souhrn';
+
+  @override
+  String get restaurantNameRequired => 'Název restaurace *';
+
+  @override
+  String get requiredField => 'Povinné pole';
+
+  @override
+  String get cuisineType => 'Typ kuchyně';
+
+  @override
+  String get streetRequired => 'Ulice *';
+
+  @override
+  String get cityRequired => 'Město *';
+
+  @override
+  String get postalCode => 'PSČ';
+
+  @override
+  String get closedDay => 'Zavřeno';
+
+  @override
+  String tablesCount(int count) {
+    return 'Stoly ($count)';
+  }
+
+  @override
+  String get tableLabel => 'Označení';
+
+  @override
+  String categoriesCount(int count) {
+    return 'Kategorie ($count)';
+  }
+
+  @override
+  String get categoryName => 'Název';
+
+  @override
+  String get itemName => 'Název';
+
+  @override
+  String get itemDescription => 'Popis';
+
+  @override
+  String get panoramaOptionalTitle => 'Panorama (volitelné)';
+
+  @override
+  String get panoramaHelpText => 'Panoramatický snímek restaurace pomůže zákazníkům si místo prohlédnout.';
+
+  @override
+  String get existingSessions => 'Existující sezení:';
+
+  @override
+  String statusLabel(String status, int taken, int total) {
+    return 'Stav: $status, Fotek: $taken/$total';
+  }
+
+  @override
+  String get panoramaIsActive => 'Panorama je aktivní';
+
+  @override
+  String get summaryInfo => 'Informace o restauraci';
+
+  @override
+  String get summaryHours => 'Otevírací hodiny';
+
+  @override
+  String get summaryTables => 'Alespoň 1 stůl';
+
+  @override
+  String get summaryMenu => 'Alespoň 1 položka v menu';
+
+  @override
+  String get summaryPanorama => 'Panorama (volitelné)';
+
+  @override
+  String get publishedSuccess => 'Restaurace byla úspěšně publikována!';
+
+  @override
+  String get fillRequiredSteps => 'Vyplňte všechny povinné kroky před publikací.';
+
+  @override
+  String capturedPhotos(int count, int total) {
+    return '$count/$total fotek';
+  }
+
+  @override
+  String get finalize => 'Finalizovat';
+
+  @override
+  String minPhotosHint(int count) {
+    return 'Min. $count fotek pro finalizaci';
+  }
+
+  @override
+  String get newTable => 'Nový stůl';
+
+  @override
+  String get editTable => 'Upravit stůl';
+
+  @override
+  String get addTableTooltip => 'Přidat stůl';
+
+  @override
+  String get finishAddingTooltip => 'Ukončit přidávání';
+
+  @override
+  String get onboardingTitle4 => 'Sledujte vše';
+
+  @override
+  String get onboardingDesc4 => 'Aktualizace objednávek a rezervací v reálném čase';
+
+  @override
+  String get skip => 'Přeskočit';
+
+  @override
+  String get getStarted => 'Začít';
+
+  @override
+  String get popularNearYou => 'Populární poblíž';
+
+  @override
+  String get searchHint => 'Hledat restaurace, kuchyně...';
+
+  @override
+  String get restaurantDescription => 'Tato restaurace nabízí pečlivě sestavené menu z čerstvých surovin, přívětivou atmosféru a vynikající servis.';
+
+  @override
+  String get openingHoursInfo => 'Otevírací doba';
+
+  @override
+  String get openingHoursValue => '9:00 – 22:00';
+
+  @override
+  String get phoneInfo => 'Telefon';
+
+  @override
+  String get phoneValue => '+420 123 456 789';
+
+  @override
+  String get addressInfo => 'Adresa';
+
+  @override
+  String get addressValue => 'Hlavní ulice 12, Praha';
+
+  @override
+  String get reserveTableButton => 'Rezervovat stůl';
+
+  @override
+  String get noItemsCategory => 'V této kategorii nejsou žádné položky';
+
+  @override
+  String itemsCount(int count) {
+    return '$count položek';
+  }
+
+  @override
+  String get addToCartButton => 'Přidat do košíku';
+
+  @override
+  String get editorSaved => 'Stoly uloženy!';
+
+  @override
+  String editorSaveError(String error) {
+    return 'Chyba při ukládání: $error';
+  }
 }

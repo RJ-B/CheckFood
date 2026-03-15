@@ -8,6 +8,7 @@ import '../domain/menu_item_model.dart';
 import '../domain/restaurant_model.dart';
 
 import 'menu_item_detail_sheet.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class MenuScreen extends StatefulWidget {
   final Restaurant restaurant;
@@ -61,16 +62,17 @@ class _MenuScreenState extends State<MenuScreen>
   }
 
   Widget _buildCategory(String category) {
+    final l = S.of(context);
     final items = _menuByCategory[category]!;
 
     if (items.isEmpty) {
-      return const Center(child: Text('No items in this category'));
+      return Center(child: Text(l.noItemsCategory));
     }
 
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.base),
       children: [
-        SectionHeader(title: category, subtitle: '${items.length} items'),
+        SectionHeader(title: category, subtitle: l.itemsCount(items.length)),
         const SizedBox(height: AppSpacing.base),
         for (final item in items)
           MenuItemCard(

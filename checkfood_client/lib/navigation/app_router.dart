@@ -7,6 +7,7 @@ import '../security/presentation/pages/auth/register_page.dart';
 import '../security/presentation/pages/auth/email_verification_screen.dart';
 import '../modules/owner/presentation/pages/owner_register_page.dart';
 import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
+import '../l10n/generated/app_localizations.dart';
 
 class AppRouter {
   static const String root = '/';
@@ -61,10 +62,13 @@ class AppRouter {
 
   static Route<dynamic> _errorRoute() {
     return MaterialPageRoute(
-      builder:
-          (_) => const Scaffold(
-            body: Center(child: Text('Chyba: cesta nenalezena')),
+      builder: (context) => Scaffold(
+        body: Center(
+          child: Builder(
+            builder: (context) => Text(S.of(context).routeNotFound),
           ),
+        ),
+      ),
     );
   }
 }

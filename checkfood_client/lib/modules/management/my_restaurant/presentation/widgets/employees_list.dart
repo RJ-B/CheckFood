@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/employee.dart';
 import 'employee_role_selector.dart';
 
@@ -20,17 +21,17 @@ class EmployeesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (employees.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(32),
+          padding: const EdgeInsets.all(32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.people_outline, size: 64, color: Colors.grey),
-              SizedBox(height: 16),
+              const Icon(Icons.people_outline, size: 64, color: Colors.grey),
+              const SizedBox(height: 16),
               Text(
-                'No employees yet',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                S.of(context).noEmployeesYet,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
           ),
@@ -82,7 +83,7 @@ class _EmployeeTile extends StatelessWidget {
       subtitle: Text(employee.email),
       trailing: employee.isOwner
           ? Chip(
-              label: const Text('Owner'),
+              label: Text(S.of(context).owner),
               backgroundColor: Colors.amber.shade100,
             )
           : isOwner
@@ -102,20 +103,22 @@ class _EmployeeTile extends StatelessWidget {
                     ),
                   ],
                 )
-              : Chip(label: Text(_roleLabel(employee.role))),
+              : Chip(label: Text(_roleLabel(context, employee.role))),
     );
   }
 
   void _confirmRemove(BuildContext context) {
+    final l = S.of(context);
+    final name = employee.name.isNotEmpty ? employee.name : employee.email;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Remove Employee'),
-        content: Text('Are you sure you want to remove ${employee.name.isNotEmpty ? employee.name : employee.email}?'),
+        title: Text(l.removeEmployeeTitle),
+        content: Text(l.removeEmployeeMessage(name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            child: Text(l.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
@@ -123,7 +126,7 @@ class _EmployeeTile extends StatelessWidget {
               Navigator.of(ctx).pop();
               onRemove();
             },
-            child: const Text('Remove'),
+            child: Text(l.removeEmployee),
           ),
         ],
       ),
@@ -143,12 +146,13 @@ class _EmployeeTile extends StatelessWidget {
     }
   }
 
-  String _roleLabel(String role) {
+  String _roleLabel(BuildContext context, String role) {
+    final l = S.of(context);
     switch (role) {
       case 'MANAGER':
-        return 'Manager';
+        return l.manager;
       case 'STAFF':
-        return 'Staff';
+        return l.staff;
       default:
         return role;
     }

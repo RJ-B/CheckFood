@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../domain/entities/user_profile.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../bloc/user/user_event.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class ProfileHeader extends StatelessWidget {
   final UserProfile profile;
@@ -47,7 +48,7 @@ class ProfileHeader extends StatelessWidget {
         Navigator.of(context).pop(); // dismiss loading
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Nahrání fotky selhalo: $e'),
+            content: Text(S.of(context).photoUploadError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -119,7 +120,7 @@ class ProfileHeader extends StatelessWidget {
 
           // --- JMÉNO ---
           Text(
-            displayFullName.isNotEmpty ? displayFullName : 'Uživatel bez jména',
+            displayFullName.isNotEmpty ? displayFullName : S.of(context).userNoName,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 22,
@@ -157,7 +158,7 @@ class ProfileHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'Neaktivní účet',
+                    S.of(context).inactiveAccount,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

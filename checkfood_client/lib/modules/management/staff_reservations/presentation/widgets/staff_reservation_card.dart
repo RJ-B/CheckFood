@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/staff_reservation.dart';
 
 class StaffReservationCard extends StatelessWidget {
@@ -39,22 +40,23 @@ class StaffReservationCard extends StatelessWidget {
     }
   }
 
-  String get _statusLabel {
+  String _statusLabel(BuildContext context) {
+    final l = S.of(context);
     switch (reservation.status) {
       case 'PENDING_CONFIRMATION':
-        return 'Cekajici';
+        return l.statusWaiting;
       case 'CONFIRMED':
-        return 'Potvrzeno';
+        return l.statusConfirmed;
       case 'RESERVED':
-        return 'Rezervovano';
+        return l.statusReserved;
       case 'CHECKED_IN':
-        return 'Pritomen';
+        return l.statusCheckedIn;
       case 'CANCELLED':
-        return 'Zruseno';
+        return l.statusCancelled;
       case 'REJECTED':
-        return 'Odmitnuto';
+        return l.statusRejected;
       case 'COMPLETED':
-        return 'Dokonceno';
+        return l.statusCompleted;
       default:
         return reservation.status;
     }
@@ -62,9 +64,10 @@ class StaffReservationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     final timeRange = reservation.endTime != null
         ? '${reservation.startTime.substring(0, 5)} - ${reservation.endTime!.substring(0, 5)}'
-        : 'od ${reservation.startTime.substring(0, 5)}';
+        : l.timeFrom(reservation.startTime.substring(0, 5));
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -99,7 +102,7 @@ class StaffReservationCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    _statusLabel,
+                    _statusLabel(context),
                     style: TextStyle(
                       color: _borderColor,
                       fontWeight: FontWeight.w600,
@@ -162,7 +165,7 @@ class StaffReservationCard extends StatelessWidget {
               backgroundColor: Colors.green.shade50,
               foregroundColor: Colors.green.shade700,
             ),
-            child: const Text('Potvrdit'),
+            child: Text(S.of(context).confirm),
           ),
         if (reservation.canReject)
           FilledButton.tonal(
@@ -171,7 +174,7 @@ class StaffReservationCard extends StatelessWidget {
               backgroundColor: Colors.red.shade50,
               foregroundColor: Colors.red.shade700,
             ),
-            child: const Text('Odmitnout'),
+            child: Text(S.of(context).reject),
           ),
         if (reservation.canCheckIn)
           FilledButton.tonal(
@@ -180,7 +183,7 @@ class StaffReservationCard extends StatelessWidget {
               backgroundColor: Colors.blue.shade50,
               foregroundColor: Colors.blue.shade700,
             ),
-            child: const Text('Check-in'),
+            child: Text(S.of(context).checkIn),
           ),
         if (reservation.canComplete)
           FilledButton.tonal(
@@ -189,7 +192,7 @@ class StaffReservationCard extends StatelessWidget {
               backgroundColor: Colors.grey.shade200,
               foregroundColor: Colors.grey.shade700,
             ),
-            child: const Text('Dokoncit'),
+            child: Text(S.of(context).complete),
           ),
       ],
     );

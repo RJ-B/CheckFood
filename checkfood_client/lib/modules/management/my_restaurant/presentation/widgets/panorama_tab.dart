@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 import '../../../../../core/di/injection_container.dart';
 import '../../../../owner/onboarding/domain/entities/panorama_session.dart';
 import '../../../../owner/onboarding/domain/repositories/onboarding_repository.dart';
@@ -119,7 +121,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Chyba: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text(S.of(context).errorGeneric(e.toString())), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -132,7 +134,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
     await activate(sessionId);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Panorama aktivovano!'), backgroundColor: Colors.green),
+        SnackBar(content: Text(S.of(context).panoramaActivatedSuccess), backgroundColor: Colors.green),
       );
       _loadSessions();
     }
@@ -180,8 +182,8 @@ class _PanoramaTabState extends State<PanoramaTab> {
             }
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Pozice stolu uloženy!'),
+                SnackBar(
+                  content: Text(S.of(context).tablePositionsSavedSuccess),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -212,7 +214,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
             const SizedBox(height: 8),
             Text(_error!),
             const SizedBox(height: 16),
-            FilledButton(onPressed: _loadSessions, child: const Text('Zkusit znovu')),
+            FilledButton(onPressed: _loadSessions, child: Text(S.of(context).retry)),
           ],
         ),
       );
@@ -228,8 +230,8 @@ class _PanoramaTabState extends State<PanoramaTab> {
               color: Colors.green.shade50,
               child: ListTile(
                 leading: const Icon(Icons.panorama, color: Colors.green),
-                title: const Text('Aktivni panorama'),
-                subtitle: const Text('Panorama je nastaveno a zobrazuje se zakaznikum.'),
+                title: Text(S.of(context).activePanoramaTitle),
+                subtitle: Text(S.of(context).activePanoramaDesc),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () => _openEditorWithTables(widget.activePanoramaUrl!),
@@ -247,15 +249,15 @@ class _PanoramaTabState extends State<PanoramaTab> {
               icon: _creating
                   ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                   : const Icon(Icons.add_a_photo),
-              label: Text(_creating ? 'Vytvarim...' : 'Nove panorama'),
+              label: Text(_creating ? S.of(context).creatingPanorama : S.of(context).newPanoramaButton),
             ),
           ),
 
           if (_sessions.isEmpty && widget.activePanoramaUrl == null)
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.all(32),
-                child: Text('Zatim zadne panorama. Kliknete na tlacitko vyse.'),
+                padding: const EdgeInsets.all(32),
+                child: Text(S.of(context).noPanoramaYetLong),
               ),
             ),
 
@@ -266,11 +268,11 @@ class _PanoramaTabState extends State<PanoramaTab> {
                     _statusIcon(session.status),
                     color: _statusColor(session.status),
                   ),
-                  title: Text('Sezeni ${session.id.substring(0, 8)}...'),
+                  title: Text(S.of(context).sessionLabel(session.id.substring(0, 8))),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${_statusLabel(session.status)} | ${session.photoCount}/8 fotek'),
+                      Text('${_statusLabel(context, session.status)} | ${S.of(context).photosProgress(session.photoCount, 8)}'),
                       if (session.status == 'PROCESSING')
                         const Padding(
                           padding: EdgeInsets.only(top: 4),
@@ -288,7 +290,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
                         ),
                         FilledButton(
                           onPressed: () => _activatePanorama(session.id),
-                          child: const Text('Aktivovat'),
+                          child: Text(S.of(context).activate),
                         ),
                       ],
                     ],
@@ -314,11 +316,14 @@ class _PanoramaTabState extends State<PanoramaTab> {
         _ => Colors.grey,
       };
 
-  String _statusLabel(String status) => switch (status) {
-        'UPLOADING' => 'Nahravani',
-        'PROCESSING' => 'Zpracovani...',
-        'COMPLETED' => 'Dokonceno',
-        'FAILED' => 'Selhalo',
-        _ => status,
-      };
+  String _statusLabel(BuildContext context, String status) {
+    final l = S.of(context);
+    return switch (status) {
+      'UPLOADING' => l.statusUploading,
+      'PROCESSING' => l.statusProcessing,
+      'COMPLETED' => l.statusCompletedShort,
+      'FAILED' => l.statusFailed,
+      _ => status,
+    };
+  }
 }

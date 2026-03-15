@@ -9,6 +9,7 @@ import '../../../components/buttons/secondary_button.dart';
 
 import '../domain/restaurant_model.dart';
 import 'menu_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 
 class RestaurantDetailScreen extends StatelessWidget {
@@ -18,6 +19,7 @@ class RestaurantDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -94,31 +96,30 @@ class RestaurantDetailScreen extends StatelessWidget {
 
                   /* DESCRIPTION */
                   Text(
-                    'This restaurant offers a curated menu made from fresh ingredients, '
-                    'a welcoming atmosphere and excellent service.',
+                    l.restaurantDescription,
                     style: AppTypography.bodyMd,
                   ),
 
                   const SizedBox(height: AppSpacing.xl),
 
                   /* INFO */
-                  const SectionHeader(title: 'Information'),
+                  SectionHeader(title: l.information),
                   const SizedBox(height: AppSpacing.sm),
 
-                  const _InfoRow(
+                  _InfoRow(
                     icon: Icons.schedule,
-                    label: 'Opening hours',
-                    value: '9:00 AM – 10:00 PM',
+                    label: l.openingHoursInfo,
+                    value: l.openingHoursValue,
                   ),
-                  const _InfoRow(
+                  _InfoRow(
                     icon: Icons.phone,
-                    label: 'Phone',
-                    value: '+420 123 456 789',
+                    label: l.phoneInfo,
+                    value: l.phoneValue,
                   ),
-                  const _InfoRow(
+                  _InfoRow(
                     icon: Icons.location_on,
-                    label: 'Address',
-                    value: 'Main Street 12, Prague',
+                    label: l.addressInfo,
+                    value: l.addressValue,
                   ),
 
                   const SizedBox(height: AppSpacing.xl),
@@ -145,7 +146,7 @@ class RestaurantDetailScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: SecondaryButton(
-                    label: 'Reserve Table',
+                    label: l.reserveTableButton,
                     onTap: () {
                       // TODO: Navigate to reservation flow
                     },
@@ -154,7 +155,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: PrimaryButton(
-                    label: 'Menu',
+                    label: l.menu,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

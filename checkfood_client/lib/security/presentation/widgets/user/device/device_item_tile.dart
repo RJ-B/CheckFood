@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../domain/entities/device.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class DeviceItemTile extends StatelessWidget {
   final Device device;
@@ -24,6 +25,7 @@ class DeviceItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     // Formátování data (např. 25.01.2026 14:30)
     final dateFormat = DateFormat('dd.MM.yyyy HH:mm');
+    final l = S.of(context);
 
     return Card(
       elevation: 0,
@@ -84,9 +86,9 @@ class DeviceItemTile extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(color: Colors.green),
                           ),
-                          child: const Text(
-                            'Toto zařízení',
-                            style: TextStyle(
+                          child: Text(
+                            l.thisDevice,
+                            style: const TextStyle(
                               fontSize: 10,
                               color: Colors.green,
                               fontWeight: FontWeight.bold,
@@ -98,7 +100,7 @@ class DeviceItemTile extends StatelessWidget {
                   ),
                   const Gap(4),
                   Text(
-                    'Poslední aktivita: ${dateFormat.format(device.lastLogin)}',
+                    l.lastActivity(dateFormat.format(device.lastLogin)),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -123,7 +125,7 @@ class DeviceItemTile extends StatelessWidget {
                           ? Colors.grey.withOpacity(0.3)
                           : Colors.red,
                 ),
-                tooltip: 'Odhlásit zařízení',
+                tooltip: l.logoutDevice,
               ),
           ],
         ),

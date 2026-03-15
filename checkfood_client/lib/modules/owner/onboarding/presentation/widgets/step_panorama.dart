@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
@@ -55,9 +57,9 @@ class _StepPanoramaState extends State<StepPanorama> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Panorama (volitelne)', style: Theme.of(context).textTheme.titleMedium),
+              Text(S.of(context).panoramaOptionalTitle, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
-              const Text('Panoramaticky snimek restaurace pomuze zakaznikum si misto prohlednout.'),
+              Text(S.of(context).panoramaHelpText),
               const SizedBox(height: 16),
               FilledButton.icon(
                 onPressed: state.loading
@@ -68,22 +70,22 @@ class _StepPanoramaState extends State<StepPanorama> {
                         );
                       },
                 icon: const Icon(Icons.camera_alt),
-                label: const Text('Nove panorama'),
+                label: Text(S.of(context).newPanoramaButton),
               ),
               const SizedBox(height: 16),
               if (state.sessions.isNotEmpty) ...[
-                Text('Existujici sezeni:', style: Theme.of(context).textTheme.titleSmall),
+                Text(S.of(context).existingSessions, style: Theme.of(context).textTheme.titleSmall),
                 const SizedBox(height: 8),
                 ...state.sessions.map((session) => _buildSessionCard(context, session, state)),
               ],
               if (state.status?.hasPanorama == true)
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
                   child: Row(
                     children: [
-                      Icon(Icons.check_circle, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text('Panorama je aktivni'),
+                      const Icon(Icons.check_circle, color: Colors.green),
+                      const SizedBox(width: 8),
+                      Text(S.of(context).panoramaIsActive),
                     ],
                   ),
                 ),
@@ -129,18 +131,18 @@ class _StepPanoramaState extends State<StepPanorama> {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: Icon(statusIcon, color: statusColor),
-        title: Text('Sezeni ${session.id.substring(0, 8)}...'),
+        title: Text(S.of(context).sessionLabel(session.id.substring(0, 8))),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Stav: ${_statusLabel(session.status)}, Fotek: ${session.photoCount}/8'),
+            Text('${_statusLabel(context, session.status)}, ${S.of(context).photosProgress(session.photoCount, 8)}'),
             if (session.status == 'PROCESSING')
               const Padding(
                 padding: EdgeInsets.only(top: 4),
                 child: LinearProgressIndicator(),
               ),
             if (session.status == 'FAILED')
-              const Text('Stitching selhal. Zkuste to znovu.', style: TextStyle(color: Colors.red, fontSize: 12)),
+              Text(S.of(context).stitchingFailed, style: const TextStyle(color: Colors.red, fontSize: 12)),
           ],
         ),
         trailing: _buildSessionAction(context, session, state),
@@ -148,12 +150,13 @@ class _StepPanoramaState extends State<StepPanorama> {
     );
   }
 
-  String _statusLabel(String status) {
+  String _statusLabel(BuildContext context, String status) {
+    final l = S.of(context);
     return switch (status) {
-      'UPLOADING' => 'Nahravani',
-      'PROCESSING' => 'Zpracovani...',
-      'COMPLETED' => 'Dokonceno',
-      'FAILED' => 'Selhalo',
+      'UPLOADING' => l.statusUploading,
+      'PROCESSING' => l.statusProcessing,
+      'COMPLETED' => l.statusCompletedShort,
+      'FAILED' => l.statusFailed,
       _ => status,
     };
   }
@@ -166,7 +169,7 @@ class _StepPanoramaState extends State<StepPanorama> {
             : () => context.read<OnboardingWizardBloc>().add(
                   OnboardingWizardEvent.activatePanorama(session.id),
                 ),
-        child: const Text('Aktivovat'),
+        child: Text(S.of(context).activate),
       );
     }
 

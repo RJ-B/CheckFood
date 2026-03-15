@@ -10,6 +10,8 @@ import '../../bloc/user/user_state.dart';
 // Widgets
 import '../../widgets/user/device/device_item_tile.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 class DeviceManagementScreen extends StatefulWidget {
   const DeviceManagementScreen({super.key});
 
@@ -43,7 +45,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Správa zařízení'), centerTitle: true),
+      appBar: AppBar(title: Text(S.of(context).deviceManagementTitle), centerTitle: true),
       body: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {
           state.maybeWhen(
@@ -67,6 +69,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
           );
         },
         builder: (context, state) {
+          final l = S.of(context);
           return state.maybeWhen(
             // ✅ 4. Destrukce stavu (profile, devices, notificationsEnabled, notificationsLoading)
             loaded: (profile, devices, _, __) {
@@ -78,14 +81,14 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       const Icon(Icons.devices, size: 64, color: Colors.grey),
                       const Gap(16),
                       Text(
-                        'Žádná aktivní zařízení.',
+                        l.noActiveDevices,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const Gap(24),
                       ElevatedButton.icon(
                         onPressed: _refreshDevices,
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Načíst znovu'),
+                        label: Text(l.loadAgain),
                       ),
                     ],
                   ),
@@ -142,7 +145,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       const Gap(16),
                       ElevatedButton(
                         onPressed: _refreshDevices,
-                        child: const Text('Zkusit znovu'),
+                        child: Text(l.retry),
                       ),
                     ],
                   ),

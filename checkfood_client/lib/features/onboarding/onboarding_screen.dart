@@ -7,6 +7,7 @@ import '../../core/theme/colors.dart';
 import '../../components/buttons/primary_button.dart';
 import '../../components/buttons/ghost_button.dart';
 import '../../security/presentation/pages/auth/login_page.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -19,33 +20,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _index = 0;
 
-  final List<_OnboardingPageData> pages = const [
+  List<_OnboardingPageData> _buildPages(S l) => [
     _OnboardingPageData(
       icon: Icons.map,
-      title: 'Discover Restaurants',
-      subtitle: 'Find the perfect spot for any occasion',
+      title: l.onboardingTitle1,
+      subtitle: l.onboardingDesc1,
     ),
     _OnboardingPageData(
       icon: Icons.calendar_today,
-      title: 'Easy Reservations',
-      subtitle: 'Book tables instantly, anytime',
+      title: l.onboardingTitle2,
+      subtitle: l.onboardingDesc2,
     ),
     _OnboardingPageData(
       icon: Icons.shopping_bag,
-      title: 'Order Delicious Food',
-      subtitle: 'Delivery, takeaway, or dine-in',
+      title: l.onboardingTitle3,
+      subtitle: l.onboardingDesc3,
     ),
     _OnboardingPageData(
       icon: Icons.notifications_active,
-      title: 'Track Everything',
-      subtitle: 'Real-time updates on orders and reservations',
+      title: l.onboardingTitle4,
+      subtitle: l.onboardingDesc4,
     ),
   ];
 
-  bool get isLast => _index == pages.length - 1;
+  bool _isLast(int pageCount) => _index == pageCount - 1;
 
-  void _next() {
-    if (isLast) {
+  void _next(int pageCount) {
+    if (_isLast(pageCount)) {
       _finish();
     } else {
       _controller.nextPage(
@@ -74,6 +75,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
+    final pages = _buildPages(l);
+    final isLast = _isLast(pages.length);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -113,7 +118,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   // Tlačítko Skip
                   if (!isLast)
                     GhostButton(
-                      label: 'Skip',
+                      label: l.skip,
                       // Skip jen přeskočí na poslední slide.
                       // Pokud bys chtěl, aby Skip rovnou ukončil onboarding,
                       // změň to na: onTap: _finish,
@@ -127,8 +132,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
               child: PrimaryButton(
-                label: isLast ? 'Get Started' : 'Next',
-                onTap: _next,
+                label: isLast ? l.getStarted : l.next,
+                onTap: () => _next(pages.length),
               ),
             ),
             const SizedBox(height: AppSpacing.lg),

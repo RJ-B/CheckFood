@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(error.message),
+                  content: Text(_localizeAuthError(context, error.message)),
                   backgroundColor:
                       (isNotVerified || isExpired)
                           ? Colors.orange.shade900
@@ -266,6 +266,19 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ],
     );
+  }
+
+  String _localizeAuthError(BuildContext context, String errorCode) {
+    final l = S.of(context);
+    return switch (errorCode) {
+      'error_profile_load' => l.errorProfileLoad,
+      'error_unexpected' => l.errorUnexpected,
+      'error_register_failed' => l.errorRegisterFailed,
+      'error_verification_failed' => l.errorVerificationFailed,
+      'error_google_login' => l.errorGoogleLogin,
+      'error_apple_login' => l.errorAppleLogin,
+      _ => errorCode,
+    };
   }
 }
 

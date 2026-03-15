@@ -6,6 +6,7 @@ import '../../../core/theme/colors.dart';
 
 import '../domain/menu_item_model.dart';
 import '../../../components/buttons/primary_button.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class MenuItemDetailSheet extends StatefulWidget {
   final MenuItem item;
@@ -31,6 +32,7 @@ class _MenuItemDetailSheetState extends State<MenuItemDetailSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l = S.of(context);
     final totalPrice = widget.item.price * _quantity;
 
     return SafeArea(
@@ -91,7 +93,7 @@ class _MenuItemDetailSheetState extends State<MenuItemDetailSheet> {
 
             /* ADD BUTTON */
             PrimaryButton(
-              label: 'Add to cart',
+              label: l.addToCartButton,
               onTap: () {
                 // zatím jen zavřeme sheet
                 Navigator.of(context).pop();

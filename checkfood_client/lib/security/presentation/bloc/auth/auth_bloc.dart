@@ -102,7 +102,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(
           AuthState.failure(
             const AuthFailure(
-              message: 'Chyba při načítání uživatelského profilu.',
+              message: 'error_profile_load',
             ),
           ),
         );
@@ -115,7 +115,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(
         AuthState.failure(
-          const AuthFailure(message: 'Neočekávaná chyba serveru.'),
+          const AuthFailure(message: 'error_unexpected'),
         ),
       );
     }
@@ -135,7 +135,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     } catch (e) {
       emit(
-        AuthState.failure(const AuthFailure(message: 'Registrace selhala.')),
+        AuthState.failure(const AuthFailure(message: 'error_register_failed')),
       );
     }
   }
@@ -153,7 +153,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     } catch (e) {
       emit(
-        AuthState.failure(const AuthFailure(message: 'Registrace selhala.')),
+        AuthState.failure(const AuthFailure(message: 'error_register_failed')),
       );
     }
   }
@@ -174,7 +174,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     } catch (e) {
       emit(
-        AuthState.failure(const AuthFailure(message: 'Verifikace selhala.')),
+        AuthState.failure(const AuthFailure(message: 'error_verification_failed')),
       );
     }
   }
@@ -206,7 +206,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     } catch (e) {
       emit(
-        AuthState.failure(const AuthFailure(message: 'Google login selhal.')),
+        AuthState.failure(const AuthFailure(message: 'error_google_login')),
       );
     }
   }
@@ -225,7 +225,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     } catch (e) {
       emit(
-        AuthState.failure(const AuthFailure(message: 'Apple login selhal.')),
+        AuthState.failure(const AuthFailure(message: 'error_apple_login')),
       );
     }
   }
