@@ -29,13 +29,18 @@ jobs:
           flutter-version: '3.29.3'
           channel: stable
 
-      - name: Create .env for build
+      - name: Create .env files for build
         working-directory: checkfood_client
         run: |
-          echo "API_BASE_URL=https://checkfood-api.onrender.com/api" > .env
-          echo "GOOGLE_WEB_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}" >> .env
-          echo "APPLE_CLIENT_ID=com.checkfood.checkfood_client" >> .env
-          echo "APPLE_REDIRECT_URL=https://checkfood-api.onrender.com/api/oauth/apple/callback" >> .env
+          cat <<'ENVEOF' > .env
+          API_BASE_URL=https://checkfood-api.onrender.com/api
+          GOOGLE_WEB_CLIENT_ID=placeholder
+          APPLE_CLIENT_ID=com.checkfood.checkfood_client
+          APPLE_REDIRECT_URL=https://checkfood-api.onrender.com/api/oauth/apple/callback
+          ENVEOF
+          sed -i 's/^ *//' .env
+          cp .env .env.prod
+          cp .env .env.local
 
       - name: Install dependencies
         working-directory: checkfood_client
