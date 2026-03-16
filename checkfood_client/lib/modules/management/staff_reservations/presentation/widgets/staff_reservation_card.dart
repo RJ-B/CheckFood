@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/staff_reservation.dart';
 
@@ -24,19 +25,19 @@ class StaffReservationCard extends StatelessWidget {
   Color get _borderColor {
     switch (reservation.status) {
       case 'PENDING_CONFIRMATION':
-        return Colors.orange;
+        return AppColors.warning;
       case 'CONFIRMED':
       case 'RESERVED':
-        return Colors.green;
+        return AppColors.success;
       case 'CHECKED_IN':
-        return Colors.blue;
+        return AppColors.info;
       case 'CANCELLED':
       case 'REJECTED':
-        return Colors.red;
+        return AppColors.error;
       case 'COMPLETED':
-        return Colors.grey;
+        return AppColors.textMuted;
       default:
-        return Colors.grey;
+        return AppColors.textMuted;
     }
   }
 
@@ -98,7 +99,7 @@ class StaffReservationCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _borderColor.withOpacity(0.15),
+                    color: _borderColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -117,15 +118,15 @@ class StaffReservationCard extends StatelessWidget {
             // Time + party size
             Row(
               children: [
-                const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(timeRange,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                    style: const TextStyle(fontSize: 14, color: AppColors.textPrimary)),
                 const SizedBox(width: 16),
-                const Icon(Icons.people, size: 16, color: Colors.grey),
+                const Icon(Icons.people, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text('${reservation.partySize}',
-                    style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                    style: const TextStyle(fontSize: 14, color: AppColors.textPrimary)),
               ],
             ),
             const SizedBox(height: 8),
@@ -162,8 +163,8 @@ class StaffReservationCard extends StatelessWidget {
           FilledButton.tonal(
             onPressed: onConfirm,
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.green.shade50,
-              foregroundColor: Colors.green.shade700,
+              backgroundColor: AppColors.successLight,
+              foregroundColor: AppColors.success,
             ),
             child: Text(S.of(context).confirm),
           ),
@@ -171,8 +172,8 @@ class StaffReservationCard extends StatelessWidget {
           FilledButton.tonal(
             onPressed: onReject,
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.red.shade50,
-              foregroundColor: Colors.red.shade700,
+              backgroundColor: AppColors.errorLight,
+              foregroundColor: AppColors.error,
             ),
             child: Text(S.of(context).reject),
           ),
@@ -180,8 +181,8 @@ class StaffReservationCard extends StatelessWidget {
           FilledButton.tonal(
             onPressed: onCheckIn,
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.blue.shade50,
-              foregroundColor: Colors.blue.shade700,
+              backgroundColor: AppColors.infoLight,
+              foregroundColor: AppColors.info,
             ),
             child: Text(S.of(context).checkIn),
           ),
@@ -189,8 +190,8 @@ class StaffReservationCard extends StatelessWidget {
           FilledButton.tonal(
             onPressed: onComplete,
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.grey.shade200,
-              foregroundColor: Colors.grey.shade700,
+              backgroundColor: AppColors.borderLight,
+              foregroundColor: AppColors.textSecondary,
             ),
             child: Text(S.of(context).complete),
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 
 import '../../../../../core/di/injection_container.dart';
+import '../../../../../core/theme/colors.dart';
 import '../../../../../security/domain/enums/user_role.dart';
 import '../../../../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../data/models/request/update_employee_role_request_model.dart';
@@ -64,7 +65,7 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(Icons.error_outline, size: 64, color: AppColors.error),
             const SizedBox(height: 16),
             Text(state.message, textAlign: TextAlign.center),
             const SizedBox(height: 16),

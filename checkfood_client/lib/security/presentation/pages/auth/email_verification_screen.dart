@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
@@ -17,7 +18,7 @@ class EmailVerificationScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black87,
+        foregroundColor: AppColors.textPrimary,
       ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -28,7 +29,7 @@ class EmailVerificationScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(l.emailVerified),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.success,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -47,7 +48,7 @@ class EmailVerificationScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(error.message),
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.error,
                   behavior: SnackBarBehavior.floating,
                   duration: const Duration(seconds: 6),
                   action:
@@ -85,7 +86,7 @@ class EmailVerificationScreen extends StatelessWidget {
                     const Icon(
                       Icons.mark_email_read_rounded,
                       size: 100,
-                      color: Colors.green,
+                      color: AppColors.primary,
                     ),
                     const SizedBox(height: 32),
                     Text(
@@ -118,7 +119,7 @@ class EmailVerificationScreen extends StatelessWidget {
                               },
                       style: FilledButton.styleFrom(
                         minimumSize: const Size.fromHeight(50),
-                        backgroundColor: Colors.green,
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -128,11 +129,11 @@ class EmailVerificationScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     Text(
                       l.emailNotReceived,
-                      style: TextStyle(color: Colors.grey.shade600),
+                      style: const TextStyle(color: AppColors.textSecondary),
                     ),
                     const SizedBox(height: 8),
                     if (isLoading)
-                      const CircularProgressIndicator(color: Colors.green)
+                      const CircularProgressIndicator(color: AppColors.primary)
                     else
                       TextButton(
                         onPressed:
@@ -147,7 +148,7 @@ class EmailVerificationScreen extends StatelessWidget {
                           l.resend,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: AppColors.primaryDark,
                           ),
                         ),
                       ),

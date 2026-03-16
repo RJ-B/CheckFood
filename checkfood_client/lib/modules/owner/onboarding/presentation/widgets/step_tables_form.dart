@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
@@ -56,7 +57,7 @@ class _StepTablesFormState extends State<StepTablesForm> {
                               title: Text(table.label),
                               subtitle: Text(S.of(ctx).capacityOf(table.capacity)),
                               trailing: IconButton(
-                                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                icon: const Icon(Icons.delete_outline, color: AppColors.error),
                                 onPressed: () => context
                                     .read<OnboardingWizardBloc>()
                                     .add(OnboardingWizardEvent.deleteTable(table.id)),

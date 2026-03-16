@@ -27,4 +27,9 @@ class ExploreEvent with _$ExploreEvent {
   const factory ExploreEvent.filtersChanged({
     required RestaurantFilters filters,
   }) = FiltersChanged;
+
+  /// Marker tapped — null restaurantId deselects
+  const factory ExploreEvent.markerSelected({
+    String? restaurantId,
+  }) = MarkerSelected;
 }

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/colors.dart';
 import 'panorama_capture_screen.dart' show SpherePoint;
 
 /// AR overlay painter that projects sphere-grid capture points onto the camera
@@ -78,7 +79,7 @@ class SphereGuidancePainter extends CustomPainter {
       // Color coding
       Color dotColor;
       if (isCaptured) {
-        dotColor = Colors.greenAccent;
+        dotColor = AppColors.primary;
       } else if (isAligned) {
         dotColor = Colors.yellowAccent;
       } else {
@@ -106,7 +107,7 @@ class SphereGuidancePainter extends CustomPainter {
       // Ring around captured dots
       if (isCaptured) {
         final ringPaint = Paint()
-          ..color = Colors.greenAccent.withValues(alpha: 0.6)
+          ..color = AppColors.primary.withValues(alpha: 0.6)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5;
         canvas.drawCircle(

@@ -20,6 +20,7 @@ import '../bloc/explore_event.dart';
 import '../bloc/explore_state.dart';
 import '../widgets/restaurant_card.dart';
 import '../utils/map_marker_helper.dart';
+import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/location_service.dart';
 import 'restaurant_detail_page.dart';
 
@@ -31,11 +32,15 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  final Completer<GoogleMapController> _mapController = Completer();
+  // GoogleMapController is nullable so we can dispose safely
+  GoogleMapController? _googleMapController;
   final PanelController _panelController = PanelController();
   final TextEditingController _searchController = TextEditingController();
 
-  // --- STAV MAPY ---
+  // ScrollController created here once — listener registered once in initState
+  late final ScrollController _listScrollController;
+
+  // --- MAP STATE ---
   Set<Marker> _markers = {};
   double _currentZoom = 14.0;
   bool _initialCameraSet = false;
@@ -48,59 +53,91 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   void initState() {
     super.initState();
+
+    // Scroll listener registered once here, NOT inside panelBuilder
+    _listScrollController = ScrollController();
+    _listScrollController.addListener(_onListScrolled);
+
     context.read<ExploreBloc>().add(const ExploreEvent.initializeRequested());
+
     rootBundle.loadString('assets/map_style.json').then((style) {
-      _mapStyle = style;
+      if (mounted) setState(() => _mapStyle = style);
     });
+
+    // Pre-generate pin bitmaps so first render is instant
+    MapMarkerHelper.preGeneratePins();
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _listScrollController.dispose();
+    // Dispose GoogleMapController to release native resources
+    _googleMapController?.dispose();
     super.dispose();
   }
 
-  Future<void> _updateMarkers(List<RestaurantMarker> backendMarkers) async {
+  void _onListScrolled() {
+    if (!_listScrollController.hasClients) return;
+    if (_listScrollController.position.pixels >=
+        _listScrollController.position.maxScrollExtent - 200) {
+      context.read<ExploreBloc>().add(const ExploreEvent.loadMoreRequested());
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Marker rendering
+  // ---------------------------------------------------------------------------
+
+  Future<void> _updateMarkers(
+    List<RestaurantMarker> backendMarkers,
+    String? selectedMarkerId,
+  ) async {
     final Set<Marker> freshMarkers = {};
     final zoom = _currentZoom.round();
 
-    final List<Future<void>> markerTasks =
-        backendMarkers.map((item) async {
-          if (item.isCluster) {
-            final clusterId =
-                'cluster_${(item.latitude * 100000).round()}_${(item.longitude * 100000).round()}';
+    final List<Future<void>> markerTasks = backendMarkers.map((item) async {
+      if (item.isCluster) {
+        final clusterId =
+            'cluster_${(item.latitude * 100000).round()}_${(item.longitude * 100000).round()}';
 
-            final iconSize = MapMarkerHelper.clusterIconSize(item.count, zoom: zoom);
-            final label = item.count > 999 ? '999+' : item.count.toString();
+        final iconSize =
+            MapMarkerHelper.clusterIconSize(item.count, zoom: zoom);
+        final label = item.count > 999 ? '999+' : item.count.toString();
 
-            final icon = await MapMarkerHelper.getClusterBitmap(
-              iconSize,
-              text: label,
-            );
+        final icon = await MapMarkerHelper.getClusterBitmap(
+          iconSize,
+          text: label,
+        );
 
-            freshMarkers.add(
-              Marker(
-                markerId: MarkerId(clusterId),
-                position: LatLng(item.latitude, item.longitude),
-                icon: icon,
-                zIndexInt: 2,
-                onTap: () => _zoomIntoCluster(item),
-              ),
-            );
-          } else {
-            freshMarkers.add(
-              Marker(
-                markerId: MarkerId(item.id ?? 'unknown'),
-                position: LatLng(item.latitude, item.longitude),
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueAzure,
-                ),
-                zIndexInt: 1,
-                onTap: () => _onPinClicked(item.id),
-              ),
-            );
-          }
-        }).toList();
+        freshMarkers.add(
+          Marker(
+            markerId: MarkerId(clusterId),
+            position: LatLng(item.latitude, item.longitude),
+            icon: icon,
+            zIndexInt: 2,
+            onTap: () => _zoomIntoCluster(item),
+          ),
+        );
+      } else {
+        final isSelected = item.id == selectedMarkerId;
+
+        // Use custom branded teardrop pin
+        final icon = await MapMarkerHelper.getRestaurantBitmap(
+          isSelected: isSelected,
+        );
+
+        freshMarkers.add(
+          Marker(
+            markerId: MarkerId(item.id ?? 'unknown'),
+            position: LatLng(item.latitude, item.longitude),
+            icon: icon,
+            zIndexInt: isSelected ? 3 : 1,
+            onTap: () => _onPinTapped(item.id),
+          ),
+        );
+      }
+    }).toList();
 
     await Future.wait(markerTasks);
 
@@ -112,8 +149,7 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   Future<void> _zoomIntoCluster(RestaurantMarker cluster) async {
-    final controller = await _mapController.future;
-    controller.animateCamera(
+    _googleMapController?.animateCamera(
       CameraUpdate.newLatLngZoom(
         LatLng(cluster.latitude, cluster.longitude),
         _currentZoom + 2.5,
@@ -121,9 +157,18 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  void _onPinClicked(String? restaurantId) {
+  void _onPinTapped(String? restaurantId) {
     if (restaurantId == null) return;
-    _openRestaurantDetail(restaurantId);
+    // Fire markerSelected event — BLoC updates selectedMarkerId + selectedRestaurant
+    context.read<ExploreBloc>().add(
+      ExploreEvent.markerSelected(restaurantId: restaurantId),
+    );
+  }
+
+  void _deselectMarker() {
+    context.read<ExploreBloc>().add(
+      const ExploreEvent.markerSelected(restaurantId: null),
+    );
   }
 
   void _openRestaurantDetail(String restaurantId) {
@@ -133,6 +178,10 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
+
+  // ---------------------------------------------------------------------------
+  // Build
+  // ---------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -149,12 +198,14 @@ class _ExplorePageState extends State<ExplorePage> {
                 );
                 _initialCameraSet = true;
               }
-              _updateMarkers(data.markers);
+              _updateMarkers(data.markers, data.selectedMarkerId);
             },
-            error:
-                (message) => ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message), backgroundColor: Colors.red),
-                ),
+            error: (message) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: AppColors.error,
+              ),
+            ),
           );
         },
         builder: (context, state) {
@@ -181,40 +232,46 @@ class _ExplorePageState extends State<ExplorePage> {
           minHeight: panelHeightClosed,
           parallaxEnabled: true,
           parallaxOffset: .5,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          body: GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                data.userPosition.latitude,
-                data.userPosition.longitude,
+          borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(24)),
+          body: GestureDetector(
+            // Tap on map background deselects marker
+            onTap: data.selectedMarkerId != null ? _deselectMarker : null,
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  data.userPosition.latitude,
+                  data.userPosition.longitude,
+                ),
+                zoom: _currentZoom,
               ),
-              zoom: _currentZoom,
+              markers: _markers,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              zoomControlsEnabled: false,
+              mapToolbarEnabled: false,
+              style: _mapStyle,
+              onMapCreated: (controller) {
+                _googleMapController = controller;
+              },
+              onCameraMove: (position) {
+                _currentZoom = position.zoom;
+              },
+              onCameraIdle: () {
+                _onMapBoundsChanged();
+              },
             ),
-            markers: _markers,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            mapToolbarEnabled: false,
-            style: _mapStyle,
-            onMapCreated: (controller) {
-              _mapController.complete(controller);
-            },
-            onCameraMove: (position) {
-              _currentZoom = position.zoom;
-            },
-            onCameraIdle: () {
-              _onMapBoundsChanged();
-            },
           ),
-          panelBuilder: (sc) => _buildRestaurantList(sc, data),
+          panelBuilder: (_) => _buildRestaurantList(data),
         ),
-        // Search bar + filter chips
+        // Search bar overlay
         Positioned(
           top: MediaQuery.of(context).padding.top + 10,
           left: 16,
           right: 16,
           child: _buildTopSearchBar(data.filters),
         ),
+        // My-location FAB
         Positioned(
           right: 16,
           bottom: panelHeightClosed + 16,
@@ -222,20 +279,163 @@ class _ExplorePageState extends State<ExplorePage> {
             heroTag: 'myLocation',
             backgroundColor: Colors.white,
             onPressed: _centerOnUser,
-            child: const Icon(Icons.my_location, color: Colors.teal),
+            child: const Icon(Icons.my_location, color: AppColors.primary),
           ),
         ),
+        // Map loading indicator
         _buildMapLoadingIndicator(data.isMapLoading),
+        // Selected restaurant preview card
+        if (data.selectedRestaurant != null)
+          _buildSelectedMarkerPreview(data, panelHeightClosed),
       ],
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Selected marker preview card (T-0008)
+  // ---------------------------------------------------------------------------
+
+  Widget _buildSelectedMarkerPreview(
+    ExploreData data,
+    double panelHeightClosed,
+  ) {
+    final restaurant = data.selectedRestaurant!;
+
+    return Positioned(
+      left: 16,
+      right: 16,
+      bottom: panelHeightClosed + 72,
+      child: GestureDetector(
+        onTap: () => _openRestaurantDetail(restaurant.id),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.12),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Thumbnail
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: restaurant.coverImageUrl != null
+                      ? Image.network(
+                          restaurant.coverImageUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              _previewPlaceholder(),
+                        )
+                      : _previewPlaceholder(),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Name + cuisine
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      restaurant.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: AppColors.textPrimary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      restaurant.cuisineType.displayName,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    if (restaurant.rating != null) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            size: 14,
+                            color: Colors.amber,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            restaurant.rating!.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              // Close + arrow
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: _deselectMarker,
+                    child: const Icon(
+                      Icons.close,
+                      size: 18,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.primary,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _previewPlaceholder() {
+    return Container(
+      color: AppColors.borderLight,
+      child: const Icon(
+        Icons.restaurant,
+        color: AppColors.textMuted,
+        size: 24,
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Location
+  // ---------------------------------------------------------------------------
+
   Future<void> _centerOnUser() async {
     try {
       final position = await LocationService().getCurrentLocation();
-      final controller = await _mapController.future;
-      controller.animateCamera(
-        CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
+      _googleMapController?.animateCamera(
+        CameraUpdate.newLatLng(
+          LatLng(position.latitude, position.longitude),
+        ),
       );
     } catch (_) {
       if (mounted) {
@@ -251,6 +451,10 @@ class _ExplorePageState extends State<ExplorePage> {
       }
     }
   }
+
+  // ---------------------------------------------------------------------------
+  // Map loading indicator
+  // ---------------------------------------------------------------------------
 
   Widget _buildMapLoadingIndicator(bool isLoading) {
     return AnimatedPositioned(
@@ -280,12 +484,13 @@ class _ExplorePageState extends State<ExplorePage> {
                 height: 14,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               ),
               Gap(10),
               Text(
-                "Updating map...",
+                'Aktualizuji mapu...',
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
               ),
             ],
@@ -295,13 +500,11 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  Widget _buildRestaurantList(ScrollController sc, ExploreData data) {
-    sc.addListener(() {
-      if (sc.position.pixels >= sc.position.maxScrollExtent - 200) {
-        context.read<ExploreBloc>().add(const ExploreEvent.loadMoreRequested());
-      }
-    });
+  // ---------------------------------------------------------------------------
+  // Restaurant list panel — uses the single ScrollController from state
+  // ---------------------------------------------------------------------------
 
+  Widget _buildRestaurantList(ExploreData data) {
     return Column(
       children: [
         const Gap(12),
@@ -315,15 +518,17 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Padding(
                     padding: EdgeInsets.all(32),
                     child: Text(
-                      'Zadne restaurace nenalezeny.',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      'Žádné restaurace nenalezeny.',
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 )
               : ListView.builder(
-                  controller: sc,
-                  itemCount:
-                      data.nearestRestaurants.length +
+                  controller: _listScrollController,
+                  itemCount: data.nearestRestaurants.length +
                       (data.isPaginationLoading ? 1 : 0),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemBuilder: (context, index) {
@@ -335,7 +540,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       );
                     }
                     return const Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16),
                       child: Center(child: CircularProgressIndicator()),
                     );
                   },
@@ -345,16 +550,23 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Map bounds / viewport
+  // ---------------------------------------------------------------------------
+
   void _onMapBoundsChanged() async {
-    final controller = await _mapController.future;
-    final bounds = await controller.getVisibleRegion();
+    if (_googleMapController == null) return;
+    final bounds = await _googleMapController!.getVisibleRegion();
     final zoom = _currentZoom.round();
 
     final zoomUnchanged = _lastFetchedZoom == zoom;
     if (zoomUnchanged &&
         _lastFetchedBounds != null &&
         _isContained(bounds, _lastFetchedBounds!)) {
-      dev.log('viewport skip: zoom=$zoom (contained in buffer)', name: 'CheckFood.Map');
+      dev.log(
+        'viewport skip: zoom=$zoom (contained in buffer)',
+        name: 'CheckFood.Map',
+      );
       return;
     }
 
@@ -396,33 +608,35 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   Future<void> _moveCameraToUser(double lat, double lng) async {
-    final controller = await _mapController.future;
-    controller.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 15));
+    _googleMapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(LatLng(lat, lng), 15),
+    );
   }
 
   void _showPermissionDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) => LocationPermissionDialog(
-            onConfirm: () {
-              Navigator.pop(context);
-              context.read<ExploreBloc>().add(
-                const ExploreEvent.permissionResultReceived(granted: true),
-              );
-            },
-            onCancel: () {
-              Navigator.pop(context);
-              context.read<ExploreBloc>().add(
-                const ExploreEvent.permissionResultReceived(granted: false),
-              );
-            },
-          ),
+      builder: (context) => LocationPermissionDialog(
+        onConfirm: () {
+          Navigator.pop(context);
+          context.read<ExploreBloc>().add(
+            const ExploreEvent.permissionResultReceived(granted: true),
+          );
+        },
+        onCancel: () {
+          Navigator.pop(context);
+          context.read<ExploreBloc>().add(
+            const ExploreEvent.permissionResultReceived(granted: false),
+          );
+        },
+      ),
     );
   }
 
-  // --- UI WIDGETS ---
+  // ---------------------------------------------------------------------------
+  // Search bar
+  // ---------------------------------------------------------------------------
 
   Widget _buildTopSearchBar(RestaurantFilters filters) {
     return Container(
@@ -440,7 +654,7 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, color: Colors.grey),
+          const Icon(Icons.search, color: AppColors.textMuted),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(
@@ -449,7 +663,8 @@ class _ExplorePageState extends State<ExplorePage> {
                 hintText: S.of(context).searchRestaurants,
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10),
               ),
               onChanged: (value) {
                 context.read<ExploreBloc>().add(
@@ -466,14 +681,18 @@ class _ExplorePageState extends State<ExplorePage> {
                   const ExploreEvent.searchChanged(query: ''),
                 );
               },
-              child: const Icon(Icons.close, color: Colors.grey, size: 20),
+              child: const Icon(
+                Icons.close,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
             ),
           if (filters.hasActiveFilters)
             Container(
               margin: const EdgeInsets.only(left: 4),
               padding: const EdgeInsets.all(4),
               decoration: const BoxDecoration(
-                color: Colors.teal,
+                color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
               child: Text(
@@ -490,6 +709,10 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Filter chips
+  // ---------------------------------------------------------------------------
+
   Widget _buildFilterChips(RestaurantFilters filters) {
     return SizedBox(
       height: 36,
@@ -502,11 +725,12 @@ class _ExplorePageState extends State<ExplorePage> {
             icon: Icons.favorite,
             selected: filters.favouritesOnly,
             onTap: () {
-              final newFilters = filters.copyWith(
-                favouritesOnly: !filters.favouritesOnly,
-              );
               context.read<ExploreBloc>().add(
-                ExploreEvent.filtersChanged(filters: newFilters),
+                ExploreEvent.filtersChanged(
+                  filters: filters.copyWith(
+                    favouritesOnly: !filters.favouritesOnly,
+                  ),
+                ),
               );
             },
           ),
@@ -516,11 +740,10 @@ class _ExplorePageState extends State<ExplorePage> {
             icon: Icons.access_time,
             selected: filters.openNow,
             onTap: () {
-              final newFilters = filters.copyWith(
-                openNow: !filters.openNow,
-              );
               context.read<ExploreBloc>().add(
-                ExploreEvent.filtersChanged(filters: newFilters),
+                ExploreEvent.filtersChanged(
+                  filters: filters.copyWith(openNow: !filters.openNow),
+                ),
               );
             },
           ),
@@ -544,10 +767,10 @@ class _ExplorePageState extends State<ExplorePage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? Colors.teal : Colors.grey[100],
+          color: selected ? AppColors.primary : AppColors.borderLight,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: selected ? Colors.teal : Colors.grey[300]!,
+            color: selected ? AppColors.primary : AppColors.border,
           ),
         ),
         child: Row(
@@ -556,7 +779,7 @@ class _ExplorePageState extends State<ExplorePage> {
             Icon(
               icon,
               size: 16,
-              color: selected ? Colors.white : Colors.grey[600],
+              color: selected ? Colors.white : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
             Text(
@@ -564,7 +787,7 @@ class _ExplorePageState extends State<ExplorePage> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: selected ? Colors.white : Colors.grey[700],
+                color: selected ? Colors.white : AppColors.textSecondary,
               ),
             ),
           ],
@@ -576,16 +799,14 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget _buildRatingChip(RestaurantFilters filters) {
     final hasRating = filters.minRating != null;
     return GestureDetector(
-      onTap: () {
-        _showRatingPicker(filters);
-      },
+      onTap: () => _showRatingPicker(filters),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: hasRating ? Colors.teal : Colors.grey[100],
+          color: hasRating ? AppColors.primary : AppColors.borderLight,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: hasRating ? Colors.teal : Colors.grey[300]!,
+            color: hasRating ? AppColors.primary : AppColors.border,
           ),
         ),
         child: Row(
@@ -594,15 +815,17 @@ class _ExplorePageState extends State<ExplorePage> {
             Icon(
               Icons.star,
               size: 16,
-              color: hasRating ? Colors.white : Colors.grey[600],
+              color: hasRating ? Colors.white : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
             Text(
-              hasRating ? '${filters.minRating!.toStringAsFixed(0)}+' : 'Hodnoceni',
+              hasRating
+                  ? '${filters.minRating!.toStringAsFixed(0)}+'
+                  : 'Hodnocení',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: hasRating ? Colors.white : Colors.grey[700],
+                color: hasRating ? Colors.white : AppColors.textSecondary,
               ),
             ),
           ],
@@ -614,16 +837,14 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget _buildCuisineChip(RestaurantFilters filters) {
     final hasCuisine = filters.cuisineTypes.isNotEmpty;
     return GestureDetector(
-      onTap: () {
-        _showCuisinePicker(filters);
-      },
+      onTap: () => _showCuisinePicker(filters),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: hasCuisine ? Colors.teal : Colors.grey[100],
+          color: hasCuisine ? AppColors.primary : AppColors.borderLight,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: hasCuisine ? Colors.teal : Colors.grey[300]!,
+            color: hasCuisine ? AppColors.primary : AppColors.border,
           ),
         ),
         child: Row(
@@ -632,17 +853,17 @@ class _ExplorePageState extends State<ExplorePage> {
             Icon(
               Icons.restaurant_menu,
               size: 16,
-              color: hasCuisine ? Colors.white : Colors.grey[600],
+              color: hasCuisine ? Colors.white : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
             Text(
               hasCuisine
-                  ? '${filters.cuisineTypes.length} kuchyne'
-                  : 'Kuchyne',
+                  ? '${filters.cuisineTypes.length} kuchyně'
+                  : 'Kuchyně',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: hasCuisine ? Colors.white : Colors.grey[700],
+                color: hasCuisine ? Colors.white : AppColors.textSecondary,
               ),
             ),
           ],
@@ -650,6 +871,10 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
+
+  // ---------------------------------------------------------------------------
+  // Pickers
+  // ---------------------------------------------------------------------------
 
   void _showRatingPicker(RestaurantFilters filters) {
     showModalBottomSheet(
@@ -662,7 +887,7 @@ class _ExplorePageState extends State<ExplorePage> {
               const Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Minimalni hodnoceni',
+                  'Minimální hodnocení',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -673,9 +898,10 @@ class _ExplorePageState extends State<ExplorePage> {
                   selected: filters.minRating == rating,
                   onTap: () {
                     Navigator.pop(ctx);
-                    final newFilters = filters.copyWith(minRating: rating);
                     context.read<ExploreBloc>().add(
-                      ExploreEvent.filtersChanged(filters: newFilters),
+                      ExploreEvent.filtersChanged(
+                        filters: filters.copyWith(minRating: rating),
+                      ),
                     );
                   },
                 ),
@@ -685,9 +911,10 @@ class _ExplorePageState extends State<ExplorePage> {
                   title: Text(S.of(context).clearFilter),
                   onTap: () {
                     Navigator.pop(ctx);
-                    final newFilters = filters.copyWith(minRating: null);
                     context.read<ExploreBloc>().add(
-                      ExploreEvent.filtersChanged(filters: newFilters),
+                      ExploreEvent.filtersChanged(
+                        filters: filters.copyWith(minRating: null),
+                      ),
                     );
                   },
                 ),
@@ -722,7 +949,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Typ kuchyne',
+                              'Typ kuchyně',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -731,12 +958,11 @@ class _ExplorePageState extends State<ExplorePage> {
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(ctx);
-                                final newFilters = filters.copyWith(
-                                  cuisineTypes: selected.toList(),
-                                );
                                 context.read<ExploreBloc>().add(
                                   ExploreEvent.filtersChanged(
-                                    filters: newFilters,
+                                    filters: filters.copyWith(
+                                      cuisineTypes: selected.toList(),
+                                    ),
                                   ),
                                 );
                               },
@@ -749,10 +975,10 @@ class _ExplorePageState extends State<ExplorePage> {
                         child: ListView(
                           controller: scrollCtrl,
                           children: CuisineType.values.map((type) {
-                            final isSelected = selected.contains(type);
+                            final isSel = selected.contains(type);
                             return CheckboxListTile(
                               title: Text(type.displayName),
-                              value: isSelected,
+                              value: isSel,
                               onChanged: (val) {
                                 setModalState(() {
                                   if (val == true) {
@@ -777,31 +1003,38 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Panel handle
+  // ---------------------------------------------------------------------------
+
   Widget _buildPanelHandle() {
     return Container(
       width: 40,
       height: 5,
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: AppColors.border,
         borderRadius: BorderRadius.circular(10),
       ),
     );
   }
+
+  // ---------------------------------------------------------------------------
+  // Error UI
+  // ---------------------------------------------------------------------------
 
   Widget _buildErrorUI(String message) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: 48, color: Colors.red),
+          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
           const Gap(16),
           Text(S.of(context).errorGeneric(message)),
           const Gap(16),
           ElevatedButton(
-            onPressed:
-                () => context.read<ExploreBloc>().add(
-                  const ExploreEvent.initializeRequested(),
-                ),
+            onPressed: () => context.read<ExploreBloc>().add(
+              const ExploreEvent.initializeRequested(),
+            ),
             child: Text(S.of(context).retry),
           ),
         ],

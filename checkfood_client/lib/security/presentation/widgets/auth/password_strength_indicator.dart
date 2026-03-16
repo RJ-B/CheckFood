@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/colors.dart';
 
 class PasswordStrengthIndicator extends StatelessWidget {
   final String password;
@@ -19,10 +20,10 @@ class PasswordStrengthIndicator extends StatelessWidget {
   }
 
   Color _getColor(double strength) {
-    if (strength <= 0.25) return Colors.red;
-    if (strength <= 0.5) return Colors.orange;
+    if (strength <= 0.25) return AppColors.error;
+    if (strength <= 0.5) return AppColors.warning;
     if (strength <= 0.75) return Colors.yellow;
-    return Colors.green;
+    return AppColors.success;
   }
 
   @override
@@ -35,7 +36,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
       children: [
         LinearProgressIndicator(
           value: strength,
-          backgroundColor: Colors.grey.shade300,
+          backgroundColor: AppColors.border,
           color: color,
           minHeight: 5,
         ),

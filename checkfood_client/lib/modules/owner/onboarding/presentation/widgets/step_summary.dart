@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
@@ -29,7 +30,7 @@ class StepSummary extends StatelessWidget {
               const SizedBox(height: 24),
               if (state.published) ...[
                 Card(
-                  color: Colors.green,
+                  color: AppColors.successLight,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -62,7 +63,7 @@ class StepSummary extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       S.of(context).fillRequiredSteps,
-                      style: const TextStyle(color: Colors.orange),
+                      style: const TextStyle(color: AppColors.warning),
                     ),
                   ),
               ],
@@ -85,7 +86,7 @@ class StepSummary extends StatelessWidget {
         children: [
           Icon(
             done ? Icons.check_circle : (optional ? Icons.radio_button_unchecked : Icons.cancel),
-            color: done ? Colors.green : (optional ? Colors.grey : Colors.red),
+            color: done ? AppColors.success : (optional ? AppColors.textMuted : AppColors.error),
           ),
           const SizedBox(width: 12),
           Expanded(child: Text(label)),

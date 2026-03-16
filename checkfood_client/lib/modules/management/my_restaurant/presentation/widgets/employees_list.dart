@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/employee.dart';
 import 'employee_role_selector.dart';
@@ -27,11 +28,11 @@ class EmployeesList extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.people_outline, size: 64, color: Colors.grey),
+              const Icon(Icons.people_outline, size: 64, color: AppColors.textMuted),
               const SizedBox(height: 16),
               Text(
                 S.of(context).noEmployeesYet,
-                style: const TextStyle(fontSize: 18, color: Colors.grey),
+                style: const TextStyle(fontSize: 18, color: AppColors.textMuted),
               ),
             ],
           ),
@@ -98,7 +99,7 @@ class _EmployeeTile extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      icon: const Icon(Icons.delete_outline, color: AppColors.error),
                       onPressed: () => _confirmRemove(context),
                     ),
                   ],
@@ -121,7 +122,7 @@ class _EmployeeTile extends StatelessWidget {
             child: Text(l.cancel),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
             onPressed: () {
               Navigator.of(ctx).pop();
               onRemove();
@@ -138,11 +139,11 @@ class _EmployeeTile extends StatelessWidget {
       case 'OWNER':
         return Colors.amber.shade700;
       case 'MANAGER':
-        return Colors.blue;
+        return AppColors.info;
       case 'STAFF':
-        return Colors.green;
+        return AppColors.success;
       default:
-        return Colors.grey;
+        return AppColors.textMuted;
     }
   }
 

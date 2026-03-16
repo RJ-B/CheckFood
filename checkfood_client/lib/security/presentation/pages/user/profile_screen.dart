@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import '../../../../core/theme/colors.dart';
 
 // Domain Entities
 import '../../../domain/entities/device.dart';
@@ -124,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   child: Text(
                     l.logoutOthers,
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: AppColors.error),
                   ),
                 ),
             ],
@@ -147,13 +148,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(S.of(context).loggedOutFromDevices),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.success,
                 ),
               );
             },
             failure: (msg) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(msg), backgroundColor: Colors.red),
+                SnackBar(content: Text(msg), backgroundColor: AppColors.error),
               );
             },
             orElse: () {},
@@ -199,13 +200,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const Icon(
                         Icons.error_outline,
                         size: 48,
-                        color: Colors.red,
+                        color: AppColors.error,
                       ),
                       const Gap(16),
                       Text(
                         message,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: AppColors.textMuted),
                       ),
                       const Gap(16),
                       ElevatedButton(
@@ -310,13 +311,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               secondary: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
+                  color: AppColors.borderLight,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.notifications_none,
                   size: 20,
-                  color: Colors.grey.shade700,
+                  color: AppColors.textSecondary,
                 ),
               ),
               title: Text(
@@ -327,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
                   notifState.enabled ? l.enabled : l.disabled,
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                 ),
               ),
               value: notifState.enabled,
@@ -400,7 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: Colors.grey,
+            color: AppColors.textMuted,
             letterSpacing: 1.2,
           ),
         ),

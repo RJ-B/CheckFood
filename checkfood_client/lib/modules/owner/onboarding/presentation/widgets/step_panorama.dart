@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
@@ -83,7 +84,7 @@ class _StepPanoramaState extends State<StepPanorama> {
                   padding: const EdgeInsets.only(top: 16),
                   child: Row(
                     children: [
-                      const Icon(Icons.check_circle, color: Colors.green),
+                      const Icon(Icons.check_circle, color: AppColors.success),
                       const SizedBox(width: 8),
                       Text(S.of(context).panoramaIsActive),
                     ],
@@ -114,10 +115,10 @@ class _StepPanoramaState extends State<StepPanorama> {
 
   Widget _buildSessionCard(BuildContext context, dynamic session, OnboardingWizardState state) {
     final statusColor = switch (session.status as String) {
-      'COMPLETED' => Colors.green,
-      'PROCESSING' => Colors.orange,
-      'FAILED' => Colors.red,
-      _ => Colors.grey,
+      'COMPLETED' => AppColors.success,
+      'PROCESSING' => AppColors.warning,
+      'FAILED' => AppColors.error,
+      _ => AppColors.textMuted,
     };
 
     final statusIcon = switch (session.status as String) {
@@ -142,7 +143,7 @@ class _StepPanoramaState extends State<StepPanorama> {
                 child: LinearProgressIndicator(),
               ),
             if (session.status == 'FAILED')
-              Text(S.of(context).stitchingFailed, style: const TextStyle(color: Colors.red, fontSize: 12)),
+              Text(S.of(context).stitchingFailed, style: const TextStyle(color: AppColors.error, fontSize: 12)),
           ],
         ),
         trailing: _buildSessionAction(context, session, state),

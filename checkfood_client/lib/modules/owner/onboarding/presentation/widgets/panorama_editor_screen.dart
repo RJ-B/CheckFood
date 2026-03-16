@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -187,7 +188,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).editorSaved),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColors.success,
           ),
         );
         Navigator.of(context).pop();
@@ -197,7 +198,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).editorSaveError(e.toString())),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -298,7 +299,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
                 Navigator.of(ctx).pop();
                 onDelete?.call();
               },
-              child: Text(S.of(context).delete, style: const TextStyle(color: Colors.red)),
+              child: Text(S.of(context).delete, style: const TextStyle(color: AppColors.error)),
             ),
           TextButton(
             onPressed: () {
@@ -363,7 +364,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
         onPressed: _saving ? null : _onSavePressed,
         icon: const Icon(Icons.save),
         label: Text(S.of(context).save),
-        backgroundColor: Colors.green,
+        backgroundColor: AppColors.primary,
       ),
     );
   }

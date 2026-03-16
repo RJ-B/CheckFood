@@ -26,6 +26,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMoreRequested>(_onLoadMoreRequested);
     on<RefreshRequested>(_onRefreshRequested);
     on<FiltersChanged>(_onFiltersChanged);
+    on<MarkerSelected>(_onMarkerSelected);
 
     on<MapBoundsChanged>(
       _onMapBoundsChanged,
@@ -246,6 +247,34 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
         emit(ExploreState.error(message: e.toString()));
       }
     }
+  }
+
+  Future<void> _onMarkerSelected(
+    MarkerSelected event,
+    Emitter<ExploreState> emit,
+  ) async {
+    if (state is! Loaded) return;
+    final currentState = state as Loaded;
+    final data = currentState.data;
+
+    if (event.restaurantId == null) {
+      emit(ExploreState.loaded(
+        data: data.copyWith(selectedMarkerId: null, selectedRestaurant: null),
+      ));
+      return;
+    }
+
+    // Find restaurant in already-loaded list
+    final found = data.nearestRestaurants
+        .where((r) => r.id == event.restaurantId)
+        .firstOrNull;
+
+    emit(ExploreState.loaded(
+      data: data.copyWith(
+        selectedMarkerId: event.restaurantId,
+        selectedRestaurant: found,
+      ),
+    ));
   }
 
   Future<void> _onRefreshRequested(

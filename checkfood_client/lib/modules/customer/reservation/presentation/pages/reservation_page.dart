@@ -11,6 +11,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import '../../../../../core/di/injection_container.dart';
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../../../../navigation/main_shell.dart';
 import '../../presentation/bloc/my_reservations_bloc.dart';
@@ -234,7 +235,7 @@ class _ReservationPageState extends State<ReservationPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(S.of(context).reservationCreated),
-                    backgroundColor: Colors.green,
+                    backgroundColor: AppColors.success,
                   ),
                 );
               });
@@ -244,7 +245,7 @@ class _ReservationPageState extends State<ReservationPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(S.of(context).slotUnavailable),
-                  backgroundColor: Colors.orange,
+                  backgroundColor: AppColors.warning,
                 ),
               );
             }
@@ -261,11 +262,11 @@ class _ReservationPageState extends State<ReservationPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                    const Icon(Icons.error_outline, color: AppColors.error, size: 48),
                     const SizedBox(height: 16),
                     Text(
                       S.of(context).sceneLoadFailed,
-                      style: TextStyle(color: Colors.grey[400]),
+                      style: const TextStyle(color: AppColors.textMuted),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -366,7 +367,7 @@ class _DatePickerRow extends StatelessWidget {
                 onDateChanged(picked.toIso8601String().substring(0, 10));
               }
             },
-            child: Text(S.of(context).change, style: const TextStyle(color: Colors.tealAccent)),
+            child: Text(S.of(context).change, style: const TextStyle(color: AppColors.primary)),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 class StartEditorButton extends StatelessWidget {
@@ -12,7 +13,7 @@ class StartEditorButton extends StatelessWidget {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        backgroundColor: Colors.green,
+        backgroundColor: AppColors.primary,
       ),
       icon: const Icon(Icons.add),
       label: Text(l.addTable, style: const TextStyle(fontSize: 16)),

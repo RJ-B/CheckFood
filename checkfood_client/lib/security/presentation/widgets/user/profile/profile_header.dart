@@ -49,7 +49,7 @@ class ProfileHeader extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).photoUploadError(e.toString())),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -69,7 +69,7 @@ class ProfileHeader extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: Colors.grey.shade100)),
+        border: const Border(bottom: BorderSide(color: AppColors.borderLight)),
       ),
       child: Column(
         children: [
@@ -126,7 +126,7 @@ class ProfileHeader extends StatelessWidget {
               fontSize: 22,
               fontWeight: FontWeight.bold,
               letterSpacing: -0.5,
-              color: Colors.black87,
+              color: AppColors.textPrimary,
             ),
           ),
 
@@ -135,7 +135,7 @@ class ProfileHeader extends StatelessWidget {
           // --- EMAIL ---
           Text(
             profile.email,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
 
           // --- STATUS NEAKTIVNÍHO ÚČTU ---
@@ -144,9 +144,9 @@ class ProfileHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.orange.shade50,
+                color: AppColors.warningLight,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.orange.shade200),
+                border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -154,7 +154,7 @@ class ProfileHeader extends StatelessWidget {
                   Icon(
                     Icons.info_outline,
                     size: 14,
-                    color: Colors.orange.shade800,
+                    color: AppColors.warning,
                   ),
                   const SizedBox(width: 6),
                   Text(
@@ -162,7 +162,7 @@ class ProfileHeader extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange.shade900,
+                      color: AppColors.warning,
                     ),
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ? l.accountActivated
               : (widget.verificationMessage ?? l.activationError),
         ),
-        backgroundColor: isSuccess ? Colors.green : Colors.red,
+        backgroundColor: isSuccess ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 5),
       ),
@@ -88,8 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                   content: Text(_localizeAuthError(context, error.message)),
                   backgroundColor:
                       (isNotVerified || isExpired)
-                          ? Colors.orange.shade900
-                          : Colors.red,
+                          ? AppColors.warning
+                          : AppColors.error,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -118,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                   const Icon(
                     Icons.restaurant_menu_rounded,
                     size: 80,
-                    color: Colors.green,
+                    color: AppColors.primary,
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -127,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.w900,
-                      color: Colors.black87,
+                      color: AppColors.textPrimary,
                       letterSpacing: -1,
                     ),
                   ),
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     S.of(context).loginSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                    style: const TextStyle(fontSize: 16, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 48),
 
@@ -171,8 +172,8 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             S.of(context).or,
-            style: TextStyle(
-              color: Colors.grey.shade400,
+            style: const TextStyle(
+              color: AppColors.textMuted,
               fontSize: 11,
               fontWeight: FontWeight.bold,
               letterSpacing: 1,
@@ -191,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
           label: 'Google',
           icon: Icons.g_mobiledata_rounded,
           color: Colors.white,
-          textColor: Colors.black87,
+          textColor: AppColors.textPrimary,
           onPressed:
               () => context.read<AuthBloc>().add(
                 const AuthEvent.googleLoginRequested(),
@@ -223,8 +224,8 @@ class _LoginPageState extends State<LoginPage> {
       icon: const Icon(Icons.mail_outline),
       label: Text(S.of(context).resolveActivation),
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.orange.shade900,
-        side: BorderSide(color: Colors.orange.shade900),
+        foregroundColor: AppColors.warning,
+        side: const BorderSide(color: AppColors.warning),
         padding: const EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
@@ -240,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Text(
               l.noAccountYet,
-              style: TextStyle(color: Colors.grey.shade700),
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
             TextButton(
               onPressed: () =>
@@ -248,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
                 l.signUp,
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                    const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryDark),
               ),
             ),
           ],
@@ -258,9 +259,9 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.of(context).pushNamed(AppRouter.registerOwner),
           child: Text(
             l.registerAsOwner,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade600,
+              color: AppColors.textSecondary,
             ),
           ),
         ),
@@ -314,7 +315,7 @@ class _SocialButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             side:
                 color == Colors.white
-                    ? BorderSide(color: Colors.grey.shade300)
+                    ? const BorderSide(color: AppColors.border)
                     : BorderSide.none,
           ),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),

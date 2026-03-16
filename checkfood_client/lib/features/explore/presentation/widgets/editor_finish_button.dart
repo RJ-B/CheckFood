@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 class FinishEditorButton extends StatelessWidget {
@@ -12,7 +13,7 @@ class FinishEditorButton extends StatelessWidget {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        backgroundColor: Colors.red,
+        backgroundColor: AppColors.error,
       ),
       icon: const Icon(Icons.check),
       label: Text(l.done, style: const TextStyle(fontSize: 16)),

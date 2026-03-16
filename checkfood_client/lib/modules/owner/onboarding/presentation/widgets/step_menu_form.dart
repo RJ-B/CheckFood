@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
@@ -61,7 +62,7 @@ class _StepMenuFormState extends State<StepMenuForm> {
                                   onPressed: () => _showAddItemDialog(context, cat.id),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                                  icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
                                   onPressed: () => context
                                       .read<OnboardingWizardBloc>()
                                       .add(OnboardingWizardEvent.deleteCategory(cat.id)),
@@ -73,7 +74,7 @@ class _StepMenuFormState extends State<StepMenuForm> {
                                 title: Text(item.name),
                                 subtitle: Text('${(item.priceMinor / 100).toStringAsFixed(0)} ${item.currency}'),
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                                  icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
                                   onPressed: () => context
                                       .read<OnboardingWizardBloc>()
                                       .add(OnboardingWizardEvent.deleteItem(item.id)),

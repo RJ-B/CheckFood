@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../bloc/owner_claim_bloc.dart';
 import '../bloc/owner_claim_event.dart';
@@ -54,7 +55,7 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(S.of(context).restaurantAssigned),
-                backgroundColor: Colors.green.shade600,
+                backgroundColor: AppColors.success,
                 behavior: SnackBarBehavior.floating,
               ),
             );

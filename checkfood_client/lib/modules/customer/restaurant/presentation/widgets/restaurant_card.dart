@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
+import '../../../../../core/theme/colors.dart';
 import '../../domain/entities/restaurant.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -25,7 +26,7 @@ class RestaurantCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -100,12 +101,12 @@ class RestaurantCard extends StatelessWidget {
             children: [
               Text(
                 "${restaurant.cuisineType.name} • ",
-                style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
               Text(
                 distance,
                 style: const TextStyle(
-                  color: Colors.black87,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -129,7 +130,7 @@ class RestaurantCard extends StatelessWidget {
           width: 8,
           height: 8,
           decoration: BoxDecoration(
-            color: isOpen ? Colors.green : Colors.red,
+            color: isOpen ? AppColors.success : AppColors.error,
             shape: BoxShape.circle,
           ),
         ),
@@ -137,7 +138,7 @@ class RestaurantCard extends StatelessWidget {
         Text(
           isOpen ? "Open now" : "Closed",
           style: TextStyle(
-            color: isOpen ? Colors.green[700] : Colors.red[700],
+            color: isOpen ? AppColors.primaryDark : AppColors.error,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -145,7 +146,7 @@ class RestaurantCard extends StatelessWidget {
         const Gap(4),
         Text(
           "• Closes 22:00",
-          style: TextStyle(color: Colors.grey[600], fontSize: 13),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
         ),
       ],
     );
@@ -172,9 +173,9 @@ class RestaurantCard extends StatelessWidget {
 
   Widget _buildPlaceholder() {
     return Container(
-      color: Colors.grey[100],
+      color: AppColors.borderLight,
       child: const Center(
-        child: Icon(Icons.restaurant, color: Colors.grey, size: 40),
+        child: Icon(Icons.restaurant, color: AppColors.textMuted, size: 40),
       ),
     );
   }
@@ -183,7 +184,7 @@ class RestaurantCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
+        color: color.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(

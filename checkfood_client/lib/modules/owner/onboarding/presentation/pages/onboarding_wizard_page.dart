@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
@@ -35,12 +36,12 @@ class OnboardingWizardPage extends StatelessWidget {
         listener: (context, state) {
           if (state.error != null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error!), backgroundColor: Colors.red),
+              SnackBar(content: Text(state.error!), backgroundColor: AppColors.error),
             );
           }
           if (state.published) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).restaurantPublished), backgroundColor: Colors.green),
+              SnackBar(content: Text(S.of(context).restaurantPublished), backgroundColor: AppColors.success),
             );
           }
         },

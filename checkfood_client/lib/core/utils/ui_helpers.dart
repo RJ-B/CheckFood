@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/colors.dart';
 
 class AppNotifications {
   /// Obecný template pro úspěšnou hlášku (zelená)
@@ -12,7 +13,7 @@ class AppNotifications {
             Expanded(child: Text(message)),
           ],
         ),
-        backgroundColor: Colors.green.shade700,
+        backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         duration: const Duration(seconds: 3),
@@ -31,7 +32,7 @@ class AppNotifications {
             Expanded(child: Text(message)),
           ],
         ),
-        backgroundColor: Colors.red.shade700,
+        backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),

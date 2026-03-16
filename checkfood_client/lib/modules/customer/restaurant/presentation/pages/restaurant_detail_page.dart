@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../core/di/injection_container.dart';
+import '../../../../../core/theme/colors.dart';
 import '../../domain/entities/restaurant.dart';
 import '../../domain/entities/opening_hours.dart';
 import '../../../../customer/reservation/presentation/pages/reservation_page.dart';
@@ -94,7 +95,7 @@ class _DetailContent extends StatelessWidget {
                 restaurant.isFavourite
                     ? Icons.favorite
                     : Icons.favorite_border,
-                color: restaurant.isFavourite ? Colors.red : Colors.black87,
+                color: restaurant.isFavourite ? AppColors.error : AppColors.textPrimary,
               ),
               onPressed: () => context
                   .read<RestaurantDetailBloc>()
@@ -118,9 +119,9 @@ class _DetailContent extends StatelessWidget {
 
   Widget _imagePlaceholder() {
     return Container(
-      color: Colors.grey[200],
+      color: AppColors.borderLight,
       child: const Center(
-        child: Icon(Icons.restaurant, size: 64, color: Colors.grey),
+        child: Icon(Icons.restaurant, size: 64, color: AppColors.textMuted),
       ),
     );
   }
@@ -185,7 +186,7 @@ class _DetailContent extends StatelessWidget {
             ],
             Text(
               restaurant.cuisineType.displayName,
-              style: TextStyle(color: Colors.grey[700], fontSize: 14),
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
             ),
             _dot(),
             _buildOpenNowBadge(context),
@@ -198,10 +199,10 @@ class _DetailContent extends StatelessWidget {
   Widget _dot() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Text(
+      child: const Text(
         '\u00B7',
         style: TextStyle(
-          color: Colors.grey[500],
+          color: AppColors.textMuted,
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
@@ -227,7 +228,7 @@ class _DetailContent extends StatelessWidget {
           width: 8,
           height: 8,
           decoration: BoxDecoration(
-            color: isOpen ? Colors.green : Colors.red,
+            color: isOpen ? AppColors.success : AppColors.error,
             shape: BoxShape.circle,
           ),
         ),
@@ -235,7 +236,7 @@ class _DetailContent extends StatelessWidget {
         Text(
           isOpen ? l.open : l.closed,
           style: TextStyle(
-            color: isOpen ? Colors.green[700] : Colors.red[700],
+            color: isOpen ? AppColors.primaryDark : AppColors.error,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -279,12 +280,12 @@ class _DetailContent extends StatelessWidget {
   Widget _buildAddress() {
     return Row(
       children: [
-        Icon(Icons.location_on_outlined, color: Colors.grey[600], size: 18),
+        const Icon(Icons.location_on_outlined, color: AppColors.textSecondary, size: 18),
         const Gap(6),
         Expanded(
           child: Text(
             restaurant.address.fullAddress,
-            style: TextStyle(color: Colors.grey[700], fontSize: 14),
+            style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
           ),
         ),
       ],
@@ -307,8 +308,8 @@ class _DetailContent extends StatelessWidget {
         const Gap(8),
         Text(
           restaurant.description!,
-          style: TextStyle(
-            color: Colors.grey[700],
+          style: const TextStyle(
+            color: AppColors.textSecondary,
             fontSize: 14,
             height: 1.5,
           ),
@@ -358,7 +359,7 @@ class _DetailContent extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
                       fontSize: 14,
-                      color: isToday ? Colors.teal : Colors.black87,
+                      color: isToday ? AppColors.primary : AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -367,7 +368,7 @@ class _DetailContent extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: isToday ? FontWeight.w600 : FontWeight.normal,
                     fontSize: 14,
-                    color: isToday ? Colors.teal : Colors.grey[700],
+                    color: isToday ? AppColors.primary : AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -388,13 +389,13 @@ class _DetailContent extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.teal.withValues(alpha: 0.1),
+            color: AppColors.primaryLight,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             tag,
             style: const TextStyle(
-              color: Colors.teal,
+              color: AppColors.primaryDark,
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
@@ -419,7 +420,7 @@ class _DetailContent extends StatelessWidget {
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.teal,
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -453,7 +454,7 @@ class _ErrorContent extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
             const Gap(16),
             Text(
               message,

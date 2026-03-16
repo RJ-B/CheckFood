@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/colors.dart';
 
 class ProfileMenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String? subtitle; // --- 1. PŘIDÁNO: Volitelný podtitulek ---
+  final String? subtitle;
   final VoidCallback onTap;
   final Color? iconColor;
 
@@ -11,7 +12,7 @@ class ProfileMenuItem extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
-    this.subtitle, // --- 2. PŘIDÁNO do konstruktoru ---
+    this.subtitle,
     required this.onTap,
     this.iconColor,
   });
@@ -22,27 +23,26 @@ class ProfileMenuItem extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.grey.shade50,
+          color: AppColors.borderLight,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, size: 20, color: iconColor ?? Colors.grey.shade700),
+        child: Icon(icon, size: 20, color: iconColor ?? AppColors.textSecondary),
       ),
       title: Text(
         title,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
-      // --- 3. PŘIDÁNO: Zobrazení podtitulku v ListTile ---
       subtitle:
           subtitle != null
               ? Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
                   subtitle!,
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                 ),
               )
               : null,
-      trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.grey),
+      trailing: const Icon(Icons.chevron_right, size: 18, color: AppColors.textMuted),
       onTap: onTap,
     );
   }

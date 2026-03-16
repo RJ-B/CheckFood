@@ -41,6 +41,12 @@ mixin _$ExploreData {
   /// Aktivní filtry
   RestaurantFilters get filters => throw _privateConstructorUsedError;
 
+  /// ID vybraného markeru (null = žádný výběr)
+  String? get selectedMarkerId => throw _privateConstructorUsedError;
+
+  /// Vybraná restaurace pro preview card (null = žádná)
+  Restaurant? get selectedRestaurant => throw _privateConstructorUsedError;
+
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -64,9 +70,12 @@ abstract class $ExploreDataCopyWith<$Res> {
     bool isPaginationLoading,
     bool isMapLoading,
     RestaurantFilters filters,
+    String? selectedMarkerId,
+    Restaurant? selectedRestaurant,
   });
 
   $RestaurantFiltersCopyWith<$Res> get filters;
+  $RestaurantCopyWith<$Res>? get selectedRestaurant;
 }
 
 /// @nodoc
@@ -92,6 +101,8 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
     Object? isPaginationLoading = null,
     Object? isMapLoading = null,
     Object? filters = null,
+    Object? selectedMarkerId = freezed,
+    Object? selectedRestaurant = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -135,6 +146,16 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
                     ? _value.filters
                     : filters // ignore: cast_nullable_to_non_nullable
                         as RestaurantFilters,
+            selectedMarkerId:
+                freezed == selectedMarkerId
+                    ? _value.selectedMarkerId
+                    : selectedMarkerId // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            selectedRestaurant:
+                freezed == selectedRestaurant
+                    ? _value.selectedRestaurant
+                    : selectedRestaurant // ignore: cast_nullable_to_non_nullable
+                        as Restaurant?,
           )
           as $Val,
     );
@@ -147,6 +168,20 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
   $RestaurantFiltersCopyWith<$Res> get filters {
     return $RestaurantFiltersCopyWith<$Res>(_value.filters, (value) {
       return _then(_value.copyWith(filters: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ExploreData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RestaurantCopyWith<$Res>? get selectedRestaurant {
+    if (_value.selectedRestaurant == null) {
+      return null;
+    }
+
+    return $RestaurantCopyWith<$Res>(_value.selectedRestaurant!, (value) {
+      return _then(_value.copyWith(selectedRestaurant: value) as $Val);
     });
   }
 }
@@ -169,10 +204,14 @@ abstract class _$$ExploreDataImplCopyWith<$Res>
     bool isPaginationLoading,
     bool isMapLoading,
     RestaurantFilters filters,
+    String? selectedMarkerId,
+    Restaurant? selectedRestaurant,
   });
 
   @override
   $RestaurantFiltersCopyWith<$Res> get filters;
+  @override
+  $RestaurantCopyWith<$Res>? get selectedRestaurant;
 }
 
 /// @nodoc
@@ -197,6 +236,8 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
     Object? isPaginationLoading = null,
     Object? isMapLoading = null,
     Object? filters = null,
+    Object? selectedMarkerId = freezed,
+    Object? selectedRestaurant = freezed,
   }) {
     return _then(
       _$ExploreDataImpl(
@@ -240,6 +281,16 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
                 ? _value.filters
                 : filters // ignore: cast_nullable_to_non_nullable
                     as RestaurantFilters,
+        selectedMarkerId:
+            freezed == selectedMarkerId
+                ? _value.selectedMarkerId
+                : selectedMarkerId // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        selectedRestaurant:
+            freezed == selectedRestaurant
+                ? _value.selectedRestaurant
+                : selectedRestaurant // ignore: cast_nullable_to_non_nullable
+                    as Restaurant?,
       ),
     );
   }
@@ -257,6 +308,8 @@ class _$ExploreDataImpl implements _ExploreData {
     required this.isPaginationLoading,
     this.isMapLoading = false,
     this.filters = const RestaurantFilters(),
+    this.selectedMarkerId = null,
+    this.selectedRestaurant = null,
   }) : _markers = markers,
        _nearestRestaurants = nearestRestaurants;
 
@@ -309,9 +362,19 @@ class _$ExploreDataImpl implements _ExploreData {
   @JsonKey()
   final RestaurantFilters filters;
 
+  /// ID vybraného markeru (null = žádný výběr)
+  @override
+  @JsonKey()
+  final String? selectedMarkerId;
+
+  /// Vybraná restaurace pro preview card (null = žádná)
+  @override
+  @JsonKey()
+  final Restaurant? selectedRestaurant;
+
   @override
   String toString() {
-    return 'ExploreData(markers: $markers, nearestRestaurants: $nearestRestaurants, userPosition: $userPosition, currentPage: $currentPage, hasMore: $hasMore, isPaginationLoading: $isPaginationLoading, isMapLoading: $isMapLoading, filters: $filters)';
+    return 'ExploreData(markers: $markers, nearestRestaurants: $nearestRestaurants, userPosition: $userPosition, currentPage: $currentPage, hasMore: $hasMore, isPaginationLoading: $isPaginationLoading, isMapLoading: $isMapLoading, filters: $filters, selectedMarkerId: $selectedMarkerId, selectedRestaurant: $selectedRestaurant)';
   }
 
   @override
@@ -333,7 +396,11 @@ class _$ExploreDataImpl implements _ExploreData {
                 other.isPaginationLoading == isPaginationLoading) &&
             (identical(other.isMapLoading, isMapLoading) ||
                 other.isMapLoading == isMapLoading) &&
-            (identical(other.filters, filters) || other.filters == filters));
+            (identical(other.filters, filters) || other.filters == filters) &&
+            (identical(other.selectedMarkerId, selectedMarkerId) ||
+                other.selectedMarkerId == selectedMarkerId) &&
+            (identical(other.selectedRestaurant, selectedRestaurant) ||
+                other.selectedRestaurant == selectedRestaurant));
   }
 
   @override
@@ -347,6 +414,8 @@ class _$ExploreDataImpl implements _ExploreData {
     isPaginationLoading,
     isMapLoading,
     filters,
+    selectedMarkerId,
+    selectedRestaurant,
   );
 
   /// Create a copy of ExploreData
@@ -368,6 +437,8 @@ abstract class _ExploreData implements ExploreData {
     required final bool isPaginationLoading,
     final bool isMapLoading,
     final RestaurantFilters filters,
+    final String? selectedMarkerId,
+    final Restaurant? selectedRestaurant,
   }) = _$ExploreDataImpl;
 
   /// Markery pro mapu (shluky nebo restaurace)
@@ -401,6 +472,14 @@ abstract class _ExploreData implements ExploreData {
   /// Aktivní filtry
   @override
   RestaurantFilters get filters;
+
+  /// ID vybraného markeru (null = žádný výběr)
+  @override
+  String? get selectedMarkerId;
+
+  /// Vybraná restaurace pro preview card (null = žádná)
+  @override
+  Restaurant? get selectedRestaurant;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.

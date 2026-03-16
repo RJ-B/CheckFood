@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
@@ -32,7 +33,7 @@ class RegisterPage extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(l.registerSuccess),
-                  backgroundColor: Colors.green.shade600,
+                  backgroundColor: AppColors.success,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -162,7 +163,7 @@ class RegisterPage extends StatelessWidget {
                 return state.maybeWhen(
                   loading:
                       () => Container(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         child: const Center(child: CircularProgressIndicator()),
                       ),
                   orElse: () => const SizedBox.shrink(),

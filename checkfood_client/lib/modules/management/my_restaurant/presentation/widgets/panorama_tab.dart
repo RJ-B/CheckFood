@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/theme/colors.dart';
 
 import '../../../../../l10n/generated/app_localizations.dart';
 
@@ -121,7 +122,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context).errorGeneric(e.toString())), backgroundColor: Colors.red),
+          SnackBar(content: Text(S.of(context).errorGeneric(e.toString())), backgroundColor: AppColors.error),
         );
       }
     } finally {
@@ -134,7 +135,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
     await activate(sessionId);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).panoramaActivatedSuccess), backgroundColor: Colors.green),
+        SnackBar(content: Text(S.of(context).panoramaActivatedSuccess), backgroundColor: AppColors.success),
       );
       _loadSessions();
     }
@@ -184,7 +185,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(S.of(context).tablePositionsSavedSuccess),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.success,
                 ),
               );
             }
@@ -210,7 +211,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
             const SizedBox(height: 8),
             Text(_error!),
             const SizedBox(height: 16),
@@ -227,9 +228,9 @@ class _PanoramaTabState extends State<PanoramaTab> {
         children: [
           if (widget.activePanoramaUrl != null) ...[
             Card(
-              color: Colors.green.shade50,
+              color: AppColors.successLight,
               child: ListTile(
-                leading: const Icon(Icons.panorama, color: Colors.green),
+                leading: const Icon(Icons.panorama, color: AppColors.success),
                 title: Text(S.of(context).activePanoramaTitle),
                 subtitle: Text(S.of(context).activePanoramaDesc),
                 trailing: IconButton(
@@ -310,10 +311,10 @@ class _PanoramaTabState extends State<PanoramaTab> {
       };
 
   Color _statusColor(String status) => switch (status) {
-        'COMPLETED' => Colors.green,
-        'PROCESSING' => Colors.orange,
-        'FAILED' => Colors.red,
-        _ => Colors.grey,
+        'COMPLETED' => AppColors.success,
+        'PROCESSING' => AppColors.warning,
+        'FAILED' => AppColors.error,
+        _ => AppColors.textMuted,
       };
 
   String _statusLabel(BuildContext context, String status) {

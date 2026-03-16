@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../core/theme/colors.dart';
 
 import '../bloc/my_reservations_bloc.dart';
 import '../bloc/my_reservations_event.dart';
@@ -33,7 +34,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(l.reservationCancelled),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.success,
               ),
             );
           }
@@ -44,7 +45,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(l.reservationEdited),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.success,
               ),
             );
           }
@@ -60,11 +61,11 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                  const Icon(Icons.error_outline, color: AppColors.error, size: 48),
                   const SizedBox(height: 16),
                   Text(
                     state.loadError!,
-                    style: TextStyle(color: Colors.grey[600]),
+                    style: const TextStyle(color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -194,7 +195,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                     MyReservationsEvent.cancel(reservationId: reservationId),
                   );
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: Text(l.yesCancelIt),
           ),
         ],
@@ -246,11 +247,11 @@ class _EmptyState extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 32),
       child: Column(
         children: [
-          Icon(icon, size: 48, color: Colors.grey[400]),
+          Icon(icon, size: 48, color: AppColors.textMuted),
           const SizedBox(height: 12),
           Text(
             message,
-            style: TextStyle(color: Colors.grey[500], fontSize: 14),
+            style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
           ),
         ],
       ),

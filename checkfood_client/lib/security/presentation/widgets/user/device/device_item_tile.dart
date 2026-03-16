@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../domain/entities/device.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 
@@ -9,8 +10,6 @@ class DeviceItemTile extends StatelessWidget {
   final Device device;
   final VoidCallback onLogout;
   final bool isLoggingOut;
-
-  // PŘIDÁNO: Musíme tento parametr definovat, aby ho šlo zvenčí naplnit
   final bool isCurrentDevice;
 
   const DeviceItemTile({
@@ -18,31 +17,29 @@ class DeviceItemTile extends StatelessWidget {
     required this.device,
     required this.onLogout,
     this.isLoggingOut = false,
-    this.isCurrentDevice = false, // Defaultně false
+    this.isCurrentDevice = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Formátování data (např. 25.01.2026 14:30)
     final dateFormat = DateFormat('dd.MM.yyyy HH:mm');
     final l = S.of(context);
 
     return Card(
       elevation: 0,
-      // Pokud je to aktuální zařízení, podbarvíme ho jemně zeleně/primární barvou
       color:
           isCurrentDevice
-              ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
+              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
               : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+        side: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            // Ikona zařízení
+            // Device icon
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -56,7 +53,7 @@ class DeviceItemTile extends StatelessWidget {
             ),
             const Gap(16),
 
-            // Popis zařízení
+            // Device info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +70,6 @@ class DeviceItemTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      // Štítek "Toto zařízení"
                       if (isCurrentDevice) ...[
                         const Gap(8),
                         Container(
@@ -82,15 +78,15 @@ class DeviceItemTile extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.1),
+                            color: AppColors.primaryLight,
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Colors.green),
+                            border: Border.all(color: AppColors.primary),
                           ),
                           child: Text(
                             l.thisDevice,
                             style: const TextStyle(
                               fontSize: 10,
-                              color: Colors.green,
+                              color: AppColors.primaryDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -107,7 +103,7 @@ class DeviceItemTile extends StatelessWidget {
               ),
             ),
 
-            // Tlačítko odhlášení
+            // Logout button
             if (isLoggingOut)
               const SizedBox(
                 width: 24,
@@ -116,14 +112,12 @@ class DeviceItemTile extends StatelessWidget {
               )
             else
               IconButton(
-                // Pokud je to aktuální zařízení, zakážeme tlačítko (vlastní logout je v menu)
                 onPressed: isCurrentDevice ? null : onLogout,
                 icon: Icon(
                   Icons.logout,
-                  color:
-                      isCurrentDevice
-                          ? Colors.grey.withOpacity(0.3)
-                          : Colors.red,
+                  color: isCurrentDevice
+                      ? AppColors.textMuted.withValues(alpha: 0.5)
+                      : AppColors.error,
                 ),
                 tooltip: l.logoutDevice,
               ),

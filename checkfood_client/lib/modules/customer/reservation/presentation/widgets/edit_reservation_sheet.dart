@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../core/theme/colors.dart';
 
 import '../../domain/entities/reservation_scene.dart';
 import '../bloc/my_reservations_bloc.dart';
@@ -43,7 +44,7 @@ class EditReservationSheet extends StatelessWidget {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: AppColors.border,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -61,7 +62,7 @@ class EditReservationSheet extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   reservation.restaurantName ?? '',
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: const TextStyle(color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 20),
 
@@ -124,7 +125,7 @@ class EditReservationSheet extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child: Text(
                       l.noSlotsForDay,
-                      style: TextStyle(color: Colors.grey[500]),
+                      style: const TextStyle(color: AppColors.textMuted),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -137,12 +138,12 @@ class EditReservationSheet extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      color: Colors.orange.withValues(alpha: 0.1),
+                      color: AppColors.warningLight,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       l.slotUnavailable,
-                      style: const TextStyle(color: Colors.orange, fontSize: 13),
+                      style: const TextStyle(color: AppColors.warning, fontSize: 13),
                     ),
                   ),
                 if (state.editError != null)
@@ -150,12 +151,12 @@ class EditReservationSheet extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.1),
+                      color: AppColors.errorLight,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       state.editError!,
-                      style: const TextStyle(color: Colors.red, fontSize: 13),
+                      style: const TextStyle(color: AppColors.error, fontSize: 13),
                     ),
                   ),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import '../../../../core/theme/colors.dart';
 
 // Bloc
 import '../../bloc/user/user_bloc.dart';
@@ -62,7 +63,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                 _isRefreshing = false;
               });
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message), backgroundColor: Colors.red),
+                SnackBar(content: Text(message), backgroundColor: AppColors.error),
               );
             },
             orElse: () {},
@@ -78,7 +79,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.devices, size: 64, color: Colors.grey),
+                      const Icon(Icons.devices, size: 64, color: AppColors.textMuted),
                       const Gap(16),
                       Text(
                         l.noActiveDevices,
@@ -138,7 +139,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       const Icon(
                         Icons.error_outline,
                         size: 48,
-                        color: Colors.red,
+                        color: AppColors.error,
                       ),
                       const Gap(16),
                       Text(message, textAlign: TextAlign.center),

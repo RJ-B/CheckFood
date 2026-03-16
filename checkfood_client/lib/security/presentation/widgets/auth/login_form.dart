@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 // Domain Params
@@ -129,7 +130,7 @@ class _LoginFormState extends State<LoginForm> {
                     () => const Center(
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(color: Colors.green),
+                        child: CircularProgressIndicator(color: AppColors.primary),
                       ),
                     ),
                 orElse:
@@ -138,7 +139,7 @@ class _LoginFormState extends State<LoginForm> {
                       child: ElevatedButton(
                         onPressed: _onLoginPressed,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),

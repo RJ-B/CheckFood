@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/theme/colors.dart';
 import '../../domain/entities/reservation.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
@@ -53,18 +54,18 @@ class ReservationCard extends StatelessWidget {
             // Table + party size
             Row(
               children: [
-                const Icon(Icons.table_restaurant, size: 16, color: Colors.grey),
+                const Icon(Icons.table_restaurant, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(
                   reservation.tableLabel ?? l.table,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 13),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                 ),
                 const SizedBox(width: 16),
-                const Icon(Icons.people, size: 16, color: Colors.grey),
+                const Icon(Icons.people, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(
                   l.partySizeShort(reservation.partySize),
-                  style: TextStyle(color: Colors.grey[700], fontSize: 13),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                 ),
               ],
             ),
@@ -73,13 +74,13 @@ class ReservationCard extends StatelessWidget {
             // Date + time
             Row(
               children: [
-                const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(
                   reservation.endTime != null
                       ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
                       : '${_formatDate(reservation.date)}  ${l.timeFrom(_formatTime(reservation.startTime))}',
-                  style: TextStyle(color: Colors.grey[700], fontSize: 13),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                 ),
               ],
             ),
@@ -111,7 +112,7 @@ class ReservationCard extends StatelessWidget {
                         onPressed: onCancel,
                         icon: const Icon(Icons.cancel_outlined, size: 18),
                         label: Text(l.cancel),
-                        style: TextButton.styleFrom(foregroundColor: Colors.red),
+                        style: TextButton.styleFrom(foregroundColor: AppColors.error),
                       ),
                   ],
                 ],
@@ -146,13 +147,13 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = S.of(context);
     final (label, color) = switch (status) {
-      'PENDING_CONFIRMATION' => (l.statusPending, Colors.orange),
-      'CONFIRMED' => (l.statusConfirmed, Colors.green),
-      'RESERVED' => (l.statusConfirmed, Colors.green),
-      'CANCELLED' => (l.statusCancelled, Colors.red),
-      'REJECTED' => (l.statusRejected, Colors.red),
-      'COMPLETED' => (l.statusCompleted, Colors.grey),
-      _ => (status, Colors.grey),
+      'PENDING_CONFIRMATION' => (l.statusPending, AppColors.warning),
+      'CONFIRMED' => (l.statusConfirmed, AppColors.success),
+      'RESERVED' => (l.statusConfirmed, AppColors.success),
+      'CANCELLED' => (l.statusCancelled, AppColors.error),
+      'REJECTED' => (l.statusRejected, AppColors.error),
+      'COMPLETED' => (l.statusCompleted, AppColors.textMuted),
+      _ => (status, AppColors.textMuted),
     };
 
     return Container(

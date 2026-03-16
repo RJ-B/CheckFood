@@ -32,6 +32,12 @@ class ExploreData with _$ExploreData {
 
     /// Aktivní filtry
     @Default(RestaurantFilters()) RestaurantFilters filters,
+
+    /// ID vybraného markeru (null = žádný výběr)
+    @Default(null) String? selectedMarkerId,
+
+    /// Vybraná restaurace pro preview card (null = žádná)
+    @Default(null) Restaurant? selectedRestaurant,
   }) = _ExploreData;
 
   // Defaultní stav pro init

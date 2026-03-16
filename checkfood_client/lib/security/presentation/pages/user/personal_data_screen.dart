@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import '../../../../core/theme/colors.dart';
 
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/profile/request/update_profile_request_model.dart';
@@ -80,14 +81,14 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(l.profileUpdated),
-                    backgroundColor: Colors.green,
+                    backgroundColor: AppColors.success,
                   ),
                 );
               }
             },
             failure: (message) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message), backgroundColor: Colors.red),
+                SnackBar(content: Text(message), backgroundColor: AppColors.error),
               );
             },
             orElse: () {},
@@ -112,7 +113,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                   ),
                   Text(
                     l.basicInfoSubtitle,
-                    style: const TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: AppColors.textMuted),
                   ),
                   const Gap(24),
 

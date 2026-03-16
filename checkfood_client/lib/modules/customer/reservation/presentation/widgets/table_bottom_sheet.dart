@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../core/theme/colors.dart';
 
 import '../../presentation/bloc/reservation_bloc.dart';
 import '../../presentation/bloc/reservation_event.dart';
@@ -31,7 +32,7 @@ class TableBottomSheet extends StatelessWidget {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -47,7 +48,7 @@ class TableBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     l.capacityOf(state.selectedTableCapacity!),
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                   ),
                 ),
 
@@ -109,7 +110,7 @@ class TableBottomSheet extends StatelessWidget {
                   child: Center(
                     child: Text(
                       l.noSlotsForDay,
-                      style: TextStyle(color: Colors.grey[500]),
+                      style: const TextStyle(color: AppColors.textMuted),
                     ),
                   ),
                 )
@@ -136,9 +137,9 @@ class TableBottomSheet extends StatelessWidget {
                           .add(const ReservationEvent.submitReservation())
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[300],
+                    disabledBackgroundColor: AppColors.border,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -168,7 +169,7 @@ class TableBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     l.slotUnavailable,
-                    style: const TextStyle(color: Colors.orange, fontSize: 13),
+                    style: const TextStyle(color: AppColors.warning, fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -177,7 +178,7 @@ class TableBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     state.submitError!,
-                    style: const TextStyle(color: Colors.red, fontSize: 13),
+                    style: const TextStyle(color: AppColors.error, fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -220,10 +221,10 @@ class _TimeSlotsGrid extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
-              color: isSelected ? Colors.teal : Colors.grey[100],
+              color: isSelected ? AppColors.primary : AppColors.borderLight,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isSelected ? Colors.teal : Colors.grey[300]!,
+                color: isSelected ? AppColors.primary : AppColors.border,
               ),
             ),
             child: Text(

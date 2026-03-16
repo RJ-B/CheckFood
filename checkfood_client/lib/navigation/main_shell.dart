@@ -135,7 +135,7 @@ class _MainShellState extends State<MainShell> {
               height: 80,
               selectedIndex: safeIndex,
               onDestinationSelected: _onTabSelected,
-              indicatorColor: AppColors.primary.withOpacity(0.1),
+              indicatorColor: AppColors.primary.withValues(alpha: 0.1),
               destinations: destinations,
             ),
           );

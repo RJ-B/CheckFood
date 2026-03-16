@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/profile/request/change_password_request_model.dart';
 import '../../../validators/password_validator.dart';
@@ -58,14 +59,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(l.changePasswordSuccess),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.success,
               ),
             );
             Navigator.pop(context);
           },
           failure: (msg) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(msg), backgroundColor: Colors.red),
+              SnackBar(content: Text(msg), backgroundColor: AppColors.error),
             );
           },
           orElse: () {},

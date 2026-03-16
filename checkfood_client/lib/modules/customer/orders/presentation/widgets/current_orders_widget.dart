@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/theme/colors.dart';
 import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
@@ -75,13 +76,13 @@ class CurrentOrdersWidget extends StatelessWidget {
 
   Widget _statusIcon(String status) {
     final (IconData icon, Color color) = switch (status) {
-      'PENDING' => (Icons.hourglass_top, Colors.orange),
-      'CONFIRMED' => (Icons.check_circle_outline, Colors.blue),
+      'PENDING' => (Icons.hourglass_top, AppColors.warning),
+      'CONFIRMED' => (Icons.check_circle_outline, AppColors.info),
       'PREPARING' => (Icons.restaurant, Colors.amber),
-      'READY' => (Icons.notifications_active, Colors.green),
-      'DELIVERED' => (Icons.done_all, Colors.grey),
-      'CANCELLED' => (Icons.cancel_outlined, Colors.red),
-      _ => (Icons.receipt, Colors.grey),
+      'READY' => (Icons.notifications_active, AppColors.success),
+      'DELIVERED' => (Icons.done_all, AppColors.textMuted),
+      'CANCELLED' => (Icons.cancel_outlined, AppColors.error),
+      _ => (Icons.receipt, AppColors.textMuted),
     };
 
     return Icon(icon, color: color, size: 28);

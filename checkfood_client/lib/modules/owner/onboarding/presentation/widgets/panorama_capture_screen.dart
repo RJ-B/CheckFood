@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -359,7 +360,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                         icon: const Icon(Icons.check),
                         label: Text(S.of(context).finalize),
                         style: FilledButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: AppColors.success,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                         ),
@@ -425,7 +426,7 @@ class _MiniMapPainter extends CustomPainter {
 
       final isCaptured = capturedIndices.contains(point.index);
       final paint = Paint()
-        ..color = isCaptured ? Colors.green : Colors.white38
+        ..color = isCaptured ? AppColors.primary : Colors.white38
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(dx, dy), isCaptured ? 4 : 3, paint);
@@ -438,13 +439,13 @@ class _MiniMapPainter extends CustomPainter {
       center.dy - (maxRadius * 0.25) * cos(arrowAngle),
     );
     final arrowPaint = Paint()
-      ..color = Colors.tealAccent
+      ..color = AppColors.primary
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
     canvas.drawLine(center, arrowEnd, arrowPaint);
 
     // Arrow tip
-    canvas.drawCircle(arrowEnd, 3, Paint()..color = Colors.tealAccent);
+    canvas.drawCircle(arrowEnd, 3, Paint()..color = AppColors.primary);
   }
 
   @override

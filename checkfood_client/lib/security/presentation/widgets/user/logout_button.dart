@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
@@ -18,11 +19,11 @@ class LogoutButton extends StatelessWidget {
         icon: const Icon(Icons.logout),
         label: Text(l.logout),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red.shade50,
-          foregroundColor: Colors.red,
+          backgroundColor: AppColors.errorLight,
+          foregroundColor: AppColors.error,
           minimumSize: const Size.fromHeight(50),
           elevation: 0,
-          side: BorderSide(color: Colors.red.shade100),
+          side: const BorderSide(color: AppColors.error),
         ),
       ),
     );
@@ -50,7 +51,7 @@ class LogoutButton extends StatelessWidget {
                 },
                 child: Text(
                   l.logout,
-                  style: const TextStyle(color: Colors.red),
+                  style: const TextStyle(color: AppColors.error),
                 ),
               ),
             ],

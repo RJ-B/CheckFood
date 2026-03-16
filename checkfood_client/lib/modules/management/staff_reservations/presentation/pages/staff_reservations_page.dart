@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../../l10n/generated/app_localizations.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../bloc/staff_reservations_bloc.dart';
 import '../bloc/staff_reservations_event.dart';
 import '../bloc/staff_reservations_state.dart';
@@ -39,7 +40,7 @@ class _StaffReservationsPageState extends State<StaffReservationsPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.actionError!),
-              backgroundColor: Colors.red.shade700,
+              backgroundColor: AppColors.error,
             ),
           );
         }
@@ -72,7 +73,7 @@ class _StaffReservationsPageState extends State<StaffReservationsPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
             const SizedBox(height: 12),
             Text(state.error!, textAlign: TextAlign.center),
             const SizedBox(height: 12),
@@ -91,7 +92,7 @@ class _StaffReservationsPageState extends State<StaffReservationsPage> {
     if (state.reservations.isEmpty) {
       return Center(
         child: Text(S.of(context).noReservationsForDayStaff,
-            style: const TextStyle(color: Colors.grey)),
+            style: const TextStyle(color: AppColors.textMuted)),
       );
     }
 
