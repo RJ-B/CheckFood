@@ -1,47 +1,42 @@
+import 'dart:math' as math;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'dart:developer' as dev;
 
+import '../../../../../core/services/google_places_service.dart';
 import '../../domain/entities/explore_data.dart';
-import '../../domain/entities/restaurant_filters.dart';
+import '../../domain/entities/google_place.dart';
+import '../../domain/entities/restaurant_marker.dart';
 import '../../domain/usecases/explore_usecases.dart';
 import 'explore_event.dart';
 import 'explore_state.dart';
 
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   final GetLocationUseCase _getLocationUseCase;
-  final GetRestaurantMarkersUseCase _getMarkersUseCase;
-  final GetNearestRestaurantsUseCase _getNearestUseCase;
+  final GooglePlacesService _placesService;
 
   ExploreBloc({
     required GetLocationUseCase getLocationUseCase,
-    required GetRestaurantMarkersUseCase getMarkersUseCase,
-    required GetNearestRestaurantsUseCase getNearestUseCase,
-  }) : _getLocationUseCase = getLocationUseCase,
-       _getMarkersUseCase = getMarkersUseCase,
-       _getNearestUseCase = getNearestUseCase,
-       super(const ExploreState.initial()) {
+    required GooglePlacesService placesService,
+  })  : _getLocationUseCase = getLocationUseCase,
+        _placesService = placesService,
+        super(const ExploreState.initial()) {
     on<InitializeRequested>(_onInitializeRequested);
     on<PermissionResultReceived>(_onPermissionResultReceived);
-    on<LoadMoreRequested>(_onLoadMoreRequested);
     on<RefreshRequested>(_onRefreshRequested);
-    on<FiltersChanged>(_onFiltersChanged);
     on<MarkerSelected>(_onMarkerSelected);
 
     on<MapBoundsChanged>(
       _onMapBoundsChanged,
-      transformer:
-          (events, mapper) => events
-              .debounce(const Duration(milliseconds: 300))
-              .switchMap(mapper),
+      transformer: (events, mapper) =>
+          events.debounce(const Duration(milliseconds: 300)).switchMap(mapper),
     );
 
     on<SearchChanged>(
       _onSearchChanged,
-      transformer:
-          (events, mapper) => events
-              .debounce(const Duration(milliseconds: 400))
-              .switchMap(mapper),
+      transformer: (events, mapper) =>
+          events.debounce(const Duration(milliseconds: 400)).switchMap(mapper),
     );
   }
 
@@ -65,48 +60,117 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     }
   }
 
+  Future<void> _onRefreshRequested(
+    RefreshRequested event,
+    Emitter<ExploreState> emit,
+  ) async {
+    emit(const ExploreState.loading());
+    await _startFlow(emit);
+  }
+
+  Future<void> _startFlow(Emitter<ExploreState> emit) async {
+    try {
+      final position = await _getLocationUseCase.execute();
+      final places = await _placesService.searchNearby(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        radiusMeters: 3000,
+      );
+
+      final markers = _clusterPlaces(places, 15);
+
+      emit(ExploreState.loaded(
+        data: ExploreData.initial().copyWith(
+          userPosition: position,
+          places: places,
+          markers: markers,
+        ),
+      ));
+    } catch (e) {
+      if (e.toString().contains('denied')) {
+        emit(const ExploreState.permissionRequired());
+      } else {
+        emit(ExploreState.error(message: e.toString()));
+      }
+    }
+  }
+
   Future<void> _onMapBoundsChanged(
     MapBoundsChanged event,
     Emitter<ExploreState> emit,
   ) async {
     if (state is! Loaded) return;
     final currentState = state as Loaded;
+    final data = currentState.data;
 
     try {
-      emit(
-        ExploreState.loaded(
-          data: currentState.data.copyWith(isMapLoading: true),
-        ),
+      emit(ExploreState.loaded(
+        data: data.copyWith(isMapLoading: true),
+      ));
+
+      final bounds = event.params.bounds;
+      final zoom = event.params.zoom;
+
+      final centerLat =
+          (bounds.southwest.latitude + bounds.northeast.latitude) / 2;
+      final centerLng =
+          (bounds.southwest.longitude + bounds.northeast.longitude) / 2;
+
+      final radius = Geolocator.distanceBetween(
+        centerLat,
+        centerLng,
+        bounds.northeast.latitude,
+        bounds.northeast.longitude,
       );
 
       final sw = Stopwatch()..start();
-      final markers = await _getMarkersUseCase.execute(event.params);
+
+      List<GooglePlace> places;
+      if (data.searchQuery != null && data.searchQuery!.isNotEmpty) {
+        places = await _placesService.searchText(
+          query: data.searchQuery!,
+          latitude: centerLat,
+          longitude: centerLng,
+          radiusMeters: radius,
+        );
+      } else {
+        places = await _placesService.searchNearby(
+          latitude: centerLat,
+          longitude: centerLng,
+          radiusMeters: radius,
+        );
+      }
+
+      final markers = _clusterPlaces(places, zoom);
       sw.stop();
 
-      final clusters = markers.where((m) => m.isCluster).length;
-      final maxCount = markers.fold<int>(0, (prev, m) => m.count > prev ? m.count : prev);
       dev.log(
-        'markers zoom=${event.params.zoom} '
-        'total=${markers.length} clusters=$clusters points=${markers.length - clusters} '
-        'maxCount=$maxCount ms=${sw.elapsedMilliseconds}',
+        'places zoom=$zoom total=${places.length} '
+        'markers=${markers.length} ms=${sw.elapsedMilliseconds}',
         name: 'CheckFood.Map',
       );
 
-      emit(
-        ExploreState.loaded(
-          data: currentState.data.copyWith(
-            markers: markers,
-            isMapLoading: false,
-          ),
+      emit(ExploreState.loaded(
+        data: data.copyWith(
+          places: places,
+          markers: markers,
+          isMapLoading: false,
+          // Deselect if selected place is no longer in results
+          selectedPlaceId: data.selectedPlaceId != null &&
+                  places.any((p) => p.id == data.selectedPlaceId)
+              ? data.selectedPlaceId
+              : null,
+          selectedPlace: data.selectedPlaceId != null &&
+                  places.any((p) => p.id == data.selectedPlaceId)
+              ? data.selectedPlace
+              : null,
         ),
-      );
+      ));
     } catch (e) {
       dev.log('Map Update Error: $e', error: e, name: 'CheckFood.Explore');
-      emit(
-        ExploreState.loaded(
-          data: currentState.data.copyWith(isMapLoading: false),
-        ),
-      );
+      emit(ExploreState.loaded(
+        data: data.copyWith(isMapLoading: false),
+      ));
     }
   }
 
@@ -118,134 +182,47 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     final currentState = state as Loaded;
     final data = currentState.data;
 
-    final newFilters = data.filters.copyWith(
-      searchQuery: event.query.isEmpty ? null : event.query,
-    );
-
-    await _reloadWithFilters(data, newFilters, emit);
-  }
-
-  Future<void> _onFiltersChanged(
-    FiltersChanged event,
-    Emitter<ExploreState> emit,
-  ) async {
-    if (state is! Loaded) return;
-    final currentState = state as Loaded;
-    final data = currentState.data;
-
-    await _reloadWithFilters(data, event.filters, emit);
-  }
-
-  Future<void> _reloadWithFilters(
-    ExploreData data,
-    RestaurantFilters filters,
-    Emitter<ExploreState> emit,
-  ) async {
-    emit(
-      ExploreState.loaded(
-        data: data.copyWith(
-          filters: filters,
-          isPaginationLoading: true,
-          nearestRestaurants: [],
-          currentPage: 0,
-        ),
+    emit(ExploreState.loaded(
+      data: data.copyWith(
+        searchQuery: event.query.isEmpty ? null : event.query,
+        isMapLoading: true,
       ),
-    );
+    ));
 
     try {
-      final restaurants = await _getNearestUseCase.execute(
-        lat: data.userPosition.latitude,
-        lng: data.userPosition.longitude,
-        page: 0,
-        filters: filters,
-      );
-
-      emit(
-        ExploreState.loaded(
-          data: data.copyWith(
-            filters: filters,
-            nearestRestaurants: restaurants,
-            currentPage: 0,
-            hasMore: restaurants.length >= 10,
-            isPaginationLoading: false,
-          ),
-        ),
-      );
-    } catch (e) {
-      dev.log('Filter Error: $e', error: e, name: 'CheckFood.Explore');
-      emit(
-        ExploreState.loaded(
-          data: data.copyWith(
-            filters: filters,
-            isPaginationLoading: false,
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _onLoadMoreRequested(
-    LoadMoreRequested event,
-    Emitter<ExploreState> emit,
-  ) async {
-    if (state is! Loaded) return;
-    final currentState = state as Loaded;
-    final data = currentState.data;
-
-    if (data.isPaginationLoading || !data.hasMore) return;
-
-    emit(ExploreState.loaded(data: data.copyWith(isPaginationLoading: true)));
-
-    try {
-      final nextPage = data.currentPage + 1;
-      final newRestaurants = await _getNearestUseCase.execute(
-        lat: data.userPosition.latitude,
-        lng: data.userPosition.longitude,
-        page: nextPage,
-        filters: data.filters,
-      );
-
-      emit(
-        ExploreState.loaded(
-          data: data.copyWith(
-            nearestRestaurants: [...data.nearestRestaurants, ...newRestaurants],
-            currentPage: nextPage,
-            hasMore: newRestaurants.length >= 10,
-            isPaginationLoading: false,
-          ),
-        ),
-      );
-    } catch (e) {
-      emit(
-        ExploreState.loaded(data: data.copyWith(isPaginationLoading: false)),
-      );
-    }
-  }
-
-  Future<void> _startFlow(Emitter<ExploreState> emit) async {
-    try {
-      final position = await _getLocationUseCase.execute();
-      final restaurants = await _getNearestUseCase.execute(
-        lat: position.latitude,
-        lng: position.longitude,
-        page: 0,
-      );
-
-      emit(
-        ExploreState.loaded(
-          data: ExploreData.initial().copyWith(
-            userPosition: position,
-            nearestRestaurants: restaurants,
-            hasMore: restaurants.length >= 10,
-          ),
-        ),
-      );
-    } catch (e) {
-      if (e.toString().contains('denied')) {
-        emit(const ExploreState.permissionRequired());
+      List<GooglePlace> places;
+      if (event.query.isNotEmpty) {
+        places = await _placesService.searchText(
+          query: event.query,
+          latitude: data.userPosition.latitude,
+          longitude: data.userPosition.longitude,
+          radiusMeters: 5000,
+        );
       } else {
-        emit(ExploreState.error(message: e.toString()));
+        places = await _placesService.searchNearby(
+          latitude: data.userPosition.latitude,
+          longitude: data.userPosition.longitude,
+          radiusMeters: 3000,
+        );
       }
+
+      final markers = _clusterPlaces(places, 15);
+
+      emit(ExploreState.loaded(
+        data: data.copyWith(
+          searchQuery: event.query.isEmpty ? null : event.query,
+          places: places,
+          markers: markers,
+          isMapLoading: false,
+          selectedPlaceId: null,
+          selectedPlace: null,
+        ),
+      ));
+    } catch (e) {
+      dev.log('Search Error: $e', error: e, name: 'CheckFood.Explore');
+      emit(ExploreState.loaded(
+        data: data.copyWith(isMapLoading: false),
+      ));
     }
   }
 
@@ -257,31 +234,77 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     final currentState = state as Loaded;
     final data = currentState.data;
 
-    if (event.restaurantId == null) {
+    if (event.placeId == null) {
       emit(ExploreState.loaded(
-        data: data.copyWith(selectedMarkerId: null, selectedRestaurant: null),
+        data: data.copyWith(selectedPlaceId: null, selectedPlace: null),
       ));
       return;
     }
 
-    // Find restaurant in already-loaded list
-    final found = data.nearestRestaurants
-        .where((r) => r.id == event.restaurantId)
-        .firstOrNull;
+    final found =
+        data.places.where((p) => p.id == event.placeId).firstOrNull;
 
     emit(ExploreState.loaded(
       data: data.copyWith(
-        selectedMarkerId: event.restaurantId,
-        selectedRestaurant: found,
+        selectedPlaceId: event.placeId,
+        selectedPlace: found,
       ),
     ));
   }
 
-  Future<void> _onRefreshRequested(
-    RefreshRequested event,
-    Emitter<ExploreState> emit,
-  ) async {
-    emit(const ExploreState.loading());
-    await _startFlow(emit);
+  // ---------------------------------------------------------------------------
+  // Grid-based clustering
+  // ---------------------------------------------------------------------------
+
+  List<RestaurantMarker> _clusterPlaces(List<GooglePlace> places, int zoom) {
+    if (places.isEmpty) return [];
+
+    // No clustering at street level
+    if (zoom >= 17) {
+      return places
+          .map((p) => RestaurantMarker(
+                id: p.id,
+                latitude: p.latitude,
+                longitude: p.longitude,
+                count: 1,
+              ))
+          .toList();
+    }
+
+    // Grid cell size in degrees — proportional to zoom
+    final cellSize = 360.0 / (256 * math.pow(2, zoom)) * 60;
+
+    final Map<String, List<GooglePlace>> grid = {};
+    for (final place in places) {
+      final cellX = (place.longitude / cellSize).floor();
+      final cellY = (place.latitude / cellSize).floor();
+      final key = '${cellX}_$cellY';
+      grid.putIfAbsent(key, () => []).add(place);
+    }
+
+    return grid.values.map((group) {
+      if (group.length == 1) {
+        final p = group.first;
+        return RestaurantMarker(
+          id: p.id,
+          latitude: p.latitude,
+          longitude: p.longitude,
+          count: 1,
+        );
+      }
+
+      // Cluster: centroid of group
+      final lat =
+          group.map((p) => p.latitude).reduce((a, b) => a + b) / group.length;
+      final lng =
+          group.map((p) => p.longitude).reduce((a, b) => a + b) / group.length;
+
+      return RestaurantMarker(
+        id: null,
+        latitude: lat,
+        longitude: lng,
+        count: group.length,
+      );
+    }).toList();
   }
 }

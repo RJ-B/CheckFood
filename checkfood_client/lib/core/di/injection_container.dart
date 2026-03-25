@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 // Core Services
+import '../services/google_places_service.dart';
 
 // Data Sources
 import '../../modules/customer/restaurant/data/datasources/favourite_remote_datasource.dart';
@@ -168,9 +169,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeviceInfoPlugin());
   sl.registerLazySingleton(() => DeviceInfoService(sl()));
 
-  // Location Service (Potřebné pro GetLocationUseCase)
-  // Zde registrujeme službu jako singleton.
+  // Location Service
   sl.registerLazySingleton(() => LocationService());
+
+  // Google Places Service
+  final googleMapsApiKey = dotenv.get('GOOGLE_MAPS_API_KEY', fallback: '');
+  sl.registerLazySingleton(
+    () => GooglePlacesService(apiKey: googleMapsApiKey),
+  );
 
   // Notification Service (Firebase Messaging wrapper)
   sl.registerLazySingleton(() => NotificationService());
@@ -370,9 +376,6 @@ Future<void> init() async {
   // LocationService uz je registrovan v sekci 1. Zde registrujeme jen UseCase.
   sl.registerLazySingleton(() => GetLocationUseCase(sl()));
 
-  sl.registerLazySingleton(() => GetRestaurantMarkersUseCase(sl()));
-  sl.registerLazySingleton(() => GetNearestRestaurantsUseCase(sl()));
-
   sl.registerLazySingleton(() => GetRestaurantByIdUseCase(sl()));
   sl.registerLazySingleton(() => ToggleFavouriteUseCase(sl()));
 
@@ -380,8 +383,7 @@ Future<void> init() async {
   sl.registerFactory(
     () => ExploreBloc(
       getLocationUseCase: sl(),
-      getMarkersUseCase: sl(),
-      getNearestUseCase: sl(),
+      placesService: sl(),
     ),
   );
 

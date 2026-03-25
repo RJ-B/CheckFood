@@ -60,6 +60,10 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Aplikace potřebuje vaši polohu pro zobrazení restaurací v okolí.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>Aplikace potřebuje vaši polohu pro zobrazení restaurací v okolí.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

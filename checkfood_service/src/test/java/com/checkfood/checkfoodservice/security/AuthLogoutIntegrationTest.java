@@ -93,8 +93,9 @@ class AuthLogoutIntegrationTest extends BaseAuthIntegrationTest {
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isNoContent());
 
-        // Assert: all devices should be removed
+        // Assert: only other devices removed; current device (device-B) remains
         var devicesAfter = deviceRepository.findAllByUser(user);
-        assertThat(devicesAfter).isEmpty();
+        assertThat(devicesAfter).hasSize(1);
+        assertThat(devicesAfter.get(0).getDeviceIdentifier()).isEqualTo("device-B");
     }
 }

@@ -22,33 +22,27 @@ mixin _$ExploreEvent {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -57,10 +51,8 @@ mixin _$ExploreEvent {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -68,10 +60,8 @@ mixin _$ExploreEvent {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -79,10 +69,8 @@ mixin _$ExploreEvent {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -157,11 +145,9 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) {
     return initializeRequested();
   }
@@ -172,11 +158,9 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) {
     return initializeRequested?.call();
   }
@@ -187,11 +171,9 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) {
     if (initializeRequested != null) {
@@ -207,10 +189,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) {
     return initializeRequested(this);
@@ -222,10 +202,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) {
     return initializeRequested?.call(this);
@@ -237,10 +215,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) {
@@ -331,11 +307,9 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) {
     return permissionResultReceived(granted);
   }
@@ -346,11 +320,9 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) {
     return permissionResultReceived?.call(granted);
   }
@@ -361,11 +333,9 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) {
     if (permissionResultReceived != null) {
@@ -381,10 +351,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) {
     return permissionResultReceived(this);
@@ -396,10 +364,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) {
     return permissionResultReceived?.call(this);
@@ -411,10 +377,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) {
@@ -527,11 +491,9 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) {
     return mapBoundsChanged(params);
   }
@@ -542,11 +504,9 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) {
     return mapBoundsChanged?.call(params);
   }
@@ -557,11 +517,9 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) {
     if (mapBoundsChanged != null) {
@@ -577,10 +535,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) {
     return mapBoundsChanged(this);
@@ -592,10 +548,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) {
     return mapBoundsChanged?.call(this);
@@ -607,10 +561,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) {
@@ -632,150 +584,6 @@ abstract class MapBoundsChanged implements ExploreEvent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MapBoundsChangedImplCopyWith<_$MapBoundsChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LoadMoreRequestedImplCopyWith<$Res> {
-  factory _$$LoadMoreRequestedImplCopyWith(
-    _$LoadMoreRequestedImpl value,
-    $Res Function(_$LoadMoreRequestedImpl) then,
-  ) = __$$LoadMoreRequestedImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadMoreRequestedImplCopyWithImpl<$Res>
-    extends _$ExploreEventCopyWithImpl<$Res, _$LoadMoreRequestedImpl>
-    implements _$$LoadMoreRequestedImplCopyWith<$Res> {
-  __$$LoadMoreRequestedImplCopyWithImpl(
-    _$LoadMoreRequestedImpl _value,
-    $Res Function(_$LoadMoreRequestedImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of ExploreEvent
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LoadMoreRequestedImpl implements LoadMoreRequested {
-  const _$LoadMoreRequestedImpl();
-
-  @override
-  String toString() {
-    return 'ExploreEvent.loadMoreRequested()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadMoreRequestedImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initializeRequested,
-    required TResult Function(bool granted) permissionResultReceived,
-    required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
-    required TResult Function() refreshRequested,
-    required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
-  }) {
-    return loadMoreRequested();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initializeRequested,
-    TResult? Function(bool granted)? permissionResultReceived,
-    TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
-    TResult? Function()? refreshRequested,
-    TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
-  }) {
-    return loadMoreRequested?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initializeRequested,
-    TResult Function(bool granted)? permissionResultReceived,
-    TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
-    TResult Function()? refreshRequested,
-    TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
-    required TResult orElse(),
-  }) {
-    if (loadMoreRequested != null) {
-      return loadMoreRequested();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(InitializeRequested value) initializeRequested,
-    required TResult Function(PermissionResultReceived value)
-    permissionResultReceived,
-    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
-    required TResult Function(RefreshRequested value) refreshRequested,
-    required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
-    required TResult Function(MarkerSelected value) markerSelected,
-  }) {
-    return loadMoreRequested(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitializeRequested value)? initializeRequested,
-    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
-    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
-    TResult? Function(RefreshRequested value)? refreshRequested,
-    TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
-    TResult? Function(MarkerSelected value)? markerSelected,
-  }) {
-    return loadMoreRequested?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitializeRequested value)? initializeRequested,
-    TResult Function(PermissionResultReceived value)? permissionResultReceived,
-    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
-    TResult Function(RefreshRequested value)? refreshRequested,
-    TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
-    TResult Function(MarkerSelected value)? markerSelected,
-    required TResult orElse(),
-  }) {
-    if (loadMoreRequested != null) {
-      return loadMoreRequested(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LoadMoreRequested implements ExploreEvent {
-  const factory LoadMoreRequested() = _$LoadMoreRequestedImpl;
 }
 
 /// @nodoc
@@ -824,11 +632,9 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) {
     return refreshRequested();
   }
@@ -839,11 +645,9 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) {
     return refreshRequested?.call();
   }
@@ -854,11 +658,9 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) {
     if (refreshRequested != null) {
@@ -874,10 +676,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) {
     return refreshRequested(this);
@@ -889,10 +689,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) {
     return refreshRequested?.call(this);
@@ -904,10 +702,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) {
@@ -996,11 +792,9 @@ class _$SearchChangedImpl implements SearchChanged {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) {
     return searchChanged(query);
   }
@@ -1011,11 +805,9 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) {
     return searchChanged?.call(query);
   }
@@ -1026,11 +818,9 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) {
     if (searchChanged != null) {
@@ -1046,10 +836,8 @@ class _$SearchChangedImpl implements SearchChanged {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) {
     return searchChanged(this);
@@ -1061,10 +849,8 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) {
     return searchChanged?.call(this);
@@ -1076,10 +862,8 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) {
@@ -1104,209 +888,13 @@ abstract class SearchChanged implements ExploreEvent {
 }
 
 /// @nodoc
-abstract class _$$FiltersChangedImplCopyWith<$Res> {
-  factory _$$FiltersChangedImplCopyWith(
-    _$FiltersChangedImpl value,
-    $Res Function(_$FiltersChangedImpl) then,
-  ) = __$$FiltersChangedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({RestaurantFilters filters});
-
-  $RestaurantFiltersCopyWith<$Res> get filters;
-}
-
-/// @nodoc
-class __$$FiltersChangedImplCopyWithImpl<$Res>
-    extends _$ExploreEventCopyWithImpl<$Res, _$FiltersChangedImpl>
-    implements _$$FiltersChangedImplCopyWith<$Res> {
-  __$$FiltersChangedImplCopyWithImpl(
-    _$FiltersChangedImpl _value,
-    $Res Function(_$FiltersChangedImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of ExploreEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? filters = null}) {
-    return _then(
-      _$FiltersChangedImpl(
-        filters:
-            null == filters
-                ? _value.filters
-                : filters // ignore: cast_nullable_to_non_nullable
-                    as RestaurantFilters,
-      ),
-    );
-  }
-
-  /// Create a copy of ExploreEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RestaurantFiltersCopyWith<$Res> get filters {
-    return $RestaurantFiltersCopyWith<$Res>(_value.filters, (value) {
-      return _then(_value.copyWith(filters: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$FiltersChangedImpl implements FiltersChanged {
-  const _$FiltersChangedImpl({required this.filters});
-
-  @override
-  final RestaurantFilters filters;
-
-  @override
-  String toString() {
-    return 'ExploreEvent.filtersChanged(filters: $filters)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$FiltersChangedImpl &&
-            (identical(other.filters, filters) || other.filters == filters));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, filters);
-
-  /// Create a copy of ExploreEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$FiltersChangedImplCopyWith<_$FiltersChangedImpl> get copyWith =>
-      __$$FiltersChangedImplCopyWithImpl<_$FiltersChangedImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initializeRequested,
-    required TResult Function(bool granted) permissionResultReceived,
-    required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
-    required TResult Function() refreshRequested,
-    required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
-  }) {
-    return filtersChanged(filters);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initializeRequested,
-    TResult? Function(bool granted)? permissionResultReceived,
-    TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
-    TResult? Function()? refreshRequested,
-    TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
-  }) {
-    return filtersChanged?.call(filters);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initializeRequested,
-    TResult Function(bool granted)? permissionResultReceived,
-    TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
-    TResult Function()? refreshRequested,
-    TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
-    required TResult orElse(),
-  }) {
-    if (filtersChanged != null) {
-      return filtersChanged(filters);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(InitializeRequested value) initializeRequested,
-    required TResult Function(PermissionResultReceived value)
-    permissionResultReceived,
-    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
-    required TResult Function(RefreshRequested value) refreshRequested,
-    required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
-    required TResult Function(MarkerSelected value) markerSelected,
-  }) {
-    return filtersChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitializeRequested value)? initializeRequested,
-    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
-    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
-    TResult? Function(RefreshRequested value)? refreshRequested,
-    TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
-    TResult? Function(MarkerSelected value)? markerSelected,
-  }) {
-    return filtersChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitializeRequested value)? initializeRequested,
-    TResult Function(PermissionResultReceived value)? permissionResultReceived,
-    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
-    TResult Function(RefreshRequested value)? refreshRequested,
-    TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
-    TResult Function(MarkerSelected value)? markerSelected,
-    required TResult orElse(),
-  }) {
-    if (filtersChanged != null) {
-      return filtersChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class FiltersChanged implements ExploreEvent {
-  const factory FiltersChanged({required final RestaurantFilters filters}) =
-      _$FiltersChangedImpl;
-
-  RestaurantFilters get filters;
-
-  /// Create a copy of ExploreEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$FiltersChangedImplCopyWith<_$FiltersChangedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
 abstract class _$$MarkerSelectedImplCopyWith<$Res> {
   factory _$$MarkerSelectedImplCopyWith(
     _$MarkerSelectedImpl value,
     $Res Function(_$MarkerSelectedImpl) then,
   ) = __$$MarkerSelectedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String? restaurantId});
+  $Res call({String? placeId});
 }
 
 /// @nodoc
@@ -1322,13 +910,13 @@ class __$$MarkerSelectedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? restaurantId = freezed}) {
+  $Res call({Object? placeId = freezed}) {
     return _then(
       _$MarkerSelectedImpl(
-        restaurantId:
-            freezed == restaurantId
-                ? _value.restaurantId
-                : restaurantId // ignore: cast_nullable_to_non_nullable
+        placeId:
+            freezed == placeId
+                ? _value.placeId
+                : placeId // ignore: cast_nullable_to_non_nullable
                     as String?,
       ),
     );
@@ -1338,14 +926,14 @@ class __$$MarkerSelectedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MarkerSelectedImpl implements MarkerSelected {
-  const _$MarkerSelectedImpl({this.restaurantId});
+  const _$MarkerSelectedImpl({this.placeId});
 
   @override
-  final String? restaurantId;
+  final String? placeId;
 
   @override
   String toString() {
-    return 'ExploreEvent.markerSelected(restaurantId: $restaurantId)';
+    return 'ExploreEvent.markerSelected(placeId: $placeId)';
   }
 
   @override
@@ -1353,12 +941,11 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MarkerSelectedImpl &&
-            (identical(other.restaurantId, restaurantId) ||
-                other.restaurantId == restaurantId));
+            (identical(other.placeId, placeId) || other.placeId == placeId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, restaurantId);
+  int get hashCode => Object.hash(runtimeType, placeId);
 
   /// Create a copy of ExploreEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -1377,13 +964,11 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     required TResult Function() initializeRequested,
     required TResult Function(bool granted) permissionResultReceived,
     required TResult Function(MapParamsModel params) mapBoundsChanged,
-    required TResult Function() loadMoreRequested,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(RestaurantFilters filters) filtersChanged,
-    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(String? placeId) markerSelected,
   }) {
-    return markerSelected(restaurantId);
+    return markerSelected(placeId);
   }
 
   @override
@@ -1392,13 +977,11 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult? Function()? initializeRequested,
     TResult? Function(bool granted)? permissionResultReceived,
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
-    TResult? Function()? loadMoreRequested,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(RestaurantFilters filters)? filtersChanged,
-    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(String? placeId)? markerSelected,
   }) {
-    return markerSelected?.call(restaurantId);
+    return markerSelected?.call(placeId);
   }
 
   @override
@@ -1407,15 +990,13 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult Function()? initializeRequested,
     TResult Function(bool granted)? permissionResultReceived,
     TResult Function(MapParamsModel params)? mapBoundsChanged,
-    TResult Function()? loadMoreRequested,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(RestaurantFilters filters)? filtersChanged,
-    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(String? placeId)? markerSelected,
     required TResult orElse(),
   }) {
     if (markerSelected != null) {
-      return markerSelected(restaurantId);
+      return markerSelected(placeId);
     }
     return orElse();
   }
@@ -1427,10 +1008,8 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     required TResult Function(PermissionResultReceived value)
     permissionResultReceived,
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
-    required TResult Function(LoadMoreRequested value) loadMoreRequested,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
-    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
   }) {
     return markerSelected(this);
@@ -1442,10 +1021,8 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult? Function(InitializeRequested value)? initializeRequested,
     TResult? Function(PermissionResultReceived value)? permissionResultReceived,
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult? Function(LoadMoreRequested value)? loadMoreRequested,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
-    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
   }) {
     return markerSelected?.call(this);
@@ -1457,10 +1034,8 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult Function(InitializeRequested value)? initializeRequested,
     TResult Function(PermissionResultReceived value)? permissionResultReceived,
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
-    TResult Function(LoadMoreRequested value)? loadMoreRequested,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
-    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     required TResult orElse(),
   }) {
@@ -1472,10 +1047,9 @@ class _$MarkerSelectedImpl implements MarkerSelected {
 }
 
 abstract class MarkerSelected implements ExploreEvent {
-  const factory MarkerSelected({final String? restaurantId}) =
-      _$MarkerSelectedImpl;
+  const factory MarkerSelected({final String? placeId}) = _$MarkerSelectedImpl;
 
-  String? get restaurantId;
+  String? get placeId;
 
   /// Create a copy of ExploreEvent
   /// with the given fields replaced by the non-null parameter values.

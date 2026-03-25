@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    private static final int SLOT_INTERVAL_MINUTES = 15;
+    private static final int SLOT_INTERVAL_MINUTES = 30;
     private static final int BOOKING_BUFFER_MINUTES = 30;
     private static final int EDIT_CUTOFF_MINUTES = 120;
     private static final int HISTORY_PREVIEW_LIMIT = 10;

@@ -82,7 +82,7 @@ public class RestaurantException extends AppException {
         return new RestaurantException(
                 RestaurantErrorCode.NO_RESTAURANT_ASSIGNED,
                 "Nemáte přiřazenou žádnou restauraci.",
-                HttpStatus.CONFLICT
+                HttpStatus.NOT_FOUND
         );
     }
 

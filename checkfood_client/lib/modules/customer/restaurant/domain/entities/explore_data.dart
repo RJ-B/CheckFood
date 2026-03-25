@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'restaurant.dart';
-import 'restaurant_filters.dart';
+import 'google_place.dart';
 import 'restaurant_marker.dart';
 
 part 'explore_data.freezed.dart';
@@ -9,56 +8,42 @@ part 'explore_data.freezed.dart';
 @freezed
 class ExploreData with _$ExploreData {
   const factory ExploreData({
+    /// Google Places z API
+    required List<GooglePlace> places,
+
     /// Markery pro mapu (shluky nebo restaurace)
     required List<RestaurantMarker> markers,
 
-    /// Seznam nejbližších restaurací (pod mapou)
-    required List<Restaurant> nearestRestaurants,
-
-    /// Aktuální poloha uživatele
+    /// Aktualni poloha uzivatele
     required Position userPosition,
 
-    /// Aktuální stránka pro pagination
-    required int currentPage,
-
-    /// Zda je k dispozici další stránka
-    required bool hasMore,
-
-    /// Zda se načítá další stránka (aby se nevolalo 2x)
-    required bool isPaginationLoading,
-
-    /// Zda probíhá aktualizace markerů na mapě (pro plynulé UI)
+    /// Zda probiha aktualizace markeru na mape
     @Default(false) bool isMapLoading,
 
-    /// Aktivní filtry
-    @Default(RestaurantFilters()) RestaurantFilters filters,
+    /// ID vybraneho mista (null = zadny vyber)
+    @Default(null) String? selectedPlaceId,
 
-    /// ID vybraného markeru (null = žádný výběr)
-    @Default(null) String? selectedMarkerId,
+    /// Vybrane misto pro preview card
+    @Default(null) GooglePlace? selectedPlace,
 
-    /// Vybraná restaurace pro preview card (null = žádná)
-    @Default(null) Restaurant? selectedRestaurant,
+    /// Aktivni search query
+    @Default(null) String? searchQuery,
   }) = _ExploreData;
 
-  // Defaultní stav pro init
   factory ExploreData.initial() => ExploreData(
-    markers: [],
-    nearestRestaurants: [],
-    userPosition: Position(
-      longitude: 0,
-      latitude: 0,
-      timestamp: DateTime.now(),
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-      speedAccuracy: 0,
-      altitudeAccuracy: 0,
-      headingAccuracy: 0,
-    ),
-    currentPage: 0,
-    hasMore: true,
-    isPaginationLoading: false,
-    isMapLoading: false, // ✅ NOVÉ
-  );
+        places: [],
+        markers: [],
+        userPosition: Position(
+          longitude: 0,
+          latitude: 0,
+          timestamp: DateTime.now(),
+          accuracy: 0,
+          altitude: 0,
+          heading: 0,
+          speed: 0,
+          speedAccuracy: 0,
+          altitudeAccuracy: 0,
+          headingAccuracy: 0,
+        ),
+      );
 }

@@ -11,18 +11,16 @@ import 'package:gap/gap.dart';
 import '../../../../../components/dialogs/location_permission_dialog.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../data/models/request/map_params_model.dart';
-import '../../domain/entities/cuisine_type.dart';
-import '../../domain/entities/restaurant_filters.dart';
+import '../../domain/entities/google_place.dart';
 import '../../domain/entities/restaurant_marker.dart';
 import '../../domain/entities/explore_data.dart';
 import '../bloc/explore_bloc.dart';
 import '../bloc/explore_event.dart';
 import '../bloc/explore_state.dart';
-import '../widgets/restaurant_card.dart';
+import '../widgets/place_card.dart';
 import '../utils/map_marker_helper.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/location_service.dart';
-import 'restaurant_detail_page.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -32,21 +30,16 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  // GoogleMapController is nullable so we can dispose safely
   GoogleMapController? _googleMapController;
   final PanelController _panelController = PanelController();
   final TextEditingController _searchController = TextEditingController();
-
-  // ScrollController created here once — listener registered once in initState
   late final ScrollController _listScrollController;
 
-  // --- MAP STATE ---
   Set<Marker> _markers = {};
   double _currentZoom = 14.0;
   bool _initialCameraSet = false;
   String? _mapStyle;
 
-  // --- VIEWPORT BUFFER ---
   LatLngBounds? _lastFetchedBounds;
   int? _lastFetchedZoom;
 
@@ -54,9 +47,7 @@ class _ExplorePageState extends State<ExplorePage> {
   void initState() {
     super.initState();
 
-    // Scroll listener registered once here, NOT inside panelBuilder
     _listScrollController = ScrollController();
-    _listScrollController.addListener(_onListScrolled);
 
     context.read<ExploreBloc>().add(const ExploreEvent.initializeRequested());
 
@@ -64,7 +55,6 @@ class _ExplorePageState extends State<ExplorePage> {
       if (mounted) setState(() => _mapStyle = style);
     });
 
-    // Pre-generate pin bitmaps so first render is instant
     MapMarkerHelper.preGeneratePins();
   }
 
@@ -72,17 +62,8 @@ class _ExplorePageState extends State<ExplorePage> {
   void dispose() {
     _searchController.dispose();
     _listScrollController.dispose();
-    // Dispose GoogleMapController to release native resources
     _googleMapController?.dispose();
     super.dispose();
-  }
-
-  void _onListScrolled() {
-    if (!_listScrollController.hasClients) return;
-    if (_listScrollController.position.pixels >=
-        _listScrollController.position.maxScrollExtent - 200) {
-      context.read<ExploreBloc>().add(const ExploreEvent.loadMoreRequested());
-    }
   }
 
   // ---------------------------------------------------------------------------
@@ -91,7 +72,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Future<void> _updateMarkers(
     List<RestaurantMarker> backendMarkers,
-    String? selectedMarkerId,
+    String? selectedPlaceId,
   ) async {
     final Set<Marker> freshMarkers = {};
     final zoom = _currentZoom.round();
@@ -120,9 +101,8 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
         );
       } else {
-        final isSelected = item.id == selectedMarkerId;
+        final isSelected = item.id == selectedPlaceId;
 
-        // Use custom branded teardrop pin
         final icon = await MapMarkerHelper.getRestaurantBitmap(
           isSelected: isSelected,
         );
@@ -157,26 +137,17 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  void _onPinTapped(String? restaurantId) {
-    if (restaurantId == null) return;
-    // Fire markerSelected event — BLoC updates selectedMarkerId + selectedRestaurant
+  void _onPinTapped(String? placeId) {
+    if (placeId == null) return;
     context.read<ExploreBloc>().add(
-      ExploreEvent.markerSelected(restaurantId: restaurantId),
-    );
+          ExploreEvent.markerSelected(placeId: placeId),
+        );
   }
 
   void _deselectMarker() {
     context.read<ExploreBloc>().add(
-      const ExploreEvent.markerSelected(restaurantId: null),
-    );
-  }
-
-  void _openRestaurantDetail(String restaurantId) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => RestaurantDetailPage(restaurantId: restaurantId),
-      ),
-    );
+          const ExploreEvent.markerSelected(placeId: null),
+        );
   }
 
   // ---------------------------------------------------------------------------
@@ -198,7 +169,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 );
                 _initialCameraSet = true;
               }
-              _updateMarkers(data.markers, data.selectedMarkerId);
+              _updateMarkers(data.markers, data.selectedPlaceId);
             },
             error: (message) => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -235,8 +206,7 @@ class _ExplorePageState extends State<ExplorePage> {
           borderRadius:
               const BorderRadius.vertical(top: Radius.circular(24)),
           body: GestureDetector(
-            // Tap on map background deselects marker
-            onTap: data.selectedMarkerId != null ? _deselectMarker : null,
+            onTap: data.selectedPlaceId != null ? _deselectMarker : null,
             child: GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: LatLng(
@@ -262,14 +232,14 @@ class _ExplorePageState extends State<ExplorePage> {
               },
             ),
           ),
-          panelBuilder: (_) => _buildRestaurantList(data),
+          panelBuilder: (_) => _buildPlaceList(data),
         ),
         // Search bar overlay
         Positioned(
           top: MediaQuery.of(context).padding.top + 10,
           left: 16,
           right: 16,
-          child: _buildTopSearchBar(data.filters),
+          child: _buildTopSearchBar(),
         ),
         // My-location FAB
         Positioned(
@@ -284,131 +254,120 @@ class _ExplorePageState extends State<ExplorePage> {
         ),
         // Map loading indicator
         _buildMapLoadingIndicator(data.isMapLoading),
-        // Selected restaurant preview card
-        if (data.selectedRestaurant != null)
-          _buildSelectedMarkerPreview(data, panelHeightClosed),
+        // Selected place preview card
+        if (data.selectedPlace != null)
+          _buildSelectedPlacePreview(data, panelHeightClosed),
       ],
     );
   }
 
   // ---------------------------------------------------------------------------
-  // Selected marker preview card (T-0008)
+  // Selected place preview card
   // ---------------------------------------------------------------------------
 
-  Widget _buildSelectedMarkerPreview(
+  Widget _buildSelectedPlacePreview(
     ExploreData data,
     double panelHeightClosed,
   ) {
-    final restaurant = data.selectedRestaurant!;
+    final place = data.selectedPlace!;
 
     return Positioned(
       left: 16,
       right: 16,
       bottom: panelHeightClosed + 72,
-      child: GestureDetector(
-        onTap: () => _openRestaurantDetail(restaurant.id),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Thumbnail
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                width: 56,
+                height: 56,
+                child: place.photoUrl != null
+                    ? Image.network(
+                        place.photoUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _previewPlaceholder(),
+                      )
+                    : _previewPlaceholder(),
               ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Thumbnail
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: restaurant.coverImageUrl != null
-                      ? Image.network(
-                          restaurant.coverImageUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              _previewPlaceholder(),
-                        )
-                      : _previewPlaceholder(),
-                ),
-              ),
-              const SizedBox(width: 12),
-              // Name + cuisine
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      restaurant.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: AppColors.textPrimary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(width: 12),
+            // Name + address
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    place.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: AppColors.textPrimary,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (place.address != null) ...[
                     const SizedBox(height: 2),
                     Text(
-                      restaurant.cuisineType.displayName,
+                      place.address!,
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    if (restaurant.rating != null) ...[
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.star_rounded,
-                            size: 14,
-                            color: Colors.amber,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            restaurant.rating!.toStringAsFixed(1),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                   ],
-                ),
-              ),
-              // Close + arrow
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: _deselectMarker,
-                    child: const Icon(
-                      Icons.close,
-                      size: 18,
-                      color: AppColors.textMuted,
+                  if (place.rating != null) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          size: 14,
+                          color: Colors.amber,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          place.rating!.toStringAsFixed(1),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: AppColors.primary,
-                  ),
+                  ],
                 ],
               ),
-            ],
-          ),
+            ),
+            // Close button
+            GestureDetector(
+              onTap: _deselectMarker,
+              child: const Icon(
+                Icons.close,
+                size: 18,
+                color: AppColors.textMuted,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -501,19 +460,61 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   // ---------------------------------------------------------------------------
-  // Restaurant list panel — uses the single ScrollController from state
+  // Place list panel
   // ---------------------------------------------------------------------------
 
-  Widget _buildRestaurantList(ExploreData data) {
+  Widget _buildPlaceList(ExploreData data) {
+    final hasMore = data.places.length >= 20;
+
     return Column(
       children: [
         const Gap(12),
         _buildPanelHandle(),
         const Gap(12),
-        _buildFilterChips(data.filters),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              const Text(
+                'Restaurace v okolí',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                hasMore ? '20+ nalezeno' : '${data.places.length} nalezeno',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (hasMore)
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
+            child: Row(
+              children: [
+                Icon(Icons.zoom_in, size: 14, color: AppColors.primary),
+                const SizedBox(width: 4),
+                Text(
+                  'Přibližte mapu pro zobrazení dalších',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
         const Gap(8),
         Expanded(
-          child: data.nearestRestaurants.isEmpty && !data.isPaginationLoading
+          child: data.places.isEmpty && !data.isMapLoading
               ? const Center(
                   child: Padding(
                     padding: EdgeInsets.all(32),
@@ -528,26 +529,32 @@ class _ExplorePageState extends State<ExplorePage> {
                 )
               : ListView.builder(
                   controller: _listScrollController,
-                  itemCount: data.nearestRestaurants.length +
-                      (data.isPaginationLoading ? 1 : 0),
+                  itemCount: data.places.length,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemBuilder: (context, index) {
-                    if (index < data.nearestRestaurants.length) {
-                      final restaurant = data.nearestRestaurants[index];
-                      return RestaurantCard(
-                        restaurant: restaurant,
-                        onTap: () => _openRestaurantDetail(restaurant.id),
-                      );
-                    }
-                    return const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Center(child: CircularProgressIndicator()),
+                    final place = data.places[index];
+                    return PlaceCard(
+                      place: place,
+                      onTap: () => _onPlaceCardTapped(place),
                     );
                   },
                 ),
         ),
       ],
     );
+  }
+
+  void _onPlaceCardTapped(GooglePlace place) {
+    // Animate map to the place
+    _googleMapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(place.latLng, 17),
+    );
+    // Select marker
+    context.read<ExploreBloc>().add(
+          ExploreEvent.markerSelected(placeId: place.id),
+        );
+    // Collapse panel
+    _panelController.close();
   }
 
   // ---------------------------------------------------------------------------
@@ -576,10 +583,10 @@ class _ExplorePageState extends State<ExplorePage> {
 
     if (mounted) {
       context.read<ExploreBloc>().add(
-        ExploreEvent.mapBoundsChanged(
-          params: MapParamsModel(bounds: bufferedBounds, zoom: zoom),
-        ),
-      );
+            ExploreEvent.mapBoundsChanged(
+              params: MapParamsModel(bounds: bufferedBounds, zoom: zoom),
+            ),
+          );
     }
   }
 
@@ -621,14 +628,14 @@ class _ExplorePageState extends State<ExplorePage> {
         onConfirm: () {
           Navigator.pop(context);
           context.read<ExploreBloc>().add(
-            const ExploreEvent.permissionResultReceived(granted: true),
-          );
+                const ExploreEvent.permissionResultReceived(granted: true),
+              );
         },
         onCancel: () {
           Navigator.pop(context);
           context.read<ExploreBloc>().add(
-            const ExploreEvent.permissionResultReceived(granted: false),
-          );
+                const ExploreEvent.permissionResultReceived(granted: false),
+              );
         },
       ),
     );
@@ -638,7 +645,7 @@ class _ExplorePageState extends State<ExplorePage> {
   // Search bar
   // ---------------------------------------------------------------------------
 
-  Widget _buildTopSearchBar(RestaurantFilters filters) {
+  Widget _buildTopSearchBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
@@ -663,13 +670,12 @@ class _ExplorePageState extends State<ExplorePage> {
                 hintText: S.of(context).searchRestaurants,
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
               ),
               onChanged: (value) {
                 context.read<ExploreBloc>().add(
-                  ExploreEvent.searchChanged(query: value),
-                );
+                      ExploreEvent.searchChanged(query: value),
+                    );
               },
             ),
           ),
@@ -678,8 +684,8 @@ class _ExplorePageState extends State<ExplorePage> {
               onTap: () {
                 _searchController.clear();
                 context.read<ExploreBloc>().add(
-                  const ExploreEvent.searchChanged(query: ''),
-                );
+                      const ExploreEvent.searchChanged(query: ''),
+                    );
               },
               child: const Icon(
                 Icons.close,
@@ -687,319 +693,8 @@ class _ExplorePageState extends State<ExplorePage> {
                 size: 20,
               ),
             ),
-          if (filters.hasActiveFilters)
-            Container(
-              margin: const EdgeInsets.only(left: 4),
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                '${filters.activeFilterCount}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
         ],
       ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Filter chips
-  // ---------------------------------------------------------------------------
-
-  Widget _buildFilterChips(RestaurantFilters filters) {
-    return SizedBox(
-      height: 36,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          _buildToggleChip(
-            label: S.of(context).favorites,
-            icon: Icons.favorite,
-            selected: filters.favouritesOnly,
-            onTap: () {
-              context.read<ExploreBloc>().add(
-                ExploreEvent.filtersChanged(
-                  filters: filters.copyWith(
-                    favouritesOnly: !filters.favouritesOnly,
-                  ),
-                ),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-          _buildToggleChip(
-            label: S.of(context).open,
-            icon: Icons.access_time,
-            selected: filters.openNow,
-            onTap: () {
-              context.read<ExploreBloc>().add(
-                ExploreEvent.filtersChanged(
-                  filters: filters.copyWith(openNow: !filters.openNow),
-                ),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-          _buildRatingChip(filters),
-          const SizedBox(width: 8),
-          _buildCuisineChip(filters),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildToggleChip({
-    required String label,
-    required IconData icon,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : AppColors.borderLight,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: selected ? AppColors.primary : AppColors.border,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: selected ? Colors.white : AppColors.textSecondary,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: selected ? Colors.white : AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRatingChip(RestaurantFilters filters) {
-    final hasRating = filters.minRating != null;
-    return GestureDetector(
-      onTap: () => _showRatingPicker(filters),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: hasRating ? AppColors.primary : AppColors.borderLight,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: hasRating ? AppColors.primary : AppColors.border,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.star,
-              size: 16,
-              color: hasRating ? Colors.white : AppColors.textSecondary,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              hasRating
-                  ? '${filters.minRating!.toStringAsFixed(0)}+'
-                  : 'Hodnocení',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: hasRating ? Colors.white : AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCuisineChip(RestaurantFilters filters) {
-    final hasCuisine = filters.cuisineTypes.isNotEmpty;
-    return GestureDetector(
-      onTap: () => _showCuisinePicker(filters),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: hasCuisine ? AppColors.primary : AppColors.borderLight,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: hasCuisine ? AppColors.primary : AppColors.border,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.restaurant_menu,
-              size: 16,
-              color: hasCuisine ? Colors.white : AppColors.textSecondary,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              hasCuisine
-                  ? '${filters.cuisineTypes.length} kuchyně'
-                  : 'Kuchyně',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: hasCuisine ? Colors.white : AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Pickers
-  // ---------------------------------------------------------------------------
-
-  void _showRatingPicker(RestaurantFilters filters) {
-    showModalBottomSheet(
-      context: context,
-      builder: (ctx) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  'Minimální hodnocení',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              for (final rating in [3.0, 3.5, 4.0, 4.5])
-                ListTile(
-                  leading: const Icon(Icons.star, color: Colors.amber),
-                  title: Text('${rating.toStringAsFixed(1)}+'),
-                  selected: filters.minRating == rating,
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    context.read<ExploreBloc>().add(
-                      ExploreEvent.filtersChanged(
-                        filters: filters.copyWith(minRating: rating),
-                      ),
-                    );
-                  },
-                ),
-              if (filters.minRating != null)
-                ListTile(
-                  leading: const Icon(Icons.clear),
-                  title: Text(S.of(context).clearFilter),
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    context.read<ExploreBloc>().add(
-                      ExploreEvent.filtersChanged(
-                        filters: filters.copyWith(minRating: null),
-                      ),
-                    );
-                  },
-                ),
-              const Gap(8),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showCuisinePicker(RestaurantFilters filters) {
-    final selected = Set<CuisineType>.from(filters.cuisineTypes);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setModalState) {
-            return SafeArea(
-              child: DraggableScrollableSheet(
-                initialChildSize: 0.6,
-                maxChildSize: 0.85,
-                minChildSize: 0.4,
-                expand: false,
-                builder: (_, scrollCtrl) {
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Typ kuchyně',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                context.read<ExploreBloc>().add(
-                                  ExploreEvent.filtersChanged(
-                                    filters: filters.copyWith(
-                                      cuisineTypes: selected.toList(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Text(S.of(context).confirm),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView(
-                          controller: scrollCtrl,
-                          children: CuisineType.values.map((type) {
-                            final isSel = selected.contains(type);
-                            return CheckboxListTile(
-                              title: Text(type.displayName),
-                              value: isSel,
-                              onChanged: (val) {
-                                setModalState(() {
-                                  if (val == true) {
-                                    selected.add(type);
-                                  } else {
-                                    selected.remove(type);
-                                  }
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            );
-          },
-        );
-      },
     );
   }
 
@@ -1033,8 +728,8 @@ class _ExplorePageState extends State<ExplorePage> {
           const Gap(16),
           ElevatedButton(
             onPressed: () => context.read<ExploreBloc>().add(
-              const ExploreEvent.initializeRequested(),
-            ),
+                  const ExploreEvent.initializeRequested(),
+                ),
             child: Text(S.of(context).retry),
           ),
         ],

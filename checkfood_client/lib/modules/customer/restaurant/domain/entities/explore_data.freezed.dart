@@ -17,35 +17,26 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ExploreData {
+  /// Google Places z API
+  List<GooglePlace> get places => throw _privateConstructorUsedError;
+
   /// Markery pro mapu (shluky nebo restaurace)
   List<RestaurantMarker> get markers => throw _privateConstructorUsedError;
 
-  /// Seznam nejbližších restaurací (pod mapou)
-  List<Restaurant> get nearestRestaurants => throw _privateConstructorUsedError;
-
-  /// Aktuální poloha uživatele
+  /// Aktualni poloha uzivatele
   Position get userPosition => throw _privateConstructorUsedError;
 
-  /// Aktuální stránka pro pagination
-  int get currentPage => throw _privateConstructorUsedError;
-
-  /// Zda je k dispozici další stránka
-  bool get hasMore => throw _privateConstructorUsedError;
-
-  /// Zda se načítá další stránka (aby se nevolalo 2x)
-  bool get isPaginationLoading => throw _privateConstructorUsedError;
-
-  /// Zda probíhá aktualizace markerů na mapě (pro plynulé UI)
+  /// Zda probiha aktualizace markeru na mape
   bool get isMapLoading => throw _privateConstructorUsedError;
 
-  /// Aktivní filtry
-  RestaurantFilters get filters => throw _privateConstructorUsedError;
+  /// ID vybraneho mista (null = zadny vyber)
+  String? get selectedPlaceId => throw _privateConstructorUsedError;
 
-  /// ID vybraného markeru (null = žádný výběr)
-  String? get selectedMarkerId => throw _privateConstructorUsedError;
+  /// Vybrane misto pro preview card
+  GooglePlace? get selectedPlace => throw _privateConstructorUsedError;
 
-  /// Vybraná restaurace pro preview card (null = žádná)
-  Restaurant? get selectedRestaurant => throw _privateConstructorUsedError;
+  /// Aktivni search query
+  String? get searchQuery => throw _privateConstructorUsedError;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.
@@ -62,20 +53,14 @@ abstract class $ExploreDataCopyWith<$Res> {
   ) = _$ExploreDataCopyWithImpl<$Res, ExploreData>;
   @useResult
   $Res call({
+    List<GooglePlace> places,
     List<RestaurantMarker> markers,
-    List<Restaurant> nearestRestaurants,
     Position userPosition,
-    int currentPage,
-    bool hasMore,
-    bool isPaginationLoading,
     bool isMapLoading,
-    RestaurantFilters filters,
-    String? selectedMarkerId,
-    Restaurant? selectedRestaurant,
+    String? selectedPlaceId,
+    GooglePlace? selectedPlace,
+    String? searchQuery,
   });
-
-  $RestaurantFiltersCopyWith<$Res> get filters;
-  $RestaurantCopyWith<$Res>? get selectedRestaurant;
 }
 
 /// @nodoc
@@ -93,96 +78,54 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? places = null,
     Object? markers = null,
-    Object? nearestRestaurants = null,
     Object? userPosition = null,
-    Object? currentPage = null,
-    Object? hasMore = null,
-    Object? isPaginationLoading = null,
     Object? isMapLoading = null,
-    Object? filters = null,
-    Object? selectedMarkerId = freezed,
-    Object? selectedRestaurant = freezed,
+    Object? selectedPlaceId = freezed,
+    Object? selectedPlace = freezed,
+    Object? searchQuery = freezed,
   }) {
     return _then(
       _value.copyWith(
+            places:
+                null == places
+                    ? _value.places
+                    : places // ignore: cast_nullable_to_non_nullable
+                        as List<GooglePlace>,
             markers:
                 null == markers
                     ? _value.markers
                     : markers // ignore: cast_nullable_to_non_nullable
                         as List<RestaurantMarker>,
-            nearestRestaurants:
-                null == nearestRestaurants
-                    ? _value.nearestRestaurants
-                    : nearestRestaurants // ignore: cast_nullable_to_non_nullable
-                        as List<Restaurant>,
             userPosition:
                 null == userPosition
                     ? _value.userPosition
                     : userPosition // ignore: cast_nullable_to_non_nullable
                         as Position,
-            currentPage:
-                null == currentPage
-                    ? _value.currentPage
-                    : currentPage // ignore: cast_nullable_to_non_nullable
-                        as int,
-            hasMore:
-                null == hasMore
-                    ? _value.hasMore
-                    : hasMore // ignore: cast_nullable_to_non_nullable
-                        as bool,
-            isPaginationLoading:
-                null == isPaginationLoading
-                    ? _value.isPaginationLoading
-                    : isPaginationLoading // ignore: cast_nullable_to_non_nullable
-                        as bool,
             isMapLoading:
                 null == isMapLoading
                     ? _value.isMapLoading
                     : isMapLoading // ignore: cast_nullable_to_non_nullable
                         as bool,
-            filters:
-                null == filters
-                    ? _value.filters
-                    : filters // ignore: cast_nullable_to_non_nullable
-                        as RestaurantFilters,
-            selectedMarkerId:
-                freezed == selectedMarkerId
-                    ? _value.selectedMarkerId
-                    : selectedMarkerId // ignore: cast_nullable_to_non_nullable
+            selectedPlaceId:
+                freezed == selectedPlaceId
+                    ? _value.selectedPlaceId
+                    : selectedPlaceId // ignore: cast_nullable_to_non_nullable
                         as String?,
-            selectedRestaurant:
-                freezed == selectedRestaurant
-                    ? _value.selectedRestaurant
-                    : selectedRestaurant // ignore: cast_nullable_to_non_nullable
-                        as Restaurant?,
+            selectedPlace:
+                freezed == selectedPlace
+                    ? _value.selectedPlace
+                    : selectedPlace // ignore: cast_nullable_to_non_nullable
+                        as GooglePlace?,
+            searchQuery:
+                freezed == searchQuery
+                    ? _value.searchQuery
+                    : searchQuery // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
-  }
-
-  /// Create a copy of ExploreData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RestaurantFiltersCopyWith<$Res> get filters {
-    return $RestaurantFiltersCopyWith<$Res>(_value.filters, (value) {
-      return _then(_value.copyWith(filters: value) as $Val);
-    });
-  }
-
-  /// Create a copy of ExploreData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RestaurantCopyWith<$Res>? get selectedRestaurant {
-    if (_value.selectedRestaurant == null) {
-      return null;
-    }
-
-    return $RestaurantCopyWith<$Res>(_value.selectedRestaurant!, (value) {
-      return _then(_value.copyWith(selectedRestaurant: value) as $Val);
-    });
   }
 }
 
@@ -196,22 +139,14 @@ abstract class _$$ExploreDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
+    List<GooglePlace> places,
     List<RestaurantMarker> markers,
-    List<Restaurant> nearestRestaurants,
     Position userPosition,
-    int currentPage,
-    bool hasMore,
-    bool isPaginationLoading,
     bool isMapLoading,
-    RestaurantFilters filters,
-    String? selectedMarkerId,
-    Restaurant? selectedRestaurant,
+    String? selectedPlaceId,
+    GooglePlace? selectedPlace,
+    String? searchQuery,
   });
-
-  @override
-  $RestaurantFiltersCopyWith<$Res> get filters;
-  @override
-  $RestaurantCopyWith<$Res>? get selectedRestaurant;
 }
 
 /// @nodoc
@@ -228,69 +163,51 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? places = null,
     Object? markers = null,
-    Object? nearestRestaurants = null,
     Object? userPosition = null,
-    Object? currentPage = null,
-    Object? hasMore = null,
-    Object? isPaginationLoading = null,
     Object? isMapLoading = null,
-    Object? filters = null,
-    Object? selectedMarkerId = freezed,
-    Object? selectedRestaurant = freezed,
+    Object? selectedPlaceId = freezed,
+    Object? selectedPlace = freezed,
+    Object? searchQuery = freezed,
   }) {
     return _then(
       _$ExploreDataImpl(
+        places:
+            null == places
+                ? _value._places
+                : places // ignore: cast_nullable_to_non_nullable
+                    as List<GooglePlace>,
         markers:
             null == markers
                 ? _value._markers
                 : markers // ignore: cast_nullable_to_non_nullable
                     as List<RestaurantMarker>,
-        nearestRestaurants:
-            null == nearestRestaurants
-                ? _value._nearestRestaurants
-                : nearestRestaurants // ignore: cast_nullable_to_non_nullable
-                    as List<Restaurant>,
         userPosition:
             null == userPosition
                 ? _value.userPosition
                 : userPosition // ignore: cast_nullable_to_non_nullable
                     as Position,
-        currentPage:
-            null == currentPage
-                ? _value.currentPage
-                : currentPage // ignore: cast_nullable_to_non_nullable
-                    as int,
-        hasMore:
-            null == hasMore
-                ? _value.hasMore
-                : hasMore // ignore: cast_nullable_to_non_nullable
-                    as bool,
-        isPaginationLoading:
-            null == isPaginationLoading
-                ? _value.isPaginationLoading
-                : isPaginationLoading // ignore: cast_nullable_to_non_nullable
-                    as bool,
         isMapLoading:
             null == isMapLoading
                 ? _value.isMapLoading
                 : isMapLoading // ignore: cast_nullable_to_non_nullable
                     as bool,
-        filters:
-            null == filters
-                ? _value.filters
-                : filters // ignore: cast_nullable_to_non_nullable
-                    as RestaurantFilters,
-        selectedMarkerId:
-            freezed == selectedMarkerId
-                ? _value.selectedMarkerId
-                : selectedMarkerId // ignore: cast_nullable_to_non_nullable
+        selectedPlaceId:
+            freezed == selectedPlaceId
+                ? _value.selectedPlaceId
+                : selectedPlaceId // ignore: cast_nullable_to_non_nullable
                     as String?,
-        selectedRestaurant:
-            freezed == selectedRestaurant
-                ? _value.selectedRestaurant
-                : selectedRestaurant // ignore: cast_nullable_to_non_nullable
-                    as Restaurant?,
+        selectedPlace:
+            freezed == selectedPlace
+                ? _value.selectedPlace
+                : selectedPlace // ignore: cast_nullable_to_non_nullable
+                    as GooglePlace?,
+        searchQuery:
+            freezed == searchQuery
+                ? _value.searchQuery
+                : searchQuery // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -300,18 +217,26 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
 
 class _$ExploreDataImpl implements _ExploreData {
   const _$ExploreDataImpl({
+    required final List<GooglePlace> places,
     required final List<RestaurantMarker> markers,
-    required final List<Restaurant> nearestRestaurants,
     required this.userPosition,
-    required this.currentPage,
-    required this.hasMore,
-    required this.isPaginationLoading,
     this.isMapLoading = false,
-    this.filters = const RestaurantFilters(),
-    this.selectedMarkerId = null,
-    this.selectedRestaurant = null,
-  }) : _markers = markers,
-       _nearestRestaurants = nearestRestaurants;
+    this.selectedPlaceId = null,
+    this.selectedPlace = null,
+    this.searchQuery = null,
+  }) : _places = places,
+       _markers = markers;
+
+  /// Google Places z API
+  final List<GooglePlace> _places;
+
+  /// Google Places z API
+  @override
+  List<GooglePlace> get places {
+    if (_places is EqualUnmodifiableListView) return _places;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_places);
+  }
 
   /// Markery pro mapu (shluky nebo restaurace)
   final List<RestaurantMarker> _markers;
@@ -324,57 +249,33 @@ class _$ExploreDataImpl implements _ExploreData {
     return EqualUnmodifiableListView(_markers);
   }
 
-  /// Seznam nejbližších restaurací (pod mapou)
-  final List<Restaurant> _nearestRestaurants;
-
-  /// Seznam nejbližších restaurací (pod mapou)
-  @override
-  List<Restaurant> get nearestRestaurants {
-    if (_nearestRestaurants is EqualUnmodifiableListView)
-      return _nearestRestaurants;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_nearestRestaurants);
-  }
-
-  /// Aktuální poloha uživatele
+  /// Aktualni poloha uzivatele
   @override
   final Position userPosition;
 
-  /// Aktuální stránka pro pagination
-  @override
-  final int currentPage;
-
-  /// Zda je k dispozici další stránka
-  @override
-  final bool hasMore;
-
-  /// Zda se načítá další stránka (aby se nevolalo 2x)
-  @override
-  final bool isPaginationLoading;
-
-  /// Zda probíhá aktualizace markerů na mapě (pro plynulé UI)
+  /// Zda probiha aktualizace markeru na mape
   @override
   @JsonKey()
   final bool isMapLoading;
 
-  /// Aktivní filtry
+  /// ID vybraneho mista (null = zadny vyber)
   @override
   @JsonKey()
-  final RestaurantFilters filters;
+  final String? selectedPlaceId;
 
-  /// ID vybraného markeru (null = žádný výběr)
+  /// Vybrane misto pro preview card
   @override
   @JsonKey()
-  final String? selectedMarkerId;
+  final GooglePlace? selectedPlace;
 
-  /// Vybraná restaurace pro preview card (null = žádná)
+  /// Aktivni search query
   @override
   @JsonKey()
-  final Restaurant? selectedRestaurant;
+  final String? searchQuery;
 
   @override
   String toString() {
-    return 'ExploreData(markers: $markers, nearestRestaurants: $nearestRestaurants, userPosition: $userPosition, currentPage: $currentPage, hasMore: $hasMore, isPaginationLoading: $isPaginationLoading, isMapLoading: $isMapLoading, filters: $filters, selectedMarkerId: $selectedMarkerId, selectedRestaurant: $selectedRestaurant)';
+    return 'ExploreData(places: $places, markers: $markers, userPosition: $userPosition, isMapLoading: $isMapLoading, selectedPlaceId: $selectedPlaceId, selectedPlace: $selectedPlace, searchQuery: $searchQuery)';
   }
 
   @override
@@ -382,40 +283,30 @@ class _$ExploreDataImpl implements _ExploreData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ExploreDataImpl &&
+            const DeepCollectionEquality().equals(other._places, _places) &&
             const DeepCollectionEquality().equals(other._markers, _markers) &&
-            const DeepCollectionEquality().equals(
-              other._nearestRestaurants,
-              _nearestRestaurants,
-            ) &&
             (identical(other.userPosition, userPosition) ||
                 other.userPosition == userPosition) &&
-            (identical(other.currentPage, currentPage) ||
-                other.currentPage == currentPage) &&
-            (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
-            (identical(other.isPaginationLoading, isPaginationLoading) ||
-                other.isPaginationLoading == isPaginationLoading) &&
             (identical(other.isMapLoading, isMapLoading) ||
                 other.isMapLoading == isMapLoading) &&
-            (identical(other.filters, filters) || other.filters == filters) &&
-            (identical(other.selectedMarkerId, selectedMarkerId) ||
-                other.selectedMarkerId == selectedMarkerId) &&
-            (identical(other.selectedRestaurant, selectedRestaurant) ||
-                other.selectedRestaurant == selectedRestaurant));
+            (identical(other.selectedPlaceId, selectedPlaceId) ||
+                other.selectedPlaceId == selectedPlaceId) &&
+            (identical(other.selectedPlace, selectedPlace) ||
+                other.selectedPlace == selectedPlace) &&
+            (identical(other.searchQuery, searchQuery) ||
+                other.searchQuery == searchQuery));
   }
 
   @override
   int get hashCode => Object.hash(
     runtimeType,
+    const DeepCollectionEquality().hash(_places),
     const DeepCollectionEquality().hash(_markers),
-    const DeepCollectionEquality().hash(_nearestRestaurants),
     userPosition,
-    currentPage,
-    hasMore,
-    isPaginationLoading,
     isMapLoading,
-    filters,
-    selectedMarkerId,
-    selectedRestaurant,
+    selectedPlaceId,
+    selectedPlace,
+    searchQuery,
   );
 
   /// Create a copy of ExploreData
@@ -429,57 +320,42 @@ class _$ExploreDataImpl implements _ExploreData {
 
 abstract class _ExploreData implements ExploreData {
   const factory _ExploreData({
+    required final List<GooglePlace> places,
     required final List<RestaurantMarker> markers,
-    required final List<Restaurant> nearestRestaurants,
     required final Position userPosition,
-    required final int currentPage,
-    required final bool hasMore,
-    required final bool isPaginationLoading,
     final bool isMapLoading,
-    final RestaurantFilters filters,
-    final String? selectedMarkerId,
-    final Restaurant? selectedRestaurant,
+    final String? selectedPlaceId,
+    final GooglePlace? selectedPlace,
+    final String? searchQuery,
   }) = _$ExploreDataImpl;
+
+  /// Google Places z API
+  @override
+  List<GooglePlace> get places;
 
   /// Markery pro mapu (shluky nebo restaurace)
   @override
   List<RestaurantMarker> get markers;
 
-  /// Seznam nejbližších restaurací (pod mapou)
-  @override
-  List<Restaurant> get nearestRestaurants;
-
-  /// Aktuální poloha uživatele
+  /// Aktualni poloha uzivatele
   @override
   Position get userPosition;
 
-  /// Aktuální stránka pro pagination
-  @override
-  int get currentPage;
-
-  /// Zda je k dispozici další stránka
-  @override
-  bool get hasMore;
-
-  /// Zda se načítá další stránka (aby se nevolalo 2x)
-  @override
-  bool get isPaginationLoading;
-
-  /// Zda probíhá aktualizace markerů na mapě (pro plynulé UI)
+  /// Zda probiha aktualizace markeru na mape
   @override
   bool get isMapLoading;
 
-  /// Aktivní filtry
+  /// ID vybraneho mista (null = zadny vyber)
   @override
-  RestaurantFilters get filters;
+  String? get selectedPlaceId;
 
-  /// ID vybraného markeru (null = žádný výběr)
+  /// Vybrane misto pro preview card
   @override
-  String? get selectedMarkerId;
+  GooglePlace? get selectedPlace;
 
-  /// Vybraná restaurace pro preview card (null = žádná)
+  /// Aktivni search query
   @override
-  Restaurant? get selectedRestaurant;
+  String? get searchQuery;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.
