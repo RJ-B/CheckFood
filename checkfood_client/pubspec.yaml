@@ -18,52 +18,52 @@ dependencies:
   # --- Základní UI a Ikony ---
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10
-  google_fonts: ^6.2.1
+  google_fonts: ^8.0.2
   gap: ^3.0.1
 
   # --- Architektura a State Management ---
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.1.1
   equatable: ^2.0.7
-  get_it: ^7.7.0
+  get_it: ^9.2.1
 
   # --- Navigace a Deep Linking ---
-  go_router: ^14.0.0
-  app_links: ^6.3.2
+  go_router: ^17.1.0
+  app_links: ^7.0.0
 
   # --- Konfigurace prostředí ---
-  flutter_dotenv: ^5.2.1
+  flutter_dotenv: ^6.0.0
 
   # --- Síťová komunikace ---
   dio: ^5.4.3
-  internet_connection_checker: ^1.0.0+1
+  internet_connection_checker: ^3.0.1
 
   # --- Autentizace a OAuth ---
-  google_sign_in: ^6.2.1
-  sign_in_with_apple: ^6.1.1
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
   jwt_decoder: ^2.0.1
 
   # --- Serializace a Imutabilita ---
-  freezed_annotation: ^2.4.1
+  freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
 
   # --- Lokální úložiště a Bezpečnost ---
-  flutter_secure_storage: ^9.2.2
+  flutter_secure_storage: ^10.0.0
   shared_preferences: ^2.2.3
 
   # --- Práce se zařízením a Soubory ---
-  device_info_plus: ^10.1.2
-  package_info_plus: ^8.0.0
+  device_info_plus: ^12.3.0
+  package_info_plus: ^9.0.0
   path_provider: ^2.1.3
   url_launcher: ^6.3.0
   io: ^1.0.4
 
   # --- Push Notifikace (Firebase) ---
-  firebase_core: ^3.8.1
-  firebase_messaging: ^15.2.1
+  firebase_core: ^4.6.0
+  firebase_messaging: ^16.1.3
 
   # --- Kamera a Senzory ---
-  camera: ^0.11.0+2
-  sensors_plus: ^6.1.1
+  camera: ^0.12.0+1
+  sensors_plus: ^7.0.0
 
   # --- Vyber fotek ---
   image_picker: ^1.1.2
@@ -72,7 +72,7 @@ dependencies:
   cached_network_image: ^3.3.1
   qr_flutter: ^4.1.0
   webview_flutter: ^4.8.0
-  webview_flutter_android: ^3.16.0
+  webview_flutter_android: ^4.10.13
 
   # --- Mapy a Interaktivní UI ---
   # Používáme nejnovější verzi Google Maps
@@ -81,7 +81,7 @@ dependencies:
   # (Fluster byl odstraněn - clustering nyní řeší backend PostGIS)
 
   sliding_up_panel: ^2.0.0+1
-  geolocator: ^13.0.0
+  geolocator: ^14.0.2
 
   # --- Utility a Formátování ---
   stream_transform: ^2.1.0
@@ -93,19 +93,19 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
   # --- Testování ---
-  bloc_test: ^9.1.7
+  bloc_test: ^10.0.0
   mocktail: ^1.0.4
 
   # --- Generování kódu ---
   build_runner: ^2.4.9
-  freezed: ^2.5.2
+  freezed: ^3.2.5
   json_serializable: ^6.8.0
 
   # --- Nástroje ---
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.0
 
 # --------------------------------------------------
@@ -131,6 +131,7 @@ flutter_native_splash:
 # Nastavení Assets a Fontů
 # --------------------------------------------------
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:

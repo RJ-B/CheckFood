@@ -26,18 +26,19 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'
+          flutter-version: '3.41.5'
           channel: stable
 
       - name: Create .env files for build
         working-directory: checkfood_client
         run: |
-          cat <<'ENVEOF' > .env
+          cat > .env << 'EOF'
           API_BASE_URL=https://checkfood-api.onrender.com/api
-          GOOGLE_WEB_CLIENT_ID=placeholder
+          GOOGLE_WEB_CLIENT_ID=809801655996-hiubgqhjj2ae8cn9872pc693evonrfvp.apps.googleusercontent.com
           APPLE_CLIENT_ID=com.checkfood.checkfood_client
           APPLE_REDIRECT_URL=https://checkfood-api.onrender.com/api/oauth/apple/callback
-          ENVEOF
+          GOOGLE_MAPS_API_KEY=AIzaSyB2ro-yzrhNW6SdgwLRUtm5RZeq-jMh1jk
+          EOF
           sed -i 's/^ *//' .env
           cp .env .env.prod
           cp .env .env.local

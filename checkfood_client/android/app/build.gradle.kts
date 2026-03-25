@@ -27,10 +27,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     defaultConfig {
         applicationId = "com.checkfood.checkfood_client"
         minSdk = 24
@@ -39,7 +35,6 @@ android {
         versionName = flutter.versionName
 
         // --- 2. ČÁST: Předání klíče do Manifestu ---
-        // Tímto se hodnota ${mapsApiKey} v AndroidManifest.xml nahradí skutečným klíčem
         manifestPlaceholders["mapsApiKey"] = localProperties.getProperty("MAPS_API_KEY") ?: ""
     }
 
@@ -47,6 +42,12 @@ android {
         release {
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 

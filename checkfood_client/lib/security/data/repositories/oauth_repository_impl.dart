@@ -22,9 +22,9 @@ class OAuthRepositoryImpl implements OAuthRepository {
   final OAuthRemoteDataSource _remoteDataSource;
   final TokenStorage _tokenStorage;
   final DeviceInfoService _deviceInfoService;
-  final GoogleSignIn _googleSignIn;
 
   User? _currentUser;
+  bool _googleInitialized = false;
 
   OAuthRepositoryImpl({
     required OAuthRemoteDataSource remoteDataSource,
@@ -32,24 +32,44 @@ class OAuthRepositoryImpl implements OAuthRepository {
     required DeviceInfoService deviceInfoService,
   }) : _remoteDataSource = remoteDataSource,
        _tokenStorage = tokenStorage,
-       _deviceInfoService = deviceInfoService,
-       _googleSignIn = GoogleSignIn(
-         serverClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'],
-         scopes: ['email', 'profile'],
-       );
+       _deviceInfoService = deviceInfoService;
+
+  /// Inicializace GoogleSignIn singletonu (volá se max jednou).
+  Future<void> _ensureGoogleInitialized() async {
+    if (_googleInitialized) return;
+    await GoogleSignIn.instance.initialize(
+      serverClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'],
+    );
+    _googleInitialized = true;
+  }
 
   @override
   Future<User> loginWithGoogle() async {
     try {
+      await _ensureGoogleInitialized();
+
+      // Odhlásíme předchozí session
       try {
-        await _googleSignIn.signOut();
+        await GoogleSignIn.instance.signOut();
       } catch (_) {}
 
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) throw const OAuthCanceledException();
+      // google_sign_in 7.x: authenticate() místo signIn(),
+      // při zrušení hází GoogleSignInException s kódem canceled
+      final GoogleSignInAccount googleUser;
+      try {
+        googleUser = await GoogleSignIn.instance.authenticate(
+          scopeHint: ['email', 'profile'],
+        );
+      } on GoogleSignInException catch (e) {
+        if (e.code == GoogleSignInExceptionCode.canceled) {
+          throw const OAuthCanceledException();
+        }
+        rethrow;
+      }
 
+      // google_sign_in 7.x: authentication je synchronní property (ne Future)
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+          googleUser.authentication;
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {
@@ -75,6 +95,8 @@ class OAuthRepositoryImpl implements OAuthRepository {
       );
 
       return await _processOAuthResponse(requestModel);
+    } on OAuthCanceledException {
+      rethrow;
     } on DioException catch (e) {
       throw _mapOAuthDioException(e);
     }

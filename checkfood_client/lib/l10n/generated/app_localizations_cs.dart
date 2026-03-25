@@ -174,7 +174,8 @@ class SCs extends S {
   String get logoutOthers => 'Odhlásit ostatní';
 
   @override
-  String get loggedOutFromDevices => 'Byl jste odhlášen ze všech ostatních zařízení.';
+  String get loggedOutFromDevices =>
+      'Byl jste odhlášen ze všech ostatních zařízení.';
 
   @override
   String get pushNotifications => 'Push notifikace';
@@ -237,7 +238,8 @@ class SCs extends S {
   String get allowInSystem => 'Povolit v systému';
 
   @override
-  String get cannotGetLocation => 'Nelze zjistit polohu. Zkontrolujte oprávnění.';
+  String get cannotGetLocation =>
+      'Nelze zjistit polohu. Zkontrolujte oprávnění.';
 
   @override
   String get reserveTable => 'Rezervovat stůl';
@@ -270,7 +272,8 @@ class SCs extends S {
   String get cancelReservation => 'Zrušit rezervaci';
 
   @override
-  String get cancelReservationConfirm => 'Opravdu chcete zrušit tuto rezervaci?';
+  String get cancelReservationConfirm =>
+      'Opravdu chcete zrušit tuto rezervaci?';
 
   @override
   String get slotUnavailable => 'Termín už není volný. Vyberte jiný čas.';
@@ -465,7 +468,8 @@ class SCs extends S {
   }
 
   @override
-  String get noCategoriesYet => 'Zatím žádné kategorie. Přidejte alespoň jednu.';
+  String get noCategoriesYet =>
+      'Zatím žádné kategorie. Přidejte alespoň jednu.';
 
   @override
   String get priceLabel => 'Cena (Kč)';
@@ -489,13 +493,16 @@ class SCs extends S {
   String get panoramaActive => 'Panorama je aktivní';
 
   @override
-  String get panoramaActiveDesc => 'Panorama je nastaveno a zobrazuje se zákazníkům.';
+  String get panoramaActiveDesc =>
+      'Panorama je nastaveno a zobrazuje se zákazníkům.';
 
   @override
-  String get panoramaHelp => 'Panoramatický snímek restaurace pomůže zákazníkům si místo prohlédnout.';
+  String get panoramaHelp =>
+      'Panoramatický snímek restaurace pomůže zákazníkům si místo prohlédnout.';
 
   @override
-  String get noPanoramaYet => 'Zatím žádné panorama. Klikněte na tlačítko výše.';
+  String get noPanoramaYet =>
+      'Zatím žádné panorama. Klikněte na tlačítko výše.';
 
   @override
   String get stitchingFailed => 'Stitching selhal. Zkuste to znovu.';
@@ -570,7 +577,8 @@ class SCs extends S {
   }
 
   @override
-  String get accountActivated => 'Váš účet byl úspěšně aktivován! Nyní se můžete přihlásit.';
+  String get accountActivated =>
+      'Váš účet byl úspěšně aktivován! Nyní se můžete přihlásit.';
 
   @override
   String get activationError => 'Chyba při aktivaci účtu.';
@@ -609,10 +617,12 @@ class SCs extends S {
   String get createAccount => 'Vytvořte si účet';
 
   @override
-  String get registerSubtitle => 'Zadejte své údaje pro zahájení cesty s CheckFood';
+  String get registerSubtitle =>
+      'Zadejte své údaje pro zahájení cesty s CheckFood';
 
   @override
-  String get registerSuccess => 'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail.';
+  String get registerSuccess =>
+      'Registrace proběhla úspěšně. Zkontrolujte svůj e-mail.';
 
   @override
   String get alreadyHaveAccount => 'Již máte účet?';
@@ -689,7 +699,8 @@ class SCs extends S {
   String get ownerRegisterHeading => 'Registrace majitele restaurace';
 
   @override
-  String get ownerRegisterSubtitle => 'Vytvořte si účet pro správu vaší restaurace';
+  String get ownerRegisterSubtitle =>
+      'Vytvořte si účet pro správu vaší restaurace';
 
   @override
   String get emailRequired => 'E-mail je povinný';
@@ -701,7 +712,8 @@ class SCs extends S {
   String get role => 'Role';
 
   @override
-  String get locationPermissionDesc => 'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.';
+  String get locationPermissionDesc =>
+      'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.';
 
   @override
   String get errorProfileLoad => 'Chyba při načítání uživatelského profilu.';
@@ -919,7 +931,8 @@ class SCs extends S {
   String get activePanoramaTitle => 'Aktivní panorama';
 
   @override
-  String get activePanoramaDesc => 'Panorama je nastaveno a zobrazuje se zákazníkům.';
+  String get activePanoramaDesc =>
+      'Panorama je nastaveno a zobrazuje se zákazníkům.';
 
   @override
   String get creatingPanorama => 'Vytvářím...';
@@ -928,7 +941,8 @@ class SCs extends S {
   String get newPanoramaButton => 'Nové panorama';
 
   @override
-  String get noPanoramaYetLong => 'Zatím žádné panorama. Klikněte na tlačítko výše.';
+  String get noPanoramaYetLong =>
+      'Zatím žádné panorama. Klikněte na tlačítko výše.';
 
   @override
   String sessionLabel(String id) {
@@ -971,7 +985,8 @@ class SCs extends S {
   String get searchRestaurantTitle => 'Vyhledejte svou restauraci';
 
   @override
-  String get searchRestaurantSubtitle => 'Zadejte IČO vaší firmy pro vyhledání v ARES';
+  String get searchRestaurantSubtitle =>
+      'Zadejte IČO vaší firmy pro vyhledání v ARES';
 
   @override
   String get icoHint => 'např. 12345678';
@@ -992,7 +1007,8 @@ class SCs extends S {
   String get emailVerificationFallback => 'Ověření e-mailem';
 
   @override
-  String get emailVerificationFallbackDesc => 'Identita nebyla potvrzena přes BankID. Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.';
+  String get emailVerificationFallbackDesc =>
+      'Identita nebyla potvrzena přes BankID. Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.';
 
   @override
   String emailLabel(String email) {
@@ -1067,7 +1083,8 @@ class SCs extends S {
   String get panoramaOptionalTitle => 'Panorama (volitelné)';
 
   @override
-  String get panoramaHelpText => 'Panoramatický snímek restaurace pomůže zákazníkům si místo prohlédnout.';
+  String get panoramaHelpText =>
+      'Panoramatický snímek restaurace pomůže zákazníkům si místo prohlédnout.';
 
   @override
   String get existingSessions => 'Existující sezení:';
@@ -1099,7 +1116,8 @@ class SCs extends S {
   String get publishedSuccess => 'Restaurace byla úspěšně publikována!';
 
   @override
-  String get fillRequiredSteps => 'Vyplňte všechny povinné kroky před publikací.';
+  String get fillRequiredSteps =>
+      'Vyplňte všechny povinné kroky před publikací.';
 
   @override
   String capturedPhotos(int count, int total) {
@@ -1130,7 +1148,8 @@ class SCs extends S {
   String get onboardingTitle4 => 'Sledujte vše';
 
   @override
-  String get onboardingDesc4 => 'Aktualizace objednávek a rezervací v reálném čase';
+  String get onboardingDesc4 =>
+      'Aktualizace objednávek a rezervací v reálném čase';
 
   @override
   String get skip => 'Přeskočit';
@@ -1145,7 +1164,8 @@ class SCs extends S {
   String get searchHint => 'Hledat restaurace, kuchyně...';
 
   @override
-  String get restaurantDescription => 'Tato restaurace nabízí pečlivě sestavené menu z čerstvých surovin, přívětivou atmosféru a vynikající servis.';
+  String get restaurantDescription =>
+      'Tato restaurace nabízí pečlivě sestavené menu z čerstvých surovin, přívětivou atmosféru a vynikající servis.';
 
   @override
   String get openingHoursInfo => 'Otevírací doba';
