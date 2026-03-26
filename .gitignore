@@ -27,10 +27,9 @@ Desktop.ini
 .env.test
 !.env.example
 
-# --- AI Agent Workflow (internal) ---
+# --- AI / Claude (interní, nesmí na GitHub) ---
 ai/
-
-# --- Claude Code ---
+CLAUDE.md
 .claude/
 
 # ==========================================
