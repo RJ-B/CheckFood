@@ -10,6 +10,10 @@ class SecurityEndpoints {
   static const String verifyEmail = '/auth/verify';
   static const String resendVerification = '/auth/resend-code';
 
+  // --- PASSWORD RESET ---
+  static const String forgotPassword = '/auth/forgot-password';
+  static const String resetPassword = '/auth/reset-password';
+
   // --- OAUTH ---
   static const String oauthLogin = '/oauth/login';
 
@@ -21,7 +25,9 @@ class SecurityEndpoints {
   // --- DEVICES ---
   static const String devices = '/user/devices';
   static const String logoutAllDevices = '/user/logout-all';
-  static String logoutDevice(int deviceId) => '/user/devices/$deviceId';
+  static const String deleteAllDevices = '/user/devices/all';
+  static String logoutDevice(int deviceId) => '/user/devices/$deviceId/logout';
+  static String deleteDevice(int deviceId) => '/user/devices/$deviceId';
 
   // --- OWNER CLAIM ---
   // Note: Dio baseUrl already includes /api, so paths start from /v1/...

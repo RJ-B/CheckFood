@@ -66,6 +66,53 @@ class SCs extends S {
   String get forgotPassword => 'Zapomněli jste heslo?';
 
   @override
+  String get forgotPasswordTitle => 'Obnova hesla';
+
+  @override
+  String get forgotPasswordSubtitle => 'Zadejte svůj e-mail a my vám pošleme odkaz pro obnovu hesla.';
+
+  @override
+  String get forgotPasswordSend => 'Odeslat odkaz';
+
+  @override
+  String forgotPasswordSent(String email) {
+    return 'Odkaz pro obnovu hesla byl odeslán na $email. Zkontrolujte svou e-mailovou schránku.';
+  }
+
+  @override
+  String get forgotPasswordCheckSpam => 'Nenašel/la jste e-mail? Zkontrolujte složku spam.';
+
+  @override
+  String get resetPasswordTitle => 'Nové heslo';
+
+  @override
+  String get resetPasswordSubtitle => 'Zadejte své nové heslo.';
+
+  @override
+  String get newPasswordLabel => 'Nové heslo';
+
+  @override
+  String get confirmNewPasswordLabel => 'Potvrzení hesla';
+
+  @override
+  String get resetPasswordButton => 'Nastavit nové heslo';
+
+  @override
+  String get resetPasswordSuccess => 'Heslo bylo úspěšně změněno! Nyní se můžete přihlásit.';
+
+  @override
+  String get passwordsDoNotMatch => 'Hesla se neshodují.';
+
+  @override
+  String get passwordTooShort => 'Heslo musí mít alespoň 8 znaků.';
+
+  @override
+  String get errorForgotPassword => 'Nepodařilo se odeslat odkaz. Zkuste to později.';
+
+  @override
+  String get errorResetPassword => 'Nepodařilo se nastavit nové heslo.';
+
+  @override
   String continueWith(String label) {
     return 'Pokračovat s $label';
   }
@@ -588,7 +635,10 @@ class SCs extends S {
   String get signUp => 'Zaregistrujte se';
 
   @override
-  String get registerAsOwner => 'Registrovat se jako majitel restaurace';
+  String get registerAsOwner => 'Chci přidat svou restauraci';
+
+  @override
+  String get registerAsOwnerSubtitle => 'Vytvoříme vám zkušební restauraci — doladíte ji po přihlášení';
 
   @override
   String get enterEmail => 'Zadejte e-mail';
@@ -732,11 +782,56 @@ class SCs extends S {
 
   @override
   String lastActivity(String date) {
-    return 'Poslední aktivita: $date';
+    return 'Poslední přihlášení: $date';
   }
 
   @override
   String get logoutDevice => 'Odhlásit zařízení';
+
+  @override
+  String get deleteDevice => 'Smazat zařízení';
+
+  @override
+  String get deviceActive => 'Aktivní';
+
+  @override
+  String get deviceInactive => 'Neaktivní';
+
+  @override
+  String get logoutAll => 'Odhlásit všechna';
+
+  @override
+  String get deleteAll => 'Smazat všechna';
+
+  @override
+  String get logoutAllDevices => 'Odhlásit všechna zařízení';
+
+  @override
+  String get deleteAllDevices => 'Smazat všechna zařízení';
+
+  @override
+  String get logoutDeviceDialogTitle => 'Odhlásit zařízení?';
+
+  @override
+  String get logoutDeviceDialogContent => 'Zařízení bude odhlášeno, ale zůstane uloženo v seznamu.';
+
+  @override
+  String get deleteDeviceDialogTitle => 'Smazat zařízení?';
+
+  @override
+  String get deleteDeviceDialogContent => 'Zařízení bude odhlášeno a trvale odstraněno ze seznamu.';
+
+  @override
+  String get logoutAllDevicesDialogTitle => 'Odhlásit všechna zařízení?';
+
+  @override
+  String get logoutAllDevicesDialogContent => 'Všechna zařízení kromě tohoto budou odhlášena, ale zůstanou uložena v seznamu.';
+
+  @override
+  String get deleteAllDevicesDialogTitle => 'Smazat všechna zařízení?';
+
+  @override
+  String get deleteAllDevicesDialogContent => 'Všechna zařízení kromě tohoto budou odhlášena a trvale odstraněna ze seznamu.';
 
   @override
   String get firstNameRequired => 'Jméno nesmí být prázdné';
@@ -860,6 +955,9 @@ class SCs extends S {
   }
 
   @override
+  String get selectRestaurant => 'Vyberte restauraci';
+
+  @override
   String get reservationsTab => 'Rezervace';
 
   @override
@@ -867,6 +965,9 @@ class SCs extends S {
 
   @override
   String get employeesTab => 'Zaměstnanci';
+
+  @override
+  String get settingsTab => 'Nastavení';
 
   @override
   String get restaurantInfo => 'Informace o restauraci';
@@ -882,6 +983,9 @@ class SCs extends S {
 
   @override
   String get phoneLabel => 'Telefon';
+
+  @override
+  String get phoneRequired => 'Telefon je povinný';
 
   @override
   String get contactEmailLabel => 'Kontaktní e-mail';
@@ -1186,4 +1290,146 @@ class SCs extends S {
   String editorSaveError(String error) {
     return 'Chyba při ukládání: $error';
   }
+
+  @override
+  String get statisticsTab => 'Statistiky';
+
+  @override
+  String get employeeCount => 'Počet zaměstnanců';
+
+  @override
+  String get restaurantStatus => 'Stav restaurace';
+
+  @override
+  String get active => 'Aktivní';
+
+  @override
+  String get inactive => 'Neaktivní';
+
+  @override
+  String get panoramaStatus => 'Panorama';
+
+  @override
+  String get panoramaAvailable => 'K dispozici';
+
+  @override
+  String get panoramaNotAvailable => 'Není k dispozici';
+
+  @override
+  String get moreStatsSoon => 'Další statistiky budou brzy k dispozici.';
+
+  @override
+  String get managePanorama => 'Spravovat panorama';
+
+  @override
+  String get panoramaSection => 'Panorama';
+
+  @override
+  String get noPanoramaInfo => 'Žádné aktivní panorama. Klepněte pro nastavení.';
+
+  @override
+  String get activePanoramaInfo => 'Aktivní panorama je nastaveno.';
+
+  @override
+  String get calendarHeader => 'Vyberte den';
+
+  @override
+  String get collapseCalendar => 'Skrýt kalendář';
+
+  @override
+  String get expandCalendar => 'Zobrazit kalendář';
+
+  @override
+  String get timelineView => 'Časová osa';
+
+  @override
+  String get listView => 'Seznam';
+
+  @override
+  String get noTablesConfigured => 'Žádné stoly nejsou nakonfigurovány';
+
+  @override
+  String get proposeChange => 'Navrhnout změnu';
+
+  @override
+  String get extendReservation => 'Prodloužit';
+
+  @override
+  String get pendingChangeInfo => 'Zákazník bude požádán o souhlas se změnou.';
+
+  @override
+  String get extendInfo => 'Zákazník nebude o prodloužení informován.';
+
+  @override
+  String get waitingForResponse => 'Čeká na odpověď zákazníka';
+
+  @override
+  String get restaurantProposesChange => 'Restaurace navrhuje změnu';
+
+  @override
+  String proposedNewTime(String time) {
+    return 'Nový čas: $time';
+  }
+
+  @override
+  String proposedNewTable(String table) {
+    return 'Nový stůl: $table';
+  }
+
+  @override
+  String get acceptChange => 'Přijmout';
+
+  @override
+  String get declineChange => 'Odmítnout';
+
+  @override
+  String get declineWarning => 'Odmítnutím bude rezervace zrušena.';
+
+  @override
+  String get changeAccepted => 'Změna byla přijata.';
+
+  @override
+  String get changeDeclined => 'Změna byla odmítnuta, rezervace zrušena.';
+
+  @override
+  String get newStartTime => 'Nový čas začátku';
+
+  @override
+  String get newEndTime => 'Nový čas konce';
+
+  @override
+  String get selectTime => 'Vyberte čas';
+
+  @override
+  String get selectTable => 'Vyberte stůl';
+
+  @override
+  String get checkInConfirmMessage => 'Opravdu chcete označit hosta jako přítomného?';
+
+  @override
+  String get completeConfirmMessage => 'Opravdu chcete ukončit tuto rezervaci?';
+
+  @override
+  String get payButton => 'Zaplatit';
+
+  @override
+  String get paymentPending => 'Čeká na platbu';
+
+  @override
+  String get paymentPaid => 'Zaplaceno';
+
+  @override
+  String get paymentFailed => 'Platba selhala';
+
+  @override
+  String get paymentProcessing => 'Zpracovává se...';
+
+  @override
+  String get paymentCancelled => 'Platba zrušena';
+
+  @override
+  String get paymentInitiating => 'Spouštím platbu...';
+
+  @override
+  String get paymentErrorRetry => 'Nepodařilo se spustit platbu. Zkuste to znovu.';
 }

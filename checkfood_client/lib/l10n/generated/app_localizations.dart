@@ -209,6 +209,96 @@ abstract class S {
   /// **'Zapomněli jste heslo?'**
   String get forgotPassword;
 
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Obnova hesla'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zadejte svůj e-mail a my vám pošleme odkaz pro obnovu hesla.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @forgotPasswordSend.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odeslat odkaz'**
+  String get forgotPasswordSend;
+
+  /// No description provided for @forgotPasswordSent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odkaz pro obnovu hesla byl odeslán na {email}. Zkontrolujte svou e-mailovou schránku.'**
+  String forgotPasswordSent(String email);
+
+  /// No description provided for @forgotPasswordCheckSpam.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nenašel/la jste e-mail? Zkontrolujte složku spam.'**
+  String get forgotPasswordCheckSpam;
+
+  /// No description provided for @resetPasswordTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nové heslo'**
+  String get resetPasswordTitle;
+
+  /// No description provided for @resetPasswordSubtitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zadejte své nové heslo.'**
+  String get resetPasswordSubtitle;
+
+  /// No description provided for @newPasswordLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nové heslo'**
+  String get newPasswordLabel;
+
+  /// No description provided for @confirmNewPasswordLabel.
+  ///
+  /// In cs, this message translates to:
+  /// **'Potvrzení hesla'**
+  String get confirmNewPasswordLabel;
+
+  /// No description provided for @resetPasswordButton.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nastavit nové heslo'**
+  String get resetPasswordButton;
+
+  /// No description provided for @resetPasswordSuccess.
+  ///
+  /// In cs, this message translates to:
+  /// **'Heslo bylo úspěšně změněno! Nyní se můžete přihlásit.'**
+  String get resetPasswordSuccess;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In cs, this message translates to:
+  /// **'Hesla se neshodují.'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In cs, this message translates to:
+  /// **'Heslo musí mít alespoň 8 znaků.'**
+  String get passwordTooShort;
+
+  /// No description provided for @errorForgotPassword.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nepodařilo se odeslat odkaz. Zkuste to později.'**
+  String get errorForgotPassword;
+
+  /// No description provided for @errorResetPassword.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nepodařilo se nastavit nové heslo.'**
+  String get errorResetPassword;
+
   /// No description provided for @continueWith.
   ///
   /// In cs, this message translates to:
@@ -1208,8 +1298,14 @@ abstract class S {
   /// No description provided for @registerAsOwner.
   ///
   /// In cs, this message translates to:
-  /// **'Registrovat se jako majitel restaurace'**
+  /// **'Chci přidat svou restauraci'**
   String get registerAsOwner;
+
+  /// No description provided for @registerAsOwnerSubtitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vytvoříme vám zkušební restauraci — doladíte ji po přihlášení'**
+  String get registerAsOwnerSubtitle;
 
   /// No description provided for @enterEmail.
   ///
@@ -1490,7 +1586,7 @@ abstract class S {
   /// No description provided for @lastActivity.
   ///
   /// In cs, this message translates to:
-  /// **'Poslední aktivita: {date}'**
+  /// **'Poslední přihlášení: {date}'**
   String lastActivity(String date);
 
   /// No description provided for @logoutDevice.
@@ -1498,6 +1594,96 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Odhlásit zařízení'**
   String get logoutDevice;
+
+  /// No description provided for @deleteDevice.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat zařízení'**
+  String get deleteDevice;
+
+  /// No description provided for @deviceActive.
+  ///
+  /// In cs, this message translates to:
+  /// **'Aktivní'**
+  String get deviceActive;
+
+  /// No description provided for @deviceInactive.
+  ///
+  /// In cs, this message translates to:
+  /// **'Neaktivní'**
+  String get deviceInactive;
+
+  /// No description provided for @logoutAll.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odhlásit všechna'**
+  String get logoutAll;
+
+  /// No description provided for @deleteAll.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat všechna'**
+  String get deleteAll;
+
+  /// No description provided for @logoutAllDevices.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odhlásit všechna zařízení'**
+  String get logoutAllDevices;
+
+  /// No description provided for @deleteAllDevices.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat všechna zařízení'**
+  String get deleteAllDevices;
+
+  /// No description provided for @logoutDeviceDialogTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odhlásit zařízení?'**
+  String get logoutDeviceDialogTitle;
+
+  /// No description provided for @logoutDeviceDialogContent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zařízení bude odhlášeno, ale zůstane uloženo v seznamu.'**
+  String get logoutDeviceDialogContent;
+
+  /// No description provided for @deleteDeviceDialogTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat zařízení?'**
+  String get deleteDeviceDialogTitle;
+
+  /// No description provided for @deleteDeviceDialogContent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zařízení bude odhlášeno a trvale odstraněno ze seznamu.'**
+  String get deleteDeviceDialogContent;
+
+  /// No description provided for @logoutAllDevicesDialogTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odhlásit všechna zařízení?'**
+  String get logoutAllDevicesDialogTitle;
+
+  /// No description provided for @logoutAllDevicesDialogContent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Všechna zařízení kromě tohoto budou odhlášena, ale zůstanou uložena v seznamu.'**
+  String get logoutAllDevicesDialogContent;
+
+  /// No description provided for @deleteAllDevicesDialogTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat všechna zařízení?'**
+  String get deleteAllDevicesDialogTitle;
+
+  /// No description provided for @deleteAllDevicesDialogContent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Všechna zařízení kromě tohoto budou odhlášena a trvale odstraněna ze seznamu.'**
+  String get deleteAllDevicesDialogContent;
 
   /// No description provided for @firstNameRequired.
   ///
@@ -1721,6 +1907,12 @@ abstract class S {
   /// **'{count} pol.'**
   String itemsShort(int count);
 
+  /// No description provided for @selectRestaurant.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyberte restauraci'**
+  String get selectRestaurant;
+
   /// No description provided for @reservationsTab.
   ///
   /// In cs, this message translates to:
@@ -1738,6 +1930,12 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Zaměstnanci'**
   String get employeesTab;
+
+  /// No description provided for @settingsTab.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nastavení'**
+  String get settingsTab;
 
   /// No description provided for @restaurantInfo.
   ///
@@ -1768,6 +1966,12 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Telefon'**
   String get phoneLabel;
+
+  /// No description provided for @phoneRequired.
+  ///
+  /// In cs, this message translates to:
+  /// **'Telefon je povinný'**
+  String get phoneRequired;
 
   /// No description provided for @contactEmailLabel.
   ///
@@ -2332,6 +2536,282 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Chyba při ukládání: {error}'**
   String editorSaveError(String error);
+
+  /// No description provided for @statisticsTab.
+  ///
+  /// In cs, this message translates to:
+  /// **'Statistiky'**
+  String get statisticsTab;
+
+  /// No description provided for @employeeCount.
+  ///
+  /// In cs, this message translates to:
+  /// **'Počet zaměstnanců'**
+  String get employeeCount;
+
+  /// No description provided for @restaurantStatus.
+  ///
+  /// In cs, this message translates to:
+  /// **'Stav restaurace'**
+  String get restaurantStatus;
+
+  /// No description provided for @active.
+  ///
+  /// In cs, this message translates to:
+  /// **'Aktivní'**
+  String get active;
+
+  /// No description provided for @inactive.
+  ///
+  /// In cs, this message translates to:
+  /// **'Neaktivní'**
+  String get inactive;
+
+  /// No description provided for @panoramaStatus.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama'**
+  String get panoramaStatus;
+
+  /// No description provided for @panoramaAvailable.
+  ///
+  /// In cs, this message translates to:
+  /// **'K dispozici'**
+  String get panoramaAvailable;
+
+  /// No description provided for @panoramaNotAvailable.
+  ///
+  /// In cs, this message translates to:
+  /// **'Není k dispozici'**
+  String get panoramaNotAvailable;
+
+  /// No description provided for @moreStatsSoon.
+  ///
+  /// In cs, this message translates to:
+  /// **'Další statistiky budou brzy k dispozici.'**
+  String get moreStatsSoon;
+
+  /// No description provided for @managePanorama.
+  ///
+  /// In cs, this message translates to:
+  /// **'Spravovat panorama'**
+  String get managePanorama;
+
+  /// No description provided for @panoramaSection.
+  ///
+  /// In cs, this message translates to:
+  /// **'Panorama'**
+  String get panoramaSection;
+
+  /// No description provided for @noPanoramaInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádné aktivní panorama. Klepněte pro nastavení.'**
+  String get noPanoramaInfo;
+
+  /// No description provided for @activePanoramaInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Aktivní panorama je nastaveno.'**
+  String get activePanoramaInfo;
+
+  /// No description provided for @calendarHeader.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyberte den'**
+  String get calendarHeader;
+
+  /// No description provided for @collapseCalendar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Skrýt kalendář'**
+  String get collapseCalendar;
+
+  /// No description provided for @expandCalendar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zobrazit kalendář'**
+  String get expandCalendar;
+
+  /// No description provided for @timelineView.
+  ///
+  /// In cs, this message translates to:
+  /// **'Časová osa'**
+  String get timelineView;
+
+  /// No description provided for @listView.
+  ///
+  /// In cs, this message translates to:
+  /// **'Seznam'**
+  String get listView;
+
+  /// No description provided for @noTablesConfigured.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádné stoly nejsou nakonfigurovány'**
+  String get noTablesConfigured;
+
+  /// No description provided for @proposeChange.
+  ///
+  /// In cs, this message translates to:
+  /// **'Navrhnout změnu'**
+  String get proposeChange;
+
+  /// No description provided for @extendReservation.
+  ///
+  /// In cs, this message translates to:
+  /// **'Prodloužit'**
+  String get extendReservation;
+
+  /// No description provided for @pendingChangeInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zákazník bude požádán o souhlas se změnou.'**
+  String get pendingChangeInfo;
+
+  /// No description provided for @extendInfo.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zákazník nebude o prodloužení informován.'**
+  String get extendInfo;
+
+  /// No description provided for @waitingForResponse.
+  ///
+  /// In cs, this message translates to:
+  /// **'Čeká na odpověď zákazníka'**
+  String get waitingForResponse;
+
+  /// No description provided for @restaurantProposesChange.
+  ///
+  /// In cs, this message translates to:
+  /// **'Restaurace navrhuje změnu'**
+  String get restaurantProposesChange;
+
+  /// No description provided for @proposedNewTime.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nový čas: {time}'**
+  String proposedNewTime(String time);
+
+  /// No description provided for @proposedNewTable.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nový stůl: {table}'**
+  String proposedNewTable(String table);
+
+  /// No description provided for @acceptChange.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přijmout'**
+  String get acceptChange;
+
+  /// No description provided for @declineChange.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odmítnout'**
+  String get declineChange;
+
+  /// No description provided for @declineWarning.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odmítnutím bude rezervace zrušena.'**
+  String get declineWarning;
+
+  /// No description provided for @changeAccepted.
+  ///
+  /// In cs, this message translates to:
+  /// **'Změna byla přijata.'**
+  String get changeAccepted;
+
+  /// No description provided for @changeDeclined.
+  ///
+  /// In cs, this message translates to:
+  /// **'Změna byla odmítnuta, rezervace zrušena.'**
+  String get changeDeclined;
+
+  /// No description provided for @newStartTime.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nový čas začátku'**
+  String get newStartTime;
+
+  /// No description provided for @newEndTime.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nový čas konce'**
+  String get newEndTime;
+
+  /// No description provided for @selectTime.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyberte čas'**
+  String get selectTime;
+
+  /// No description provided for @selectTable.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyberte stůl'**
+  String get selectTable;
+
+  /// No description provided for @checkInConfirmMessage.
+  ///
+  /// In cs, this message translates to:
+  /// **'Opravdu chcete označit hosta jako přítomného?'**
+  String get checkInConfirmMessage;
+
+  /// No description provided for @completeConfirmMessage.
+  ///
+  /// In cs, this message translates to:
+  /// **'Opravdu chcete ukončit tuto rezervaci?'**
+  String get completeConfirmMessage;
+
+  /// No description provided for @payButton.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zaplatit'**
+  String get payButton;
+
+  /// No description provided for @paymentPending.
+  ///
+  /// In cs, this message translates to:
+  /// **'Čeká na platbu'**
+  String get paymentPending;
+
+  /// No description provided for @paymentPaid.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zaplaceno'**
+  String get paymentPaid;
+
+  /// No description provided for @paymentFailed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Platba selhala'**
+  String get paymentFailed;
+
+  /// No description provided for @paymentProcessing.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zpracovává se...'**
+  String get paymentProcessing;
+
+  /// No description provided for @paymentCancelled.
+  ///
+  /// In cs, this message translates to:
+  /// **'Platba zrušena'**
+  String get paymentCancelled;
+
+  /// No description provided for @paymentInitiating.
+  ///
+  /// In cs, this message translates to:
+  /// **'Spouštím platbu...'**
+  String get paymentInitiating;
+
+  /// No description provided for @paymentErrorRetry.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nepodařilo se spustit platbu. Zkuste to znovu.'**
+  String get paymentErrorRetry;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

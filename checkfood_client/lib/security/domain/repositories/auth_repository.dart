@@ -26,4 +26,10 @@ abstract class AuthRepository {
 
   /// Získání aktuálně přihlášeného uživatele z paměti nebo cache.
   Future<User?> getAuthenticatedUser();
+
+  /// Odešle žádost o obnovu hesla na zadaný email.
+  Future<void> forgotPassword(String email);
+
+  /// Provede reset hesla pomocí tokenu a nového hesla.
+  Future<void> resetPassword(String token, String newPassword);
 }

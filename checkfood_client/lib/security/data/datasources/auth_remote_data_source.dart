@@ -8,6 +8,8 @@ import '../models/auth/request/refresh_token_request_model.dart';
 import '../models/auth/request/verify_email_request_model.dart';
 import '../models/auth/request/logout_request_model.dart';
 import '../models/auth/request/resend_verification_request_model.dart';
+import '../models/auth/request/forgot_password_request_model.dart';
+import '../models/auth/request/reset_password_request_model.dart';
 
 // Response Models
 import '../models/auth/response/auth_response_model.dart';
@@ -23,6 +25,8 @@ abstract class AuthRemoteDataSource {
   Future<void> resendVerificationCode(ResendVerificationRequestModel request);
   Future<TokenResponseModel> refreshToken(RefreshTokenRequestModel request);
   Future<void> logout(LogoutRequestModel request);
+  Future<void> forgotPassword(ForgotPasswordRequestModel request);
+  Future<void> resetPassword(ResetPasswordRequestModel request);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -82,5 +86,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logout(LogoutRequestModel request) async {
     await _dio.post(SecurityEndpoints.logout, data: request.toJson());
+  }
+
+  @override
+  Future<void> forgotPassword(ForgotPasswordRequestModel request) async {
+    await _dio.post(SecurityEndpoints.forgotPassword, data: request.toJson());
+  }
+
+  @override
+  Future<void> resetPassword(ResetPasswordRequestModel request) async {
+    await _dio.post(SecurityEndpoints.resetPassword, data: request.toJson());
   }
 }

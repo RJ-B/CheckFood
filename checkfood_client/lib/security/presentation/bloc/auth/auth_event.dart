@@ -33,4 +33,14 @@ class AuthEvent with _$AuthEvent {
 
   /// Odhlášení ze systému.
   const factory AuthEvent.logoutRequested() = LogoutRequested;
+
+  /// Požadavek na odeslání odkazu pro obnovu hesla.
+  const factory AuthEvent.forgotPasswordRequested({required String email}) =
+      ForgotPasswordRequested;
+
+  /// Požadavek na nastavení nového hesla přes reset token.
+  const factory AuthEvent.resetPasswordRequested({
+    required String token,
+    required String newPassword,
+  }) = ResetPasswordRequested;
 }

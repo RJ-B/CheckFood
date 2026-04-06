@@ -26,6 +26,11 @@ public enum AuthErrorCode {
     // Account state conditions requiring user awareness
     AUTH_ACCOUNT_DISABLED("SECURITY_ACCOUNT_STATE"),
 
+    // Password reset token errors
+    AUTH_RESET_TOKEN_INVALID("SECURITY_INCIDENT"),
+    AUTH_RESET_TOKEN_EXPIRED("VALIDATION"),
+    AUTH_RESET_TOKEN_USED("VALIDATION"),
+
     // Business logic validation a user input errors
     AUTH_EMAIL_EXISTS("VALIDATION"),
     AUTH_ACCOUNT_ALREADY_ACTIVATED("VALIDATION"),

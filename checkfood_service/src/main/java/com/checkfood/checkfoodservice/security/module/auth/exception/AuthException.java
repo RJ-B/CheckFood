@@ -163,6 +163,39 @@ public class AuthException extends SecurityException {
     }
 
     /**
+     * Password reset token neexistuje nebo je invalid.
+     */
+    public static AuthException invalidResetToken() {
+        return new AuthException(
+                AuthErrorCode.AUTH_RESET_TOKEN_INVALID,
+                "Neplatný nebo neexistující odkaz pro obnovu hesla.",
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    /**
+     * Password reset token vypršel.
+     */
+    public static AuthException resetTokenExpired() {
+        return new AuthException(
+                AuthErrorCode.AUTH_RESET_TOKEN_EXPIRED,
+                "Odkaz pro obnovu hesla vypršel. Požádejte o nový.",
+                HttpStatus.GONE
+        );
+    }
+
+    /**
+     * Password reset token byl již použit.
+     */
+    public static AuthException resetTokenAlreadyUsed() {
+        return new AuthException(
+                AuthErrorCode.AUTH_RESET_TOKEN_USED,
+                "Tento odkaz pro obnovu hesla byl již použit.",
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    /**
      * Email verification token neexistuje nebo je invalid.
      */
     public static AuthException invalidVerificationToken() {

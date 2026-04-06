@@ -19,6 +19,8 @@ import '../models/auth/request/verify_email_request_model.dart';
 import '../models/auth/request/refresh_token_request_model.dart';
 import '../models/auth/request/logout_request_model.dart';
 import '../models/auth/request/resend_verification_request_model.dart';
+import '../models/auth/request/forgot_password_request_model.dart';
+import '../models/auth/request/reset_password_request_model.dart';
 
 // Response Models
 import '../models/auth/response/auth_error_response_model.dart';
@@ -85,6 +87,9 @@ class AuthRepositoryImpl implements AuthRepository {
         password: params.password,
         firstName: params.firstName,
         lastName: params.lastName,
+        ownerRegistration: params.ownerRegistration,
+        latitude: params.latitude,
+        longitude: params.longitude,
       );
 
       await _remoteDataSource.register(request);
@@ -103,6 +108,7 @@ class AuthRepositoryImpl implements AuthRepository {
         password: params.password,
         firstName: params.firstName,
         lastName: params.lastName,
+        ownerRegistration: true,
       );
 
       await _remoteDataSource.registerOwner(request);
@@ -203,7 +209,7 @@ class AuthRepositoryImpl implements AuthRepository {
         email: userEmail,
         role: role,
         isActive: true,
-        permissions: (rolesData is List) ? rolesData.cast<String>() : [],
+        permissions: (rolesData is List) ? rolesData.map((e) => e.toString()).toList() : [],
         needsRestaurantClaim: needsRestaurantClaim,
         needsOnboarding: needsOnboarding,
       );
@@ -246,6 +252,33 @@ class AuthRepositoryImpl implements AuthRepository {
       throw const SessionExpiredException(
         'Sezení vypršelo, přihlaste se znovu.',
       );
+    }
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    try {
+      final request = ForgotPasswordRequestModel(email: email);
+      await _remoteDataSource.forgotPassword(request);
+    } on DioException catch (e) {
+      throw _mapDioException(e, emailFallback: email);
+    } catch (e) {
+      throw AuthServerException('Neočekávaná chyba při odesílání žádosti: $e');
+    }
+  }
+
+  @override
+  Future<void> resetPassword(String token, String newPassword) async {
+    try {
+      final request = ResetPasswordRequestModel(
+        token: token,
+        newPassword: newPassword,
+      );
+      await _remoteDataSource.resetPassword(request);
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    } catch (e) {
+      throw AuthServerException('Neočekávaná chyba při obnově hesla: $e');
     }
   }
 

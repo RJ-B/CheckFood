@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../navigation/app_router.dart';
 
 // Domain Params
 import '../../../domain/usecases/auth/params/auth_params.dart';
@@ -114,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                // TODO: Implementovat navigaci pro reset hesla
+                Navigator.of(context).pushNamed(AppRouter.forgotPassword);
               },
               child: Text(l.forgotPassword),
             ),

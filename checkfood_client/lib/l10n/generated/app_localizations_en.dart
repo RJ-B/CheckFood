@@ -66,6 +66,53 @@ class SEn extends S {
   String get forgotPassword => 'Forgot your password?';
 
   @override
+  String get forgotPasswordTitle => 'Password Recovery';
+
+  @override
+  String get forgotPasswordSubtitle => 'Enter your email and we will send you a link to reset your password.';
+
+  @override
+  String get forgotPasswordSend => 'Send link';
+
+  @override
+  String forgotPasswordSent(String email) {
+    return 'A password reset link has been sent to $email. Check your inbox.';
+  }
+
+  @override
+  String get forgotPasswordCheckSpam => 'Can\'t find the email? Check your spam folder.';
+
+  @override
+  String get resetPasswordTitle => 'New Password';
+
+  @override
+  String get resetPasswordSubtitle => 'Enter your new password.';
+
+  @override
+  String get newPasswordLabel => 'New password';
+
+  @override
+  String get confirmNewPasswordLabel => 'Confirm password';
+
+  @override
+  String get resetPasswordButton => 'Set new password';
+
+  @override
+  String get resetPasswordSuccess => 'Password changed successfully! You can now log in.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters.';
+
+  @override
+  String get errorForgotPassword => 'Failed to send the link. Try again later.';
+
+  @override
+  String get errorResetPassword => 'Failed to set new password.';
+
+  @override
   String continueWith(String label) {
     return 'Continue with $label';
   }
@@ -588,7 +635,10 @@ class SEn extends S {
   String get signUp => 'Sign up';
 
   @override
-  String get registerAsOwner => 'Register as a restaurant owner';
+  String get registerAsOwner => 'I want to add my restaurant';
+
+  @override
+  String get registerAsOwnerSubtitle => 'We\'ll create a trial restaurant for you — you can set it up after logging in';
 
   @override
   String get enterEmail => 'Enter email';
@@ -732,11 +782,56 @@ class SEn extends S {
 
   @override
   String lastActivity(String date) {
-    return 'Last activity: $date';
+    return 'Last login: $date';
   }
 
   @override
   String get logoutDevice => 'Log out device';
+
+  @override
+  String get deleteDevice => 'Delete device';
+
+  @override
+  String get deviceActive => 'Active';
+
+  @override
+  String get deviceInactive => 'Inactive';
+
+  @override
+  String get logoutAll => 'Log out all';
+
+  @override
+  String get deleteAll => 'Delete all';
+
+  @override
+  String get logoutAllDevices => 'Log out all devices';
+
+  @override
+  String get deleteAllDevices => 'Delete all devices';
+
+  @override
+  String get logoutDeviceDialogTitle => 'Log out device?';
+
+  @override
+  String get logoutDeviceDialogContent => 'The device will be logged out but remain saved in the list.';
+
+  @override
+  String get deleteDeviceDialogTitle => 'Delete device?';
+
+  @override
+  String get deleteDeviceDialogContent => 'The device will be logged out and permanently removed from the list.';
+
+  @override
+  String get logoutAllDevicesDialogTitle => 'Log out all devices?';
+
+  @override
+  String get logoutAllDevicesDialogContent => 'All devices except this one will be logged out but remain saved in the list.';
+
+  @override
+  String get deleteAllDevicesDialogTitle => 'Delete all devices?';
+
+  @override
+  String get deleteAllDevicesDialogContent => 'All devices except this one will be logged out and permanently removed from the list.';
 
   @override
   String get firstNameRequired => 'First name is required';
@@ -860,6 +955,9 @@ class SEn extends S {
   }
 
   @override
+  String get selectRestaurant => 'Select restaurant';
+
+  @override
   String get reservationsTab => 'Reservations';
 
   @override
@@ -867,6 +965,9 @@ class SEn extends S {
 
   @override
   String get employeesTab => 'Employees';
+
+  @override
+  String get settingsTab => 'Settings';
 
   @override
   String get restaurantInfo => 'Restaurant Info';
@@ -882,6 +983,9 @@ class SEn extends S {
 
   @override
   String get phoneLabel => 'Phone';
+
+  @override
+  String get phoneRequired => 'Phone is required';
 
   @override
   String get contactEmailLabel => 'Contact Email';
@@ -1186,4 +1290,146 @@ class SEn extends S {
   String editorSaveError(String error) {
     return 'Error saving: $error';
   }
+
+  @override
+  String get statisticsTab => 'Statistics';
+
+  @override
+  String get employeeCount => 'Employee count';
+
+  @override
+  String get restaurantStatus => 'Restaurant status';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get inactive => 'Inactive';
+
+  @override
+  String get panoramaStatus => 'Panorama';
+
+  @override
+  String get panoramaAvailable => 'Available';
+
+  @override
+  String get panoramaNotAvailable => 'Not available';
+
+  @override
+  String get moreStatsSoon => 'More statistics will be available soon.';
+
+  @override
+  String get managePanorama => 'Manage panorama';
+
+  @override
+  String get panoramaSection => 'Panorama';
+
+  @override
+  String get noPanoramaInfo => 'No active panorama. Tap to set up.';
+
+  @override
+  String get activePanoramaInfo => 'Active panorama is set.';
+
+  @override
+  String get calendarHeader => 'Select a day';
+
+  @override
+  String get collapseCalendar => 'Hide calendar';
+
+  @override
+  String get expandCalendar => 'Show calendar';
+
+  @override
+  String get timelineView => 'Timeline';
+
+  @override
+  String get listView => 'List';
+
+  @override
+  String get noTablesConfigured => 'No tables configured';
+
+  @override
+  String get proposeChange => 'Propose change';
+
+  @override
+  String get extendReservation => 'Extend';
+
+  @override
+  String get pendingChangeInfo => 'The customer will be asked to approve the change.';
+
+  @override
+  String get extendInfo => 'The customer will not be notified about the extension.';
+
+  @override
+  String get waitingForResponse => 'Waiting for customer response';
+
+  @override
+  String get restaurantProposesChange => 'Restaurant proposes a change';
+
+  @override
+  String proposedNewTime(String time) {
+    return 'New time: $time';
+  }
+
+  @override
+  String proposedNewTable(String table) {
+    return 'New table: $table';
+  }
+
+  @override
+  String get acceptChange => 'Accept';
+
+  @override
+  String get declineChange => 'Decline';
+
+  @override
+  String get declineWarning => 'Declining will cancel the reservation.';
+
+  @override
+  String get changeAccepted => 'Change accepted.';
+
+  @override
+  String get changeDeclined => 'Change declined, reservation cancelled.';
+
+  @override
+  String get newStartTime => 'New start time';
+
+  @override
+  String get newEndTime => 'New end time';
+
+  @override
+  String get selectTime => 'Select time';
+
+  @override
+  String get selectTable => 'Select table';
+
+  @override
+  String get checkInConfirmMessage => 'Are you sure you want to check in this guest?';
+
+  @override
+  String get completeConfirmMessage => 'Are you sure you want to complete this reservation?';
+
+  @override
+  String get payButton => 'Pay';
+
+  @override
+  String get paymentPending => 'Payment pending';
+
+  @override
+  String get paymentPaid => 'Paid';
+
+  @override
+  String get paymentFailed => 'Payment failed';
+
+  @override
+  String get paymentProcessing => 'Processing...';
+
+  @override
+  String get paymentCancelled => 'Payment cancelled';
+
+  @override
+  String get paymentInitiating => 'Initiating payment...';
+
+  @override
+  String get paymentErrorRetry => 'Failed to initiate payment. Please try again.';
 }

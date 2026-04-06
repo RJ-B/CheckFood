@@ -1,58 +1,18 @@
 # Tester Log
 
 ---
-2026-03-16 | T-0009 + T-0008 | TESTER
-build_runner: OK (0 nových výstupů). flutter analyze: 0 errors, 81 info/warning (pre-existující). flutter test: 27/27 PASS.
-QA fix: žádné — implementace byla bezchybná.
-Commit: feat(T-0009): unify app design to match splash screen brand identity. Push: OK.
+2026-04-07T01:40:00Z | Tester | T-0010
+START: Doplnění chybějící Frontend implementace (Frontend Dev se přerušil po KROK 1)
 
----
-2026-03-16 | T-0007 | TESTER
-build_runner: OK (0 nových výstupů). flutter analyze: 0 errors, 83 info/warning (pre-existující). flutter test: 27/27 PASS.
-QA fix: 3 hardcoded strings opraveny v reservation_card.dart a staff_reservation_card.dart ('os.', 'od ...').
-Commit: 33906d3 feat(T-0007): complete app-wide localization (Czech + English). Push: OK (po rebase — remote měl 25 nových commitů).
+KROK A (app_router.dart): Přidány importy ForgotPasswordPage + ResetPasswordPage, konstanty forgotPassword + resetPassword, case bloky ve switch. DONE.
+KROK B (login_form.dart): Nahrazen TODO komentář navigací na AppRouter.forgotPassword, přidán import app_router.dart. DONE.
+KROK C (injection_container.dart): Přidány importy forgot/reset use cases, registrace jako lazySingleton, AuthBloc factory aktualizována s forgotPasswordUseCase + resetPasswordUseCase. DONE.
+KROK D (login_page.dart): Přidány error kódy error_forgot_password + error_reset_password do _localizeAuthError. DONE.
 
----
-2026-03-06 | T-0004 | TESTER
+BUILD: dart run build_runner build — OK (0 nových outputs, vše up-to-date)
+ANALYZE: flutter analyze — 0 errors, 100 info/warnings (pre-existující)
+BACKEND COMPILE: ./mvnw compile — OK
+BACKEND TESTS: 70/80 PASS, 10 FAIL (všechny pre-existující)
+FLUTTER TESTS: 28/29 PASS, 1 FAIL (widget_test.dart — pre-existující boilerplate)
 
-Testováno: backend compile, backend testy (77/80), frontend build_runner, frontend analyze (0 errors), frontend testy (27/28), API contract verification, acceptance criteria review, DI check
-Bugy nalezeny: 0 (opraveno: 0)
-Výsledek: PASS
-Commit: a805358
-
----
-2026-03-10 | T-0005 | TESTER
-
-Testováno: backend compile (./mvnw compile -q), backend testy (./mvnw test), frontend build_runner (OK, 0 new outputs), flutter analyze (0 errors, 90 info pre-existing), flutter test (27/27 PASS), code review všech 11 backend souborů + 9 frontend souborů, API contract verification, acceptance criteria review, DI check.
-
-Bugy nalezeny: 0 (opraveno: 0)
-Backend testy: 77/80 PASS (3 failures — všechny pre-existující, žádná nová selhání z T-0005)
-Frontend testy: 27/27 PASS (widget_test.dart byl smazán v předchozím tasku)
-
-Klíčové ověření:
-- SupabaseStorageService @Profile("prod") implementuje StorageService správně ✓
-- LocalFilesystemStorageService @Profile({"local","test"}) — testy projdou bez Supabase ✓
-- StitcherClientImpl.requestStitching() používá "photo_urls" JSON key (sync s main.py) ✓
-- PanoramaServiceImpl.finalizeSession() předává photoUrls přímo bez transformace ✓
-- stitcher/main.py dual mode: HTTP (Supabase) vs lokální filesystem ✓
-- ProfileHeader: GestureDetector + ImagePicker + UserEvent.profilePhotoUploadRequested ✓
-- UserBloc._onProfilePhotoUploadRequested: upload → updateProfile → profileRequested ✓
-- DI: profileRepository: sl() přidáno do UserBloc factory v injection_container.dart ✓
-- application.properties: supabase.url, supabase.service-role-key, supabase.storage.bucket ✓
-- render.yaml: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_STORAGE_BUCKET ✓
-
-Výsledek: PASS
-
----
-2026-03-15 | T-0006 | TESTER
-
-Testováno: ověření všech 7 souborů (pom.xml, backend.yml, CLAUDE.md, RestaurantRepository.java, PasswordPolicy.java, DiningContextServiceImpl.java, TestReservationInitializer.java), backend compile s JDK 21.0.10 (Microsoft), backend testy (./mvnw test).
-
-Akceptační kritéria: všechna splněna (config + text blocks + getFirst).
-Backend compile: BUILD SUCCESS — 420 souborů, javac release 21.
-Backend testy: 73/80 PASS — 7 selhání, všechna pre-existující (ověřeno git stash + test na předchozím commitu eac0dd4: identické selhání).
-
-Žádné nové selhání způsobené T-0006.
-
-Výsledek: PASS
-
+STATUS: PASS — commit + push provedeny

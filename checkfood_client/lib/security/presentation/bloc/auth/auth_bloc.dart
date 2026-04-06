@@ -12,6 +12,8 @@ import '../../../domain/usecases/auth/register_usecase.dart';
 import '../../../domain/usecases/auth/register_owner_usecase.dart';
 import '../../../domain/usecases/auth/resend_verification_code_usecase.dart';
 import '../../../domain/usecases/auth/verify_email_usecase.dart';
+import '../../../domain/usecases/auth/forgot_password_usecase.dart';
+import '../../../domain/usecases/auth/reset_password_usecase.dart';
 import '../../../domain/usecases/oauth/login_with_apple_usecase.dart';
 import '../../../domain/usecases/oauth/login_with_google_usecase.dart';
 
@@ -35,6 +37,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginWithGoogleUseCase _loginWithGoogleUseCase;
   final LoginWithAppleUseCase _loginWithAppleUseCase;
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
+  final ForgotPasswordUseCase _forgotPasswordUseCase;
+  final ResetPasswordUseCase _resetPasswordUseCase;
 
   AuthBloc({
     required LoginUseCase loginUseCase,
@@ -47,6 +51,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required LoginWithGoogleUseCase loginWithGoogleUseCase,
     required LoginWithAppleUseCase loginWithAppleUseCase,
     required CheckAuthStatusUseCase checkAuthStatusUseCase,
+    required ForgotPasswordUseCase forgotPasswordUseCase,
+    required ResetPasswordUseCase resetPasswordUseCase,
   }) : _loginUseCase = loginUseCase,
        _registerUseCase = registerUseCase,
        _registerOwnerUseCase = registerOwnerUseCase,
@@ -57,6 +63,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _loginWithGoogleUseCase = loginWithGoogleUseCase,
        _loginWithAppleUseCase = loginWithAppleUseCase,
        _checkAuthStatusUseCase = checkAuthStatusUseCase,
+       _forgotPasswordUseCase = forgotPasswordUseCase,
+       _resetPasswordUseCase = resetPasswordUseCase,
        super(const AuthState.initial()) {
     // Registrace handlerů pro jednotlivé události
     on<AppStarted>(_onAppStarted);
@@ -68,6 +76,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleLoginRequested>(_onGoogleLoginRequested);
     on<AppleLoginRequested>(_onAppleLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<ForgotPasswordRequested>(_onForgotPasswordRequested);
+    on<ResetPasswordRequested>(_onResetPasswordRequested);
   }
 
   /// 🟢 INITIALIZATION
@@ -242,6 +252,49 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } finally {
       // Vždy emitujeme unauthenticated, i když síťové volání selže
       emit(const AuthState.unauthenticated());
+    }
+  }
+
+  /// Odešle email s odkazem pro obnovu hesla.
+  Future<void> _onForgotPasswordRequested(
+    ForgotPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthState.loading());
+    try {
+      await _forgotPasswordUseCase(event.email);
+      emit(AuthState.passwordResetEmailSent(event.email));
+    } on SecurityException catch (e) {
+      emit(AuthState.failure(_mapExceptionToFailure(e)));
+    } catch (e) {
+      emit(
+        AuthState.failure(
+          const AuthFailure(message: 'error_forgot_password'),
+        ),
+      );
+    }
+  }
+
+  /// Nastaví nové heslo přes reset token.
+  Future<void> _onResetPasswordRequested(
+    ResetPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthState.loading());
+    try {
+      await _resetPasswordUseCase(
+        token: event.token,
+        newPassword: event.newPassword,
+      );
+      emit(const AuthState.passwordResetSuccess());
+    } on SecurityException catch (e) {
+      emit(AuthState.failure(_mapExceptionToFailure(e)));
+    } catch (e) {
+      emit(
+        AuthState.failure(
+          const AuthFailure(message: 'error_reset_password'),
+        ),
+      );
     }
   }
 

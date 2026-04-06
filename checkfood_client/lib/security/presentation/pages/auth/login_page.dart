@@ -7,7 +7,12 @@ import '../../../../navigation/app_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
+import '../../../domain/entities/user.dart';
+import '../../../data/models/profile/request/update_profile_request_model.dart';
+import '../../bloc/user/user_bloc.dart';
+import '../../bloc/user/user_event.dart';
 import '../../widgets/auth/login_form.dart';
+import '../../widgets/profile_completion_dialog.dart';
 
 /**
  * Hlavní přihlašovací stránka aplikace.
@@ -72,9 +77,13 @@ class _LoginPageState extends State<LoginPage> {
           state.maybeWhen(
             authenticated: (user) {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
-              Navigator.of(
-                context,
-              ).pushNamedAndRemoveUntil(AppRouter.main, (route) => false);
+              if (user.needsProfileCompletion) {
+                _showProfileCompletionDialog(context, user);
+              } else {
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(AppRouter.main, (route) => false);
+              }
             },
             failure: (error) {
               // ✅ Využití isExpired z modelu místo parsování textu
@@ -234,38 +243,47 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildRegisterLink() {
     final l = S.of(context);
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              l.noAccountYet,
-              style: const TextStyle(color: AppColors.textSecondary),
-            ),
-            TextButton(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(AppRouter.register),
-              child: Text(
-                l.signUp,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryDark),
-              ),
-            ),
-          ],
+        Text(
+          l.noAccountYet,
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         TextButton(
           onPressed: () =>
-              Navigator.of(context).pushNamed(AppRouter.registerOwner),
+              Navigator.of(context).pushNamed(AppRouter.register),
           child: Text(
-            l.registerAsOwner,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
-            ),
+            l.signUp,
+            style:
+                const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryDark),
           ),
         ),
       ],
+    );
+  }
+
+  void _showProfileCompletionDialog(BuildContext context, User user) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => ProfileCompletionDialog(
+        initialFirstName: user.firstName.isNotEmpty ? user.firstName : null,
+        initialLastName: user.lastName.isNotEmpty ? user.lastName : null,
+        onSave: (firstName, lastName, phone) {
+          context.read<UserBloc>().add(
+                UserEvent.profileUpdated(
+                  UpdateProfileRequestModel(
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: phone.isNotEmpty ? phone : null,
+                  ),
+                ),
+              );
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRouter.main, (route) => false);
+        },
+      ),
     );
   }
 
@@ -278,6 +296,8 @@ class _LoginPageState extends State<LoginPage> {
       'error_verification_failed' => l.errorVerificationFailed,
       'error_google_login' => l.errorGoogleLogin,
       'error_apple_login' => l.errorAppleLogin,
+      'error_forgot_password' => l.errorForgotPassword,
+      'error_reset_password' => l.errorResetPassword,
       _ => errorCode,
     };
   }

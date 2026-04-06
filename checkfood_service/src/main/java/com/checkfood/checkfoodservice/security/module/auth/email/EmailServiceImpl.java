@@ -79,4 +79,36 @@ public class EmailServiceImpl implements EmailService {
             throw AuthException.internalError("Chyba při odesílání verifikačního emailu: " + e.getMessage());
         }
     }
+
+    /**
+     * Asynchronně odešle HTML email s odkazem pro obnovu hesla.
+     *
+     * Konstruuje reset URL s backend endpointem a token parametrem.
+     * Používá EmailTemplates pro consistent branding a HTML formatting.
+     *
+     * @param to email adresa příjemce
+     * @param token reset token pro URL construction
+     * @throws AuthException při SMTP delivery failures
+     */
+    @Async
+    @Override
+    public void sendPasswordResetEmail(String to, String token) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            String link = backendUrl + "/api/auth/reset-password?token=" + token;
+            String htmlMsg = EmailTemplates.createPasswordResetEmail(link);
+
+            helper.setText(htmlMsg, true);
+            helper.setTo(to);
+            helper.setSubject("CheckFood - Obnova hesla");
+            helper.setFrom(senderEmail);
+
+            mailSender.send(mimeMessage);
+
+        } catch (MessagingException e) {
+            throw AuthException.internalError("Chyba při odesílání emailu pro obnovu hesla: " + e.getMessage());
+        }
+    }
 }

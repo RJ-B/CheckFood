@@ -87,4 +87,20 @@ public interface AuthService {
      * @return DTO s informacemi o uživateli
      */
     UserResponse getCurrentUser(UserDetails userDetails);
+
+    /**
+     * Zpracuje žádost o obnovu hesla. Vygeneruje reset token a odešle email.
+     * Vrací void a NEINDIKUJE zda email existuje (prevence user enumeration).
+     *
+     * @param email emailová adresa uživatele
+     */
+    void requestPasswordReset(String email);
+
+    /**
+     * Provede reset hesla na základě platného tokenu.
+     *
+     * @param token reset token z emailového odkazu
+     * @param newPassword nové heslo (validováno přes PasswordPolicy)
+     */
+    void resetPassword(String token, String newPassword);
 }

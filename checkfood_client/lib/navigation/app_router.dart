@@ -5,6 +5,8 @@ import 'main_shell.dart';
 import '../security/presentation/pages/auth/login_page.dart';
 import '../security/presentation/pages/auth/register_page.dart';
 import '../security/presentation/pages/auth/email_verification_screen.dart';
+import '../security/presentation/pages/auth/forgot_password_page.dart';
+import '../security/presentation/pages/auth/reset_password_page.dart';
 import '../modules/owner/presentation/pages/owner_register_page.dart';
 import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
 import '../l10n/generated/app_localizations.dart';
@@ -17,6 +19,8 @@ class AppRouter {
   static const String claimRestaurant = '/claim-restaurant';
   static const String verifyEmail = '/verify-email';
   static const String main = '/main';
+  static const String forgotPassword = '/forgot-password';
+  static const String resetPassword = '/reset-password';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final uri = Uri.parse(settings.name ?? '/');
@@ -54,6 +58,18 @@ class AppRouter {
 
       case main:
         return MaterialPageRoute(builder: (_) => const MainShell());
+
+      case forgotPassword:
+        return MaterialPageRoute(builder: (_) => const ForgotPasswordPage());
+
+      case resetPassword:
+        final String? token = uri.queryParameters['token'];
+        if (token == null || token.isEmpty) {
+          return _errorRoute();
+        }
+        return MaterialPageRoute(
+          builder: (_) => ResetPasswordPage(token: token),
+        );
 
       default:
         return _errorRoute();

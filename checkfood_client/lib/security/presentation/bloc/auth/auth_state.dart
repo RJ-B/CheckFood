@@ -25,4 +25,10 @@ class AuthState with _$AuthState {
 
   /// Jednotný stav pro jakékoliv selhání s doménovou entitou AuthFailure.
   const factory AuthState.failure(AuthFailure failure) = _Failure;
+
+  /// Email s odkazem pro obnovu hesla byl odeslán.
+  const factory AuthState.passwordResetEmailSent(String email) = _PasswordResetEmailSent;
+
+  /// Heslo bylo úspěšně změněno přes reset token.
+  const factory AuthState.passwordResetSuccess() = _PasswordResetSuccess;
 }

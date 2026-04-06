@@ -67,4 +67,18 @@ public class AuthLogger extends SecurityLogger {
     public void logTokenRefresh(String email) {
         this.info("Obnovení přístupového tokenu (Refresh) pro uživatele '{}'.", email);
     }
+
+    /**
+     * Zaloguje žádost o obnovu hesla.
+     */
+    public void logPasswordResetRequested(String email) {
+        this.info("Žádost o obnovu hesla pro uživatele '{}'.", email);
+    }
+
+    /**
+     * Zaloguje úspěšný reset hesla.
+     */
+    public void logPasswordResetCompleted(String email) {
+        this.info("Heslo uživatele '{}' bylo úspěšně změněno přes reset odkaz.", email);
+    }
 }

@@ -62,6 +62,8 @@ public class SecurityConfig {
                                 "/api/auth/resend-code",
                                 "/api/auth/refresh",
                                 "/api/auth/logout",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password",
                                 "/api/oauth/**"
                         ).permitAll()
 
@@ -74,8 +76,16 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
 
                         .requestMatchers("/api/v1/internal/**").permitAll()
+                        .requestMatchers("/api/v1/payments/callback").permitAll()
                         .requestMatchers("/panoramas/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers(
+                                "/api/v1/restaurants/markers",
+                                "/api/v1/restaurants/all-markers",
+                                "/api/v1/restaurants/markers-version",
+                                "/api/v1/restaurants/nearest",
+                                "/api/v1/restaurants/{id}"
+                        ).permitAll()
 
                         .anyRequest().authenticated()
                 )

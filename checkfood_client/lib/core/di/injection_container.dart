@@ -13,7 +13,9 @@ import '../../modules/customer/restaurant/data/datasources/favourite_remote_data
 import '../../modules/customer/restaurant/data/datasources/restaurant_remote_datasource.dart';
 import '../../modules/customer/restaurant/data/repositories/restaurant_repository_impl.dart';
 import '../../modules/customer/restaurant/domain/repositories/restaurant_repository.dart';
+import '../../modules/customer/restaurant/data/services/marker_data_service.dart';
 import '../../modules/customer/restaurant/domain/usecases/explore_usecases.dart';
+import '../../modules/customer/restaurant/domain/usecases/get_all_markers_usecase.dart';
 import '../../modules/customer/restaurant/domain/usecases/get_restaurant_by_id_usecase.dart';
 import '../../modules/customer/restaurant/domain/usecases/toggle_favourite_usecase.dart';
 import '../../modules/customer/restaurant/presentation/bloc/explore_bloc.dart';
@@ -42,6 +44,8 @@ import '../../security/domain/usecases/auth/register_usecase.dart';
 import '../../security/domain/usecases/auth/register_owner_usecase.dart';
 import '../../security/domain/usecases/auth/resend_verification_code_usecase.dart';
 import '../../security/domain/usecases/auth/verify_email_usecase.dart';
+import '../../security/domain/usecases/auth/forgot_password_usecase.dart';
+import '../../security/domain/usecases/auth/reset_password_usecase.dart';
 
 // Use Cases - OAuth
 import '../../security/domain/usecases/oauth/login_with_apple_usecase.dart';
@@ -53,6 +57,8 @@ import '../../security/domain/usecases/profile/get_active_devices_usecase.dart';
 import '../../security/domain/usecases/profile/get_user_profile_usecase.dart';
 import '../../security/domain/usecases/profile/logout_all_devices_usecase.dart';
 import '../../security/domain/usecases/profile/logout_device_usecase.dart';
+import '../../security/domain/usecases/profile/delete_device_usecase.dart';
+import '../../security/domain/usecases/profile/delete_all_devices_usecase.dart';
 import '../../security/domain/usecases/profile/update_profile_usecase.dart';
 import '../../security/domain/usecases/profile/update_notification_preference_usecase.dart';
 import '../../security/domain/usecases/profile/get_notification_preference_usecase.dart';
@@ -71,11 +77,13 @@ import '../../modules/management/my_restaurant/data/datasources/my_restaurant_re
 import '../../modules/management/my_restaurant/data/repositories/my_restaurant_repository_impl.dart';
 import '../../modules/management/my_restaurant/domain/repositories/my_restaurant_repository.dart';
 import '../../modules/management/my_restaurant/domain/usecases/get_my_restaurant_usecase.dart';
+import '../../modules/management/my_restaurant/domain/usecases/get_my_restaurants_usecase.dart';
 import '../../modules/management/my_restaurant/domain/usecases/update_restaurant_info_usecase.dart';
 import '../../modules/management/my_restaurant/domain/usecases/get_employees_usecase.dart';
 import '../../modules/management/my_restaurant/domain/usecases/add_employee_usecase.dart';
 import '../../modules/management/my_restaurant/domain/usecases/update_employee_role_usecase.dart';
 import '../../modules/management/my_restaurant/domain/usecases/remove_employee_usecase.dart';
+import '../../modules/management/my_restaurant/domain/usecases/update_employee_permissions_usecase.dart';
 import '../../modules/management/my_restaurant/presentation/bloc/my_restaurant_bloc.dart';
 
 // Reservation Module
@@ -90,6 +98,12 @@ import '../../modules/customer/reservation/domain/usecases/get_my_reservations_o
 import '../../modules/customer/reservation/domain/usecases/get_my_reservations_history_usecase.dart';
 import '../../modules/customer/reservation/domain/usecases/update_reservation_usecase.dart';
 import '../../modules/customer/reservation/domain/usecases/cancel_reservation_usecase.dart';
+import '../../modules/customer/reservation/domain/usecases/get_pending_changes_usecase.dart';
+import '../../modules/customer/reservation/domain/usecases/accept_change_request_usecase.dart';
+import '../../modules/customer/reservation/domain/usecases/decline_change_request_usecase.dart';
+import '../../modules/customer/reservation/domain/usecases/create_recurring_reservation_usecase.dart';
+import '../../modules/customer/reservation/domain/usecases/get_my_recurring_reservations_usecase.dart';
+import '../../modules/customer/reservation/domain/usecases/cancel_recurring_reservation_usecase.dart';
 import '../../modules/customer/reservation/presentation/bloc/reservation_bloc.dart';
 import '../../modules/customer/reservation/presentation/bloc/my_reservations_bloc.dart';
 
@@ -101,6 +115,8 @@ import '../../modules/customer/orders/domain/usecases/get_dining_context_usecase
 import '../../modules/customer/orders/domain/usecases/get_menu_usecase.dart';
 import '../../modules/customer/orders/domain/usecases/create_order_usecase.dart';
 import '../../modules/customer/orders/domain/usecases/get_current_orders_usecase.dart';
+import '../../modules/customer/orders/domain/usecases/initiate_payment_usecase.dart';
+import '../../modules/customer/orders/domain/usecases/get_payment_status_usecase.dart';
 import '../../modules/customer/orders/presentation/bloc/orders_bloc.dart';
 
 // Staff Reservations Module (Management)
@@ -112,6 +128,9 @@ import '../../modules/management/staff_reservations/domain/usecases/confirm_rese
 import '../../modules/management/staff_reservations/domain/usecases/reject_reservation_usecase.dart';
 import '../../modules/management/staff_reservations/domain/usecases/check_in_reservation_usecase.dart';
 import '../../modules/management/staff_reservations/domain/usecases/complete_reservation_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/get_restaurant_tables_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/propose_change_usecase.dart';
+import '../../modules/management/staff_reservations/domain/usecases/extend_reservation_usecase.dart';
 import '../../modules/management/staff_reservations/presentation/bloc/staff_reservations_bloc.dart';
 
 // Owner Claim Module
@@ -305,6 +324,10 @@ Future<void> init() async {
   // CheckAuthStatusUseCase
   sl.registerLazySingleton(() => CheckAuthStatusUseCase(sl()));
 
+  // Forgot/Reset Password
+  sl.registerLazySingleton(() => ForgotPasswordUseCase(sl()));
+  sl.registerLazySingleton(() => ResetPasswordUseCase(sl()));
+
   // Auth OAuth
   sl.registerLazySingleton(() => LoginWithGoogleUseCase(sl()));
   sl.registerLazySingleton(() => LoginWithAppleUseCase(sl()));
@@ -316,6 +339,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetActiveDevicesUseCase(sl()));
   sl.registerLazySingleton(() => LogoutDeviceUseCase(sl()));
   sl.registerLazySingleton(() => LogoutAllDevicesUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteDeviceUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteAllDevicesUseCase(sl()));
   sl.registerLazySingleton(() => UpdateNotificationPreferenceUseCase(sl()));
   sl.registerLazySingleton(() => GetNotificationPreferenceUseCase(sl()));
 
@@ -335,6 +360,8 @@ Future<void> init() async {
       loginWithGoogleUseCase: sl(),
       loginWithAppleUseCase: sl(),
       checkAuthStatusUseCase: sl(),
+      forgotPasswordUseCase: sl(),
+      resetPasswordUseCase: sl(),
     ),
   );
 
@@ -346,6 +373,8 @@ Future<void> init() async {
       changePasswordUseCase: sl(),
       logoutDeviceUseCase: sl(),
       logoutAllDevicesUseCase: sl(),
+      deleteDeviceUseCase: sl(),
+      deleteAllDevicesUseCase: sl(),
       updateNotificationPreferenceUseCase: sl(),
       getNotificationPreferenceUseCase: sl(),
       notificationService: sl(),
@@ -376,14 +405,22 @@ Future<void> init() async {
   // LocationService uz je registrovan v sekci 1. Zde registrujeme jen UseCase.
   sl.registerLazySingleton(() => GetLocationUseCase(sl()));
 
+  sl.registerLazySingleton(() => GetRestaurantMarkersUseCase(sl()));
+  sl.registerLazySingleton(() => GetNearestRestaurantsUseCase(sl()));
   sl.registerLazySingleton(() => GetRestaurantByIdUseCase(sl()));
   sl.registerLazySingleton(() => ToggleFavouriteUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllMarkersUseCase(sl()));
+  sl.registerLazySingleton(() => MarkerDataService());
 
   // --- Blocs ---
   sl.registerFactory(
     () => ExploreBloc(
       getLocationUseCase: sl(),
-      placesService: sl(),
+      getMarkersUseCase: sl(),
+      getNearestUseCase: sl(),
+      restaurantRepository: sl(),
+      getAllMarkersUseCase: sl(),
+      markerDataService: sl(),
     ),
   );
 
@@ -417,6 +454,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMyReservationsHistoryUseCase(sl()));
   sl.registerLazySingleton(() => UpdateReservationUseCase(sl()));
   sl.registerLazySingleton(() => CancelReservationUseCase(sl()));
+  sl.registerFactory(() => GetPendingChangesUseCase(sl()));
+  sl.registerFactory(() => AcceptChangeRequestUseCase(sl()));
+  sl.registerFactory(() => DeclineChangeRequestUseCase(sl()));
 
   // --- Blocs ---
   sl.registerFactory(
@@ -436,8 +476,19 @@ Future<void> init() async {
       updateUseCase: sl(),
       getSceneUseCase: sl(),
       getSlotsUseCase: sl(),
+      getPendingChangesUseCase: sl(),
+      acceptChangeRequestUseCase: sl(),
+      declineChangeRequestUseCase: sl(),
+      createRecurringUseCase: sl(),
+      getRecurringUseCase: sl(),
+      cancelRecurringUseCase: sl(),
     ),
   );
+
+  // Recurring reservation use cases
+  sl.registerLazySingleton(() => CreateRecurringReservationUseCase(sl()));
+  sl.registerLazySingleton(() => GetMyRecurringReservationsUseCase(sl()));
+  sl.registerLazySingleton(() => CancelRecurringReservationUseCase(sl()));
 
   // ===========================================================================
   // 9. MY RESTAURANT MODULE (Management)
@@ -455,21 +506,25 @@ Future<void> init() async {
 
   // --- Use Cases ---
   sl.registerLazySingleton(() => GetMyRestaurantUseCase(sl()));
+  sl.registerLazySingleton(() => GetMyRestaurantsUseCase(sl()));
   sl.registerLazySingleton(() => UpdateRestaurantInfoUseCase(sl()));
   sl.registerLazySingleton(() => GetEmployeesUseCase(sl()));
   sl.registerLazySingleton(() => AddEmployeeUseCase(sl()));
   sl.registerLazySingleton(() => UpdateEmployeeRoleUseCase(sl()));
   sl.registerLazySingleton(() => RemoveEmployeeUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateEmployeePermissionsUseCase(sl()));
 
   // --- Blocs ---
   sl.registerFactory(
     () => MyRestaurantBloc(
       getMyRestaurantUseCase: sl(),
+      getMyRestaurantsUseCase: sl(),
       updateRestaurantInfoUseCase: sl(),
       getEmployeesUseCase: sl(),
       addEmployeeUseCase: sl(),
       updateEmployeeRoleUseCase: sl(),
       removeEmployeeUseCase: sl(),
+      updateEmployeePermissionsUseCase: sl(),
     ),
   );
 
@@ -493,6 +548,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RejectReservationUseCase(sl()));
   sl.registerLazySingleton(() => CheckInReservationUseCase(sl()));
   sl.registerLazySingleton(() => CompleteReservationUseCase(sl()));
+  sl.registerLazySingleton(() => GetRestaurantTablesUseCase(sl()));
+  sl.registerFactory(() => ProposeChangeUseCase(sl()));
+  sl.registerFactory(() => ExtendReservationUseCase(sl()));
 
   // --- Blocs ---
   sl.registerFactory(
@@ -502,6 +560,9 @@ Future<void> init() async {
       reject: sl(),
       checkIn: sl(),
       complete: sl(),
+      getTables: sl(),
+      proposeChange: sl(),
+      extendReservation: sl(),
     ),
   );
 
@@ -524,6 +585,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMenuUseCase(sl()));
   sl.registerLazySingleton(() => CreateOrderUseCase(sl()));
   sl.registerLazySingleton(() => GetCurrentOrdersUseCase(sl()));
+  sl.registerLazySingleton(() => InitiatePaymentUseCase(sl()));
+  sl.registerLazySingleton(() => GetPaymentStatusUseCase(sl()));
 
   // --- Blocs ---
   sl.registerFactory(
@@ -532,6 +595,8 @@ Future<void> init() async {
       getMenuUseCase: sl(),
       createOrderUseCase: sl(),
       getCurrentOrdersUseCase: sl(),
+      initiatePaymentUseCase: sl(),
+      getPaymentStatusUseCase: sl(),
     ),
   );
 

@@ -27,4 +27,13 @@ public interface EmailService {
      * @throws AuthException při email delivery failures
      */
     void sendVerificationEmail(String to, String token);
+
+    /**
+     * Asynchronně odešle email s odkazem pro obnovu hesla.
+     *
+     * @param to email adresa příjemce
+     * @param token reset token pro URL construction
+     * @throws AuthException při email delivery failures
+     */
+    void sendPasswordResetEmail(String to, String token);
 }

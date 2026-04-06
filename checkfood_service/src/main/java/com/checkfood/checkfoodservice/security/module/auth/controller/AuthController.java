@@ -3,6 +3,7 @@ package com.checkfood.checkfoodservice.security.module.auth.controller;
 import com.checkfood.checkfoodservice.security.module.auth.dto.request.*;
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.TokenResponse;
+import com.checkfood.checkfoodservice.security.module.auth.repository.PasswordResetTokenRepository;
 import com.checkfood.checkfoodservice.security.module.user.dto.response.UserResponse;
 import com.checkfood.checkfoodservice.security.module.auth.service.AuthService;
 import com.checkfood.checkfoodservice.security.ratelimit.annotation.RateLimited;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,6 +42,11 @@ public class AuthController {
      * Authentication service pro business logic execution.
      */
     private final AuthService authService;
+
+    /**
+     * Repository pro přímý lookup tokenu při GET redirect validaci.
+     */
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     /**
      * Registruje nového uživatele do systému s rate limiting protection.
@@ -185,6 +192,69 @@ public class AuthController {
         String email = (userDetails != null) ? userDetails.getUsername() : null;
         authService.logout(request, email);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Odešle email s odkazem pro obnovu hesla.
+     * Vrací 200 OK vždy — i pro neexistující email (prevence user enumeration).
+     *
+     * @param request request s email adresou uživatele
+     * @return ResponseEntity s HTTP 200 status
+     */
+    @RateLimited(
+            key = "auth:forgot-password",
+            limit = 3,
+            duration = 15,
+            unit = TimeUnit.MINUTES,
+            perIp = true
+    )
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        authService.requestPasswordReset(request.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * GET endpoint pro deep link redirect z emailu.
+     * Validuje token a přesměruje do mobilní aplikace přes custom URL scheme.
+     *
+     * @param token reset token z emailového odkazu
+     * @param response HTTP response pro redirect functionality
+     * @throws IOException při redirect failures
+     */
+    @GetMapping("/reset-password")
+    public void resetPasswordRedirect(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
+        var optToken = passwordResetTokenRepository.findByToken(token);
+        if (optToken.isEmpty() || optToken.get().isUsed() || optToken.get().getExpiryDate().isBefore(LocalDateTime.now())) {
+            String msg = optToken.isEmpty() ? "Neplatný odkaz" :
+                         optToken.get().isUsed() ? "Odkaz již byl použit" :
+                         "Odkaz vypršel";
+            response.sendRedirect(String.format(
+                    "checkfood://app/login?status=error&type=RESET_TOKEN_ERROR&message=%s",
+                    URLEncoder.encode(msg, StandardCharsets.UTF_8)
+            ));
+            return;
+        }
+        response.sendRedirect("checkfood://app/reset-password?token=" + token);
+    }
+
+    /**
+     * Provede reset hesla na základě tokenu a nového hesla.
+     *
+     * @param request request s tokenem a novým heslem
+     * @return ResponseEntity s HTTP 200 status
+     */
+    @RateLimited(
+            key = "auth:reset-password",
+            limit = 5,
+            duration = 15,
+            unit = TimeUnit.MINUTES,
+            perIp = true
+    )
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request.getToken(), request.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
     /**
