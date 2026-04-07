@@ -3,19 +3,23 @@ import 'package:dio/dio.dart';
 import '../models/request/map_params_model.dart';
 import '../models/request/restaurant_request_model.dart';
 import '../models/request/restaurant_table_request_model.dart';
+import '../models/response/all_markers_response_model.dart';
 import '../models/response/restaurant_marker_response_model.dart';
 import '../models/response/restaurant_response_model.dart';
 import '../models/response/restaurant_table_response_model.dart';
 
-/// Kontrakt pro dálkový datový zdroj modulu restaurací.
+/// Remote data source contract for the restaurant module.
 abstract class RestaurantRemoteDataSource {
-  // --- NOVÉ OPTIMALIZOVANÉ ENDPOINTY (PostGIS) ---
-
-  /// Získá lehké markery (nebo shluky) pro zobrazení na mapě.
-  /// ✅ OPRAVENO: Signatura nyní odpovídá implementaci a přijímá MapParamsModel.
+  /// Returns markers or clusters visible within the given map viewport.
   Future<List<RestaurantMarkerResponseModel>> getMarkers(MapParamsModel params);
 
-  /// Získá seznam nejbližších restaurací seřazený podle vzdálenosti (stránkovaný).
+  /// Downloads the full snapshot of lightweight markers for client-side clustering.
+  Future<AllMarkersResponseModel> getAllMarkers();
+
+  /// Returns the current server-side version of the markers snapshot.
+  Future<int> getMarkersVersion();
+
+  /// Returns a paginated list of restaurants sorted by distance from the given coordinates.
   Future<List<RestaurantResponseModel>> getNearestRestaurants({
     required double lat,
     required double lng,
@@ -27,8 +31,6 @@ abstract class RestaurantRemoteDataSource {
     bool? openNow,
     bool? favouritesOnly,
   });
-
-  // --- STANDARDNÍ CRUD ENDPOINTY ---
 
   Future<RestaurantResponseModel> getRestaurantById(String id);
 
@@ -45,8 +47,6 @@ abstract class RestaurantRemoteDataSource {
 
   Future<void> deleteRestaurant(String id);
 
-  // --- SPRÁVA STOLŮ ---
-
   Future<RestaurantTableResponseModel> addTable(
     String restaurantId,
     RestaurantTableRequestModel request,
@@ -55,11 +55,10 @@ abstract class RestaurantRemoteDataSource {
   Future<List<RestaurantTableResponseModel>> getTables(String restaurantId);
 }
 
-/// Implementace využívající Dio pro REST komunikaci.
+/// Dio-based implementation of [RestaurantRemoteDataSource].
 class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   final Dio _dio;
 
-  // Base URL navazuje na globální nastavení Dio (obvykle /api)
   static const String _baseUrl = '/v1/restaurants';
 
   RestaurantRemoteDataSourceImpl(this._dio);
@@ -70,8 +69,7 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   ) async {
     final response = await _dio.get(
       '$_baseUrl/markers',
-      queryParameters:
-          params.toQueryParameters(), // ✅ Čisté předání parametrů skrze model
+      queryParameters: params.toQueryParameters(),
     );
 
     return (response.data as List)
@@ -201,5 +199,19 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
           ),
         )
         .toList();
+  }
+
+  @override
+  Future<AllMarkersResponseModel> getAllMarkers() async {
+    final response = await _dio.get('$_baseUrl/all-markers');
+    return AllMarkersResponseModel.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  Future<int> getMarkersVersion() async {
+    final response = await _dio.get('$_baseUrl/markers-version');
+    return response.data['version'] as int;
   }
 }

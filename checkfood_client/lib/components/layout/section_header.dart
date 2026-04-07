@@ -4,6 +4,7 @@ import '../../core/theme/typography.dart';
 import '../../core/theme/colors.dart';
 import '../buttons/ghost_button.dart';
 
+/// Řádek s nadpisem sekce, volitelným podnadpisem a tlačítkem akce na konci.
 class SectionHeader extends StatelessWidget {
   final String title;
   final String? subtitle;

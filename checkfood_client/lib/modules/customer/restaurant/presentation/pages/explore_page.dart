@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +9,9 @@ import 'package:gap/gap.dart';
 
 import '../../../../../components/dialogs/location_permission_dialog.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
-import '../../data/models/request/map_params_model.dart';
-import '../../domain/entities/google_place.dart';
 import '../../domain/entities/restaurant_marker.dart';
 import '../../domain/entities/explore_data.dart';
+import '../../domain/entities/restaurant.dart';
 import '../bloc/explore_bloc.dart';
 import '../bloc/explore_event.dart';
 import '../bloc/explore_state.dart';
@@ -21,7 +19,10 @@ import '../widgets/place_card.dart';
 import '../utils/map_marker_helper.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/location_service.dart';
+import 'restaurant_detail_page.dart';
 
+/// Full-screen map view for discovering nearby restaurants, with client-side
+/// marker clustering, a sliding restaurant list panel, and text search.
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
 
@@ -29,7 +30,9 @@ class ExplorePage extends StatefulWidget {
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
-class _ExplorePageState extends State<ExplorePage> {
+/// State for [ExplorePage]: manages the Google Maps controller, panel
+/// animations, search input, and marker clustering lifecycle.
+class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin {
   GoogleMapController? _googleMapController;
   final PanelController _panelController = PanelController();
   final TextEditingController _searchController = TextEditingController();
@@ -39,15 +42,23 @@ class _ExplorePageState extends State<ExplorePage> {
   double _currentZoom = 14.0;
   bool _initialCameraSet = false;
   String? _mapStyle;
+  bool _panelFullyOpen = false;
+  bool _showDebugPanel = false;
+  double _debugClusterRadius = 30.0;
+  bool _debugRadiusOverride = false;
 
-  LatLngBounds? _lastFetchedBounds;
-  int? _lastFetchedZoom;
+  late final AnimationController _fadeController;
+  double? _previousZoomForFade;
 
   @override
   void initState() {
     super.initState();
 
     _listScrollController = ScrollController();
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
 
     context.read<ExploreBloc>().add(const ExploreEvent.initializeRequested());
 
@@ -60,22 +71,29 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   void dispose() {
+    _fadeController.dispose();
     _searchController.dispose();
     _listScrollController.dispose();
     _googleMapController?.dispose();
     super.dispose();
   }
 
-  // ---------------------------------------------------------------------------
-  // Marker rendering
-  // ---------------------------------------------------------------------------
+  List<RestaurantMarker>? _lastBackendMarkers;
+  String? _lastSelectedId;
 
   Future<void> _updateMarkers(
     List<RestaurantMarker> backendMarkers,
-    String? selectedPlaceId,
+    String? selectedRestaurantId,
   ) async {
+    if (identical(_lastBackendMarkers, backendMarkers) &&
+        _lastSelectedId == selectedRestaurantId) {
+      return;
+    }
+    _lastBackendMarkers = backendMarkers;
+    _lastSelectedId = selectedRestaurantId;
+
     final Set<Marker> freshMarkers = {};
-    final zoom = _currentZoom.round();
+    final zoom = _currentZoom.floor();
 
     final List<Future<void>> markerTasks = backendMarkers.map((item) async {
       if (item.isCluster) {
@@ -101,9 +119,12 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
         );
       } else {
-        final isSelected = item.id == selectedPlaceId;
+        final isSelected = item.id == selectedRestaurantId;
 
         final icon = await MapMarkerHelper.getRestaurantBitmap(
+          id: item.id ?? 'unknown',
+          name: item.name,
+          logoUrl: item.logoUrl,
           isSelected: isSelected,
         );
 
@@ -121,12 +142,37 @@ class _ExplorePageState extends State<ExplorePage> {
 
     await Future.wait(markerTasks);
 
-    if (mounted) {
-      setState(() {
-        _markers = freshMarkers;
-      });
+    if (!mounted) return;
+
+    final zoomChanged = _previousZoomForFade != null &&
+        (_previousZoomForFade! - _currentZoom).abs() >= 0.5;
+    _previousZoomForFade = _currentZoom;
+
+    if (zoomChanged && _markers.isNotEmpty) {
+      setState(() => _markers = _setAlpha(_markers, 0.01));
+      await Future.delayed(const Duration(milliseconds: 80));
+      if (!mounted) return;
+      setState(() => _markers = _setAlpha(freshMarkers, 0.01));
+      await Future.delayed(const Duration(milliseconds: 40));
+      if (!mounted) return;
+      setState(() => _markers = freshMarkers);
+    } else {
+      setState(() => _markers = freshMarkers);
     }
   }
+
+  /// Creates a copy of markers with the given alpha. Cheap — no bitmap regeneration.
+  Set<Marker> _setAlpha(Set<Marker> markers, double alpha) {
+    return markers.map((m) => Marker(
+      markerId: m.markerId,
+      position: m.position,
+      icon: m.icon,
+      alpha: alpha.clamp(0.01, 1.0),
+      zIndexInt: m.zIndexInt,
+      onTap: m.onTap,
+    )).toSet();
+  }
+
 
   Future<void> _zoomIntoCluster(RestaurantMarker cluster) async {
     _googleMapController?.animateCamera(
@@ -137,22 +183,18 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  void _onPinTapped(String? placeId) {
-    if (placeId == null) return;
+  void _onPinTapped(String? restaurantId) {
+    if (restaurantId == null) return;
     context.read<ExploreBloc>().add(
-          ExploreEvent.markerSelected(placeId: placeId),
+          ExploreEvent.markerSelected(restaurantId: restaurantId),
         );
   }
 
   void _deselectMarker() {
     context.read<ExploreBloc>().add(
-          const ExploreEvent.markerSelected(placeId: null),
+          const ExploreEvent.markerSelected(restaurantId: null),
         );
   }
-
-  // ---------------------------------------------------------------------------
-  // Build
-  // ---------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +211,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 );
                 _initialCameraSet = true;
               }
-              _updateMarkers(data.markers, data.selectedPlaceId);
+              _updateMarkers(data.markers, data.selectedRestaurantId);
             },
             error: (message) => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -192,8 +234,10 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   Widget _buildMainUI(ExploreData data) {
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.8;
-    const panelHeightClosed = 200.0;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final panelHeightOpen = screenHeight * 0.8;
+    const panelHeightClosed = 60.0;
+    final snapFraction = 200.0 / panelHeightOpen;
 
     return Stack(
       children: [
@@ -201,12 +245,20 @@ class _ExplorePageState extends State<ExplorePage> {
           controller: _panelController,
           maxHeight: panelHeightOpen,
           minHeight: panelHeightClosed,
+          snapPoint: snapFraction,
+          defaultPanelState: PanelState.CLOSED,
           parallaxEnabled: true,
           parallaxOffset: .5,
           borderRadius:
               const BorderRadius.vertical(top: Radius.circular(24)),
+          onPanelSlide: (position) {
+            final isOpen = position >= 0.99;
+            if (isOpen != _panelFullyOpen) {
+              setState(() => _panelFullyOpen = isOpen);
+            }
+          },
           body: GestureDetector(
-            onTap: data.selectedPlaceId != null ? _deselectMarker : null,
+            onTap: data.selectedRestaurantId != null ? _deselectMarker : null,
             child: GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: LatLng(
@@ -226,22 +278,23 @@ class _ExplorePageState extends State<ExplorePage> {
               },
               onCameraMove: (position) {
                 _currentZoom = position.zoom;
+                if (_showDebugPanel) {
+                  setState(() {});
+                }
               },
               onCameraIdle: () {
                 _onMapBoundsChanged();
               },
             ),
           ),
-          panelBuilder: (_) => _buildPlaceList(data),
+          panelBuilder: (_) => _buildRestaurantList(data),
         ),
-        // Search bar overlay
         Positioned(
           top: MediaQuery.of(context).padding.top + 10,
           left: 16,
           right: 16,
           child: _buildTopSearchBar(),
         ),
-        // My-location FAB
         Positioned(
           right: 16,
           bottom: panelHeightClosed + 16,
@@ -252,53 +305,141 @@ class _ExplorePageState extends State<ExplorePage> {
             child: const Icon(Icons.my_location, color: AppColors.primary),
           ),
         ),
-        // Map loading indicator
         _buildMapLoadingIndicator(data.isMapLoading),
-        // Selected place preview card
-        if (data.selectedPlace != null)
-          _buildSelectedPlacePreview(data, panelHeightClosed),
+        Positioned(
+          left: 16,
+          bottom: panelHeightClosed + 16,
+          child: FloatingActionButton.small(
+            heroTag: 'debugToggle',
+            backgroundColor: _showDebugPanel ? AppColors.primary : Colors.white,
+            onPressed: () => setState(() => _showDebugPanel = !_showDebugPanel),
+            child: Icon(Icons.tune, color: _showDebugPanel ? Colors.white : AppColors.textMuted),
+          ),
+        ),
+        if (_showDebugPanel)
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: panelHeightClosed + 60,
+            child: _buildDebugPanel(),
+          ),
       ],
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Selected place preview card
-  // ---------------------------------------------------------------------------
+  double _computeGaussianRadius(double zoom) {
+    return context.read<ExploreBloc>().clusterManager.dynamicRadiusPx(zoom);
+  }
 
-  Widget _buildSelectedPlacePreview(
-    ExploreData data,
-    double panelHeightClosed,
-  ) {
-    final place = data.selectedPlace!;
+  Widget _buildDebugPanel() {
+    final gaussianRadius = _computeGaussianRadius(_currentZoom);
 
-    return Positioned(
-      left: 16,
-      right: 16,
-      bottom: panelHeightClosed + 72,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 8)],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'zoom: ${_currentZoom.toStringAsFixed(2)}',
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Gauss: ${gaussianRadius.toStringAsFixed(1)}px',
+                style: const TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+              ),
+              if (_debugRadiusOverride) ...[
+                const SizedBox(width: 8),
+                Text(
+                  '→ override: ${_debugClusterRadius.round()}px',
+                  style: const TextStyle(fontSize: 12, color: AppColors.error, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Text('Radius:', style: TextStyle(fontSize: 11)),
+              Expanded(
+                child: Slider(
+                  value: _debugClusterRadius,
+                  min: 1,
+                  max: 100,
+                  divisions: 99,
+                  label: _debugClusterRadius.round().toString(),
+                  onChanged: (v) => setState(() => _debugClusterRadius = v),
+                ),
+              ),
+              Text(
+                '${_debugClusterRadius.round()}px',
+                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (_debugRadiusOverride)
+                TextButton(
+                  onPressed: () {
+                    setState(() => _debugRadiusOverride = false);
+                    context.read<ExploreBloc>().clusterManager.radiusOverride = null;
+                    MapMarkerHelper.clearCache();
+                    _onMapBoundsChanged();
+                  },
+                  child: const Text('Zrušit override', style: TextStyle(fontSize: 12)),
+                ),
+              const SizedBox(width: 8),
+              FilledButton(
+                onPressed: () {
+                  setState(() => _debugRadiusOverride = true);
+                  context.read<ExploreBloc>().clusterManager.radiusOverride = _debugClusterRadius;
+                  MapMarkerHelper.clearCache();
+                  _onMapBoundsChanged();
+                },
+                child: const Text('Použít', style: TextStyle(fontSize: 12)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInlineRestaurantPreview(ExploreData data) {
+    final restaurant = data.selectedRestaurant!;
+    final imageUrl = restaurant.coverImageUrl ?? restaurant.logoUrl;
+    final address = restaurant.address.fullAddress;
+
+    return GestureDetector(
+      onTap: () => _navigateToDetail(restaurant.id),
       child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          color: AppColors.borderLight,
+          borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
           children: [
-            // Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: SizedBox(
-                width: 56,
-                height: 56,
-                child: place.photoUrl != null
+                width: 48,
+                height: 48,
+                child: imageUrl != null
                     ? Image.network(
-                        place.photoUrl!,
+                        imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => _previewPlaceholder(),
                       )
@@ -306,51 +447,39 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
             const SizedBox(width: 12),
-            // Name + address
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    place.name,
+                    restaurant.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontSize: 14,
                       color: AppColors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (place.address != null) ...[
+                  if (address.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
-                      place.address!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
+                      address,
+                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  if (place.rating != null) ...[
-                    const SizedBox(height: 4),
+                  if (restaurant.rating != null) ...[
+                    const SizedBox(height: 3),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.star_rounded,
-                          size: 14,
-                          color: Colors.amber,
-                        ),
+                        const Icon(Icons.star_rounded, size: 14, color: Colors.amber),
                         const SizedBox(width: 2),
                         Text(
-                          place.rating!.toStringAsFixed(1),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
-                          ),
+                          restaurant.rating!.toStringAsFixed(1),
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -358,14 +487,11 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
             ),
-            // Close button
+            const Icon(Icons.chevron_right, color: AppColors.textMuted, size: 20),
+            const SizedBox(width: 4),
             GestureDetector(
               onTap: _deselectMarker,
-              child: const Icon(
-                Icons.close,
-                size: 18,
-                color: AppColors.textMuted,
-              ),
+              child: const Icon(Icons.close, size: 18, color: AppColors.textMuted),
             ),
           ],
         ),
@@ -383,10 +509,6 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
-
-  // ---------------------------------------------------------------------------
-  // Location
-  // ---------------------------------------------------------------------------
 
   Future<void> _centerOnUser() async {
     try {
@@ -410,10 +532,6 @@ class _ExplorePageState extends State<ExplorePage> {
       }
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Map loading indicator
-  // ---------------------------------------------------------------------------
 
   Widget _buildMapLoadingIndicator(bool isLoading) {
     return AnimatedPositioned(
@@ -459,17 +577,15 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Place list panel
-  // ---------------------------------------------------------------------------
-
-  Widget _buildPlaceList(ExploreData data) {
-    final hasMore = data.places.length >= 20;
+  Widget _buildRestaurantList(ExploreData data) {
+    final hasMore = data.restaurants.length >= 20;
 
     return Column(
       children: [
         const Gap(12),
         _buildPanelHandle(),
+        if (data.selectedRestaurant != null)
+          _buildInlineRestaurantPreview(data),
         const Gap(12),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -485,7 +601,9 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
               const Spacer(),
               Text(
-                hasMore ? '20+ nalezeno' : '${data.places.length} nalezeno',
+                hasMore
+                    ? '20+ nalezeno'
+                    : '${data.restaurants.length} nalezeno',
                 style: const TextStyle(
                   fontSize: 12,
                   color: AppColors.textMuted,
@@ -499,9 +617,9 @@ class _ExplorePageState extends State<ExplorePage> {
             padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
             child: Row(
               children: [
-                Icon(Icons.zoom_in, size: 14, color: AppColors.primary),
+                const Icon(Icons.zoom_in, size: 14, color: AppColors.primary),
                 const SizedBox(width: 4),
-                Text(
+                const Text(
                   'Přibližte mapu pro zobrazení dalších',
                   style: TextStyle(
                     fontSize: 11,
@@ -514,7 +632,7 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
         const Gap(8),
         Expanded(
-          child: data.places.isEmpty && !data.isMapLoading
+          child: data.restaurants.isEmpty && !data.isMapLoading
               ? const Center(
                   child: Padding(
                     padding: EdgeInsets.all(32),
@@ -529,13 +647,16 @@ class _ExplorePageState extends State<ExplorePage> {
                 )
               : ListView.builder(
                   controller: _listScrollController,
-                  itemCount: data.places.length,
+                  physics: _panelFullyOpen
+                      ? const AlwaysScrollableScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
+                  itemCount: data.restaurants.length,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemBuilder: (context, index) {
-                    final place = data.places[index];
-                    return PlaceCard(
-                      place: place,
-                      onTap: () => _onPlaceCardTapped(place),
+                    final restaurant = data.restaurants[index];
+                    return RestaurantListCard(
+                      restaurant: restaurant,
+                      onTap: () => _selectRestaurantFromList(restaurant),
                     );
                   },
                 ),
@@ -544,74 +665,48 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  void _onPlaceCardTapped(GooglePlace place) {
-    // Animate map to the place
-    _googleMapController?.animateCamera(
-      CameraUpdate.newLatLngZoom(place.latLng, 17),
-    );
-    // Select marker
-    context.read<ExploreBloc>().add(
-          ExploreEvent.markerSelected(placeId: place.id),
-        );
-    // Collapse panel
+  void _selectRestaurantFromList(Restaurant restaurant) {
     _panelController.close();
+    _googleMapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(
+        LatLng(restaurant.address.latitude ?? 0, restaurant.address.longitude ?? 0),
+        18.0,
+      ),
+    );
+    context.read<ExploreBloc>().add(
+      ExploreEvent.markerSelected(restaurantId: restaurant.id),
+    );
   }
 
-  // ---------------------------------------------------------------------------
-  // Map bounds / viewport
-  // ---------------------------------------------------------------------------
+  void _navigateToDetail(String restaurantId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RestaurantDetailPage(restaurantId: restaurantId),
+      ),
+    );
+  }
 
-  void _onMapBoundsChanged() async {
+  void _onMapBoundsChanged({bool forceRefresh = false}) async {
     if (_googleMapController == null) return;
     final bounds = await _googleMapController!.getVisibleRegion();
-    final zoom = _currentZoom.round();
+    final zoom = _currentZoom.floor();
 
-    final zoomUnchanged = _lastFetchedZoom == zoom;
-    if (zoomUnchanged &&
-        _lastFetchedBounds != null &&
-        _isContained(bounds, _lastFetchedBounds!)) {
-      dev.log(
-        'viewport skip: zoom=$zoom (contained in buffer)',
-        name: 'CheckFood.Map',
-      );
-      return;
+    if (forceRefresh) {
+      MapMarkerHelper.clearCache();
     }
-
-    final bufferedBounds = _expandBounds(bounds, 0.3);
-    _lastFetchedBounds = bufferedBounds;
-    _lastFetchedZoom = zoom;
 
     if (mounted) {
       context.read<ExploreBloc>().add(
-            ExploreEvent.mapBoundsChanged(
-              params: MapParamsModel(bounds: bufferedBounds, zoom: zoom),
-            ),
-          );
+        ExploreEvent.viewportChanged(
+          minLat: bounds.southwest.latitude,
+          maxLat: bounds.northeast.latitude,
+          minLng: bounds.southwest.longitude,
+          maxLng: bounds.northeast.longitude,
+          zoom: zoom,
+        ),
+      );
     }
-  }
-
-  bool _isContained(LatLngBounds inner, LatLngBounds outer) {
-    return inner.southwest.latitude >= outer.southwest.latitude &&
-        inner.southwest.longitude >= outer.southwest.longitude &&
-        inner.northeast.latitude <= outer.northeast.latitude &&
-        inner.northeast.longitude <= outer.northeast.longitude;
-  }
-
-  LatLngBounds _expandBounds(LatLngBounds bounds, double factor) {
-    final latDelta =
-        (bounds.northeast.latitude - bounds.southwest.latitude) * factor;
-    final lngDelta =
-        (bounds.northeast.longitude - bounds.southwest.longitude) * factor;
-    return LatLngBounds(
-      southwest: LatLng(
-        bounds.southwest.latitude - latDelta,
-        bounds.southwest.longitude - lngDelta,
-      ),
-      northeast: LatLng(
-        bounds.northeast.latitude + latDelta,
-        bounds.northeast.longitude + lngDelta,
-      ),
-    );
   }
 
   Future<void> _moveCameraToUser(double lat, double lng) async {
@@ -640,10 +735,6 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
-
-  // ---------------------------------------------------------------------------
-  // Search bar
-  // ---------------------------------------------------------------------------
 
   Widget _buildTopSearchBar() {
     return Container(
@@ -698,10 +789,6 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Panel handle
-  // ---------------------------------------------------------------------------
-
   Widget _buildPanelHandle() {
     return Container(
       width: 40,
@@ -712,10 +799,6 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
-
-  // ---------------------------------------------------------------------------
-  // Error UI
-  // ---------------------------------------------------------------------------
 
   Widget _buildErrorUI(String message) {
     return Center(

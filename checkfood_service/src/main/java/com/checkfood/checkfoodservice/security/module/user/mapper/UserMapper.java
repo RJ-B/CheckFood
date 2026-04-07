@@ -16,14 +16,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Centrální mapper pro transformaci uživatelských dat.
- * Zajišťuje konzistentní převod mezi entitami a DTO s ohledem na bezpečnost a výkon.
+ * MapStruct mapper pro transformaci uživatelských entit na DTO a opačně.
+ * Zajišťuje konzistentní převod mezi entitami a DTO s eliminací citlivých dat z výstupů.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see UserEntity
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UserMapper {
 
     /**
-     * Mapování identity na klientský profil (pro endpoint /api/user/me).
+     * Převede uživatelskou entitu na profilové DTO pro endpoint {@code /api/user/me}.
+     *
+     * @param user uživatelská entita
+     * @return profilová data uživatele
      */
     @Mapping(target = "isActive", source = "enabled")
     @Mapping(target = "role", source = "roles", qualifiedByName = "mapPrimaryRole")
@@ -31,8 +38,11 @@ public interface UserMapper {
     UserProfileResponse toProfile(UserEntity user);
 
     /**
-     * Mapování pro autentizační odpověď (použito v AuthMapper).
-     * Sjednoceno s Flutter modelem: vrací primární roli a technická oprávnění.
+     * Převede uživatelskou entitu na autentizační DTO pro odpověď po přihlášení.
+     * Vrací primární roli a technická Spring Security oprávnění.
+     *
+     * @param user uživatelská entita
+     * @return autentizační data uživatele
      */
     @Mapping(target = "isActive", source = "enabled")
     @Mapping(target = "role", source = "roles", qualifiedByName = "mapPrimaryRole")
@@ -42,15 +52,20 @@ public interface UserMapper {
     UserResponse toAuth(UserEntity user);
 
     /**
-     * Zjednodušená transformace pro seznamy uživatelů.
-     * Ponecháno pro budoucí využití v seznamech či vyhledávání.
+     * Převede uživatelskou entitu na zjednodušené DTO pro použití v seznamech.
+     *
+     * @param user uživatelská entita
+     * @return souhrnná data uživatele
      */
     @Mapping(target = "isActive", source = "enabled")
     UserSummaryResponse toSummary(UserEntity user);
 
     /**
-     * Úplná reprezentace pro systémovou administraci.
-     * Obsahuje detailní sety rolí i oprávnění.
+     * Převede uživatelskou entitu na administrativní DTO s úplnými daty.
+     * Obsahuje detailní sety rolí i Spring Security oprávnění.
+     *
+     * @param user uživatelská entita
+     * @return administrativní data uživatele
      */
     @Mapping(target = "isActive", source = "enabled")
     @Mapping(target = "roles", source = "roles", qualifiedByName = "mapRolesToSet")
@@ -59,14 +74,23 @@ public interface UserMapper {
     UserAdminResponse toAdmin(UserEntity user);
 
     /**
-     * Mapování zařízení s detekcí aktuální session.
+     * Převede entitu zařízení na DTO s příznakem aktuální session.
+     *
+     * @param device                  entita zařízení
+     * @param currentDeviceIdentifier identifikátor zařízení aktuálního požadavku
+     * @return DTO zařízení s nastaveným příznakem {@code currentDevice}
      */
     @Mapping(target = "currentDevice", expression = "java(device.getDeviceIdentifier().equals(currentDeviceIdentifier))")
     @Mapping(target = "deviceIdentifier", source = "device.deviceIdentifier")
+    @Mapping(target = "active", source = "device.active")
     DeviceResponse toDeviceResponse(DeviceEntity device, String currentDeviceIdentifier);
 
     /**
-     * Pomocná metoda pro mapování kolekce zařízení.
+     * Převede kolekci entit zařízení na seznam DTO.
+     *
+     * @param devices                 kolekce entit zařízení
+     * @param currentDeviceIdentifier identifikátor aktuálního zařízení pro označení
+     * @return seznam DTO zařízení, nebo prázdný seznam pokud je vstup {@code null}
      */
     default List<DeviceResponse> toDeviceResponseList(Collection<DeviceEntity> devices, String currentDeviceIdentifier) {
         if (devices == null) return Collections.emptyList();
@@ -76,7 +100,11 @@ public interface UserMapper {
     }
 
     /**
-     * Bezpečná aktualizace entity z požadavku na změnu profilu.
+     * Aktualizuje uživatelskou entitu z požadavku na změnu profilu.
+     * Citlivá a systémová pole (heslo, role, ID) jsou ignorována.
+     *
+     * @param request vstupní data profilu
+     * @param entity  cílová uživatelská entita k aktualizaci
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
@@ -89,10 +117,15 @@ public interface UserMapper {
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "authProvider", ignore = true)
     @Mapping(target = "providerId", ignore = true)
+    @Mapping(target = "ownerTier", ignore = true)
     void updateEntityFromRequest(UpdateProfileRequest request, @MappingTarget UserEntity entity);
 
-    // --- Implementace pomocných (Named) metod ---
-
+    /**
+     * Vypočítá čas posledního přihlášení jako maximum ze všech registrovaných zařízení.
+     *
+     * @param devices sada zařízení uživatele
+     * @return nejnovější čas přihlášení, nebo {@code null} pokud žádné zařízení neexistuje
+     */
     @Named("calculateGlobalLastLogin")
     default LocalDateTime calculateGlobalLastLogin(Set<DeviceEntity> devices) {
         if (devices == null || devices.isEmpty()) return null;
@@ -103,6 +136,12 @@ public interface UserMapper {
                 .orElse(null);
     }
 
+    /**
+     * Určí primární roli uživatele podle hierarchie: ADMIN > OWNER > MANAGER > STAFF > USER.
+     *
+     * @param roles sada rolí uživatele
+     * @return název primární role
+     */
     @Named("mapPrimaryRole")
     default String mapPrimaryRole(Set<RoleEntity> roles) {
         if (roles == null || roles.isEmpty()) return "USER";
@@ -114,6 +153,12 @@ public interface UserMapper {
         return "USER";
     }
 
+    /**
+     * Převede kolekci Spring Security oprávnění na sadu řetězců.
+     *
+     * @param authorities kolekce grantovaných oprávnění
+     * @return sada názvů oprávnění, nebo prázdná sada pro {@code null} vstup
+     */
     @Named("mapAuthoritiesToSet")
     default Set<String> mapAuthoritiesToSet(Collection<? extends GrantedAuthority> authorities) {
         if (authorities == null) return Collections.emptySet();
@@ -122,6 +167,12 @@ public interface UserMapper {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Převede sadu entit rolí na sadu jejich názvů.
+     *
+     * @param roles sada entit rolí
+     * @return sada názvů rolí, nebo prázdná sada pro {@code null} vstup
+     */
     @Named("mapRolesToSet")
     default Set<String> mapRolesToSet(Set<RoleEntity> roles) {
         if (roles == null) return Collections.emptySet();

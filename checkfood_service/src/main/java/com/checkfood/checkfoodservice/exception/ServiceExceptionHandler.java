@@ -12,6 +12,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * Poskytuje společné metody pro zpracování výjimek a vytváření error responses.
  * Slouží jako rodičovská třída pro specifické exception handlery jednotlivých vrstev.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see ErrorResponseBuilder
  * @see ServiceException
  */
@@ -38,11 +40,10 @@ public abstract class ServiceExceptionHandler {
     }
 
     /**
-     * Zpracuje obecnou neošetřenou výjimku.
-     * Vrací obecnou chybovou zprávu klientovi.
+     * Zpracuje výjimku při nenalezení endpointu.
      *
-     * @param ex výjimka
-     * @return chybová odpověď s HTTP 500
+     * @param ex výjimka neexistujícího zdroje
+     * @return chybová odpověď s HTTP 404
      */
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex) {
@@ -54,6 +55,12 @@ public abstract class ServiceExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Zpracuje neošetřenou výjimku jako fallback. Vrací obecnou chybovou zprávu klientovi.
+     *
+     * @param ex neošetřená výjimka
+     * @return chybová odpověď s HTTP 500
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         ErrorResponse response = errorResponseBuilder.build(
@@ -64,6 +71,12 @@ public abstract class ServiceExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Zpracuje výjimku způsobenou nečitelným nebo neplatným tělem HTTP požadavku.
+     *
+     * @param ex výjimka neplatného formátu
+     * @return chybová odpověď s HTTP 400
+     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         ErrorResponse response = errorResponseBuilder.build(
@@ -74,6 +87,12 @@ public abstract class ServiceExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Zpracuje výjimku způsobenou neplatným argumentem.
+     *
+     * @param ex výjimka neplatného argumentu
+     * @return chybová odpověď s HTTP 400
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         ErrorResponse response = errorResponseBuilder.build(

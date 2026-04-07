@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Stav MFA účtu.
+ * DTO odpovědi obsahující příznak aktivace MFA na uživatelském účtu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

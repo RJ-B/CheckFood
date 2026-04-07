@@ -1,6 +1,7 @@
 import '../entities/table_status.dart';
 import '../repositories/reservation_repository.dart';
 
+/// Fetches the availability status of all tables for a given restaurant and date.
 class GetTableStatusesUseCase {
   final ReservationRepository _repository;
 

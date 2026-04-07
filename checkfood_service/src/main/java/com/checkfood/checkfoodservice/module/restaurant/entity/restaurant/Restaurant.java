@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Hlavní doménová entita reprezentující restauraci na platformě CheckFood.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -78,7 +84,6 @@ public class Restaurant {
     @Column(name = "rating", precision = 2, scale = 1)
     private BigDecimal rating;
 
-    // Obsahuje pole 'Point location', které se mapuje do DB
     @Embedded
     private Address address;
 
@@ -92,9 +97,18 @@ public class Restaurant {
     @Column(name = "tag")
     private Set<String> tags;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "restaurant_special_day", joinColumns = @JoinColumn(name = "restaurant_id"))
+    @Builder.Default
+    private List<SpecialDay> specialDays = new ArrayList<>();
+
     @Transient
     @Builder.Default
     private List<RestaurantTable> tables = new ArrayList<>();
+
+    @Builder.Default
+    @Column(name = "default_reservation_duration_minutes", nullable = false)
+    private int defaultReservationDurationMinutes = 60;
 
     @Builder.Default
     @Column(name = "onboarding_completed", nullable = false)

@@ -10,8 +10,9 @@ import '../../data/models/restaurant_response_model.dart';
 import '../../data/models/address_model.dart';
 import '../../data/models/opening_hours_model.dart';
 
+/// Domain contract for the restaurant onboarding wizard: restaurant info,
+/// opening hours, tables, menu, onboarding status, and panorama sessions.
 abstract class OnboardingRepository {
-  // Restaurant
   Future<OwnerRestaurantResponseModel> getMyRestaurant();
   Future<OwnerRestaurantResponseModel> updateInfo({
     required String name,
@@ -23,13 +24,11 @@ abstract class OnboardingRepository {
   });
   Future<OwnerRestaurantResponseModel> updateHours(List<OpeningHoursModel> hours);
 
-  // Tables
   Future<List<OnboardingTable>> getTables();
   Future<OnboardingTable> addTable({required String label, required int capacity, bool active = true});
   Future<OnboardingTable> updateTable(String id, {required String label, required int capacity, bool active = true, double? yaw, double? pitch});
   Future<void> deleteTable(String id);
 
-  // Menu
   Future<List<OnboardingMenuCategory>> getMenu();
   Future<OnboardingMenuCategory> createCategory({required String name, int sortOrder = 0});
   Future<OnboardingMenuCategory> updateCategory(String id, {required String name, int sortOrder = 0});
@@ -54,11 +53,9 @@ abstract class OnboardingRepository {
   });
   Future<void> deleteItem(String id);
 
-  // Onboarding status
   Future<OnboardingStatus> getOnboardingStatus();
   Future<OwnerRestaurantResponseModel> publish();
 
-  // Panorama
   Future<PanoramaSession> createPanoramaSession();
   Future<PanoramaPhoto> uploadPhoto(String sessionId, int angleIndex, double actualAngle, double? actualPitch, Uint8List fileBytes, String filename);
   Future<PanoramaSession> finalizePanoramaSession(String sessionId);

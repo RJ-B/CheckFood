@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Drops stale Hibernate-generated enum check constraints on startup.
- * Hibernate 6 {@code ddl-auto=update} creates check constraints for
- * {@code @Enumerated(STRING)} columns but never updates them when new
- * enum values are added, causing inserts to fail.
+ * Odstraňuje zastaralé check constraints generované Hibernate při startu aplikace.
+ * Hibernate 6 s {@code ddl-auto=update} vytváří check constraints pro sloupce anotované
+ * {@code @Enumerated(STRING)}, ale neaktualizuje je při přidání nových enum hodnot, což způsobuje selhání insertů.
+ * Spouští se pouze v profilu {@code local}.
  *
- * Only runs in the "local" profile.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Slf4j
 @Component
@@ -26,8 +27,11 @@ public class EnumConstraintFixer {
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Odstraní zastaralé enum check constraints po startu aplikace, před spuštěním datových seederů.
+     */
     @EventListener(ApplicationReadyEvent.class)
-    @Order(1) // Run before all data seeders
+    @Order(1)
     @Transactional
     public void dropStaleEnumConstraints() {
         dropConstraintIfExists("reservation", "reservation_status_check");

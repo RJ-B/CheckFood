@@ -29,6 +29,15 @@ mixin _$UpdateProfileRequestModel {
   String get lastName => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.profileImageUrl)
   String? get profileImageUrl => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressStreet')
+  String? get addressStreet => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressCity')
+  String? get addressCity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressPostalCode')
+  String? get addressPostalCode => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressCountry')
+  String? get addressCountry => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateProfileRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,6 +60,11 @@ abstract class $UpdateProfileRequestModelCopyWith<$Res> {
     @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
+    String? phone,
+    @JsonKey(name: 'addressStreet') String? addressStreet,
+    @JsonKey(name: 'addressCity') String? addressCity,
+    @JsonKey(name: 'addressPostalCode') String? addressPostalCode,
+    @JsonKey(name: 'addressCountry') String? addressCountry,
   });
 }
 
@@ -75,6 +89,11 @@ class _$UpdateProfileRequestModelCopyWithImpl<
     Object? firstName = null,
     Object? lastName = null,
     Object? profileImageUrl = freezed,
+    Object? phone = freezed,
+    Object? addressStreet = freezed,
+    Object? addressCity = freezed,
+    Object? addressPostalCode = freezed,
+    Object? addressCountry = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -92,6 +111,31 @@ class _$UpdateProfileRequestModelCopyWithImpl<
                 freezed == profileImageUrl
                     ? _value.profileImageUrl
                     : profileImageUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            phone:
+                freezed == phone
+                    ? _value.phone
+                    : phone // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            addressStreet:
+                freezed == addressStreet
+                    ? _value.addressStreet
+                    : addressStreet // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            addressCity:
+                freezed == addressCity
+                    ? _value.addressCity
+                    : addressCity // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            addressPostalCode:
+                freezed == addressPostalCode
+                    ? _value.addressPostalCode
+                    : addressPostalCode // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            addressCountry:
+                freezed == addressCountry
+                    ? _value.addressCountry
+                    : addressCountry // ignore: cast_nullable_to_non_nullable
                         as String?,
           )
           as $Val,
@@ -112,6 +156,11 @@ abstract class _$$UpdateProfileRequestModelImplCopyWith<$Res>
     @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
+    String? phone,
+    @JsonKey(name: 'addressStreet') String? addressStreet,
+    @JsonKey(name: 'addressCity') String? addressCity,
+    @JsonKey(name: 'addressPostalCode') String? addressPostalCode,
+    @JsonKey(name: 'addressCountry') String? addressCountry,
   });
 }
 
@@ -136,6 +185,11 @@ class __$$UpdateProfileRequestModelImplCopyWithImpl<$Res>
     Object? firstName = null,
     Object? lastName = null,
     Object? profileImageUrl = freezed,
+    Object? phone = freezed,
+    Object? addressStreet = freezed,
+    Object? addressCity = freezed,
+    Object? addressPostalCode = freezed,
+    Object? addressCountry = freezed,
   }) {
     return _then(
       _$UpdateProfileRequestModelImpl(
@@ -154,6 +208,31 @@ class __$$UpdateProfileRequestModelImplCopyWithImpl<$Res>
                 ? _value.profileImageUrl
                 : profileImageUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
+        phone:
+            freezed == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        addressStreet:
+            freezed == addressStreet
+                ? _value.addressStreet
+                : addressStreet // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        addressCity:
+            freezed == addressCity
+                ? _value.addressCity
+                : addressCity // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        addressPostalCode:
+            freezed == addressPostalCode
+                ? _value.addressPostalCode
+                : addressPostalCode // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        addressCountry:
+            freezed == addressCountry
+                ? _value.addressCountry
+                : addressCountry // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -166,6 +245,11 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
     @JsonKey(name: SecurityJsonKeys.firstName) required this.firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) required this.lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl) this.profileImageUrl,
+    this.phone,
+    @JsonKey(name: 'addressStreet') this.addressStreet,
+    @JsonKey(name: 'addressCity') this.addressCity,
+    @JsonKey(name: 'addressPostalCode') this.addressPostalCode,
+    @JsonKey(name: 'addressCountry') this.addressCountry,
   });
 
   factory _$UpdateProfileRequestModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -180,10 +264,24 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
   @override
   @JsonKey(name: SecurityJsonKeys.profileImageUrl)
   final String? profileImageUrl;
+  @override
+  final String? phone;
+  @override
+  @JsonKey(name: 'addressStreet')
+  final String? addressStreet;
+  @override
+  @JsonKey(name: 'addressCity')
+  final String? addressCity;
+  @override
+  @JsonKey(name: 'addressPostalCode')
+  final String? addressPostalCode;
+  @override
+  @JsonKey(name: 'addressCountry')
+  final String? addressCountry;
 
   @override
   String toString() {
-    return 'UpdateProfileRequestModel(firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl)';
+    return 'UpdateProfileRequestModel(firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, phone: $phone, addressStreet: $addressStreet, addressCity: $addressCity, addressPostalCode: $addressPostalCode, addressCountry: $addressCountry)';
   }
 
   @override
@@ -196,13 +294,31 @@ class _$UpdateProfileRequestModelImpl implements _UpdateProfileRequestModel {
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
-                other.profileImageUrl == profileImageUrl));
+                other.profileImageUrl == profileImageUrl) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.addressStreet, addressStreet) ||
+                other.addressStreet == addressStreet) &&
+            (identical(other.addressCity, addressCity) ||
+                other.addressCity == addressCity) &&
+            (identical(other.addressPostalCode, addressPostalCode) ||
+                other.addressPostalCode == addressPostalCode) &&
+            (identical(other.addressCountry, addressCountry) ||
+                other.addressCountry == addressCountry));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, firstName, lastName, profileImageUrl);
+  int get hashCode => Object.hash(
+    runtimeType,
+    firstName,
+    lastName,
+    profileImageUrl,
+    phone,
+    addressStreet,
+    addressCity,
+    addressPostalCode,
+    addressCountry,
+  );
 
   /// Create a copy of UpdateProfileRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -226,6 +342,11 @@ abstract class _UpdateProfileRequestModel implements UpdateProfileRequestModel {
     @JsonKey(name: SecurityJsonKeys.lastName) required final String lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl)
     final String? profileImageUrl,
+    final String? phone,
+    @JsonKey(name: 'addressStreet') final String? addressStreet,
+    @JsonKey(name: 'addressCity') final String? addressCity,
+    @JsonKey(name: 'addressPostalCode') final String? addressPostalCode,
+    @JsonKey(name: 'addressCountry') final String? addressCountry,
   }) = _$UpdateProfileRequestModelImpl;
 
   factory _UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) =
@@ -240,6 +361,20 @@ abstract class _UpdateProfileRequestModel implements UpdateProfileRequestModel {
   @override
   @JsonKey(name: SecurityJsonKeys.profileImageUrl)
   String? get profileImageUrl;
+  @override
+  String? get phone;
+  @override
+  @JsonKey(name: 'addressStreet')
+  String? get addressStreet;
+  @override
+  @JsonKey(name: 'addressCity')
+  String? get addressCity;
+  @override
+  @JsonKey(name: 'addressPostalCode')
+  String? get addressPostalCode;
+  @override
+  @JsonKey(name: 'addressCountry')
+  String? get addressCountry;
 
   /// Create a copy of UpdateProfileRequestModel
   /// with the given fields replaced by the non-null parameter values.

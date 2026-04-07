@@ -26,21 +26,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    /**
-     * Spring JavaMailSender pro SMTP communication.
-     */
     private final JavaMailSender mailSender;
 
-    /**
-     * SMTP sender email address z configuration.
-     */
     @Value("${spring.mail.username}")
     private String senderEmail;
 
-    /**
-     * Backend URL pro verification link construction.
-     * Environment-specific configuration pro development vs production.
-     */
     @Value("${app.backend.url:http://localhost:8081}")
     private String backendUrl;
 
@@ -62,11 +52,9 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-            // Verification URL construction s backend endpoint
             String link = backendUrl + "/api/auth/verify?token=" + token;
             String htmlMsg = EmailTemplates.createVerificationEmail(link);
 
-            // Email configuration s HTML content type
             helper.setText(htmlMsg, true);
             helper.setTo(to);
             helper.setSubject("CheckFood - Potvrzení registrace");
@@ -75,7 +63,6 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            // Transform SMTP exception na AuthException pro consistent error handling
             throw AuthException.internalError("Chyba při odesílání verifikačního emailu: " + e.getMessage());
         }
     }

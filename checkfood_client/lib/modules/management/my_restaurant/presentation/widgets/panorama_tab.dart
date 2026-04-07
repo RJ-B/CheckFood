@@ -18,6 +18,8 @@ import '../../../../owner/onboarding/presentation/bloc/onboarding_wizard_bloc.da
 import '../../../../owner/onboarding/presentation/widgets/panorama_capture_screen.dart';
 import '../../../../owner/onboarding/presentation/widgets/panorama_editor_screen.dart';
 
+/// A tab in the owner dashboard for managing panorama sessions:
+/// creating new captures, monitoring stitching progress, and activating a finished panorama.
 class PanoramaTab extends StatefulWidget {
   final String? activePanoramaUrl;
 
@@ -102,8 +104,6 @@ class _PanoramaTabState extends State<PanoramaTab> {
 
       if (!mounted) return;
 
-      // PanoramaCaptureScreen requires OnboardingWizardBloc for photo upload and finalize.
-      // Finalize is handled inside capture screen via BLoC — no need to call it again here.
       await Navigator.of(context).push<bool>(
         MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -115,9 +115,6 @@ class _PanoramaTabState extends State<PanoramaTab> {
 
       if (!mounted) return;
 
-      // result == true means user finalized in capture screen (BLoC already called finalize)
-      // result == null means user pressed back without finalizing
-      // In both cases, reload sessions to pick up any changes
       await _loadSessions();
     } catch (e) {
       if (mounted) {
@@ -142,7 +139,6 @@ class _PanoramaTabState extends State<PanoramaTab> {
   }
 
   Future<void> _openEditorWithTables(String panoramaUrl) async {
-    // Fetch existing tables and map those with yaw/pitch to EditorTable
     List<EditorTable> editorTables = [];
     try {
       final getTables = sl<GetTablesUseCase>();
@@ -158,9 +154,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
                 isNew: false,
               ))
           .toList();
-    } catch (e) {
-      debugPrint('[PanoramaTab] Failed to load tables: $e');
-    }
+    } catch (_) {}
 
     if (!mounted) return;
 
@@ -172,7 +166,7 @@ class _PanoramaTabState extends State<PanoramaTab> {
           onSave: (tables) async {
             final updateTable = sl<UpdateTableUseCase>();
             for (final t in tables) {
-              if (t.isNew) continue; // new tables need create flow — skip for now
+              if (t.isNew) continue;
               await updateTable(
                 t.id,
                 label: t.label,
@@ -242,7 +236,6 @@ class _PanoramaTabState extends State<PanoramaTab> {
             const SizedBox(height: 16),
           ],
 
-          // "Nové panorama" button
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: FilledButton.icon(

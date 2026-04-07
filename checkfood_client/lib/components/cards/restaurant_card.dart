@@ -3,6 +3,7 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/typography.dart';
 
+/// A compact card displaying a restaurant's name, cuisine, rating, and distance.
 class RestaurantCard extends StatelessWidget {
   final String name;
   final String cuisine;

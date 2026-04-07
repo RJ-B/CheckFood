@@ -1,10 +1,12 @@
+/// Base class for [StaffReservationsBloc] events.
 abstract class StaffReservationsEvent {
   const StaffReservationsEvent();
 }
 
 class LoadStaffReservations extends StaffReservationsEvent {
   final String date;
-  const LoadStaffReservations(this.date);
+  final String? restaurantId;
+  const LoadStaffReservations(this.date, {this.restaurantId});
 }
 
 class ChangeDate extends StaffReservationsEvent {
@@ -34,4 +36,21 @@ class CompleteReservation extends StaffReservationsEvent {
 
 class PollRefresh extends StaffReservationsEvent {
   const PollRefresh();
+}
+
+class LoadTables extends StaffReservationsEvent {
+  const LoadTables();
+}
+
+class ProposeChange extends StaffReservationsEvent {
+  final String reservationId;
+  final String? startTime;
+  final String? tableId;
+  const ProposeChange(this.reservationId, {this.startTime, this.tableId});
+}
+
+class ExtendReservation extends StaffReservationsEvent {
+  final String reservationId;
+  final String endTime;
+  const ExtendReservation(this.reservationId, this.endTime);
 }

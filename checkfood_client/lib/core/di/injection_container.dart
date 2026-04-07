@@ -5,10 +5,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-// Core Services
+// Základní služby
 import '../services/google_places_service.dart';
 
-// Data Sources
+// Datové zdroje
 import '../../modules/customer/restaurant/data/datasources/favourite_remote_datasource.dart';
 import '../../modules/customer/restaurant/data/datasources/restaurant_remote_datasource.dart';
 import '../../modules/customer/restaurant/data/repositories/restaurant_repository_impl.dart';
@@ -26,7 +26,7 @@ import '../../security/data/datasources/profile_remote_data_source.dart';
 import '../../security/data/datasources/oauth_remote_data_source.dart';
 import '../../security/data/local/token_storage.dart';
 
-// Repositories
+// Repozitáře
 import '../../security/data/repositories/auth_repository_impl.dart';
 import '../../security/data/repositories/profile_repository_impl.dart';
 import '../../security/data/repositories/oauth_repository_impl.dart';
@@ -35,7 +35,7 @@ import '../../security/domain/repositories/auth_repository.dart';
 import '../../security/domain/repositories/profile_repository.dart';
 import '../../security/domain/repositories/oauth_repository.dart';
 
-// Use Cases - Auth (Standard)
+// Případy použití – ověřování (standardní)
 import '../../security/domain/usecases/auth/check_auth_status_usecase.dart';
 import '../../security/domain/usecases/auth/get_authenticated_user_usecase.dart';
 import '../../security/domain/usecases/auth/login_usecase.dart';
@@ -47,11 +47,11 @@ import '../../security/domain/usecases/auth/verify_email_usecase.dart';
 import '../../security/domain/usecases/auth/forgot_password_usecase.dart';
 import '../../security/domain/usecases/auth/reset_password_usecase.dart';
 
-// Use Cases - OAuth
+// Případy použití – OAuth
 import '../../security/domain/usecases/oauth/login_with_apple_usecase.dart';
 import '../../security/domain/usecases/oauth/login_with_google_usecase.dart';
 
-// Use Cases - Profile
+// Případy použití – profil
 import '../../security/domain/usecases/profile/change_password_usecase.dart';
 import '../../security/domain/usecases/profile/get_active_devices_usecase.dart';
 import '../../security/domain/usecases/profile/get_user_profile_usecase.dart';
@@ -64,15 +64,15 @@ import '../../security/domain/usecases/profile/update_notification_preference_us
 import '../../security/domain/usecases/profile/get_notification_preference_usecase.dart';
 import '../../security/data/services/notification_service.dart';
 
-// Interceptors & Managers
+// Interceptory a správci
 import '../../security/interceptors/auth_interceptor.dart';
 import '../../security/interceptors/refresh_token_manager.dart';
 
-// Blocs
+// BLoC
 import '../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../security/presentation/bloc/user/user_bloc.dart';
 
-// My Restaurant Module (Management)
+// Modul Moje restaurace (správa)
 import '../../modules/management/my_restaurant/data/datasources/my_restaurant_remote_datasource.dart';
 import '../../modules/management/my_restaurant/data/repositories/my_restaurant_repository_impl.dart';
 import '../../modules/management/my_restaurant/domain/repositories/my_restaurant_repository.dart';
@@ -86,7 +86,7 @@ import '../../modules/management/my_restaurant/domain/usecases/remove_employee_u
 import '../../modules/management/my_restaurant/domain/usecases/update_employee_permissions_usecase.dart';
 import '../../modules/management/my_restaurant/presentation/bloc/my_restaurant_bloc.dart';
 
-// Reservation Module
+// Modul rezervací
 import '../../modules/customer/reservation/data/datasources/reservation_remote_datasource.dart';
 import '../../modules/customer/reservation/data/repositories/reservation_repository_impl.dart';
 import '../../modules/customer/reservation/domain/repositories/reservation_repository.dart';
@@ -107,7 +107,7 @@ import '../../modules/customer/reservation/domain/usecases/cancel_recurring_rese
 import '../../modules/customer/reservation/presentation/bloc/reservation_bloc.dart';
 import '../../modules/customer/reservation/presentation/bloc/my_reservations_bloc.dart';
 
-// Orders Module
+// Modul objednávek
 import '../../modules/customer/orders/data/datasources/orders_remote_datasource.dart';
 import '../../modules/customer/orders/data/repositories/orders_repository_impl.dart';
 import '../../modules/customer/orders/domain/repositories/orders_repository.dart';
@@ -119,7 +119,7 @@ import '../../modules/customer/orders/domain/usecases/initiate_payment_usecase.d
 import '../../modules/customer/orders/domain/usecases/get_payment_status_usecase.dart';
 import '../../modules/customer/orders/presentation/bloc/orders_bloc.dart';
 
-// Staff Reservations Module (Management)
+// Modul rezervací personálu (správa)
 import '../../modules/management/staff_reservations/data/datasources/staff_reservation_remote_datasource.dart';
 import '../../modules/management/staff_reservations/data/repositories/staff_reservation_repository_impl.dart';
 import '../../modules/management/staff_reservations/domain/repositories/staff_reservation_repository.dart';
@@ -133,7 +133,7 @@ import '../../modules/management/staff_reservations/domain/usecases/propose_chan
 import '../../modules/management/staff_reservations/domain/usecases/extend_reservation_usecase.dart';
 import '../../modules/management/staff_reservations/presentation/bloc/staff_reservations_bloc.dart';
 
-// Owner Claim Module
+// Modul nárokování vlastníka
 import '../../modules/owner/data/datasources/owner_claim_remote_datasource.dart';
 import '../../modules/owner/data/repositories/owner_claim_repository_impl.dart';
 import '../../modules/owner/domain/repositories/owner_claim_repository.dart';
@@ -143,7 +143,7 @@ import '../../modules/owner/domain/usecases/start_email_claim_usecase.dart';
 import '../../modules/owner/domain/usecases/confirm_email_claim_usecase.dart';
 import '../../modules/owner/presentation/bloc/owner_claim_bloc.dart';
 
-// Owner Onboarding Module
+// Modul onboardingu vlastníka
 import '../../modules/owner/onboarding/data/datasources/onboarding_remote_datasource.dart';
 import '../../modules/owner/onboarding/data/repositories/onboarding_repository_impl.dart';
 import '../../modules/owner/onboarding/domain/repositories/onboarding_repository.dart';
@@ -170,47 +170,46 @@ import '../../modules/owner/onboarding/domain/usecases/get_panorama_status_useca
 import '../../modules/owner/onboarding/domain/usecases/activate_panorama_usecase.dart';
 import '../../modules/owner/onboarding/presentation/bloc/onboarding_wizard_bloc.dart';
 
-// Utils
+// Pomocné nástroje
 import '../utils/location_service.dart';
 
+/// Globální service locator — vstupní bod pro dependency injection.
 final sl = GetIt.instance;
 
+/// Registruje všechny závislosti do [GetIt] service locatoru.
+///
+/// Musí být zavolána před spuštěním aplikace (před `runApp`).
 Future<void> init() async {
   // ===========================================================================
-  // 1. EXTERNAL, STORAGE & CORE SERVICES
+  // 1. EXTERNÍ ZÁVISLOSTI, ÚLOŽIŠTĚ & ZÁKLADNÍ SLUŽBY
   // ===========================================================================
 
-  // Storage
   sl.registerLazySingleton(() => const FlutterSecureStorage());
   sl.registerLazySingleton(() => TokenStorage(sl()));
 
-  // Device Identity
   sl.registerLazySingleton(() => DeviceInfoPlugin());
   sl.registerLazySingleton(() => DeviceInfoService(sl()));
 
-  // Location Service
   sl.registerLazySingleton(() => LocationService());
 
-  // Google Places Service
   final googleMapsApiKey = dotenv.get('GOOGLE_MAPS_API_KEY', fallback: '');
   sl.registerLazySingleton(
     () => GooglePlacesService(apiKey: googleMapsApiKey),
   );
 
-  // Notification Service (Firebase Messaging wrapper)
   sl.registerLazySingleton(() => NotificationService());
 
-  // Environment
+  // Prostředí
   final String apiBaseUrl = dotenv.get(
     'API_BASE_URL',
     fallback: 'http://10.0.2.2:8081/api',
   );
 
   // ===========================================================================
-  // 2. NETWORK (DIO)
+  // 2. SÍŤ (DIO)
   // ===========================================================================
 
-  // Guard: detect duplicate /api/api/ prefix in debug builds
+  // Ochrana: detekce duplicitní předpony /api/api/ v debug sestavení
   final apiPathGuard = InterceptorsWrapper(
     onRequest: (options, handler) {
       final uri = options.uri.toString();
@@ -267,7 +266,7 @@ Future<void> init() async {
   });
 
   // ===========================================================================
-  // 3. DATA SOURCES
+  // 3. DATOVÉ ZDROJE
   // ===========================================================================
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -283,7 +282,7 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 4. REPOSITORIES
+  // 4. REPOZITÁŘE
   // ===========================================================================
 
   sl.registerLazySingleton<AuthRepository>(
@@ -309,10 +308,10 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 5. USE CASES
+  // 5. PŘÍPADY POUŽITÍ
   // ===========================================================================
 
-  // Auth Standard
+  // Ověřování – standard
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
   sl.registerLazySingleton(() => RegisterOwnerUseCase(sl()));
@@ -321,18 +320,18 @@ Future<void> init() async {
   sl.registerLazySingleton(() => VerifyEmailUseCase(sl()));
   sl.registerLazySingleton(() => ResendVerificationCodeUseCase(sl()));
 
-  // CheckAuthStatusUseCase
+  // Případ použití pro ověření stavu autentizace
   sl.registerLazySingleton(() => CheckAuthStatusUseCase(sl()));
 
-  // Forgot/Reset Password
+  // Zapomenuté/obnovení hesla
   sl.registerLazySingleton(() => ForgotPasswordUseCase(sl()));
   sl.registerLazySingleton(() => ResetPasswordUseCase(sl()));
 
-  // Auth OAuth
+  // OAuth ověřování
   sl.registerLazySingleton(() => LoginWithGoogleUseCase(sl()));
   sl.registerLazySingleton(() => LoginWithAppleUseCase(sl()));
 
-  // Profile
+  // Profil
   sl.registerLazySingleton(() => GetUserProfileUseCase(sl()));
   sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
   sl.registerLazySingleton(() => ChangePasswordUseCase(sl()));
@@ -345,7 +344,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetNotificationPreferenceUseCase(sl()));
 
   // ===========================================================================
-  // 6. BLOCS
+  // 6. BLOC
   // ===========================================================================
 
   sl.registerFactory(
@@ -384,10 +383,10 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 7. RESTAURANT MODULE
+  // 7. MODUL RESTAURACÍ
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<RestaurantRemoteDataSource>(
     () => RestaurantRemoteDataSourceImpl(sl()),
   );
@@ -395,12 +394,12 @@ Future<void> init() async {
     () => FavouriteRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<RestaurantRepository>(
     () => RestaurantRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
 
   // LocationService uz je registrovan v sekci 1. Zde registrujeme jen UseCase.
   sl.registerLazySingleton(() => GetLocationUseCase(sl()));
@@ -412,7 +411,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAllMarkersUseCase(sl()));
   sl.registerLazySingleton(() => MarkerDataService());
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => ExploreBloc(
       getLocationUseCase: sl(),
@@ -432,20 +431,20 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 8. RESERVATION MODULE
+  // 8. MODUL REZERVACÍ
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<ReservationRemoteDataSource>(
     () => ReservationRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<ReservationRepository>(
     () => ReservationRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
   sl.registerLazySingleton(() => GetReservationSceneUseCase(sl()));
   sl.registerLazySingleton(() => GetTableStatusesUseCase(sl()));
   sl.registerLazySingleton(() => GetAvailableSlotsUseCase(sl()));
@@ -458,7 +457,7 @@ Future<void> init() async {
   sl.registerFactory(() => AcceptChangeRequestUseCase(sl()));
   sl.registerFactory(() => DeclineChangeRequestUseCase(sl()));
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => ReservationBloc(
       getSceneUseCase: sl(),
@@ -485,26 +484,26 @@ Future<void> init() async {
     ),
   );
 
-  // Recurring reservation use cases
+  // Případy použití pro opakující se rezervace
   sl.registerLazySingleton(() => CreateRecurringReservationUseCase(sl()));
   sl.registerLazySingleton(() => GetMyRecurringReservationsUseCase(sl()));
   sl.registerLazySingleton(() => CancelRecurringReservationUseCase(sl()));
 
   // ===========================================================================
-  // 9. MY RESTAURANT MODULE (Management)
+  // 9. MODUL MOJE RESTAURACE (správa)
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<MyRestaurantRemoteDataSource>(
     () => MyRestaurantRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<MyRestaurantRepository>(
     () => MyRestaurantRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
   sl.registerLazySingleton(() => GetMyRestaurantUseCase(sl()));
   sl.registerLazySingleton(() => GetMyRestaurantsUseCase(sl()));
   sl.registerLazySingleton(() => UpdateRestaurantInfoUseCase(sl()));
@@ -514,7 +513,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RemoveEmployeeUseCase(sl()));
   sl.registerLazySingleton(() => UpdateEmployeePermissionsUseCase(sl()));
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => MyRestaurantBloc(
       getMyRestaurantUseCase: sl(),
@@ -529,20 +528,20 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 9b. STAFF RESERVATIONS MODULE (Management)
+  // 9b. MODUL REZERVACÍ PERSONÁLU (správa)
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<StaffReservationRemoteDataSource>(
     () => StaffReservationRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<StaffReservationRepository>(
     () => StaffReservationRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
   sl.registerLazySingleton(() => GetStaffReservationsUseCase(sl()));
   sl.registerLazySingleton(() => ConfirmReservationUseCase(sl()));
   sl.registerLazySingleton(() => RejectReservationUseCase(sl()));
@@ -552,7 +551,7 @@ Future<void> init() async {
   sl.registerFactory(() => ProposeChangeUseCase(sl()));
   sl.registerFactory(() => ExtendReservationUseCase(sl()));
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => StaffReservationsBloc(
       getReservations: sl(),
@@ -567,20 +566,20 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 10. ORDERS MODULE
+  // 10. MODUL OBJEDNÁVEK
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<OrdersRemoteDataSource>(
     () => OrdersRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<OrdersRepository>(
     () => OrdersRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
   sl.registerLazySingleton(() => GetDiningContextUseCase(sl()));
   sl.registerLazySingleton(() => GetMenuUseCase(sl()));
   sl.registerLazySingleton(() => CreateOrderUseCase(sl()));
@@ -588,7 +587,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => InitiatePaymentUseCase(sl()));
   sl.registerLazySingleton(() => GetPaymentStatusUseCase(sl()));
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => OrdersBloc(
       getDiningContextUseCase: sl(),
@@ -601,26 +600,26 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 11. OWNER CLAIM MODULE
+  // 11. MODUL NÁROKOVÁNÍ VLASTNÍKA
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<OwnerClaimRemoteDataSource>(
     () => OwnerClaimRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<OwnerClaimRepository>(
     () => OwnerClaimRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
   sl.registerLazySingleton(() => LookupAresUseCase(sl()));
   sl.registerLazySingleton(() => VerifyBankIdUseCase(sl()));
   sl.registerLazySingleton(() => StartEmailClaimUseCase(sl()));
   sl.registerLazySingleton(() => ConfirmEmailClaimUseCase(sl()));
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => OwnerClaimBloc(
       lookupAresUseCase: sl(),
@@ -631,20 +630,20 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 12. OWNER ONBOARDING MODULE
+  // 12. MODUL ONBOARDINGU VLASTNÍKA
   // ===========================================================================
 
-  // --- Data Sources ---
+  // --- Datové zdroje ---
   sl.registerLazySingleton<OnboardingRemoteDataSource>(
     () => OnboardingRemoteDataSourceImpl(sl()),
   );
 
-  // --- Repositories ---
+  // --- Repozitáře ---
   sl.registerLazySingleton<OnboardingRepository>(
     () => OnboardingRepositoryImpl(sl()),
   );
 
-  // --- Use Cases ---
+  // --- Případy použití ---
   sl.registerLazySingleton(() => GetOnboardingStatusUseCase(sl()));
   sl.registerLazySingleton<ob_uc.UpdateRestaurantInfoUseCase>(
     () => ob_uc.UpdateRestaurantInfoUseCase(sl()),
@@ -668,7 +667,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPanoramaStatusUseCase(sl()));
   sl.registerLazySingleton(() => ActivatePanoramaUseCase(sl()));
 
-  // --- Blocs ---
+  // --- BLoC ---
   sl.registerFactory(
     () => OnboardingWizardBloc(
       repository: sl(),

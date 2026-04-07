@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * Konfigurace základních bezpečnostních komponent.
  * Využívá automatickou konfiguraci Spring Security pro sestavení AuthenticationProvideru.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 @RequiredArgsConstructor
@@ -22,8 +25,10 @@ public class SecurityBeansConfig {
     private final UserRepository userRepository;
 
     /**
-     * Definice UserDetailsService pro vyhledávání uživatelů podle e-mailu.
-     * Spring Security tento Bean automaticky použije pro výchozí DaoAuthenticationProvider.
+     * Definuje UserDetailsService pro vyhledávání uživatelů podle e-mailu.
+     * Spring Security tento bean automaticky použije pro výchozí DaoAuthenticationProvider.
+     *
+     * @return implementace UserDetailsService načítající uživatele z databáze
      */
     @Bean
     public UserDetailsService userDetailsService() {
@@ -32,8 +37,10 @@ public class SecurityBeansConfig {
     }
 
     /**
-     * Definice algoritmu pro hašování hesel (BCrypt se silou 12).
-     * Spring Security tento Bean automaticky použije pro verifikaci hesel v DaoAuthenticationProvideru.
+     * Definuje algoritmus pro hašování hesel (BCrypt se silou 12).
+     * Spring Security tento bean automaticky použije pro verifikaci hesel v DaoAuthenticationProvideru.
+     *
+     * @return BCryptPasswordEncoder s cost faktorem 12
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,9 +48,12 @@ public class SecurityBeansConfig {
     }
 
     /**
-     * Získání AuthenticationManageru z připravené konfigurace.
-     * Ten v sobě automaticky ponese DaoAuthenticationProvider nakonfigurovaný
-     * pomocí Beany userDetailsService a passwordEncoder výše.
+     * Poskytuje AuthenticationManager sestavený Spring Security z definovaných beanů
+     * userDetailsService a passwordEncoder.
+     *
+     * @param config Spring Security authentication configuration
+     * @return nakonfigurovaný AuthenticationManager
+     * @throws Exception při chybě získání manageru
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

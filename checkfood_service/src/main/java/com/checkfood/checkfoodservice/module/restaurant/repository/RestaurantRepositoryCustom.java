@@ -9,10 +9,25 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Custom repository fragment for dynamic native PostGIS queries with optional filters.
+ * Vlastní fragment repozitáře pro dynamické nativní PostGIS dotazy s volitelnými filtry.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface RestaurantRepositoryCustom {
 
+    /**
+     * Vrátí stránkovaný seznam nejbližších restaurací s volitelnými filtry bez filtru oblíbených.
+     *
+     * @param lat         zeměpisná šířka uživatele
+     * @param lng         zeměpisná délka uživatele
+     * @param searchQuery fulltextový vyhledávací dotaz (může být null)
+     * @param cuisineTypes seznam typů kuchyní pro filtrování (může být null)
+     * @param minRating   minimální hodnocení (může být null)
+     * @param openNow     filtr pouze otevřených restaurací (může být null)
+     * @param pageable    parametry stránkování
+     * @return stránka výsledků seřazená dle vzdálenosti
+     */
     Page<Restaurant> findNearestWithFilters(
             double lat,
             double lng,
@@ -23,6 +38,19 @@ public interface RestaurantRepositoryCustom {
             Pageable pageable
     );
 
+    /**
+     * Vrátí stránkovaný seznam nejbližších restaurací s volitelnými filtry včetně filtru oblíbených.
+     *
+     * @param lat          zeměpisná šířka uživatele
+     * @param lng          zeměpisná délka uživatele
+     * @param searchQuery  fulltextový vyhledávací dotaz (může být null)
+     * @param cuisineTypes seznam typů kuchyní pro filtrování (může být null)
+     * @param minRating    minimální hodnocení (může být null)
+     * @param openNow      filtr pouze otevřených restaurací (může být null)
+     * @param favouriteIds sada UUID oblíbených restaurací pro filtrování (může být null)
+     * @param pageable     parametry stránkování
+     * @return stránka výsledků seřazená dle vzdálenosti
+     */
     Page<Restaurant> findNearestWithFilters(
             double lat,
             double lng,

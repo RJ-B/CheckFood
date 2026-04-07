@@ -12,6 +12,9 @@ import java.util.Set;
 
 /**
  * Požadavek na vytvoření nebo aktualizaci restaurace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Data
 @Builder
@@ -41,4 +44,8 @@ public class RestaurantRequest {
     private List<OpeningHoursDto> openingHours;
 
     private Set<String> tags;
+
+    @Min(value = 15, message = "Minimální délka rezervace je 15 minut")
+    @Max(value = 480, message = "Maximální délka rezervace je 8 hodin")
+    private Integer defaultReservationDurationMinutes;
 }

@@ -8,6 +8,8 @@ import '../bloc/owner_claim_bloc.dart';
 import '../bloc/owner_claim_event.dart';
 import '../bloc/owner_claim_state.dart';
 
+/// Entry point for the restaurant claim flow, providing the [OwnerClaimBloc]
+/// and rendering the claim wizard view.
 class ClaimRestaurantPage extends StatelessWidget {
   const ClaimRestaurantPage({super.key});
 
@@ -20,6 +22,8 @@ class ClaimRestaurantPage extends StatelessWidget {
   }
 }
 
+/// The claim wizard view, collecting the company IČO, confirming company data
+/// via ARES, verifying identity via BankID, and offering an email fallback.
 class _ClaimRestaurantView extends StatefulWidget {
   const _ClaimRestaurantView();
 
@@ -59,7 +63,6 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                 behavior: SnackBarBehavior.floating,
               ),
             );
-            // Navigate to main after successful claim
             Navigator.of(context).pushNamedAndRemoveUntil('/', (r) => false);
           }
           if (state.aresError != null) {
@@ -111,16 +114,13 @@ class _ClaimRestaurantViewState extends State<_ClaimRestaurantView> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Step 1: ICO input
                   _buildIcoInput(context, state, theme),
 
-                  // Step 2: Company info + BankID
                   if (state.aresCompany != null) ...[
                     const SizedBox(height: 24),
                     _buildCompanyInfo(context, state, theme),
                   ],
 
-                  // Step 3: Email fallback
                   if (state.claimResult != null &&
                       !state.claimResult!.matched &&
                       state.claimResult!.emailFallbackAvailable) ...[

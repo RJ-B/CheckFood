@@ -53,30 +53,23 @@ public class AuthExceptionHandler extends SecurityExceptionHandler {
     }
 
     /**
-     * Context-aware logging based na AuthErrorCode categories s JDK 21 pattern matching.
+     * Zaloguje kontext auth výjimky podle kategorie error kódu.
+     * Kritické bezpečnostní incidenty loguje jako ERROR, upozornění jako WARN, ostatní jako INFO.
      *
-     * Implementuje different logging levels podle security severity:
-     * - ERROR: Critical security incidents, system failures
-     * - WARN: Security events requiring attention
-     * - INFO: Business logic events, user actions
-     *
-     * @param ex AuthException s AuthErrorCode pro category determination
-     * @param request WebRequest pro metadata extraction
+     * @param ex      AuthException s typovaným error kódem
+     * @param request WebRequest pro extrakci URI, IP a User-Agent
      */
     private void logAuthExceptionContext(AuthException ex, WebRequest request) {
         String uri = extractRequestUri(request);
         String ip = getRemoteAddress(request);
         String ua = request.getHeader("User-Agent");
 
-        // Type safety check s JDK 21 pattern matching
         if (!(ex.getErrorCode() instanceof AuthErrorCode errorCode)) {
             log.error("Unknown error code type: {} - URI: {}", ex.getErrorCode(), uri);
             return;
         }
 
-        // Category-based logging s JDK 21 enhanced switch
         switch (errorCode) {
-            // Critical security incidents requiring immediate attention
             case AUTH_TOO_MANY_ATTEMPTS ->
                     log.error("BRUTE FORCE DETECTED: Too many attempts - IP: {}, UA: {}, URI: {}", ip, ua, uri);
 
@@ -89,7 +82,6 @@ public class AuthExceptionHandler extends SecurityExceptionHandler {
             case AUTH_ROLE_NOT_FOUND, AUTH_REGISTRATION_FAILED ->
                     log.error("System/Logic Error: {} - URI: {}, Msg: {}", errorCode, uri, ex.getMessage());
 
-            // Security events requiring monitoring
             case AUTH_INVALID_CREDENTIALS ->
                     log.warn("Invalid credentials - IP: {}, UA: {}, URI: {}", ip, ua, uri);
 
@@ -105,7 +97,6 @@ public class AuthExceptionHandler extends SecurityExceptionHandler {
             case AUTH_INSUFFICIENT_PRIVILEGES ->
                     log.warn("Privilege Escalation Attempt - IP: {}, UA: {}, URI: {}", ip, ua, uri);
 
-            // Business logic events a user actions
             case AUTH_EMAIL_EXISTS ->
                     log.info("Registration failed: Email already exists - URI: {}", uri);
 
@@ -121,7 +112,6 @@ public class AuthExceptionHandler extends SecurityExceptionHandler {
             case AUTH_VALIDATION_ERROR ->
                     log.info("Validation error - URI: {}, Msg: {}", uri, ex.getMessage());
 
-            // Catch-all pro unknown error codes
             default ->
                     log.error("Unexpected Auth Error - Code: {}, URI: {}, Error: {}", errorCode, uri, ex.getMessage());
         }

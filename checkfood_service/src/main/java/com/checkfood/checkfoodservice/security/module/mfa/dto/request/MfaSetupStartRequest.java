@@ -8,7 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Request pro zahájení MFA setupu.
+ * DTO pro zahájení nastavení MFA určující zvolenou metodu ověřování.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

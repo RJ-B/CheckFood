@@ -1,6 +1,8 @@
 import '../../../../customer/restaurant/domain/entities/address.dart';
 import '../../../../customer/restaurant/domain/entities/opening_hours.dart';
+import '../../../../customer/restaurant/domain/entities/special_day.dart';
 
+/// The full management-level view of a restaurant owned by the authenticated user.
 class MyRestaurant {
   final String id;
   final String name;
@@ -9,9 +11,11 @@ class MyRestaurant {
   final String? contactEmail;
   final Address address;
   final List<OpeningHours> openingHours;
+  final List<SpecialDay> specialDays;
   final String status;
   final bool isActive;
   final String? panoramaUrl;
+  final int defaultReservationDurationMinutes;
 
   const MyRestaurant({
     required this.id,
@@ -21,8 +25,10 @@ class MyRestaurant {
     this.contactEmail,
     required this.address,
     required this.openingHours,
+    this.specialDays = const [],
     required this.status,
     required this.isActive,
     this.panoramaUrl,
+    this.defaultReservationDurationMinutes = 60,
   });
 }

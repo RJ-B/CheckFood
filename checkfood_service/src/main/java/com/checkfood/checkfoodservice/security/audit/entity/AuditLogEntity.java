@@ -15,6 +15,8 @@ import java.time.Instant;
  * Ukládá informace o provedených akcích v systému včetně kontextu a výsledku.
  * Tabulka je indexována pro efektivní vyhledávání podle uživatele, času a typu akce.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditAction
  * @see AuditStatus
  */

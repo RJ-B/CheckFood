@@ -1,16 +1,13 @@
 package com.checkfood.checkfoodservice.scheduler.job;
 
 /**
- * Plánovaná úloha pro čištění auditních záznamů.
+ * Plánovaná úloha pro periodické čištění auditních záznamů.
+ * Deleguje na service vrstvu a neobsahuje business logiku.
  *
- * Spouští se periodicky.
- *
- *   Neobsahuje business logiku
- * ✔ deleguje na service vrstvu
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class AuditCleanupJob {
 
-    // TODO:
-    // - @Scheduled
-    // - volání AuditService
+    // TODO: @Scheduled, volání AuditService
 }

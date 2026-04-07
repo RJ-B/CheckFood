@@ -3,18 +3,14 @@ package com.checkfood.checkfoodservice.logging.config;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Technická konfigurace Logbacku.
+ * Technická konfigurace Logbacku, sloužící jako doplněk k logback-spring.xml.
+ * Může obsahovat programovou konfiguraci nebo custom appendery.
  *
- * Slouží jako:
- * - programová konfigurace (pokud se nepoužije XML)
- * - místo pro rozšíření logback chování
- *
- * Většinou doplněk k logback-spring.xml.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 public class LogbackConfig {
 
-    // TODO:
-    // - custom appendery
-    // - async logging
+    // TODO: custom appendery, async logging
 }

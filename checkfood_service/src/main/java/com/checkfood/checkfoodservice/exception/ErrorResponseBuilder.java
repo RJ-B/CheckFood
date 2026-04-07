@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
  * Poskytuje jednotné rozhraní pro sestavení ErrorResponse objektů napříč celou aplikací.
  * Slouží jako rodičovská třída pro specifické buildery jednotlivých vrstev.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see ErrorResponse
  */
 @Component

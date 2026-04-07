@@ -31,6 +31,13 @@ mixin _$RestaurantMarkerResponseModel {
   /// Backend nyní vrací počet prvků
   int get count => throw _privateConstructorUsedError;
 
+  /// Název restaurace (pouze pro count == 1)
+  String? get name => throw _privateConstructorUsedError;
+
+  /// URL loga restaurace (pouze pro count == 1)
+  @JsonKey(name: 'logoUrl')
+  String? get logoUrl => throw _privateConstructorUsedError;
+
   /// Serializes this RestaurantMarkerResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -52,7 +59,14 @@ abstract class $RestaurantMarkerResponseModelCopyWith<$Res> {
         RestaurantMarkerResponseModel
       >;
   @useResult
-  $Res call({String? id, double latitude, double longitude, int count});
+  $Res call({
+    String? id,
+    double latitude,
+    double longitude,
+    int count,
+    String? name,
+    @JsonKey(name: 'logoUrl') String? logoUrl,
+  });
 }
 
 /// @nodoc
@@ -77,6 +91,8 @@ class _$RestaurantMarkerResponseModelCopyWithImpl<
     Object? latitude = null,
     Object? longitude = null,
     Object? count = null,
+    Object? name = freezed,
+    Object? logoUrl = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -100,6 +116,16 @@ class _$RestaurantMarkerResponseModelCopyWithImpl<
                     ? _value.count
                     : count // ignore: cast_nullable_to_non_nullable
                         as int,
+            name:
+                freezed == name
+                    ? _value.name
+                    : name // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            logoUrl:
+                freezed == logoUrl
+                    ? _value.logoUrl
+                    : logoUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -115,7 +141,14 @@ abstract class _$$RestaurantMarkerResponseModelImplCopyWith<$Res>
   ) = __$$RestaurantMarkerResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? id, double latitude, double longitude, int count});
+  $Res call({
+    String? id,
+    double latitude,
+    double longitude,
+    int count,
+    String? name,
+    @JsonKey(name: 'logoUrl') String? logoUrl,
+  });
 }
 
 /// @nodoc
@@ -140,6 +173,8 @@ class __$$RestaurantMarkerResponseModelImplCopyWithImpl<$Res>
     Object? latitude = null,
     Object? longitude = null,
     Object? count = null,
+    Object? name = freezed,
+    Object? logoUrl = freezed,
   }) {
     return _then(
       _$RestaurantMarkerResponseModelImpl(
@@ -163,6 +198,16 @@ class __$$RestaurantMarkerResponseModelImplCopyWithImpl<$Res>
                 ? _value.count
                 : count // ignore: cast_nullable_to_non_nullable
                     as int,
+        name:
+            freezed == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        logoUrl:
+            freezed == logoUrl
+                ? _value.logoUrl
+                : logoUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -177,6 +222,8 @@ class _$RestaurantMarkerResponseModelImpl
     required this.latitude,
     required this.longitude,
     required this.count,
+    this.name,
+    @JsonKey(name: 'logoUrl') this.logoUrl,
   }) : super._();
 
   factory _$RestaurantMarkerResponseModelImpl.fromJson(
@@ -195,9 +242,18 @@ class _$RestaurantMarkerResponseModelImpl
   @override
   final int count;
 
+  /// Název restaurace (pouze pro count == 1)
+  @override
+  final String? name;
+
+  /// URL loga restaurace (pouze pro count == 1)
+  @override
+  @JsonKey(name: 'logoUrl')
+  final String? logoUrl;
+
   @override
   String toString() {
-    return 'RestaurantMarkerResponseModel(id: $id, latitude: $latitude, longitude: $longitude, count: $count)';
+    return 'RestaurantMarkerResponseModel(id: $id, latitude: $latitude, longitude: $longitude, count: $count, name: $name, logoUrl: $logoUrl)';
   }
 
   @override
@@ -210,12 +266,15 @@ class _$RestaurantMarkerResponseModelImpl
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
-            (identical(other.count, count) || other.count == count));
+            (identical(other.count, count) || other.count == count) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, latitude, longitude, count);
+  int get hashCode =>
+      Object.hash(runtimeType, id, latitude, longitude, count, name, logoUrl);
 
   /// Create a copy of RestaurantMarkerResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -242,6 +301,8 @@ abstract class _RestaurantMarkerResponseModel
     required final double latitude,
     required final double longitude,
     required final int count,
+    final String? name,
+    @JsonKey(name: 'logoUrl') final String? logoUrl,
   }) = _$RestaurantMarkerResponseModelImpl;
   const _RestaurantMarkerResponseModel._() : super._();
 
@@ -259,6 +320,15 @@ abstract class _RestaurantMarkerResponseModel
   /// Backend nyní vrací počet prvků
   @override
   int get count;
+
+  /// Název restaurace (pouze pro count == 1)
+  @override
+  String? get name;
+
+  /// URL loga restaurace (pouze pro count == 1)
+  @override
+  @JsonKey(name: 'logoUrl')
+  String? get logoUrl;
 
   /// Create a copy of RestaurantMarkerResponseModel
   /// with the given fields replaced by the non-null parameter values.

@@ -14,13 +14,11 @@ import '../../bloc/user/user_event.dart';
 import '../../widgets/auth/login_form.dart';
 import '../../widgets/profile_completion_dialog.dart';
 
-/**
- * Hlavní přihlašovací stránka aplikace.
- * Zajišťuje orchestraci mezi formulářem, sociálními providery a navigací.
- * Zpracovává také výsledky verifikace účtu předané skrze AppRouter.
- */
+/// Hlavní přihlašovací stránka aplikace.
+///
+/// Zajišťuje orchestraci mezi formulářem, sociálními providery a navigací.
+/// Zpracovává také výsledky verifikace účtu předané skrze [AppRouter].
 class LoginPage extends StatefulWidget {
-  // ✅ PŘIDÁNO: Parametry z AppRouteru pro zobrazení výsledku verifikace
   final String? verificationStatus;
   final String? verificationMessage;
 
@@ -41,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // ✅ Reakce na parametry z verifikace po sestavení widgetu
     if (widget.verificationStatus != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _handleVerificationFeedback();

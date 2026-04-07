@@ -8,6 +8,7 @@ import '../common/opening_hours_model.dart';
 part 'restaurant_response_model.freezed.dart';
 part 'restaurant_response_model.g.dart';
 
+/// API response model for a restaurant listing, including address, opening hours, and metadata.
 @freezed
 class RestaurantResponseModel with _$RestaurantResponseModel {
   const RestaurantResponseModel._();
@@ -27,12 +28,13 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     @Default([]) List<OpeningHoursModel> openingHours,
     @Default([]) List<String> tags,
     @Default(false) bool isFavourite,
+    @Default([]) List<Map<String, dynamic>> specialDays,
   }) = _RestaurantResponseModel;
 
   factory RestaurantResponseModel.fromJson(Map<String, dynamic> json) =>
       _$RestaurantResponseModelFromJson(json);
 
-  /// Mapování na entitu s ošetřením null hodnot (Null-safety fallback)
+  /// Converts this model to a [Restaurant] domain entity, applying safe defaults for nullable fields.
   Restaurant toEntity() => Restaurant(
     id: id ?? '',
     ownerId: ownerId ?? '',
@@ -49,5 +51,6 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     openingHours: openingHours.map((e) => e.toEntity()).toList(),
     tags: tags,
     isFavourite: isFavourite,
+    specialDays: specialDays,
   );
 }

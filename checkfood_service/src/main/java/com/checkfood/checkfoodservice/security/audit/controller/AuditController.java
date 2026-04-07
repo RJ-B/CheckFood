@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  * REST kontroler pro správu auditních záznamů.
  * Všechny endpointy vyžadují roli ADMIN a jsou chráněny rate limitingem.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditService
  * @see AuditLogResponse
  * @see AuditLogEntity
@@ -35,10 +37,6 @@ public class AuditController {
 
     private final AuditService auditService;
 
-
-    // =====================================================
-    // ALL LOGS
-    // =====================================================
 
     /**
      * Vrátí všechny auditní záznamy s podporou stránkování.
@@ -71,10 +69,6 @@ public class AuditController {
         return ResponseEntity.ok(result);
     }
 
-
-    // =====================================================
-    // USER LOGS
-    // =====================================================
 
     /**
      * Vrátí auditní záznamy konkrétního uživatele s podporou stránkování.
@@ -110,15 +104,11 @@ public class AuditController {
     }
 
 
-    // =====================================================
-    // MAPPING
-    // =====================================================
-
     /**
-     * Mapuje auditní entitu naDTO pro response.
+     * Mapuje auditní entitu na DTO pro response.
      *
      * @param entity zdrojová auditní entita
-     * @returnDTO objekt pro API odpověď
+     * @return DTO objekt pro API odpověď
      */
     private AuditLogResponse toResponse(AuditLogEntity entity) {
 

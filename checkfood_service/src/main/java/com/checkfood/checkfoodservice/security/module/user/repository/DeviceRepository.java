@@ -17,8 +17,8 @@ import java.util.Optional;
  * Zajišťuje perzistenci dat pro bezpečnostní audit, správu refresh tokenů a session management.
  * Každé zařízení je jednoznačně identifikováno device identifierem a vázáno na uživatele.
  *
- * ✅ ROZŠÍŘENO: Obsahuje metody countByUser a existsByIdAndUser pro Service vrstvu.
- *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see DeviceEntity
  * @see UserEntity
  */
@@ -55,10 +55,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
      */
     List<DeviceEntity> findAllByUser(UserEntity user);
 
-    // =================================================================================
-    // ✅ NOVÉ METODY PRO SERVICE LAYER (Fix pro "Cannot resolve method")
-    // =================================================================================
-
     /**
      * Zjistí, zda existuje zařízení s daným ID, které patří konkrétnímu uživateli.
      * Klíčové pro bezpečné mazání podle ID (prevence smazání cizího zařízení).
@@ -88,10 +84,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
      * @return true pokud zařízení existuje, jinak false
      */
     boolean existsByDeviceIdentifierAndUser(String deviceIdentifier, UserEntity user);
-
-    // =================================================================================
-    // DELETE METODY
-    // =================================================================================
 
     /**
      * Smaže zařízení podle jeho identifikátoru.

@@ -4,6 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+/**
+ * DTO pro aktualizaci preference push notifikací a FCM tokenu pro konkrétní zařízení.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor

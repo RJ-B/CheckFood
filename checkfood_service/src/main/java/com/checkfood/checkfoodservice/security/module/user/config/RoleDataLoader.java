@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
  * Zajišťuje, že základní role (USER, ADMIN) existují v databázi před prvním použitím.
  * Spouští se automaticky po startu aplikace díky implementaci CommandLineRunner.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see RoleEntity
  * @see RoleRepository
  */

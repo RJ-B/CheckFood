@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Request pro zahájení MFA challenge.
+ * DTO pro zahájení MFA přihlašovací výzvy identifikující cílového uživatele.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

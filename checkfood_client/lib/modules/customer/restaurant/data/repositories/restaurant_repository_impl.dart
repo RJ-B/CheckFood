@@ -1,32 +1,27 @@
 import '../../domain/entities/restaurant.dart';
 import '../../domain/entities/restaurant_marker.dart';
+import '../../domain/entities/restaurant_marker_light.dart';
 import '../../domain/entities/restaurant_table.dart';
 import '../../domain/repositories/restaurant_repository.dart';
 import '../datasources/restaurant_remote_datasource.dart';
-import '../models/request/map_params_model.dart'; // ✅ Přidán import modelu
+import '../models/request/map_params_model.dart';
 import '../models/request/restaurant_request_model.dart';
 import '../models/request/restaurant_table_request_model.dart';
 
-/// Implementace repozitáře pro modul restaurací.
-/// Propojuje doménovou vrstvu s dálkovým datovým zdrojem (API).
+/// Concrete implementation of [RestaurantRepository] that delegates to the remote data source.
 class RestaurantRepositoryImpl implements RestaurantRepository {
   final RestaurantRemoteDataSource _remoteDataSource;
 
   RestaurantRepositoryImpl(this._remoteDataSource);
 
-  // ✅ OPRAVENO: Použití MapParamsModel pro konzistenci s interface
   @override
   Future<List<RestaurantMarker>> getMarkersInBounds(
     MapParamsModel params,
   ) async {
-    // Předáváme celý model do data source [cite: 2026-01-25]
     final models = await _remoteDataSource.getMarkers(params);
-
-    // Mapování modelů (Data) na entity (Domain)
     return models.map((m) => m.toEntity()).toList();
   }
 
-  // ✅ KONZISTENTNÍ IMPLEMENTACE: Get Nearest (Seznam pod mapou)
   @override
   Future<List<Restaurant>> getNearestRestaurants({
     required double lat,
@@ -52,8 +47,6 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
     );
     return models.map((m) => m.toEntity()).toList();
   }
-
-  // --- SPRÁVA RESTAURACÍ ---
 
   @override
   Future<Restaurant> getRestaurantById(String id) async {
@@ -87,8 +80,6 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
     await _remoteDataSource.deleteRestaurant(id);
   }
 
-  // --- SPRÁVA STOLŮ ---
-
   @override
   Future<RestaurantTable> addTable(
     String restaurantId,
@@ -102,5 +93,16 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
   Future<List<RestaurantTable>> getTables(String restaurantId) async {
     final models = await _remoteDataSource.getTables(restaurantId);
     return models.map((m) => m.toEntity()).toList();
+  }
+
+  @override
+  Future<({int version, List<RestaurantMarkerLight> data})> getAllMarkers() async {
+    final response = await _remoteDataSource.getAllMarkers();
+    return (version: response.version, data: response.data);
+  }
+
+  @override
+  Future<int> getMarkersVersion() async {
+    return await _remoteDataSource.getMarkersVersion();
   }
 }

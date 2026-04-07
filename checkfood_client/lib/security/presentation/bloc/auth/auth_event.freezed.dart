@@ -28,6 +28,9 @@ mixin _$AuthEvent {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -40,6 +43,8 @@ mixin _$AuthEvent {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -52,6 +57,8 @@ mixin _$AuthEvent {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,6 +73,10 @@ mixin _$AuthEvent {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -78,6 +89,8 @@ mixin _$AuthEvent {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -90,6 +103,8 @@ mixin _$AuthEvent {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -166,6 +181,9 @@ class _$AppStartedImpl implements AppStarted {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return appStarted();
   }
@@ -182,6 +200,8 @@ class _$AppStartedImpl implements AppStarted {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return appStarted?.call();
   }
@@ -198,6 +218,8 @@ class _$AppStartedImpl implements AppStarted {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (appStarted != null) {
@@ -219,6 +241,10 @@ class _$AppStartedImpl implements AppStarted {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return appStarted(this);
   }
@@ -235,6 +261,8 @@ class _$AppStartedImpl implements AppStarted {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return appStarted?.call(this);
   }
@@ -251,6 +279,8 @@ class _$AppStartedImpl implements AppStarted {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (appStarted != null) {
@@ -346,6 +376,9 @@ class _$LoginRequestedImpl implements LoginRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return loginRequested(params);
   }
@@ -362,6 +395,8 @@ class _$LoginRequestedImpl implements LoginRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return loginRequested?.call(params);
   }
@@ -378,6 +413,8 @@ class _$LoginRequestedImpl implements LoginRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (loginRequested != null) {
@@ -399,6 +436,10 @@ class _$LoginRequestedImpl implements LoginRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return loginRequested(this);
   }
@@ -415,6 +456,8 @@ class _$LoginRequestedImpl implements LoginRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return loginRequested?.call(this);
   }
@@ -431,6 +474,8 @@ class _$LoginRequestedImpl implements LoginRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (loginRequested != null) {
@@ -534,6 +579,9 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return registerRequested(params);
   }
@@ -550,6 +598,8 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return registerRequested?.call(params);
   }
@@ -566,6 +616,8 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (registerRequested != null) {
@@ -587,6 +639,10 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return registerRequested(this);
   }
@@ -603,6 +659,8 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return registerRequested?.call(this);
   }
@@ -619,6 +677,8 @@ class _$RegisterRequestedImpl implements RegisterRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (registerRequested != null) {
@@ -724,6 +784,9 @@ class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return registerOwnerRequested(params);
   }
@@ -740,6 +803,8 @@ class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return registerOwnerRequested?.call(params);
   }
@@ -756,6 +821,8 @@ class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (registerOwnerRequested != null) {
@@ -777,6 +844,10 @@ class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return registerOwnerRequested(this);
   }
@@ -793,6 +864,8 @@ class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return registerOwnerRequested?.call(this);
   }
@@ -809,6 +882,8 @@ class _$RegisterOwnerRequestedImpl implements RegisterOwnerRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (registerOwnerRequested != null) {
@@ -915,6 +990,9 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return verifyEmailRequested(token);
   }
@@ -931,6 +1009,8 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return verifyEmailRequested?.call(token);
   }
@@ -947,6 +1027,8 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (verifyEmailRequested != null) {
@@ -968,6 +1050,10 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return verifyEmailRequested(this);
   }
@@ -984,6 +1070,8 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return verifyEmailRequested?.call(this);
   }
@@ -1000,6 +1088,8 @@ class _$VerifyEmailRequestedImpl implements VerifyEmailRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (verifyEmailRequested != null) {
@@ -1105,6 +1195,9 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return resendCodeRequested(email);
   }
@@ -1121,6 +1214,8 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return resendCodeRequested?.call(email);
   }
@@ -1137,6 +1232,8 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (resendCodeRequested != null) {
@@ -1158,6 +1255,10 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return resendCodeRequested(this);
   }
@@ -1174,6 +1275,8 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return resendCodeRequested?.call(this);
   }
@@ -1190,6 +1293,8 @@ class _$ResendCodeRequestedImpl implements ResendCodeRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (resendCodeRequested != null) {
@@ -1265,6 +1370,9 @@ class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return googleLoginRequested();
   }
@@ -1281,6 +1389,8 @@ class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return googleLoginRequested?.call();
   }
@@ -1297,6 +1407,8 @@ class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (googleLoginRequested != null) {
@@ -1318,6 +1430,10 @@ class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return googleLoginRequested(this);
   }
@@ -1334,6 +1450,8 @@ class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return googleLoginRequested?.call(this);
   }
@@ -1350,6 +1468,8 @@ class _$GoogleLoginRequestedImpl implements GoogleLoginRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (googleLoginRequested != null) {
@@ -1416,6 +1536,9 @@ class _$AppleLoginRequestedImpl implements AppleLoginRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return appleLoginRequested();
   }
@@ -1432,6 +1555,8 @@ class _$AppleLoginRequestedImpl implements AppleLoginRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return appleLoginRequested?.call();
   }
@@ -1448,6 +1573,8 @@ class _$AppleLoginRequestedImpl implements AppleLoginRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (appleLoginRequested != null) {
@@ -1469,6 +1596,10 @@ class _$AppleLoginRequestedImpl implements AppleLoginRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return appleLoginRequested(this);
   }
@@ -1485,6 +1616,8 @@ class _$AppleLoginRequestedImpl implements AppleLoginRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return appleLoginRequested?.call(this);
   }
@@ -1501,6 +1634,8 @@ class _$AppleLoginRequestedImpl implements AppleLoginRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (appleLoginRequested != null) {
@@ -1566,6 +1701,9 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     required TResult Function() googleLoginRequested,
     required TResult Function() appleLoginRequested,
     required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
   }) {
     return logoutRequested();
   }
@@ -1582,6 +1720,8 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     TResult? Function()? googleLoginRequested,
     TResult? Function()? appleLoginRequested,
     TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
   }) {
     return logoutRequested?.call();
   }
@@ -1598,6 +1738,8 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     TResult Function()? googleLoginRequested,
     TResult Function()? appleLoginRequested,
     TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (logoutRequested != null) {
@@ -1619,6 +1761,10 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     required TResult Function(GoogleLoginRequested value) googleLoginRequested,
     required TResult Function(AppleLoginRequested value) appleLoginRequested,
     required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
   }) {
     return logoutRequested(this);
   }
@@ -1635,6 +1781,8 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult? Function(AppleLoginRequested value)? appleLoginRequested,
     TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
   }) {
     return logoutRequested?.call(this);
   }
@@ -1651,6 +1799,8 @@ class _$LogoutRequestedImpl implements LogoutRequested {
     TResult Function(GoogleLoginRequested value)? googleLoginRequested,
     TResult Function(AppleLoginRequested value)? appleLoginRequested,
     TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
     required TResult orElse(),
   }) {
     if (logoutRequested != null) {
@@ -1662,4 +1812,429 @@ class _$LogoutRequestedImpl implements LogoutRequested {
 
 abstract class LogoutRequested implements AuthEvent {
   const factory LogoutRequested() = _$LogoutRequestedImpl;
+}
+
+/// @nodoc
+abstract class _$$ForgotPasswordRequestedImplCopyWith<$Res> {
+  factory _$$ForgotPasswordRequestedImplCopyWith(
+    _$ForgotPasswordRequestedImpl value,
+    $Res Function(_$ForgotPasswordRequestedImpl) then,
+  ) = __$$ForgotPasswordRequestedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String email});
+}
+
+/// @nodoc
+class __$$ForgotPasswordRequestedImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$ForgotPasswordRequestedImpl>
+    implements _$$ForgotPasswordRequestedImplCopyWith<$Res> {
+  __$$ForgotPasswordRequestedImplCopyWithImpl(
+    _$ForgotPasswordRequestedImpl _value,
+    $Res Function(_$ForgotPasswordRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? email = null}) {
+    return _then(
+      _$ForgotPasswordRequestedImpl(
+        email:
+            null == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$ForgotPasswordRequestedImpl implements ForgotPasswordRequested {
+  const _$ForgotPasswordRequestedImpl({required this.email});
+
+  @override
+  final String email;
+
+  @override
+  String toString() {
+    return 'AuthEvent.forgotPasswordRequested(email: $email)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ForgotPasswordRequestedImpl &&
+            (identical(other.email, email) || other.email == email));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, email);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ForgotPasswordRequestedImplCopyWith<_$ForgotPasswordRequestedImpl>
+  get copyWith => __$$ForgotPasswordRequestedImplCopyWithImpl<
+    _$ForgotPasswordRequestedImpl
+  >(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() appStarted,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
+    required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
+    required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
+  }) {
+    return forgotPasswordRequested(email);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? appStarted,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
+    TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
+    TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
+  }) {
+    return forgotPasswordRequested?.call(email);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? appStarted,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
+    TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
+    TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
+    required TResult orElse(),
+  }) {
+    if (forgotPasswordRequested != null) {
+      return forgotPasswordRequested(email);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppStarted value) appStarted,
+    required TResult Function(LoginRequested value) loginRequested,
+    required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
+    required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
+    required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
+    required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
+  }) {
+    return forgotPasswordRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppStarted value)? appStarted,
+    TResult? Function(LoginRequested value)? loginRequested,
+    TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
+  }) {
+    return forgotPasswordRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppStarted value)? appStarted,
+    TResult Function(LoginRequested value)? loginRequested,
+    TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
+    required TResult orElse(),
+  }) {
+    if (forgotPasswordRequested != null) {
+      return forgotPasswordRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ForgotPasswordRequested implements AuthEvent {
+  const factory ForgotPasswordRequested({required final String email}) =
+      _$ForgotPasswordRequestedImpl;
+
+  String get email;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ForgotPasswordRequestedImplCopyWith<_$ForgotPasswordRequestedImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ResetPasswordRequestedImplCopyWith<$Res> {
+  factory _$$ResetPasswordRequestedImplCopyWith(
+    _$ResetPasswordRequestedImpl value,
+    $Res Function(_$ResetPasswordRequestedImpl) then,
+  ) = __$$ResetPasswordRequestedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String token, String newPassword});
+}
+
+/// @nodoc
+class __$$ResetPasswordRequestedImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$ResetPasswordRequestedImpl>
+    implements _$$ResetPasswordRequestedImplCopyWith<$Res> {
+  __$$ResetPasswordRequestedImplCopyWithImpl(
+    _$ResetPasswordRequestedImpl _value,
+    $Res Function(_$ResetPasswordRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? token = null, Object? newPassword = null}) {
+    return _then(
+      _$ResetPasswordRequestedImpl(
+        token:
+            null == token
+                ? _value.token
+                : token // ignore: cast_nullable_to_non_nullable
+                    as String,
+        newPassword:
+            null == newPassword
+                ? _value.newPassword
+                : newPassword // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$ResetPasswordRequestedImpl implements ResetPasswordRequested {
+  const _$ResetPasswordRequestedImpl({
+    required this.token,
+    required this.newPassword,
+  });
+
+  @override
+  final String token;
+  @override
+  final String newPassword;
+
+  @override
+  String toString() {
+    return 'AuthEvent.resetPasswordRequested(token: $token, newPassword: $newPassword)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ResetPasswordRequestedImpl &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.newPassword, newPassword) ||
+                other.newPassword == newPassword));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, token, newPassword);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ResetPasswordRequestedImplCopyWith<_$ResetPasswordRequestedImpl>
+  get copyWith =>
+      __$$ResetPasswordRequestedImplCopyWithImpl<_$ResetPasswordRequestedImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() appStarted,
+    required TResult Function(LoginParams params) loginRequested,
+    required TResult Function(RegisterParams params) registerRequested,
+    required TResult Function(RegisterParams params) registerOwnerRequested,
+    required TResult Function(String token) verifyEmailRequested,
+    required TResult Function(String email) resendCodeRequested,
+    required TResult Function() googleLoginRequested,
+    required TResult Function() appleLoginRequested,
+    required TResult Function() logoutRequested,
+    required TResult Function(String email) forgotPasswordRequested,
+    required TResult Function(String token, String newPassword)
+    resetPasswordRequested,
+  }) {
+    return resetPasswordRequested(token, newPassword);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? appStarted,
+    TResult? Function(LoginParams params)? loginRequested,
+    TResult? Function(RegisterParams params)? registerRequested,
+    TResult? Function(RegisterParams params)? registerOwnerRequested,
+    TResult? Function(String token)? verifyEmailRequested,
+    TResult? Function(String email)? resendCodeRequested,
+    TResult? Function()? googleLoginRequested,
+    TResult? Function()? appleLoginRequested,
+    TResult? Function()? logoutRequested,
+    TResult? Function(String email)? forgotPasswordRequested,
+    TResult? Function(String token, String newPassword)? resetPasswordRequested,
+  }) {
+    return resetPasswordRequested?.call(token, newPassword);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? appStarted,
+    TResult Function(LoginParams params)? loginRequested,
+    TResult Function(RegisterParams params)? registerRequested,
+    TResult Function(RegisterParams params)? registerOwnerRequested,
+    TResult Function(String token)? verifyEmailRequested,
+    TResult Function(String email)? resendCodeRequested,
+    TResult Function()? googleLoginRequested,
+    TResult Function()? appleLoginRequested,
+    TResult Function()? logoutRequested,
+    TResult Function(String email)? forgotPasswordRequested,
+    TResult Function(String token, String newPassword)? resetPasswordRequested,
+    required TResult orElse(),
+  }) {
+    if (resetPasswordRequested != null) {
+      return resetPasswordRequested(token, newPassword);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppStarted value) appStarted,
+    required TResult Function(LoginRequested value) loginRequested,
+    required TResult Function(RegisterRequested value) registerRequested,
+    required TResult Function(RegisterOwnerRequested value)
+    registerOwnerRequested,
+    required TResult Function(VerifyEmailRequested value) verifyEmailRequested,
+    required TResult Function(ResendCodeRequested value) resendCodeRequested,
+    required TResult Function(GoogleLoginRequested value) googleLoginRequested,
+    required TResult Function(AppleLoginRequested value) appleLoginRequested,
+    required TResult Function(LogoutRequested value) logoutRequested,
+    required TResult Function(ForgotPasswordRequested value)
+    forgotPasswordRequested,
+    required TResult Function(ResetPasswordRequested value)
+    resetPasswordRequested,
+  }) {
+    return resetPasswordRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppStarted value)? appStarted,
+    TResult? Function(LoginRequested value)? loginRequested,
+    TResult? Function(RegisterRequested value)? registerRequested,
+    TResult? Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult? Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult? Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult? Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult? Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult? Function(LogoutRequested value)? logoutRequested,
+    TResult? Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult? Function(ResetPasswordRequested value)? resetPasswordRequested,
+  }) {
+    return resetPasswordRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppStarted value)? appStarted,
+    TResult Function(LoginRequested value)? loginRequested,
+    TResult Function(RegisterRequested value)? registerRequested,
+    TResult Function(RegisterOwnerRequested value)? registerOwnerRequested,
+    TResult Function(VerifyEmailRequested value)? verifyEmailRequested,
+    TResult Function(ResendCodeRequested value)? resendCodeRequested,
+    TResult Function(GoogleLoginRequested value)? googleLoginRequested,
+    TResult Function(AppleLoginRequested value)? appleLoginRequested,
+    TResult Function(LogoutRequested value)? logoutRequested,
+    TResult Function(ForgotPasswordRequested value)? forgotPasswordRequested,
+    TResult Function(ResetPasswordRequested value)? resetPasswordRequested,
+    required TResult orElse(),
+  }) {
+    if (resetPasswordRequested != null) {
+      return resetPasswordRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ResetPasswordRequested implements AuthEvent {
+  const factory ResetPasswordRequested({
+    required final String token,
+    required final String newPassword,
+  }) = _$ResetPasswordRequestedImpl;
+
+  String get token;
+  String get newPassword;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ResetPasswordRequestedImplCopyWith<_$ResetPasswordRequestedImpl>
+  get copyWith => throw _privateConstructorUsedError;
 }

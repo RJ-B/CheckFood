@@ -19,6 +19,13 @@ import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Implementace procesu přiřazení restaurace majiteli podporující ověření přes ARES, BankID a e-mail.
+ * Jednorázové kódy pro e-mailové ověření jsou uchovávány in-memory s TTL 15 minut.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,6 +42,9 @@ public class OwnerClaimServiceImpl implements OwnerClaimService {
 
     private static final int CODE_TTL_MINUTES = 15;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public AresLookupResponse lookupAres(String ico, Long userId) {
@@ -54,6 +64,9 @@ public class OwnerClaimServiceImpl implements OwnerClaimService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ClaimResultResponse verifyBankId(String ico, Long userId) {
         var aresInfo = aresService.lookupByIco(ico);
@@ -88,6 +101,9 @@ public class OwnerClaimServiceImpl implements OwnerClaimService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ClaimResultResponse startEmailClaim(String ico, Long userId) {
         var restaurant = restaurantRepository.findByIco(ico)
@@ -97,7 +113,6 @@ public class OwnerClaimServiceImpl implements OwnerClaimService {
         String key = ico + ":" + userId;
         emailCodes.put(key, new EmailClaimCode(code, LocalDateTime.now().plusMinutes(CODE_TTL_MINUTES)));
 
-        // Mock email - just log it
         log.info("[MOCK EMAIL] Verification code for ICO={}, userId={}: {}", ico, userId, code);
         log.info("[MOCK EMAIL] Would send to: {}", restaurant.getContactEmail());
 
@@ -109,6 +124,9 @@ public class OwnerClaimServiceImpl implements OwnerClaimService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ClaimResultResponse confirmEmailClaim(String ico, String code, Long userId) {
         String key = ico + ":" + userId;
@@ -141,8 +159,6 @@ public class OwnerClaimServiceImpl implements OwnerClaimService {
                 .membershipCreated(true)
                 .build();
     }
-
-    // --- Private helpers ---
 
     private void createMembership(Long userId, Restaurant restaurant) {
         if (employeeRepository.existsByUserIdAndRestaurantId(userId, restaurant.getId())) {

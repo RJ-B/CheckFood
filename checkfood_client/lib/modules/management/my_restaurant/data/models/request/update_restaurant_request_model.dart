@@ -1,3 +1,4 @@
+/// Request payload for updating a restaurant's editable fields.
 class UpdateRestaurantRequestModel {
   final String name;
   final String? description;
@@ -5,6 +6,8 @@ class UpdateRestaurantRequestModel {
   final String? phone;
   final String? email;
   final List<Map<String, dynamic>>? openingHours;
+  final int? defaultReservationDurationMinutes;
+  final List<Map<String, dynamic>>? specialDays;
 
   const UpdateRestaurantRequestModel({
     required this.name,
@@ -13,6 +16,8 @@ class UpdateRestaurantRequestModel {
     this.phone,
     this.email,
     this.openingHours,
+    this.defaultReservationDurationMinutes,
+    this.specialDays,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,6 +29,10 @@ class UpdateRestaurantRequestModel {
     if (phone != null) json['phone'] = phone;
     if (email != null) json['email'] = email;
     if (openingHours != null) json['openingHours'] = openingHours;
+    if (defaultReservationDurationMinutes != null) {
+      json['defaultReservationDurationMinutes'] = defaultReservationDurationMinutes;
+    }
+    if (specialDays != null) json['specialDays'] = specialDays;
     return json;
   }
 }

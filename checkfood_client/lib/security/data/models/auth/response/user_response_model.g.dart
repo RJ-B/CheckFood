@@ -20,6 +20,9 @@ _$UserResponseModelImpl _$$UserResponseModelImplFromJson(
       const [],
   needsRestaurantClaim: json['needsRestaurantClaim'] as bool? ?? false,
   needsOnboarding: json['needsOnboarding'] as bool? ?? false,
+  firstName: json['firstName'] as String? ?? '',
+  lastName: json['lastName'] as String? ?? '',
+  phone: json['phone'] as String? ?? '',
 );
 
 Map<String, dynamic> _$$UserResponseModelImplToJson(
@@ -32,4 +35,7 @@ Map<String, dynamic> _$$UserResponseModelImplToJson(
   'authorities': instance.authorities,
   'needsRestaurantClaim': instance.needsRestaurantClaim,
   'needsOnboarding': instance.needsOnboarding,
+  'firstName': instance.firstName,
+  'lastName': instance.lastName,
+  'phone': instance.phone,
 };

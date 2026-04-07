@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'menu_category_request_model.freezed.dart';
 part 'menu_category_request_model.g.dart';
 
+/// Request payload for creating or updating a menu category.
 @freezed
 class MenuCategoryRequestModel with _$MenuCategoryRequestModel {
   const factory MenuCategoryRequestModel({

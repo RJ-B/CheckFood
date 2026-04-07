@@ -10,6 +10,9 @@ import java.util.UUID;
 
 /**
  * Agregát reprezentující logické spojení stolů pro konkrétní sezení nebo skupinu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -67,7 +70,9 @@ public class TableGroup {
     private List<TableGroupItem> items = new ArrayList<>();
 
     /**
-     * Pomocná metoda pro přidání stolu do skupiny.
+     * Přidá fyzický stůl do této skupiny.
+     *
+     * @param tableId UUID fyzického stolu, který má být přidán
      */
     public void addTable(UUID tableId) {
         TableGroupItem item = TableGroupItem.builder()

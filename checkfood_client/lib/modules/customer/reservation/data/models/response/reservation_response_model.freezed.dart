@@ -35,6 +35,7 @@ mixin _$ReservationResponseModel {
   int? get partySize => throw _privateConstructorUsedError;
   bool get canEdit => throw _privateConstructorUsedError;
   bool get canCancel => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get pendingChange => throw _privateConstructorUsedError;
 
   /// Serializes this ReservationResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -66,6 +67,7 @@ abstract class $ReservationResponseModelCopyWith<$Res> {
     int? partySize,
     bool canEdit,
     bool canCancel,
+    Map<String, dynamic>? pendingChange,
   });
 }
 
@@ -99,6 +101,7 @@ class _$ReservationResponseModelCopyWithImpl<
     Object? partySize = freezed,
     Object? canEdit = null,
     Object? canCancel = null,
+    Object? pendingChange = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -162,6 +165,11 @@ class _$ReservationResponseModelCopyWithImpl<
                     ? _value.canCancel
                     : canCancel // ignore: cast_nullable_to_non_nullable
                         as bool,
+            pendingChange:
+                freezed == pendingChange
+                    ? _value.pendingChange
+                    : pendingChange // ignore: cast_nullable_to_non_nullable
+                        as Map<String, dynamic>?,
           )
           as $Val,
     );
@@ -190,6 +198,7 @@ abstract class _$$ReservationResponseModelImplCopyWith<$Res>
     int? partySize,
     bool canEdit,
     bool canCancel,
+    Map<String, dynamic>? pendingChange,
   });
 }
 
@@ -223,6 +232,7 @@ class __$$ReservationResponseModelImplCopyWithImpl<$Res>
     Object? partySize = freezed,
     Object? canEdit = null,
     Object? canCancel = null,
+    Object? pendingChange = freezed,
   }) {
     return _then(
       _$ReservationResponseModelImpl(
@@ -286,6 +296,11 @@ class __$$ReservationResponseModelImplCopyWithImpl<$Res>
                 ? _value.canCancel
                 : canCancel // ignore: cast_nullable_to_non_nullable
                     as bool,
+        pendingChange:
+            freezed == pendingChange
+                ? _value._pendingChange
+                : pendingChange // ignore: cast_nullable_to_non_nullable
+                    as Map<String, dynamic>?,
       ),
     );
   }
@@ -307,7 +322,9 @@ class _$ReservationResponseModelImpl extends _ReservationResponseModel {
     this.partySize,
     this.canEdit = false,
     this.canCancel = false,
-  }) : super._();
+    final Map<String, dynamic>? pendingChange,
+  }) : _pendingChange = pendingChange,
+       super._();
 
   factory _$ReservationResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReservationResponseModelImplFromJson(json);
@@ -338,10 +355,19 @@ class _$ReservationResponseModelImpl extends _ReservationResponseModel {
   @override
   @JsonKey()
   final bool canCancel;
+  final Map<String, dynamic>? _pendingChange;
+  @override
+  Map<String, dynamic>? get pendingChange {
+    final value = _pendingChange;
+    if (value == null) return null;
+    if (_pendingChange is EqualUnmodifiableMapView) return _pendingChange;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   String toString() {
-    return 'ReservationResponseModel(id: $id, restaurantId: $restaurantId, tableId: $tableId, restaurantName: $restaurantName, tableLabel: $tableLabel, date: $date, startTime: $startTime, endTime: $endTime, status: $status, partySize: $partySize, canEdit: $canEdit, canCancel: $canCancel)';
+    return 'ReservationResponseModel(id: $id, restaurantId: $restaurantId, tableId: $tableId, restaurantName: $restaurantName, tableLabel: $tableLabel, date: $date, startTime: $startTime, endTime: $endTime, status: $status, partySize: $partySize, canEdit: $canEdit, canCancel: $canCancel, pendingChange: $pendingChange)';
   }
 
   @override
@@ -366,7 +392,11 @@ class _$ReservationResponseModelImpl extends _ReservationResponseModel {
                 other.partySize == partySize) &&
             (identical(other.canEdit, canEdit) || other.canEdit == canEdit) &&
             (identical(other.canCancel, canCancel) ||
-                other.canCancel == canCancel));
+                other.canCancel == canCancel) &&
+            const DeepCollectionEquality().equals(
+              other._pendingChange,
+              _pendingChange,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -385,6 +415,7 @@ class _$ReservationResponseModelImpl extends _ReservationResponseModel {
     partySize,
     canEdit,
     canCancel,
+    const DeepCollectionEquality().hash(_pendingChange),
   );
 
   /// Create a copy of ReservationResponseModel
@@ -417,6 +448,7 @@ abstract class _ReservationResponseModel extends ReservationResponseModel {
     final int? partySize,
     final bool canEdit,
     final bool canCancel,
+    final Map<String, dynamic>? pendingChange,
   }) = _$ReservationResponseModelImpl;
   const _ReservationResponseModel._() : super._();
 
@@ -447,6 +479,8 @@ abstract class _ReservationResponseModel extends ReservationResponseModel {
   bool get canEdit;
   @override
   bool get canCancel;
+  @override
+  Map<String, dynamic>? get pendingChange;
 
   /// Create a copy of ReservationResponseModel
   /// with the given fields replaced by the non-null parameter values.

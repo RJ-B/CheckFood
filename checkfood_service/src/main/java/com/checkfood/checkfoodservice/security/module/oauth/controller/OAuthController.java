@@ -1,6 +1,6 @@
 package com.checkfood.checkfoodservice.security.module.oauth.controller;
 
-import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse; // ✅ Import ze sdíleného modulu
+import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
 import com.checkfood.checkfoodservice.security.module.oauth.dto.request.OAuthLoginRequest;
 import com.checkfood.checkfoodservice.security.module.oauth.service.OAuthService;
 import com.checkfood.checkfoodservice.security.ratelimit.annotation.RateLimited;
@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Controller pro OAuth přihlašování.
- * Zajišťuje sjednocený výstupní formát pro všechny typy autentizace.
+ * REST kontroler pro OAuth přihlašování přes externí poskytovatele identity (Google, Apple).
+ * Vrací sjednocený formát AuthResponse kompatibilní s ostatními autentizačními endpointy.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @RestController
 @RequestMapping("/api/oauth")
@@ -26,8 +29,10 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     /**
-     * OAuth login endpoint.
-     * ✅ Vrací sjednocený AuthResponse pro bezproblémové parsování na frontendu.
+     * Provede OAuth přihlášení uživatele ověřením ID tokenu od poskytovatele.
+     *
+     * @param request požadavek obsahující ID token, typ poskytovatele a data o zařízení
+     * @return odpověď s JWT tokeny a daty uživatele
      */
     @RateLimited(
             key = "oauth:login",
@@ -38,7 +43,6 @@ public class OAuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody OAuthLoginRequest request) {
-        // OAuthService nyní vrací standardní AuthResponse
         AuthResponse response = oAuthService.login(request);
         return ResponseEntity.ok(response);
     }

@@ -6,7 +6,10 @@ import lombok.*;
 
 /**
  * DTO pro bezpečné zpracování požadavku na změnu hesla.
- * Obsahuje současné heslo pro ověření, nové heslo a jeho potvrzení.
+ * Obsahuje současné heslo pro ověření identity, nové heslo a potvrzovací pole.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

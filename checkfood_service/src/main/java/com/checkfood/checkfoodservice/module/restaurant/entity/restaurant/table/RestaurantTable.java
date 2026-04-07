@@ -8,6 +8,9 @@ import java.util.UUID;
 /**
  * Doménová entita reprezentující fyzický stůl v restauraci.
  * Stůl je základním prvkem pro správu kapacity a rezervací.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

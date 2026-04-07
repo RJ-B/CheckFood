@@ -4,8 +4,11 @@ import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthUserIn
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 
 /**
- * Rozhraní pro správu uživatelských entit v rámci OAuth procesu.
- * Definuje operace pro vyhledání existujících uživatelů nebo registraci nových (JIT provisioning).
+ * Rozhraní pro správu uživatelských entit v rámci OAuth procesu (JIT provisioning).
+ * Definuje operace pro vyhledání existujících uživatelů nebo automatickou registraci nových.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface OAuthUserService {
 

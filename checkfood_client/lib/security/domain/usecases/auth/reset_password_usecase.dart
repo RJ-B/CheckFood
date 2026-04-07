@@ -1,5 +1,6 @@
 import '../../repositories/auth_repository.dart';
 
+/// UseCase pro nastavení nového hesla pomocí resetovacího tokenu.
 class ResetPasswordUseCase {
   final AuthRepository _repository;
 

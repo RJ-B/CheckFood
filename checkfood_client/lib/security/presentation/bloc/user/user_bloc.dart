@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'user_event.dart';
 import 'user_state.dart';
-
-// Importy UseCases
 import '../../../domain/usecases/profile/get_user_profile_usecase.dart';
 import '../../../domain/usecases/profile/update_profile_usecase.dart';
 import '../../../domain/usecases/profile/change_password_usecase.dart';
 import '../../../domain/usecases/profile/logout_device_usecase.dart';
 import '../../../domain/usecases/profile/logout_all_devices_usecase.dart';
+import '../../../domain/usecases/profile/delete_device_usecase.dart';
+import '../../../domain/usecases/profile/delete_all_devices_usecase.dart';
 import '../../../domain/usecases/profile/get_active_devices_usecase.dart';
 import '../../../domain/usecases/profile/update_notification_preference_usecase.dart';
 import '../../../domain/usecases/profile/get_notification_preference_usecase.dart';
@@ -16,10 +15,9 @@ import '../../../data/services/notification_service.dart';
 import '../../../data/services/device_info_service.dart';
 import '../../../domain/repositories/profile_repository.dart';
 import '../../../data/models/profile/request/update_profile_request_model.dart';
-
-// ✅ Nutný import pro typ <Device>
 import '../../../domain/entities/device.dart';
 
+/// BLoC pro správu profilu uživatele, zařízení a nastavení notifikací.
 class UserBloc extends Bloc<UserEvent, UserState> {
   final GetUserProfileUseCase _getUserProfileUseCase;
   final GetActiveDevicesUseCase _getActiveDevicesUseCase;
@@ -27,6 +25,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final ChangePasswordUseCase _changePasswordUseCase;
   final LogoutDeviceUseCase _logoutDeviceUseCase;
   final LogoutAllDevicesUseCase _logoutAllDevicesUseCase;
+  final DeleteDeviceUseCase _deleteDeviceUseCase;
+  final DeleteAllDevicesUseCase _deleteAllDevicesUseCase;
   final UpdateNotificationPreferenceUseCase _updateNotificationPreferenceUseCase;
   final GetNotificationPreferenceUseCase _getNotificationPreferenceUseCase;
   final NotificationService _notificationService;
@@ -40,6 +40,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     required ChangePasswordUseCase changePasswordUseCase,
     required LogoutDeviceUseCase logoutDeviceUseCase,
     required LogoutAllDevicesUseCase logoutAllDevicesUseCase,
+    required DeleteDeviceUseCase deleteDeviceUseCase,
+    required DeleteAllDevicesUseCase deleteAllDevicesUseCase,
     required UpdateNotificationPreferenceUseCase updateNotificationPreferenceUseCase,
     required GetNotificationPreferenceUseCase getNotificationPreferenceUseCase,
     required NotificationService notificationService,
@@ -51,6 +53,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
        _changePasswordUseCase = changePasswordUseCase,
        _logoutDeviceUseCase = logoutDeviceUseCase,
        _logoutAllDevicesUseCase = logoutAllDevicesUseCase,
+       _deleteDeviceUseCase = deleteDeviceUseCase,
+       _deleteAllDevicesUseCase = deleteAllDevicesUseCase,
        _updateNotificationPreferenceUseCase = updateNotificationPreferenceUseCase,
        _getNotificationPreferenceUseCase = getNotificationPreferenceUseCase,
        _notificationService = notificationService,
@@ -64,24 +68,35 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<PasswordChangeRequested>(_onPasswordChangeRequested);
     on<AllDevicesLogoutRequested>(_onAllDevicesLogoutRequested);
     on<DeviceLoggedOut>(_onDeviceLoggedOut);
+    on<DeviceDeleted>(_onDeviceDeleted);
+    on<AllDevicesDeleteRequested>(_onAllDevicesDeleteRequested);
 
-    // ✅ NOVÉ: Handler pro vyčištění dat
     on<ClearDataRequested>(_onClearDataRequested);
-
-    // Push notifikace
     on<NotificationPreferenceRequested>(_onNotificationPreferenceRequested);
     on<NotificationToggled>(_onNotificationToggled);
-
-    // Profile photo upload
     on<ProfilePhotoUploadRequested>(_onProfilePhotoUploadRequested);
   }
 
-  /// 1. Načtení profilu
+  /// Seřadí zařízení: aktuální první, pak aktivní, pak neaktivní (dle lastLogin).
+  List<Device> _sortDevices(List<Device> devices) {
+    return List.of(devices)..sort((a, b) {
+      if (a.isCurrentDevice != b.isCurrentDevice) {
+        return a.isCurrentDevice ? -1 : 1;
+      }
+      if (a.isActive != b.isActive) {
+        return a.isActive ? -1 : 1;
+      }
+      return b.lastLogin.compareTo(a.lastLogin);
+    });
+  }
+
+  /// Načte profil uživatele a aktualizuje seznam zařízení a nastavení notifikací.
+  ///
+  /// Pokud je profil již načten, loading state se přeskakuje (zamezí blikání).
   Future<void> _onProfileRequested(
     ProfileRequested event,
     Emitter<UserState> emit,
   ) async {
-    // Kontrola, zda už máme načteno (abychom neblikali loadingem zbytečně)
     final isAlreadyLoaded = state.maybeMap(
       loaded: (_) => true,
       orElse: () => false,
@@ -92,56 +107,43 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     try {
-      // 1. Stáhneme profil
       final profile = await _getUserProfileUseCase();
 
-      // 2. Pokusíme se zachovat aktuální seznam zařízení, pokud existuje
       final List<Device> currentDevices = state.maybeWhen(
         loaded: (_, devices, __, ___) => devices,
         orElse: () => <Device>[],
       );
 
-      // 3. Emitujeme stav Loaded
       emit(UserState.loaded(profile: profile, devices: currentDevices));
 
-      // 4. Automaticky po načtení profilu spustíme načtení zařízení
-      // (Aby se seznam aktualizoval)
-      add(const UserEvent.devicesRequested());
+      try {
+        final freshDevices = await _getActiveDevicesUseCase();
+        emit(UserState.loaded(profile: profile, devices: _sortDevices(freshDevices)));
+      } catch (_) {}
 
-      // 5. Nacist stav notifikaci
       add(const UserEvent.notificationPreferenceRequested());
     } catch (e) {
       emit(UserState.failure(e.toString()));
     }
   }
 
-  /// 2. Načtení aktivních zařízení
+  /// Načte a aktualizuje seznam aktivních zařízení bez ovlivnění zbytku stavu.
   Future<void> _onDevicesRequested(
     DevicesRequested event,
     Emitter<UserState> emit,
   ) async {
-    // Potřebujeme aktuální stav Loaded, abychom měli kam přidat zařízení
     final currentState = state.mapOrNull(loaded: (s) => s);
-
-    if (currentState == null) {
-      // Nemáme profil -> nemůžeme aktualizovat jen zařízení
-      return;
-    }
+    if (currentState == null) return;
 
     try {
       final devices = await _getActiveDevicesUseCase();
-
-      // Emitujeme kopii stavu s novými zařízeními
-      emit(currentState.copyWith(devices: devices));
+      emit(currentState.copyWith(devices: _sortDevices(devices)));
     } catch (e) {
-      // U zařízení selhání nevadí tolik, jen zalogujeme nebo zobrazíme chybu,
-      // ale ideálně bychom neměli shodit celý profil do Failure stavu.
-      // Pro teď necháme failure, ale v budoucnu to můžeš řešit přes 'copyWith(error: ...)'
       emit(UserState.failure("Nepodařilo se načíst zařízení: $e"));
     }
   }
 
-  /// 3. Aktualizace profilu
+  /// Aktualizuje profil uživatele a znovu načte seznam zařízení.
   Future<void> _onProfileUpdated(
     ProfileUpdated event,
     Emitter<UserState> emit,
@@ -149,8 +151,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(const UserState.loading());
     try {
       final updatedProfile = await _updateProfileUseCase(event.request);
-
-      // Po aktualizaci resetujeme zařízení (prázdný seznam) a vyžádáme je znovu
       emit(UserState.loaded(profile: updatedProfile, devices: <Device>[]));
       add(const UserEvent.devicesRequested());
     } catch (e) {
@@ -158,7 +158,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  /// 4. Změna hesla
+  /// Provede změnu hesla a znovu načte profil po úspěchu.
   Future<void> _onPasswordChangeRequested(
     PasswordChangeRequested event,
     Emitter<UserState> emit,
@@ -167,41 +167,81 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       await _changePasswordUseCase(event.request);
       emit(const UserState.passwordChangeSuccess());
-      // Po úspěšné změně hesla znovu načteme profil (pro jistotu)
       add(const UserEvent.profileRequested());
     } catch (e) {
       emit(UserState.failure(e.toString()));
     }
   }
 
-  /// 5. Odhlášení všech zařízení
+  /// Odhlásí všechna zařízení kromě aktuálního a obnoví jejich seznam.
   Future<void> _onAllDevicesLogoutRequested(
     AllDevicesLogoutRequested event,
     Emitter<UserState> emit,
   ) async {
+    final currentState = state.mapOrNull(loaded: (s) => s);
     try {
       await _logoutAllDevicesUseCase();
-      emit(const UserState.devicesLogoutSuccess());
-      add(const UserEvent.devicesRequested());
+      final devices = await _getActiveDevicesUseCase();
+      if (currentState != null) {
+        emit(currentState.copyWith(devices: _sortDevices(devices)));
+      }
     } catch (e) {
       emit(UserState.failure(e.toString()));
     }
   }
 
-  /// 6. Odhlášení jednoho zařízení
+  /// Odhlásí konkrétní zařízení a obnoví jejich seznam.
   Future<void> _onDeviceLoggedOut(
     DeviceLoggedOut event,
     Emitter<UserState> emit,
   ) async {
+    final currentState = state.mapOrNull(loaded: (s) => s);
     try {
       await _logoutDeviceUseCase(event.deviceId);
-      add(const UserEvent.devicesRequested());
+      final devices = await _getActiveDevicesUseCase();
+      if (currentState != null) {
+        emit(currentState.copyWith(devices: _sortDevices(devices)));
+      }
     } catch (e) {
       emit(UserState.failure(e.toString()));
     }
   }
 
-  /// 10. Upload profilove fotky: upload souboru → ziskat URL → aktualizovat profil
+  /// Smaže konkrétní zařízení z DB a obnoví jejich seznam.
+  Future<void> _onDeviceDeleted(
+    DeviceDeleted event,
+    Emitter<UserState> emit,
+  ) async {
+    final currentState = state.mapOrNull(loaded: (s) => s);
+    try {
+      await _deleteDeviceUseCase(event.deviceId);
+      final devices = await _getActiveDevicesUseCase();
+      if (currentState != null) {
+        emit(currentState.copyWith(devices: _sortDevices(devices)));
+      }
+    } catch (e) {
+      emit(UserState.failure(e.toString()));
+    }
+  }
+
+  /// Smaže všechna zařízení kromě aktuálního a obnoví jejich seznam.
+  Future<void> _onAllDevicesDeleteRequested(
+    AllDevicesDeleteRequested event,
+    Emitter<UserState> emit,
+  ) async {
+    final currentState = state.mapOrNull(loaded: (s) => s);
+    try {
+      await _deleteAllDevicesUseCase();
+      final devices = await _getActiveDevicesUseCase();
+      if (currentState != null) {
+        emit(currentState.copyWith(devices: _sortDevices(devices)));
+      }
+    } catch (e) {
+      emit(UserState.failure(e.toString()));
+    }
+  }
+
+  /// Nahraje profilovou fotku, aktualizuje profil s novou URL a znovu jej načte.
   Future<void> _onProfilePhotoUploadRequested(
     ProfilePhotoUploadRequested event,
     Emitter<UserState> emit,
@@ -210,38 +250,33 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (currentState == null) return;
 
     try {
-      // 1. Upload fotky
       final photoUrl = await _profileRepository.uploadProfilePhoto(
         event.imageBytes,
         event.filename,
       );
 
-      // 2. Aktualizovat profil s novou URL
       await _updateProfileUseCase(UpdateProfileRequestModel(
         firstName: currentState.profile.firstName,
         lastName: currentState.profile.lastName,
         profileImageUrl: photoUrl,
       ));
 
-      // 3. Znovu nacist profil pro aktualizaci UI
       add(const UserEvent.profileRequested());
     } catch (e) {
       emit(UserState.failure('Nahrání fotky selhalo: $e'));
-      // Znovu emitovat loaded stav
       add(const UserEvent.profileRequested());
     }
   }
 
-  /// ✅ 7. NOVÉ: Vyčištění dat (Reset)
+  /// Resetuje BLoC do výchozího stavu (např. po odhlášení).
   Future<void> _onClearDataRequested(
     ClearDataRequested event,
     Emitter<UserState> emit,
   ) async {
-    // Jednoduše vrátíme BLoC do výchozího stavu
     emit(const UserState.initial());
   }
 
-  /// 8. Nacte stav notifikaci z backendu
+  /// Načte aktuální stav notifikací z backendu a aktualizuje stav.
   Future<void> _onNotificationPreferenceRequested(
     NotificationPreferenceRequested event,
     Emitter<UserState> emit,
@@ -256,13 +291,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       );
       final enabled = result['notificationsEnabled'] as bool? ?? false;
       emit(currentState.copyWith(notificationsEnabled: enabled));
-    } catch (e) {
-      // Pri selhani nechame default (false), nezobrazime error
-      debugPrint('Failed to load notification preference: $e');
-    }
+    } catch (_) {}
   }
 
-  /// 9. Zapne/vypne notifikace — vyzada permission, ziska token, posle na backend
+  /// Zapne nebo vypne notifikace — vyžádá OS permission, získá FCM token
+  /// a odešle preferenci na backend.
   Future<void> _onNotificationToggled(
     NotificationToggled event,
     Emitter<UserState> emit,
@@ -270,17 +303,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     final currentState = state.mapOrNull(loaded: (s) => s);
     if (currentState == null) return;
 
-    // Zobrazit loading na switchi
     emit(currentState.copyWith(notificationsLoading: true));
 
     try {
       final deviceId = await _deviceInfoService.getDeviceIdentifier();
 
       if (event.enabled) {
-        // ZAPNUTI: vyzadat permission od OS
         final granted = await _notificationService.requestPermission();
         if (!granted) {
-          // OS zamitnul — vratit switch zpet
           emit(currentState.copyWith(
             notificationsEnabled: false,
             notificationsLoading: false,
@@ -288,7 +318,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           return;
         }
 
-        // Ziskat FCM token
         final fcmToken = await _notificationService.getToken();
         if (fcmToken == null) {
           emit(currentState.copyWith(
@@ -298,7 +327,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           return;
         }
 
-        // Poslat na backend
         await _updateNotificationPreferenceUseCase(
           deviceIdentifier: deviceId,
           notificationsEnabled: true,
@@ -310,7 +338,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           notificationsLoading: false,
         ));
       } else {
-        // VYPNUTI: poslat na backend
         await _updateNotificationPreferenceUseCase(
           deviceIdentifier: deviceId,
           notificationsEnabled: false,
@@ -322,10 +349,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         ));
       }
     } catch (e) {
-      // Pri chybe vratit puvodni stav
       emit(currentState.copyWith(notificationsLoading: false));
       emit(UserState.failure('Nepodařilo se změnit nastavení notifikací: $e'));
-      // Znovu emitovat loaded stav (aby UI nezustalo ve failure)
       add(const UserEvent.profileRequested());
     }
   }

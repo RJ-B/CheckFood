@@ -11,10 +11,10 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Repository pro správu systémových oprávnění (permissions/privileges).
- * Zajišťuje perzistentní vrstvu pro jemnou kontrolu přístupu (fine-grained access control).
- * Oprávnění definují konkrétní akce, které mohou být prováděny v systému.
+ * Repository pro správu systémových oprávnění (fine-grained access control).
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see PermissionEntity
  */
 @Repository

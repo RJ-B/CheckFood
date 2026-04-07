@@ -3,9 +3,11 @@ import 'package:gap/gap.dart';
 import '../../../../domain/entities/user_profile.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 
+/// Formulář pro úpravu jména a příjmení uživatele.
+///
+/// Po úspěšné validaci volá [onSave] s vyčištěnými hodnotami.
 class ProfileForm extends StatefulWidget {
   final UserProfile userProfile;
-  // Callback nyní vrací obě hodnoty
   final void Function(String firstName, String lastName) onSave;
 
   const ProfileForm({
@@ -26,7 +28,6 @@ class _ProfileFormState extends State<ProfileForm> {
   @override
   void initState() {
     super.initState();
-    // Inicializace kontrolerů surovými daty z entity
     _firstNameController = TextEditingController(
       text: widget.userProfile.firstName,
     );
@@ -50,7 +51,6 @@ class _ProfileFormState extends State<ProfileForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // --- JMÉNO ---
           TextFormField(
             controller: _firstNameController,
             textInputAction: TextInputAction.next,
@@ -69,7 +69,6 @@ class _ProfileFormState extends State<ProfileForm> {
 
           const Gap(16),
 
-          // --- PŘÍJMENÍ ---
           TextFormField(
             controller: _lastNameController,
             textInputAction: TextInputAction.done,
@@ -88,14 +87,12 @@ class _ProfileFormState extends State<ProfileForm> {
 
           const Gap(24),
 
-          // --- TLAČÍTKO ULOŽIT ---
           SizedBox(
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  // Odesíláme očištěná data zpět do rodičovského widgetu/obrazovky
                   widget.onSave(
                     _firstNameController.text.trim(),
                     _lastNameController.text.trim(),

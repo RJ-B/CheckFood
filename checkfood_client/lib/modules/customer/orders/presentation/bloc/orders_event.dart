@@ -18,4 +18,17 @@ class OrdersEvent with _$OrdersEvent {
   const factory OrdersEvent.submitOrder({String? note}) = SubmitOrder;
   const factory OrdersEvent.loadCurrentOrders() = LoadCurrentOrders;
   const factory OrdersEvent.refresh() = RefreshOrders;
+  const factory OrdersEvent.payOrder({required String orderId}) = PayOrder;
+  const factory OrdersEvent.checkPaymentStatus({required String orderId}) =
+      CheckPaymentStatus;
+
+  const factory OrdersEvent.loadSession() = LoadSession;
+  const factory OrdersEvent.loadSessionOrders() = LoadSessionOrders;
+  const factory OrdersEvent.toggleItemSelection({required String itemId}) =
+      ToggleItemSelection;
+  const factory OrdersEvent.selectAllMyItems() = SelectAllMyItems;
+  const factory OrdersEvent.paySelectedItems() = PaySelectedItems;
+  const factory OrdersEvent.joinSession({required String inviteCode}) =
+      JoinSession;
+  const factory OrdersEvent.showSessionQr() = ShowSessionQr;
 }

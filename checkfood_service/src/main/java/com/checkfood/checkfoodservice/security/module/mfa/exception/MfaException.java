@@ -1,7 +1,10 @@
 package com.checkfood.checkfoodservice.security.module.mfa.exception;
 
 /**
- * Základní výjimka pro MFA modul.
+ * Základní výjimka pro MFA modul, ze které dědí všechny specifičtější MFA výjimky.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class MfaException extends RuntimeException {
 

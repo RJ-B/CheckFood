@@ -40,14 +40,12 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Implementace autentizační služby.
+ * Implementace autentizační služby zajišťující registraci, přihlášení, token refresh,
+ * odhlášení, email verifikaci a reset hesla.
  *
- * REFACTORING A OPTIMALIZACE:
- * - Odstraněna závislost na HttpServletRequest (řeší DeviceService).
- * - Odstraněna přímá závislost na RoleRepository (nahrazeno RoleService).
- * - Odstraněna duplicitní logika správy zařízení (delegováno na DeviceService).
- * - Zjednodušena logika logout (delegováno na DeviceService).
- * - Opraveno pořadí kontrol u refresh tokenu.
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see AuthService
  */
 @Service
 @RequiredArgsConstructor
@@ -80,10 +78,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (requestDto.isOwnerRegistration()) {
-            // Registrace majitele — OWNER role + zkušební restaurace
             registerAsOwner(requestDto);
         } else {
-            // Standardní registrace zákazníka
             registerAsCustomer(requestDto);
         }
     }
@@ -100,10 +96,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Interní metoda pro registraci běžného zákazníka (role USER).
+     * Registruje běžného zákazníka s rolí USER a odesílá verifikační email.
+     *
+     * @param requestDto registrační data zákazníka
      */
     private void registerAsCustomer(RegisterRequest requestDto) {
-        // RoleService vyhodí UserException.roleNotFound, pokud role neexistuje
         var userRole = roleService.findByName("USER");
 
         var user = UserEntity.builder()
@@ -123,8 +120,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Interní metoda pro registraci majitele restaurace (role OWNER).
-     * Vytvoří uživatele a automaticky mu přiřadí zkušební restauraci (TRIAL).
+     * Registruje majitele restaurace s rolí OWNER a vytváří dvě zkušební restaurace (TRIAL).
+     *
+     * @param requestDto registrační data majitele
      */
     private void registerAsOwner(RegisterRequest requestDto) {
         var ownerRole = roleService.findByName("OWNER");
@@ -143,11 +141,9 @@ public class AuthServiceImpl implements AuthService {
 
         var savedUser = userService.save(user);
 
-        // Vytvoření 2 zkušebních restaurací (TRIAL) — nejsou viditelné pro hosty
         double lat = requestDto.getLatitude() != null ? requestDto.getLatitude() : 49.7474;
         double lng = requestDto.getLongitude() != null ? requestDto.getLongitude() : 13.3776;
 
-        // Sdílený manažer (fiktivní uživatel)
         var managerRole = roleService.findByName("USER");
         var managerUser = UserEntity.builder()
                 .email("manager." + savedUser.getId() + "@trial.checkfood.cz")
@@ -187,7 +183,6 @@ public class AuthServiceImpl implements AuthService {
                     .address(address)
                     .build();
 
-            // Otevírací doba Po-Ne 10:00-22:00
             var hours = new java.util.ArrayList<com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.OpeningHours>();
             for (var day : java.time.DayOfWeek.values()) {
                 hours.add(com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.OpeningHours.builder()
@@ -201,7 +196,6 @@ public class AuthServiceImpl implements AuthService {
 
             var savedRestaurant = restaurantRepository.save(restaurant);
 
-            // 3 stoly
             for (int t = 1; t <= 3; t++) {
                 restaurantTableRepository.save(
                     com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.table.RestaurantTable.builder()
@@ -213,21 +207,18 @@ public class AuthServiceImpl implements AuthService {
                 );
             }
 
-            // Owner propojení
             restaurantEmployeeRepository.save(RestaurantEmployee.builder()
                     .user(savedUser)
                     .restaurant(savedRestaurant)
                     .role(RestaurantEmployeeRole.OWNER)
                     .build());
 
-            // Sdílený manažer
             restaurantEmployeeRepository.save(RestaurantEmployee.builder()
                     .user(savedManager)
                     .restaurant(savedRestaurant)
                     .role(RestaurantEmployeeRole.MANAGER)
                     .build());
 
-            // Unikátní staff pro každou restauraci
             var staffUser = UserEntity.builder()
                     .email("staff" + (r + 1) + "." + savedUser.getId() + "@trial.checkfood.cz")
                     .firstName(staffFirstNames[r])
@@ -271,24 +262,20 @@ public class AuthServiceImpl implements AuthService {
 
         // ✅ Delegace na DeviceService (žádné ruční IP/UA)
         var device = registerOrUpdateDevice(user, requestDto);
-        String deviceIdentifier = (device != null) ? device.getDeviceIdentifier() : null;
+        String deviceIdentifier = device != null ? device.getDeviceIdentifier() : null;
 
         authLogger.logSuccessfulLogin(user.getEmail());
-
         return buildAuthResponse(user, deviceIdentifier);
     }
 
     @Override
     public TokenResponse refreshToken(RefreshRequest requestDto) {
-        // 1. Nejprve extrahujeme data ze starého tokenu a zkontrolujeme shodu zařízení
         String tokenDeviceIdentifier = jwtService.extractDeviceIdentifier(requestDto.getRefreshToken());
 
-        // Bezpečnostní kontrola: Token byl vydán pro jiné zařízení, než které žádá o refresh
         if (tokenDeviceIdentifier != null && !tokenDeviceIdentifier.equals(requestDto.getDeviceIdentifier())) {
             throw AuthException.deviceMismatch();
         }
 
-        // 2. Kontrola, že zařízení existuje a je aktivní (smazané/deaktivované = odmítnutí)
         if (tokenDeviceIdentifier != null) {
             var deviceOpt = deviceService.findByIdentifier(tokenDeviceIdentifier);
             if (deviceOpt.isEmpty() || !deviceOpt.get().isActive()) {
@@ -296,10 +283,7 @@ public class AuthServiceImpl implements AuthService {
             }
         }
 
-        // 3. Teprve nyní provedeme rotaci tokenů (validace expirace proběhne uvnitř)
         var authResponse = jwtService.refreshTokens(requestDto.getRefreshToken());
-
-        // 4. Aktualizace aktivity zařízení
         deviceService.updateLastLogin(tokenDeviceIdentifier);
 
         String email = jwtService.extractEmail(authResponse.getAccessToken());
@@ -350,10 +334,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(LogoutRequest requestDto, String authenticatedEmail) {
-        // Extrahujeme email z refresh tokenu
         String tokenEmail = jwtService.extractEmail(requestDto.getRefreshToken());
 
-        // Bezpečnostní kontrola: pokud je uživatel přihlášen, ověříme shodu
         if (authenticatedEmail != null && !tokenEmail.equals(authenticatedEmail)) {
             throw AuthException.invalidToken();
         }
@@ -362,7 +344,6 @@ public class AuthServiceImpl implements AuthService {
 
         if (requestDto.getDeviceIdentifier() != null
                 && deviceService.existsByIdentifierAndUser(requestDto.getDeviceIdentifier(), user)) {
-            // Soft-logout: deaktivovat zařízení (zachovat v DB), nemazat
             deviceService.deactivateByIdentifierAndUser(requestDto.getDeviceIdentifier(), user);
         }
 
@@ -378,7 +359,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void requestPasswordReset(String email) {
-        // Tichý návrat pokud email neexistuje (prevence user enumeration)
         if (!userService.existsByEmail(email)) {
             return;
         }
@@ -389,7 +369,7 @@ public class AuthServiceImpl implements AuthService {
         var resetToken = PasswordResetTokenEntity.builder()
                 .token(token)
                 .user(user)
-                .expiryDate(PasswordResetTokenEntity.calculateExpiryDate(60)) // 60 minut
+                .expiryDate(PasswordResetTokenEntity.calculateExpiryDate(60))
                 .build();
 
         passwordResetTokenRepository.save(resetToken);
@@ -422,8 +402,11 @@ public class AuthServiceImpl implements AuthService {
         authLogger.logPasswordResetCompleted(user.getEmail());
     }
 
-    // --- Private Helpers ---
-
+    /**
+     * Vygeneruje UUID verifikační token, uloží jej a odešle verifikační email.
+     *
+     * @param user uživatel, jemuž se odesílá verifikační email
+     */
     private void generateAndSendVerificationToken(UserEntity user) {
         String token = UUID.randomUUID().toString();
         var verificationToken = VerificationTokenEntity.builder()
@@ -438,12 +421,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Vytvoří minimalistickou entitu zařízení a nechá DeviceService doplnit metadata.
+     * Zaregistruje nebo aktualizuje záznam zařízení přes DeviceService.
+     *
+     * @param user uživatel přihlašující se ze zařízení
+     * @param dto  login request obsahující identifikátor a metadata zařízení
+     * @return uložená entita zařízení nebo {@code null} pokud deviceIdentifier chybí
      */
     private DeviceEntity registerOrUpdateDevice(UserEntity user, LoginRequest dto) {
         if (dto.getDeviceIdentifier() == null) return null;
 
-        // Vytvoříme jen přenosku dat, DeviceService.save() doplní IP, UA a timestampy
         var deviceTemplate = DeviceEntity.builder()
                 .user(user)
                 .deviceIdentifier(dto.getDeviceIdentifier())
@@ -454,6 +440,13 @@ public class AuthServiceImpl implements AuthService {
         return deviceService.save(deviceTemplate);
     }
 
+    /**
+     * Sestaví AuthResponse s JWT tokeny a nastaví příznaky onboardingu pro roli OWNER.
+     *
+     * @param user             autentizovaný uživatel
+     * @param deviceIdentifier identifikátor zařízení pro vazbu tokenu
+     * @return kompletní autentizační odpověď
+     */
     private AuthResponse buildAuthResponse(UserEntity user, String deviceIdentifier) {
         String accessToken = jwtService.generateAccessToken(user, deviceIdentifier);
         String refreshToken = jwtService.generateRefreshToken(user, deviceIdentifier);

@@ -6,23 +6,22 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Společná konfigurace pro OAuth modul.
+ * Sdílené konfigurační vlastnosti pro OAuth modul načítané z application.properties pod prefixem security.oauth.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "security.oauth")
 public class OAuthProperties {
 
-    // Povolení OAuth přihlašování
     private boolean enabled = true;
 
-    // Redirect URI (pokud používáš authorization code flow)
     private String redirectUri;
 
-    // Timeout pro komunikaci s providerem (ms)
     private int connectionTimeout = 5000;
 
-    // Read timeout (ms)
     private int readTimeout = 5000;
 
 }

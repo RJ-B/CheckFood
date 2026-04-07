@@ -11,6 +11,9 @@ import '../datasources/profile_remote_data_source.dart';
 import '../models/profile/request/update_profile_request_model.dart';
 import '../models/profile/request/change_password_request_model.dart';
 
+/// Implementace [ProfileRepository] pro správu profilu a zařízení uživatele.
+///
+/// Mapuje [DioException] na doménové výjimky pomocí [_handleDioException].
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource _remoteDataSource;
 
@@ -67,9 +70,27 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<void> deleteDevice(int deviceId) async {
+    try {
+      await _remoteDataSource.deleteDevice(deviceId);
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
   Future<void> logoutAllDevices() async {
     try {
       await _remoteDataSource.logoutAllDevices();
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
+  Future<void> deleteAllDevices() async {
+    try {
+      await _remoteDataSource.deleteAllDevices();
     } on DioException catch (e) {
       throw _handleDioException(e);
     }
@@ -113,8 +134,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
       throw _handleDioException(e);
     }
   }
-
-  // --- Helper metody ---
 
   SecurityException _handleDioException(DioException e) {
     if (e.type == DioExceptionType.connectionTimeout ||

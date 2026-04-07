@@ -1,12 +1,15 @@
 package com.checkfood.checkfoodservice.module.reservation.service;
 
+import lombok.extern.slf4j.Slf4j;
 import com.checkfood.checkfoodservice.module.reservation.dto.request.CreateReservationRequest;
 import com.checkfood.checkfoodservice.module.reservation.dto.request.UpdateReservationRequest;
 import com.checkfood.checkfoodservice.module.reservation.dto.response.*;
+import com.checkfood.checkfoodservice.module.reservation.entity.ChangeRequestStatus;
 import com.checkfood.checkfoodservice.module.reservation.entity.Reservation;
 import com.checkfood.checkfoodservice.module.reservation.entity.ReservationStatus;
 import com.checkfood.checkfoodservice.module.reservation.exception.ReservationException;
 import com.checkfood.checkfoodservice.module.reservation.logging.ReservationLogger;
+import com.checkfood.checkfoodservice.module.reservation.repository.ReservationChangeRequestRepository;
 import com.checkfood.checkfoodservice.module.reservation.repository.ReservationRepository;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.OpeningHours;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
@@ -21,28 +24,40 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementace {@link ReservationService} pro zákaznické operace s rezervacemi.
+ * Obsahuje algoritmus pro výpočet dostupných slotů s podporou hodin přes půlnoc,
+ * race-safe kontrolu kolizí v transakci a anti-spam limity.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
     private static final int SLOT_INTERVAL_MINUTES = 30;
-    private static final int BOOKING_BUFFER_MINUTES = 30;
+    private static final int BOOKING_BUFFER_MINUTES = 10;
     private static final int EDIT_CUTOFF_MINUTES = 120;
     private static final int HISTORY_PREVIEW_LIMIT = 10;
+    private static final int MAX_RESERVATIONS_PER_RESTAURANT_PER_DAY = 3;
+    private static final int MAX_ACTIVE_RESERVATIONS_TOTAL = 10;
 
-    /** Statuses that count as "active" (upcoming, editable, blocking slots). */
+    /** Stavy označující "aktivní" rezervaci (nadcházející, editovatelné, blokující sloty). */
     private static final Set<ReservationStatus> ACTIVE_STATUSES = Set.of(
             ReservationStatus.PENDING_CONFIRMATION,
             ReservationStatus.CONFIRMED,
-            ReservationStatus.RESERVED,   // backward compat with existing DB rows
+            ReservationStatus.RESERVED,   // zpětná kompatibilita s existujícími záznamy v databázi
             ReservationStatus.CHECKED_IN
     );
 
-    /** Statuses excluded from slot availability and table status queries. */
+    /** Stavy vyloučené z dotazů na dostupné sloty a stav stolů. */
     private static final List<ReservationStatus> EXCLUDED_STATUSES = List.of(
             ReservationStatus.CANCELLED,
             ReservationStatus.REJECTED,
@@ -52,12 +67,9 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final RestaurantRepository restaurantRepository;
     private final RestaurantTableRepository tableRepository;
+    private final ReservationChangeRequestRepository changeRequestRepository;
     private final ReservationLogger reservationLogger;
     private final Clock clock;
-
-    // ========================================================================
-    // 1. RESERVATION SCENE (panorama + table positions)
-    // ========================================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -82,10 +94,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .tables(sceneTables)
                 .build();
     }
-
-    // ========================================================================
-    // 2. TABLE STATUSES (for coloring markers)
-    // ========================================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -122,108 +130,190 @@ public class ReservationServiceImpl implements ReservationService {
                 .build();
     }
 
-    // ========================================================================
-    // 3. AVAILABLE SLOTS (algorithm)
-    // ========================================================================
-
     @Override
     @Transactional(readOnly = true)
     public AvailableSlotsResponse getAvailableSlots(UUID restaurantId, UUID tableId, LocalDate date, UUID excludeReservationId) {
         var restaurant = findRestaurant(restaurantId);
         validateTableBelongsToRestaurant(tableId, restaurantId);
 
-        // 1) Get opening hours for this day
-        DayOfWeek dayOfWeek = date.getDayOfWeek();
-        OpeningHours hours = restaurant.getOpeningHours().stream()
-                .filter(h -> h.getDayOfWeek() == dayOfWeek)
+        var specialDay = restaurant.getSpecialDays().stream()
+                .filter(sd -> sd.getDate().equals(date))
                 .findFirst()
                 .orElse(null);
+
+        if (specialDay != null && specialDay.isClosed()) {
+            return AvailableSlotsResponse.builder()
+                    .date(date).tableId(tableId)
+                    .slotMinutes(SLOT_INTERVAL_MINUTES)
+                    .durationMinutes(restaurant.getDefaultReservationDurationMinutes())
+                    .availableStartTimes(List.of())
+                    .build();
+        }
+
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        OpeningHours hours;
+        if (specialDay != null && specialDay.getOpenAt() != null && specialDay.getCloseAt() != null) {
+            hours = OpeningHours.builder()
+                    .dayOfWeek(dayOfWeek)
+                    .openAt(specialDay.getOpenAt())
+                    .closeAt(specialDay.getCloseAt())
+                    .closed(false)
+                    .build();
+        } else {
+            hours = restaurant.getOpeningHours().stream()
+                    .filter(h -> h.getDayOfWeek() == dayOfWeek)
+                    .findFirst()
+                    .orElse(null);
+        }
 
         if (hours == null || hours.isClosed() || hours.getOpenAt() == null || hours.getCloseAt() == null) {
             return AvailableSlotsResponse.builder()
                     .date(date)
                     .tableId(tableId)
                     .slotMinutes(SLOT_INTERVAL_MINUTES)
+                    .durationMinutes(restaurant.getDefaultReservationDurationMinutes())
                     .availableStartTimes(List.of())
                     .build();
         }
 
-        // 2) Get existing ACTIVE reservations for this table+date
         var existingReservations = reservationRepository.findAllByTableIdAndDateAndStatusNotIn(
                 tableId, date, EXCLUDED_STATUSES
         );
 
-        // Exclude the reservation being edited (so the user's own slot appears available)
         if (excludeReservationId != null) {
             existingReservations = existingReservations.stream()
                     .filter(r -> !r.getId().equals(excludeReservationId))
                     .toList();
         }
 
-        // 3) Generate candidate start times (open-ended: last slot = closeAt - one interval)
         LocalTime openAt = hours.getOpenAt();
         LocalTime closeAt = hours.getCloseAt();
-        LocalTime lastPossibleStart = closeAt.minusMinutes(SLOT_INTERVAL_MINUTES);
+        int durationMinutes = restaurant.getDefaultReservationDurationMinutes();
 
-        // If today, skip past slots (with BOOKING_BUFFER_MINUTES ahead)
-        LocalTime earliestStart = openAt;
+        boolean crossesMidnight = closeAt.isBefore(openAt) || closeAt.equals(openAt);
+
+        int openMinutes = openAt.getHour() * 60 + openAt.getMinute();
+        int totalOpenMinutes = crossesMidnight
+                ? (24 * 60 - openMinutes) + (closeAt.getHour() * 60 + closeAt.getMinute())
+                : (closeAt.getHour() * 60 + closeAt.getMinute()) - openMinutes;
+        int lastPossibleOffset = totalOpenMinutes - durationMinutes;
+
+        if (lastPossibleOffset < 0) {
+            return AvailableSlotsResponse.builder()
+                    .date(date).tableId(tableId)
+                    .slotMinutes(SLOT_INTERVAL_MINUTES)
+                    .durationMinutes(durationMinutes)
+                    .availableStartTimes(List.of())
+                    .build();
+        }
+
+        int startOffset = 0;
         if (date.equals(LocalDate.now(clock))) {
-            var nowPlusBuffer = LocalTime.now(clock).plusMinutes(BOOKING_BUFFER_MINUTES);
-            if (nowPlusBuffer.isAfter(earliestStart)) {
-                // Round up to next slot boundary
-                int minutesSinceOpen = (int) java.time.Duration.between(openAt, nowPlusBuffer).toMinutes();
-                int slotsToSkip = (minutesSinceOpen + SLOT_INTERVAL_MINUTES - 1) / SLOT_INTERVAL_MINUTES;
-                earliestStart = openAt.plusMinutes((long) slotsToSkip * SLOT_INTERVAL_MINUTES);
+            var now = LocalTime.now(clock);
+            var nowPlusBuffer = now.plusMinutes(BOOKING_BUFFER_MINUTES);
+            int nowMinutes = nowPlusBuffer.getHour() * 60 + nowPlusBuffer.getMinute();
+            int offsetFromOpen;
+            if (crossesMidnight && nowMinutes < openMinutes) {
+                offsetFromOpen = (24 * 60 - openMinutes) + nowMinutes;
+            } else {
+                offsetFromOpen = nowMinutes - openMinutes;
+            }
+            if (offsetFromOpen > lastPossibleOffset) {
+                return AvailableSlotsResponse.builder()
+                        .date(date).tableId(tableId)
+                        .slotMinutes(SLOT_INTERVAL_MINUTES)
+                        .durationMinutes(durationMinutes)
+                        .availableStartTimes(List.of())
+                        .build();
+            }
+            if (offsetFromOpen > 0) {
+                int slotsToSkip = (offsetFromOpen + SLOT_INTERVAL_MINUTES - 1) / SLOT_INTERVAL_MINUTES;
+                startOffset = slotsToSkip * SLOT_INTERVAL_MINUTES;
             }
         }
 
         List<LocalTime> availableSlots = new ArrayList<>();
-        LocalTime candidate = earliestStart;
+        for (int offset = startOffset; offset <= lastPossibleOffset; offset += SLOT_INTERVAL_MINUTES) {
+            int candidateMinutes = (openMinutes + offset) % (24 * 60);
+            LocalTime slot = LocalTime.of(candidateMinutes / 60, candidateMinutes % 60);
+            int slotEndMinutes = (candidateMinutes + durationMinutes) % (24 * 60);
+            LocalTime slotEnd = LocalTime.of(slotEndMinutes / 60, slotEndMinutes % 60);
 
-        while (!candidate.isAfter(lastPossibleStart)) {
-            // Open-ended model: slot is blocked if any active reservation has startTime <= candidate
-            final LocalTime slot = candidate;
+            final LocalTime fSlot = slot;
+            final LocalTime fSlotEnd = slotEnd;
+            final boolean slotCrossesMidnight = slotEndMinutes < candidateMinutes;
+
             boolean hasConflict = existingReservations.stream()
-                    .anyMatch(r -> !r.getStartTime().isAfter(slot));
+                    .anyMatch(r -> {
+                        LocalTime rStart = r.getStartTime();
+                        LocalTime rEnd = r.getEndTime() != null
+                                ? r.getEndTime()
+                                : r.getStartTime().plusMinutes(durationMinutes);
+
+                            int s1 = fSlot.getHour() * 60 + fSlot.getMinute();
+                        int e1 = s1 + durationMinutes;
+                        int s2 = rStart.getHour() * 60 + rStart.getMinute();
+                        int e2 = rEnd.getHour() * 60 + rEnd.getMinute();
+                        if (e2 <= s2) e2 += 24 * 60;
+                        if (slotCrossesMidnight) e1 = s1 + durationMinutes;
+
+                        return s1 < e2 && e1 > s2;
+                    });
 
             if (!hasConflict) {
-                availableSlots.add(candidate);
+                availableSlots.add(slot);
             }
-
-            candidate = candidate.plusMinutes(SLOT_INTERVAL_MINUTES);
         }
 
         return AvailableSlotsResponse.builder()
                 .date(date)
                 .tableId(tableId)
                 .slotMinutes(SLOT_INTERVAL_MINUTES)
+                .durationMinutes(durationMinutes)
                 .availableStartTimes(availableSlots)
                 .build();
     }
 
-    // ========================================================================
-    // 4. CREATE RESERVATION (transaction-safe against race conditions)
-    // ========================================================================
-
     @Override
     @Transactional
     public ReservationResponse createReservation(CreateReservationRequest request, Long userId) {
-        findRestaurant(request.getRestaurantId());
+        var restaurant = findRestaurant(request.getRestaurantId());
         var table = findTableInRestaurant(request.getTableId(), request.getRestaurantId());
 
-        // Validate: cannot create reservation in the past
         validateNotInPast(request.getDate(), request.getStartTime());
 
-        // Validate party size against table capacity
         if (request.getPartySize() > table.getCapacity()) {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
         }
 
-        // Race-safe overlap check inside transaction (open-ended reservations)
+        long perRestaurantPerDay = reservationRepository
+                .findAllByRestaurantIdAndDateAndStatusNotIn(
+                        request.getRestaurantId(), request.getDate(), EXCLUDED_STATUSES.stream().toList())
+                .stream()
+                .filter(r -> r.getUserId().equals(userId))
+                .count();
+        if (perRestaurantPerDay >= MAX_RESERVATIONS_PER_RESTAURANT_PER_DAY) {
+            throw ReservationException.reservationLimitPerDay(MAX_RESERVATIONS_PER_RESTAURANT_PER_DAY);
+        }
+
+        long totalActive = reservationRepository
+                .findAllByUserIdOrderByDateDescStartTimeDesc(userId)
+                .stream()
+                .filter(r -> ACTIVE_STATUSES.contains(r.getStatus()))
+                .filter(r -> !r.getDate().isBefore(LocalDate.now(clock)))
+                .count();
+        if (totalActive >= MAX_ACTIVE_RESERVATIONS_TOTAL) {
+            throw ReservationException.reservationLimitTotal(MAX_ACTIVE_RESERVATIONS_TOTAL);
+        }
+
+        int durationMinutes = restaurant.getDefaultReservationDurationMinutes();
+        LocalTime endTime = request.getStartTime().plusMinutes(durationMinutes);
+
         boolean conflict = reservationRepository.existsOverlappingReservation(
                 request.getTableId(),
                 request.getDate(),
-                request.getStartTime()
+                request.getStartTime(),
+                endTime
         );
 
         if (conflict) {
@@ -237,7 +327,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .userId(userId)
                 .date(request.getDate())
                 .startTime(request.getStartTime())
-                .status(ReservationStatus.PENDING_CONFIRMATION)
+                .endTime(endTime)
+                .status(ReservationStatus.CONFIRMED)
                 .partySize(request.getPartySize())
                 .build();
 
@@ -250,19 +341,13 @@ public class ReservationServiceImpl implements ReservationService {
         return toResponse(saved, null, null, false);
     }
 
-    // ========================================================================
-    // 5. MY RESERVATIONS OVERVIEW (upcoming + history)
-    // ========================================================================
-
     @Override
     @Transactional(readOnly = true)
     public MyReservationsOverviewResponse getMyReservationsOverview(Long userId) {
         var reservations = reservationRepository.findAllByUserIdOrderByDateDescStartTimeDesc(userId);
 
-        // Batch-load restaurant names and table labels
         var namesMaps = batchLoadNames(reservations);
 
-        // Split into upcoming and history
         var upcoming = reservations.stream()
                 .filter(this::isUpcoming)
                 .sorted(Comparator.comparing(Reservation::getDate).thenComparing(Reservation::getStartTime))
@@ -287,10 +372,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .build();
     }
 
-    // ========================================================================
-    // 6. MY RESERVATIONS HISTORY (all, for "show all" button)
-    // ========================================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<ReservationResponse> getMyReservationsHistory(Long userId) {
@@ -305,40 +386,35 @@ public class ReservationServiceImpl implements ReservationService {
                 .toList();
     }
 
-    // ========================================================================
-    // 7. UPDATE RESERVATION
-    // ========================================================================
-
     @Override
     @Transactional
     public ReservationResponse updateReservation(UUID id, UpdateReservationRequest request, Long userId) {
         var reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> ReservationException.notFound(id));
 
-        // Security: verify ownership
         if (!reservation.getUserId().equals(userId)) {
             throw ReservationException.accessDenied();
         }
 
-        // Business: verify editable
         if (!computeCanEdit(reservation)) {
             throw ReservationException.cannotEdit();
         }
 
-        // Validate: new time cannot be in the past
         validateNotInPast(request.getDate(), request.getStartTime());
 
-        // Validate table belongs to the original restaurant + capacity
         var table = findTableInRestaurant(request.getTableId(), reservation.getRestaurantId());
         if (request.getPartySize() > table.getCapacity()) {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
         }
 
-        // Race-safe overlap check excluding self (open-ended reservations)
+        var restaurant = findRestaurant(reservation.getRestaurantId());
+        int dur = restaurant.getDefaultReservationDurationMinutes();
+        LocalTime updateEndTime = request.getStartTime().plusMinutes(dur);
         boolean conflict = reservationRepository.existsOverlappingReservationExcluding(
                 request.getTableId(),
                 request.getDate(),
                 request.getStartTime(),
+                updateEndTime,
                 id
         );
 
@@ -347,7 +423,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw ReservationException.slotConflict();
         }
 
-        // Update fields — editing resets status to PENDING_CONFIRMATION
         reservation.setTableId(request.getTableId());
         reservation.setDate(request.getDate());
         reservation.setStartTime(request.getStartTime());
@@ -361,7 +436,6 @@ public class ReservationServiceImpl implements ReservationService {
                 saved.getId(), saved.getTableId(), saved.getDate()
         );
 
-        // Load names for response
         var restaurantName = restaurantRepository.findById(saved.getRestaurantId())
                 .map(Restaurant::getName).orElse(null);
         var tableLabel = tableRepository.findById(saved.getTableId())
@@ -370,27 +444,20 @@ public class ReservationServiceImpl implements ReservationService {
         return toResponse(saved, restaurantName, tableLabel, computeCanEdit(saved));
     }
 
-    // ========================================================================
-    // 8. CANCEL RESERVATION
-    // ========================================================================
-
     @Override
     @Transactional
     public ReservationResponse cancelReservation(UUID id, Long userId) {
         var reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> ReservationException.notFound(id));
 
-        // Security: verify ownership
         if (!reservation.getUserId().equals(userId)) {
             throw ReservationException.accessDenied();
         }
 
-        // Business: verify not already cancelled
         if (reservation.getStatus() == ReservationStatus.CANCELLED) {
             throw ReservationException.alreadyCancelled();
         }
 
-        // Business: cannot cancel a reservation that already started
         if (!isUpcoming(reservation)) {
             throw ReservationException.cannotCancel();
         }
@@ -408,25 +475,184 @@ public class ReservationServiceImpl implements ReservationService {
         return toResponse(saved, restaurantName, tableLabel, false);
     }
 
-    // ========================================================================
-    // HELPERS
-    // ========================================================================
+    @Override
+    @Transactional(readOnly = true)
+    public List<PendingChangeResponse> getPendingChangesForUser(Long userId) {
+        var changeRequests = changeRequestRepository.findAllByReservationUserIdAndStatus(userId, ChangeRequestStatus.PENDING);
 
+        if (changeRequests.isEmpty()) return List.of();
+
+        var reservationIds = changeRequests.stream()
+                .map(cr -> cr.getReservationId())
+                .collect(Collectors.toSet());
+        var reservationMap = reservationRepository.findAllById(reservationIds).stream()
+                .collect(Collectors.toMap(Reservation::getId, r -> r));
+
+        var restaurantIds = reservationMap.values().stream()
+                .map(Reservation::getRestaurantId)
+                .collect(Collectors.toSet());
+        var restaurantNames = restaurantRepository.findAllById(restaurantIds).stream()
+                .collect(Collectors.toMap(Restaurant::getId, Restaurant::getName));
+
+        var allTableIds = new HashSet<UUID>();
+        changeRequests.forEach(cr -> {
+            allTableIds.add(cr.getOriginalTableId());
+            if (cr.getProposedTableId() != null) allTableIds.add(cr.getProposedTableId());
+        });
+        var tableLabels = tableRepository.findAllById(allTableIds).stream()
+                .collect(Collectors.toMap(RestaurantTable::getId, RestaurantTable::getLabel));
+
+        return changeRequests.stream().map(cr -> {
+            var reservation = reservationMap.get(cr.getReservationId());
+            String restaurantName = reservation != null
+                    ? restaurantNames.get(reservation.getRestaurantId()) : null;
+            LocalDate reservationDate = reservation != null ? reservation.getDate() : null;
+
+            return PendingChangeResponse.builder()
+                    .id(cr.getId())
+                    .reservationId(cr.getReservationId())
+                    .restaurantName(restaurantName)
+                    .proposedStartTime(cr.getProposedStartTime())
+                    .proposedTableId(cr.getProposedTableId())
+                    .proposedTableLabel(cr.getProposedTableId() != null
+                            ? tableLabels.get(cr.getProposedTableId()) : null)
+                    .originalStartTime(cr.getOriginalStartTime())
+                    .originalTableId(cr.getOriginalTableId())
+                    .originalTableLabel(tableLabels.get(cr.getOriginalTableId()))
+                    .reservationDate(reservationDate)
+                    .status(cr.getStatus())
+                    .createdAt(cr.getCreatedAt())
+                    .build();
+        }).toList();
+    }
+
+    @Override
+    @Transactional
+    public ReservationResponse acceptChangeRequest(UUID changeRequestId, Long userId) {
+        var changeRequest = changeRequestRepository.findById(changeRequestId)
+                .orElseThrow(() -> ReservationException.changeRequestNotFound(changeRequestId));
+
+        var reservation = reservationRepository.findById(changeRequest.getReservationId())
+                .orElseThrow(() -> ReservationException.notFound(changeRequest.getReservationId()));
+        if (!reservation.getUserId().equals(userId)) {
+            throw ReservationException.accessDenied();
+        }
+
+        if (changeRequest.getStatus() != ChangeRequestStatus.PENDING) {
+            throw ReservationException.invalidStatusTransition(
+                    changeRequest.getStatus().name(), ChangeRequestStatus.ACCEPTED.name());
+        }
+
+        UUID targetTableId = changeRequest.getProposedTableId() != null
+                ? changeRequest.getProposedTableId() : reservation.getTableId();
+        LocalTime targetStartTime = changeRequest.getProposedStartTime() != null
+                ? changeRequest.getProposedStartTime() : reservation.getStartTime();
+
+        var acceptRestaurant = findRestaurant(reservation.getRestaurantId());
+        LocalTime targetEndTime = targetStartTime.plusMinutes(acceptRestaurant.getDefaultReservationDurationMinutes());
+        boolean conflict = reservationRepository.existsOverlappingReservationExcluding(
+                targetTableId,
+                reservation.getDate(),
+                targetStartTime,
+                targetEndTime,
+                reservation.getId()
+        );
+        if (conflict) {
+            throw ReservationException.slotConflict();
+        }
+
+        if (changeRequest.getProposedStartTime() != null) {
+            reservation.setStartTime(changeRequest.getProposedStartTime());
+        }
+        if (changeRequest.getProposedTableId() != null) {
+            reservation.setTableId(changeRequest.getProposedTableId());
+        }
+        var savedReservation = reservationRepository.save(reservation);
+
+        changeRequest.setStatus(ChangeRequestStatus.ACCEPTED);
+        changeRequest.setResolvedAt(LocalDateTime.now());
+        changeRequestRepository.save(changeRequest);
+
+        var restaurantName = restaurantRepository.findById(savedReservation.getRestaurantId())
+                .map(Restaurant::getName).orElse(null);
+        var tableLabel = tableRepository.findById(savedReservation.getTableId())
+                .map(RestaurantTable::getLabel).orElse(null);
+
+        return toResponse(savedReservation, restaurantName, tableLabel, computeCanEdit(savedReservation));
+    }
+
+    @Override
+    @Transactional
+    public ReservationResponse declineChangeRequest(UUID changeRequestId, Long userId) {
+        var changeRequest = changeRequestRepository.findById(changeRequestId)
+                .orElseThrow(() -> ReservationException.changeRequestNotFound(changeRequestId));
+
+        var reservation = reservationRepository.findById(changeRequest.getReservationId())
+                .orElseThrow(() -> ReservationException.notFound(changeRequest.getReservationId()));
+        if (!reservation.getUserId().equals(userId)) {
+            throw ReservationException.accessDenied();
+        }
+
+        if (changeRequest.getStatus() != ChangeRequestStatus.PENDING) {
+            throw ReservationException.invalidStatusTransition(
+                    changeRequest.getStatus().name(), ChangeRequestStatus.DECLINED.name());
+        }
+
+        changeRequest.setStatus(ChangeRequestStatus.DECLINED);
+        changeRequest.setResolvedAt(LocalDateTime.now());
+        changeRequestRepository.save(changeRequest);
+
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        var savedReservation = reservationRepository.save(reservation);
+
+        var restaurantName = restaurantRepository.findById(savedReservation.getRestaurantId())
+                .map(Restaurant::getName).orElse(null);
+        var tableLabel = tableRepository.findById(savedReservation.getTableId())
+                .map(RestaurantTable::getLabel).orElse(null);
+
+        return toResponse(savedReservation, restaurantName, tableLabel, false);
+    }
+
+    /**
+     * Načte restauraci dle ID nebo vyhodí {@link RestaurantException} s HTTP 404.
+     *
+     * @param restaurantId UUID restaurace
+     * @return nalezená entita restaurace
+     */
     private Restaurant findRestaurant(UUID restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> RestaurantException.notFound(restaurantId));
     }
 
+    /**
+     * Ověří, že stůl patří do dané restaurace. Vyhodí výjimku při neshodě.
+     *
+     * @param tableId      UUID stolu
+     * @param restaurantId UUID restaurace
+     */
     private void validateTableBelongsToRestaurant(UUID tableId, UUID restaurantId) {
         tableRepository.findByIdAndRestaurantId(tableId, restaurantId)
                 .orElseThrow(ReservationException::tableNotInRestaurant);
     }
 
+    /**
+     * Načte stůl patřící do dané restaurace nebo vyhodí výjimku.
+     *
+     * @param tableId      UUID stolu
+     * @param restaurantId UUID restaurace
+     * @return entita stolu
+     */
     private RestaurantTable findTableInRestaurant(UUID tableId, UUID restaurantId) {
         return tableRepository.findByIdAndRestaurantId(tableId, restaurantId)
                 .orElseThrow(ReservationException::tableNotInRestaurant);
     }
 
+    /**
+     * Určí, zda je rezervace nadcházející (aktivní stav a datum/čas v budoucnosti).
+     *
+     * @param r rezervace ke kontrole
+     * @return {@code true} pokud rezervace ještě nenastala
+     */
     private boolean isUpcoming(Reservation r) {
         if (!ACTIVE_STATUSES.contains(r.getStatus())) return false;
         LocalDate today = LocalDate.now(clock);
@@ -435,6 +661,13 @@ public class ReservationServiceImpl implements ReservationService {
         return false;
     }
 
+    /**
+     * Ověří, že kombinace data a času není v minulosti (s ohledem na booking buffer).
+     * Vyhodí {@link ReservationException} pokud je datum nebo čas v minulosti.
+     *
+     * @param date      datum rezervace
+     * @param startTime čas začátku rezervace
+     */
     private void validateNotInPast(LocalDate date, LocalTime startTime) {
         LocalDate today = LocalDate.now(clock);
         if (date.isBefore(today)) {
@@ -445,24 +678,61 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /**
+     * Vypočítá, zda může zákazník rezervaci upravit.
+     * Úprava je povolena jen pro rezervace v nadcházejícím datu a s editovatelným stavem,
+     * přičemž ve stejný den musí být alespoň {@value #EDIT_CUTOFF_MINUTES} minut do začátku.
+     *
+     * @param r rezervace ke kontrole
+     * @return {@code true} pokud lze rezervaci upravit
+     */
     private boolean computeCanEdit(Reservation r) {
         if (!isUpcoming(r)) return false;
-        // Only PENDING_CONFIRMATION reservations can be edited by the customer
         if (r.getStatus() != ReservationStatus.PENDING_CONFIRMATION
+                && r.getStatus() != ReservationStatus.CONFIRMED
                 && r.getStatus() != ReservationStatus.RESERVED) {
             return false;
         }
         LocalDate today = LocalDate.now(clock);
         if (r.getDate().isAfter(today)) return true;
-        // Same day: must be at least EDIT_CUTOFF_MINUTES before start
         return r.getStartTime().isAfter(LocalTime.now(clock).plusMinutes(EDIT_CUTOFF_MINUTES));
     }
 
+    /**
+     * Určí, zda může zákazník rezervaci zrušit (rezervace musí být nadcházející).
+     *
+     * @param r rezervace ke kontrole
+     * @return {@code true} pokud lze rezervaci zrušit
+     */
     private boolean computeCanCancel(Reservation r) {
         return isUpcoming(r);
     }
 
+    /**
+     * Sestaví {@link ReservationResponse} z entity rezervace a doplňkových dat.
+     *
+     * @param r              entita rezervace
+     * @param restaurantName název restaurace (může být {@code null})
+     * @param tableLabel     označení stolu (může být {@code null})
+     * @param canEdit        příznak zda zákazník může rezervaci upravit
+     * @return sestavený response DTO
+     */
     private ReservationResponse toResponse(Reservation r, String restaurantName, String tableLabel, boolean canEdit) {
+        var pendingChangeOpt = changeRequestRepository.findByReservationIdAndStatus(r.getId(), ChangeRequestStatus.PENDING);
+        ReservationResponse.PendingChangeDetail pendingChangeDetail = null;
+        if (pendingChangeOpt.isPresent()) {
+            var cr = pendingChangeOpt.get();
+            String proposedTableLabel = cr.getProposedTableId() != null
+                    ? tableRepository.findById(cr.getProposedTableId()).map(RestaurantTable::getLabel).orElse(null)
+                    : null;
+            pendingChangeDetail = ReservationResponse.PendingChangeDetail.builder()
+                    .changeRequestId(cr.getId())
+                    .proposedStartTime(cr.getProposedStartTime())
+                    .proposedTableId(cr.getProposedTableId())
+                    .proposedTableLabel(proposedTableLabel)
+                    .build();
+        }
+
         return ReservationResponse.builder()
                 .id(r.getId())
                 .restaurantId(r.getRestaurantId())
@@ -476,11 +746,20 @@ public class ReservationServiceImpl implements ReservationService {
                 .partySize(r.getPartySize())
                 .canEdit(canEdit)
                 .canCancel(computeCanCancel(r))
+                .pendingChange(pendingChangeDetail)
+                .recurringReservationId(r.getRecurringReservationId())
                 .build();
     }
 
     private record NamesMaps(Map<UUID, String> restaurantNames, Map<UUID, String> tableLabels) {}
 
+    /**
+     * Hromadně načte názvy restaurací a označení stolů pro seznam rezervací.
+     * Zabraňuje N+1 dotazům při sestavování odpovědí.
+     *
+     * @param reservations seznam rezervací
+     * @return přepravní objekt s mapami názvů indexovanými dle UUID
+     */
     private NamesMaps batchLoadNames(List<Reservation> reservations) {
         var restaurantIds = reservations.stream().map(Reservation::getRestaurantId).collect(Collectors.toSet());
         var tableIds = reservations.stream().map(Reservation::getTableId).collect(Collectors.toSet());

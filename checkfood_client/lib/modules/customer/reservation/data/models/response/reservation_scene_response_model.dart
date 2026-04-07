@@ -5,6 +5,7 @@ import '../../../domain/entities/reservation_scene.dart';
 part 'reservation_scene_response_model.freezed.dart';
 part 'reservation_scene_response_model.g.dart';
 
+/// API response model for the panorama scene of a restaurant, including table positions.
 @freezed
 class ReservationSceneResponseModel with _$ReservationSceneResponseModel {
   const ReservationSceneResponseModel._();
@@ -25,6 +26,7 @@ class ReservationSceneResponseModel with _$ReservationSceneResponseModel {
       );
 }
 
+/// API response model for a single table's position within the panorama scene.
 @freezed
 class SceneTableModel with _$SceneTableModel {
   const SceneTableModel._();

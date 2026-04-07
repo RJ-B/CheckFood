@@ -1,6 +1,7 @@
 import '../entities/menu_category.dart';
 import '../repositories/orders_repository.dart';
 
+/// Fetches the menu categories and items for the given restaurant.
 class GetMenuUseCase {
   final OrdersRepository _repository;
 

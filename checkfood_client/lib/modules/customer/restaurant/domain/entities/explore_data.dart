@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'google_place.dart';
+import 'restaurant.dart';
 import 'restaurant_marker.dart';
 
 part 'explore_data.freezed.dart';
@@ -8,30 +8,18 @@ part 'explore_data.freezed.dart';
 @freezed
 class ExploreData with _$ExploreData {
   const factory ExploreData({
-    /// Google Places z API
-    required List<GooglePlace> places,
-
-    /// Markery pro mapu (shluky nebo restaurace)
+    required List<Restaurant> restaurants,
     required List<RestaurantMarker> markers,
-
-    /// Aktualni poloha uzivatele
     required Position userPosition,
-
-    /// Zda probiha aktualizace markeru na mape
     @Default(false) bool isMapLoading,
-
-    /// ID vybraneho mista (null = zadny vyber)
-    @Default(null) String? selectedPlaceId,
-
-    /// Vybrane misto pro preview card
-    @Default(null) GooglePlace? selectedPlace,
-
-    /// Aktivni search query
+    @Default(null) String? selectedRestaurantId,
+    @Default(null) Restaurant? selectedRestaurant,
     @Default(null) String? searchQuery,
+    @Default(false) bool clusterEngineReady,
   }) = _ExploreData;
 
   factory ExploreData.initial() => ExploreData(
-        places: [],
+        restaurants: [],
         markers: [],
         userPosition: Position(
           longitude: 0,

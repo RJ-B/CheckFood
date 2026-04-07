@@ -1,7 +1,10 @@
 package com.checkfood.checkfoodservice.security.module.mfa.exception;
 
 /**
- * Vyhozena při zadání neplatného MFA kódu.
+ * Výjimka vyhozená při zadání neplatného nebo expirovaného MFA kódu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class MfaInvalidCodeException extends MfaException {
 

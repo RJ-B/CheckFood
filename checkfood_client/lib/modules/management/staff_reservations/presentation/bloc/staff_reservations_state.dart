@@ -1,10 +1,15 @@
 import '../../domain/entities/staff_reservation.dart';
+import '../../domain/entities/staff_table.dart';
 
+/// Immutable state for [StaffReservationsBloc], holding the reservation list,
+/// the selected date, available tables, and per-action progress tracking.
 class StaffReservationsState {
   final bool isLoading;
   final String? error;
   final String selectedDate;
+  final String? restaurantId;
   final List<StaffReservation> reservations;
+  final List<StaffTable> tables;
   final String? actionInProgressId;
   final String? actionError;
 
@@ -12,7 +17,9 @@ class StaffReservationsState {
     this.isLoading = false,
     this.error,
     required this.selectedDate,
+    this.restaurantId,
     this.reservations = const [],
+    this.tables = const [],
     this.actionInProgressId,
     this.actionError,
   });
@@ -22,7 +29,9 @@ class StaffReservationsState {
     String? error,
     bool clearError = false,
     String? selectedDate,
+    String? restaurantId,
     List<StaffReservation>? reservations,
+    List<StaffTable>? tables,
     String? actionInProgressId,
     bool clearActionInProgress = false,
     String? actionError,
@@ -32,7 +41,9 @@ class StaffReservationsState {
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
       selectedDate: selectedDate ?? this.selectedDate,
+      restaurantId: restaurantId ?? this.restaurantId,
       reservations: reservations ?? this.reservations,
+      tables: tables ?? this.tables,
       actionInProgressId: clearActionInProgress
           ? null
           : (actionInProgressId ?? this.actionInProgressId),

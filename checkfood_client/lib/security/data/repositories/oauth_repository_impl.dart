@@ -18,6 +18,10 @@ import '../models/auth/response/auth_response_model.dart';
 import '../models/oauth/request/oauth_login_request_model.dart';
 import '../services/device_info_service.dart';
 
+/// Implementace [OAuthRepository] pro přihlášení přes Google a Apple.
+///
+/// Orchestruje celý OAuth flow: získání ID tokenu od poskytovatele,
+/// odeslání na backend a uložení výsledných tokenů do [TokenStorage].
 class OAuthRepositoryImpl implements OAuthRepository {
   final OAuthRemoteDataSource _remoteDataSource;
   final TokenStorage _tokenStorage;
@@ -127,7 +131,6 @@ class OAuthRepositoryImpl implements OAuthRepository {
 
       final decodedToken = JwtDecoder.decode(token);
 
-      // Sjednocené parsování identity skrze SecurityClaims
       final int userId =
           (decodedToken[SecurityClaims.userId] is int)
               ? decodedToken[SecurityClaims.userId]
@@ -163,8 +166,6 @@ class OAuthRepositoryImpl implements OAuthRepository {
       return null;
     }
   }
-
-  // --- Helpers ---
 
   Future<User> _processOAuthResponse(OAuthLoginRequestModel request) async {
     final AuthResponseModel authResponse = await _remoteDataSource

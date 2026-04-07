@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'table_status.freezed.dart';
 
+/// The availability statuses for all tables in a restaurant on a given date.
 @freezed
 class TableStatusList with _$TableStatusList {
   const factory TableStatusList({
@@ -10,6 +11,7 @@ class TableStatusList with _$TableStatusList {
   }) = _TableStatusList;
 }
 
+/// Availability status of a single table (e.g. available, partially booked).
 @freezed
 class TableStatus with _$TableStatus {
   const factory TableStatus({

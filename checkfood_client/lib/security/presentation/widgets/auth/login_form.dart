@@ -5,14 +5,14 @@ import '../../../../core/theme/colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../navigation/app_router.dart';
 
-// Domain Params
 import '../../../domain/usecases/auth/params/auth_params.dart';
-
-// Bloc
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 
+/// Formulář pro přihlášení uživatele (e-mail + heslo).
+///
+/// Komunikuje s [AuthBloc] a zobrazuje indikátor načítání místo tlačítka.
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
@@ -61,7 +61,6 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Email Field
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -84,7 +83,6 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: 20),
 
-          // Password Field
           TextFormField(
             controller: _passwordController,
             obscureText: !_isPasswordVisible,
@@ -110,7 +108,6 @@ class _LoginFormState extends State<LoginForm> {
 
           const SizedBox(height: 12),
 
-          // Forgot Password
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -123,7 +120,6 @@ class _LoginFormState extends State<LoginForm> {
 
           const SizedBox(height: 24),
 
-          // Submit Button s reakcí na stav BLoCu
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               return state.maybeWhen(

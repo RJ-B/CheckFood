@@ -11,7 +11,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * Entita pro MFA (TOTP) tajný klíč uživatele.
+ * JPA entita uchovávající TOTP tajný klíč a stav MFA pro konkrétního uživatele.
+ * Vztah k uživateli je 1:1 — každý uživatel může mít nejvýše jeden aktivní MFA secret.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Entity
 @Table(
@@ -25,33 +29,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MfaSecretEntity {
 
-    // Primární klíč
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Uživatel (1:1)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    // Base32 secret pro TOTP
     @Column(nullable = false, length = 64)
     private String secret;
 
-    // Je MFA aktivní?
     @Column(nullable = false)
     private boolean enabled = false;
 
-    // Typ metody (zatím TOTP)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private MfaMethodType method = MfaMethodType.TOTP;
 
-    // Kdy bylo MFA zapnuto
     private LocalDateTime enabledAt;
 
-    // Kdy byl secret vytvořen
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

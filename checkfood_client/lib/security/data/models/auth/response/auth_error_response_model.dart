@@ -4,6 +4,7 @@ import '../../../../config/security_json_keys.dart';
 part 'auth_error_response_model.freezed.dart';
 part 'auth_error_response_model.g.dart';
 
+/// Datový model pro chybovou odpověď z autentizačních endpointů.
 @freezed
 class AuthErrorResponseModel with _$AuthErrorResponseModel {
   const AuthErrorResponseModel._();

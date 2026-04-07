@@ -11,6 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
+/**
+ * Plánovaná úloha, která každou minutu automaticky potvrdí rezervace čekající déle než 15 minut.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -21,6 +27,10 @@ public class ReservationAutoConfirmJob {
     private final ReservationRepository reservationRepository;
     private final Clock clock;
 
+    /**
+     * Vyhledá čekající rezervace starší než {@code AUTO_CONFIRM_AFTER_MINUTES} minut
+     * a změní jejich stav na CONFIRMED.
+     */
     @Scheduled(fixedRate = 60_000)
     @Transactional
     public void autoConfirmPendingReservations() {
@@ -36,7 +46,7 @@ public class ReservationAutoConfirmJob {
         }
         reservationRepository.saveAll(pending);
 
-        log.info("[AutoConfirm] Auto-confirmed {} reservations older than {} minutes.",
+        log.info("[AutoConfirm] Automaticky potvrzeno {} rezervací starších než {} minut.",
                 pending.size(), AUTO_CONFIRM_AFTER_MINUTES);
     }
 }

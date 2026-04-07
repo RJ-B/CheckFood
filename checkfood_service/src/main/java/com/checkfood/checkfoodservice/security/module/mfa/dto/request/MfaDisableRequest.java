@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Request pro vypnutí MFA.
+ * DTO pro deaktivaci MFA obsahující aktuální heslo uživatele pro ověření identity.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

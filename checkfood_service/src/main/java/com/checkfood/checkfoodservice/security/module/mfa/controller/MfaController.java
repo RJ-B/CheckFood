@@ -24,7 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * REST API pro MFA (2FA).
+ * REST kontroler pro správu vícefaktorové autentizace (MFA/2FA).
+ * Poskytuje endpointy pro nastavení TOTP, ověření přihlašovací výzvy, deaktivaci MFA a zjištění stavu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @RestController
 @RequestMapping("/api/mfa")
@@ -34,12 +38,11 @@ public class MfaController {
     private final MfaService mfaService;
 
 
-    // =====================================================
-    // SETUP
-    // =====================================================
-
     /**
-     * Zahájí nastavení MFA (vygeneruje QR).
+     * Zahájí nastavení MFA pro přihlášeného uživatele a vrátí QR kód a tajný klíč.
+     *
+     * @param authentication autentizační kontext aktuálního uživatele
+     * @return odpověď s QR payloadem a Base32 tajným klíčem
      */
     @RateLimited(
             key = "mfa:setup:start",
@@ -65,7 +68,11 @@ public class MfaController {
 
 
     /**
-     * Potvrdí MFA nastavení.
+     * Potvrdí nastavení MFA zadáním prvního platného TOTP kódu.
+     *
+     * @param request  požadavek obsahující TOTP kód z autentizační aplikace
+     * @param authentication autentizační kontext aktuálního uživatele
+     * @return HTTP 200 OK po úspěšném potvrzení
      */
     @RateLimited(
             key = "mfa:setup:verify",
@@ -93,12 +100,12 @@ public class MfaController {
     }
 
 
-    // =====================================================
-    // LOGIN CHALLENGE
-    // =====================================================
-
     /**
-     * Ověří MFA kód při přihlášení.
+     * Ověří TOTP nebo záložní kód předložený uživatelem při přihlašovací výzvě MFA.
+     *
+     * @param request  požadavek obsahující kód z autentizační aplikace nebo záložní kód
+     * @param authentication autentizační kontext aktuálního uživatele
+     * @return odpověď s výsledkem ověření
      */
     @RateLimited(
             key = "mfa:challenge:verify",
@@ -127,12 +134,12 @@ public class MfaController {
     }
 
 
-    // =====================================================
-    // DISABLE
-    // =====================================================
-
     /**
-     * Vypne MFA.
+     * Deaktivuje MFA po ověření aktuálního hesla uživatele.
+     *
+     * @param request  požadavek obsahující aktuální heslo uživatele
+     * @param authentication autentizační kontext aktuálního uživatele
+     * @return HTTP 200 OK po úspěšné deaktivaci
      */
     @RateLimited(
             key = "mfa:disable",
@@ -160,12 +167,11 @@ public class MfaController {
     }
 
 
-    // =====================================================
-    // STATUS
-    // =====================================================
-
     /**
-     * Vrátí stav MFA.
+     * Vrátí aktuální stav MFA (aktivní/neaktivní) pro přihlášeného uživatele.
+     *
+     * @param authentication autentizační kontext aktuálního uživatele
+     * @return odpověď se stavem MFA
      */
     @RateLimited(
             key = "mfa:status",

@@ -7,6 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * JPA repozitář pro entitu {@link MenuItem} poskytující dotazy pro načítání dostupných položek
+ * kategorie a hromadné načítání položek podle ID (pro validaci objednávek).
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
 

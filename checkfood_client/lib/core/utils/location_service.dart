@@ -19,20 +19,16 @@ class LocationService {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Oprávnění byla zamítnuta uživatelem.
         throw Exception('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Oprávnění jsou trvale zamítnuta, nelze o ně znovu žádat.
       throw Exception(
         'Location permissions are permanently denied, we cannot request permissions.',
       );
     }
 
-    // Pokud je vše v pořádku, získáme aktuální polohu.
-    // Používáme High přesnost pro mapu, ale s rozumným timeoutem.
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
       timeLimit: const Duration(seconds: 5),

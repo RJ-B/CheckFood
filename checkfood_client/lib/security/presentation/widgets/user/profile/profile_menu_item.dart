@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/colors.dart';
 
+/// Položka menu v profilu uživatele — ikona, nadpis, volitelný popis a akce při klepnutí.
 class ProfileMenuItem extends StatelessWidget {
   final IconData icon;
   final String title;

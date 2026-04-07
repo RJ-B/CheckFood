@@ -29,6 +29,19 @@ mixin _$MyReservationsEvent {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -42,6 +55,19 @@ mixin _$MyReservationsEvent {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -55,6 +81,19 @@ mixin _$MyReservationsEvent {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,6 +108,12 @@ mixin _$MyReservationsEvent {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -82,6 +127,12 @@ mixin _$MyReservationsEvent {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -95,6 +146,12 @@ mixin _$MyReservationsEvent {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -174,6 +231,19 @@ class _$LoadMyReservationsImpl implements LoadMyReservations {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return load();
   }
@@ -191,6 +261,19 @@ class _$LoadMyReservationsImpl implements LoadMyReservations {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return load?.call();
   }
@@ -208,6 +291,19 @@ class _$LoadMyReservationsImpl implements LoadMyReservations {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -229,6 +325,12 @@ class _$LoadMyReservationsImpl implements LoadMyReservations {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return load(this);
   }
@@ -246,6 +348,12 @@ class _$LoadMyReservationsImpl implements LoadMyReservations {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return load?.call(this);
   }
@@ -263,6 +371,12 @@ class _$LoadMyReservationsImpl implements LoadMyReservations {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -330,6 +444,19 @@ class _$RefreshMyReservationsImpl implements RefreshMyReservations {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return refresh();
   }
@@ -347,6 +474,19 @@ class _$RefreshMyReservationsImpl implements RefreshMyReservations {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return refresh?.call();
   }
@@ -364,6 +504,19 @@ class _$RefreshMyReservationsImpl implements RefreshMyReservations {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -385,6 +538,12 @@ class _$RefreshMyReservationsImpl implements RefreshMyReservations {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return refresh(this);
   }
@@ -402,6 +561,12 @@ class _$RefreshMyReservationsImpl implements RefreshMyReservations {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return refresh?.call(this);
   }
@@ -419,6 +584,12 @@ class _$RefreshMyReservationsImpl implements RefreshMyReservations {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -485,6 +656,19 @@ class _$ShowAllHistoryImpl implements ShowAllHistory {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return showAllHistory();
   }
@@ -502,6 +686,19 @@ class _$ShowAllHistoryImpl implements ShowAllHistory {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return showAllHistory?.call();
   }
@@ -519,6 +716,19 @@ class _$ShowAllHistoryImpl implements ShowAllHistory {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (showAllHistory != null) {
@@ -540,6 +750,12 @@ class _$ShowAllHistoryImpl implements ShowAllHistory {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return showAllHistory(this);
   }
@@ -557,6 +773,12 @@ class _$ShowAllHistoryImpl implements ShowAllHistory {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return showAllHistory?.call(this);
   }
@@ -574,6 +796,12 @@ class _$ShowAllHistoryImpl implements ShowAllHistory {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (showAllHistory != null) {
@@ -672,6 +900,19 @@ class _$CancelReservationImpl implements CancelReservation {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return cancel(reservationId);
   }
@@ -689,6 +930,19 @@ class _$CancelReservationImpl implements CancelReservation {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return cancel?.call(reservationId);
   }
@@ -706,6 +960,19 @@ class _$CancelReservationImpl implements CancelReservation {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (cancel != null) {
@@ -727,6 +994,12 @@ class _$CancelReservationImpl implements CancelReservation {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return cancel(this);
   }
@@ -744,6 +1017,12 @@ class _$CancelReservationImpl implements CancelReservation {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return cancel?.call(this);
   }
@@ -761,6 +1040,12 @@ class _$CancelReservationImpl implements CancelReservation {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (cancel != null) {
@@ -881,6 +1166,19 @@ class _$StartEditReservationImpl implements StartEditReservation {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return startEdit(reservation);
   }
@@ -898,6 +1196,19 @@ class _$StartEditReservationImpl implements StartEditReservation {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return startEdit?.call(reservation);
   }
@@ -915,6 +1226,19 @@ class _$StartEditReservationImpl implements StartEditReservation {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (startEdit != null) {
@@ -936,6 +1260,12 @@ class _$StartEditReservationImpl implements StartEditReservation {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return startEdit(this);
   }
@@ -953,6 +1283,12 @@ class _$StartEditReservationImpl implements StartEditReservation {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return startEdit?.call(this);
   }
@@ -970,6 +1306,12 @@ class _$StartEditReservationImpl implements StartEditReservation {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (startEdit != null) {
@@ -1076,6 +1418,19 @@ class _$EditDateChangedImpl implements EditDateChanged {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return editDateChanged(date);
   }
@@ -1093,6 +1448,19 @@ class _$EditDateChangedImpl implements EditDateChanged {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return editDateChanged?.call(date);
   }
@@ -1110,6 +1478,19 @@ class _$EditDateChangedImpl implements EditDateChanged {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editDateChanged != null) {
@@ -1131,6 +1512,12 @@ class _$EditDateChangedImpl implements EditDateChanged {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return editDateChanged(this);
   }
@@ -1148,6 +1535,12 @@ class _$EditDateChangedImpl implements EditDateChanged {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return editDateChanged?.call(this);
   }
@@ -1165,6 +1558,12 @@ class _$EditDateChangedImpl implements EditDateChanged {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editDateChanged != null) {
@@ -1271,6 +1670,19 @@ class _$EditTableChangedImpl implements EditTableChanged {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return editTableChanged(tableId);
   }
@@ -1288,6 +1700,19 @@ class _$EditTableChangedImpl implements EditTableChanged {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return editTableChanged?.call(tableId);
   }
@@ -1305,6 +1730,19 @@ class _$EditTableChangedImpl implements EditTableChanged {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editTableChanged != null) {
@@ -1326,6 +1764,12 @@ class _$EditTableChangedImpl implements EditTableChanged {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return editTableChanged(this);
   }
@@ -1343,6 +1787,12 @@ class _$EditTableChangedImpl implements EditTableChanged {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return editTableChanged?.call(this);
   }
@@ -1360,6 +1810,12 @@ class _$EditTableChangedImpl implements EditTableChanged {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editTableChanged != null) {
@@ -1467,6 +1923,19 @@ class _$EditTimeSelectedImpl implements EditTimeSelected {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return editTimeSelected(startTime);
   }
@@ -1484,6 +1953,19 @@ class _$EditTimeSelectedImpl implements EditTimeSelected {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return editTimeSelected?.call(startTime);
   }
@@ -1501,6 +1983,19 @@ class _$EditTimeSelectedImpl implements EditTimeSelected {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editTimeSelected != null) {
@@ -1522,6 +2017,12 @@ class _$EditTimeSelectedImpl implements EditTimeSelected {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return editTimeSelected(this);
   }
@@ -1539,6 +2040,12 @@ class _$EditTimeSelectedImpl implements EditTimeSelected {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return editTimeSelected?.call(this);
   }
@@ -1556,6 +2063,12 @@ class _$EditTimeSelectedImpl implements EditTimeSelected {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editTimeSelected != null) {
@@ -1664,6 +2177,19 @@ class _$EditPartySizeChangedImpl implements EditPartySizeChanged {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return editPartySizeChanged(partySize);
   }
@@ -1681,6 +2207,19 @@ class _$EditPartySizeChangedImpl implements EditPartySizeChanged {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return editPartySizeChanged?.call(partySize);
   }
@@ -1698,6 +2237,19 @@ class _$EditPartySizeChangedImpl implements EditPartySizeChanged {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editPartySizeChanged != null) {
@@ -1719,6 +2271,12 @@ class _$EditPartySizeChangedImpl implements EditPartySizeChanged {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return editPartySizeChanged(this);
   }
@@ -1736,6 +2294,12 @@ class _$EditPartySizeChangedImpl implements EditPartySizeChanged {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return editPartySizeChanged?.call(this);
   }
@@ -1753,6 +2317,12 @@ class _$EditPartySizeChangedImpl implements EditPartySizeChanged {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (editPartySizeChanged != null) {
@@ -1829,6 +2399,19 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
     required TResult Function(String startTime) editTimeSelected,
     required TResult Function(int partySize) editPartySizeChanged,
     required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
   }) {
     return submitEdit();
   }
@@ -1846,6 +2429,19 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
     TResult? Function(String startTime)? editTimeSelected,
     TResult? Function(int partySize)? editPartySizeChanged,
     TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
   }) {
     return submitEdit?.call();
   }
@@ -1863,6 +2459,19 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
     TResult Function(String startTime)? editTimeSelected,
     TResult Function(int partySize)? editPartySizeChanged,
     TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (submitEdit != null) {
@@ -1884,6 +2493,12 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
     required TResult Function(EditTimeSelected value) editTimeSelected,
     required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
     required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
   }) {
     return submitEdit(this);
   }
@@ -1901,6 +2516,12 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
     TResult? Function(EditTimeSelected value)? editTimeSelected,
     TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
   }) {
     return submitEdit?.call(this);
   }
@@ -1918,6 +2539,12 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
     TResult Function(EditTimeSelected value)? editTimeSelected,
     TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
     TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
     required TResult orElse(),
   }) {
     if (submitEdit != null) {
@@ -1929,4 +2556,1535 @@ class _$SubmitEditReservationImpl implements SubmitEditReservation {
 
 abstract class SubmitEditReservation implements MyReservationsEvent {
   const factory SubmitEditReservation() = _$SubmitEditReservationImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadPendingChangesImplCopyWith<$Res> {
+  factory _$$LoadPendingChangesImplCopyWith(
+    _$LoadPendingChangesImpl value,
+    $Res Function(_$LoadPendingChangesImpl) then,
+  ) = __$$LoadPendingChangesImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadPendingChangesImplCopyWithImpl<$Res>
+    extends _$MyReservationsEventCopyWithImpl<$Res, _$LoadPendingChangesImpl>
+    implements _$$LoadPendingChangesImplCopyWith<$Res> {
+  __$$LoadPendingChangesImplCopyWithImpl(
+    _$LoadPendingChangesImpl _value,
+    $Res Function(_$LoadPendingChangesImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadPendingChangesImpl implements LoadPendingChanges {
+  const _$LoadPendingChangesImpl();
+
+  @override
+  String toString() {
+    return 'MyReservationsEvent.loadPendingChanges()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadPendingChangesImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function() refresh,
+    required TResult Function() showAllHistory,
+    required TResult Function(String reservationId) cancel,
+    required TResult Function(Reservation reservation) startEdit,
+    required TResult Function(String date) editDateChanged,
+    required TResult Function(String tableId) editTableChanged,
+    required TResult Function(String startTime) editTimeSelected,
+    required TResult Function(int partySize) editPartySizeChanged,
+    required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
+  }) {
+    return loadPendingChanges();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? load,
+    TResult? Function()? refresh,
+    TResult? Function()? showAllHistory,
+    TResult? Function(String reservationId)? cancel,
+    TResult? Function(Reservation reservation)? startEdit,
+    TResult? Function(String date)? editDateChanged,
+    TResult? Function(String tableId)? editTableChanged,
+    TResult? Function(String startTime)? editTimeSelected,
+    TResult? Function(int partySize)? editPartySizeChanged,
+    TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
+  }) {
+    return loadPendingChanges?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function()? refresh,
+    TResult Function()? showAllHistory,
+    TResult Function(String reservationId)? cancel,
+    TResult Function(Reservation reservation)? startEdit,
+    TResult Function(String date)? editDateChanged,
+    TResult Function(String tableId)? editTableChanged,
+    TResult Function(String startTime)? editTimeSelected,
+    TResult Function(int partySize)? editPartySizeChanged,
+    TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (loadPendingChanges != null) {
+      return loadPendingChanges();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadMyReservations value) load,
+    required TResult Function(RefreshMyReservations value) refresh,
+    required TResult Function(ShowAllHistory value) showAllHistory,
+    required TResult Function(CancelReservation value) cancel,
+    required TResult Function(StartEditReservation value) startEdit,
+    required TResult Function(EditDateChanged value) editDateChanged,
+    required TResult Function(EditTableChanged value) editTableChanged,
+    required TResult Function(EditTimeSelected value) editTimeSelected,
+    required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
+    required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
+  }) {
+    return loadPendingChanges(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadMyReservations value)? load,
+    TResult? Function(RefreshMyReservations value)? refresh,
+    TResult? Function(ShowAllHistory value)? showAllHistory,
+    TResult? Function(CancelReservation value)? cancel,
+    TResult? Function(StartEditReservation value)? startEdit,
+    TResult? Function(EditDateChanged value)? editDateChanged,
+    TResult? Function(EditTableChanged value)? editTableChanged,
+    TResult? Function(EditTimeSelected value)? editTimeSelected,
+    TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
+  }) {
+    return loadPendingChanges?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadMyReservations value)? load,
+    TResult Function(RefreshMyReservations value)? refresh,
+    TResult Function(ShowAllHistory value)? showAllHistory,
+    TResult Function(CancelReservation value)? cancel,
+    TResult Function(StartEditReservation value)? startEdit,
+    TResult Function(EditDateChanged value)? editDateChanged,
+    TResult Function(EditTableChanged value)? editTableChanged,
+    TResult Function(EditTimeSelected value)? editTimeSelected,
+    TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (loadPendingChanges != null) {
+      return loadPendingChanges(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadPendingChanges implements MyReservationsEvent {
+  const factory LoadPendingChanges() = _$LoadPendingChangesImpl;
+}
+
+/// @nodoc
+abstract class _$$AcceptChangeRequestImplCopyWith<$Res> {
+  factory _$$AcceptChangeRequestImplCopyWith(
+    _$AcceptChangeRequestImpl value,
+    $Res Function(_$AcceptChangeRequestImpl) then,
+  ) = __$$AcceptChangeRequestImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String changeRequestId});
+}
+
+/// @nodoc
+class __$$AcceptChangeRequestImplCopyWithImpl<$Res>
+    extends _$MyReservationsEventCopyWithImpl<$Res, _$AcceptChangeRequestImpl>
+    implements _$$AcceptChangeRequestImplCopyWith<$Res> {
+  __$$AcceptChangeRequestImplCopyWithImpl(
+    _$AcceptChangeRequestImpl _value,
+    $Res Function(_$AcceptChangeRequestImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? changeRequestId = null}) {
+    return _then(
+      _$AcceptChangeRequestImpl(
+        changeRequestId:
+            null == changeRequestId
+                ? _value.changeRequestId
+                : changeRequestId // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$AcceptChangeRequestImpl implements AcceptChangeRequest {
+  const _$AcceptChangeRequestImpl({required this.changeRequestId});
+
+  @override
+  final String changeRequestId;
+
+  @override
+  String toString() {
+    return 'MyReservationsEvent.acceptChangeRequest(changeRequestId: $changeRequestId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AcceptChangeRequestImpl &&
+            (identical(other.changeRequestId, changeRequestId) ||
+                other.changeRequestId == changeRequestId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, changeRequestId);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AcceptChangeRequestImplCopyWith<_$AcceptChangeRequestImpl> get copyWith =>
+      __$$AcceptChangeRequestImplCopyWithImpl<_$AcceptChangeRequestImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function() refresh,
+    required TResult Function() showAllHistory,
+    required TResult Function(String reservationId) cancel,
+    required TResult Function(Reservation reservation) startEdit,
+    required TResult Function(String date) editDateChanged,
+    required TResult Function(String tableId) editTableChanged,
+    required TResult Function(String startTime) editTimeSelected,
+    required TResult Function(int partySize) editPartySizeChanged,
+    required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
+  }) {
+    return acceptChangeRequest(changeRequestId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? load,
+    TResult? Function()? refresh,
+    TResult? Function()? showAllHistory,
+    TResult? Function(String reservationId)? cancel,
+    TResult? Function(Reservation reservation)? startEdit,
+    TResult? Function(String date)? editDateChanged,
+    TResult? Function(String tableId)? editTableChanged,
+    TResult? Function(String startTime)? editTimeSelected,
+    TResult? Function(int partySize)? editPartySizeChanged,
+    TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
+  }) {
+    return acceptChangeRequest?.call(changeRequestId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function()? refresh,
+    TResult Function()? showAllHistory,
+    TResult Function(String reservationId)? cancel,
+    TResult Function(Reservation reservation)? startEdit,
+    TResult Function(String date)? editDateChanged,
+    TResult Function(String tableId)? editTableChanged,
+    TResult Function(String startTime)? editTimeSelected,
+    TResult Function(int partySize)? editPartySizeChanged,
+    TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (acceptChangeRequest != null) {
+      return acceptChangeRequest(changeRequestId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadMyReservations value) load,
+    required TResult Function(RefreshMyReservations value) refresh,
+    required TResult Function(ShowAllHistory value) showAllHistory,
+    required TResult Function(CancelReservation value) cancel,
+    required TResult Function(StartEditReservation value) startEdit,
+    required TResult Function(EditDateChanged value) editDateChanged,
+    required TResult Function(EditTableChanged value) editTableChanged,
+    required TResult Function(EditTimeSelected value) editTimeSelected,
+    required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
+    required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
+  }) {
+    return acceptChangeRequest(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadMyReservations value)? load,
+    TResult? Function(RefreshMyReservations value)? refresh,
+    TResult? Function(ShowAllHistory value)? showAllHistory,
+    TResult? Function(CancelReservation value)? cancel,
+    TResult? Function(StartEditReservation value)? startEdit,
+    TResult? Function(EditDateChanged value)? editDateChanged,
+    TResult? Function(EditTableChanged value)? editTableChanged,
+    TResult? Function(EditTimeSelected value)? editTimeSelected,
+    TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
+  }) {
+    return acceptChangeRequest?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadMyReservations value)? load,
+    TResult Function(RefreshMyReservations value)? refresh,
+    TResult Function(ShowAllHistory value)? showAllHistory,
+    TResult Function(CancelReservation value)? cancel,
+    TResult Function(StartEditReservation value)? startEdit,
+    TResult Function(EditDateChanged value)? editDateChanged,
+    TResult Function(EditTableChanged value)? editTableChanged,
+    TResult Function(EditTimeSelected value)? editTimeSelected,
+    TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (acceptChangeRequest != null) {
+      return acceptChangeRequest(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AcceptChangeRequest implements MyReservationsEvent {
+  const factory AcceptChangeRequest({required final String changeRequestId}) =
+      _$AcceptChangeRequestImpl;
+
+  String get changeRequestId;
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AcceptChangeRequestImplCopyWith<_$AcceptChangeRequestImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DeclineChangeRequestImplCopyWith<$Res> {
+  factory _$$DeclineChangeRequestImplCopyWith(
+    _$DeclineChangeRequestImpl value,
+    $Res Function(_$DeclineChangeRequestImpl) then,
+  ) = __$$DeclineChangeRequestImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String changeRequestId});
+}
+
+/// @nodoc
+class __$$DeclineChangeRequestImplCopyWithImpl<$Res>
+    extends _$MyReservationsEventCopyWithImpl<$Res, _$DeclineChangeRequestImpl>
+    implements _$$DeclineChangeRequestImplCopyWith<$Res> {
+  __$$DeclineChangeRequestImplCopyWithImpl(
+    _$DeclineChangeRequestImpl _value,
+    $Res Function(_$DeclineChangeRequestImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? changeRequestId = null}) {
+    return _then(
+      _$DeclineChangeRequestImpl(
+        changeRequestId:
+            null == changeRequestId
+                ? _value.changeRequestId
+                : changeRequestId // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$DeclineChangeRequestImpl implements DeclineChangeRequest {
+  const _$DeclineChangeRequestImpl({required this.changeRequestId});
+
+  @override
+  final String changeRequestId;
+
+  @override
+  String toString() {
+    return 'MyReservationsEvent.declineChangeRequest(changeRequestId: $changeRequestId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DeclineChangeRequestImpl &&
+            (identical(other.changeRequestId, changeRequestId) ||
+                other.changeRequestId == changeRequestId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, changeRequestId);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DeclineChangeRequestImplCopyWith<_$DeclineChangeRequestImpl>
+  get copyWith =>
+      __$$DeclineChangeRequestImplCopyWithImpl<_$DeclineChangeRequestImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function() refresh,
+    required TResult Function() showAllHistory,
+    required TResult Function(String reservationId) cancel,
+    required TResult Function(Reservation reservation) startEdit,
+    required TResult Function(String date) editDateChanged,
+    required TResult Function(String tableId) editTableChanged,
+    required TResult Function(String startTime) editTimeSelected,
+    required TResult Function(int partySize) editPartySizeChanged,
+    required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
+  }) {
+    return declineChangeRequest(changeRequestId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? load,
+    TResult? Function()? refresh,
+    TResult? Function()? showAllHistory,
+    TResult? Function(String reservationId)? cancel,
+    TResult? Function(Reservation reservation)? startEdit,
+    TResult? Function(String date)? editDateChanged,
+    TResult? Function(String tableId)? editTableChanged,
+    TResult? Function(String startTime)? editTimeSelected,
+    TResult? Function(int partySize)? editPartySizeChanged,
+    TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
+  }) {
+    return declineChangeRequest?.call(changeRequestId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function()? refresh,
+    TResult Function()? showAllHistory,
+    TResult Function(String reservationId)? cancel,
+    TResult Function(Reservation reservation)? startEdit,
+    TResult Function(String date)? editDateChanged,
+    TResult Function(String tableId)? editTableChanged,
+    TResult Function(String startTime)? editTimeSelected,
+    TResult Function(int partySize)? editPartySizeChanged,
+    TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (declineChangeRequest != null) {
+      return declineChangeRequest(changeRequestId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadMyReservations value) load,
+    required TResult Function(RefreshMyReservations value) refresh,
+    required TResult Function(ShowAllHistory value) showAllHistory,
+    required TResult Function(CancelReservation value) cancel,
+    required TResult Function(StartEditReservation value) startEdit,
+    required TResult Function(EditDateChanged value) editDateChanged,
+    required TResult Function(EditTableChanged value) editTableChanged,
+    required TResult Function(EditTimeSelected value) editTimeSelected,
+    required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
+    required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
+  }) {
+    return declineChangeRequest(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadMyReservations value)? load,
+    TResult? Function(RefreshMyReservations value)? refresh,
+    TResult? Function(ShowAllHistory value)? showAllHistory,
+    TResult? Function(CancelReservation value)? cancel,
+    TResult? Function(StartEditReservation value)? startEdit,
+    TResult? Function(EditDateChanged value)? editDateChanged,
+    TResult? Function(EditTableChanged value)? editTableChanged,
+    TResult? Function(EditTimeSelected value)? editTimeSelected,
+    TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
+  }) {
+    return declineChangeRequest?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadMyReservations value)? load,
+    TResult Function(RefreshMyReservations value)? refresh,
+    TResult Function(ShowAllHistory value)? showAllHistory,
+    TResult Function(CancelReservation value)? cancel,
+    TResult Function(StartEditReservation value)? startEdit,
+    TResult Function(EditDateChanged value)? editDateChanged,
+    TResult Function(EditTableChanged value)? editTableChanged,
+    TResult Function(EditTimeSelected value)? editTimeSelected,
+    TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (declineChangeRequest != null) {
+      return declineChangeRequest(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DeclineChangeRequest implements MyReservationsEvent {
+  const factory DeclineChangeRequest({required final String changeRequestId}) =
+      _$DeclineChangeRequestImpl;
+
+  String get changeRequestId;
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DeclineChangeRequestImplCopyWith<_$DeclineChangeRequestImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CreateRecurringReservationImplCopyWith<$Res> {
+  factory _$$CreateRecurringReservationImplCopyWith(
+    _$CreateRecurringReservationImpl value,
+    $Res Function(_$CreateRecurringReservationImpl) then,
+  ) = __$$CreateRecurringReservationImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({
+    String restaurantId,
+    String tableId,
+    String dayOfWeek,
+    String startTime,
+    int partySize,
+  });
+}
+
+/// @nodoc
+class __$$CreateRecurringReservationImplCopyWithImpl<$Res>
+    extends
+        _$MyReservationsEventCopyWithImpl<
+          $Res,
+          _$CreateRecurringReservationImpl
+        >
+    implements _$$CreateRecurringReservationImplCopyWith<$Res> {
+  __$$CreateRecurringReservationImplCopyWithImpl(
+    _$CreateRecurringReservationImpl _value,
+    $Res Function(_$CreateRecurringReservationImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? restaurantId = null,
+    Object? tableId = null,
+    Object? dayOfWeek = null,
+    Object? startTime = null,
+    Object? partySize = null,
+  }) {
+    return _then(
+      _$CreateRecurringReservationImpl(
+        restaurantId:
+            null == restaurantId
+                ? _value.restaurantId
+                : restaurantId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        tableId:
+            null == tableId
+                ? _value.tableId
+                : tableId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        dayOfWeek:
+            null == dayOfWeek
+                ? _value.dayOfWeek
+                : dayOfWeek // ignore: cast_nullable_to_non_nullable
+                    as String,
+        startTime:
+            null == startTime
+                ? _value.startTime
+                : startTime // ignore: cast_nullable_to_non_nullable
+                    as String,
+        partySize:
+            null == partySize
+                ? _value.partySize
+                : partySize // ignore: cast_nullable_to_non_nullable
+                    as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$CreateRecurringReservationImpl implements CreateRecurringReservation {
+  const _$CreateRecurringReservationImpl({
+    required this.restaurantId,
+    required this.tableId,
+    required this.dayOfWeek,
+    required this.startTime,
+    required this.partySize,
+  });
+
+  @override
+  final String restaurantId;
+  @override
+  final String tableId;
+  @override
+  final String dayOfWeek;
+  @override
+  final String startTime;
+  @override
+  final int partySize;
+
+  @override
+  String toString() {
+    return 'MyReservationsEvent.createRecurring(restaurantId: $restaurantId, tableId: $tableId, dayOfWeek: $dayOfWeek, startTime: $startTime, partySize: $partySize)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CreateRecurringReservationImpl &&
+            (identical(other.restaurantId, restaurantId) ||
+                other.restaurantId == restaurantId) &&
+            (identical(other.tableId, tableId) || other.tableId == tableId) &&
+            (identical(other.dayOfWeek, dayOfWeek) ||
+                other.dayOfWeek == dayOfWeek) &&
+            (identical(other.startTime, startTime) ||
+                other.startTime == startTime) &&
+            (identical(other.partySize, partySize) ||
+                other.partySize == partySize));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    restaurantId,
+    tableId,
+    dayOfWeek,
+    startTime,
+    partySize,
+  );
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CreateRecurringReservationImplCopyWith<_$CreateRecurringReservationImpl>
+  get copyWith => __$$CreateRecurringReservationImplCopyWithImpl<
+    _$CreateRecurringReservationImpl
+  >(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function() refresh,
+    required TResult Function() showAllHistory,
+    required TResult Function(String reservationId) cancel,
+    required TResult Function(Reservation reservation) startEdit,
+    required TResult Function(String date) editDateChanged,
+    required TResult Function(String tableId) editTableChanged,
+    required TResult Function(String startTime) editTimeSelected,
+    required TResult Function(int partySize) editPartySizeChanged,
+    required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
+  }) {
+    return createRecurring(
+      restaurantId,
+      tableId,
+      dayOfWeek,
+      startTime,
+      partySize,
+    );
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? load,
+    TResult? Function()? refresh,
+    TResult? Function()? showAllHistory,
+    TResult? Function(String reservationId)? cancel,
+    TResult? Function(Reservation reservation)? startEdit,
+    TResult? Function(String date)? editDateChanged,
+    TResult? Function(String tableId)? editTableChanged,
+    TResult? Function(String startTime)? editTimeSelected,
+    TResult? Function(int partySize)? editPartySizeChanged,
+    TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
+  }) {
+    return createRecurring?.call(
+      restaurantId,
+      tableId,
+      dayOfWeek,
+      startTime,
+      partySize,
+    );
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function()? refresh,
+    TResult Function()? showAllHistory,
+    TResult Function(String reservationId)? cancel,
+    TResult Function(Reservation reservation)? startEdit,
+    TResult Function(String date)? editDateChanged,
+    TResult Function(String tableId)? editTableChanged,
+    TResult Function(String startTime)? editTimeSelected,
+    TResult Function(int partySize)? editPartySizeChanged,
+    TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (createRecurring != null) {
+      return createRecurring(
+        restaurantId,
+        tableId,
+        dayOfWeek,
+        startTime,
+        partySize,
+      );
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadMyReservations value) load,
+    required TResult Function(RefreshMyReservations value) refresh,
+    required TResult Function(ShowAllHistory value) showAllHistory,
+    required TResult Function(CancelReservation value) cancel,
+    required TResult Function(StartEditReservation value) startEdit,
+    required TResult Function(EditDateChanged value) editDateChanged,
+    required TResult Function(EditTableChanged value) editTableChanged,
+    required TResult Function(EditTimeSelected value) editTimeSelected,
+    required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
+    required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
+  }) {
+    return createRecurring(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadMyReservations value)? load,
+    TResult? Function(RefreshMyReservations value)? refresh,
+    TResult? Function(ShowAllHistory value)? showAllHistory,
+    TResult? Function(CancelReservation value)? cancel,
+    TResult? Function(StartEditReservation value)? startEdit,
+    TResult? Function(EditDateChanged value)? editDateChanged,
+    TResult? Function(EditTableChanged value)? editTableChanged,
+    TResult? Function(EditTimeSelected value)? editTimeSelected,
+    TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
+  }) {
+    return createRecurring?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadMyReservations value)? load,
+    TResult Function(RefreshMyReservations value)? refresh,
+    TResult Function(ShowAllHistory value)? showAllHistory,
+    TResult Function(CancelReservation value)? cancel,
+    TResult Function(StartEditReservation value)? startEdit,
+    TResult Function(EditDateChanged value)? editDateChanged,
+    TResult Function(EditTableChanged value)? editTableChanged,
+    TResult Function(EditTimeSelected value)? editTimeSelected,
+    TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (createRecurring != null) {
+      return createRecurring(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CreateRecurringReservation implements MyReservationsEvent {
+  const factory CreateRecurringReservation({
+    required final String restaurantId,
+    required final String tableId,
+    required final String dayOfWeek,
+    required final String startTime,
+    required final int partySize,
+  }) = _$CreateRecurringReservationImpl;
+
+  String get restaurantId;
+  String get tableId;
+  String get dayOfWeek;
+  String get startTime;
+  int get partySize;
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CreateRecurringReservationImplCopyWith<_$CreateRecurringReservationImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadRecurringReservationsImplCopyWith<$Res> {
+  factory _$$LoadRecurringReservationsImplCopyWith(
+    _$LoadRecurringReservationsImpl value,
+    $Res Function(_$LoadRecurringReservationsImpl) then,
+  ) = __$$LoadRecurringReservationsImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadRecurringReservationsImplCopyWithImpl<$Res>
+    extends
+        _$MyReservationsEventCopyWithImpl<$Res, _$LoadRecurringReservationsImpl>
+    implements _$$LoadRecurringReservationsImplCopyWith<$Res> {
+  __$$LoadRecurringReservationsImplCopyWithImpl(
+    _$LoadRecurringReservationsImpl _value,
+    $Res Function(_$LoadRecurringReservationsImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadRecurringReservationsImpl implements LoadRecurringReservations {
+  const _$LoadRecurringReservationsImpl();
+
+  @override
+  String toString() {
+    return 'MyReservationsEvent.loadRecurring()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadRecurringReservationsImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function() refresh,
+    required TResult Function() showAllHistory,
+    required TResult Function(String reservationId) cancel,
+    required TResult Function(Reservation reservation) startEdit,
+    required TResult Function(String date) editDateChanged,
+    required TResult Function(String tableId) editTableChanged,
+    required TResult Function(String startTime) editTimeSelected,
+    required TResult Function(int partySize) editPartySizeChanged,
+    required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
+  }) {
+    return loadRecurring();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? load,
+    TResult? Function()? refresh,
+    TResult? Function()? showAllHistory,
+    TResult? Function(String reservationId)? cancel,
+    TResult? Function(Reservation reservation)? startEdit,
+    TResult? Function(String date)? editDateChanged,
+    TResult? Function(String tableId)? editTableChanged,
+    TResult? Function(String startTime)? editTimeSelected,
+    TResult? Function(int partySize)? editPartySizeChanged,
+    TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
+  }) {
+    return loadRecurring?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function()? refresh,
+    TResult Function()? showAllHistory,
+    TResult Function(String reservationId)? cancel,
+    TResult Function(Reservation reservation)? startEdit,
+    TResult Function(String date)? editDateChanged,
+    TResult Function(String tableId)? editTableChanged,
+    TResult Function(String startTime)? editTimeSelected,
+    TResult Function(int partySize)? editPartySizeChanged,
+    TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (loadRecurring != null) {
+      return loadRecurring();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadMyReservations value) load,
+    required TResult Function(RefreshMyReservations value) refresh,
+    required TResult Function(ShowAllHistory value) showAllHistory,
+    required TResult Function(CancelReservation value) cancel,
+    required TResult Function(StartEditReservation value) startEdit,
+    required TResult Function(EditDateChanged value) editDateChanged,
+    required TResult Function(EditTableChanged value) editTableChanged,
+    required TResult Function(EditTimeSelected value) editTimeSelected,
+    required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
+    required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
+  }) {
+    return loadRecurring(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadMyReservations value)? load,
+    TResult? Function(RefreshMyReservations value)? refresh,
+    TResult? Function(ShowAllHistory value)? showAllHistory,
+    TResult? Function(CancelReservation value)? cancel,
+    TResult? Function(StartEditReservation value)? startEdit,
+    TResult? Function(EditDateChanged value)? editDateChanged,
+    TResult? Function(EditTableChanged value)? editTableChanged,
+    TResult? Function(EditTimeSelected value)? editTimeSelected,
+    TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
+  }) {
+    return loadRecurring?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadMyReservations value)? load,
+    TResult Function(RefreshMyReservations value)? refresh,
+    TResult Function(ShowAllHistory value)? showAllHistory,
+    TResult Function(CancelReservation value)? cancel,
+    TResult Function(StartEditReservation value)? startEdit,
+    TResult Function(EditDateChanged value)? editDateChanged,
+    TResult Function(EditTableChanged value)? editTableChanged,
+    TResult Function(EditTimeSelected value)? editTimeSelected,
+    TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (loadRecurring != null) {
+      return loadRecurring(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadRecurringReservations implements MyReservationsEvent {
+  const factory LoadRecurringReservations() = _$LoadRecurringReservationsImpl;
+}
+
+/// @nodoc
+abstract class _$$CancelRecurringReservationImplCopyWith<$Res> {
+  factory _$$CancelRecurringReservationImplCopyWith(
+    _$CancelRecurringReservationImpl value,
+    $Res Function(_$CancelRecurringReservationImpl) then,
+  ) = __$$CancelRecurringReservationImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String id});
+}
+
+/// @nodoc
+class __$$CancelRecurringReservationImplCopyWithImpl<$Res>
+    extends
+        _$MyReservationsEventCopyWithImpl<
+          $Res,
+          _$CancelRecurringReservationImpl
+        >
+    implements _$$CancelRecurringReservationImplCopyWith<$Res> {
+  __$$CancelRecurringReservationImplCopyWithImpl(
+    _$CancelRecurringReservationImpl _value,
+    $Res Function(_$CancelRecurringReservationImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null}) {
+    return _then(
+      _$CancelRecurringReservationImpl(
+        id:
+            null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$CancelRecurringReservationImpl implements CancelRecurringReservation {
+  const _$CancelRecurringReservationImpl({required this.id});
+
+  @override
+  final String id;
+
+  @override
+  String toString() {
+    return 'MyReservationsEvent.cancelRecurring(id: $id)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CancelRecurringReservationImpl &&
+            (identical(other.id, id) || other.id == id));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id);
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CancelRecurringReservationImplCopyWith<_$CancelRecurringReservationImpl>
+  get copyWith => __$$CancelRecurringReservationImplCopyWithImpl<
+    _$CancelRecurringReservationImpl
+  >(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function() refresh,
+    required TResult Function() showAllHistory,
+    required TResult Function(String reservationId) cancel,
+    required TResult Function(Reservation reservation) startEdit,
+    required TResult Function(String date) editDateChanged,
+    required TResult Function(String tableId) editTableChanged,
+    required TResult Function(String startTime) editTimeSelected,
+    required TResult Function(int partySize) editPartySizeChanged,
+    required TResult Function() submitEdit,
+    required TResult Function() loadPendingChanges,
+    required TResult Function(String changeRequestId) acceptChangeRequest,
+    required TResult Function(String changeRequestId) declineChangeRequest,
+    required TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )
+    createRecurring,
+    required TResult Function() loadRecurring,
+    required TResult Function(String id) cancelRecurring,
+  }) {
+    return cancelRecurring(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? load,
+    TResult? Function()? refresh,
+    TResult? Function()? showAllHistory,
+    TResult? Function(String reservationId)? cancel,
+    TResult? Function(Reservation reservation)? startEdit,
+    TResult? Function(String date)? editDateChanged,
+    TResult? Function(String tableId)? editTableChanged,
+    TResult? Function(String startTime)? editTimeSelected,
+    TResult? Function(int partySize)? editPartySizeChanged,
+    TResult? Function()? submitEdit,
+    TResult? Function()? loadPendingChanges,
+    TResult? Function(String changeRequestId)? acceptChangeRequest,
+    TResult? Function(String changeRequestId)? declineChangeRequest,
+    TResult? Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult? Function()? loadRecurring,
+    TResult? Function(String id)? cancelRecurring,
+  }) {
+    return cancelRecurring?.call(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function()? refresh,
+    TResult Function()? showAllHistory,
+    TResult Function(String reservationId)? cancel,
+    TResult Function(Reservation reservation)? startEdit,
+    TResult Function(String date)? editDateChanged,
+    TResult Function(String tableId)? editTableChanged,
+    TResult Function(String startTime)? editTimeSelected,
+    TResult Function(int partySize)? editPartySizeChanged,
+    TResult Function()? submitEdit,
+    TResult Function()? loadPendingChanges,
+    TResult Function(String changeRequestId)? acceptChangeRequest,
+    TResult Function(String changeRequestId)? declineChangeRequest,
+    TResult Function(
+      String restaurantId,
+      String tableId,
+      String dayOfWeek,
+      String startTime,
+      int partySize,
+    )?
+    createRecurring,
+    TResult Function()? loadRecurring,
+    TResult Function(String id)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (cancelRecurring != null) {
+      return cancelRecurring(id);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadMyReservations value) load,
+    required TResult Function(RefreshMyReservations value) refresh,
+    required TResult Function(ShowAllHistory value) showAllHistory,
+    required TResult Function(CancelReservation value) cancel,
+    required TResult Function(StartEditReservation value) startEdit,
+    required TResult Function(EditDateChanged value) editDateChanged,
+    required TResult Function(EditTableChanged value) editTableChanged,
+    required TResult Function(EditTimeSelected value) editTimeSelected,
+    required TResult Function(EditPartySizeChanged value) editPartySizeChanged,
+    required TResult Function(SubmitEditReservation value) submitEdit,
+    required TResult Function(LoadPendingChanges value) loadPendingChanges,
+    required TResult Function(AcceptChangeRequest value) acceptChangeRequest,
+    required TResult Function(DeclineChangeRequest value) declineChangeRequest,
+    required TResult Function(CreateRecurringReservation value) createRecurring,
+    required TResult Function(LoadRecurringReservations value) loadRecurring,
+    required TResult Function(CancelRecurringReservation value) cancelRecurring,
+  }) {
+    return cancelRecurring(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadMyReservations value)? load,
+    TResult? Function(RefreshMyReservations value)? refresh,
+    TResult? Function(ShowAllHistory value)? showAllHistory,
+    TResult? Function(CancelReservation value)? cancel,
+    TResult? Function(StartEditReservation value)? startEdit,
+    TResult? Function(EditDateChanged value)? editDateChanged,
+    TResult? Function(EditTableChanged value)? editTableChanged,
+    TResult? Function(EditTimeSelected value)? editTimeSelected,
+    TResult? Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult? Function(SubmitEditReservation value)? submitEdit,
+    TResult? Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult? Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult? Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult? Function(CreateRecurringReservation value)? createRecurring,
+    TResult? Function(LoadRecurringReservations value)? loadRecurring,
+    TResult? Function(CancelRecurringReservation value)? cancelRecurring,
+  }) {
+    return cancelRecurring?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadMyReservations value)? load,
+    TResult Function(RefreshMyReservations value)? refresh,
+    TResult Function(ShowAllHistory value)? showAllHistory,
+    TResult Function(CancelReservation value)? cancel,
+    TResult Function(StartEditReservation value)? startEdit,
+    TResult Function(EditDateChanged value)? editDateChanged,
+    TResult Function(EditTableChanged value)? editTableChanged,
+    TResult Function(EditTimeSelected value)? editTimeSelected,
+    TResult Function(EditPartySizeChanged value)? editPartySizeChanged,
+    TResult Function(SubmitEditReservation value)? submitEdit,
+    TResult Function(LoadPendingChanges value)? loadPendingChanges,
+    TResult Function(AcceptChangeRequest value)? acceptChangeRequest,
+    TResult Function(DeclineChangeRequest value)? declineChangeRequest,
+    TResult Function(CreateRecurringReservation value)? createRecurring,
+    TResult Function(LoadRecurringReservations value)? loadRecurring,
+    TResult Function(CancelRecurringReservation value)? cancelRecurring,
+    required TResult orElse(),
+  }) {
+    if (cancelRecurring != null) {
+      return cancelRecurring(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CancelRecurringReservation implements MyReservationsEvent {
+  const factory CancelRecurringReservation({required final String id}) =
+      _$CancelRecurringReservationImpl;
+
+  String get id;
+
+  /// Create a copy of MyReservationsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CancelRecurringReservationImplCopyWith<_$CancelRecurringReservationImpl>
+  get copyWith => throw _privateConstructorUsedError;
 }

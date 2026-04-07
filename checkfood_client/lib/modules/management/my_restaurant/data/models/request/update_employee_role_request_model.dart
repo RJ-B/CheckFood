@@ -1,3 +1,4 @@
+/// Request payload for changing an employee's role.
 class UpdateEmployeeRoleRequestModel {
   final String role;
 

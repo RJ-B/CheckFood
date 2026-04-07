@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'cart_item.freezed.dart';
 
+/// Položka uložená v lokálním košíku před odesláním objednávky.
 @freezed
 class CartItem with _$CartItem {
   const CartItem._();

@@ -5,14 +5,21 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 /**
- * Entita reprezentující klientské zařízení a jeho aktivní relaci v systému.
+ * JPA entita reprezentující klientské zařízení a jeho aktivní relaci v systému.
  * Slouží jako primární zdroj dat pro auditování přístupů a správu bezpečnosti relací.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see UserEntity
  */
 @Entity
 @Table(
         name = "devices",
         indexes = {
                 @Index(name = "idx_device_identifier", columnList = "device_identifier")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_device_identifier_user", columnNames = {"device_identifier", "user_id"})
         }
 )
 @Getter
@@ -26,7 +33,7 @@ public class DeviceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "device_identifier", nullable = false, unique = true)
+    @Column(name = "device_identifier", nullable = false)
     private String deviceIdentifier;
 
     @Column(name = "device_type")
@@ -43,19 +50,28 @@ public class DeviceEntity {
 
     /**
      * Firebase Cloud Messaging token pro push notifikace.
-     * Nullable — stare zarizeni nemaji FCM token.
-     * Nastavuje se pri zapnuti notifikaci uzivatelem.
+     * Nullable — starší zařízení nemusí mít FCM token.
+     * Nastavuje se při zapnutí notifikací uživatelem.
      */
     @Column(name = "fcm_token", length = 512)
     private String fcmToken;
 
     /**
-     * Uzivatelska preference pro push notifikace na tomto zarizeni.
-     * false = uzivatel nechce notifikace (default).
+     * Uživatelská preference pro push notifikace na tomto zařízení.
+     * {@code false} = uživatel nechce notifikace (výchozí stav).
      */
     @Builder.Default
     @Column(name = "notifications_enabled", nullable = false)
     private boolean notificationsEnabled = false;
+
+    /**
+     * Příznak aktivity zařízení.
+     * {@code true} = zařízení je aktivní (přihlášeno), {@code false} = odhlášeno (zachováno v DB, soft-logout).
+     * Pole pojmenováno {@code active} aby Lombok vygeneroval správný getter {@code isActive()}.
+     */
+    @Builder.Default
+    @Column(name = "is_active", nullable = false)
+    private boolean active = true;
 
     /**
      * Časová značka posledního úspěšného přihlášení nebo interakce skrze toto zařízení.
@@ -67,6 +83,9 @@ public class DeviceEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    /**
+     * Nastaví výchozí hodnotu lastLogin před prvním persistováním entity.
+     */
     @PrePersist
     protected void onCreate() {
         if (this.lastLogin == null) {
@@ -74,6 +93,9 @@ public class DeviceEntity {
         }
     }
 
+    /**
+     * Aktualizuje časovou značku posledního přihlášení při každé změně entity.
+     */
     @PreUpdate
     protected void onUpdate() {
         this.lastLogin = LocalDateTime.now();

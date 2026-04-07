@@ -1,8 +1,10 @@
 import '../../../../../customer/restaurant/data/models/common/address_model.dart';
 import '../../../../../customer/restaurant/data/models/common/opening_hours_model.dart';
 import '../../../../../customer/restaurant/domain/entities/address.dart';
+import '../../../../../customer/restaurant/domain/entities/special_day.dart';
 import '../../../domain/entities/my_restaurant.dart';
 
+/// API response model for the owner's restaurant detail view.
 class MyRestaurantResponseModel {
   final String? id;
   final String? name;
@@ -14,6 +16,8 @@ class MyRestaurantResponseModel {
   final String? status;
   final bool? isActive;
   final String? panoramaUrl;
+  final int? defaultReservationDurationMinutes;
+  final List<SpecialDay> specialDays;
 
   const MyRestaurantResponseModel({
     this.id,
@@ -23,9 +27,11 @@ class MyRestaurantResponseModel {
     this.contactEmail,
     this.address,
     this.openingHours = const [],
+    this.specialDays = const [],
     this.status,
     this.isActive,
     this.panoramaUrl,
+    this.defaultReservationDurationMinutes,
   });
 
   factory MyRestaurantResponseModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +51,11 @@ class MyRestaurantResponseModel {
       status: json['status'] as String?,
       isActive: json['active'] as bool?,
       panoramaUrl: json['panoramaUrl'] as String?,
+      defaultReservationDurationMinutes: json['defaultReservationDurationMinutes'] as int?,
+      specialDays: (json['specialDays'] as List<dynamic>?)
+              ?.map((e) => SpecialDay.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -59,5 +70,7 @@ class MyRestaurantResponseModel {
         status: status ?? 'INACTIVE',
         isActive: isActive ?? false,
         panoramaUrl: panoramaUrl,
+        defaultReservationDurationMinutes: defaultReservationDurationMinutes ?? 60,
+        specialDays: specialDays,
       );
 }

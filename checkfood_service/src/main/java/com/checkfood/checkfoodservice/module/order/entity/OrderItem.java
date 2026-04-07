@@ -5,6 +5,12 @@ import lombok.*;
 
 import java.util.UUID;
 
+/**
+ * JPA entita položky objednávky uchovávající snímek dat menu položky v době objednání a stav platby.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +19,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "order_item", indexes = {
         @Index(name = "idx_order_item_order", columnList = "order_id"),
-        @Index(name = "idx_order_item_menu_item", columnList = "menu_item_id")
+        @Index(name = "idx_order_item_menu_item", columnList = "menu_item_id"),
+        @Index(name = "idx_order_item_payment_tx", columnList = "payment_transaction_id")
 })
 public class OrderItem {
 
@@ -36,4 +43,18 @@ public class OrderItem {
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @Column(name = "ordered_by_user_id")
+    private Long orderedByUserId;
+
+    @Column(name = "paid_by_user_id")
+    private Long paidByUserId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "item_payment_status", length = 20)
+    @Builder.Default
+    private ItemPaymentStatus itemPaymentStatus = ItemPaymentStatus.UNPAID;
+
+    @Column(name = "payment_transaction_id", length = 100)
+    private String paymentTransactionId;
 }

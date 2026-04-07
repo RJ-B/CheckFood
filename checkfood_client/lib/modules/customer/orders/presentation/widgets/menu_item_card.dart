@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/menu_item.dart';
 
+/// A card representing a single menu item with its name, description, and
+/// price, plus inline quantity controls when the item is already in the cart.
 class MenuItemCard extends StatelessWidget {
   final MenuItem menuItem;
   final int cartQuantity;
@@ -25,7 +27,6 @@ class MenuItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            // Item info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +61,6 @@ class MenuItemCard extends StatelessWidget {
 
             const SizedBox(width: 12),
 
-            // Quantity controls
             if (cartQuantity > 0)
               Row(
                 mainAxisSize: MainAxisSize.min,

@@ -3,6 +3,7 @@ import '../../core/theme/spacing.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/radius.dart';
 
+/// Pojmenované textové formulářové pole s konzistentním stylem aplikace.
 class TextInputField extends StatelessWidget {
   final String label;
   final String? hint;

@@ -3,6 +3,12 @@ package com.checkfood.checkfoodservice.module.restaurant.dto.response;
 import lombok.*;
 import java.util.UUID;
 
+/**
+ * Odpověď s daty fyzického stolu v restauraci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

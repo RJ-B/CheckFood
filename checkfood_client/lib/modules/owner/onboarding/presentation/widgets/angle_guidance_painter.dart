@@ -30,7 +30,6 @@ class SphereGuidancePainter extends CustomPainter {
     final cy = size.height / 2;
     final halfFov = cameraFov / 2;
 
-    // Crosshair at center
     final crossPaint = Paint()
       ..color = Colors.white.withValues(alpha: 0.3)
       ..strokeWidth = 1;
@@ -46,29 +45,23 @@ class SphereGuidancePainter extends CustomPainter {
     );
 
     for (final point in sphereGrid) {
-      // Compute angular difference from current orientation
       final relYaw = _angleDiff(point.yaw, currentYaw);
       final relPitch = point.pitch - currentPitch;
 
-      // Signed yaw difference (for left/right placement)
       final signedYaw = _signedAngleDiff(point.yaw, currentYaw);
 
-      // FOV culling — skip points outside visible cone (with margin)
       const cullMargin = 15.0;
       if (relYaw.abs() > halfFov + cullMargin ||
           relPitch.abs() > halfFov + cullMargin) {
         continue;
       }
 
-      // Project to screen coordinates
-      // signedYaw > 0 means point is to the right of where camera looks
       final screenX = cx + (signedYaw / halfFov) * (size.width / 2);
       final screenY = cy - (relPitch / halfFov) * (size.height / 2);
 
       final isCaptured = capturedIndices.contains(point.index);
       final isAligned = point.index == alignedIndex;
 
-      // Dot size — larger when closer to center, smaller at edges
       final distFromCenter = sqrt(relYaw * relYaw + relPitch * relPitch);
       var baseRadius = _lerp(10.0, 5.0, (distFromCenter / halfFov).clamp(0, 1));
 
@@ -76,7 +69,6 @@ class SphereGuidancePainter extends CustomPainter {
         baseRadius *= pulseScale;
       }
 
-      // Color coding
       Color dotColor;
       if (isCaptured) {
         dotColor = AppColors.primary;
@@ -86,7 +78,6 @@ class SphereGuidancePainter extends CustomPainter {
         dotColor = Colors.white.withValues(alpha: 0.5);
       }
 
-      // Outer glow for aligned dot
       if (isAligned) {
         final glowPaint = Paint()
           ..color = Colors.yellowAccent.withValues(alpha: 0.3)
@@ -98,13 +89,11 @@ class SphereGuidancePainter extends CustomPainter {
         );
       }
 
-      // Draw dot
       final dotPaint = Paint()
         ..color = dotColor
         ..style = PaintingStyle.fill;
       canvas.drawCircle(Offset(screenX, screenY), baseRadius, dotPaint);
 
-      // Ring around captured dots
       if (isCaptured) {
         final ringPaint = Paint()
           ..color = AppColors.primary.withValues(alpha: 0.6)

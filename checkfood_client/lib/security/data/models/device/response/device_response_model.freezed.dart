@@ -33,6 +33,8 @@ mixin _$DeviceResponseModel {
   DateTime? get lastLogin => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.isCurrentDevice)
   bool get isCurrentDevice => throw _privateConstructorUsedError;
+  @JsonKey(name: SecurityJsonKeys.deviceActive)
+  bool get active => throw _privateConstructorUsedError;
 
   /// Serializes this DeviceResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,6 +60,7 @@ abstract class $DeviceResponseModelCopyWith<$Res> {
     @JsonKey(name: SecurityJsonKeys.deviceIdentifier) String deviceIdentifier,
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.isCurrentDevice) bool isCurrentDevice,
+    @JsonKey(name: SecurityJsonKeys.deviceActive) bool active,
   });
 }
 
@@ -82,6 +85,7 @@ class _$DeviceResponseModelCopyWithImpl<$Res, $Val extends DeviceResponseModel>
     Object? deviceIdentifier = null,
     Object? lastLogin = freezed,
     Object? isCurrentDevice = null,
+    Object? active = null,
   }) {
     return _then(
       _value.copyWith(
@@ -115,6 +119,11 @@ class _$DeviceResponseModelCopyWithImpl<$Res, $Val extends DeviceResponseModel>
                     ? _value.isCurrentDevice
                     : isCurrentDevice // ignore: cast_nullable_to_non_nullable
                         as bool,
+            active:
+                null == active
+                    ? _value.active
+                    : active // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -137,6 +146,7 @@ abstract class _$$DeviceResponseModelImplCopyWith<$Res>
     @JsonKey(name: SecurityJsonKeys.deviceIdentifier) String deviceIdentifier,
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.isCurrentDevice) bool isCurrentDevice,
+    @JsonKey(name: SecurityJsonKeys.deviceActive) bool active,
   });
 }
 
@@ -160,6 +170,7 @@ class __$$DeviceResponseModelImplCopyWithImpl<$Res>
     Object? deviceIdentifier = null,
     Object? lastLogin = freezed,
     Object? isCurrentDevice = null,
+    Object? active = null,
   }) {
     return _then(
       _$DeviceResponseModelImpl(
@@ -193,6 +204,11 @@ class __$$DeviceResponseModelImplCopyWithImpl<$Res>
                 ? _value.isCurrentDevice
                 : isCurrentDevice // ignore: cast_nullable_to_non_nullable
                     as bool,
+        active:
+            null == active
+                ? _value.active
+                : active // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -210,6 +226,7 @@ class _$DeviceResponseModelImpl extends _DeviceResponseModel {
     @JsonKey(name: SecurityJsonKeys.lastLogin) required this.lastLogin,
     @JsonKey(name: SecurityJsonKeys.isCurrentDevice)
     this.isCurrentDevice = false,
+    @JsonKey(name: SecurityJsonKeys.deviceActive) this.active = true,
   }) : super._();
 
   factory _$DeviceResponseModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -233,10 +250,13 @@ class _$DeviceResponseModelImpl extends _DeviceResponseModel {
   @override
   @JsonKey(name: SecurityJsonKeys.isCurrentDevice)
   final bool isCurrentDevice;
+  @override
+  @JsonKey(name: SecurityJsonKeys.deviceActive)
+  final bool active;
 
   @override
   String toString() {
-    return 'DeviceResponseModel(id: $id, deviceName: $deviceName, deviceType: $deviceType, deviceIdentifier: $deviceIdentifier, lastLogin: $lastLogin, isCurrentDevice: $isCurrentDevice)';
+    return 'DeviceResponseModel(id: $id, deviceName: $deviceName, deviceType: $deviceType, deviceIdentifier: $deviceIdentifier, lastLogin: $lastLogin, isCurrentDevice: $isCurrentDevice, active: $active)';
   }
 
   @override
@@ -254,7 +274,8 @@ class _$DeviceResponseModelImpl extends _DeviceResponseModel {
             (identical(other.lastLogin, lastLogin) ||
                 other.lastLogin == lastLogin) &&
             (identical(other.isCurrentDevice, isCurrentDevice) ||
-                other.isCurrentDevice == isCurrentDevice));
+                other.isCurrentDevice == isCurrentDevice) &&
+            (identical(other.active, active) || other.active == active));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -267,6 +288,7 @@ class _$DeviceResponseModelImpl extends _DeviceResponseModel {
     deviceIdentifier,
     lastLogin,
     isCurrentDevice,
+    active,
   );
 
   /// Create a copy of DeviceResponseModel
@@ -298,6 +320,7 @@ abstract class _DeviceResponseModel extends DeviceResponseModel {
     @JsonKey(name: SecurityJsonKeys.lastLogin)
     required final DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.isCurrentDevice) final bool isCurrentDevice,
+    @JsonKey(name: SecurityJsonKeys.deviceActive) final bool active,
   }) = _$DeviceResponseModelImpl;
   const _DeviceResponseModel._() : super._();
 
@@ -322,6 +345,9 @@ abstract class _DeviceResponseModel extends DeviceResponseModel {
   @override
   @JsonKey(name: SecurityJsonKeys.isCurrentDevice)
   bool get isCurrentDevice;
+  @override
+  @JsonKey(name: SecurityJsonKeys.deviceActive)
+  bool get active;
 
   /// Create a copy of DeviceResponseModel
   /// with the given fields replaced by the non-null parameter values.

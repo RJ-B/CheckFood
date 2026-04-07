@@ -20,6 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementace {@link OwnerMenuService} zajišťující CRUD operace nad kategoriemi a položkami menu
+ * s ověřením vlastnictví restaurace před každou modifikací.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -150,11 +157,9 @@ public class OwnerMenuServiceImpl implements OwnerMenuService {
         itemRepository.delete(item);
     }
 
-    // --- Private Helpers ---
-
     private UUID findOwnerRestaurantId(String userEmail) {
         var user = userService.findByEmail(userEmail);
-        var membership = employeeRepository.findByUserIdAndRole(user.getId(), RestaurantEmployeeRole.OWNER)
+        var membership = employeeRepository.findFirstByUserIdAndRole(user.getId(), RestaurantEmployeeRole.OWNER)
                 .orElseThrow(RestaurantException::noRestaurantAssigned);
         return membership.getRestaurant().getId();
     }

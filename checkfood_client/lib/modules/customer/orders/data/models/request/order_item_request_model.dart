@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'order_item_request_model.freezed.dart';
 part 'order_item_request_model.g.dart';
 
+/// A single line item in an order request, identifying a menu item and quantity.
 @freezed
 class OrderItemRequestModel with _$OrderItemRequestModel {
   const factory OrderItemRequestModel({

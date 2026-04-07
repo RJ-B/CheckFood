@@ -10,15 +10,34 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Globální handler výjimek pro modul dining context — loguje a převádí
+ * {@link DiningContextException} na standardizovanou HTTP odpověď.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @RestControllerAdvice
 @Component
 @Slf4j
 public class DiningContextExceptionHandler extends AppExceptionHandler {
 
+    /**
+     * Vytvoří handler s injektovaným stavitelem chybových odpovědí.
+     *
+     * @param errorResponseBuilder stavitel standardizované chybové odpovědi
+     */
     public DiningContextExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);
     }
 
+    /**
+     * Zpracuje {@link DiningContextException} — zaloguje ji dle závažnosti a vrátí chybovou odpověď.
+     *
+     * @param ex      zachycená výjimka dining context
+     * @param request aktuální webový požadavek
+     * @return HTTP odpověď s chybovým tělem
+     */
     @ExceptionHandler(DiningContextException.class)
     public ResponseEntity<ErrorResponse> handleDiningContextException(
             DiningContextException ex, WebRequest request) {

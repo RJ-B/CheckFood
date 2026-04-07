@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Odpověď po MFA ověření.
+ * DTO odpovědi po ověření MFA přihlašovací výzvy indikující výsledek operace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -14,6 +17,11 @@ public class MfaChallengeResponse {
 
     private boolean success;
 
+    /**
+     * Vytvoří odpověď indikující úspěšné ověření MFA kódu.
+     *
+     * @return instance s příznakem úspěchu
+     */
     public static MfaChallengeResponse success() {
         return new MfaChallengeResponse(true);
     }

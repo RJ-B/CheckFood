@@ -1,6 +1,7 @@
 import '../entities/onboarding_menu_item.dart';
 import '../repositories/onboarding_repository.dart';
 
+/// Creates a new menu item inside the specified category.
 class CreateMenuItemUseCase {
   final OnboardingRepository _repository;
 

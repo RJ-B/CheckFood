@@ -11,7 +11,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * Entita pro záložní MFA kódy.
+ * JPA entita uchovávající záložní jednorázové kódy pro případ nedostupnosti TOTP aplikace.
+ * Každý kód je uložen ve formě bcrypt hashe a po použití označen příznakem used.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Entity
 @Table(
@@ -25,25 +29,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MfaBackupCodeEntity {
 
-    // Primární klíč
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Uživatel
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    // Hash záložního kódu
     @Column(nullable = false, length = 255)
     private String codeHash;
 
-    // Už byl použit?
     @Column(nullable = false)
     private boolean used = false;
 
-    // Kdy byl vytvořen
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

@@ -5,6 +5,7 @@ import '../../../domain/entities/reservation.dart';
 part 'reservation_response_model.freezed.dart';
 part 'reservation_response_model.g.dart';
 
+/// API response model for a single reservation, including edit/cancel permissions and any pending change.
 @freezed
 class ReservationResponseModel with _$ReservationResponseModel {
   const ReservationResponseModel._();
@@ -22,6 +23,7 @@ class ReservationResponseModel with _$ReservationResponseModel {
     int? partySize,
     @Default(false) bool canEdit,
     @Default(false) bool canCancel,
+    Map<String, dynamic>? pendingChange,
   }) = _ReservationResponseModel;
 
   factory ReservationResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -40,5 +42,9 @@ class ReservationResponseModel with _$ReservationResponseModel {
         partySize: partySize ?? 2,
         canEdit: canEdit,
         canCancel: canCancel,
+        pendingChangeRequestId: pendingChange?['changeRequestId'] as String?,
+        pendingProposedStartTime: pendingChange?['proposedStartTime'] as String?,
+        pendingProposedTableId: pendingChange?['proposedTableId'] as String?,
+        pendingProposedTableLabel: pendingChange?['proposedTableLabel'] as String?,
       );
 }

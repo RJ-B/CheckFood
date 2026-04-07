@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repository pro správu uživatelských rolí v systému.
- * Podporuje RBAC (Role-Based Access Control) s optimalizovaným načítáním oprávnění.
- * Poskytuje metody pro vyhledávání rolí a jejich permissions s prevencí N+1 problému.
+ * Repository pro správu uživatelských rolí s optimalizovaným načítáním oprávnění (prevence N+1).
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see RoleEntity
  */
 @Repository

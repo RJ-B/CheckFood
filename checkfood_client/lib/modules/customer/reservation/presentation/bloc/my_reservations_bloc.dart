@@ -1,15 +1,25 @@
+import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/usecases/accept_change_request_usecase.dart';
 import '../../domain/usecases/cancel_reservation_usecase.dart';
+import '../../domain/usecases/decline_change_request_usecase.dart';
 import '../../domain/usecases/get_available_slots_usecase.dart';
 import '../../domain/usecases/get_my_reservations_history_usecase.dart';
 import '../../domain/usecases/get_my_reservations_overview_usecase.dart';
+import '../../domain/usecases/get_pending_changes_usecase.dart';
 import '../../domain/usecases/get_reservation_scene_usecase.dart';
 import '../../domain/usecases/update_reservation_usecase.dart';
+import '../../domain/usecases/create_recurring_reservation_usecase.dart';
+import '../../domain/usecases/get_my_recurring_reservations_usecase.dart';
+import '../../domain/usecases/cancel_recurring_reservation_usecase.dart';
 import 'my_reservations_event.dart';
 import 'my_reservations_state.dart';
 
+/// BLoC that manages the user's reservation list: loading the overview, editing and
+/// cancelling individual reservations, responding to pending change proposals, and
+/// creating or cancelling recurring reservation series.
 class MyReservationsBloc
     extends Bloc<MyReservationsEvent, MyReservationsState> {
   final GetMyReservationsOverviewUseCase _getOverviewUseCase;
@@ -18,6 +28,12 @@ class MyReservationsBloc
   final UpdateReservationUseCase _updateUseCase;
   final GetReservationSceneUseCase _getSceneUseCase;
   final GetAvailableSlotsUseCase _getSlotsUseCase;
+  final GetPendingChangesUseCase _getPendingChangesUseCase;
+  final AcceptChangeRequestUseCase _acceptChangeRequestUseCase;
+  final DeclineChangeRequestUseCase _declineChangeRequestUseCase;
+  final CreateRecurringReservationUseCase _createRecurringUseCase;
+  final GetMyRecurringReservationsUseCase _getRecurringUseCase;
+  final CancelRecurringReservationUseCase _cancelRecurringUseCase;
 
   MyReservationsBloc({
     required GetMyReservationsOverviewUseCase getOverviewUseCase,
@@ -26,12 +42,24 @@ class MyReservationsBloc
     required UpdateReservationUseCase updateUseCase,
     required GetReservationSceneUseCase getSceneUseCase,
     required GetAvailableSlotsUseCase getSlotsUseCase,
+    required GetPendingChangesUseCase getPendingChangesUseCase,
+    required AcceptChangeRequestUseCase acceptChangeRequestUseCase,
+    required DeclineChangeRequestUseCase declineChangeRequestUseCase,
+    required CreateRecurringReservationUseCase createRecurringUseCase,
+    required GetMyRecurringReservationsUseCase getRecurringUseCase,
+    required CancelRecurringReservationUseCase cancelRecurringUseCase,
   })  : _getOverviewUseCase = getOverviewUseCase,
         _getHistoryUseCase = getHistoryUseCase,
         _cancelUseCase = cancelUseCase,
         _updateUseCase = updateUseCase,
         _getSceneUseCase = getSceneUseCase,
         _getSlotsUseCase = getSlotsUseCase,
+        _getPendingChangesUseCase = getPendingChangesUseCase,
+        _acceptChangeRequestUseCase = acceptChangeRequestUseCase,
+        _declineChangeRequestUseCase = declineChangeRequestUseCase,
+        _createRecurringUseCase = createRecurringUseCase,
+        _getRecurringUseCase = getRecurringUseCase,
+        _cancelRecurringUseCase = cancelRecurringUseCase,
         super(const MyReservationsState()) {
     on<LoadMyReservations>(_onLoad);
     on<RefreshMyReservations>(_onRefresh);
@@ -43,9 +71,13 @@ class MyReservationsBloc
     on<EditTimeSelected>(_onEditTimeSelected);
     on<EditPartySizeChanged>(_onEditPartySizeChanged);
     on<SubmitEditReservation>(_onSubmitEdit);
+    on<LoadPendingChanges>(_onLoadPendingChanges);
+    on<AcceptChangeRequest>(_onAcceptChangeRequest);
+    on<DeclineChangeRequest>(_onDeclineChangeRequest);
+    on<CreateRecurringReservation>(_onCreateRecurring);
+    on<LoadRecurringReservations>(_onLoadRecurring);
+    on<CancelRecurringReservation>(_onCancelRecurring);
   }
-
-  // ── Load overview ──────────────────────────────────────────────────
 
   Future<void> _onLoad(
     LoadMyReservations event,
@@ -61,6 +93,7 @@ class MyReservationsBloc
         totalHistoryCount: overview.totalHistoryCount,
         showingAllHistory: false,
       ));
+      add(const MyReservationsEvent.loadPendingChanges());
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
@@ -68,8 +101,6 @@ class MyReservationsBloc
       ));
     }
   }
-
-  // ── Refresh (pull-to-refresh, no loading spinner) ──────────────────
 
   Future<void> _onRefresh(
     RefreshMyReservations event,
@@ -85,12 +116,8 @@ class MyReservationsBloc
         cancelSuccess: false,
         editSuccess: false,
       ));
-    } catch (_) {
-      // Silent fail on refresh
-    }
+    } catch (_) {}
   }
-
-  // ── Show all history ───────────────────────────────────────────────
 
   Future<void> _onShowAllHistory(
     ShowAllHistory event,
@@ -109,8 +136,6 @@ class MyReservationsBloc
     }
   }
 
-  // ── Cancel reservation ─────────────────────────────────────────────
-
   Future<void> _onCancel(
     CancelReservation event,
     Emitter<MyReservationsState> emit,
@@ -118,7 +143,6 @@ class MyReservationsBloc
     emit(state.copyWith(cancellingId: event.reservationId, cancelSuccess: false));
     try {
       await _cancelUseCase(event.reservationId);
-      // Reload overview after cancel
       final overview = await _getOverviewUseCase();
       emit(state.copyWith(
         cancellingId: null,
@@ -132,8 +156,6 @@ class MyReservationsBloc
       emit(state.copyWith(cancellingId: null));
     }
   }
-
-  // ── Start edit ─────────────────────────────────────────────────────
 
   Future<void> _onStartEdit(
     StartEditReservation event,
@@ -156,11 +178,9 @@ class MyReservationsBloc
     ));
 
     try {
-      // Load tables from scene
       final scene = await _getSceneUseCase(reservation.restaurantId);
       emit(state.copyWith(editTables: scene.tables));
 
-      // Load available slots for current table+date
       final slots = await _getSlotsUseCase(
         reservation.restaurantId,
         reservation.tableId,
@@ -178,8 +198,6 @@ class MyReservationsBloc
       ));
     }
   }
-
-  // ── Edit: date changed ─────────────────────────────────────────────
 
   Future<void> _onEditDateChanged(
     EditDateChanged event,
@@ -208,8 +226,6 @@ class MyReservationsBloc
     }
   }
 
-  // ── Edit: table changed ────────────────────────────────────────────
-
   Future<void> _onEditTableChanged(
     EditTableChanged event,
     Emitter<MyReservationsState> emit,
@@ -237,8 +253,6 @@ class MyReservationsBloc
     }
   }
 
-  // ── Edit: time selected ────────────────────────────────────────────
-
   Future<void> _onEditTimeSelected(
     EditTimeSelected event,
     Emitter<MyReservationsState> emit,
@@ -246,16 +260,12 @@ class MyReservationsBloc
     emit(state.copyWith(editSelectedTime: event.startTime));
   }
 
-  // ── Edit: party size changed ───────────────────────────────────────
-
   Future<void> _onEditPartySizeChanged(
     EditPartySizeChanged event,
     Emitter<MyReservationsState> emit,
   ) async {
     emit(state.copyWith(editPartySize: event.partySize));
   }
-
-  // ── Submit edit ────────────────────────────────────────────────────
 
   Future<void> _onSubmitEdit(
     SubmitEditReservation event,
@@ -279,7 +289,6 @@ class MyReservationsBloc
         partySize: state.editPartySize!,
       );
 
-      // Reload overview
       final overview = await _getOverviewUseCase();
       emit(state.copyWith(
         isSubmittingEdit: false,
@@ -307,6 +316,114 @@ class MyReservationsBloc
         isSubmittingEdit: false,
         editError: 'Nepodařilo se uložit změny.',
       ));
+    }
+  }
+
+  Future<void> _onLoadPendingChanges(
+    LoadPendingChanges event,
+    Emitter<MyReservationsState> emit,
+  ) async {
+    try {
+      final changes = await _getPendingChangesUseCase();
+      emit(state.copyWith(pendingChanges: changes));
+    } catch (_) {}
+  }
+
+  Future<void> _onAcceptChangeRequest(
+    AcceptChangeRequest event,
+    Emitter<MyReservationsState> emit,
+  ) async {
+    emit(state.copyWith(pendingChangeActionId: event.changeRequestId));
+    try {
+      await _acceptChangeRequestUseCase(event.changeRequestId);
+      final overview = await _getOverviewUseCase();
+      final changes = await _getPendingChangesUseCase();
+      emit(state.copyWith(
+        pendingChangeActionId: null,
+        pendingChanges: changes,
+        upcoming: overview.upcoming,
+        history: overview.history,
+        totalHistoryCount: overview.totalHistoryCount,
+        showingAllHistory: false,
+      ));
+    } catch (e) {
+      dev.log('AcceptChangeRequest failed: $e', name: 'CheckFood.Reservations');
+      emit(state.copyWith(pendingChangeActionId: null));
+    }
+  }
+
+  Future<void> _onDeclineChangeRequest(
+    DeclineChangeRequest event,
+    Emitter<MyReservationsState> emit,
+  ) async {
+    emit(state.copyWith(pendingChangeActionId: event.changeRequestId));
+    try {
+      await _declineChangeRequestUseCase(event.changeRequestId);
+      final overview = await _getOverviewUseCase();
+      final changes = await _getPendingChangesUseCase();
+      emit(state.copyWith(
+        pendingChangeActionId: null,
+        pendingChanges: changes,
+        upcoming: overview.upcoming,
+        history: overview.history,
+        totalHistoryCount: overview.totalHistoryCount,
+        showingAllHistory: false,
+      ));
+    } catch (_) {
+      emit(state.copyWith(pendingChangeActionId: null));
+    }
+  }
+
+  Future<void> _onCreateRecurring(
+    CreateRecurringReservation event,
+    Emitter<MyReservationsState> emit,
+  ) async {
+    emit(state.copyWith(isLoadingRecurring: true, recurringSuccess: false));
+    try {
+      await _createRecurringUseCase(
+        restaurantId: event.restaurantId,
+        tableId: event.tableId,
+        dayOfWeek: event.dayOfWeek,
+        startTime: event.startTime,
+        partySize: event.partySize,
+      );
+      final recurring = await _getRecurringUseCase();
+      emit(state.copyWith(
+        isLoadingRecurring: false,
+        recurringReservations: recurring,
+        recurringSuccess: true,
+      ));
+    } catch (e) {
+      dev.log('CreateRecurring failed: $e', name: 'CheckFood.Reservations');
+      emit(state.copyWith(isLoadingRecurring: false));
+    }
+  }
+
+  Future<void> _onLoadRecurring(
+    LoadRecurringReservations event,
+    Emitter<MyReservationsState> emit,
+  ) async {
+    try {
+      final recurring = await _getRecurringUseCase();
+      emit(state.copyWith(recurringReservations: recurring));
+    } catch (_) {}
+  }
+
+  Future<void> _onCancelRecurring(
+    CancelRecurringReservation event,
+    Emitter<MyReservationsState> emit,
+  ) async {
+    try {
+      await _cancelRecurringUseCase(event.id);
+      final recurring = await _getRecurringUseCase();
+      final overview = await _getOverviewUseCase();
+      emit(state.copyWith(
+        recurringReservations: recurring,
+        upcoming: overview.upcoming,
+        history: overview.history,
+      ));
+    } catch (e) {
+      dev.log('CancelRecurring failed: $e', name: 'CheckFood.Reservations');
     }
   }
 }

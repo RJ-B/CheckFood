@@ -1,9 +1,10 @@
 package com.checkfood.checkfoodservice.monitoring.metrics;
 
 /**
- * Centrální definice názvů metrik.
+ * Centrální definice názvů metrik zabraňující používání magic stringů.
  *
- * Zabraňuje používání magic stringů.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public final class MetricNames {
 

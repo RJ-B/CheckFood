@@ -7,10 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Entita reprezentující jemná oprávnění v systému (fine-grained permissions).
- * Oprávnění definují konkrétní akce, které může uživatel provádět.
- * Přiřazují se rolím, nikoliv přímo uživatelům, pro snadnější správu.
+ * JPA entita reprezentující jemnozrnné oprávnění v systému (fine-grained permission).
+ * Oprávnění definují konkrétní akce a přiřazují se rolím pro snadnou správu.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see RoleEntity
  */
 @Entity

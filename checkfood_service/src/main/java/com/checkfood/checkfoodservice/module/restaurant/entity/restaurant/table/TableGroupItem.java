@@ -7,6 +7,9 @@ import java.util.UUID;
 
 /**
  * Vazební entita propojující TableGroup s konkrétním fyzickým stolem.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

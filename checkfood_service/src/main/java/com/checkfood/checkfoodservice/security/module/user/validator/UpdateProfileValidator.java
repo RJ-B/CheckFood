@@ -5,10 +5,10 @@ import com.checkfood.checkfoodservice.security.module.user.exception.UserExcepti
 import org.springframework.stereotype.Component;
 
 /**
- * Validátor pro aktualizaci uživatelského profilu.
- * Provádí byznys validace nad rámec standardních JSR-303 anotací.
- * Zajišťuje integritu jmen a zabraňuje nastavení prázdných hodnot.
+ * Validátor pro aktualizaci uživatelského profilu kontrolující, že jména nejsou tvořena pouze bílými znaky.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see UpdateProfileRequest
  */
 @Component

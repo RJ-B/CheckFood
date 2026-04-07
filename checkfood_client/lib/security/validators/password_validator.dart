@@ -1,16 +1,16 @@
+/// Validátor síly hesla pro registraci a změnu hesla.
+///
+/// Vyžaduje délku 8–64 znaků, alespoň jedno velké písmeno, malé písmeno,
+/// číslici a speciální znak (`@$!%*?&`).
 class PasswordValidator {
   static const int minLength = 8;
   static const int maxLength = 64;
 
-  /// Regex pro silné heslo:
-  /// - Minimálně jedno velké písmeno
-  /// - Minimálně jedno malé písmeno
-  /// - Minimálně jedna číslice
-  /// - Minimálně jeden speciální znak (@$!%*?&)
   static final RegExp _passwordRegex = RegExp(
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
   );
 
+  /// Vrátí chybovou zprávu, pokud [value] nesplňuje požadavky, nebo `null` při úspěchu.
   static String? validate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Heslo je povinné';
@@ -31,6 +31,7 @@ class PasswordValidator {
     return null;
   }
 
+  /// Vrátí chybovou zprávu, pokud se [confirmPassword] neshoduje s [originalPassword].
   static String? validateMatch(
     String? confirmPassword,
     String originalPassword,

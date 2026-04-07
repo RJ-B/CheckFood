@@ -5,6 +5,7 @@ import '../../../../domain/entities/device.dart';
 part 'device_response_model.freezed.dart';
 part 'device_response_model.g.dart';
 
+/// Datový model pro zařízení vrácené z backendu.
 @freezed
 class DeviceResponseModel with _$DeviceResponseModel {
   const DeviceResponseModel._();
@@ -19,6 +20,9 @@ class DeviceResponseModel with _$DeviceResponseModel {
     @JsonKey(name: SecurityJsonKeys.isCurrentDevice)
     @Default(false)
     bool isCurrentDevice,
+    @JsonKey(name: SecurityJsonKeys.deviceActive)
+    @Default(true)
+    bool active,
   }) = _DeviceResponseModel;
 
   factory DeviceResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -32,6 +36,7 @@ class DeviceResponseModel with _$DeviceResponseModel {
       deviceIdentifier: deviceIdentifier,
       lastLogin: lastLogin ?? DateTime.now(),
       isCurrentDevice: isCurrentDevice,
+      isActive: active,
     );
   }
 }

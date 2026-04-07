@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../config/security_claims.dart';
@@ -12,7 +11,6 @@ import '../../exceptions/auth_exceptions.dart';
 import '../datasources/auth_remote_data_source.dart';
 import '../local/token_storage.dart';
 
-// Request Models
 import '../models/auth/request/login_request_model.dart';
 import '../models/auth/request/register_request_model.dart';
 import '../models/auth/request/verify_email_request_model.dart';
@@ -21,11 +19,13 @@ import '../models/auth/request/logout_request_model.dart';
 import '../models/auth/request/resend_verification_request_model.dart';
 import '../models/auth/request/forgot_password_request_model.dart';
 import '../models/auth/request/reset_password_request_model.dart';
-
-// Response Models
 import '../models/auth/response/auth_error_response_model.dart';
 import '../services/device_info_service.dart';
 
+/// Implementace [AuthRepository] pro přihlašování, registraci a správu tokenů.
+///
+/// Mapuje [DioException] na doménové výjimky pomocí [_mapDioException].
+/// Cache přihlášeného uživatele je uložena v [_currentUser].
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
   final TokenStorage _tokenStorage;
@@ -134,7 +134,6 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> resendVerificationCode(String email) async {
     try {
-      // ✅ OPRAVENO: Nyní správně vytváří model pro DataSource
       final request = ResendVerificationRequestModel(email: email);
       await _remoteDataSource.resendVerificationCode(request);
     } on DioException catch (e) {
@@ -157,8 +156,7 @@ class AuthRepositoryImpl implements AuthRepository {
         );
         await _remoteDataSource.logout(request);
       }
-    } catch (e) {
-      debugPrint('🔴 [LOGOUT] Varování API: $e');
+    } catch (_) {
     } finally {
       await _tokenStorage.clearAuthData();
       _currentUser = null;
@@ -215,8 +213,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return _currentUser;
-    } catch (e) {
-      debugPrint('🔴 [REPO] Chyba dekódování tokenu: $e');
+    } catch (_) {
       return null;
     }
   }
@@ -308,7 +305,6 @@ class AuthRepositoryImpl implements AuthRepository {
     final statusCode = e.response?.statusCode;
     final finalMessage = errorModel?.message ?? 'Neočekávaná chyba serveru.';
 
-    // Backend error code (e.g. AUTH_ACCOUNT_NOT_VERIFIED, AUTH_ACCOUNT_DISABLED)
     final rawCode = (e.response?.data is Map)
         ? (e.response!.data as Map<String, dynamic>)['code']?.toString()
         : null;

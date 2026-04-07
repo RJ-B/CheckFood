@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 
+/// Remote data source contract for managing favourite restaurants.
 abstract class FavouriteRemoteDataSource {
   Future<void> addFavourite(String restaurantId);
   Future<void> removeFavourite(String restaurantId);
 }
 
+/// Dio-based implementation of [FavouriteRemoteDataSource].
 class FavouriteRemoteDataSourceImpl implements FavouriteRemoteDataSource {
   final Dio _dio;
   static const String _baseUrl = '/v1/users/me/favourites';

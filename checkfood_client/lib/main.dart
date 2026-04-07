@@ -10,12 +10,13 @@ import 'app.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/locale/locale_cubit.dart';
 
-// Importy BLoCů a Eventů
 import 'security/presentation/bloc/auth/auth_bloc.dart';
 import 'security/presentation/bloc/auth/auth_event.dart';
 import 'security/presentation/bloc/user/user_bloc.dart';
 
-/// Zkusí připojení na lokální backend. Vrací true pokud odpovídá.
+/// Pokusí se o HTTP ping na lokální backend.
+///
+/// Vrací `true`, pokud server odpoví se stavovým kódem nižším než 500.
 Future<bool> _isLocalBackendReachable() async {
   try {
     final client = HttpClient()
@@ -32,16 +33,16 @@ Future<bool> _isLocalBackendReachable() async {
 }
 
 /// Hlavní vstupní bod aplikace.
-/// Zajišťuje sekvenční inicializaci asynchronních služeb a konfigurace.
+///
+/// Zajišťuje sekvenční inicializaci: Flutter bindings, výběr .env souboru,
+/// dependency injection a spuštění widget stromu.
 void main() async {
   try {
-    // 1. Zajištění inicializace vazeb Flutteru
     WidgetsFlutterBinding.ensureInitialized();
 
     // TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
     // await Firebase.initializeApp();
 
-    // 2. Auto-detekce prostředí: zkusí lokální backend, jinak Render server
     const forceEnv = String.fromEnvironment('ENV');
     String envFile;
     if (forceEnv == 'prod') {
@@ -49,26 +50,22 @@ void main() async {
     } else if (forceEnv == 'local') {
       envFile = '.env.local';
     } else {
-      // Auto-detekce: ping lokální backend
       final localReachable = await _isLocalBackendReachable();
       envFile = localReachable ? '.env.local' : '.env.prod';
-      debugPrint('ENV auto-detect: ${localReachable ? "LOCAL" : "PROD (Render)"}');
     }
     await dotenv.load(fileName: envFile);
 
-    // 3. Spuštění Dependency Injection (Service Locator)
     await di.init();
 
-    // 4. Spuštění aplikace
     runApp(const AppBootstrapper());
-  } catch (e, stackTrace) {
-    debugPrint('FATAL_ERROR_STARTUP: $e');
-    debugPrint('STACK_TRACE: $stackTrace');
+  } catch (e) {
+    // Kritická chyba při startu — aplikaci nelze spustit.
   }
 }
 
-/// Wrapper widget pro inicializaci globálních BLoC providerů.
-/// Odděluje logiku vkládání závislostí od samotné definice aplikace.
+/// Kořenový widget zajišťující globální BLoC providery.
+///
+/// Odděluje inicializaci závislostí od samotné definice aplikace [CheckFoodApp].
 class AppBootstrapper extends StatelessWidget {
   const AppBootstrapper({super.key});
 
@@ -76,16 +73,11 @@ class AppBootstrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // LocaleCubit: Spravuje aktuální jazyk aplikace.
         BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()),
-
-        // AuthBloc: Zpracovává persistence tokenů a globální stav přihlášení.
         BlocProvider<AuthBloc>(
           create:
               (context) => di.sl<AuthBloc>()..add(const AuthEvent.appStarted()),
         ),
-
-        // UserBloc: Spravuje data aktuálně přihlášeného uživatele.
         BlocProvider<UserBloc>(create: (context) => di.sl<UserBloc>()),
       ],
       child: const CheckFoodApp(),

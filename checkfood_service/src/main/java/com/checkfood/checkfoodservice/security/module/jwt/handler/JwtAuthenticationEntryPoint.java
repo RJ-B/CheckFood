@@ -12,7 +12,10 @@ import java.io.IOException;
 
 /**
  * Handler pro zpracování chyb autentizace (HTTP 401 Unauthorized).
- * Využívá dedikovaný JwtLogger pro záznam incidentu.
+ * Vyvolá se, když požadavek přistupuje k chráněnému zdroji bez platné autentizace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 @RequiredArgsConstructor
@@ -21,6 +24,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final SecurityErrorResponseWriter errorResponseWriter;
     private final JwtLogger jwtLogger;
 
+    /**
+     * Zapíše HTTP 401 odpověď při pokusu o přístup bez autentizace.
+     *
+     * @param request       HTTP požadavek
+     * @param response      HTTP odpověď pro zápis chybové odpovědi
+     * @param authException výjimka popisující důvod selhání autentizace
+     * @throws IOException při chybě zápisu odpovědi
+     */
     @Override
     public void commence(
             HttpServletRequest request,

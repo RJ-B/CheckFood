@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * DTO pro požadavek na přihlášení přes OAuth.
- * Sjednoceno s LoginRequest pro konzistentní správu zařízení a JWT relací [cite: 2026-01-24].
+ * DTO pro požadavek na OAuth přihlášení obsahující ID token poskytovatele a data o zařízení.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -26,14 +28,12 @@ public class OAuthLoginRequest {
 
     private String lastName;
 
-    // --- Sjednocená sekce pro zařízení (shodná s klasickým loginem) ---
-
     @NotBlank(message = "Identifikátor zařízení nesmí být prázdný")
-    private String deviceIdentifier; // ✅ Změněno z Long deviceId na String deviceIdentifier
+    private String deviceIdentifier;
 
     @NotBlank(message = "Název zařízení nesmí být prázdný")
-    private String deviceName; // ✅ Přidáno pro sjednocení s Flutter modelem
+    private String deviceName;
 
     @NotBlank(message = "Typ zařízení nesmí být prázdný")
-    private String deviceType; // ✅ Přidáno pro sjednocení s Flutter modelem
+    private String deviceType;
 }

@@ -43,4 +43,7 @@ AKCEPTAČNÍ KRITÉRIA:
 BACKEND COMPILE: ./mvnw compile -q → EXIT 0 (žádné chyby)
 BACKEND TESTS: 0/75 PASS — 75 ERRORS (všechny způsobeny pre-existující AresService NoSuchBeanDefinitionException — nesouvisí s T-0014, blokuje ApplicationContext; B-002 = neblokuje commit)
 
-STATUS: PASS — commit + push probíhají
+COMMIT: 3133a8e — infra(T-0014): migrate from Render to Google Cloud Platform (Cloud Run + Cloud SQL + GCS)
+PUSH: origin/main — OK (d110a11..3133a8e)
+
+STATUS: PASS — commit + push DONE

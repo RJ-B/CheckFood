@@ -5,12 +5,32 @@ import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
+/**
+ * Doménová výjimka pro modul rezervací.
+ * Poskytuje tovární metody pro všechny typové chybové stavy modulu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 public class ReservationException extends AppException {
 
+    /**
+     * Vytvoří novou instanci výjimky s daným kódem chyby, zprávou a HTTP statusem.
+     *
+     * @param errorCode kód chyby z výčtu {@link ReservationErrorCode}
+     * @param message   lidsky čitelná chybová zpráva
+     * @param status    HTTP status odpovědi
+     */
     public ReservationException(ReservationErrorCode errorCode, String message, HttpStatus status) {
         super(errorCode, message, status);
     }
 
+    /**
+     * Rezervace s daným ID nebyla nalezena.
+     *
+     * @param id UUID hledané rezervace
+     * @return výjimka s HTTP 404
+     */
     public static ReservationException notFound(UUID id) {
         return new ReservationException(
                 ReservationErrorCode.RESERVATION_NOT_FOUND,
@@ -111,6 +131,62 @@ public class ReservationException extends AppException {
         return new ReservationException(
                 ReservationErrorCode.CHECKIN_OUTSIDE_WINDOW,
                 "Check-in je možný pouze 30 minut před až 60 minut po začátku rezervace.",
+                HttpStatus.CONFLICT
+        );
+    }
+
+    public static ReservationException pendingChangeExists() {
+        return new ReservationException(
+                ReservationErrorCode.PENDING_CHANGE_EXISTS,
+                "Pro tuto rezervaci již existuje nevyřízený návrh změny.",
+                HttpStatus.CONFLICT
+        );
+    }
+
+    public static ReservationException changeRequestNotFound(UUID id) {
+        return new ReservationException(
+                ReservationErrorCode.CHANGE_REQUEST_NOT_FOUND,
+                "Návrh změny s ID " + id + " nebyl nalezen.",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    public static ReservationException reservationLimitPerDay(int max) {
+        return new ReservationException(
+                ReservationErrorCode.RESERVATION_LIMIT,
+                "Maximální počet rezervací na restauraci na den je " + max + ".",
+                HttpStatus.TOO_MANY_REQUESTS
+        );
+    }
+
+    public static ReservationException reservationLimitTotal(int max) {
+        return new ReservationException(
+                ReservationErrorCode.RESERVATION_LIMIT,
+                "Maximální počet aktivních rezervací je " + max + ".",
+                HttpStatus.TOO_MANY_REQUESTS
+        );
+    }
+
+    public static ReservationException recurringNotFound(UUID id) {
+        return new ReservationException(
+                ReservationErrorCode.RECURRING_RESERVATION_NOT_FOUND,
+                "Opakovaná rezervace s ID " + id + " nebyla nalezena.",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    public static ReservationException recurringAlreadyActive() {
+        return new ReservationException(
+                ReservationErrorCode.RECURRING_RESERVATION_ALREADY_ACTIVE,
+                "Opakovaná rezervace již byla potvrzena nebo odmítnuta.",
+                HttpStatus.CONFLICT
+        );
+    }
+
+    public static ReservationException recurringNoInstances() {
+        return new ReservationException(
+                ReservationErrorCode.RECURRING_NO_INSTANCES_GENERATED,
+                "Nepodařilo se vygenerovat žádnou instanci rezervace — všechny termíny jsou obsazeny.",
                 HttpStatus.CONFLICT
         );
     }

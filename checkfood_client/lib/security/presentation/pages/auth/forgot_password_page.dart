@@ -8,6 +8,9 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 
+/// Stránka pro zahájení procesu obnovy zapomenutého hesla.
+///
+/// Zobrazuje formulář pro zadání e-mailu a po odeslání přechází do stavu potvrzení.
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 

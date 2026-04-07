@@ -5,11 +5,12 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Konfigurace autentizačního modulu.
- * Zodpovídá za aktivaci načítání vlastností (Properties) specifických pro Auth modul.
+ * Aktivuje automatické načítání konfiguračních properties ze security.auth prefixu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 @ConfigurationPropertiesScan(basePackages = "com.checkfood.checkfoodservice.security.module.auth")
 public class AuthModuleConfig {
-    // V případě potřeby zde lze definovat specifické beany pro lokální auth proces,
-    // které vyžadují manuální konfiguraci (např. Password Validator Factory).
 }

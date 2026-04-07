@@ -4,6 +4,7 @@ import '../../../domain/entities/address.dart';
 part 'address_model.freezed.dart';
 part 'address_model.g.dart';
 
+/// API response/request model for a physical address with optional geo-coordinates.
 @freezed
 class AddressModel with _$AddressModel {
   const AddressModel._();
@@ -22,7 +23,6 @@ class AddressModel with _$AddressModel {
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
 
-  /// Převod na doménovou entitu s ošetřením null hodnot
   Address toEntity() => Address(
     street: street ?? '',
     streetNumber: streetNumber,

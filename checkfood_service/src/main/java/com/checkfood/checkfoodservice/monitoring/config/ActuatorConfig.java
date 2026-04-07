@@ -4,20 +4,14 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Konfigurace Spring Boot Actuatoru.
+ * Centralizuje konfiguraci actuator endpointů a slouží jako vstupní bod pro rozšíření
+ * (security, custom endpoints). Neobsahuje aplikační ani business logiku.
  *
- * Tato třída:
- * - centralizuje konfiguraci actuator endpointů
- * - odděluje observability od business logiky
- * - slouží jako vstupní bod pro rozšíření (security, custom endpoints)
- *
- * ❌ Neobsahuje aplikační ani business logiku
- * ❌ Neřeší autentizaci (to je v security)
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 public class ActuatorConfig {
 
-    // TODO:
-    // - případné custom HealthIndicator registry
-    // - custom InfoContributor
-    // - groupování health endpointů
+    // TODO: custom HealthIndicator registry, custom InfoContributor, groupování health endpointů
 }

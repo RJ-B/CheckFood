@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'dining_context.freezed.dart';
 
+/// Popisuje aktivní stravovací kontext získaný naskenováním QR kódu stolu.
 @freezed
 class DiningContext with _$DiningContext {
   const DiningContext._();

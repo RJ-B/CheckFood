@@ -11,21 +11,25 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 /**
  * Globální konfigurace JSON serializace a deserializace.
  * Sjednocuje formátování datových typů napříč celým API.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 public class JacksonConfig {
 
+    /**
+     * Vytvoří primární ObjectMapper s podporou Java 8 Date/Time API a ISO-8601 formátováním dat.
+     *
+     * @param builder builder pro konfiguraci ObjectMapper
+     * @return nakonfigurovaný ObjectMapper
+     */
     @Bean
     @Primary
     public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
-
-        // Podpora pro Java 8 Date/Time API
         objectMapper.registerModule(new JavaTimeModule());
-
-        // Zápis dat jako ISO-8601 řetězce namísto číselných polí
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
         return objectMapper;
     }
 }

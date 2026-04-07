@@ -10,15 +10,33 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Globální handler výjimek pro modul menu — loguje a převádí {@link MenuException} na HTTP odpověď.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @RestControllerAdvice
 @Component
 @Slf4j
 public class MenuExceptionHandler extends AppExceptionHandler {
 
+    /**
+     * Vytvoří handler s injektovaným stavitelem chybových odpovědí.
+     *
+     * @param errorResponseBuilder stavitel standardizované chybové odpovědi
+     */
     public MenuExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);
     }
 
+    /**
+     * Zpracuje {@link MenuException} — zaloguje ji dle závažnosti a vrátí standardizovanou chybovou odpověď.
+     *
+     * @param ex      zachycená výjimka menu
+     * @param request aktuální webový požadavek
+     * @return HTTP odpověď s chybovým tělem
+     */
     @ExceptionHandler(MenuException.class)
     public ResponseEntity<ErrorResponse> handleMenuException(MenuException ex, WebRequest request) {
         String uri = extractRequestUri(request);

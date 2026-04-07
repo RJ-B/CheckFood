@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Request pro ověření MFA challenge.
+ * DTO pro ověření MFA přihlašovací výzvy obsahující TOTP nebo záložní kód.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

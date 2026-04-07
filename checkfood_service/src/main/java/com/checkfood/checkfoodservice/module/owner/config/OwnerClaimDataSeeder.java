@@ -13,6 +13,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+/**
+ * Datový seeder pro inicializaci testovací restaurace používané v owner claim flow.
+ * Spouští se při startu aplikace s pořadím 3.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @Component
 @Order(3)
@@ -21,6 +28,11 @@ public class OwnerClaimDataSeeder implements CommandLineRunner {
 
     private final RestaurantRepository restaurantRepository;
 
+    /**
+     * Vytvoří testovací restauraci s IČO 12345678, pokud ještě neexistuje.
+     *
+     * @param args argumenty příkazové řádky (nevyužívány)
+     */
     @Override
     public void run(String... args) {
         if (restaurantRepository.findByIco("12345678").isPresent()) {

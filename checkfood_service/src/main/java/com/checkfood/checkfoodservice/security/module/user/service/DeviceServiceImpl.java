@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service pro správu zařízení uživatelů (Sessions).
+ * Implementace servisní vrstvy pro správu klientských zařízení a jejich relací.
+ * Poskytuje operace pro registraci, aktualizaci, deaktivaci a odstraňování zařízení
+ * s důrazem na bezpečnostní kontroly vlastnictví a konzistentní logování.
  *
- * Verze JDK 21:
- * - Bez auditů.
- * - Logování pouze úspěšných operací.
- * - Konzistentní používání UserException.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Service
 @RequiredArgsConstructor
@@ -43,8 +43,8 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceEntity save(DeviceEntity device) {
         return deviceRepository.findByDeviceIdentifierAndUser(device.getDeviceIdentifier(), device.getUser())
                 .map(existingDevice -> {
-                    // Update existujícího zařízení (Meta data)
                     existingDevice.setLastLogin(LocalDateTime.now());
+                    existingDevice.setActive(true);
                     try {
                         existingDevice.setLastIpAddress(request.getRemoteAddr());
                         existingDevice.setUserAgent(request.getHeader("User-Agent"));
@@ -53,19 +53,15 @@ public class DeviceServiceImpl implements DeviceService {
                     existingDevice.setDeviceName(device.getDeviceName());
                     existingDevice.setDeviceType(device.getDeviceType());
 
-                    // Logovat update není nutné při každém requestu, bylo by to hlučné
                     return deviceRepository.save(existingDevice);
                 })
                 .orElseGet(() -> {
-                    // Registrace nového zařízení
                     try {
                         device.setLastIpAddress(request.getRemoteAddr());
                         device.setUserAgent(request.getHeader("User-Agent"));
                     } catch (Exception ignored) {}
 
                     var saved = deviceRepository.save(device);
-
-                    // Logování úspěchu
                     userLogger.logDeviceRegistered(saved.getDeviceIdentifier(), device.getUser().getEmail());
                     return saved;
                 });
@@ -90,28 +86,34 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<DeviceResponse> findAllUserDevicesWithStatus(String email, String accessToken) {
-        // 1. Získání uživatele
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> UserException.userNotFound(email));
 
-        // 2. Načtení všech relací
-        var devices = deviceRepository.findAllByUser(user);
-
-        // 3. Extrakce ID aktuálního zařízení (pokud selže, vyhodí JwtException, což je OK)
         String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(accessToken);
 
-        // 4. Mapování
+        if (currentDeviceIdentifier != null
+                && !deviceRepository.existsByDeviceIdentifierAndUser(currentDeviceIdentifier, user)) {
+            var newDevice = DeviceEntity.builder()
+                    .deviceIdentifier(currentDeviceIdentifier)
+                    .deviceName("Unknown Device")
+                    .deviceType("UNKNOWN")
+                    .user(user)
+                    .active(true)
+                    .lastLogin(java.time.LocalDateTime.now())
+                    .build();
+            deviceRepository.save(newDevice);
+        }
+
+        var devices = deviceRepository.findAllByUser(user);
+
         return userMapper.toDeviceResponseList(devices, currentDeviceIdentifier);
     }
 
     @Override
     public void deleteByIdentifier(String deviceIdentifier) {
-        // Zde můžeme ověřit existenci, pokud chceme být striktní, ale delete je často idempotentní
         deviceRepository.deleteByDeviceIdentifier(deviceIdentifier);
-
-        // Logování úspěchu (bez kontextu uživatele, pokud ho nemáme po ruce, logujeme jen ID)
         userLogger.logDeviceRemoved(deviceIdentifier, "unknown-user");
     }
 
@@ -120,13 +122,10 @@ public class DeviceServiceImpl implements DeviceService {
         var deviceOpt = deviceRepository.findByDeviceIdentifierAndUser(deviceIdentifier, user);
 
         if (deviceOpt.isEmpty()) {
-            // Vyhazujeme byznys výjimku
             throw UserException.invalidOperation("Zařízení neexistuje nebo nepatří tomuto uživateli.");
         }
 
         deviceRepository.deleteByDeviceIdentifierAndUser(deviceIdentifier, user);
-
-        // Logování úspěchu
         userLogger.logDeviceRemoved(deviceIdentifier, user.getEmail());
     }
 
@@ -134,8 +133,6 @@ public class DeviceServiceImpl implements DeviceService {
     public void removeAllByUser(UserEntity user) {
         long count = deviceRepository.countByUser(user);
         deviceRepository.deleteAllByUser(user);
-
-        // Logování úspěchu
         userLogger.logAllDevicesRemoved(user.getEmail(), (int) count);
     }
 
@@ -147,7 +144,43 @@ public class DeviceServiceImpl implements DeviceService {
         userLogger.logAllDevicesRemoved(user.getEmail(), (int) Math.max(0, count - 1));
     }
 
-    // --- Pomocné metody ---
+    @Override
+    public void deactivateByIdentifierAndUser(String deviceIdentifier, UserEntity user) {
+        var device = deviceRepository.findByDeviceIdentifierAndUser(deviceIdentifier, user)
+                .orElseThrow(() -> UserException.invalidOperation(
+                        "Zařízení neexistuje nebo nepatří tomuto uživateli."));
+
+        device.setActive(false);
+        deviceRepository.save(device);
+
+        userLogger.logDeviceRemoved(deviceIdentifier, user.getEmail());
+    }
+
+    @Override
+    public void deactivateByIdAndUser(Long deviceId, UserEntity user) {
+        var device = deviceRepository.findById(deviceId)
+                .filter(d -> d.getUser().getId().equals(user.getId()))
+                .orElseThrow(() -> UserException.invalidOperation(
+                        "Zařízení s ID " + deviceId + " nebylo nalezeno nebo nepatří tomuto uživateli."));
+
+        device.setActive(false);
+        deviceRepository.save(device);
+
+        userLogger.logDeviceRemoved("ID:" + deviceId, user.getEmail());
+    }
+
+    @Override
+    public void deactivateAllByUserExceptCurrent(UserEntity user, String currentDeviceIdentifier) {
+        var devices = deviceRepository.findAllByUser(user);
+        var toDeactivate = devices.stream()
+                .filter(d -> !d.getDeviceIdentifier().equals(currentDeviceIdentifier))
+                .peek(d -> d.setActive(false))
+                .toList();
+
+        deviceRepository.saveAll(toDeactivate);
+
+        userLogger.logAllDevicesRemoved(user.getEmail(), toDeactivate.size());
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -173,8 +206,6 @@ public class DeviceServiceImpl implements DeviceService {
             throw UserException.invalidOperation("Zařízení s ID " + deviceId + " nebylo nalezeno.");
         }
 
-        // Pro logování si vytáhneme identifier, pokud chceme být precizní (volitelné)
-        // Zde stačí smazat
         deviceRepository.deleteByIdAndUser(deviceId, user);
 
         userLogger.logDeviceRemoved("ID:" + deviceId, user.getEmail());
@@ -191,10 +222,8 @@ public class DeviceServiceImpl implements DeviceService {
         device.setNotificationsEnabled(notificationsEnabled);
 
         if (notificationsEnabled) {
-            // Pri zapnuti: ulozit FCM token
             device.setFcmToken(fcmToken);
         } else {
-            // Pri vypnuti: smazat FCM token (GDPR — neodesílat na deaktivovany token)
             device.setFcmToken(null);
         }
 

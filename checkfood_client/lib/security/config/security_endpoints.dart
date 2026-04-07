@@ -1,7 +1,10 @@
+/// Konstanty URL cest pro všechny backendové REST endpointy.
+///
+/// Cesty jsou relativní vůči `baseUrl` Dio klienta, který již obsahuje `/api`.
+/// Dynamické segmenty jsou generovány metodami (např. [logoutDevice]).
 class SecurityEndpoints {
   SecurityEndpoints._();
 
-  // --- AUTH ---
   static const String login = '/auth/login';
   static const String register = '/auth/register';
   static const String registerOwner = '/auth/register-owner';
@@ -10,58 +13,67 @@ class SecurityEndpoints {
   static const String verifyEmail = '/auth/verify';
   static const String resendVerification = '/auth/resend-code';
 
-  // --- PASSWORD RESET ---
   static const String forgotPassword = '/auth/forgot-password';
   static const String resetPassword = '/auth/reset-password';
 
-  // --- OAUTH ---
   static const String oauthLogin = '/oauth/login';
 
-  // --- PROFILE & USER ---
   static const String profileMe = '/user/me';
   static const String updateProfile = '/user/profile';
   static const String changePassword = '/user/change-password';
 
-  // --- DEVICES ---
   static const String devices = '/user/devices';
   static const String logoutAllDevices = '/user/logout-all';
   static const String deleteAllDevices = '/user/devices/all';
+
+  /// Vrátí cestu pro odhlášení konkrétního zařízení.
   static String logoutDevice(int deviceId) => '/user/devices/$deviceId/logout';
+
+  /// Vrátí cestu pro smazání konkrétního zařízení.
   static String deleteDevice(int deviceId) => '/user/devices/$deviceId';
 
-  // --- OWNER CLAIM ---
-  // Note: Dio baseUrl already includes /api, so paths start from /v1/...
   static const String ownerClaimAres = '/v1/owner/claim/ares';
   static const String ownerClaimBankId = '/v1/owner/claim/bankid';
   static const String ownerClaimEmailStart = '/v1/owner/claim/email/start';
   static const String ownerClaimEmailConfirm = '/v1/owner/claim/email/confirm';
 
-  // --- OWNER ONBOARDING ---
   static const String ownerRestaurant = '/v1/owner/restaurant/me';
   static const String ownerRestaurantInfo = '/v1/owner/restaurant/me/info';
   static const String ownerRestaurantHours = '/v1/owner/restaurant/me/hours';
   static const String ownerRestaurantTables = '/v1/owner/restaurant/me/tables';
+
+  /// Vrátí cestu pro konkrétní stůl restaurace.
   static String ownerRestaurantTable(String id) => '/v1/owner/restaurant/me/tables/$id';
   static const String ownerOnboardingStatus = '/v1/owner/restaurant/me/onboarding-status';
   static const String ownerPublish = '/v1/owner/restaurant/me/publish';
 
-  // --- OWNER MENU ---
   static const String ownerMenu = '/v1/owner/restaurant/me/menu';
   static const String ownerMenuCategories = '/v1/owner/restaurant/me/menu/categories';
+
+  /// Vrátí cestu pro konkrétní kategorii menu.
   static String ownerMenuCategory(String id) => '/v1/owner/restaurant/me/menu/categories/$id';
+
+  /// Vrátí cestu pro položky konkrétní kategorie menu.
   static String ownerMenuCategoryItems(String catId) => '/v1/owner/restaurant/me/menu/categories/$catId/items';
+
+  /// Vrátí cestu pro konkrétní položku menu.
   static String ownerMenuItem(String id) => '/v1/owner/restaurant/me/menu/items/$id';
 
-  // --- OWNER PANORAMA ---
   static const String ownerPanoramaSessions = '/v1/owner/restaurant/me/panorama/sessions';
+
+  /// Vrátí cestu pro konkrétní panoramatickou session.
   static String ownerPanoramaSession(String id) => '/v1/owner/restaurant/me/panorama/sessions/$id';
+
+  /// Vrátí cestu pro nahrávání fotografií do session.
   static String ownerPanoramaPhotos(String sessionId) => '/v1/owner/restaurant/me/panorama/sessions/$sessionId/photos';
+
+  /// Vrátí cestu pro finalizaci panoramatické session.
   static String ownerPanoramaFinalize(String sessionId) => '/v1/owner/restaurant/me/panorama/sessions/$sessionId/finalize';
+
+  /// Vrátí cestu pro aktivaci panoramatu.
   static String ownerPanoramaActivate(String sessionId) => '/v1/owner/restaurant/me/panorama/sessions/$sessionId/activate';
 
-  // --- UPLOADS ---
   static const String upload = '/v1/uploads';
 
-  // --- NOTIFICATIONS ---
   static const String notificationPreference = '/user/devices/notifications';
 }

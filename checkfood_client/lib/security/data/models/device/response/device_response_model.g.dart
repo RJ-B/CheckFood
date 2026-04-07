@@ -18,6 +18,7 @@ _$DeviceResponseModelImpl _$$DeviceResponseModelImplFromJson(
           ? null
           : DateTime.parse(json['lastLogin'] as String),
   isCurrentDevice: json['currentDevice'] as bool? ?? false,
+  active: json['active'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$$DeviceResponseModelImplToJson(
@@ -29,4 +30,5 @@ Map<String, dynamic> _$$DeviceResponseModelImplToJson(
   'deviceIdentifier': instance.deviceIdentifier,
   'lastLogin': instance.lastLogin?.toIso8601String(),
   'currentDevice': instance.isCurrentDevice,
+  'active': instance.active,
 };

@@ -7,6 +7,7 @@ import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 
+/// Onboarding step 3: form for adding and removing tables from the restaurant's seating plan.
 class StepTablesForm extends StatefulWidget {
   const StepTablesForm({super.key});
 
@@ -14,6 +15,7 @@ class StepTablesForm extends StatefulWidget {
   State<StepTablesForm> createState() => _StepTablesFormState();
 }
 
+/// State for [StepTablesForm]: triggers the initial table load and shows the add-table dialog.
 class _StepTablesFormState extends State<StepTablesForm> {
   bool _loaded = false;
 

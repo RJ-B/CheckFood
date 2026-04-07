@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../domain/entities/pending_change.dart';
 import '../../domain/entities/reservation.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
+/// A card showing reservation details (restaurant, table, date/time, party size, status)
+/// along with optional edit, cancel, and recurring-booking action buttons.
+/// Displays a [_PendingChangeBanner] above the card when a staff change proposal is pending.
 class ReservationCard extends StatelessWidget {
   final Reservation reservation;
   final bool isCancelling;
   final VoidCallback? onEdit;
   final VoidCallback? onCancel;
+  final PendingChange? pendingChange;
+  final bool isPendingChangeLoading;
+  final VoidCallback? onAcceptChange;
+  final VoidCallback? onDeclineChange;
+  final VoidCallback? onCreateRecurring;
 
   const ReservationCard({
     super.key,
@@ -16,6 +25,11 @@ class ReservationCard extends StatelessWidget {
     required this.isCancelling,
     this.onEdit,
     this.onCancel,
+    this.pendingChange,
+    this.isPendingChangeLoading = false,
+    this.onAcceptChange,
+    this.onDeclineChange,
+    this.onCreateRecurring,
   });
 
   @override
@@ -23,104 +37,120 @@ class ReservationCard extends StatelessWidget {
     final l = S.of(context);
     final showActions = (reservation.canEdit || reservation.canCancel);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Restaurant name + status chip
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    reservation.restaurantName ?? l.restaurant,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                _StatusChip(status: reservation.status),
-              ],
-            ),
-            const SizedBox(height: 8),
-
-            // Table + party size
-            Row(
-              children: [
-                const Icon(Icons.table_restaurant, size: 16, color: AppColors.textMuted),
-                const SizedBox(width: 4),
-                Text(
-                  reservation.tableLabel ?? l.table,
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
-                ),
-                const SizedBox(width: 16),
-                const Icon(Icons.people, size: 16, color: AppColors.textMuted),
-                const SizedBox(width: 4),
-                Text(
-                  l.partySizeShort(reservation.partySize),
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-
-            // Date + time
-            Row(
-              children: [
-                const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
-                const SizedBox(width: 4),
-                Text(
-                  reservation.endTime != null
-                      ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
-                      : '${_formatDate(reservation.date)}  ${l.timeFrom(_formatTime(reservation.startTime))}',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
-                ),
-              ],
-            ),
-
-            // Action buttons — driven by backend canEdit/canCancel flags
-            if (showActions) ...[
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (reservation.canEdit && onEdit != null)
-                    TextButton.icon(
-                      onPressed: onEdit,
-                      icon: const Icon(Icons.edit, size: 18),
-                      label: Text(l.edit),
-                    ),
-                  if (reservation.canCancel && onCancel != null) ...[
-                    if (isCancelling)
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
-                    else
-                      TextButton.icon(
-                        onPressed: onCancel,
-                        icon: const Icon(Icons.cancel_outlined, size: 18),
-                        label: Text(l.cancel),
-                        style: TextButton.styleFrom(foregroundColor: AppColors.error),
-                      ),
-                  ],
-                ],
-              ),
-            ],
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (pendingChange != null) _PendingChangeBanner(
+          pendingChange: pendingChange!,
+          isLoading: isPendingChangeLoading,
+          onAccept: onAcceptChange,
+          onDecline: onDeclineChange,
+          l: l,
         ),
-      ),
+        Card(
+          margin: const EdgeInsets.only(bottom: 10),
+          elevation: 1,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        reservation.restaurantName ?? l.restaurant,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    _StatusChip(status: reservation.status),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                Row(
+                  children: [
+                    const Icon(Icons.table_restaurant, size: 16, color: AppColors.textMuted),
+                    const SizedBox(width: 4),
+                    Text(
+                      reservation.tableLabel ?? l.table,
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    ),
+                    const SizedBox(width: 16),
+                    const Icon(Icons.people, size: 16, color: AppColors.textMuted),
+                    const SizedBox(width: 4),
+                    Text(
+                      l.partySizeShort(reservation.partySize),
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+
+                Row(
+                  children: [
+                    const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
+                    const SizedBox(width: 4),
+                    Text(
+                      reservation.endTime != null
+                          ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
+                          : '${_formatDate(reservation.date)}  ${l.timeFrom(_formatTime(reservation.startTime))}',
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    ),
+                  ],
+                ),
+
+                if (showActions) ...[
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (reservation.canEdit && onEdit != null)
+                        TextButton.icon(
+                          onPressed: onEdit,
+                          icon: const Icon(Icons.edit, size: 18),
+                          label: Text(l.edit),
+                        ),
+                      if (reservation.canCancel && onCancel != null) ...[
+                        if (isCancelling)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          )
+                        else
+                          TextButton.icon(
+                            onPressed: onCancel,
+                            icon: const Icon(Icons.cancel_outlined, size: 18),
+                            label: Text(l.cancel),
+                            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+                          ),
+                      ],
+                      if (onCreateRecurring != null)
+                        TextButton.icon(
+                          onPressed: onCreateRecurring,
+                          icon: const Icon(Icons.repeat, size: 18),
+                          label: const Text('Opakovat'),
+                          style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+                        ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -131,13 +161,124 @@ class ReservationCard extends StatelessWidget {
   }
 
   String _formatTime(String time) {
-    // Remove seconds if present (e.g., "18:00:00" → "18:00")
     final parts = time.split(':');
     if (parts.length >= 2) return '${parts[0]}:${parts[1]}';
     return time;
   }
 }
 
+/// A warning banner displayed above a reservation card when the restaurant
+/// has proposed a time or table change that requires the guest's response.
+class _PendingChangeBanner extends StatelessWidget {
+  final PendingChange pendingChange;
+  final bool isLoading;
+  final VoidCallback? onAccept;
+  final VoidCallback? onDecline;
+  final S l;
+
+  const _PendingChangeBanner({
+    required this.pendingChange,
+    required this.isLoading,
+    required this.onAccept,
+    required this.onDecline,
+    required this.l,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.warning.withValues(alpha: 0.10),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+        border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.edit_notifications_outlined,
+                  size: 16, color: AppColors.warning),
+              const SizedBox(width: 6),
+              Text(
+                l.restaurantProposesChange,
+                style: const TextStyle(
+                  color: AppColors.warning,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+          if (pendingChange.proposedStartTime != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              l.proposedNewTime(pendingChange.proposedStartTime!),
+              style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+            ),
+          ],
+          if (pendingChange.proposedTableLabel != null) ...[
+            const SizedBox(height: 2),
+            Text(
+              l.proposedNewTable(pendingChange.proposedTableLabel!),
+              style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+            ),
+          ],
+          const SizedBox(height: 8),
+          if (isLoading)
+            const Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+          else
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: onAccept,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.success,
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                    ),
+                    child: Text(l.acceptChange,
+                        style: const TextStyle(fontSize: 13)),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: onDecline,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.error,
+                      side: const BorderSide(color: AppColors.error),
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                    ),
+                    child: Text(l.declineChange,
+                        style: const TextStyle(fontSize: 13)),
+                  ),
+                ),
+              ],
+            ),
+          const SizedBox(height: 4),
+          Text(
+            l.declineWarning,
+            style: TextStyle(
+              fontSize: 11,
+              color: AppColors.error.withValues(alpha: 0.8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A small coloured badge that reflects the reservation's current status.
 class _StatusChip extends StatelessWidget {
   final String status;
 

@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 /**
- * DTO pro přiřazení role uživateli.
- * Používá se v administrativním rozhraní pro správu přístupových práv.
+ * DTO pro přiřazení role uživateli v administrativním rozhraní.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

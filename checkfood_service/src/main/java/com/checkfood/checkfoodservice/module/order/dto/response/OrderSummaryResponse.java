@@ -9,6 +9,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Zkrácený response DTO objednávky pro seznam aktivních objednávek zákazníka.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

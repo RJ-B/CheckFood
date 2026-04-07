@@ -14,6 +14,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * Aktivuje asynchronní zpracování auditních událostí, plánované úlohy pro údržbu
  * auditních záznamů a načítání konfiguračních vlastností z {@link AuditProperties}.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditProperties
  */
 @Configuration

@@ -5,16 +5,21 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Reaguje na úspěšné dokončení jobu.
+ * Posluchač doménové události úspěšného dokončení scheduler jobu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class JobFinishedListener {
 
+    /**
+     * Zpracuje událost dokončení jobu.
+     *
+     * @param event událost s názvem dokončeného jobu
+     */
     @EventListener
     public void onJobFinished(JobFinishedEvent event) {
-
-        // TODO:
-        // - log dokončení
-        // - audit běhu jobu
+        // TODO: log dokončení, audit běhu jobu
     }
 }

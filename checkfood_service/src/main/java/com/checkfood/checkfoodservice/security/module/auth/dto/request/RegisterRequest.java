@@ -53,4 +53,17 @@ public class RegisterRequest {
     @NotBlank(message = "Heslo nesmí být prázdné.")
     @Size(min = 8, max = 64, message = "Heslo musí mít 8 až 64 znaků.")
     private String password;
+
+    /**
+     * Příznak pro registraci jako majitel restaurace.
+     * Pokud true, uživatel dostane roli OWNER a je mu vytvořena zkušební restaurace (TRIAL).
+     */
+    @Builder.Default
+    private boolean ownerRegistration = false;
+
+    /** GPS šířka pro umístění zkušební restaurace (volitelné, jen pro owner registraci) */
+    private Double latitude;
+
+    /** GPS délka pro umístění zkušební restaurace (volitelné, jen pro owner registraci) */
+    private Double longitude;
 }

@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'device.freezed.dart';
 
+/// Doménová entita představující přihlášené zařízení uživatele.
 @freezed
 class Device with _$Device {
   const factory Device({
@@ -11,5 +12,6 @@ class Device with _$Device {
     required String deviceIdentifier,
     required DateTime lastLogin,
     required bool isCurrentDevice,
+    @Default(true) bool isActive,
   }) = _Device;
 }

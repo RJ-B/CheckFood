@@ -5,6 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Požadavek na vyhledání restaurace v registru ARES podle IČO.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor

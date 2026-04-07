@@ -7,6 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Response DTO obsahující detail jedné položky objednávky včetně ceny a množství.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

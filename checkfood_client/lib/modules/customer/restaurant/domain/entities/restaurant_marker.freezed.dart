@@ -28,6 +28,12 @@ mixin _$RestaurantMarker {
   /// >1 = shluk
   int get count => throw _privateConstructorUsedError;
 
+  /// Název restaurace — zobrazuje se pod markerem jako label.
+  String? get name => throw _privateConstructorUsedError;
+
+  /// URL loga restaurace — používá se pro avatar v markeru.
+  String? get logoUrl => throw _privateConstructorUsedError;
+
   /// Create a copy of RestaurantMarker
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -42,7 +48,14 @@ abstract class $RestaurantMarkerCopyWith<$Res> {
     $Res Function(RestaurantMarker) then,
   ) = _$RestaurantMarkerCopyWithImpl<$Res, RestaurantMarker>;
   @useResult
-  $Res call({String? id, double latitude, double longitude, int count});
+  $Res call({
+    String? id,
+    double latitude,
+    double longitude,
+    int count,
+    String? name,
+    String? logoUrl,
+  });
 }
 
 /// @nodoc
@@ -64,6 +77,8 @@ class _$RestaurantMarkerCopyWithImpl<$Res, $Val extends RestaurantMarker>
     Object? latitude = null,
     Object? longitude = null,
     Object? count = null,
+    Object? name = freezed,
+    Object? logoUrl = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -87,6 +102,16 @@ class _$RestaurantMarkerCopyWithImpl<$Res, $Val extends RestaurantMarker>
                     ? _value.count
                     : count // ignore: cast_nullable_to_non_nullable
                         as int,
+            name:
+                freezed == name
+                    ? _value.name
+                    : name // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            logoUrl:
+                freezed == logoUrl
+                    ? _value.logoUrl
+                    : logoUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -102,7 +127,14 @@ abstract class _$$RestaurantMarkerImplCopyWith<$Res>
   ) = __$$RestaurantMarkerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? id, double latitude, double longitude, int count});
+  $Res call({
+    String? id,
+    double latitude,
+    double longitude,
+    int count,
+    String? name,
+    String? logoUrl,
+  });
 }
 
 /// @nodoc
@@ -123,6 +155,8 @@ class __$$RestaurantMarkerImplCopyWithImpl<$Res>
     Object? latitude = null,
     Object? longitude = null,
     Object? count = null,
+    Object? name = freezed,
+    Object? logoUrl = freezed,
   }) {
     return _then(
       _$RestaurantMarkerImpl(
@@ -146,6 +180,16 @@ class __$$RestaurantMarkerImplCopyWithImpl<$Res>
                 ? _value.count
                 : count // ignore: cast_nullable_to_non_nullable
                     as int,
+        name:
+            freezed == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        logoUrl:
+            freezed == logoUrl
+                ? _value.logoUrl
+                : logoUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -159,6 +203,8 @@ class _$RestaurantMarkerImpl extends _RestaurantMarker {
     required this.latitude,
     required this.longitude,
     required this.count,
+    this.name,
+    this.logoUrl,
   }) : super._();
 
   /// ID je null, pokud se jedná o shluk (cluster).
@@ -176,9 +222,17 @@ class _$RestaurantMarkerImpl extends _RestaurantMarker {
   @override
   final int count;
 
+  /// Název restaurace — zobrazuje se pod markerem jako label.
+  @override
+  final String? name;
+
+  /// URL loga restaurace — používá se pro avatar v markeru.
+  @override
+  final String? logoUrl;
+
   @override
   String toString() {
-    return 'RestaurantMarker(id: $id, latitude: $latitude, longitude: $longitude, count: $count)';
+    return 'RestaurantMarker(id: $id, latitude: $latitude, longitude: $longitude, count: $count, name: $name, logoUrl: $logoUrl)';
   }
 
   @override
@@ -191,11 +245,14 @@ class _$RestaurantMarkerImpl extends _RestaurantMarker {
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
-            (identical(other.count, count) || other.count == count));
+            (identical(other.count, count) || other.count == count) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, latitude, longitude, count);
+  int get hashCode =>
+      Object.hash(runtimeType, id, latitude, longitude, count, name, logoUrl);
 
   /// Create a copy of RestaurantMarker
   /// with the given fields replaced by the non-null parameter values.
@@ -215,6 +272,8 @@ abstract class _RestaurantMarker extends RestaurantMarker {
     required final double latitude,
     required final double longitude,
     required final int count,
+    final String? name,
+    final String? logoUrl,
   }) = _$RestaurantMarkerImpl;
   const _RestaurantMarker._() : super._();
 
@@ -232,6 +291,14 @@ abstract class _RestaurantMarker extends RestaurantMarker {
   /// >1 = shluk
   @override
   int get count;
+
+  /// Název restaurace — zobrazuje se pod markerem jako label.
+  @override
+  String? get name;
+
+  /// URL loga restaurace — používá se pro avatar v markeru.
+  @override
+  String? get logoUrl;
 
   /// Create a copy of RestaurantMarker
   /// with the given fields replaced by the non-null parameter values.

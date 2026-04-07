@@ -24,5 +24,6 @@ class Restaurant with _$Restaurant {
     required List<OpeningHours> openingHours,
     @Default([]) List<String> tags,
     @Default(false) bool isFavourite,
+    @Default([]) List<Map<String, dynamic>> specialDays,
   }) = _Restaurant;
 }

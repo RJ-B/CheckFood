@@ -4,18 +4,13 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Konfigurace feature-flag subsystému.
+ * Zapíná feature management v aplikaci a registruje resolvery feature flagů.
  *
- * Tato třída:
- * - zapíná feature management v aplikaci
- * - registruje resolvery feature flagů
- *
- *   Neobsahuje business logiku
- *   Neobsahuje rozhodování o chování aplikace
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 public class FeatureConfig {
 
-    // TODO:
-    // - registrace dostupných FeatureResolver implementací
-    // - případné priority resolverů
+    // TODO: registrace dostupných FeatureResolver implementací, případné priority resolverů
 }

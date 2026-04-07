@@ -1,5 +1,6 @@
 import '../../repositories/profile_repository.dart';
 
+/// UseCase pro vzdálené odhlášení všech zařízení kromě aktuálního.
 class LogoutAllDevicesUseCase {
   final ProfileRepository _repository;
 

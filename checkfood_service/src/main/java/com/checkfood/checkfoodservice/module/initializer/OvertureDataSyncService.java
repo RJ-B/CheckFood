@@ -23,6 +23,14 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Služba pro synchronizaci dat restaurací z Overture Maps pomocí DuckDB a S3 Parquet souborů.
+ * Provádí upsert (vložení nových + aktualizace existujících) a soft-delete zaniklých podniků.
+ * Nespouští se v testovacím profilu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,6 +44,9 @@ public class OvertureDataSyncService {
     @Value("${overture.release.path:s3://overturemaps-us-west-2/release/2026-*/theme=places/type=place/*.parquet}")
     private String overturePath;
 
+    /**
+     * Pravidelná synchronizace dat spouštěná každé pondělí ve 3:00.
+     */
     @Scheduled(cron = "0 0 3 * * MON")
     @Transactional
     public void scheduledSync() {
@@ -43,11 +54,14 @@ public class OvertureDataSyncService {
         syncRestaurantsFromOverture();
     }
 
+    /**
+     * Provede synchronizaci dat restaurací z Overture Maps Parquet souborů přes DuckDB.
+     * Nové záznamy jsou vloženy, existující aktualizovány, zaniklé deaktivovány.
+     */
     @Transactional
     public void syncRestaurantsFromOverture() {
         log.info("Zahajuji synchronizaci dat z Overture Maps (Upsert strategie)...");
 
-        // Zaznamenání času pro následný Soft-Delete zaniklých podniků
         final LocalDateTime syncStartTime = LocalDateTime.now();
         int totalProcessed = 0;
 
@@ -80,7 +94,6 @@ public class OvertureDataSyncService {
                     while (rs.next()) {
                         batch.add(mapToTransientEntity(rs));
 
-                        // Zpracování v dávkách pro minimalizaci zátěže paměti a sítě
                         if (batch.size() >= 1000) {
                             processBatch(batch);
                             totalProcessed += batch.size();
@@ -89,7 +102,6 @@ public class OvertureDataSyncService {
                         }
                     }
 
-                    // Zpracování zbytku dat
                     if (!batch.isEmpty()) {
                         processBatch(batch);
                         totalProcessed += batch.size();
@@ -97,7 +109,6 @@ public class OvertureDataSyncService {
 
                     log.info("Import dat dokončen. Celkem zpracováno {} restaurací. Zahajuji proces Soft-Delete.", totalProcessed);
 
-                    // Provedení hromadné deaktivace těch podniků, které v aktuálním exportu chybí
                     if (totalProcessed > 0) {
                         int deactivatedCount = restaurantRepository.deactivateObsoleteOvertureRestaurants(syncStartTime);
                         log.info("Deaktivováno {} zaniklých podniků.", deactivatedCount);
@@ -113,12 +124,10 @@ public class OvertureDataSyncService {
     }
 
     private void processBatch(List<Restaurant> incomingBatch) {
-        // Získání Overture identifikátorů pro aktuální dávku
         Set<String> overtureIds = incomingBatch.stream()
                 .map(Restaurant::getOvertureId)
                 .collect(Collectors.toSet());
 
-        // Hromadné načtení existujících entit z databáze
         Map<String, Restaurant> existingRestaurants = restaurantRepository.findByOvertureIdIn(overtureIds).stream()
                 .collect(Collectors.toMap(Restaurant::getOvertureId, r -> r));
 
@@ -128,17 +137,15 @@ public class OvertureDataSyncService {
             Restaurant existing = existingRestaurants.get(incoming.getOvertureId());
 
             if (existing != null) {
-                // UPDATE: Aktualizace měnících se dat, zachování interních aplikací (rating atd.)
                 existing.setName(incoming.getName());
                 existing.setCuisineType(incoming.getCuisineType());
                 existing.setAddress(incoming.getAddress());
                 existing.setTags(incoming.getTags());
                 existing.setActive(true);
                 existing.setStatus(RestaurantStatus.ACTIVE);
-                existing.setUpdatedAt(LocalDateTime.now()); // Zabrání následnému Soft-Delete
+                existing.setUpdatedAt(LocalDateTime.now());
                 entitiesToSave.add(existing);
             } else {
-                // INSERT: Zcela nový záznam
                 incoming.setUpdatedAt(LocalDateTime.now());
                 entitiesToSave.add(incoming);
             }
@@ -201,7 +208,6 @@ public class OvertureDataSyncService {
                     .build());
         }
 
-        // Využití String.format místo spojování (+)
         String description = String.format("Importováno z Overture Maps (%s)", category);
 
         return Restaurant.builder()
@@ -215,7 +221,6 @@ public class OvertureDataSyncService {
                 .status(RestaurantStatus.ACTIVE)
                 .active(true)
                 .openingHours(hours)
-                // Nahrazení Arrays.asList moderním List.of
                 .tags(new HashSet<>(List.of(cuisineType.name().toLowerCase())))
                 .build();
     }

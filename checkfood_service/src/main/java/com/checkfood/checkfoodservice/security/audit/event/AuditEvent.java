@@ -8,6 +8,8 @@ import org.springframework.context.ApplicationEvent;
  * Spring ApplicationEvent reprezentující bezpečnostní akci v systému.
  * Slouží pro asynchronní zpracování auditních událostí prostřednictvím event publishingu.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditAction
  * @see AuditStatus
  */

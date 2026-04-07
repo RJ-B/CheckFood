@@ -12,6 +12,8 @@ import java.time.Instant;
  * DTO pro přenos auditního záznamu v API odpovědích.
  * Obsahuje základní informace o auditované akci a jejím kontextu.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditAction
  * @see AuditStatus
  */

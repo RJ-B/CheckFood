@@ -2,8 +2,10 @@ package com.checkfood.checkfoodservice.module.dining.service;
 
 import com.checkfood.checkfoodservice.module.dining.config.DiningContextProperties;
 import com.checkfood.checkfoodservice.module.dining.dto.response.DiningContextResponse;
+import com.checkfood.checkfoodservice.module.dining.entity.DiningSessionStatus;
 import com.checkfood.checkfoodservice.module.dining.exception.DiningContextException;
 import com.checkfood.checkfoodservice.module.dining.logging.DiningContextLogger;
+import com.checkfood.checkfoodservice.module.dining.repository.DiningSessionRepository;
 import com.checkfood.checkfoodservice.module.reservation.entity.Reservation;
 import com.checkfood.checkfoodservice.module.reservation.repository.ReservationRepository;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.OpeningHours;
@@ -22,6 +24,13 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementace {@link DiningContextService} určující aktivní kontext stravování uživatele
+ * na základě rezervací v časovém okně grace periody a případného aktivního skupinového sezení.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,6 +39,7 @@ public class DiningContextServiceImpl implements DiningContextService {
     private final ReservationRepository reservationRepository;
     private final RestaurantRepository restaurantRepository;
     private final RestaurantTableRepository restaurantTableRepository;
+    private final DiningSessionRepository diningSessionRepository;
     private final DiningContextProperties properties;
     private final DiningContextLogger logger;
     private final Clock clock;
@@ -72,7 +82,7 @@ public class DiningContextServiceImpl implements DiningContextService {
 
         logger.logContextResolved(userId, reservation.getId());
 
-        // Open-ended model: if endTime is null, use restaurant closing time as validTo
+        // Pokud endTime není zadán, použijeme zavírací čas restaurace jako validTo (open-ended model)
         LocalTime validToTime;
         if (reservation.getEndTime() != null) {
             validToTime = reservation.getEndTime();
@@ -87,12 +97,18 @@ public class DiningContextServiceImpl implements DiningContextService {
                     .orElse(LocalTime.of(23, 59));
         }
 
+        var sessionId = diningSessionRepository.findByReservationIdAndStatus(
+                reservation.getId(), DiningSessionStatus.ACTIVE)
+                .map(s -> s.getId())
+                .or(() -> diningSessionRepository.findActiveByUserId(userId).map(s -> s.getId()))
+                .orElse(null);
+
         DiningContextResponse response = DiningContextResponse.builder()
                 .restaurantId(reservation.getRestaurantId())
                 .tableId(reservation.getTableId())
                 .reservationId(reservation.getId())
-                .sessionId(null)
-                .contextType("RESERVATION")
+                .sessionId(sessionId)
+                .contextType(sessionId != null ? "SESSION" : "RESERVATION")
                 .restaurantName(restaurantName)
                 .tableLabel(tableLabel)
                 .validFrom(LocalDateTime.of(reservation.getDate(), reservation.getStartTime()))

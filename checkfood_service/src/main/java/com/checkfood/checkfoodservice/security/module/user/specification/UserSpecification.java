@@ -5,10 +5,10 @@ import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
- * Utility třída poskytující dynamické JPA Specification filtry pro uživatele.
- * Používá se v kombinaci s Spring Data JPA pro flexibilní dotazování s možností kombinace filtrů.
- * Umožňuje vytváření složitých dotazů bez psaní vlastních JPQL queries.
+ * Utility třída poskytující kompozitelné JPA Specification filtry pro dynamické dotazování uživatelů.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see UserEntity
  * @see Specification
  */

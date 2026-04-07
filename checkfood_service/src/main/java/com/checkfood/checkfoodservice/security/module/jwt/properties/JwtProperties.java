@@ -7,8 +7,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * Konfigurační properties pro JWT modul.
- * Načítá hodnoty z application.properties s prefixem "security.jwt".
- * Definuje parametry pro generování a validaci JWT tokenů.
+ * Načítá hodnoty z application.properties s prefixem {@code security.jwt}
+ * a definuje parametry pro generování a validaci JWT tokenů.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

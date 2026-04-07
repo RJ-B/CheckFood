@@ -9,6 +9,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+/**
+ * Request DTO pro úpravu existující rezervace zákazníkem.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -21,11 +21,13 @@ import java.time.Instant;
 import java.util.stream.Collectors;
 
 /**
- * Implementace JWT servisu (JDK 21).
+ * Implementace JWT servisu zajišťující generování, validaci, extrakci a rotaci JWT tokenů.
+ * Používá Spring Security OAuth2 JWT infrastrukturu s HS256 algoritmem.
  *
- * Oprava:
- * - Implementována chybějící metoda isRefreshToken(String token).
- * - Sjednocená logika pro kontrolu typu tokenu.
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see JwtService
+ * @see JwtProperties
  */
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,9 @@ public class JwtServiceImpl implements JwtService {
     private JwtEncoder jwtEncoder;
     private JwtDecoder jwtDecoder;
 
+    /**
+     * Inicializuje JwtEncoder a JwtDecoder po sestavení beanu z konfiguračních properties.
+     */
     @PostConstruct
     private void init() {
         byte[] keyBytes = jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8);
@@ -117,7 +122,6 @@ public class JwtServiceImpl implements JwtService {
             throw JwtException.invalidToken(e.getMessage());
         }
 
-        // Kontrola typu tokenu pomocí privátní pomocné metody
         if (!isRefreshTokenInternal(jwt)) {
             throw JwtException.invalidToken("Byl použit Access Token místo Refresh Tokenu");
         }
@@ -202,7 +206,6 @@ public class JwtServiceImpl implements JwtService {
         return jwtProperties.getAccessTokenExpirationSeconds();
     }
 
-    // ✅ IMPLEMENTACE CHYBĚJÍCÍ METODY Z INTERFACE
     @Override
     public boolean isRefreshToken(String token) {
         try {
@@ -212,8 +215,6 @@ public class JwtServiceImpl implements JwtService {
             return false;
         }
     }
-
-    // --- Private Helpers ---
 
     private boolean isRefreshTokenInternal(Jwt jwt) {
         String type = jwt.getClaim(CLAIM_TYPE);

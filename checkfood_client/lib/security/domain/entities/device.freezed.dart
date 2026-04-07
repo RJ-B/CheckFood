@@ -23,6 +23,7 @@ mixin _$Device {
   String get deviceIdentifier => throw _privateConstructorUsedError;
   DateTime get lastLogin => throw _privateConstructorUsedError;
   bool get isCurrentDevice => throw _privateConstructorUsedError;
+  bool get isActive => throw _privateConstructorUsedError;
 
   /// Create a copy of Device
   /// with the given fields replaced by the non-null parameter values.
@@ -42,6 +43,7 @@ abstract class $DeviceCopyWith<$Res> {
     String deviceIdentifier,
     DateTime lastLogin,
     bool isCurrentDevice,
+    bool isActive,
   });
 }
 
@@ -66,6 +68,7 @@ class _$DeviceCopyWithImpl<$Res, $Val extends Device>
     Object? deviceIdentifier = null,
     Object? lastLogin = null,
     Object? isCurrentDevice = null,
+    Object? isActive = null,
   }) {
     return _then(
       _value.copyWith(
@@ -99,6 +102,11 @@ class _$DeviceCopyWithImpl<$Res, $Val extends Device>
                     ? _value.isCurrentDevice
                     : isCurrentDevice // ignore: cast_nullable_to_non_nullable
                         as bool,
+            isActive:
+                null == isActive
+                    ? _value.isActive
+                    : isActive // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -120,6 +128,7 @@ abstract class _$$DeviceImplCopyWith<$Res> implements $DeviceCopyWith<$Res> {
     String deviceIdentifier,
     DateTime lastLogin,
     bool isCurrentDevice,
+    bool isActive,
   });
 }
 
@@ -143,6 +152,7 @@ class __$$DeviceImplCopyWithImpl<$Res>
     Object? deviceIdentifier = null,
     Object? lastLogin = null,
     Object? isCurrentDevice = null,
+    Object? isActive = null,
   }) {
     return _then(
       _$DeviceImpl(
@@ -176,6 +186,11 @@ class __$$DeviceImplCopyWithImpl<$Res>
                 ? _value.isCurrentDevice
                 : isCurrentDevice // ignore: cast_nullable_to_non_nullable
                     as bool,
+        isActive:
+            null == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -191,6 +206,7 @@ class _$DeviceImpl implements _Device {
     required this.deviceIdentifier,
     required this.lastLogin,
     required this.isCurrentDevice,
+    this.isActive = true,
   });
 
   @override
@@ -205,10 +221,13 @@ class _$DeviceImpl implements _Device {
   final DateTime lastLogin;
   @override
   final bool isCurrentDevice;
+  @override
+  @JsonKey()
+  final bool isActive;
 
   @override
   String toString() {
-    return 'Device(id: $id, deviceName: $deviceName, deviceType: $deviceType, deviceIdentifier: $deviceIdentifier, lastLogin: $lastLogin, isCurrentDevice: $isCurrentDevice)';
+    return 'Device(id: $id, deviceName: $deviceName, deviceType: $deviceType, deviceIdentifier: $deviceIdentifier, lastLogin: $lastLogin, isCurrentDevice: $isCurrentDevice, isActive: $isActive)';
   }
 
   @override
@@ -226,7 +245,9 @@ class _$DeviceImpl implements _Device {
             (identical(other.lastLogin, lastLogin) ||
                 other.lastLogin == lastLogin) &&
             (identical(other.isCurrentDevice, isCurrentDevice) ||
-                other.isCurrentDevice == isCurrentDevice));
+                other.isCurrentDevice == isCurrentDevice) &&
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive));
   }
 
   @override
@@ -238,6 +259,7 @@ class _$DeviceImpl implements _Device {
     deviceIdentifier,
     lastLogin,
     isCurrentDevice,
+    isActive,
   );
 
   /// Create a copy of Device
@@ -257,6 +279,7 @@ abstract class _Device implements Device {
     required final String deviceIdentifier,
     required final DateTime lastLogin,
     required final bool isCurrentDevice,
+    final bool isActive,
   }) = _$DeviceImpl;
 
   @override
@@ -271,6 +294,8 @@ abstract class _Device implements Device {
   DateTime get lastLogin;
   @override
   bool get isCurrentDevice;
+  @override
+  bool get isActive;
 
   /// Create a copy of Device
   /// with the given fields replaced by the non-null parameter values.

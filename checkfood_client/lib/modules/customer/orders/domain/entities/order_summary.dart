@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'order_summary.freezed.dart';
 
+/// A lightweight summary of a placed order, including status and total price.
 @freezed
 class OrderSummary with _$OrderSummary {
   const OrderSummary._();
@@ -13,6 +14,7 @@ class OrderSummary with _$OrderSummary {
     required String currency,
     required int itemCount,
     required String createdAt,
+    String? paymentStatus,
   }) = _OrderSummary;
 
   String get formattedTotal {

@@ -24,7 +24,6 @@ class AuthValidators {
       return 'Heslo musí mít alespoň 8 znaků';
     }
 
-    // Zde můžeš přidat další pravidla (číslice, velká písmena atd.)
     return null;
   }
 

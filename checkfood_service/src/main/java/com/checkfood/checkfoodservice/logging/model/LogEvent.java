@@ -3,11 +3,10 @@ package com.checkfood.checkfoodservice.logging.model;
 import java.time.Instant;
 
 /**
- * Strukturovaný logovací záznam.
+ * Strukturovaný logovací záznam pro JSON logy a centralizované logování (ELK, GCP).
  *
- * Používá se pro:
- * - JSON logy
- * - centralizované logování (ELK, GCP)
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class LogEvent {
 

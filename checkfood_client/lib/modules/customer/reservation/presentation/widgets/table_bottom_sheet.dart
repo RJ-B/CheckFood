@@ -7,6 +7,8 @@ import '../../presentation/bloc/reservation_event.dart';
 import '../../presentation/bloc/reservation_state.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
+/// Bottom sheet shown after a table is tapped in the panorama view,
+/// allowing the user to select a time slot and party size before confirming the reservation.
 class TableBottomSheet extends StatelessWidget {
   const TableBottomSheet({super.key});
 
@@ -15,17 +17,17 @@ class TableBottomSheet extends StatelessWidget {
     return BlocBuilder<ReservationBloc, ReservationState>(
       builder: (context, state) {
         final l = S.of(context);
+        final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
         return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          padding: EdgeInsets.fromLTRB(20, 12, 20, 24 + bottomPadding),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Drag handle
               Center(
                 child: Container(
                   width: 40,
@@ -38,7 +40,6 @@ class TableBottomSheet extends StatelessWidget {
                 ),
               ),
 
-              // Table header
               Text(
                 state.selectedTableLabel ?? l.table,
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -54,7 +55,6 @@ class TableBottomSheet extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Party size selector
               Row(
                 children: [
                   Text(
@@ -91,7 +91,6 @@ class TableBottomSheet extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Time slots
               Text(
                 l.freeTimes,
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
@@ -126,7 +125,6 @@ class TableBottomSheet extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Confirm button
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -163,7 +161,6 @@ class TableBottomSheet extends StatelessWidget {
                 ),
               ),
 
-              // Error messages
               if (state.submitConflict)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -190,8 +187,7 @@ class TableBottomSheet extends StatelessWidget {
   }
 }
 
-// ── Time Slots Grid ──────────────────────────────────────────────────────
-
+/// A wrapping grid of tappable time-slot tiles showing start times.
 class _TimeSlotsGrid extends StatelessWidget {
   final List<String> slots;
   final int durationMinutes;
@@ -212,7 +208,6 @@ class _TimeSlotsGrid extends StatelessWidget {
       runSpacing: 8,
       children: slots.map((time) {
         final isSelected = time == selectedTime;
-        // Show HH:mm (strip seconds if present)
         final display = time.length > 5 ? time.substring(0, 5) : time;
 
         return GestureDetector(

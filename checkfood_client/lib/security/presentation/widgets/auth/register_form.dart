@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../validators/auth_validators.dart';
@@ -9,6 +10,9 @@ import '../../bloc/auth/auth_state.dart';
 import '../../../domain/usecases/auth/params/auth_params.dart';
 import 'password_strength_indicator.dart';
 
+/// Formulář pro registraci nového uživatele.
+///
+/// Volitelně přijímá [onSubmit] callback; pokud není zadán, odesílá událost přímo do [AuthBloc].
 class RegisterForm extends StatefulWidget {
   final void Function(RegisterParams params)? onSubmit;
 
@@ -28,6 +32,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _confirmPasswordController = TextEditingController();
 
   bool _isPasswordVisible = false;
+  bool _isOwnerRegistration = false;
 
   @override
   void dispose() {
@@ -40,15 +45,28 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Future<void> _onRegisterPressed() async {
-    // 1. Validace UI formuláře (včetně shody hesel)
     if (_formKey.currentState?.validate() ?? false) {
       FocusScope.of(context).unfocus();
+
+      double? lat, lng;
+      if (_isOwnerRegistration) {
+        try {
+          final position = await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(accuracy: LocationAccuracy.medium),
+          );
+          lat = position.latitude;
+          lng = position.longitude;
+        } catch (_) {}
+      }
 
       final params = RegisterParams(
         email: _emailController.text.trim(),
         password: _passwordController.text,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
+        ownerRegistration: _isOwnerRegistration,
+        latitude: lat,
+        longitude: lng,
       );
 
       if (mounted) {
@@ -136,7 +154,32 @@ class _RegisterFormState extends State<RegisterForm> {
                   _passwordController.text,
                 ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
+
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: CheckboxListTile(
+              title: Text(
+                l.registerAsOwner,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(
+                l.registerAsOwnerSubtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              value: _isOwnerRegistration,
+              onChanged: (val) => setState(() => _isOwnerRegistration = val ?? false),
+              activeColor: Theme.of(context).colorScheme.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            ),
+          ),
+          const SizedBox(height: 24),
 
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {

@@ -8,6 +8,8 @@ import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 import 'panorama_capture_screen.dart';
 
+/// Onboarding step 5: UI for creating panorama capture sessions, monitoring their
+/// stitching status, and activating a completed panorama for the restaurant.
 class StepPanorama extends StatefulWidget {
   const StepPanorama({super.key});
 
@@ -15,6 +17,8 @@ class StepPanorama extends StatefulWidget {
   State<StepPanorama> createState() => _StepPanoramaState();
 }
 
+/// State for [StepPanorama]: triggers the initial session list load and polls
+/// the stitching status for any sessions that are still processing.
 class _StepPanoramaState extends State<StepPanorama> {
   bool _loaded = false;
   final Set<String> _pollingSessionIds = {};
@@ -23,7 +27,6 @@ class _StepPanoramaState extends State<StepPanorama> {
   Widget build(BuildContext context) {
     return BlocConsumer<OnboardingWizardBloc, OnboardingWizardState>(
       listenWhen: (prev, curr) {
-        // Navigate to camera when a new session is created
         if (prev.activeSession == null && curr.activeSession != null &&
             curr.activeSession!.status == 'UPLOADING') {
           return true;
@@ -50,7 +53,6 @@ class _StepPanoramaState extends State<StepPanorama> {
           });
         }
 
-        // Start polling for any PROCESSING session
         _startPollingIfNeeded(context, state);
 
         return SingleChildScrollView(

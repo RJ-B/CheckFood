@@ -15,13 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Kompletní implementace servisní vrstvy pro správu uživatelů (JDK 21).
+ * Implementace servisní vrstvy pro správu uživatelských účtů, hesel a rolí.
+ * Logování probíhá výhradně pro úspěšné operace, výjimky jsou logovány v exception handleru.
  *
- * Změny:
- * - Odstraněny audity a závislosti na HTTP requestu.
- * - Logování pouze úspěšných změn stavu (Happy Path).
- * - Výjimky se nelogují zde, ale v Exception Handleru.
- * - Použití 'var' pro lepší čitelnost.
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see UserService
  */
 @Service
 @RequiredArgsConstructor
@@ -94,16 +93,12 @@ public class UserServiceImpl implements UserService {
     public void changePassword(Long userId, String currentPassword, String newPassword) {
         var user = findById(userId);
 
-        // 1. Ověření starého hesla
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-            // Vyhazujeme chybu, logování řeší handler
             throw UserException.invalidOperation("Stávající heslo není správné.");
         }
 
-        // 2. Validace nového hesla
         passwordValidator.validate(newPassword);
 
-        // 3. Uložení
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
@@ -112,10 +107,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity updateProfile(String email, UpdateProfileRequest updateRequest) {
-        // Načteme uživatele (používáme metodu s detaily pro jistotu fetchování vztahů)
         var user = findWithAllDetailsByEmail(email);
 
-        // Mapování změn z DTO do Entity
         userMapper.updateEntityFromRequest(updateRequest, user);
 
         var saved = userRepository.save(user);
@@ -130,13 +123,22 @@ public class UserServiceImpl implements UserService {
         var user = findById(userId);
         var role = roleService.findByName(roleName);
 
-        // Set.add vrací true, pokud prvek ještě nebyl v množině
         if (user.getRoles().add(role)) {
             userRepository.save(user);
             userLogger.logRoleAssigned(user.getEmail(), roleName);
         } else {
-            // Role už byla přiřazena - logujeme jako info/debug, ale nechybujeme
             userLogger.logRoleAlreadyAssigned(user.getEmail(), roleName, userId);
+        }
+    }
+
+    @Override
+    public void removeRole(Long userId, String roleName) {
+        var user = findById(userId);
+        var role = roleService.findByName(roleName);
+
+        if (user.getRoles().remove(role)) {
+            userRepository.save(user);
+            userLogger.logRoleRemoved(user.getEmail(), roleName);
         }
     }
 }

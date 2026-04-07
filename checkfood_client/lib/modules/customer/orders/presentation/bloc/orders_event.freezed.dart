@@ -29,6 +29,15 @@ mixin _$OrdersEvent {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -41,6 +50,15 @@ mixin _$OrdersEvent {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -53,6 +71,15 @@ mixin _$OrdersEvent {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,6 +93,15 @@ mixin _$OrdersEvent {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -78,6 +114,15 @@ mixin _$OrdersEvent {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -90,6 +135,15 @@ mixin _$OrdersEvent {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -169,6 +223,15 @@ class _$LoadContextImpl implements LoadContext {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return loadContext();
   }
@@ -185,6 +248,15 @@ class _$LoadContextImpl implements LoadContext {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return loadContext?.call();
   }
@@ -201,6 +273,15 @@ class _$LoadContextImpl implements LoadContext {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (loadContext != null) {
@@ -221,6 +302,15 @@ class _$LoadContextImpl implements LoadContext {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return loadContext(this);
   }
@@ -237,6 +327,15 @@ class _$LoadContextImpl implements LoadContext {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return loadContext?.call(this);
   }
@@ -253,6 +352,15 @@ class _$LoadContextImpl implements LoadContext {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (loadContext != null) {
@@ -348,6 +456,15 @@ class _$LoadMenuImpl implements LoadMenu {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return loadMenu(restaurantId);
   }
@@ -364,6 +481,15 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return loadMenu?.call(restaurantId);
   }
@@ -380,6 +506,15 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (loadMenu != null) {
@@ -400,6 +535,15 @@ class _$LoadMenuImpl implements LoadMenu {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return loadMenu(this);
   }
@@ -416,6 +560,15 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return loadMenu?.call(this);
   }
@@ -432,6 +585,15 @@ class _$LoadMenuImpl implements LoadMenu {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (loadMenu != null) {
@@ -547,6 +709,15 @@ class _$AddToCartImpl implements AddToCart {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return addToCart(menuItem);
   }
@@ -563,6 +734,15 @@ class _$AddToCartImpl implements AddToCart {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return addToCart?.call(menuItem);
   }
@@ -579,6 +759,15 @@ class _$AddToCartImpl implements AddToCart {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (addToCart != null) {
@@ -599,6 +788,15 @@ class _$AddToCartImpl implements AddToCart {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return addToCart(this);
   }
@@ -615,6 +813,15 @@ class _$AddToCartImpl implements AddToCart {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return addToCart?.call(this);
   }
@@ -631,6 +838,15 @@ class _$AddToCartImpl implements AddToCart {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (addToCart != null) {
@@ -737,6 +953,15 @@ class _$RemoveFromCartImpl implements RemoveFromCart {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return removeFromCart(menuItemId);
   }
@@ -753,6 +978,15 @@ class _$RemoveFromCartImpl implements RemoveFromCart {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return removeFromCart?.call(menuItemId);
   }
@@ -769,6 +1003,15 @@ class _$RemoveFromCartImpl implements RemoveFromCart {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (removeFromCart != null) {
@@ -789,6 +1032,15 @@ class _$RemoveFromCartImpl implements RemoveFromCart {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return removeFromCart(this);
   }
@@ -805,6 +1057,15 @@ class _$RemoveFromCartImpl implements RemoveFromCart {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return removeFromCart?.call(this);
   }
@@ -821,6 +1082,15 @@ class _$RemoveFromCartImpl implements RemoveFromCart {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (removeFromCart != null) {
@@ -940,6 +1210,15 @@ class _$UpdateCartQuantityImpl implements UpdateCartQuantity {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return updateCartQuantity(menuItemId, quantity);
   }
@@ -956,6 +1235,15 @@ class _$UpdateCartQuantityImpl implements UpdateCartQuantity {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return updateCartQuantity?.call(menuItemId, quantity);
   }
@@ -972,6 +1260,15 @@ class _$UpdateCartQuantityImpl implements UpdateCartQuantity {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (updateCartQuantity != null) {
@@ -992,6 +1289,15 @@ class _$UpdateCartQuantityImpl implements UpdateCartQuantity {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return updateCartQuantity(this);
   }
@@ -1008,6 +1314,15 @@ class _$UpdateCartQuantityImpl implements UpdateCartQuantity {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return updateCartQuantity?.call(this);
   }
@@ -1024,6 +1339,15 @@ class _$UpdateCartQuantityImpl implements UpdateCartQuantity {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (updateCartQuantity != null) {
@@ -1102,6 +1426,15 @@ class _$ClearCartImpl implements ClearCart {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return clearCart();
   }
@@ -1118,6 +1451,15 @@ class _$ClearCartImpl implements ClearCart {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return clearCart?.call();
   }
@@ -1134,6 +1476,15 @@ class _$ClearCartImpl implements ClearCart {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (clearCart != null) {
@@ -1154,6 +1505,15 @@ class _$ClearCartImpl implements ClearCart {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return clearCart(this);
   }
@@ -1170,6 +1530,15 @@ class _$ClearCartImpl implements ClearCart {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return clearCart?.call(this);
   }
@@ -1186,6 +1555,15 @@ class _$ClearCartImpl implements ClearCart {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (clearCart != null) {
@@ -1280,6 +1658,15 @@ class _$SubmitOrderImpl implements SubmitOrder {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return submitOrder(note);
   }
@@ -1296,6 +1683,15 @@ class _$SubmitOrderImpl implements SubmitOrder {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return submitOrder?.call(note);
   }
@@ -1312,6 +1708,15 @@ class _$SubmitOrderImpl implements SubmitOrder {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (submitOrder != null) {
@@ -1332,6 +1737,15 @@ class _$SubmitOrderImpl implements SubmitOrder {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return submitOrder(this);
   }
@@ -1348,6 +1762,15 @@ class _$SubmitOrderImpl implements SubmitOrder {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return submitOrder?.call(this);
   }
@@ -1364,6 +1787,15 @@ class _$SubmitOrderImpl implements SubmitOrder {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (submitOrder != null) {
@@ -1438,6 +1870,15 @@ class _$LoadCurrentOrdersImpl implements LoadCurrentOrders {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return loadCurrentOrders();
   }
@@ -1454,6 +1895,15 @@ class _$LoadCurrentOrdersImpl implements LoadCurrentOrders {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return loadCurrentOrders?.call();
   }
@@ -1470,6 +1920,15 @@ class _$LoadCurrentOrdersImpl implements LoadCurrentOrders {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (loadCurrentOrders != null) {
@@ -1490,6 +1949,15 @@ class _$LoadCurrentOrdersImpl implements LoadCurrentOrders {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return loadCurrentOrders(this);
   }
@@ -1506,6 +1974,15 @@ class _$LoadCurrentOrdersImpl implements LoadCurrentOrders {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return loadCurrentOrders?.call(this);
   }
@@ -1522,6 +1999,15 @@ class _$LoadCurrentOrdersImpl implements LoadCurrentOrders {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (loadCurrentOrders != null) {
@@ -1588,6 +2074,15 @@ class _$RefreshOrdersImpl implements RefreshOrders {
     required TResult Function(String? note) submitOrder,
     required TResult Function() loadCurrentOrders,
     required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
   }) {
     return refresh();
   }
@@ -1604,6 +2099,15 @@ class _$RefreshOrdersImpl implements RefreshOrders {
     TResult? Function(String? note)? submitOrder,
     TResult? Function()? loadCurrentOrders,
     TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
   }) {
     return refresh?.call();
   }
@@ -1620,6 +2124,15 @@ class _$RefreshOrdersImpl implements RefreshOrders {
     TResult Function(String? note)? submitOrder,
     TResult Function()? loadCurrentOrders,
     TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -1640,6 +2153,15 @@ class _$RefreshOrdersImpl implements RefreshOrders {
     required TResult Function(SubmitOrder value) submitOrder,
     required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
     required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
   }) {
     return refresh(this);
   }
@@ -1656,6 +2178,15 @@ class _$RefreshOrdersImpl implements RefreshOrders {
     TResult? Function(SubmitOrder value)? submitOrder,
     TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
   }) {
     return refresh?.call(this);
   }
@@ -1672,6 +2203,15 @@ class _$RefreshOrdersImpl implements RefreshOrders {
     TResult Function(SubmitOrder value)? submitOrder,
     TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
     TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -1683,4 +2223,1994 @@ class _$RefreshOrdersImpl implements RefreshOrders {
 
 abstract class RefreshOrders implements OrdersEvent {
   const factory RefreshOrders() = _$RefreshOrdersImpl;
+}
+
+/// @nodoc
+abstract class _$$PayOrderImplCopyWith<$Res> {
+  factory _$$PayOrderImplCopyWith(
+    _$PayOrderImpl value,
+    $Res Function(_$PayOrderImpl) then,
+  ) = __$$PayOrderImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String orderId});
+}
+
+/// @nodoc
+class __$$PayOrderImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$PayOrderImpl>
+    implements _$$PayOrderImplCopyWith<$Res> {
+  __$$PayOrderImplCopyWithImpl(
+    _$PayOrderImpl _value,
+    $Res Function(_$PayOrderImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? orderId = null}) {
+    return _then(
+      _$PayOrderImpl(
+        orderId:
+            null == orderId
+                ? _value.orderId
+                : orderId // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$PayOrderImpl implements PayOrder {
+  const _$PayOrderImpl({required this.orderId});
+
+  @override
+  final String orderId;
+
+  @override
+  String toString() {
+    return 'OrdersEvent.payOrder(orderId: $orderId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PayOrderImpl &&
+            (identical(other.orderId, orderId) || other.orderId == orderId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, orderId);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PayOrderImplCopyWith<_$PayOrderImpl> get copyWith =>
+      __$$PayOrderImplCopyWithImpl<_$PayOrderImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return payOrder(orderId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return payOrder?.call(orderId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (payOrder != null) {
+      return payOrder(orderId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return payOrder(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return payOrder?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (payOrder != null) {
+      return payOrder(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PayOrder implements OrdersEvent {
+  const factory PayOrder({required final String orderId}) = _$PayOrderImpl;
+
+  String get orderId;
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PayOrderImplCopyWith<_$PayOrderImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CheckPaymentStatusImplCopyWith<$Res> {
+  factory _$$CheckPaymentStatusImplCopyWith(
+    _$CheckPaymentStatusImpl value,
+    $Res Function(_$CheckPaymentStatusImpl) then,
+  ) = __$$CheckPaymentStatusImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String orderId});
+}
+
+/// @nodoc
+class __$$CheckPaymentStatusImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$CheckPaymentStatusImpl>
+    implements _$$CheckPaymentStatusImplCopyWith<$Res> {
+  __$$CheckPaymentStatusImplCopyWithImpl(
+    _$CheckPaymentStatusImpl _value,
+    $Res Function(_$CheckPaymentStatusImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? orderId = null}) {
+    return _then(
+      _$CheckPaymentStatusImpl(
+        orderId:
+            null == orderId
+                ? _value.orderId
+                : orderId // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
+  const _$CheckPaymentStatusImpl({required this.orderId});
+
+  @override
+  final String orderId;
+
+  @override
+  String toString() {
+    return 'OrdersEvent.checkPaymentStatus(orderId: $orderId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CheckPaymentStatusImpl &&
+            (identical(other.orderId, orderId) || other.orderId == orderId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, orderId);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CheckPaymentStatusImplCopyWith<_$CheckPaymentStatusImpl> get copyWith =>
+      __$$CheckPaymentStatusImplCopyWithImpl<_$CheckPaymentStatusImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return checkPaymentStatus(orderId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return checkPaymentStatus?.call(orderId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (checkPaymentStatus != null) {
+      return checkPaymentStatus(orderId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return checkPaymentStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return checkPaymentStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (checkPaymentStatus != null) {
+      return checkPaymentStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CheckPaymentStatus implements OrdersEvent {
+  const factory CheckPaymentStatus({required final String orderId}) =
+      _$CheckPaymentStatusImpl;
+
+  String get orderId;
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CheckPaymentStatusImplCopyWith<_$CheckPaymentStatusImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadSessionImplCopyWith<$Res> {
+  factory _$$LoadSessionImplCopyWith(
+    _$LoadSessionImpl value,
+    $Res Function(_$LoadSessionImpl) then,
+  ) = __$$LoadSessionImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadSessionImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$LoadSessionImpl>
+    implements _$$LoadSessionImplCopyWith<$Res> {
+  __$$LoadSessionImplCopyWithImpl(
+    _$LoadSessionImpl _value,
+    $Res Function(_$LoadSessionImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadSessionImpl implements LoadSession {
+  const _$LoadSessionImpl();
+
+  @override
+  String toString() {
+    return 'OrdersEvent.loadSession()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadSessionImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return loadSession();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return loadSession?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (loadSession != null) {
+      return loadSession();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return loadSession(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return loadSession?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (loadSession != null) {
+      return loadSession(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadSession implements OrdersEvent {
+  const factory LoadSession() = _$LoadSessionImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadSessionOrdersImplCopyWith<$Res> {
+  factory _$$LoadSessionOrdersImplCopyWith(
+    _$LoadSessionOrdersImpl value,
+    $Res Function(_$LoadSessionOrdersImpl) then,
+  ) = __$$LoadSessionOrdersImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadSessionOrdersImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$LoadSessionOrdersImpl>
+    implements _$$LoadSessionOrdersImplCopyWith<$Res> {
+  __$$LoadSessionOrdersImplCopyWithImpl(
+    _$LoadSessionOrdersImpl _value,
+    $Res Function(_$LoadSessionOrdersImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadSessionOrdersImpl implements LoadSessionOrders {
+  const _$LoadSessionOrdersImpl();
+
+  @override
+  String toString() {
+    return 'OrdersEvent.loadSessionOrders()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadSessionOrdersImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return loadSessionOrders();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return loadSessionOrders?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (loadSessionOrders != null) {
+      return loadSessionOrders();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return loadSessionOrders(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return loadSessionOrders?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (loadSessionOrders != null) {
+      return loadSessionOrders(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadSessionOrders implements OrdersEvent {
+  const factory LoadSessionOrders() = _$LoadSessionOrdersImpl;
+}
+
+/// @nodoc
+abstract class _$$ToggleItemSelectionImplCopyWith<$Res> {
+  factory _$$ToggleItemSelectionImplCopyWith(
+    _$ToggleItemSelectionImpl value,
+    $Res Function(_$ToggleItemSelectionImpl) then,
+  ) = __$$ToggleItemSelectionImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String itemId});
+}
+
+/// @nodoc
+class __$$ToggleItemSelectionImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$ToggleItemSelectionImpl>
+    implements _$$ToggleItemSelectionImplCopyWith<$Res> {
+  __$$ToggleItemSelectionImplCopyWithImpl(
+    _$ToggleItemSelectionImpl _value,
+    $Res Function(_$ToggleItemSelectionImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? itemId = null}) {
+    return _then(
+      _$ToggleItemSelectionImpl(
+        itemId:
+            null == itemId
+                ? _value.itemId
+                : itemId // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$ToggleItemSelectionImpl implements ToggleItemSelection {
+  const _$ToggleItemSelectionImpl({required this.itemId});
+
+  @override
+  final String itemId;
+
+  @override
+  String toString() {
+    return 'OrdersEvent.toggleItemSelection(itemId: $itemId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ToggleItemSelectionImpl &&
+            (identical(other.itemId, itemId) || other.itemId == itemId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, itemId);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ToggleItemSelectionImplCopyWith<_$ToggleItemSelectionImpl> get copyWith =>
+      __$$ToggleItemSelectionImplCopyWithImpl<_$ToggleItemSelectionImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return toggleItemSelection(itemId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return toggleItemSelection?.call(itemId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (toggleItemSelection != null) {
+      return toggleItemSelection(itemId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return toggleItemSelection(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return toggleItemSelection?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (toggleItemSelection != null) {
+      return toggleItemSelection(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ToggleItemSelection implements OrdersEvent {
+  const factory ToggleItemSelection({required final String itemId}) =
+      _$ToggleItemSelectionImpl;
+
+  String get itemId;
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ToggleItemSelectionImplCopyWith<_$ToggleItemSelectionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SelectAllMyItemsImplCopyWith<$Res> {
+  factory _$$SelectAllMyItemsImplCopyWith(
+    _$SelectAllMyItemsImpl value,
+    $Res Function(_$SelectAllMyItemsImpl) then,
+  ) = __$$SelectAllMyItemsImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SelectAllMyItemsImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$SelectAllMyItemsImpl>
+    implements _$$SelectAllMyItemsImplCopyWith<$Res> {
+  __$$SelectAllMyItemsImplCopyWithImpl(
+    _$SelectAllMyItemsImpl _value,
+    $Res Function(_$SelectAllMyItemsImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SelectAllMyItemsImpl implements SelectAllMyItems {
+  const _$SelectAllMyItemsImpl();
+
+  @override
+  String toString() {
+    return 'OrdersEvent.selectAllMyItems()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SelectAllMyItemsImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return selectAllMyItems();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return selectAllMyItems?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (selectAllMyItems != null) {
+      return selectAllMyItems();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return selectAllMyItems(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return selectAllMyItems?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (selectAllMyItems != null) {
+      return selectAllMyItems(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SelectAllMyItems implements OrdersEvent {
+  const factory SelectAllMyItems() = _$SelectAllMyItemsImpl;
+}
+
+/// @nodoc
+abstract class _$$PaySelectedItemsImplCopyWith<$Res> {
+  factory _$$PaySelectedItemsImplCopyWith(
+    _$PaySelectedItemsImpl value,
+    $Res Function(_$PaySelectedItemsImpl) then,
+  ) = __$$PaySelectedItemsImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PaySelectedItemsImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$PaySelectedItemsImpl>
+    implements _$$PaySelectedItemsImplCopyWith<$Res> {
+  __$$PaySelectedItemsImplCopyWithImpl(
+    _$PaySelectedItemsImpl _value,
+    $Res Function(_$PaySelectedItemsImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$PaySelectedItemsImpl implements PaySelectedItems {
+  const _$PaySelectedItemsImpl();
+
+  @override
+  String toString() {
+    return 'OrdersEvent.paySelectedItems()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$PaySelectedItemsImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return paySelectedItems();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return paySelectedItems?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (paySelectedItems != null) {
+      return paySelectedItems();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return paySelectedItems(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return paySelectedItems?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (paySelectedItems != null) {
+      return paySelectedItems(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PaySelectedItems implements OrdersEvent {
+  const factory PaySelectedItems() = _$PaySelectedItemsImpl;
+}
+
+/// @nodoc
+abstract class _$$JoinSessionImplCopyWith<$Res> {
+  factory _$$JoinSessionImplCopyWith(
+    _$JoinSessionImpl value,
+    $Res Function(_$JoinSessionImpl) then,
+  ) = __$$JoinSessionImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String inviteCode});
+}
+
+/// @nodoc
+class __$$JoinSessionImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$JoinSessionImpl>
+    implements _$$JoinSessionImplCopyWith<$Res> {
+  __$$JoinSessionImplCopyWithImpl(
+    _$JoinSessionImpl _value,
+    $Res Function(_$JoinSessionImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? inviteCode = null}) {
+    return _then(
+      _$JoinSessionImpl(
+        inviteCode:
+            null == inviteCode
+                ? _value.inviteCode
+                : inviteCode // ignore: cast_nullable_to_non_nullable
+                    as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$JoinSessionImpl implements JoinSession {
+  const _$JoinSessionImpl({required this.inviteCode});
+
+  @override
+  final String inviteCode;
+
+  @override
+  String toString() {
+    return 'OrdersEvent.joinSession(inviteCode: $inviteCode)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$JoinSessionImpl &&
+            (identical(other.inviteCode, inviteCode) ||
+                other.inviteCode == inviteCode));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, inviteCode);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$JoinSessionImplCopyWith<_$JoinSessionImpl> get copyWith =>
+      __$$JoinSessionImplCopyWithImpl<_$JoinSessionImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return joinSession(inviteCode);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return joinSession?.call(inviteCode);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (joinSession != null) {
+      return joinSession(inviteCode);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return joinSession(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return joinSession?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (joinSession != null) {
+      return joinSession(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class JoinSession implements OrdersEvent {
+  const factory JoinSession({required final String inviteCode}) =
+      _$JoinSessionImpl;
+
+  String get inviteCode;
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$JoinSessionImplCopyWith<_$JoinSessionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ShowSessionQrImplCopyWith<$Res> {
+  factory _$$ShowSessionQrImplCopyWith(
+    _$ShowSessionQrImpl value,
+    $Res Function(_$ShowSessionQrImpl) then,
+  ) = __$$ShowSessionQrImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ShowSessionQrImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$ShowSessionQrImpl>
+    implements _$$ShowSessionQrImplCopyWith<$Res> {
+  __$$ShowSessionQrImplCopyWithImpl(
+    _$ShowSessionQrImpl _value,
+    $Res Function(_$ShowSessionQrImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ShowSessionQrImpl implements ShowSessionQr {
+  const _$ShowSessionQrImpl();
+
+  @override
+  String toString() {
+    return 'OrdersEvent.showSessionQr()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ShowSessionQrImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadContext,
+    required TResult Function(String restaurantId) loadMenu,
+    required TResult Function(MenuItem menuItem) addToCart,
+    required TResult Function(String menuItemId) removeFromCart,
+    required TResult Function(String menuItemId, int quantity)
+    updateCartQuantity,
+    required TResult Function() clearCart,
+    required TResult Function(String? note) submitOrder,
+    required TResult Function() loadCurrentOrders,
+    required TResult Function() refresh,
+    required TResult Function(String orderId) payOrder,
+    required TResult Function(String orderId) checkPaymentStatus,
+    required TResult Function() loadSession,
+    required TResult Function() loadSessionOrders,
+    required TResult Function(String itemId) toggleItemSelection,
+    required TResult Function() selectAllMyItems,
+    required TResult Function() paySelectedItems,
+    required TResult Function(String inviteCode) joinSession,
+    required TResult Function() showSessionQr,
+  }) {
+    return showSessionQr();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadContext,
+    TResult? Function(String restaurantId)? loadMenu,
+    TResult? Function(MenuItem menuItem)? addToCart,
+    TResult? Function(String menuItemId)? removeFromCart,
+    TResult? Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult? Function()? clearCart,
+    TResult? Function(String? note)? submitOrder,
+    TResult? Function()? loadCurrentOrders,
+    TResult? Function()? refresh,
+    TResult? Function(String orderId)? payOrder,
+    TResult? Function(String orderId)? checkPaymentStatus,
+    TResult? Function()? loadSession,
+    TResult? Function()? loadSessionOrders,
+    TResult? Function(String itemId)? toggleItemSelection,
+    TResult? Function()? selectAllMyItems,
+    TResult? Function()? paySelectedItems,
+    TResult? Function(String inviteCode)? joinSession,
+    TResult? Function()? showSessionQr,
+  }) {
+    return showSessionQr?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadContext,
+    TResult Function(String restaurantId)? loadMenu,
+    TResult Function(MenuItem menuItem)? addToCart,
+    TResult Function(String menuItemId)? removeFromCart,
+    TResult Function(String menuItemId, int quantity)? updateCartQuantity,
+    TResult Function()? clearCart,
+    TResult Function(String? note)? submitOrder,
+    TResult Function()? loadCurrentOrders,
+    TResult Function()? refresh,
+    TResult Function(String orderId)? payOrder,
+    TResult Function(String orderId)? checkPaymentStatus,
+    TResult Function()? loadSession,
+    TResult Function()? loadSessionOrders,
+    TResult Function(String itemId)? toggleItemSelection,
+    TResult Function()? selectAllMyItems,
+    TResult Function()? paySelectedItems,
+    TResult Function(String inviteCode)? joinSession,
+    TResult Function()? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (showSessionQr != null) {
+      return showSessionQr();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadContext value) loadContext,
+    required TResult Function(LoadMenu value) loadMenu,
+    required TResult Function(AddToCart value) addToCart,
+    required TResult Function(RemoveFromCart value) removeFromCart,
+    required TResult Function(UpdateCartQuantity value) updateCartQuantity,
+    required TResult Function(ClearCart value) clearCart,
+    required TResult Function(SubmitOrder value) submitOrder,
+    required TResult Function(LoadCurrentOrders value) loadCurrentOrders,
+    required TResult Function(RefreshOrders value) refresh,
+    required TResult Function(PayOrder value) payOrder,
+    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
+    required TResult Function(LoadSession value) loadSession,
+    required TResult Function(LoadSessionOrders value) loadSessionOrders,
+    required TResult Function(ToggleItemSelection value) toggleItemSelection,
+    required TResult Function(SelectAllMyItems value) selectAllMyItems,
+    required TResult Function(PaySelectedItems value) paySelectedItems,
+    required TResult Function(JoinSession value) joinSession,
+    required TResult Function(ShowSessionQr value) showSessionQr,
+  }) {
+    return showSessionQr(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadContext value)? loadContext,
+    TResult? Function(LoadMenu value)? loadMenu,
+    TResult? Function(AddToCart value)? addToCart,
+    TResult? Function(RemoveFromCart value)? removeFromCart,
+    TResult? Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult? Function(ClearCart value)? clearCart,
+    TResult? Function(SubmitOrder value)? submitOrder,
+    TResult? Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult? Function(RefreshOrders value)? refresh,
+    TResult? Function(PayOrder value)? payOrder,
+    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult? Function(LoadSession value)? loadSession,
+    TResult? Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult? Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult? Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult? Function(PaySelectedItems value)? paySelectedItems,
+    TResult? Function(JoinSession value)? joinSession,
+    TResult? Function(ShowSessionQr value)? showSessionQr,
+  }) {
+    return showSessionQr?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadContext value)? loadContext,
+    TResult Function(LoadMenu value)? loadMenu,
+    TResult Function(AddToCart value)? addToCart,
+    TResult Function(RemoveFromCart value)? removeFromCart,
+    TResult Function(UpdateCartQuantity value)? updateCartQuantity,
+    TResult Function(ClearCart value)? clearCart,
+    TResult Function(SubmitOrder value)? submitOrder,
+    TResult Function(LoadCurrentOrders value)? loadCurrentOrders,
+    TResult Function(RefreshOrders value)? refresh,
+    TResult Function(PayOrder value)? payOrder,
+    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
+    TResult Function(LoadSession value)? loadSession,
+    TResult Function(LoadSessionOrders value)? loadSessionOrders,
+    TResult Function(ToggleItemSelection value)? toggleItemSelection,
+    TResult Function(SelectAllMyItems value)? selectAllMyItems,
+    TResult Function(PaySelectedItems value)? paySelectedItems,
+    TResult Function(JoinSession value)? joinSession,
+    TResult Function(ShowSessionQr value)? showSessionQr,
+    required TResult orElse(),
+  }) {
+    if (showSessionQr != null) {
+      return showSessionQr(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ShowSessionQr implements OrdersEvent {
+  const factory ShowSessionQr() = _$ShowSessionQrImpl;
 }

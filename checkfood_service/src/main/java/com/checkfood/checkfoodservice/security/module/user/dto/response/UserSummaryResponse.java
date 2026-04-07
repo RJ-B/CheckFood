@@ -3,9 +3,10 @@ package com.checkfood.checkfoodservice.security.module.user.dto.response;
 import lombok.*;
 
 /**
- * Zjednodušené DTO pro seznamy uživatelů.
- * Optimalizováno pro vysoký výkon při zobrazení v tabulkách admin rozhraní.
- * Obsahuje pouze základní informace pro přehled.
+ * Zjednodušené DTO pro přehledové seznamy uživatelů v administrátorském rozhraní.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

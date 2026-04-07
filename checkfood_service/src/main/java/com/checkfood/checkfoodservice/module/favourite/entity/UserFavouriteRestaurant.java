@@ -6,6 +6,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * JPA entita oblíbené restaurace uživatele s unikátním omezením na kombinaci uživatel + restaurace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Entity
 @Table(
         name = "user_favourite_restaurant",

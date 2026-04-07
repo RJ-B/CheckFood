@@ -2,6 +2,7 @@ package com.checkfood.checkfoodservice.module.restaurant.dto.response;
 
 import com.checkfood.checkfoodservice.module.restaurant.dto.common.AddressDto;
 import com.checkfood.checkfoodservice.module.restaurant.dto.common.OpeningHoursDto;
+import com.checkfood.checkfoodservice.module.restaurant.dto.common.SpecialDayDto;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.CuisineType;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.RestaurantStatus;
 import lombok.*;
@@ -13,6 +14,9 @@ import java.util.UUID;
 
 /**
  * Detailní odpověď s informacemi o restauraci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Data
 @Builder
@@ -34,5 +38,7 @@ public class RestaurantResponse {
     private List<OpeningHoursDto> openingHours;
     private Set<String> tags;
     private boolean onboardingCompleted;
+    private int defaultReservationDurationMinutes;
+    private List<SpecialDayDto> specialDays;
     private Boolean isFavourite;
 }

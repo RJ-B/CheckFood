@@ -1,11 +1,13 @@
 import '../../../domain/entities/employee.dart';
 
+/// API response model for a restaurant employee.
 class EmployeeResponseModel {
   final int id;
   final int userId;
   final String name;
   final String email;
   final String role;
+  final List<String> permissions;
   final String? createdAt;
 
   const EmployeeResponseModel({
@@ -14,6 +16,7 @@ class EmployeeResponseModel {
     required this.name,
     required this.email,
     required this.role,
+    this.permissions = const [],
     this.createdAt,
   });
 
@@ -24,6 +27,10 @@ class EmployeeResponseModel {
       name: json['name'] as String? ?? '',
       email: json['email'] as String? ?? '',
       role: json['role'] as String? ?? 'STAFF',
+      permissions: (json['permissions'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       createdAt: json['createdAt'] as String?,
     );
   }
@@ -34,6 +41,7 @@ class EmployeeResponseModel {
         name: name,
         email: email,
         role: role,
+        permissions: permissions,
         createdAt: createdAt != null ? DateTime.tryParse(createdAt!) : null,
       );
 }

@@ -1,3 +1,4 @@
+/// Názvy klíčů (claims) používaných v JWT tokenech vydávaných backendem.
 class SecurityClaims {
   SecurityClaims._();
 
@@ -7,8 +8,8 @@ class SecurityClaims {
   /// Klíč pro email uživatele v JWT
   static const String email = 'email';
 
-  /// Klíč, kde backend posílá role (Spring Security standardně 'authorities')
-  static const String roles = 'authorities';
+  /// Klíč, kde backend posílá role v JWT
+  static const String roles = 'roles';
 
   /// Klíč pro unikátní identifikátor zařízení uložený v tokenu
   static const String deviceIdentifier = 'deviceIdentifier';

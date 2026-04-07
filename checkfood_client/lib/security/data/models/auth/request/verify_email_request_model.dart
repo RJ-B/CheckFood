@@ -4,6 +4,7 @@ import '../../../../config/security_json_keys.dart';
 part 'verify_email_request_model.freezed.dart';
 part 'verify_email_request_model.g.dart';
 
+/// Datový model pro požadavek ověření emailu.
 @freezed
 class VerifyEmailRequestModel with _$VerifyEmailRequestModel {
   const factory VerifyEmailRequestModel({

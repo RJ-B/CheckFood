@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 
+/// Vizuální indikátor síly hesla zobrazující barevný progress bar a textový popis.
 class PasswordStrengthIndicator extends StatelessWidget {
   final String password;
 

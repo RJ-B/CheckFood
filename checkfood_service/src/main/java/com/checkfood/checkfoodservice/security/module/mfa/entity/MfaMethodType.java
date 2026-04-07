@@ -1,14 +1,17 @@
 package com.checkfood.checkfoodservice.security.module.mfa.entity;
 
 /**
- * Typy MFA metod.
+ * Výčet podporovaných metod vícefaktorové autentizace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public enum MfaMethodType {
 
-    // Time-based One-Time Password (Google Authenticator, Authy, ...)
+    /** Časově synchronizované jednorázové heslo kompatibilní s Google Authenticator, Authy a dalšími aplikacemi. */
     TOTP,
 
-    // Záložní jednorázové kódy
+    /** Záložní jednorázové kódy použitelné při nedostupnosti TOTP aplikace. */
     BACKUP_CODE
 
 }

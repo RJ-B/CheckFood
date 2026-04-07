@@ -4,6 +4,7 @@ import 'reservation.dart';
 
 part 'my_reservations_overview.freezed.dart';
 
+/// A combined view of the user's upcoming and past reservations.
 @freezed
 class MyReservationsOverview with _$MyReservationsOverview {
   const factory MyReservationsOverview({

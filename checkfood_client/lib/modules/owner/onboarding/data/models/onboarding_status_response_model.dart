@@ -4,6 +4,7 @@ import '../../domain/entities/onboarding_status.dart';
 part 'onboarding_status_response_model.freezed.dart';
 part 'onboarding_status_response_model.g.dart';
 
+/// API response model indicating which onboarding steps the owner has completed.
 @freezed
 class OnboardingStatusResponseModel with _$OnboardingStatusResponseModel {
   const OnboardingStatusResponseModel._();

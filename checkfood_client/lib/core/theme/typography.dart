@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Systém typografie — předdefinované [TextStyle] pro celou aplikaci.
 class AppTypography {
   static const display = TextStyle(
     fontSize: 32,

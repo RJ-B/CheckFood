@@ -1,16 +1,15 @@
-import 'package:flutter/foundation.dart';
-
-/// Sluzba pro spravu push notifikaci.
-/// Wrapper nad FirebaseMessaging — zapouzdruje permission a token management.
+/// Služba pro správu push notifikací.
 ///
-/// Firebase je pristupovan lazy — pokud neni inicializovan (T-0004),
-/// metody gracefully vraci false/null misto vyhozeni vyjimky.
+/// Wrapper nad FirebaseMessaging — zapouzdřuje permission a token management.
+/// Firebase je přistupován lazy — pokud není inicializován (TODO T-0004),
+/// metody vrací `false`/`null` místo vyhození výjimky.
 class NotificationService {
-  /// Vyzada OS permission pro push notifikace.
-  /// Vraci true pokud uzivatel povolil (authorized nebo provisional).
+  /// Vyžádá OS permission pro push notifikace.
+  ///
+  /// Vrací `true`, pokud uživatel povolil (authorized nebo provisional).
   Future<bool> requestPermission() async {
     try {
-      // TODO(T-0004): Aktivovat az bude Firebase inicializovan
+      // TODO(T-0004): Aktivovat až bude Firebase inicializován
       // final messaging = FirebaseMessaging.instance;
       // final settings = await messaging.requestPermission(
       //   alert: true,
@@ -20,47 +19,45 @@ class NotificationService {
       // );
       // return settings.authorizationStatus == AuthorizationStatus.authorized ||
       //     settings.authorizationStatus == AuthorizationStatus.provisional;
-      debugPrint('NotificationService.requestPermission: Firebase not initialized (T-0004)');
       return false;
-    } catch (e) {
-      debugPrint('NotificationService.requestPermission error: $e');
+    } catch (_) {
       return false;
     }
   }
 
-  /// Zjisti aktualni stav OS permission.
+  /// Zjistí aktuální stav OS permission pro notifikace.
   Future<bool> isPermissionGranted() async {
     try {
-      // TODO(T-0004): Aktivovat az bude Firebase inicializovan
+      // TODO(T-0004): Aktivovat až bude Firebase inicializován
       // final messaging = FirebaseMessaging.instance;
       // final settings = await messaging.getNotificationSettings();
       // return settings.authorizationStatus == AuthorizationStatus.authorized ||
       //     settings.authorizationStatus == AuthorizationStatus.provisional;
       return false;
-    } catch (e) {
-      debugPrint('NotificationService.isPermissionGranted error: $e');
+    } catch (_) {
       return false;
     }
   }
 
-  /// Ziska FCM token pro aktualni zarizeni.
-  /// Vraci null pokud neni k dispozici (napr. bez Firebase/Google Play Services).
+  /// Získá FCM token pro aktuální zařízení.
+  ///
+  /// Vrací `null`, pokud není k dispozici (např. bez Firebase/Google Play Services).
   Future<String?> getToken() async {
     try {
-      // TODO(T-0004): Aktivovat az bude Firebase inicializovan
+      // TODO(T-0004): Aktivovat až bude Firebase inicializován
       // final messaging = FirebaseMessaging.instance;
       // return await messaging.getToken();
       return null;
-    } catch (e) {
-      debugPrint('NotificationService.getToken error: $e');
+    } catch (_) {
       return null;
     }
   }
 
-  /// Stream pro naslouchani zmene FCM tokenu.
-  /// Vraci prazdny stream pokud Firebase neni inicializovan.
+  /// Stream pro naslouchání změně FCM tokenu.
+  ///
+  /// Vrací prázdný stream, pokud Firebase není inicializován.
   Stream<String> get onTokenRefresh {
-    // TODO(T-0004): Aktivovat az bude Firebase inicializovan
+    // TODO(T-0004): Aktivovat až bude Firebase inicializován
     // return FirebaseMessaging.instance.onTokenRefresh;
     return const Stream.empty();
   }

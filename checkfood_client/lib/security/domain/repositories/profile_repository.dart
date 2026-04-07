@@ -5,6 +5,7 @@ import '../entities/device.dart';
 import '../../data/models/profile/request/update_profile_request_model.dart';
 import '../../data/models/profile/request/change_password_request_model.dart';
 
+/// Abstraktní kontrakt pro správu profilu uživatele a jeho zařízení.
 abstract class ProfileRepository {
   /// Načte personu uživatele.
   Future<UserProfile> getUserProfile();
@@ -18,11 +19,17 @@ abstract class ProfileRepository {
   /// Načte seznam zařízení spojených s účtem.
   Future<List<Device>> getActiveDevices();
 
-  /// Odhlásí konkrétní zařízení podle jeho technického ID.
+  /// Odhlásí (deaktivuje) konkrétní zařízení podle jeho technického ID.
   Future<void> logoutDevice(int deviceId);
+
+  /// Smaže konkrétní zařízení z DB.
+  Future<void> deleteDevice(int deviceId);
 
   /// Odhlásí všechna zařízení kromě aktuálního.
   Future<void> logoutAllDevices();
+
+  /// Smaže všechna zařízení kromě aktuálního z DB.
+  Future<void> deleteAllDevices();
 
   /// Aktualizuje preferenci push notifikaci.
   Future<Map<String, dynamic>> updateNotificationPreference({

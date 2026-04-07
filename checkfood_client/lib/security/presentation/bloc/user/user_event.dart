@@ -8,10 +8,7 @@ part 'user_event.freezed.dart';
 
 @freezed
 class UserEvent with _$UserEvent {
-  // Načtení profilu (GET /me)
   const factory UserEvent.profileRequested() = ProfileRequested;
-
-  // ✅ Načtení zařízení (GET /devices)
   const factory UserEvent.devicesRequested() = DevicesRequested;
 
   const factory UserEvent.profileUpdated(UpdateProfileRequestModel request) =
@@ -24,17 +21,17 @@ class UserEvent with _$UserEvent {
   const factory UserEvent.allDevicesLogoutRequested() =
       AllDevicesLogoutRequested;
 
-  // ✅ ID je int
   const factory UserEvent.deviceLoggedOut(int deviceId) = DeviceLoggedOut;
+  const factory UserEvent.deviceDeleted(int deviceId) = DeviceDeleted;
 
-  // 🧹 ✅ NOVÝ EVENT: Vyčištění dat při odhlášení (aby nezůstala v paměti)
+  const factory UserEvent.allDevicesDeleteRequested() =
+      AllDevicesDeleteRequested;
+
   const factory UserEvent.clearDataRequested() = ClearDataRequested;
 
-  // Push notifikace
   const factory UserEvent.notificationPreferenceRequested() = NotificationPreferenceRequested;
   const factory UserEvent.notificationToggled(bool enabled) = NotificationToggled;
 
-  // Profile photo upload
   const factory UserEvent.profilePhotoUploadRequested(
     Uint8List imageBytes,
     String filename,

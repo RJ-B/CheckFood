@@ -19,6 +19,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MapParamsModel {
   LatLngBounds get bounds => throw _privateConstructorUsedError;
   int get zoom => throw _privateConstructorUsedError;
+  double? get clusterRadius => throw _privateConstructorUsedError;
 
   /// Create a copy of MapParamsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -34,7 +35,7 @@ abstract class $MapParamsModelCopyWith<$Res> {
     $Res Function(MapParamsModel) then,
   ) = _$MapParamsModelCopyWithImpl<$Res, MapParamsModel>;
   @useResult
-  $Res call({LatLngBounds bounds, int zoom});
+  $Res call({LatLngBounds bounds, int zoom, double? clusterRadius});
 }
 
 /// @nodoc
@@ -51,7 +52,11 @@ class _$MapParamsModelCopyWithImpl<$Res, $Val extends MapParamsModel>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? bounds = null, Object? zoom = null}) {
+  $Res call({
+    Object? bounds = null,
+    Object? zoom = null,
+    Object? clusterRadius = freezed,
+  }) {
     return _then(
       _value.copyWith(
             bounds:
@@ -64,6 +69,11 @@ class _$MapParamsModelCopyWithImpl<$Res, $Val extends MapParamsModel>
                     ? _value.zoom
                     : zoom // ignore: cast_nullable_to_non_nullable
                         as int,
+            clusterRadius:
+                freezed == clusterRadius
+                    ? _value.clusterRadius
+                    : clusterRadius // ignore: cast_nullable_to_non_nullable
+                        as double?,
           )
           as $Val,
     );
@@ -79,7 +89,7 @@ abstract class _$$MapParamsModelImplCopyWith<$Res>
   ) = __$$MapParamsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({LatLngBounds bounds, int zoom});
+  $Res call({LatLngBounds bounds, int zoom, double? clusterRadius});
 }
 
 /// @nodoc
@@ -95,7 +105,11 @@ class __$$MapParamsModelImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? bounds = null, Object? zoom = null}) {
+  $Res call({
+    Object? bounds = null,
+    Object? zoom = null,
+    Object? clusterRadius = freezed,
+  }) {
     return _then(
       _$MapParamsModelImpl(
         bounds:
@@ -108,6 +122,11 @@ class __$$MapParamsModelImplCopyWithImpl<$Res>
                 ? _value.zoom
                 : zoom // ignore: cast_nullable_to_non_nullable
                     as int,
+        clusterRadius:
+            freezed == clusterRadius
+                ? _value.clusterRadius
+                : clusterRadius // ignore: cast_nullable_to_non_nullable
+                    as double?,
       ),
     );
   }
@@ -116,17 +135,22 @@ class __$$MapParamsModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MapParamsModelImpl extends _MapParamsModel {
-  const _$MapParamsModelImpl({required this.bounds, required this.zoom})
-    : super._();
+  const _$MapParamsModelImpl({
+    required this.bounds,
+    required this.zoom,
+    this.clusterRadius,
+  }) : super._();
 
   @override
   final LatLngBounds bounds;
   @override
   final int zoom;
+  @override
+  final double? clusterRadius;
 
   @override
   String toString() {
-    return 'MapParamsModel(bounds: $bounds, zoom: $zoom)';
+    return 'MapParamsModel(bounds: $bounds, zoom: $zoom, clusterRadius: $clusterRadius)';
   }
 
   @override
@@ -135,11 +159,13 @@ class _$MapParamsModelImpl extends _MapParamsModel {
         (other.runtimeType == runtimeType &&
             other is _$MapParamsModelImpl &&
             (identical(other.bounds, bounds) || other.bounds == bounds) &&
-            (identical(other.zoom, zoom) || other.zoom == zoom));
+            (identical(other.zoom, zoom) || other.zoom == zoom) &&
+            (identical(other.clusterRadius, clusterRadius) ||
+                other.clusterRadius == clusterRadius));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, bounds, zoom);
+  int get hashCode => Object.hash(runtimeType, bounds, zoom, clusterRadius);
 
   /// Create a copy of MapParamsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -157,6 +183,7 @@ abstract class _MapParamsModel extends MapParamsModel {
   const factory _MapParamsModel({
     required final LatLngBounds bounds,
     required final int zoom,
+    final double? clusterRadius,
   }) = _$MapParamsModelImpl;
   const _MapParamsModel._() : super._();
 
@@ -164,6 +191,8 @@ abstract class _MapParamsModel extends MapParamsModel {
   LatLngBounds get bounds;
   @override
   int get zoom;
+  @override
+  double? get clusterRadius;
 
   /// Create a copy of MapParamsModel
   /// with the given fields replaced by the non-null parameter values.

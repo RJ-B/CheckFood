@@ -4,6 +4,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/staff_reservation.dart';
 
+/// A card showing a single staff-visible reservation with a coloured left
+/// border indicating status, time range, party size, and contextual action buttons.
 class StaffReservationCard extends StatelessWidget {
   final StaffReservation reservation;
   final bool isActionInProgress;
@@ -85,7 +87,6 @@ class StaffReservationCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header: table label + status badge
             Row(
               children: [
                 Expanded(
@@ -115,7 +116,6 @@ class StaffReservationCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Time + party size
             Row(
               children: [
                 const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
@@ -131,7 +131,6 @@ class StaffReservationCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Action buttons
             if (_hasActions) _buildActions(context),
           ],
         ),

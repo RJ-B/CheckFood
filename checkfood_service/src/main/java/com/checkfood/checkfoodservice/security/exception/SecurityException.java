@@ -41,13 +41,13 @@ public class SecurityException extends ServiceException {
     }
 
     /**
-     * Vytvoří novou security výjimku s root cause exception chaining.
-     * Používá se pro wrapping underlying exceptions se zachováním stack trace.
+     * Vytvoří novou security výjimku s řetězením příčin výjimek.
+     * Používá se pro obalení výchozích výjimek se zachováním zásobníku volání.
      *
      * @param errorCode security error kód pro kategorizaci a handling
      * @param message lidsky čitelná chybová zpráva pro uživatele
      * @param status HTTP status kód pro REST API response
-     * @param cause původní výjimka pro exception chaining a debugging
+     * @param cause původní výjimka pro řetězení výjimek a ladění
      */
     public SecurityException(Object errorCode, String message, HttpStatus status, Throwable cause) {
         super(errorCode, message, status, cause);

@@ -1,6 +1,7 @@
 import '../entities/reservation.dart';
 import '../repositories/reservation_repository.dart';
 
+/// Cancels an existing reservation by its ID.
 class CancelReservationUseCase {
   final ReservationRepository _repository;
 

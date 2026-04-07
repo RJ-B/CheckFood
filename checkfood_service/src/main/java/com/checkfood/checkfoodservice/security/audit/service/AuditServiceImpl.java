@@ -24,6 +24,8 @@ import java.time.Instant;
  * Implementace auditního servisu pro správu auditních záznamů.
  * Poskytuje persistenci logů, vyhledávání a automatický úklid starých záznamů.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditService
  * @see AuditLogRepository
  * @see AuditProperties

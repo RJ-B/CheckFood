@@ -1,3 +1,4 @@
+/// Systém mezer pro konzistentní rozstupy v celé aplikaci.
 class AppSpacing {
   static const xs = 4.0;
   static const sm = 8.0;

@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import '../../modules/customer/restaurant/domain/entities/google_place.dart';
 
+/// Klient pro Google Places API (New) pro vyhledávání restaurací.
+///
+/// Zapouzdřuje volání endpointů `searchNearby` a `searchText`
+/// a mapuje odpovědi na doménovou entitu [GooglePlace].
 class GooglePlacesService {
   final Dio _dio;
   final String _apiKey;
@@ -18,6 +22,7 @@ class GooglePlacesService {
       'places.rating,places.userRatingCount,places.formattedAddress,'
       'places.photos,places.currentOpeningHours';
 
+  /// Vyhledá restaurace v okruhu [radiusMeters] metrů od zadaných souřadnic.
   Future<List<GooglePlace>> searchNearby({
     required double latitude,
     required double longitude,
@@ -46,6 +51,7 @@ class GooglePlacesService {
     return _parsePlaces(response.data);
   }
 
+  /// Vyhledá restaurace odpovídající textovému dotazu [query] v okolí souřadnic.
   Future<List<GooglePlace>> searchText({
     required String query,
     required double latitude,
@@ -109,6 +115,7 @@ class GooglePlacesService {
     }).toList();
   }
 
+  /// Sestaví URL pro stažení fotografie místa z Places Media API.
   String getPhotoUrl(String photoResourceName, {int maxWidth = 400}) {
     return 'https://places.googleapis.com/v1/$photoResourceName/media'
         '?maxWidthPx=$maxWidth&key=$_apiKey';

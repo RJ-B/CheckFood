@@ -3,6 +3,8 @@ package com.checkfood.checkfoodservice.module.restaurant.controller;
 import com.checkfood.checkfoodservice.module.favourite.service.FavouriteService;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantTableRequest;
+import com.checkfood.checkfoodservice.module.restaurant.dto.response.AllMarkersResponse;
+import com.checkfood.checkfoodservice.module.restaurant.dto.response.MarkerVersionResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantTableResponse;
@@ -23,7 +25,11 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * REST Controller pro správu restaurací a jejich inventáře.
+ * REST controller pro veřejné i privátní operace nad restauracemi.
+ * Zahrnuje geoprostorové endpointy pro mapu, detail restaurace a správu stolů.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @RestController
 @RequestMapping("/api/v1/restaurants")
@@ -34,7 +40,27 @@ public class RestaurantController {
     private final TableManagementService tableManagementService;
     private final FavouriteService favouriteService;
 
-    // --- GEO / MAP ENDPOINTS (PUBLIC & OPTIMIZED FOR BIG DATA) ---
+    /**
+     * Vrací všechny aktivní restaurace jako odlehčené markery spolu s verzí.
+     * Klient si stáhne jednou, uloží do cache a porovnává s /markers-version.
+     *
+     * @return odpověď s verzí a seznamem markerů
+     */
+    @GetMapping("/all-markers")
+    public ResponseEntity<AllMarkersResponse> getAllMarkers() {
+        return ResponseEntity.ok(restaurantService.getAllActiveMarkers());
+    }
+
+    /**
+     * Vrací pouze aktuální verzi sady markerů (číslo).
+     * Slouží pro polling — pokud se verze liší od lokální cache, klient zavolá /all-markers.
+     */
+    @GetMapping("/markers-version")
+    public ResponseEntity<MarkerVersionResponse> getMarkersVersion() {
+        return ResponseEntity.ok(MarkerVersionResponse.builder()
+                .version(restaurantService.getMarkerVersion())
+                .build());
+    }
 
     /**
      * Inteligentní endpoint pro mapu (Smart Clustering).
@@ -51,10 +77,11 @@ public class RestaurantController {
             @RequestParam double maxLat,
             @RequestParam double minLng,
             @RequestParam double maxLng,
-            @RequestParam int zoom
+            @RequestParam int zoom,
+            @RequestParam(required = false) Double clusterRadius
     ) {
         List<RestaurantMarkerResponse> markers = restaurantService.getMarkersInBounds(
-                minLat, maxLat, minLng, maxLng, zoom
+                minLat, maxLat, minLng, maxLng, zoom, clusterRadius
         );
         return ResponseEntity.ok(markers);
     }
@@ -90,8 +117,6 @@ public class RestaurantController {
         );
     }
 
-    // --- PUBLIC DETAIL ENDPOINT ---
-
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponse> getRestaurant(
             @PathVariable UUID id,
@@ -103,8 +128,6 @@ public class RestaurantController {
         }
         return ResponseEntity.ok(response);
     }
-
-    // --- MANAGEMENT ENDPOINTS (OWNER ONLY) ---
 
     @PostMapping
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
@@ -143,8 +166,6 @@ public class RestaurantController {
         restaurantService.deleteRestaurant(id, ownerId);
     }
 
-    // --- TABLE MANAGEMENT ENDPOINTS ---
-
     @PostMapping("/{id}/tables")
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public ResponseEntity<RestaurantTableResponse> addTable(
@@ -168,7 +189,10 @@ public class RestaurantController {
     }
 
     /**
-     * Pomocná metoda pro získání UUID uživatele z Authentication kontextu.
+     * Extrahuje UUID přihlášeného uživatele z Authentication kontextu.
+     *
+     * @param authentication Spring Security authentication objekt
+     * @return UUID přihlášeného uživatele
      */
     private UUID extractUserId(Authentication authentication) {
         return UUID.fromString(authentication.getName());

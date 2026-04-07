@@ -18,12 +18,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * JWT autentizační filtr (JDK 21).
- * Validuje Bearer tokeny a nastavuje SecurityContext.
- * * Změny:
- * - Využití 'var'.
- * - Odstraněno explicitní logování chyb (v tichém catch bloku).
- * - Logování pouze úspěšné autentizace přes JwtLogger.
+ * JWT autentizační filtr zpracovávající Bearer tokeny z Authorization headeru.
+ * Při úspěšné validaci nastaví autentizaci do {@code SecurityContextHolder}.
+ * Kontroluje také aktivitu zařízení přes {@code DeviceRepository}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see JwtService
  */
 @Component
 @RequiredArgsConstructor
@@ -32,7 +33,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserService userService;
     private final JwtLogger jwtLogger;
+    private final com.checkfood.checkfoodservice.security.module.user.repository.DeviceRepository deviceRepository;
 
+    /**
+     * Zpracuje HTTP požadavek, validuje Bearer token a nastaví SecurityContext.
+     *
+     * @param request     příchozí HTTP požadavek
+     * @param response    HTTP odpověď
+     * @param filterChain zbývající filtrový řetězec
+     * @throws ServletException při chybě filtru
+     * @throws IOException      při chybě I/O
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -55,6 +66,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 var user = userService.findWithRolesByEmail(userEmail);
 
                 if (jwtService.isTokenValid(token, user)) {
+                    var deviceId = jwtService.extractDeviceIdentifier("Bearer " + token);
+                    if (deviceId != null) {
+                        var device = deviceRepository.findByDeviceIdentifierAndUser(deviceId, user);
+                        if (device.isEmpty() || !device.get().isActive()) {
+                            jwtLogger.logTokenValidationFailed(request.getRequestURI(),
+                                    "Device " + deviceId + " not found or inactive");
+                            filterChain.doFilter(request, response);
+                            return;
+                        }
+                    }
+
                     var authToken = new UsernamePasswordAuthenticationToken(
                             user,
                             null,
@@ -64,13 +86,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    // Happy path logování
                     jwtLogger.logTokenValidated(userEmail);
                 }
             }
         } catch (Exception e) {
-            // Filter musí pokračovat i při chybě (permitAll endpointy).
-            // Logujeme na WARN úrovni pro viditelnost bezpečnostních incidentů.
             jwtLogger.logTokenValidationFailed(request.getRequestURI(), e.getMessage());
         }
 

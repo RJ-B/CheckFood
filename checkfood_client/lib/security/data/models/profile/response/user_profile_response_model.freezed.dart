@@ -33,6 +33,15 @@ mixin _$UserProfileResponseModel {
   String? get lastName => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.profileImageUrl)
   String? get profileImageUrl => throw _privateConstructorUsedError;
+  String get phone => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressStreet')
+  String get addressStreet => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressCity')
+  String get addressCity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressPostalCode')
+  String get addressPostalCode => throw _privateConstructorUsedError;
+  @JsonKey(name: 'addressCountry')
+  String get addressCountry => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.isActive)
   bool get isActive => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.lastLogin)
@@ -67,6 +76,11 @@ abstract class $UserProfileResponseModelCopyWith<$Res> {
     @JsonKey(name: SecurityJsonKeys.firstName) String? firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String? lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
+    String phone,
+    @JsonKey(name: 'addressStreet') String addressStreet,
+    @JsonKey(name: 'addressCity') String addressCity,
+    @JsonKey(name: 'addressPostalCode') String addressPostalCode,
+    @JsonKey(name: 'addressCountry') String addressCountry,
     @JsonKey(name: SecurityJsonKeys.isActive) bool isActive,
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) DateTime createdAt,
@@ -98,6 +112,11 @@ class _$UserProfileResponseModelCopyWithImpl<
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? profileImageUrl = freezed,
+    Object? phone = null,
+    Object? addressStreet = null,
+    Object? addressCity = null,
+    Object? addressPostalCode = null,
+    Object? addressCountry = null,
     Object? isActive = null,
     Object? lastLogin = freezed,
     Object? createdAt = null,
@@ -131,6 +150,31 @@ class _$UserProfileResponseModelCopyWithImpl<
                     ? _value.profileImageUrl
                     : profileImageUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
+            phone:
+                null == phone
+                    ? _value.phone
+                    : phone // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressStreet:
+                null == addressStreet
+                    ? _value.addressStreet
+                    : addressStreet // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressCity:
+                null == addressCity
+                    ? _value.addressCity
+                    : addressCity // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressPostalCode:
+                null == addressPostalCode
+                    ? _value.addressPostalCode
+                    : addressPostalCode // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressCountry:
+                null == addressCountry
+                    ? _value.addressCountry
+                    : addressCountry // ignore: cast_nullable_to_non_nullable
+                        as String,
             isActive:
                 null == isActive
                     ? _value.isActive
@@ -177,6 +221,11 @@ abstract class _$$UserProfileResponseModelImplCopyWith<$Res>
     @JsonKey(name: SecurityJsonKeys.firstName) String? firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String? lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl) String? profileImageUrl,
+    String phone,
+    @JsonKey(name: 'addressStreet') String addressStreet,
+    @JsonKey(name: 'addressCity') String addressCity,
+    @JsonKey(name: 'addressPostalCode') String addressPostalCode,
+    @JsonKey(name: 'addressCountry') String addressCountry,
     @JsonKey(name: SecurityJsonKeys.isActive) bool isActive,
     @JsonKey(name: SecurityJsonKeys.lastLogin) DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) DateTime createdAt,
@@ -208,6 +257,11 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? profileImageUrl = freezed,
+    Object? phone = null,
+    Object? addressStreet = null,
+    Object? addressCity = null,
+    Object? addressPostalCode = null,
+    Object? addressCountry = null,
     Object? isActive = null,
     Object? lastLogin = freezed,
     Object? createdAt = null,
@@ -241,6 +295,31 @@ class __$$UserProfileResponseModelImplCopyWithImpl<$Res>
                 ? _value.profileImageUrl
                 : profileImageUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
+        phone:
+            null == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressStreet:
+            null == addressStreet
+                ? _value.addressStreet
+                : addressStreet // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressCity:
+            null == addressCity
+                ? _value.addressCity
+                : addressCity // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressPostalCode:
+            null == addressPostalCode
+                ? _value.addressPostalCode
+                : addressPostalCode // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressCountry:
+            null == addressCountry
+                ? _value.addressCountry
+                : addressCountry // ignore: cast_nullable_to_non_nullable
+                    as String,
         isActive:
             null == isActive
                 ? _value.isActive
@@ -280,6 +359,11 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
     @JsonKey(name: SecurityJsonKeys.firstName) this.firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) this.lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl) this.profileImageUrl,
+    this.phone = '',
+    @JsonKey(name: 'addressStreet') this.addressStreet = '',
+    @JsonKey(name: 'addressCity') this.addressCity = '',
+    @JsonKey(name: 'addressPostalCode') this.addressPostalCode = '',
+    @JsonKey(name: 'addressCountry') this.addressCountry = '',
     @JsonKey(name: SecurityJsonKeys.isActive) this.isActive = false,
     @JsonKey(name: SecurityJsonKeys.lastLogin) this.lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt) required this.createdAt,
@@ -306,6 +390,21 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
   @JsonKey(name: SecurityJsonKeys.profileImageUrl)
   final String? profileImageUrl;
   @override
+  @JsonKey()
+  final String phone;
+  @override
+  @JsonKey(name: 'addressStreet')
+  final String addressStreet;
+  @override
+  @JsonKey(name: 'addressCity')
+  final String addressCity;
+  @override
+  @JsonKey(name: 'addressPostalCode')
+  final String addressPostalCode;
+  @override
+  @JsonKey(name: 'addressCountry')
+  final String addressCountry;
+  @override
   @JsonKey(name: SecurityJsonKeys.isActive)
   final bool isActive;
   @override
@@ -323,7 +422,7 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
 
   @override
   String toString() {
-    return 'UserProfileResponseModel(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, role: $role, authProvider: $authProvider)';
+    return 'UserProfileResponseModel(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, phone: $phone, addressStreet: $addressStreet, addressCity: $addressCity, addressPostalCode: $addressPostalCode, addressCountry: $addressCountry, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, role: $role, authProvider: $authProvider)';
   }
 
   @override
@@ -339,6 +438,15 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
                 other.lastName == lastName) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.addressStreet, addressStreet) ||
+                other.addressStreet == addressStreet) &&
+            (identical(other.addressCity, addressCity) ||
+                other.addressCity == addressCity) &&
+            (identical(other.addressPostalCode, addressPostalCode) ||
+                other.addressPostalCode == addressPostalCode) &&
+            (identical(other.addressCountry, addressCountry) ||
+                other.addressCountry == addressCountry) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
             (identical(other.lastLogin, lastLogin) ||
@@ -359,6 +467,11 @@ class _$UserProfileResponseModelImpl extends _UserProfileResponseModel {
     firstName,
     lastName,
     profileImageUrl,
+    phone,
+    addressStreet,
+    addressCity,
+    addressPostalCode,
+    addressCountry,
     isActive,
     lastLogin,
     createdAt,
@@ -390,6 +503,11 @@ abstract class _UserProfileResponseModel extends UserProfileResponseModel {
     @JsonKey(name: SecurityJsonKeys.lastName) final String? lastName,
     @JsonKey(name: SecurityJsonKeys.profileImageUrl)
     final String? profileImageUrl,
+    final String phone,
+    @JsonKey(name: 'addressStreet') final String addressStreet,
+    @JsonKey(name: 'addressCity') final String addressCity,
+    @JsonKey(name: 'addressPostalCode') final String addressPostalCode,
+    @JsonKey(name: 'addressCountry') final String addressCountry,
     @JsonKey(name: SecurityJsonKeys.isActive) final bool isActive,
     @JsonKey(name: SecurityJsonKeys.lastLogin) final DateTime? lastLogin,
     @JsonKey(name: SecurityJsonKeys.createdAt)
@@ -417,6 +535,20 @@ abstract class _UserProfileResponseModel extends UserProfileResponseModel {
   @override
   @JsonKey(name: SecurityJsonKeys.profileImageUrl)
   String? get profileImageUrl;
+  @override
+  String get phone;
+  @override
+  @JsonKey(name: 'addressStreet')
+  String get addressStreet;
+  @override
+  @JsonKey(name: 'addressCity')
+  String get addressCity;
+  @override
+  @JsonKey(name: 'addressPostalCode')
+  String get addressPostalCode;
+  @override
+  @JsonKey(name: 'addressCountry')
+  String get addressCountry;
   @override
   @JsonKey(name: SecurityJsonKeys.isActive)
   bool get isActive;

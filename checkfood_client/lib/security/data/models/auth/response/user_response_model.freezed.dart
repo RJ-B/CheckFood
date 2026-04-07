@@ -35,6 +35,9 @@ mixin _$UserResponseModel {
   bool get needsRestaurantClaim => throw _privateConstructorUsedError;
   @JsonKey(name: 'needsOnboarding')
   bool get needsOnboarding => throw _privateConstructorUsedError;
+  String get firstName => throw _privateConstructorUsedError;
+  String get lastName => throw _privateConstructorUsedError;
+  String get phone => throw _privateConstructorUsedError;
 
   /// Serializes this UserResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,6 +64,9 @@ abstract class $UserResponseModelCopyWith<$Res> {
     @JsonKey(name: SecurityJsonKeys.authorities) List<String> authorities,
     @JsonKey(name: 'needsRestaurantClaim') bool needsRestaurantClaim,
     @JsonKey(name: 'needsOnboarding') bool needsOnboarding,
+    String firstName,
+    String lastName,
+    String phone,
   });
 }
 
@@ -86,6 +92,9 @@ class _$UserResponseModelCopyWithImpl<$Res, $Val extends UserResponseModel>
     Object? authorities = null,
     Object? needsRestaurantClaim = null,
     Object? needsOnboarding = null,
+    Object? firstName = null,
+    Object? lastName = null,
+    Object? phone = null,
   }) {
     return _then(
       _value.copyWith(
@@ -124,6 +133,21 @@ class _$UserResponseModelCopyWithImpl<$Res, $Val extends UserResponseModel>
                     ? _value.needsOnboarding
                     : needsOnboarding // ignore: cast_nullable_to_non_nullable
                         as bool,
+            firstName:
+                null == firstName
+                    ? _value.firstName
+                    : firstName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            lastName:
+                null == lastName
+                    ? _value.lastName
+                    : lastName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            phone:
+                null == phone
+                    ? _value.phone
+                    : phone // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -147,6 +171,9 @@ abstract class _$$UserResponseModelImplCopyWith<$Res>
     @JsonKey(name: SecurityJsonKeys.authorities) List<String> authorities,
     @JsonKey(name: 'needsRestaurantClaim') bool needsRestaurantClaim,
     @JsonKey(name: 'needsOnboarding') bool needsOnboarding,
+    String firstName,
+    String lastName,
+    String phone,
   });
 }
 
@@ -171,6 +198,9 @@ class __$$UserResponseModelImplCopyWithImpl<$Res>
     Object? authorities = null,
     Object? needsRestaurantClaim = null,
     Object? needsOnboarding = null,
+    Object? firstName = null,
+    Object? lastName = null,
+    Object? phone = null,
   }) {
     return _then(
       _$UserResponseModelImpl(
@@ -209,6 +239,21 @@ class __$$UserResponseModelImplCopyWithImpl<$Res>
                 ? _value.needsOnboarding
                 : needsOnboarding // ignore: cast_nullable_to_non_nullable
                     as bool,
+        firstName:
+            null == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        lastName:
+            null == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        phone:
+            null == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -226,6 +271,9 @@ class _$UserResponseModelImpl extends _UserResponseModel {
     final List<String> authorities = const [],
     @JsonKey(name: 'needsRestaurantClaim') this.needsRestaurantClaim = false,
     @JsonKey(name: 'needsOnboarding') this.needsOnboarding = false,
+    this.firstName = '',
+    this.lastName = '',
+    this.phone = '',
   }) : _authorities = authorities,
        super._();
 
@@ -259,10 +307,19 @@ class _$UserResponseModelImpl extends _UserResponseModel {
   @override
   @JsonKey(name: 'needsOnboarding')
   final bool needsOnboarding;
+  @override
+  @JsonKey()
+  final String firstName;
+  @override
+  @JsonKey()
+  final String lastName;
+  @override
+  @JsonKey()
+  final String phone;
 
   @override
   String toString() {
-    return 'UserResponseModel(id: $id, email: $email, role: $role, isActive: $isActive, authorities: $authorities, needsRestaurantClaim: $needsRestaurantClaim, needsOnboarding: $needsOnboarding)';
+    return 'UserResponseModel(id: $id, email: $email, role: $role, isActive: $isActive, authorities: $authorities, needsRestaurantClaim: $needsRestaurantClaim, needsOnboarding: $needsOnboarding, firstName: $firstName, lastName: $lastName, phone: $phone)';
   }
 
   @override
@@ -282,7 +339,12 @@ class _$UserResponseModelImpl extends _UserResponseModel {
             (identical(other.needsRestaurantClaim, needsRestaurantClaim) ||
                 other.needsRestaurantClaim == needsRestaurantClaim) &&
             (identical(other.needsOnboarding, needsOnboarding) ||
-                other.needsOnboarding == needsOnboarding));
+                other.needsOnboarding == needsOnboarding) &&
+            (identical(other.firstName, firstName) ||
+                other.firstName == firstName) &&
+            (identical(other.lastName, lastName) ||
+                other.lastName == lastName) &&
+            (identical(other.phone, phone) || other.phone == phone));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -296,6 +358,9 @@ class _$UserResponseModelImpl extends _UserResponseModel {
     const DeepCollectionEquality().hash(_authorities),
     needsRestaurantClaim,
     needsOnboarding,
+    firstName,
+    lastName,
+    phone,
   );
 
   /// Create a copy of UserResponseModel
@@ -324,6 +389,9 @@ abstract class _UserResponseModel extends UserResponseModel {
     @JsonKey(name: SecurityJsonKeys.authorities) final List<String> authorities,
     @JsonKey(name: 'needsRestaurantClaim') final bool needsRestaurantClaim,
     @JsonKey(name: 'needsOnboarding') final bool needsOnboarding,
+    final String firstName,
+    final String lastName,
+    final String phone,
   }) = _$UserResponseModelImpl;
   const _UserResponseModel._() : super._();
 
@@ -351,6 +419,12 @@ abstract class _UserResponseModel extends UserResponseModel {
   @override
   @JsonKey(name: 'needsOnboarding')
   bool get needsOnboarding;
+  @override
+  String get firstName;
+  @override
+  String get lastName;
+  @override
+  String get phone;
 
   /// Create a copy of UserResponseModel
   /// with the given fields replaced by the non-null parameter values.

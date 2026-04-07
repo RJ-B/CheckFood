@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
 
+import '../models/request/create_recurring_reservation_request_model.dart';
 import '../models/request/create_reservation_request_model.dart';
 import '../models/request/update_reservation_request_model.dart';
 import '../models/response/available_slots_response_model.dart';
 import '../models/response/my_reservations_overview_response_model.dart';
+import '../models/response/pending_change_model.dart';
+import '../models/response/recurring_reservation_response_model.dart';
 import '../models/response/reservation_response_model.dart';
 import '../models/response/reservation_scene_response_model.dart';
 import '../models/response/table_status_response_model.dart';
 
+/// Remote data source contract for the reservation module.
 abstract class ReservationRemoteDataSource {
   Future<ReservationSceneResponseModel> getReservationScene(String restaurantId);
   Future<TableStatusResponseModel> getTableStatuses(String restaurantId, String date);
@@ -17,14 +21,24 @@ abstract class ReservationRemoteDataSource {
   Future<List<ReservationResponseModel>> getMyReservationsHistory();
   Future<ReservationResponseModel> updateReservation(String id, UpdateReservationRequestModel request);
   Future<ReservationResponseModel> cancelReservation(String id);
+  Future<List<PendingChangeModel>> getPendingChanges();
+  Future<ReservationResponseModel> acceptChangeRequest(String changeRequestId);
+  Future<ReservationResponseModel> declineChangeRequest(String changeRequestId);
+
+  Future<RecurringReservationResponseModel> createRecurringReservation(
+      CreateRecurringReservationRequestModel request);
+  Future<List<RecurringReservationResponseModel>> getMyRecurringReservations();
+  Future<RecurringReservationResponseModel> cancelRecurringReservation(
+      String id);
 }
 
+/// Dio-based implementation of [ReservationRemoteDataSource].
 class ReservationRemoteDataSourceImpl implements ReservationRemoteDataSource {
   final Dio _dio;
 
-  // Dio baseUrl already includes /api (from .env API_BASE_URL)
   static const String _restaurantsBase = '/v1/restaurants';
   static const String _reservationsBase = '/v1/reservations';
+  static const String _recurringBase = '/v1/recurring-reservations';
 
   ReservationRemoteDataSourceImpl(this._dio);
 
@@ -97,5 +111,50 @@ class ReservationRemoteDataSourceImpl implements ReservationRemoteDataSource {
   Future<ReservationResponseModel> cancelReservation(String id) async {
     final response = await _dio.patch('$_reservationsBase/$id/cancel');
     return ReservationResponseModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<List<PendingChangeModel>> getPendingChanges() async {
+    final response = await _dio.get('$_reservationsBase/me/pending-changes');
+    return (response.data as List)
+        .map((json) => PendingChangeModel.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<ReservationResponseModel> acceptChangeRequest(String changeRequestId) async {
+    final response = await _dio.post('$_reservationsBase/change-requests/$changeRequestId/accept');
+    return ReservationResponseModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<ReservationResponseModel> declineChangeRequest(String changeRequestId) async {
+    final response = await _dio.post('$_reservationsBase/change-requests/$changeRequestId/decline');
+    return ReservationResponseModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<RecurringReservationResponseModel> createRecurringReservation(
+      CreateRecurringReservationRequestModel request) async {
+    final response = await _dio.post(_recurringBase, data: request.toJson());
+    return RecurringReservationResponseModel.fromJson(
+        response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<List<RecurringReservationResponseModel>> getMyRecurringReservations() async {
+    final response = await _dio.get('$_recurringBase/me');
+    return (response.data as List)
+        .map((j) => RecurringReservationResponseModel.fromJson(
+            j as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<RecurringReservationResponseModel> cancelRecurringReservation(
+      String id) async {
+    final response = await _dio.patch('$_recurringBase/$id/cancel');
+    return RecurringReservationResponseModel.fromJson(
+        response.data as Map<String, dynamic>);
   }
 }

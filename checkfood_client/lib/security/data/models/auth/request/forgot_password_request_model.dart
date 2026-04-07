@@ -1,3 +1,4 @@
+/// Datový model pro požadavek zahájení obnovy hesla.
 class ForgotPasswordRequestModel {
   final String email;
 

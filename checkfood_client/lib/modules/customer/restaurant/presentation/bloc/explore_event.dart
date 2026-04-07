@@ -16,12 +16,22 @@ class ExploreEvent with _$ExploreEvent {
 
   const factory ExploreEvent.refreshRequested() = RefreshRequested;
 
-  /// Search query changed (debounced in bloc)
   const factory ExploreEvent.searchChanged({required String query}) =
       SearchChanged;
 
-  /// Marker tapped — null placeId deselects
   const factory ExploreEvent.markerSelected({
-    String? placeId,
+    String? restaurantId,
   }) = MarkerSelected;
+
+  const factory ExploreEvent.viewportChanged({
+    required double minLat,
+    required double maxLat,
+    required double minLng,
+    required double maxLng,
+    required int zoom,
+  }) = ViewportChanged;
+
+  const factory ExploreEvent.markersRefreshed({
+    required int version,
+  }) = MarkersRefreshed;
 }

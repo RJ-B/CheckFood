@@ -1,11 +1,11 @@
 package com.checkfood.checkfoodservice.client.mail.model;
 
 /**
- * Datový objekt reprezentující požadavek
- * na odeslání e-mailu.
+ * Datový objekt reprezentující požadavek na odeslání e-mailu.
+ * Určen výhradně pro client vrstvu, není to aplikační DTO.
  *
- * Nejde o aplikační DTO – je určen výhradně
- * pro client vrstvu.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class MailRequest {
 

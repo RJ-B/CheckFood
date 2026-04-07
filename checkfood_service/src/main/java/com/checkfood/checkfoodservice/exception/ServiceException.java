@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
  * Poskytuje společnou strukturu pro všechny aplikační výjimky včetně error kódu a HTTP statusu.
  * Slouží jako rodičovská třída pro specifické výjimky jednotlivých vrstev.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see ErrorCode
  */
 @Getter

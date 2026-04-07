@@ -10,15 +10,33 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Globální handler výjimek modulu restaurací. Mapuje {@link RestaurantException} na HTTP odpovědi.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @RestControllerAdvice
 @Component
 @Slf4j
 public class RestaurantExceptionHandler extends AppExceptionHandler {
 
+    /**
+     * Vytvoří handler s instancí builderu pro formátování chybových odpovědí.
+     *
+     * @param errorResponseBuilder builder pro sestavení standardizované chybové odpovědi
+     */
     public RestaurantExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);
     }
 
+    /**
+     * Zpracuje výjimku modulu restaurací a vrátí odpovídající HTTP odpověď.
+     *
+     * @param ex      zachycená výjimka
+     * @param request aktuální HTTP požadavek
+     * @return HTTP odpověď s chybovým tělem
+     */
     @ExceptionHandler(RestaurantException.class)
     public ResponseEntity<ErrorResponse> handleRestaurantException(RestaurantException ex, WebRequest request) {
         logRestaurantException(ex, request);

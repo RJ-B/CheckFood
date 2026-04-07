@@ -4,6 +4,7 @@ import '../../../domain/entities/menu_item.dart';
 part 'menu_item_response_model.freezed.dart';
 part 'menu_item_response_model.g.dart';
 
+/// API response model for a single menu item with pricing and availability.
 @freezed
 class MenuItemResponseModel with _$MenuItemResponseModel {
   const MenuItemResponseModel._();

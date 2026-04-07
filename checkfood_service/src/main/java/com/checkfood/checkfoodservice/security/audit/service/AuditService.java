@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
  * Service interface pro správu a dotazování auditních záznamů.
  * Poskytuje metody pro persistenci nových logů, vyhledávání a údržbu auditních dat.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditLogEntity
  * @see AuditAction
  * @see AuditStatus

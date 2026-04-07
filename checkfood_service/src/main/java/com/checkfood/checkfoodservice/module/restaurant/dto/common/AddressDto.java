@@ -3,6 +3,12 @@ package com.checkfood.checkfoodservice.module.restaurant.dto.common;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+/**
+ * DTO pro přenos dat adresy mezi klientem a serverem.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

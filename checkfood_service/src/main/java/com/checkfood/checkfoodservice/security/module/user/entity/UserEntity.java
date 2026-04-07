@@ -14,8 +14,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Centrální doménová entita reprezentující uživatelský subjekt.
- * Aktualizována o podporu profilových obrázků z OAuth2.
+ * Centrální JPA entita reprezentující uživatelský subjekt implementující {@link UserDetails}.
+ * Obsahuje osobní údaje, autentizační metadata, přiřazené role a registrovaná zařízení.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see RoleEntity
+ * @see DeviceEntity
  */
 @Entity
 @Table(
@@ -48,8 +53,23 @@ public class UserEntity implements UserDetails {
     /**
      * URL adresa profilového obrázku získaná z OAuth poskytovatele (např. Google).
      */
-    @Column(name = "profile_image_url", length = 512) // Zvětšená délka pro dlouhé URL tokeny
+    @Column(name = "profile_image_url", length = 512)
     private String profileImageUrl;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Column(name = "address_street", length = 255)
+    private String addressStreet;
+
+    @Column(name = "address_city", length = 100)
+    private String addressCity;
+
+    @Column(name = "address_postal_code", length = 20)
+    private String addressPostalCode;
+
+    @Column(name = "address_country", length = 100)
+    private String addressCountry;
 
     @Column(length = 255)
     private String password;
@@ -64,6 +84,14 @@ public class UserEntity implements UserDetails {
     @Builder.Default
     @Column(nullable = false)
     private boolean enabled = false;
+
+    /**
+     * Úroveň vlastníka restaurace: TRIAL (zkušební) nebo FULL (plný přístup).
+     * Null pro uživatele bez role OWNER.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "owner_tier", length = 20)
+    private OwnerTier ownerTier;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -83,8 +111,9 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DeviceEntity> devices = new HashSet<>();
 
-    // --- Lifecycle Callbacks ---
-
+    /**
+     * Nastaví časová razítka a výchozí providerId před prvním persistováním entity.
+     */
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -96,25 +125,40 @@ public class UserEntity implements UserDetails {
         }
     }
 
+    /**
+     * Aktualizuje časové razítko poslední změny entity.
+     */
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // --- Synchronization Helpers ---
-
+    /**
+     * Přidá zařízení k uživateli a nastaví zpětný odkaz na vlastníka.
+     *
+     * @param device zařízení k přidání
+     */
     public void addDevice(DeviceEntity device) {
         devices.add(device);
         device.setUser(this);
     }
 
+    /**
+     * Odebere zařízení od uživatele a vymaže zpětný odkaz na vlastníka.
+     *
+     * @param device zařízení k odebrání
+     */
     public void removeDevice(DeviceEntity device) {
         devices.remove(device);
         device.setUser(null);
     }
 
-    // --- UserDetails Implementation ---
-
+    /**
+     * Vrátí kolekci Spring Security oprávnění odvozených z rolí uživatele.
+     * Každá role je namapována na {@code SimpleGrantedAuthority} s prefixem {@code ROLE_}.
+     *
+     * @return kolekce grantovaných oprávnění
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -122,6 +166,11 @@ public class UserEntity implements UserDetails {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Vrátí e-mailovou adresu jako unikátní přihlašovací jméno uživatele.
+     *
+     * @return e-mailová adresa uživatele
+     */
     @Override
     public String getUsername() {
         return email;

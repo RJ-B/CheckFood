@@ -6,6 +6,13 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Konfigurační vlastnosti pro Apple OAuth modul načítané z application.properties
+ * pod prefixem security.oauth.apple.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "security.oauth.apple")
@@ -16,8 +23,6 @@ public class AppleOAuthProperties {
 
     private String issuer = "https://appleid.apple.com";
 
-    // Následující jsou potřeba pouze pokud bys dělal i "Sign in with Apple" pro web (code flow)
-    // Pro mobilní aplikaci (id_token flow) stačí clientId a issuer.
     private String teamId;
     private String keyId;
     private String privateKey;

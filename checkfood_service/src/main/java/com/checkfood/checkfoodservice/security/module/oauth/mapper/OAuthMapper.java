@@ -9,7 +9,10 @@ import org.mapstruct.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper pro transformaci mezi OAuth daty a sjednocenými autentizačními DTO.
+ * MapStruct mapper pro transformaci mezi OAuth daty a sjednocenými autentizačními DTO.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface OAuthMapper {
@@ -21,7 +24,7 @@ public interface OAuthMapper {
     @Mapping(target = "providerId", source = "providerUserId")
     @Mapping(target = "authProvider", source = "providerType")
     @Mapping(target = "enabled", constant = "true")
-    @Mapping(target = "password", ignore = true) // Explicitní ignorování hesla při vytváření entity
+    @Mapping(target = "password", ignore = true)
     UserEntity toEntity(OAuthUserInfo userInfo);
 
     /**

@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Request pro potvrzení MFA setupu.
+ * DTO pro potvrzení nastavení MFA obsahující první TOTP kód vygenerovaný autentizační aplikací.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

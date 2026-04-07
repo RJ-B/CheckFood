@@ -1,9 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Domain Layer - Entities
 import '../../../domain/entities/auth_failure.dart';
-
-// Domain Layer - UseCases
 import '../../../domain/usecases/auth/check_auth_status_usecase.dart';
 import '../../../domain/usecases/auth/get_authenticated_user_usecase.dart';
 import '../../../domain/usecases/auth/login_usecase.dart';
@@ -16,16 +13,11 @@ import '../../../domain/usecases/auth/forgot_password_usecase.dart';
 import '../../../domain/usecases/auth/reset_password_usecase.dart';
 import '../../../domain/usecases/oauth/login_with_apple_usecase.dart';
 import '../../../domain/usecases/oauth/login_with_google_usecase.dart';
-
-// Domain Layer - Exceptions
 import '../../../exceptions/auth_exceptions.dart';
-
-// Events and States
 import 'auth_event.dart';
 import 'auth_state.dart';
 
 /// BLoC zodpovědný za řízení stavu autentizace v aplikaci.
-/// Implementuje striktní Clean Architecture (Cesta A).
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase _loginUseCase;
   final RegisterUseCase _registerUseCase;
@@ -66,7 +58,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _forgotPasswordUseCase = forgotPasswordUseCase,
        _resetPasswordUseCase = resetPasswordUseCase,
        super(const AuthState.initial()) {
-    // Registrace handlerů pro jednotlivé události
     on<AppStarted>(_onAppStarted);
     on<LoginRequested>(_onLoginRequested);
     on<RegisterRequested>(_onRegisterRequested);
@@ -80,7 +71,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ResetPasswordRequested>(_onResetPasswordRequested);
   }
 
-  /// 🟢 INITIALIZATION
   /// Kontroluje, zda je uživatel již přihlášen (např. při restartu aplikace).
   Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     try {
@@ -95,8 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// 🔵 LOGIN (Email/Password)
-  /// Provádí přihlášení a následně načítá plný profil uživatele.
+  /// Provádí přihlášení emailem/heslem a načítá profil uživatele.
   Future<void> _onLoginRequested(
     LoginRequested event,
     Emitter<AuthState> emit,
@@ -118,7 +107,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       }
     } on AccountNotVerifiedException catch (e) {
-      // Speciální stav, kdy backend vyžaduje verifikaci emailu
       emit(AuthState.verificationRequired(e.errorModel?.email ?? ''));
     } on SecurityException catch (e) {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
@@ -131,7 +119,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// 🟣 REGISTER
   /// Vytvoří nový účet a přepne UI do stavu úspěšné registrace.
   Future<void> _onRegisterRequested(
     RegisterRequested event,
@@ -150,7 +137,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// REGISTER OWNER
+  /// Registruje majitele restaurace a přepne UI do stavu úspěšné registrace.
   Future<void> _onRegisterOwnerRequested(
     RegisterOwnerRequested event,
     Emitter<AuthState> emit,
@@ -168,7 +155,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// 🟠 EMAIL VERIFICATION
   /// Potvrdí účet pomocí tokenu z emailu.
   Future<void> _onVerifyEmailRequested(
     VerifyEmailRequested event,
@@ -177,9 +163,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthState.loading());
     try {
       await _verifyEmailUseCase(event.token);
-      emit(
-        const AuthState.unauthenticated(),
-      ); // Po verifikaci se uživatel musí přihlásit
+      emit(const AuthState.unauthenticated());
     } on SecurityException catch (e) {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     } catch (e) {
@@ -189,7 +173,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// 🟡 RESEND VERIFICATION CODE
   /// Požádá backend o nové zaslání verifikačního emailu.
   Future<void> _onResendCodeRequested(
     ResendCodeRequested event,
@@ -197,13 +180,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     try {
       await _resendVerificationCodeUseCase(event.email);
-      // Zde obvykle neměníme stav na loading, aby se zachoval kontext formuláře v UI
     } on SecurityException catch (e) {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
     }
   }
 
-  /// 🔵 GOOGLE OAUTH
+  /// Zahájí přihlašovací flow přes Google OAuth.
   Future<void> _onGoogleLoginRequested(
     GoogleLoginRequested event,
     Emitter<AuthState> emit,
@@ -221,7 +203,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// ⚪ APPLE OAUTH
+  /// Zahájí přihlašovací flow přes Apple ID.
   Future<void> _onAppleLoginRequested(
     AppleLoginRequested event,
     Emitter<AuthState> emit,
@@ -240,7 +222,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// 🔴 LOGOUT
   /// Zruší sezení na backendu i lokálně.
   Future<void> _onLogoutRequested(
     LogoutRequested event,
@@ -250,7 +231,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _logoutUseCase();
     } finally {
-      // Vždy emitujeme unauthenticated, i když síťové volání selže
       emit(const AuthState.unauthenticated());
     }
   }

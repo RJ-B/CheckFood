@@ -13,7 +13,11 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 /**
- * Implementace Google OAuth klienta (JDK 21).
+ * Implementace OAuth klienta pro Google Sign In.
+ * Ověřuje Google ID token prostřednictvím oficiální Google knihovny a extrahuje data uživatele.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 @RequiredArgsConstructor
@@ -22,6 +26,14 @@ public class GoogleOAuthClient implements OAuthClient {
     private final GoogleIdTokenProvider googleTokenProvider;
     private final OAuthLogger oauthLogger;
 
+    /**
+     * Ověří Google ID token a extrahuje data uživatele z payloadu.
+     * Kontroluje, zda je e-mail Google účtu verifikovaný.
+     *
+     * @param idToken surový Google ID token z mobilní aplikace
+     * @return normalizovaná data uživatele
+     * @throws OAuthException pokud je token neplatný nebo e-mail není verifikovaný
+     */
     @Override
     public OAuthUserInfo verifyAndGetUserInfo(String idToken) {
         try {
@@ -33,14 +45,12 @@ public class GoogleOAuthClient implements OAuthClient {
 
             var payload = googleIdToken.getPayload();
 
-            // Bezpečnostní kontrola: Google email musí být verifikovaný
             if (!payload.getEmailVerified()) {
                 throw OAuthException.invalidToken("Email u Google účtu není verifikován.");
             }
 
             var providerUserId = payload.getSubject();
 
-            // Logujeme úspěch (Happy Path)
             oauthLogger.logProviderVerificationSuccess(getProviderType(), providerUserId);
 
             return OAuthUserInfo.builder()

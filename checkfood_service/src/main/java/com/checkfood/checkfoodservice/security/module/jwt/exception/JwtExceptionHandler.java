@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 /**
- * Exception handler pro JWT modul.
- * Využívá zděděné metody pro extrakci kontextu požadavku.
+ * Exception handler pro JWT modul s category-based logging strategií.
+ * Využívá zděděné utility metody ze {@code SecurityExceptionHandler} pro extrakci kontextu požadavku.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see SecurityExceptionHandler
+ * @see JwtException
  */
 @RestControllerAdvice
 @Component
@@ -23,6 +28,13 @@ public class JwtExceptionHandler extends SecurityExceptionHandler {
         super(errorResponseBuilder);
     }
 
+    /**
+     * Zpracuje JwtException a vrátí strukturovanou chybovou odpověď.
+     *
+     * @param ex      JWT výjimka s typed error kódem
+     * @param request WebRequest pro extrakci kontextu
+     * @return ResponseEntity se strukturovanou chybovou odpovědí
+     */
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex, WebRequest request) {
         logJwtExceptionContext(ex, request);
@@ -36,6 +48,13 @@ public class JwtExceptionHandler extends SecurityExceptionHandler {
         return new ResponseEntity<>(response, ex.getStatus());
     }
 
+    /**
+     * Zpracuje Spring Security JwtException a obalí ji do standardní JwtException.
+     *
+     * @param ex      Spring Security JWT výjimka
+     * @param request WebRequest pro extrakci kontextu
+     * @return ResponseEntity se strukturovanou chybovou odpovědí
+     */
     @ExceptionHandler(org.springframework.security.oauth2.jwt.JwtException.class)
     public ResponseEntity<ErrorResponse> handleSpringJwtException(
             org.springframework.security.oauth2.jwt.JwtException ex, WebRequest request) {
@@ -52,7 +71,6 @@ public class JwtExceptionHandler extends SecurityExceptionHandler {
     }
 
     private void logJwtExceptionContext(JwtException ex, WebRequest request) {
-        // Volání chráněných metod z rodiče
         String uri = extractRequestUri(request);
         String ip = getRemoteAddress(request);
         String tokenInfo = extractTokenInfo(request.getHeader("Authorization"));
@@ -81,7 +99,10 @@ public class JwtExceptionHandler extends SecurityExceptionHandler {
     }
 
     /**
-     * Pomocná metoda specifická pro JWT logger.
+     * Extrahuje zkrácené informace o tokenu z Authorization headeru pro účely logování.
+     *
+     * @param authorization hodnota Authorization headeru
+     * @return zkrácený token nebo popis jeho stavu
      */
     private String extractTokenInfo(String authorization) {
         if (authorization == null || !authorization.startsWith("Bearer ")) {

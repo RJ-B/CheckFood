@@ -4,6 +4,12 @@ import com.checkfood.checkfoodservice.module.restaurant.entity.employee.Restaura
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+/**
+ * Požadavek na změnu role zaměstnance v restauraci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

@@ -21,6 +21,8 @@ import '../bloc/reservation_event.dart';
 import '../bloc/reservation_state.dart';
 import '../widgets/table_bottom_sheet.dart';
 
+/// Full-screen panorama reservation page where the user picks a table from a
+/// Three.js panorama view and confirms a time slot via a bottom sheet.
 class ReservationPage extends StatefulWidget {
   final String restaurantId;
 
@@ -30,6 +32,8 @@ class ReservationPage extends StatefulWidget {
   State<ReservationPage> createState() => _ReservationPageState();
 }
 
+/// State for [ReservationPage]: initialises the WebView and [ReservationBloc],
+/// bridges JS table-selection messages, and manages the slot selection sheet.
 class _ReservationPageState extends State<ReservationPage> {
   late final ReservationBloc _bloc;
   late final WebViewController _webController;
@@ -52,8 +56,6 @@ class _ReservationPageState extends State<ReservationPage> {
     super.dispose();
   }
 
-  // ── WebView setup (once in initState) ──────────────────────────────
-
   void _initWebView() {
     _webController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -69,7 +71,6 @@ class _ReservationPageState extends State<ReservationPage> {
       ))
       ..loadFlutterAsset('assets/three/reservation.html');
 
-    // Android: allow local file access for Three.js assets
     if (Platform.isAndroid) {
       final androidController =
           _webController.platform as AndroidWebViewController;
@@ -91,18 +92,14 @@ class _ReservationPageState extends State<ReservationPage> {
     }
   }
 
-  // ── Push data to JS ──────────────────────────────────────────────────
-
   void _pushSceneToJs() {
     final scene = _bloc.state.scene;
     if (scene == null || !_webViewReady) return;
 
-    // Push panorama
     if (scene.panoramaUrl != null && scene.panoramaUrl!.isNotEmpty) {
       _loadPanoramaImage(scene.panoramaUrl!);
     }
 
-    // Push table markers
     final tablesJson = jsonEncode(
       scene.tables
           .map((t) => {
@@ -127,7 +124,6 @@ class _ReservationPageState extends State<ReservationPage> {
 
   Future<void> _loadPanoramaImage(String url) async {
     try {
-      // Resolve relative URLs using the API server base
       String fullUrl = url;
       if (url.startsWith('/')) {
         final apiBase = dotenv.get('API_BASE_URL', fallback: 'http://10.0.2.2:8081');
@@ -136,27 +132,19 @@ class _ReservationPageState extends State<ReservationPage> {
         fullUrl = '$serverBase$url';
       }
 
-      // Load from network and convert to base64
       final bundle = await NetworkAssetBundle(Uri.parse(fullUrl)).load(fullUrl);
       final base64 = base64Encode(bundle.buffer.asUint8List());
       _webController.runJavaScript("window.setPanoramaBase64('$base64')");
-    } catch (e) {
-      debugPrint('[ReservationPage] Failed to load panorama: $e');
-    }
+    } catch (_) {}
   }
 
   String _escapeJs(String s) => s.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
-
-  // ── WebView widget (Hybrid Composition on Android for WebGL) ────────
 
   Widget _buildWebViewWidget() {
     final gestureRecognizers = <Factory<OneSequenceGestureRecognizer>>{
       Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
     };
 
-    // Android: use Hybrid Composition so WebGL renders to its own surface
-    // instead of going through Flutter's texture layer (SurfaceProducer),
-    // which causes "unimplemented OpenGL ES API" conflicts.
     if (Platform.isAndroid) {
       return WebViewWidget.fromPlatformCreationParams(
         params: AndroidWebViewWidgetCreationParams(
@@ -173,8 +161,6 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
 
-  // ── Bottom sheet ─────────────────────────────────────────────────────
-
   void _showTableBottomSheet() {
     if (_bottomSheetOpen) return;
     _bottomSheetOpen = true;
@@ -190,8 +176,6 @@ class _ReservationPageState extends State<ReservationPage> {
       _bottomSheetOpen = false;
     });
   }
-
-  // ── Build ────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -212,20 +196,15 @@ class _ReservationPageState extends State<ReservationPage> {
               prev.selectedTableId != curr.selectedTableId ||
               prev.selectedDate != curr.selectedDate,
           listener: (context, state) {
-            // Push statuses to JS only when they actually change
             if (state.tableStatuses.isNotEmpty &&
                 !identical(state.tableStatuses, _lastPushedStatuses)) {
               _lastPushedStatuses = state.tableStatuses;
               _pushStatusesToJs(state.tableStatuses);
             }
-            // Push scene to JS once after it loads
             if (state.scene != null && _webViewReady && !_scenePushed) {
               _scenePushed = true;
               _pushSceneToJs();
             }
-            // Navigate after successful reservation creation.
-            // Deferred to post-frame to avoid !_debugLocked assertion
-            // (the bottom sheet modal route may still be mid-transition).
             if (state.submitSuccess) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (!context.mounted) return;
@@ -240,7 +219,6 @@ class _ReservationPageState extends State<ReservationPage> {
                 );
               });
             }
-            // Show conflict toast
             if (state.submitConflict) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -282,10 +260,8 @@ class _ReservationPageState extends State<ReservationPage> {
 
             return Stack(
               children: [
-                // Panorama WebView
                 _buildWebViewWidget(),
 
-                // Date picker overlay (top)
                 Positioned(
                   top: 8,
                   left: 16,
@@ -297,7 +273,6 @@ class _ReservationPageState extends State<ReservationPage> {
                   ),
                 ),
 
-                // Hint overlay (bottom)
                 if (state.selectedTableId == null)
                   Positioned(
                     bottom: 24,
@@ -329,8 +304,7 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 }
 
-// ── Date Picker Row ──────────────────────────────────────────────────────
-
+/// A compact row showing the currently selected date with a button to open the date picker.
 class _DatePickerRow extends StatelessWidget {
   final String selectedDate;
   final ValueChanged<String> onDateChanged;

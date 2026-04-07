@@ -11,18 +11,34 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 /**
- * Exception handler pro User modul.
- * Využívá zděděné metody pro extrakci kontextu požadavku.
+ * Exception handler pro User modul zpracovávající výjimky typu {@link UserException}.
+ * Využívá zděděné metody pro extrakci kontextu požadavku a kategorizuje chyby pro správnou
+ * úroveň logování (WARN pro bezpečnostní incidenty, ERROR pro systémové chyby, INFO pro ostatní).
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @RestControllerAdvice
 @Component
 @Slf4j
 public class UserExceptionHandler extends SecurityExceptionHandler {
 
+    /**
+     * Vytvoří instanci handleru s poskytnutým buildrem chybových odpovědí.
+     *
+     * @param errorResponseBuilder builder pro sestavení standardizovaných chybových odpovědí
+     */
     public UserExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);
     }
 
+    /**
+     * Zachytí výjimku User modulu, zaloguje kontext požadavku a vrátí standardizovanou chybovou odpověď.
+     *
+     * @param ex      zachycená výjimka User modulu
+     * @param request kontext webového požadavku pro extrakci URI, IP adresy a User-Agent
+     * @return standardizovaná chybová odpověď s HTTP stavovým kódem z výjimky
+     */
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorResponse> handleUserException(UserException ex, WebRequest request) {
         logUserExceptionContext(ex, request);
@@ -36,8 +52,14 @@ public class UserExceptionHandler extends SecurityExceptionHandler {
         return new ResponseEntity<>(response, ex.getStatus());
     }
 
+    /**
+     * Zaloguje kontext výjimky User modulu podle kategorie chybového kódu.
+     * Bezpečnostní incidenty loguje jako WARN, systémové chyby jako ERROR, ostatní jako INFO.
+     *
+     * @param ex      zachycená výjimka User modulu
+     * @param request kontext webového požadavku pro extrakci URI, IP adresy a User-Agent
+     */
     private void logUserExceptionContext(UserException ex, WebRequest request) {
-        // Volání chráněných metod z rodiče
         String uri = extractRequestUri(request);
         String ip = getRemoteAddress(request);
         String ua = request.getHeader("User-Agent");

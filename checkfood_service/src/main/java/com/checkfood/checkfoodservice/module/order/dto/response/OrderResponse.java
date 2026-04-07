@@ -1,6 +1,7 @@
 package com.checkfood.checkfoodservice.module.order.dto.response;
 
 import com.checkfood.checkfoodservice.module.order.entity.OrderStatus;
+import com.checkfood.checkfoodservice.module.order.entity.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Plný response DTO objednávky obsahující všechny položky, stav a informace o platbě.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -27,4 +34,8 @@ public class OrderResponse {
     private String note;
     private LocalDateTime createdAt;
     private List<OrderItemResponse> items;
+
+    private PaymentStatus paymentStatus;
+    private String paymentTransactionId;
+    private String paymentRedirectUrl;
 }

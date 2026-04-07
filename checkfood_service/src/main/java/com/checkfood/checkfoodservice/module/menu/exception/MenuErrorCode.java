@@ -3,6 +3,12 @@ package com.checkfood.checkfoodservice.module.menu.exception;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Chybové kódy specifické pro modul menu, kategorizované dle původu chyby (BUSINESS, SYSTEM).
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @RequiredArgsConstructor
 public enum MenuErrorCode {

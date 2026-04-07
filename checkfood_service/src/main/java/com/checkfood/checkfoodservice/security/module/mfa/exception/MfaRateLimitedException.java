@@ -1,7 +1,10 @@
 package com.checkfood.checkfoodservice.security.module.mfa.exception;
 
 /**
- * Vyhozena při překročení limitu pokusů o MFA ověření.
+ * Výjimka vyhozená při překročení povoleného počtu neúspěšných pokusů o MFA ověření.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class MfaRateLimitedException extends MfaException {
 

@@ -9,6 +9,12 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 
+/**
+ * Embeddable value object reprezentující fyzickou adresu s volitelnými geoprostorovými souřadnicemi PostGIS.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,9 +39,8 @@ public class Address {
     private String country;
 
     /**
-     * PostGIS Geometry sloupec.
-     * SRID 4326 je standard pro GPS souřadnice (WGS 84).
-     * @JsonIgnore zajistí, že se tento složitý objekt nebude posílat na frontend.
+     * Sloupec geometrie PostGIS s SRID 4326 (WGS 84 / GPS souřadnice).
+     * Vyloučen z JSON serializace — místo toho použijte {@link #getLatitude()} a {@link #getLongitude()}.
      */
     @JsonIgnore
     @Column(columnDefinition = "geometry(Point,4326)")
@@ -44,11 +49,10 @@ public class Address {
     @Column(name = "google_place_id", length = 255)
     private String googlePlaceId;
 
-    // --- Pomocné metody pro kompatibilitu s frontendem (JSON) ---
-
     /**
-     * Virtuální getter pro Latitude (pro JSON).
-     * Bere data přímo z Point objektu.
+     * Vrátí zeměpisnou šířku extrahovanou z PostGIS Point.
+     *
+     * @return zeměpisná šířka v desetinných stupních, nebo {@code null} pokud není poloha nastavena
      */
     public Double getLatitude() {
         if (this.location != null) {
@@ -58,8 +62,9 @@ public class Address {
     }
 
     /**
-     * Virtuální getter pro Longitude (pro JSON).
-     * Bere data přímo z Point objektu.
+     * Vrátí zeměpisnou délku extrahovanou z PostGIS Point.
+     *
+     * @return zeměpisná délka v desetinných stupních, nebo {@code null} pokud není poloha nastavena
      */
     public Double getLongitude() {
         if (this.location != null) {
@@ -69,12 +74,14 @@ public class Address {
     }
 
     /**
-     * Setter, který při přijetí dat z JSONu (nebo DTO) vytvoří JTS Point.
-     * Toto je nutné volat, pokud nastavuješ souřadnice ručně.
+     * Vytvoří a nastaví PostGIS Point ze zadaných hodnot zeměpisné šířky a délky.
+     * JTS používá pořadí (X=zeměpisná délka, Y=zeměpisná šířka).
+     *
+     * @param latitude  zeměpisná šířka v desetinných stupních
+     * @param longitude zeměpisná délka v desetinných stupních
      */
     public void setCoordinates(double latitude, double longitude) {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-        // Pozor: JTS bere pořadí (X, Y) -> (Longitude, Latitude)
         this.location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
     }
 }

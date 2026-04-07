@@ -5,17 +5,21 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Reaguje na registraci nového uživatele.
+ * Posluchač doménové události registrace nového uživatele.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class UserRegisteredListener {
 
+    /**
+     * Zpracuje událost registrace nového uživatele.
+     *
+     * @param event událost s daty registrovaného uživatele
+     */
     @EventListener
     public void onUserRegistered(UserRegisteredEvent event) {
-
-        // TODO:
-        // - odeslat uvítací e-mail (MailClient)
-        // - publikovat audit (UserAuditEvent)
-        // - případně metriky
+        // TODO: odeslat uvítací e-mail (MailClient), publikovat audit, metriky
     }
 }

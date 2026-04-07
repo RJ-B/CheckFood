@@ -4,7 +4,14 @@ import com.checkfood.checkfoodservice.module.restaurant.entity.employee.Restaura
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
+/**
+ * Odpověď s daty zaměstnance restaurace včetně jeho role a efektivních oprávnění.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,4 +23,5 @@ public class EmployeeResponse {
     private String email;
     private RestaurantEmployeeRole role;
     private LocalDateTime createdAt;
+    private Set<String> permissions;
 }

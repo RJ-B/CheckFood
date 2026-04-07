@@ -5,13 +5,20 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * Odpověď z Apple JWKS endpointu obsahující veřejné klíče.
+ * DTO odpovědi z Apple JWKS endpointu obsahující seznam veřejných RSA klíčů pro ověření ID tokenů.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
 public class ApplePublicKeyResponse {
+
     private List<Key> keys;
 
+    /**
+     * Jednotlivý RSA veřejný klíč ve formátu JWK (JSON Web Key).
+     */
     @Getter
     @Setter
     public static class Key {

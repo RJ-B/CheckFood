@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * JPA entita objednávky zákazníka v restauraci, zahrnuje položky, stav objednávky a informace o platbě.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -58,6 +64,17 @@ public class Order {
     @Column(name = "note", length = 500)
     private String note;
 
+    @Column(name = "payment_status", length = 30)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private PaymentStatus paymentStatus = PaymentStatus.NONE;
+
+    @Column(name = "payment_transaction_id", length = 100)
+    private String paymentTransactionId;
+
+    @Column(name = "payment_redirect_url", length = 500)
+    private String paymentRedirectUrl;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -65,6 +82,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
+    /**
+     * Nastaví čas vytvoření při první perzistenci entity, pokud nebyl explicitně zadán.
+     */
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {
@@ -72,6 +92,11 @@ public class Order {
         }
     }
 
+    /**
+     * Přidá položku do objednávky a nastaví zpětnou referenci na tuto objednávku.
+     *
+     * @param item položka objednávky, která má být přidána
+     */
     public void addItem(OrderItem item) {
         items.add(item);
         item.setOrder(this);

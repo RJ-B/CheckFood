@@ -13,12 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementace role servisu pro správu uživatelských rolí.
+ * Implementace servisní vrstvy pro správu uživatelských rolí s logováním operací.
  *
- * Verze JDK 21:
- * - Využití 'var'.
- * - Rozlišení logování pro CREATE/UPDATE operace.
- * - Striktní použití UserException.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Service
 @RequiredArgsConstructor
@@ -83,8 +81,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Smazání role podle ID.
-     * (Doplněno pro kompletnost CRUD operací, pokud je v interface)
+     * Smaže roli podle ID.
+     *
+     * @param id ID role ke smazání
+     * @throws UserException pokud role s daným ID neexistuje
      */
     public void deleteById(Long id) {
         var role = roleRepository.findById(id)

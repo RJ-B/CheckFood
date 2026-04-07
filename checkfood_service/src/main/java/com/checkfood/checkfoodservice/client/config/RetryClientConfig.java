@@ -3,18 +3,14 @@ package com.checkfood.checkfoodservice.client.config;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Konfigurace retry mechanismů pro externí systémy.
+ * Konfigurace retry mechanizmů pro externí systémy.
+ * Service vrstva nikdy neřeší retry přímo — veškerá logika opakování volání patří sem.
  *
- * Řeší:
- * - opakování volání při timeoutu
- * - fallback strategie
- *
- * Service vrstva nikdy neřeší retry přímo.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 public class RetryClientConfig {
 
-    // TODO:
-    // - Spring Retry / Resilience4j
-    // - retry policy podle typu klienta
+    // TODO: Spring Retry / Resilience4j — retry policy podle typu klienta
 }

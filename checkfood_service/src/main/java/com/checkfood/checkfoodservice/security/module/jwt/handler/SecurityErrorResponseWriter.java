@@ -15,6 +15,9 @@ import java.util.Map;
 /**
  * Utility třída pro generování standardizovaných JSON chybových odpovědí na úrovni Spring Security filtrů.
  * Centralizuje logiku tvorby HTTP error response pro JWT handlery.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 @RequiredArgsConstructor

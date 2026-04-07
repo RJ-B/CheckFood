@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Core & Security
 import '../core/di/injection_container.dart';
 import '../core/theme/colors.dart';
 import '../l10n/generated/app_localizations.dart';
@@ -11,29 +10,25 @@ import '../../security/presentation/pages/auth/login_page.dart';
 import '../../security/presentation/bloc/user/user_bloc.dart';
 import '../../security/presentation/bloc/user/user_event.dart';
 import '../../security/presentation/pages/user/profile_screen.dart';
-
-// Restaurant Module (Nový modul)
 import '../modules/customer/restaurant/presentation/pages/explore_page.dart';
-
-// Management Module
 import '../modules/management/my_restaurant/presentation/bloc/my_restaurant_bloc.dart';
 import '../modules/management/my_restaurant/presentation/pages/my_restaurant_page.dart';
-
-// Orders Module
 import '../modules/customer/orders/presentation/bloc/orders_bloc.dart';
 import '../modules/customer/orders/presentation/pages/orders_page.dart';
-
 import '../modules/customer/restaurant/presentation/bloc/explore_bloc.dart';
-
-// Reservation Module
 import '../modules/customer/reservation/presentation/bloc/my_reservations_bloc.dart';
 import '../modules/customer/reservation/presentation/pages/reservations_screen.dart';
 
+/// Root scaffold that hosts the bottom navigation bar and top-level tab pages.
+///
+/// The visible tabs adapt to the authenticated user's role: restaurant staff
+/// and owners see an additional "My Restaurant" tab.
 class MainShell extends StatefulWidget {
   static final GlobalKey<_MainShellState> shellKey = GlobalKey<_MainShellState>();
 
   const MainShell({super.key});
 
+  /// Switches the bottom navigation bar to the given [index] from outside the widget tree.
   static void switchToTab(int index) {
     shellKey.currentState?._onTabSelected(index);
   }
@@ -42,6 +37,8 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
+/// State for [MainShell]: tracks the active bottom-nav index and derives the
+/// correct tab configuration from the current user role.
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 
@@ -117,16 +114,11 @@ class _MainShellState extends State<MainShell> {
         );
       },
       child: BlocBuilder<AuthBloc, AuthState>(
-        buildWhen: (prev, curr) {
-          // Rebuild only when auth state type changes
-          return prev.runtimeType != curr.runtimeType;
-        },
         builder: (context, authState) {
           final showMyRestaurant = _isRestaurantStaff(context);
           final tabs = _buildTabs(showMyRestaurant);
           final destinations = _buildDestinations(showMyRestaurant, S.of(context));
 
-          // Clamp index to valid range
           final safeIndex = _currentIndex.clamp(0, tabs.length - 1);
 
           return Scaffold(

@@ -13,8 +13,7 @@ import '../bloc/restaurant_detail_event.dart';
 import '../bloc/restaurant_detail_state.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 
-/// Celostránkový detail restaurace.
-/// Přijímá [restaurantId] a sám si načte data přes RestaurantDetailBloc.
+/// Full-screen restaurant detail page that loads data via [RestaurantDetailBloc] using the provided [restaurantId].
 class RestaurantDetailPage extends StatelessWidget {
   final String restaurantId;
 
@@ -48,10 +47,7 @@ class RestaurantDetailPage extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Detail content (scrollable with SliverAppBar)
-// ---------------------------------------------------------------------------
-
+/// Scrollable detail body shown once the restaurant has been loaded successfully.
 class _DetailContent extends StatelessWidget {
   final Restaurant restaurant;
 
@@ -66,8 +62,6 @@ class _DetailContent extends StatelessWidget {
       ],
     );
   }
-
-  // --- SLIVER APP BAR with cover image ---
 
   Widget _buildAppBar(BuildContext context) {
     return SliverAppBar(
@@ -126,8 +120,6 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  // --- BODY ---
-
   Widget _buildBody(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -155,8 +147,6 @@ class _DetailContent extends StatelessWidget {
       ),
     );
   }
-
-  // --- HEADER: name, cuisine, rating ---
 
   Widget _buildHeader(BuildContext context) {
     return Column(
@@ -265,7 +255,6 @@ class _DetailContent extends StatelessWidget {
   }
 
   OpeningHours? _getTodayHours(int weekday) {
-    // weekday: 1=Monday ... 7=Sunday (matches entity dayOfWeek)
     try {
       return restaurant.openingHours.firstWhere(
         (h) => h.dayOfWeek == weekday,
@@ -274,8 +263,6 @@ class _DetailContent extends StatelessWidget {
       return null;
     }
   }
-
-  // --- ADDRESS ---
 
   Widget _buildAddress() {
     return Row(
@@ -291,8 +278,6 @@ class _DetailContent extends StatelessWidget {
       ],
     );
   }
-
-  // --- DESCRIPTION ---
 
   Widget _buildDescription(BuildContext context) {
     return Column(
@@ -318,8 +303,6 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  // --- OPENING HOURS ---
-
   Widget _buildOpeningHours(BuildContext context) {
     final l = S.of(context);
     final dayNames = [
@@ -331,6 +314,9 @@ class _DetailContent extends StatelessWidget {
       l.daySaturday,
       l.daySunday,
     ];
+
+    final now = DateTime.now();
+    final monday = now.subtract(Duration(days: now.weekday - 1));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,16 +330,56 @@ class _DetailContent extends StatelessWidget {
         ),
         const Gap(10),
         ...List.generate(7, (i) {
-          final dayOfWeek = i + 1; // 1=Monday
-          final hours = _getTodayHours(dayOfWeek);
-          final isToday = DateTime.now().weekday == dayOfWeek;
+          final dayDate = monday.add(Duration(days: i));
+          final dayOfWeek = i + 1;
+          final isToday = dayDate.day == now.day && dayDate.month == now.month;
+          final dateStr = '${dayDate.day}.${dayDate.month}.';
+
+          final dateIso = '${dayDate.year}-${dayDate.month.toString().padLeft(2, '0')}-${dayDate.day.toString().padLeft(2, '0')}';
+          final specialDay = restaurant.specialDays
+              .where((sd) => sd['date'] == dateIso)
+              .firstOrNull;
+
+          String hoursText;
+          Color textColor;
+          bool isSpecial = false;
+
+          if (specialDay != null) {
+            isSpecial = true;
+            final isClosed = specialDay['closed'] as bool? ?? true;
+            if (isClosed) {
+              final note = specialDay['note'] as String?;
+              hoursText = 'Zavřeno${note != null ? " — $note" : ""}';
+              textColor = AppColors.error;
+            } else {
+              final open = (specialDay['openAt'] as String?)?.substring(0, 5) ?? '';
+              final close = (specialDay['closeAt'] as String?)?.substring(0, 5) ?? '';
+              final note = specialDay['note'] as String?;
+              hoursText = '$open – $close${note != null ? " — $note" : ""}';
+              textColor = Colors.orange.shade700;
+            }
+          } else {
+            final hours = _getTodayHours(dayOfWeek);
+            hoursText = hours?.formattedHours ?? l.closed;
+            textColor = isToday ? AppColors.primary : AppColors.textSecondary;
+          }
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               children: [
                 SizedBox(
-                  width: 80,
+                  width: 40,
+                  child: Text(
+                    dateStr,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isToday ? AppColors.primary : AppColors.textMuted,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 65,
                   child: Text(
                     dayNames[i],
                     style: TextStyle(
@@ -363,12 +389,14 @@ class _DetailContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  hours?.formattedHours ?? l.closed,
-                  style: TextStyle(
-                    fontWeight: isToday ? FontWeight.w600 : FontWeight.normal,
-                    fontSize: 14,
-                    color: isToday ? AppColors.primary : AppColors.textSecondary,
+                Expanded(
+                  child: Text(
+                    hoursText,
+                    style: TextStyle(
+                      fontWeight: isToday || isSpecial ? FontWeight.w600 : FontWeight.normal,
+                      fontSize: 14,
+                      color: textColor,
+                    ),
                   ),
                 ),
               ],
@@ -378,8 +406,6 @@ class _DetailContent extends StatelessWidget {
       ],
     );
   }
-
-  // --- TAGS ---
 
   Widget _buildTags() {
     return Wrap(
@@ -404,8 +430,6 @@ class _DetailContent extends StatelessWidget {
       }).toList(),
     );
   }
-
-  // --- RESERVE BUTTON ---
 
   Widget _buildReserveButton(BuildContext context) {
     return SizedBox(
@@ -436,10 +460,7 @@ class _DetailContent extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Error fallback
-// ---------------------------------------------------------------------------
-
+/// Error view shown when the restaurant detail fails to load.
 class _ErrorContent extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;

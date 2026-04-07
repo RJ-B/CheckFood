@@ -8,9 +8,15 @@ import '../../domain/usecases/confirm_reservation_usecase.dart';
 import '../../domain/usecases/reject_reservation_usecase.dart';
 import '../../domain/usecases/check_in_reservation_usecase.dart';
 import '../../domain/usecases/complete_reservation_usecase.dart';
+import '../../domain/usecases/get_restaurant_tables_usecase.dart';
+import '../../domain/usecases/propose_change_usecase.dart';
+import '../../domain/usecases/extend_reservation_usecase.dart';
 import 'staff_reservations_event.dart';
 import 'staff_reservations_state.dart';
 
+/// BLoC that manages the staff reservation list: loading reservations for a
+/// selected date, confirming, rejecting, checking in, completing, proposing
+/// changes, extending reservations, and periodic background polling.
 class StaffReservationsBloc
     extends Bloc<StaffReservationsEvent, StaffReservationsState> {
   final GetStaffReservationsUseCase _getReservations;
@@ -18,6 +24,9 @@ class StaffReservationsBloc
   final RejectReservationUseCase _reject;
   final CheckInReservationUseCase _checkIn;
   final CompleteReservationUseCase _complete;
+  final GetRestaurantTablesUseCase _getTables;
+  final ProposeChangeUseCase _proposeChange;
+  final ExtendReservationUseCase _extendReservation;
 
   Timer? _pollTimer;
 
@@ -27,11 +36,17 @@ class StaffReservationsBloc
     required RejectReservationUseCase reject,
     required CheckInReservationUseCase checkIn,
     required CompleteReservationUseCase complete,
+    required GetRestaurantTablesUseCase getTables,
+    required ProposeChangeUseCase proposeChange,
+    required ExtendReservationUseCase extendReservation,
   })  : _getReservations = getReservations,
         _confirm = confirm,
         _reject = reject,
         _checkIn = checkIn,
         _complete = complete,
+        _getTables = getTables,
+        _proposeChange = proposeChange,
+        _extendReservation = extendReservation,
         super(StaffReservationsState(
           selectedDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
         )) {
@@ -42,12 +57,15 @@ class StaffReservationsBloc
     on<CheckInReservation>(_onCheckIn);
     on<CompleteReservation>(_onComplete);
     on<PollRefresh>(_onPollRefresh);
+    on<LoadTables>(_onLoadTables);
+    on<ProposeChange>(_onProposeChange);
+    on<ExtendReservation>(_onExtendReservation);
   }
 
   void startPolling() {
     _pollTimer?.cancel();
     _pollTimer = Timer.periodic(
-      const Duration(seconds: 30),
+      const Duration(seconds: 15),
       (_) => add(const PollRefresh()),
     );
   }
@@ -65,16 +83,27 @@ class StaffReservationsBloc
 
   Future<void> _onLoad(
       LoadStaffReservations event, Emitter<StaffReservationsState> emit) async {
-    emit(state.copyWith(isLoading: true, clearError: true));
+    final rid = event.restaurantId ?? state.restaurantId;
+    emit(state.copyWith(
+      isLoading: true,
+      clearError: true,
+      restaurantId: rid,
+    ));
     try {
-      final reservations = await _getReservations(event.date);
+      final reservations = await _getReservations(event.date, restaurantId: rid);
       emit(state.copyWith(
         isLoading: false,
         reservations: reservations,
         selectedDate: event.date,
       ));
+      if (state.tables.isEmpty || event.restaurantId != null) {
+        add(const LoadTables());
+      }
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
+      if (state.tables.isEmpty) {
+        add(const LoadTables());
+      }
     }
   }
 
@@ -83,7 +112,7 @@ class StaffReservationsBloc
     if (event.date == state.selectedDate) return;
     emit(state.copyWith(selectedDate: event.date, isLoading: true, clearError: true));
     try {
-      final reservations = await _getReservations(event.date);
+      final reservations = await _getReservations(event.date, restaurantId: state.restaurantId);
       emit(state.copyWith(isLoading: false, reservations: reservations));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
@@ -95,7 +124,7 @@ class StaffReservationsBloc
     emit(state.copyWith(actionInProgressId: event.id, clearActionError: true));
     try {
       await _confirm(event.id);
-      final reservations = await _getReservations(state.selectedDate);
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
       emit(state.copyWith(
           reservations: reservations, clearActionInProgress: true));
     } catch (e) {
@@ -109,7 +138,7 @@ class StaffReservationsBloc
     emit(state.copyWith(actionInProgressId: event.id, clearActionError: true));
     try {
       await _reject(event.id);
-      final reservations = await _getReservations(state.selectedDate);
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
       emit(state.copyWith(
           reservations: reservations, clearActionInProgress: true));
     } catch (e) {
@@ -123,7 +152,7 @@ class StaffReservationsBloc
     emit(state.copyWith(actionInProgressId: event.id, clearActionError: true));
     try {
       await _checkIn(event.id);
-      final reservations = await _getReservations(state.selectedDate);
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
       emit(state.copyWith(
           reservations: reservations, clearActionInProgress: true));
     } catch (e) {
@@ -137,7 +166,7 @@ class StaffReservationsBloc
     emit(state.copyWith(actionInProgressId: event.id, clearActionError: true));
     try {
       await _complete(event.id);
-      final reservations = await _getReservations(state.selectedDate);
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
       emit(state.copyWith(
           reservations: reservations, clearActionInProgress: true));
     } catch (e) {
@@ -149,10 +178,40 @@ class StaffReservationsBloc
   Future<void> _onPollRefresh(
       PollRefresh event, Emitter<StaffReservationsState> emit) async {
     try {
-      final reservations = await _getReservations(state.selectedDate);
-      emit(state.copyWith(reservations: reservations));
-    } catch (_) {
-      // Silent fail on poll — don't disrupt UI
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
+      emit(state.copyWith(reservations: reservations, clearActionError: true));
+    } catch (_) {}
+  }
+
+  Future<void> _onLoadTables(
+      LoadTables event, Emitter<StaffReservationsState> emit) async {
+    try {
+      final tables = await _getTables(restaurantId: state.restaurantId);
+      emit(state.copyWith(tables: tables));
+    } catch (_) {}
+  }
+
+  Future<void> _onProposeChange(
+      ProposeChange event, Emitter<StaffReservationsState> emit) async {
+    emit(state.copyWith(actionInProgressId: event.reservationId, clearActionError: true));
+    try {
+      await _proposeChange(event.reservationId, startTime: event.startTime, tableId: event.tableId);
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
+      emit(state.copyWith(reservations: reservations, clearActionInProgress: true));
+    } catch (e) {
+      emit(state.copyWith(actionError: e.toString(), clearActionInProgress: true));
+    }
+  }
+
+  Future<void> _onExtendReservation(
+      ExtendReservation event, Emitter<StaffReservationsState> emit) async {
+    emit(state.copyWith(actionInProgressId: event.reservationId, clearActionError: true));
+    try {
+      await _extendReservation(event.reservationId, event.endTime);
+      final reservations = await _getReservations(state.selectedDate, restaurantId: state.restaurantId);
+      emit(state.copyWith(reservations: reservations, clearActionInProgress: true));
+    } catch (e) {
+      emit(state.copyWith(actionError: e.toString(), clearActionInProgress: true));
     }
   }
 }

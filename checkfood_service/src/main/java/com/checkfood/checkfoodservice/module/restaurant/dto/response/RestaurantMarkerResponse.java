@@ -10,6 +10,9 @@ import java.util.UUID;
 /**
  * Odlehčené DTO pro přenos dat o markerech a shlucích na mapu.
  * Navrženo pro vysoký výkon při hromadném přenosu dat.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Data
 @Builder
@@ -40,7 +43,19 @@ public class RestaurantMarkerResponse {
     private int count;
 
     /**
-     * Pomocný getter pro frontend, který určuje, zda se má zobrazit cluster.
+     * Název restaurace. NULL pro clustery (count > 1).
+     */
+    private String name;
+
+    /**
+     * URL loga restaurace. NULL pro clustery (count > 1).
+     */
+    private String logoUrl;
+
+    /**
+     * Určuje, zda tento bod reprezentuje shluk více restaurací.
+     *
+     * @return {@code true} pokud {@code count > 1}, jinak {@code false}
      */
     public boolean isCluster() {
         return count > 1;

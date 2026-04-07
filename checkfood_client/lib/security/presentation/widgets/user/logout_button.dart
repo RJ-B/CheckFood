@@ -6,6 +6,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 
+/// Tlačítko pro odhlášení uživatele se zobrazením potvrzovacího dialogu.
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
 

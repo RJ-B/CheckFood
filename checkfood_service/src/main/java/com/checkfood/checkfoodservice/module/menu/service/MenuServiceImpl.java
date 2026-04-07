@@ -15,6 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementace {@link MenuService} načítající veřejné menu restaurace seřazené dle pořadí kategorií
+ * a filtrující prázdné kategorie i nedostupné položky.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

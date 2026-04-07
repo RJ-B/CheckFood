@@ -5,11 +5,13 @@ import 'package:checkfood_client/modules/management/my_restaurant/presentation/b
 import 'package:checkfood_client/modules/management/my_restaurant/domain/entities/employee.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/entities/my_restaurant.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/get_my_restaurant_usecase.dart';
+import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/get_my_restaurants_usecase.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/update_restaurant_info_usecase.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/get_employees_usecase.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/add_employee_usecase.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/update_employee_role_usecase.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/remove_employee_usecase.dart';
+import 'package:checkfood_client/modules/management/my_restaurant/domain/usecases/update_employee_permissions_usecase.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/domain/repositories/my_restaurant_repository.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/data/models/request/add_employee_request_model.dart';
 import 'package:checkfood_client/modules/management/my_restaurant/data/models/request/update_employee_role_request_model.dart';
@@ -40,10 +42,13 @@ class FakeMyRestaurantRepository implements MyRestaurantRepository {
   ];
 
   @override
-  Future<MyRestaurant> getMyRestaurant() async => _restaurant;
+  Future<List<MyRestaurant>> getMyRestaurants() async => [_restaurant];
 
   @override
-  Future<MyRestaurant> updateMyRestaurant(UpdateRestaurantRequestModel request) async =>
+  Future<MyRestaurant> getMyRestaurant({String? restaurantId}) async => _restaurant;
+
+  @override
+  Future<MyRestaurant> updateMyRestaurant(UpdateRestaurantRequestModel request, {String? restaurantId}) async =>
       MyRestaurant(
         id: 'r1',
         name: request.name,
@@ -55,21 +60,27 @@ class FakeMyRestaurantRepository implements MyRestaurantRepository {
       );
 
   @override
-  Future<List<Employee>> getEmployees() async => _employees;
+  Future<List<Employee>> getEmployees({String? restaurantId}) async => _employees;
 
   @override
-  Future<Employee> addEmployee(AddEmployeeRequestModel request) async {
+  Future<Employee> addEmployee(AddEmployeeRequestModel request, {String? restaurantId}) async {
     addEmployeeCalled = true;
     lastAddedEmail = request.email;
     return Employee(id: 3, userId: 30, name: 'New', email: request.email, role: request.role);
   }
 
   @override
-  Future<Employee> updateEmployeeRole(int employeeId, UpdateEmployeeRoleRequestModel request) async =>
+  Future<Employee> updateEmployeeRole(int employeeId, UpdateEmployeeRoleRequestModel request, {String? restaurantId}) async =>
       Employee(id: employeeId, userId: 20, name: 'Manager', email: 'mgr@test.com', role: request.role);
 
   @override
-  Future<void> removeEmployee(int employeeId) async {}
+  Future<void> removeEmployee(int employeeId, {String? restaurantId}) async {}
+
+  @override
+  Future<List<String>> getEmployeePermissions(int employeeId, {String? restaurantId}) async => [];
+
+  @override
+  Future<List<String>> updateEmployeePermissions(int employeeId, List<String> permissions, {String? restaurantId}) async => permissions;
 }
 
 void main() {
@@ -80,11 +91,13 @@ void main() {
     fakeRepo = FakeMyRestaurantRepository();
     bloc = MyRestaurantBloc(
       getMyRestaurantUseCase: GetMyRestaurantUseCase(fakeRepo),
+      getMyRestaurantsUseCase: GetMyRestaurantsUseCase(fakeRepo),
       updateRestaurantInfoUseCase: UpdateRestaurantInfoUseCase(fakeRepo),
       getEmployeesUseCase: GetEmployeesUseCase(fakeRepo),
       addEmployeeUseCase: AddEmployeeUseCase(fakeRepo),
       updateEmployeeRoleUseCase: UpdateEmployeeRoleUseCase(fakeRepo),
       removeEmployeeUseCase: RemoveEmployeeUseCase(fakeRepo),
+      updateEmployeePermissionsUseCase: UpdateEmployeePermissionsUseCase(fakeRepo),
     );
   });
 
@@ -111,6 +124,8 @@ void main() {
       final state = bloc.state as MyRestaurantLoaded;
       expect(state.restaurant.name, 'Test Restaurant');
       expect(state.employees.length, 2);
+      expect(state.restaurants.length, 1);
+      expect(state.selectedRestaurantId, 'r1');
     });
 
     test('AddEmployee calls correct endpoint and reloads employees', () async {
@@ -145,6 +160,20 @@ void main() {
 
       final state = bloc.state as MyRestaurantLoaded;
       expect(state.restaurant.name, 'Updated Name');
+    });
+
+    test('SelectRestaurant switches selected restaurant', () async {
+      bloc.add(const LoadMyRestaurant());
+      await bloc.stream.firstWhere((s) => s is MyRestaurantLoaded);
+
+      bloc.add(const SelectRestaurant('r1'));
+
+      await bloc.stream.firstWhere(
+        (s) => s is MyRestaurantLoaded && !(s).isUpdating,
+      );
+
+      final state = bloc.state as MyRestaurantLoaded;
+      expect(state.selectedRestaurantId, 'r1');
     });
   });
 }

@@ -17,8 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ExploreData {
-  /// Google Places z API
-  List<GooglePlace> get places => throw _privateConstructorUsedError;
+  /// Restaurace z DB
+  List<Restaurant> get restaurants => throw _privateConstructorUsedError;
 
   /// Markery pro mapu (shluky nebo restaurace)
   List<RestaurantMarker> get markers => throw _privateConstructorUsedError;
@@ -29,14 +29,17 @@ mixin _$ExploreData {
   /// Zda probiha aktualizace markeru na mape
   bool get isMapLoading => throw _privateConstructorUsedError;
 
-  /// ID vybraneho mista (null = zadny vyber)
-  String? get selectedPlaceId => throw _privateConstructorUsedError;
+  /// ID vybrane restaurace (null = zadny vyber)
+  String? get selectedRestaurantId => throw _privateConstructorUsedError;
 
-  /// Vybrane misto pro preview card
-  GooglePlace? get selectedPlace => throw _privateConstructorUsedError;
+  /// Vybrana restaurace pro preview card
+  Restaurant? get selectedRestaurant => throw _privateConstructorUsedError;
 
   /// Aktivni search query
   String? get searchQuery => throw _privateConstructorUsedError;
+
+  /// Zda je client-side clustering engine pripraveny (data nactena z disku/backendu)
+  bool get clusterEngineReady => throw _privateConstructorUsedError;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.
@@ -53,14 +56,17 @@ abstract class $ExploreDataCopyWith<$Res> {
   ) = _$ExploreDataCopyWithImpl<$Res, ExploreData>;
   @useResult
   $Res call({
-    List<GooglePlace> places,
+    List<Restaurant> restaurants,
     List<RestaurantMarker> markers,
     Position userPosition,
     bool isMapLoading,
-    String? selectedPlaceId,
-    GooglePlace? selectedPlace,
+    String? selectedRestaurantId,
+    Restaurant? selectedRestaurant,
     String? searchQuery,
+    bool clusterEngineReady,
   });
+
+  $RestaurantCopyWith<$Res>? get selectedRestaurant;
 }
 
 /// @nodoc
@@ -78,21 +84,22 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? places = null,
+    Object? restaurants = null,
     Object? markers = null,
     Object? userPosition = null,
     Object? isMapLoading = null,
-    Object? selectedPlaceId = freezed,
-    Object? selectedPlace = freezed,
+    Object? selectedRestaurantId = freezed,
+    Object? selectedRestaurant = freezed,
     Object? searchQuery = freezed,
+    Object? clusterEngineReady = null,
   }) {
     return _then(
       _value.copyWith(
-            places:
-                null == places
-                    ? _value.places
-                    : places // ignore: cast_nullable_to_non_nullable
-                        as List<GooglePlace>,
+            restaurants:
+                null == restaurants
+                    ? _value.restaurants
+                    : restaurants // ignore: cast_nullable_to_non_nullable
+                        as List<Restaurant>,
             markers:
                 null == markers
                     ? _value.markers
@@ -108,24 +115,43 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
                     ? _value.isMapLoading
                     : isMapLoading // ignore: cast_nullable_to_non_nullable
                         as bool,
-            selectedPlaceId:
-                freezed == selectedPlaceId
-                    ? _value.selectedPlaceId
-                    : selectedPlaceId // ignore: cast_nullable_to_non_nullable
+            selectedRestaurantId:
+                freezed == selectedRestaurantId
+                    ? _value.selectedRestaurantId
+                    : selectedRestaurantId // ignore: cast_nullable_to_non_nullable
                         as String?,
-            selectedPlace:
-                freezed == selectedPlace
-                    ? _value.selectedPlace
-                    : selectedPlace // ignore: cast_nullable_to_non_nullable
-                        as GooglePlace?,
+            selectedRestaurant:
+                freezed == selectedRestaurant
+                    ? _value.selectedRestaurant
+                    : selectedRestaurant // ignore: cast_nullable_to_non_nullable
+                        as Restaurant?,
             searchQuery:
                 freezed == searchQuery
                     ? _value.searchQuery
                     : searchQuery // ignore: cast_nullable_to_non_nullable
                         as String?,
+            clusterEngineReady:
+                null == clusterEngineReady
+                    ? _value.clusterEngineReady
+                    : clusterEngineReady // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of ExploreData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RestaurantCopyWith<$Res>? get selectedRestaurant {
+    if (_value.selectedRestaurant == null) {
+      return null;
+    }
+
+    return $RestaurantCopyWith<$Res>(_value.selectedRestaurant!, (value) {
+      return _then(_value.copyWith(selectedRestaurant: value) as $Val);
+    });
   }
 }
 
@@ -139,14 +165,18 @@ abstract class _$$ExploreDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    List<GooglePlace> places,
+    List<Restaurant> restaurants,
     List<RestaurantMarker> markers,
     Position userPosition,
     bool isMapLoading,
-    String? selectedPlaceId,
-    GooglePlace? selectedPlace,
+    String? selectedRestaurantId,
+    Restaurant? selectedRestaurant,
     String? searchQuery,
+    bool clusterEngineReady,
   });
+
+  @override
+  $RestaurantCopyWith<$Res>? get selectedRestaurant;
 }
 
 /// @nodoc
@@ -163,21 +193,22 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? places = null,
+    Object? restaurants = null,
     Object? markers = null,
     Object? userPosition = null,
     Object? isMapLoading = null,
-    Object? selectedPlaceId = freezed,
-    Object? selectedPlace = freezed,
+    Object? selectedRestaurantId = freezed,
+    Object? selectedRestaurant = freezed,
     Object? searchQuery = freezed,
+    Object? clusterEngineReady = null,
   }) {
     return _then(
       _$ExploreDataImpl(
-        places:
-            null == places
-                ? _value._places
-                : places // ignore: cast_nullable_to_non_nullable
-                    as List<GooglePlace>,
+        restaurants:
+            null == restaurants
+                ? _value._restaurants
+                : restaurants // ignore: cast_nullable_to_non_nullable
+                    as List<Restaurant>,
         markers:
             null == markers
                 ? _value._markers
@@ -193,21 +224,26 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
                 ? _value.isMapLoading
                 : isMapLoading // ignore: cast_nullable_to_non_nullable
                     as bool,
-        selectedPlaceId:
-            freezed == selectedPlaceId
-                ? _value.selectedPlaceId
-                : selectedPlaceId // ignore: cast_nullable_to_non_nullable
+        selectedRestaurantId:
+            freezed == selectedRestaurantId
+                ? _value.selectedRestaurantId
+                : selectedRestaurantId // ignore: cast_nullable_to_non_nullable
                     as String?,
-        selectedPlace:
-            freezed == selectedPlace
-                ? _value.selectedPlace
-                : selectedPlace // ignore: cast_nullable_to_non_nullable
-                    as GooglePlace?,
+        selectedRestaurant:
+            freezed == selectedRestaurant
+                ? _value.selectedRestaurant
+                : selectedRestaurant // ignore: cast_nullable_to_non_nullable
+                    as Restaurant?,
         searchQuery:
             freezed == searchQuery
                 ? _value.searchQuery
                 : searchQuery // ignore: cast_nullable_to_non_nullable
                     as String?,
+        clusterEngineReady:
+            null == clusterEngineReady
+                ? _value.clusterEngineReady
+                : clusterEngineReady // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -217,25 +253,26 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
 
 class _$ExploreDataImpl implements _ExploreData {
   const _$ExploreDataImpl({
-    required final List<GooglePlace> places,
+    required final List<Restaurant> restaurants,
     required final List<RestaurantMarker> markers,
     required this.userPosition,
     this.isMapLoading = false,
-    this.selectedPlaceId = null,
-    this.selectedPlace = null,
+    this.selectedRestaurantId = null,
+    this.selectedRestaurant = null,
     this.searchQuery = null,
-  }) : _places = places,
+    this.clusterEngineReady = false,
+  }) : _restaurants = restaurants,
        _markers = markers;
 
-  /// Google Places z API
-  final List<GooglePlace> _places;
+  /// Restaurace z DB
+  final List<Restaurant> _restaurants;
 
-  /// Google Places z API
+  /// Restaurace z DB
   @override
-  List<GooglePlace> get places {
-    if (_places is EqualUnmodifiableListView) return _places;
+  List<Restaurant> get restaurants {
+    if (_restaurants is EqualUnmodifiableListView) return _restaurants;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_places);
+    return EqualUnmodifiableListView(_restaurants);
   }
 
   /// Markery pro mapu (shluky nebo restaurace)
@@ -258,24 +295,29 @@ class _$ExploreDataImpl implements _ExploreData {
   @JsonKey()
   final bool isMapLoading;
 
-  /// ID vybraneho mista (null = zadny vyber)
+  /// ID vybrane restaurace (null = zadny vyber)
   @override
   @JsonKey()
-  final String? selectedPlaceId;
+  final String? selectedRestaurantId;
 
-  /// Vybrane misto pro preview card
+  /// Vybrana restaurace pro preview card
   @override
   @JsonKey()
-  final GooglePlace? selectedPlace;
+  final Restaurant? selectedRestaurant;
 
   /// Aktivni search query
   @override
   @JsonKey()
   final String? searchQuery;
 
+  /// Zda je client-side clustering engine pripraveny (data nactena z disku/backendu)
+  @override
+  @JsonKey()
+  final bool clusterEngineReady;
+
   @override
   String toString() {
-    return 'ExploreData(places: $places, markers: $markers, userPosition: $userPosition, isMapLoading: $isMapLoading, selectedPlaceId: $selectedPlaceId, selectedPlace: $selectedPlace, searchQuery: $searchQuery)';
+    return 'ExploreData(restaurants: $restaurants, markers: $markers, userPosition: $userPosition, isMapLoading: $isMapLoading, selectedRestaurantId: $selectedRestaurantId, selectedRestaurant: $selectedRestaurant, searchQuery: $searchQuery, clusterEngineReady: $clusterEngineReady)';
   }
 
   @override
@@ -283,30 +325,36 @@ class _$ExploreDataImpl implements _ExploreData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ExploreDataImpl &&
-            const DeepCollectionEquality().equals(other._places, _places) &&
+            const DeepCollectionEquality().equals(
+              other._restaurants,
+              _restaurants,
+            ) &&
             const DeepCollectionEquality().equals(other._markers, _markers) &&
             (identical(other.userPosition, userPosition) ||
                 other.userPosition == userPosition) &&
             (identical(other.isMapLoading, isMapLoading) ||
                 other.isMapLoading == isMapLoading) &&
-            (identical(other.selectedPlaceId, selectedPlaceId) ||
-                other.selectedPlaceId == selectedPlaceId) &&
-            (identical(other.selectedPlace, selectedPlace) ||
-                other.selectedPlace == selectedPlace) &&
+            (identical(other.selectedRestaurantId, selectedRestaurantId) ||
+                other.selectedRestaurantId == selectedRestaurantId) &&
+            (identical(other.selectedRestaurant, selectedRestaurant) ||
+                other.selectedRestaurant == selectedRestaurant) &&
             (identical(other.searchQuery, searchQuery) ||
-                other.searchQuery == searchQuery));
+                other.searchQuery == searchQuery) &&
+            (identical(other.clusterEngineReady, clusterEngineReady) ||
+                other.clusterEngineReady == clusterEngineReady));
   }
 
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    const DeepCollectionEquality().hash(_places),
+    const DeepCollectionEquality().hash(_restaurants),
     const DeepCollectionEquality().hash(_markers),
     userPosition,
     isMapLoading,
-    selectedPlaceId,
-    selectedPlace,
+    selectedRestaurantId,
+    selectedRestaurant,
     searchQuery,
+    clusterEngineReady,
   );
 
   /// Create a copy of ExploreData
@@ -320,18 +368,19 @@ class _$ExploreDataImpl implements _ExploreData {
 
 abstract class _ExploreData implements ExploreData {
   const factory _ExploreData({
-    required final List<GooglePlace> places,
+    required final List<Restaurant> restaurants,
     required final List<RestaurantMarker> markers,
     required final Position userPosition,
     final bool isMapLoading,
-    final String? selectedPlaceId,
-    final GooglePlace? selectedPlace,
+    final String? selectedRestaurantId,
+    final Restaurant? selectedRestaurant,
     final String? searchQuery,
+    final bool clusterEngineReady,
   }) = _$ExploreDataImpl;
 
-  /// Google Places z API
+  /// Restaurace z DB
   @override
-  List<GooglePlace> get places;
+  List<Restaurant> get restaurants;
 
   /// Markery pro mapu (shluky nebo restaurace)
   @override
@@ -345,17 +394,21 @@ abstract class _ExploreData implements ExploreData {
   @override
   bool get isMapLoading;
 
-  /// ID vybraneho mista (null = zadny vyber)
+  /// ID vybrane restaurace (null = zadny vyber)
   @override
-  String? get selectedPlaceId;
+  String? get selectedRestaurantId;
 
-  /// Vybrane misto pro preview card
+  /// Vybrana restaurace pro preview card
   @override
-  GooglePlace? get selectedPlace;
+  Restaurant? get selectedRestaurant;
 
   /// Aktivni search query
   @override
   String? get searchQuery;
+
+  /// Zda je client-side clustering engine pripraveny (data nactena z disku/backendu)
+  @override
+  bool get clusterEngineReady;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.

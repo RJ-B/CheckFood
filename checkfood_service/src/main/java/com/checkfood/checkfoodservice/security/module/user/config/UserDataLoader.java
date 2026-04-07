@@ -20,6 +20,9 @@ import java.util.Set;
  * Data loader pro inicializaci testovacích uživatelů při startu aplikace.
  * Vytváří uživatele s rolemi ADMIN, OWNER a MANAGER pro vývojové/testovací účely.
  * Spouští se po {@link RoleDataLoader} díky {@code @Order(2)}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 @RequiredArgsConstructor
@@ -33,6 +36,12 @@ public class UserDataLoader implements CommandLineRunner {
 
     private static final String DEFAULT_PASSWORD = "Test1234!";
 
+    /**
+     * Inicializuje testovací uživatelské účty při startu aplikace.
+     * Vytvoří admin, owner a manager účty pokud ještě neexistují.
+     *
+     * @param args argumenty příkazové řádky (nepoužívá se)
+     */
     @Override
     @Transactional
     public void run(String... args) {
@@ -45,6 +54,15 @@ public class UserDataLoader implements CommandLineRunner {
         userLogger.logUserCreated("Inicializace testovacích uživatelů dokončena");
     }
 
+    /**
+     * Zajistí existenci uživatelského účtu v databázi.
+     * Pokud účet s daným e-mailem již existuje, operaci přeskočí.
+     *
+     * @param email     e-mailová adresa uživatele
+     * @param firstName křestní jméno
+     * @param lastName  příjmení
+     * @param roleNames sada názvů rolí, které mají být uživateli přiřazeny
+     */
     private void ensureUserExists(String email, String firstName, String lastName, Set<String> roleNames) {
         if (userRepository.existsByEmail(email)) {
             userLogger.debug("Uživatel {} již existuje, přeskakuji", email);

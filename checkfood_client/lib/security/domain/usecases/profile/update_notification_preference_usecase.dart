@@ -1,12 +1,14 @@
 import '../../repositories/profile_repository.dart';
 
+/// UseCase pro aktualizaci nastavení push notifikací na backendu.
 class UpdateNotificationPreferenceUseCase {
   final ProfileRepository _repository;
 
   UpdateNotificationPreferenceUseCase(this._repository);
 
-  /// Aktualizuje preferenci notifikaci na backendu.
-  /// Vraci mapu s keys: notificationsEnabled (bool), hasFcmToken (bool).
+  /// Aktualizuje preferenci notifikací pro zařízení identifikované [deviceIdentifier].
+  ///
+  /// Vrací mapu s klíči `notificationsEnabled` (bool) a `hasFcmToken` (bool).
   Future<Map<String, dynamic>> call({
     required String deviceIdentifier,
     required bool notificationsEnabled,

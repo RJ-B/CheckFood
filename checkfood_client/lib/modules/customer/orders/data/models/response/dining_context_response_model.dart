@@ -4,6 +4,7 @@ import '../../../domain/entities/dining_context.dart';
 part 'dining_context_response_model.freezed.dart';
 part 'dining_context_response_model.g.dart';
 
+/// API response model describing the QR-code dining context (restaurant, table, session).
 @freezed
 class DiningContextResponseModel with _$DiningContextResponseModel {
   const DiningContextResponseModel._();

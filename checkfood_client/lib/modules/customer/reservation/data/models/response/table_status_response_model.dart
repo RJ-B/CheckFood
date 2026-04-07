@@ -5,6 +5,7 @@ import '../../../domain/entities/table_status.dart';
 part 'table_status_response_model.freezed.dart';
 part 'table_status_response_model.g.dart';
 
+/// API response model containing the availability status of all tables for a given date.
 @freezed
 class TableStatusResponseModel with _$TableStatusResponseModel {
   const TableStatusResponseModel._();
@@ -23,6 +24,7 @@ class TableStatusResponseModel with _$TableStatusResponseModel {
       );
 }
 
+/// API response model for the availability status of a single table.
 @freezed
 class TableStatusItemModel with _$TableStatusItemModel {
   const TableStatusItemModel._();

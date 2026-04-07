@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 
+/// Pomocné metody pro zobrazování systémových hlášek (SnackBar).
 class AppNotifications {
-  /// Obecný template pro úspěšnou hlášku (zelená)
+  /// Zobrazí plovoucí SnackBar s ikonou úspěchu.
   static void showSuccess(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -21,7 +22,7 @@ class AppNotifications {
     );
   }
 
-  /// Obecný template pro chybu (červená)
+  /// Zobrazí plovoucí SnackBar s ikonou chyby.
   static void showError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

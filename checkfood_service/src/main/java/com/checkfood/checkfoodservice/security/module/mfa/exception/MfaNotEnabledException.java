@@ -1,7 +1,10 @@
 package com.checkfood.checkfoodservice.security.module.mfa.exception;
 
 /**
- * Vyhozena, pokud MFA není aktivní.
+ * Výjimka vyhozená při pokusu o operaci vyžadující aktivní MFA, které není zapnuto.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class MfaNotEnabledException extends MfaException {
 

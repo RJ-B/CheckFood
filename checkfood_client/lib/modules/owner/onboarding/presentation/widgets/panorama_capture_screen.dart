@@ -16,36 +16,32 @@ import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 import 'angle_guidance_painter.dart';
 
-// ---------------------------------------------------------------------------
-// Sphere grid: 20 capture points in 3 rings
-// ---------------------------------------------------------------------------
-
+/// A single point on the capture sphere defined by horizontal (yaw) and
+/// vertical (pitch) angles in degrees.
 class SpherePoint {
   final int index;
-  final double yaw;   // 0-360
-  final double pitch;  // -90 to +90
+  final double yaw;
+  final double pitch;
   const SpherePoint(this.index, this.yaw, this.pitch);
 }
 
+/// 20 capture points arranged in three pitch rings: horizon (0°), upper (+30°),
+/// and lower (−30°), spaced evenly around the full 360° yaw.
 const List<SpherePoint> sphereGrid = [
-  // Horizon ring (pitch = 0°) — indices 0-7
   SpherePoint(0, 0, 0), SpherePoint(1, 45, 0), SpherePoint(2, 90, 0),
   SpherePoint(3, 135, 0), SpherePoint(4, 180, 0), SpherePoint(5, 225, 0),
   SpherePoint(6, 270, 0), SpherePoint(7, 315, 0),
-  // Upper ring (pitch = +30°) — indices 8-13
   SpherePoint(8, 0, 30), SpherePoint(9, 60, 30), SpherePoint(10, 120, 30),
   SpherePoint(11, 180, 30), SpherePoint(12, 240, 30), SpherePoint(13, 300, 30),
-  // Lower ring (pitch = -30°) — indices 14-19
   SpherePoint(14, 0, -30), SpherePoint(15, 60, -30), SpherePoint(16, 120, -30),
   SpherePoint(17, 180, -30), SpherePoint(18, 240, -30), SpherePoint(19, 300, -30),
 ];
 
 const int _minPhotosToFinalize = 8;
 
-// ---------------------------------------------------------------------------
-// PanoramaCaptureScreen
-// ---------------------------------------------------------------------------
-
+/// Full-screen camera screen that guides the user to capture photos at each
+/// sphere-grid point using compass and accelerometer for real-time alignment
+/// feedback, then uploads each captured frame to the panorama session.
 class PanoramaCaptureScreen extends StatefulWidget {
   final String sessionId;
 
@@ -55,33 +51,30 @@ class PanoramaCaptureScreen extends StatefulWidget {
   State<PanoramaCaptureScreen> createState() => _PanoramaCaptureScreenState();
 }
 
+/// State for [PanoramaCaptureScreen]: manages the camera controller, sensor
+/// subscriptions, alignment detection, and auto-capture logic.
 class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
     with SingleTickerProviderStateMixin {
   CameraController? _cameraController;
   bool _cameraReady = false;
   bool _capturing = false;
 
-  // Sensor state
   double _currentYaw = 0;
   double _currentPitch = 0;
   StreamSubscription? _magnetometerSub;
   StreamSubscription? _accelerometerSub;
 
-  // Low-pass filter state
   double _filteredMagX = 0;
   double _filteredMagY = 0;
   double _filteredPitch = 0;
   static const double _alpha = 0.15;
 
-  // Capture state
   final Set<int> _capturedIndices = {};
   int? _alignedIndex;
   Timer? _stabilizationTimer;
 
-  // Flash overlay
   bool _showFlash = false;
 
-  // Pulse animation for aligned dot
   late final AnimationController _pulseController;
   late final Animation<double> _pulseAnimation;
 
@@ -128,9 +121,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
     try {
       await _cameraController!.initialize();
       if (mounted) setState(() => _cameraReady = true);
-    } catch (e) {
-      debugPrint('[PanoramaCapture] Camera init failed: $e');
-    }
+    } catch (_) {}
   }
 
   void _initCompass() {
@@ -150,8 +141,6 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
 
   void _initPitchSensor() {
     _accelerometerSub = accelerometerEventStream().listen((event) {
-      // In portrait: phone upright = gravity ~(0, -9.8, 0), camera at horizon = pitch ~0°
-      // Tilted up: gravity shifts to -Z → pitch positive
       var pitch = atan2(-event.z, -event.y) * 180 / pi;
       _filteredPitch = _filteredPitch * (1 - _alpha) + pitch * _alpha;
 
@@ -202,10 +191,8 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
     setState(() => _capturing = true);
 
     try {
-      // Haptic feedback
       HapticFeedback.mediumImpact();
 
-      // Flash overlay
       setState(() => _showFlash = true);
       Future.delayed(const Duration(milliseconds: 150), () {
         if (mounted) setState(() => _showFlash = false);
@@ -229,8 +216,7 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
 
       _capturedIndices.add(pointIndex);
       _alignedIndex = null;
-    } catch (e) {
-      debugPrint('[PanoramaCapture] Auto-capture failed: $e');
+    } catch (_) {
     } finally {
       if (mounted) setState(() => _capturing = false);
     }
@@ -266,10 +252,8 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
           return Stack(
             fit: StackFit.expand,
             children: [
-              // Camera preview
               CameraPreview(_cameraController!),
 
-              // AR sphere guidance overlay (fullscreen)
               AnimatedBuilder(
                 animation: _pulseAnimation,
                 builder: (context, _) => CustomPaint(
@@ -285,7 +269,6 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                 ),
               ),
 
-              // Progress counter (top)
               Positioned(
                 top: 16,
                 left: 0,
@@ -309,7 +292,6 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                 ),
               ),
 
-              // Mini-map (bottom center)
               Positioned(
                 bottom: 100,
                 left: 0,
@@ -333,11 +315,9 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                 ),
               ),
 
-              // Flash overlay
               if (_showFlash)
                 Container(color: Colors.white.withValues(alpha: 0.6)),
 
-              // Loading overlay
               if (state.loading)
                 Container(
                   color: Colors.black45,
@@ -346,7 +326,6 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
                   ),
                 ),
 
-              // Bottom bar — finalize button
               Positioned(
                 bottom: 24,
                 left: 24,
@@ -388,10 +367,9 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
   }
 }
 
-// ---------------------------------------------------------------------------
-// MiniMapPainter — bird's-eye view of the sphere (bottom indicator)
-// ---------------------------------------------------------------------------
-
+/// Custom painter that renders a bird's-eye mini-map of the capture sphere,
+/// showing captured (filled) and pending (outline) points and the current
+/// camera heading as a directional arrow.
 class _MiniMapPainter extends CustomPainter {
   final double currentYaw;
   final Set<int> capturedIndices;
@@ -408,16 +386,14 @@ class _MiniMapPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final maxRadius = size.width / 2 - 8;
 
-    // Draw dots for each sphere point
     for (final point in sphereGrid) {
-      // Map pitch to radius: horizon = middle ring, upper = inner, lower = outer
       double ringRadius;
       if (point.pitch > 0) {
-        ringRadius = maxRadius * 0.35; // upper ring (inner)
+        ringRadius = maxRadius * 0.35;
       } else if (point.pitch < 0) {
-        ringRadius = maxRadius * 0.85; // lower ring (outer)
+        ringRadius = maxRadius * 0.85;
       } else {
-        ringRadius = maxRadius * 0.6; // horizon ring (middle)
+        ringRadius = maxRadius * 0.6;
       }
 
       final angle = point.yaw * pi / 180;
@@ -432,7 +408,6 @@ class _MiniMapPainter extends CustomPainter {
       canvas.drawCircle(Offset(dx, dy), isCaptured ? 4 : 3, paint);
     }
 
-    // Draw direction arrow
     final arrowAngle = currentYaw * pi / 180;
     final arrowEnd = Offset(
       center.dx + (maxRadius * 0.25) * sin(arrowAngle),
@@ -444,7 +419,6 @@ class _MiniMapPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
     canvas.drawLine(center, arrowEnd, arrowPaint);
 
-    // Arrow tip
     canvas.drawCircle(arrowEnd, 3, Paint()..color = AppColors.primary);
   }
 

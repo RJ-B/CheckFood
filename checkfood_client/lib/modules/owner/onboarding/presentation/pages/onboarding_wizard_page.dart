@@ -14,6 +14,9 @@ import '../widgets/step_menu_form.dart';
 import '../widgets/step_panorama.dart';
 import '../widgets/step_summary.dart';
 
+/// A multi-step onboarding wizard that guides a new restaurant owner through
+/// configuring restaurant info, opening hours, tables, menu, panorama, and
+/// publishing the restaurant.
 class OnboardingWizardPage extends StatelessWidget {
   const OnboardingWizardPage({super.key});
 

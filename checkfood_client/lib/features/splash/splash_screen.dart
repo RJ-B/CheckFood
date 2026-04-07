@@ -8,6 +8,8 @@ import '../../security/presentation/bloc/auth/auth_state.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../../security/presentation/pages/auth/login_page.dart';
 
+/// Animovaná úvodní obrazovka navazující na nativní splash a přesměrovávající
+/// na správnou destinaci po vyřešení stavu autentizace v [AuthBloc].
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -15,38 +17,32 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
+/// Stav pro [SplashScreen]: vlastní ovladače animací řídící přechod loga,
+/// záři, pulzování, odkrytí textu a fade-in loaderu.
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  // Android 12 renders the icon at 288dp but with 25% padding the
-  // visible logo is 216dp. Match this exactly for seamless handoff.
   static const double _nativeLogoSize = 216;
   static const double _finalLogoSize = 120;
   static const double _logoRiseDistance = 80;
 
-  // Master transition: logo scale + position + background
   late final AnimationController _transitionCtrl;
   late final Animation<double> _logoScale;
   late final Animation<double> _logoRise;
   late final Animation<double> _bgBlend;
 
-  // Glow behind logo
   late final AnimationController _glowCtrl;
   late final Animation<double> _glowOpacity;
 
-  // Continuous pulse
   late final AnimationController _pulseCtrl;
   late final Animation<double> _pulse;
 
-  // Text "CheckFood"
   late final AnimationController _textCtrl;
   late final Animation<double> _textSlide;
   late final Animation<double> _textOpacity;
 
-  // Tagline
   late final AnimationController _taglineCtrl;
   late final Animation<double> _taglineOpacity;
 
-  // Loader
   late final AnimationController _loaderCtrl;
   late final Animation<double> _loaderOpacity;
 
@@ -118,17 +114,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _runSequence() async {
-    // Hold the native-splash-identical frame.
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 
-    // Phase 1: logo shrinks + rises + bg gradient
     _transitionCtrl.forward();
 
     await Future.delayed(const Duration(milliseconds: 750));
     if (!mounted) return;
 
-    // Phase 2: text + glow + pulse
     _glowCtrl.forward();
     _textCtrl.forward();
     _pulseCtrl.repeat(reverse: true);
@@ -136,13 +129,11 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 450));
     if (!mounted) return;
 
-    // Phase 3: tagline
     _taglineCtrl.forward();
 
     await Future.delayed(const Duration(milliseconds: 350));
     if (!mounted) return;
 
-    // Phase 4: loader
     _loaderCtrl.forward();
   }
 
@@ -204,7 +195,6 @@ class _SplashScreenState extends State<SplashScreen>
               ),
               child: Stack(
                 children: [
-                  // ===== LOGO =====
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
@@ -216,7 +206,6 @@ class _SplashScreenState extends State<SplashScreen>
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
-                              // Glow
                               Opacity(
                                 opacity: _glowOpacity.value,
                                 child: Container(
@@ -235,7 +224,6 @@ class _SplashScreenState extends State<SplashScreen>
                                   ),
                                 ),
                               ),
-                              // PNG logo
                               Transform.scale(
                                 scale: scale,
                                 child: Image.asset(
@@ -252,7 +240,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
 
-                  // ===== TEXT =====
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
@@ -313,7 +300,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
 
-                  // ===== LOADER =====
                   Positioned(
                     bottom: 60,
                     left: 0,

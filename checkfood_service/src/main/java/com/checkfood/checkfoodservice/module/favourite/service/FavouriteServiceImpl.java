@@ -18,6 +18,13 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Implementace {@link FavouriteService} spravující oblíbené restaurace uživatele
+ * s idempotentním přidáváním a zachováním pořadí dle data přidání.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -37,7 +44,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         }
 
         if (favouriteRepository.existsByUserIdAndRestaurantId(user.getId(), restaurantId)) {
-            return; // idempotent — already a favourite
+            return;
         }
 
         UserFavouriteRestaurant favourite = UserFavouriteRestaurant.builder()

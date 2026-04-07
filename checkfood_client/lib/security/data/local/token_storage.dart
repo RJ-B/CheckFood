@@ -1,20 +1,18 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/**
- * Zabezpečené úložiště pro autentizační tokeny a session data.
- * Implementuje Cestu A s důrazem na hardwarové šifrování platformy.
- */
+/// Zabezpečené úložiště pro autentizační tokeny a session data.
+///
+/// Využívá [FlutterSecureStorage] s hardwarovým šifrováním:
+/// na Androidu `EncryptedSharedPreferences`, na iOS Keychain.
 class TokenStorage {
   final FlutterSecureStorage _storage;
 
-  // Klíče pro uložení hodnot jsou interní záležitostí datové vrstvy
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _deviceIdentifierKey = 'device_identifier';
   static const String _needsRestaurantClaimKey = 'needs_restaurant_claim';
   static const String _needsOnboardingKey = 'needs_onboarding';
 
-  // Výchozí konfigurace pro zvýšení bezpečnosti na Androidu a iOS
   static const AndroidOptions _androidOptions = AndroidOptions(
     encryptedSharedPreferences: true,
   );
@@ -91,6 +89,7 @@ class TokenStorage {
     );
   }
 
+  /// Uloží příznak, zda uživatel musí projít procesem nárokování restaurace.
   Future<void> saveNeedsRestaurantClaim(bool value) async {
     await _storage.write(
       key: _needsRestaurantClaimKey,
@@ -100,6 +99,7 @@ class TokenStorage {
     );
   }
 
+  /// Vrátí uložený příznak pro nárokování restaurace.
   Future<bool> getNeedsRestaurantClaim() async {
     final value = await _storage.read(
       key: _needsRestaurantClaimKey,
@@ -109,6 +109,7 @@ class TokenStorage {
     return value == 'true';
   }
 
+  /// Uloží příznak, zda uživatel musí projít onboardingem.
   Future<void> saveNeedsOnboarding(bool value) async {
     await _storage.write(
       key: _needsOnboardingKey,
@@ -118,6 +119,7 @@ class TokenStorage {
     );
   }
 
+  /// Vrátí uložený příznak pro onboarding.
   Future<bool> getNeedsOnboarding() async {
     final value = await _storage.read(
       key: _needsOnboardingKey,

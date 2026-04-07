@@ -21,6 +21,7 @@ _$ReservationResponseModelImpl _$$ReservationResponseModelImplFromJson(
   partySize: (json['partySize'] as num?)?.toInt(),
   canEdit: json['canEdit'] as bool? ?? false,
   canCancel: json['canCancel'] as bool? ?? false,
+  pendingChange: json['pendingChange'] as Map<String, dynamic>?,
 );
 
 Map<String, dynamic> _$$ReservationResponseModelImplToJson(
@@ -38,4 +39,5 @@ Map<String, dynamic> _$$ReservationResponseModelImplToJson(
   'partySize': instance.partySize,
   'canEdit': instance.canEdit,
   'canCancel': instance.canCancel,
+  'pendingChange': instance.pendingChange,
 };

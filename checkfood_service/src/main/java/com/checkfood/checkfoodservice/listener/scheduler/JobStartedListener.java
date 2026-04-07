@@ -5,16 +5,21 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Reaguje na start scheduler jobu.
+ * Posluchač doménové události startu scheduler jobu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class JobStartedListener {
 
+    /**
+     * Zpracuje událost startu jobu.
+     *
+     * @param event událost s názvem spuštěného jobu
+     */
     @EventListener
     public void onJobStarted(JobStartedEvent event) {
-
-        // TODO:
-        // - log startu jobu
-        // - metriky
+        // TODO: log startu jobu, metriky
     }
 }

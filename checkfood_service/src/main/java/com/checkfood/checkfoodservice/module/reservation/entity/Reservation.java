@@ -8,6 +8,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
+/**
+ * JPA entita reprezentující jednu konkrétní rezervaci stolu v restauraci.
+ * Rezervace může být samostatná nebo navázána na opakovanou rezervaci přes {@code recurringReservationId}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +26,8 @@ import java.util.UUID;
         indexes = {
                 @Index(name = "idx_reservation_table_date", columnList = "table_id, reservation_date"),
                 @Index(name = "idx_reservation_user", columnList = "user_id"),
-                @Index(name = "idx_reservation_restaurant", columnList = "restaurant_id")
+                @Index(name = "idx_reservation_restaurant", columnList = "restaurant_id"),
+                @Index(name = "idx_reservation_recurring", columnList = "recurring_reservation_id")
         }
 )
 public class Reservation {
@@ -54,6 +62,9 @@ public class Reservation {
     @Column(name = "party_size", nullable = false)
     @Builder.Default
     private int partySize = 2;
+
+    @Column(name = "recurring_reservation_id")
+    private UUID recurringReservationId;
 
     @Builder.Default
     @Column(name = "created_at", nullable = false, updatable = false)

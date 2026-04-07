@@ -4,6 +4,12 @@ import lombok.*;
 
 import java.util.UUID;
 
+/**
+ * Odpověď obsahující detail nahrané fotografie panoramatické session včetně úhlů snímání.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

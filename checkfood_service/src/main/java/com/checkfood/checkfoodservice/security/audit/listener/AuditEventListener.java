@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
  * Asynchronně přijímá AuditEvent události a persistuje je prostřednictvím AuditService.
  * Aktivní pouze pokud je audit modul povolen v konfiguraci.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditEvent
  * @see AuditService
  */

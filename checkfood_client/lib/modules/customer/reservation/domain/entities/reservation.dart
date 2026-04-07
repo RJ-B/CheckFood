@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'reservation.freezed.dart';
 
+/// A single table reservation including its status and any pending change request.
 @freezed
 class Reservation with _$Reservation {
   const Reservation._();
@@ -19,5 +20,9 @@ class Reservation with _$Reservation {
     required int partySize,
     @Default(false) bool canEdit,
     @Default(false) bool canCancel,
+    String? pendingChangeRequestId,
+    String? pendingProposedStartTime,
+    String? pendingProposedTableId,
+    String? pendingProposedTableLabel,
   }) = _Reservation;
 }

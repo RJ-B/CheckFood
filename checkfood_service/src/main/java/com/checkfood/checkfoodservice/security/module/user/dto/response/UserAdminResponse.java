@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * DTO poskytující detailní administrativní pohled na uživatele.
- * Rozšířeno o profilový obrázek pro vizuální identifikaci v admin rozhraní.
+ * DTO poskytující detailní administrativní pohled na uživatelský účet včetně rolí a oprávnění.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -24,10 +26,7 @@ public class UserAdminResponse {
 
     private String lastName;
 
-    /**
-     * URL adresa profilového obrázku.
-     */
-    private String profileImageUrl; // ✅ Přidáno pro opravu chyby v UserMapper
+    private String profileImageUrl;
 
     private LocalDateTime lastLogin;
     private Set<String> authorities;

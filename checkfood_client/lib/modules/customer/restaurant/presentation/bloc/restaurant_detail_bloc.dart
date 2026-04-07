@@ -5,6 +5,8 @@ import '../../domain/usecases/toggle_favourite_usecase.dart';
 import 'restaurant_detail_event.dart';
 import 'restaurant_detail_state.dart';
 
+/// BLoC that loads a restaurant's full detail and handles favourite toggling
+/// with an optimistic UI update.
 class RestaurantDetailBloc
     extends Bloc<RestaurantDetailEvent, RestaurantDetailState> {
   final GetRestaurantByIdUseCase _getRestaurantByIdUseCase;
@@ -45,7 +47,6 @@ class RestaurantDetailBloc
     final restaurant = current.restaurant;
     final wasFavourite = restaurant.isFavourite;
 
-    // Optimistic update
     emit(
       RestaurantDetailState.loaded(
         restaurant: restaurant.copyWith(isFavourite: !wasFavourite),
@@ -58,7 +59,7 @@ class RestaurantDetailBloc
         currentlyFavourite: wasFavourite,
       );
     } catch (_) {
-      // Rollback on error
+      // Rollback the optimistic update.
       emit(
         RestaurantDetailState.loaded(
           restaurant: restaurant.copyWith(isFavourite: wasFavourite),

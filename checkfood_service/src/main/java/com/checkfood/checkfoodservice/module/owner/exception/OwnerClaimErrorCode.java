@@ -4,6 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Chybové kódy specifické pro proces přiřazení restaurace majiteli (owner claim flow).
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @RequiredArgsConstructor
 public enum OwnerClaimErrorCode {

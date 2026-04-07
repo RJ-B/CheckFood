@@ -3,12 +3,11 @@ package com.checkfood.checkfoodservice.security.audit.event;
 /**
  * Enumrace typů auditovaných bezpečnostních akcí v systému.
  * Pokrývá autentizaci, MFA operace, správu uživatelského účtu a bezpečnostní události.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public enum AuditAction {
-
-    // =====================
-    // AUTH
-    // =====================
 
     /**
      * Přihlášení uživatele do systému.
@@ -41,10 +40,6 @@ public enum AuditAction {
     OAUTH_LOGIN,
 
 
-    // =====================
-    // MFA
-    // =====================
-
     /**
      * Zahájení procesu nastavení vícefaktorové autentizace.
      */
@@ -65,10 +60,6 @@ public enum AuditAction {
      */
     MFA_DISABLED,
 
-
-    // =====================
-    // USER
-    // =====================
 
     /**
      * Změna hesla uživatele.
@@ -91,10 +82,6 @@ public enum AuditAction {
     ACCOUNT_DELETED,
 
 
-    // =====================
-    // SECURITY
-    // =====================
-
     /**
      * Překročení rate limitu pro API požadavky.
      */
@@ -105,7 +92,11 @@ public enum AuditAction {
      */
     INVALID_TOKEN,
 
+    /**
+     * Přiřazení role uživateli administrátorem.
+     */
     ROLE_ASSIGNED,
+
     /**
      * Pokus o neoprávněný přístup k chráněnému zdroji.
      */

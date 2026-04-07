@@ -7,6 +7,7 @@ import 'user_response_model.dart';
 part 'auth_response_model.freezed.dart';
 part 'auth_response_model.g.dart';
 
+/// Datový model pro odpověď po úspěšném přihlášení — obsahuje tokeny i data uživatele.
 @freezed
 class AuthResponseModel with _$AuthResponseModel {
   const AuthResponseModel._();

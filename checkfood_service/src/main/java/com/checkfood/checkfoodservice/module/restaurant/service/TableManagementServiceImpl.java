@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Implementace {@link TableManagementService} pro správu fyzických stolů a sezení v restauraci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -94,14 +100,24 @@ public class TableManagementServiceImpl implements TableManagementService {
         groupRepository.save(group);
     }
 
-    // --- Privátní pomocné metody ---
-
+    /**
+     * Ověří, zda zadaný uživatel je vlastníkem restaurace. Vyvolá výjimku při neshodě.
+     *
+     * @param restaurantId UUID restaurace
+     * @param ownerId      UUID požadovaného vlastníka
+     */
     private void validateRestaurantOwnership(UUID restaurantId, UUID ownerId) {
         if (!restaurantRepository.existsByIdAndOwnerId(restaurantId, ownerId)) {
             throw RestaurantException.accessDenied();
         }
     }
 
+    /**
+     * Ověří, že žádný z požadovaných stolů není momentálně součástí aktivního sezení.
+     *
+     * @param tableIds     seznam UUID stolů ke kontrole
+     * @param restaurantId UUID restaurace
+     */
     private void checkTablesAvailability(List<UUID> tableIds, UUID restaurantId) {
         var activeGroups = groupRepository.findAllByRestaurantIdAndActiveTrue(restaurantId);
 
@@ -110,7 +126,6 @@ public class TableManagementServiceImpl implements TableManagementService {
                 .anyMatch(item -> tableIds.contains(item.getTableId()));
 
         if (isAnyTableOccupied) {
-            // Použijeme specifickou výjimku bez generického textu
             throw RestaurantException.tableOccupied("Jeden nebo více vybraných stolů je již obsazeno.");
         }
     }

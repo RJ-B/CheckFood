@@ -23,6 +23,9 @@ import '../../domain/repositories/onboarding_repository.dart';
 import 'onboarding_wizard_event.dart';
 import 'onboarding_wizard_state.dart';
 
+/// BLoC that drives the restaurant onboarding wizard across all steps: loading
+/// status, updating restaurant info and hours, managing tables and menu,
+/// creating and polling panorama sessions, and publishing the restaurant.
 class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardState> {
   final OnboardingRepository _repository;
   final GetOnboardingStatusUseCase _getOnboardingStatus;
@@ -255,7 +258,6 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
         description: event.description,
         priceMinor: event.priceMinor,
       );
-      // Refresh menu to get updated categories with items
       final categories = await _getMenu();
       final status = await _getOnboardingStatus();
       emit(state.copyWith(loading: false, categories: categories, status: status));
@@ -358,7 +360,6 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
       final updatedSessions = state.sessions.map((s) => s.id == session.id ? session : s).toList();
       emit(state.copyWith(activeSession: session, sessions: updatedSessions));
 
-      // Continue polling if still PROCESSING
       if (session.status == 'PROCESSING') {
         await Future.delayed(const Duration(seconds: 3));
         if (!isClosed) {
@@ -366,7 +367,6 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
         }
       }
     } catch (_) {
-      // Silently retry polling on error
       await Future.delayed(const Duration(seconds: 5));
       if (!isClosed) {
         add(OnboardingWizardEvent.pollPanoramaStatus(event.sessionId));

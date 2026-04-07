@@ -5,11 +5,14 @@ import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/employee.dart';
 import 'employee_role_selector.dart';
 
+/// A scrollable list of employee tiles with role-change and remove controls
+/// visible only to the restaurant owner.
 class EmployeesList extends StatelessWidget {
   final List<Employee> employees;
   final bool isOwner;
   final void Function(int employeeId, String newRole) onRoleChanged;
   final void Function(int employeeId) onRemove;
+  final void Function(Employee employee)? onPermissions;
 
   const EmployeesList({
     super.key,
@@ -17,6 +20,7 @@ class EmployeesList extends StatelessWidget {
     required this.isOwner,
     required this.onRoleChanged,
     required this.onRemove,
+    this.onPermissions,
   });
 
   @override
@@ -51,60 +55,115 @@ class EmployeesList extends StatelessWidget {
           isOwner: isOwner,
           onRoleChanged: (newRole) => onRoleChanged(employee.id, newRole),
           onRemove: () => onRemove(employee.id),
+          onPermissions: onPermissions != null ? () => onPermissions!(employee) : null,
         );
       },
     );
   }
 }
 
+/// A single row in [EmployeesList] showing the employee's avatar, name/email,
+/// and (for owners) role selector, permission, and remove controls.
 class _EmployeeTile extends StatelessWidget {
   final Employee employee;
   final bool isOwner;
   final ValueChanged<String> onRoleChanged;
   final VoidCallback onRemove;
+  final VoidCallback? onPermissions;
 
   const _EmployeeTile({
     required this.employee,
     required this.isOwner,
     required this.onRoleChanged,
     required this.onRemove,
+    this.onPermissions,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: _roleColor(employee.role),
-        child: Text(
-          employee.name.isNotEmpty ? employee.name[0].toUpperCase() : '?',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-      title: Text(employee.name.isNotEmpty ? employee.name : employee.email),
-      subtitle: Text(employee.email),
-      trailing: employee.isOwner
-          ? Chip(
-              label: Text(S.of(context).owner),
-              backgroundColor: Colors.amber.shade100,
-            )
-          : isOwner
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: _roleColor(employee.role),
+                child: Text(
+                  employee.name.isNotEmpty ? employee.name[0].toUpperCase() : '?',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 120,
-                      child: EmployeeRoleSelector(
-                        currentRole: employee.role,
-                        onRoleChanged: onRoleChanged,
-                      ),
+                    Text(
+                      employee.name.isNotEmpty ? employee.name : employee.email,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline, color: AppColors.error),
-                      onPressed: () => _confirmRemove(context),
+                    Text(
+                      employee.email,
+                      style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                )
-              : Chip(label: Text(_roleLabel(context, employee.role))),
+                ),
+              ),
+              if (employee.isOwner)
+                Chip(
+                  label: Text(S.of(context).owner),
+                  backgroundColor: Colors.amber.shade100,
+                  visualDensity: VisualDensity.compact,
+                ),
+            ],
+          ),
+          if (!employee.isOwner && isOwner) ...[
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.only(left: 52),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: EmployeeRoleSelector(
+                      currentRole: employee.role,
+                      onRoleChanged: onRoleChanged,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: onPermissions,
+                    icon: const Icon(Icons.security, size: 20),
+                    color: AppColors.primary,
+                    tooltip: 'Oprávnění',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline, size: 20),
+                    color: AppColors.error,
+                    onPressed: () => _confirmRemove(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          if (!employee.isOwner && !isOwner)
+            Padding(
+              padding: const EdgeInsets.only(left: 52, top: 4),
+              child: Chip(
+                label: Text(_roleLabel(context, employee.role)),
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
+        ],
+      ),
     );
   }
 

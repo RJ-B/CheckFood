@@ -5,6 +5,7 @@ import 'menu_item_response_model.dart';
 part 'menu_category_response_model.freezed.dart';
 part 'menu_category_response_model.g.dart';
 
+/// API response model for a menu category containing a list of items.
 @freezed
 class MenuCategoryResponseModel with _$MenuCategoryResponseModel {
   const MenuCategoryResponseModel._();

@@ -3,23 +3,29 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 part 'map_params_model.freezed.dart';
 
+/// Parameters describing the current map viewport, used to query visible restaurant markers.
 @freezed
 class MapParamsModel with _$MapParamsModel {
-  const MapParamsModel._(); // Nutné pro vlastní metody
+  const MapParamsModel._();
 
   const factory MapParamsModel({
     required LatLngBounds bounds,
     required int zoom,
+    double? clusterRadius,
   }) = _MapParamsModel;
 
-  /// Převede parametry na mapu pro query parametry Dio požadavku
+  /// Converts the viewport parameters into Dio query parameters.
   Map<String, dynamic> toQueryParameters() {
-    return {
+    final params = <String, dynamic>{
       'minLat': bounds.southwest.latitude,
       'maxLat': bounds.northeast.latitude,
       'minLng': bounds.southwest.longitude,
       'maxLng': bounds.northeast.longitude,
       'zoom': zoom,
     };
+    if (clusterRadius != null) {
+      params['clusterRadius'] = clusterRadius;
+    }
+    return params;
   }
 }

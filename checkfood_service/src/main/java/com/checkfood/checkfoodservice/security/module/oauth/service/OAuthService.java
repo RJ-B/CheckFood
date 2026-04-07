@@ -1,18 +1,23 @@
 package com.checkfood.checkfoodservice.security.module.oauth.service;
 
-import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse; // ✅ Sjednocený import
+import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
 import com.checkfood.checkfoodservice.security.module.oauth.dto.request.OAuthLoginRequest;
 
 /**
- * Hlavní orchestrační služba pro modul OAuth.
+ * Hlavní orchestrační rozhraní pro OAuth modul.
  * Zodpovídá za zpracování požadavků na přihlášení přes externí poskytovatele identity.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface OAuthService {
 
     /**
-     * Provede kompletní proces autentizace uživatele přes sociální sítě.
-     * * @param request Požadavek obsahující typ poskytovatele, ID token a data o zařízení.
-     * @return Sjednocená odpověď AuthResponse obsahující JWT tokeny a UserResponse.
+     * Provede kompletní OAuth autentizaci: ověří ID token, získá nebo vytvoří uživatele
+     * a vydá JWT tokeny.
+     *
+     * @param request požadavek obsahující typ poskytovatele, ID token a data o zařízení
+     * @return sjednocená odpověď s JWT tokeny a daty uživatele
      */
-    AuthResponse login(OAuthLoginRequest request); // ✅ Změněno z OAuthResponse na AuthResponse
+    AuthResponse login(OAuthLoginRequest request);
 }

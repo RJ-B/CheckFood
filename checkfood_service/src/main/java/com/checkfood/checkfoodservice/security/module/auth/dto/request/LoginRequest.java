@@ -10,6 +10,8 @@ import lombok.*;
  * DTO pro přihlášení uživatele do systému.
  * Obsahuje přihlašovací údaje a informace o zařízení pro správu sessions a refresh tokenů.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuthService#login(LoginRequest)
  */
 @Getter

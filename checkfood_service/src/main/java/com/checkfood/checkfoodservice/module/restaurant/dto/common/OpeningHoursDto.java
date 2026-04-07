@@ -4,6 +4,12 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import lombok.*;
 
+/**
+ * DTO pro přenos provozní doby restaurace pro konkrétní den.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

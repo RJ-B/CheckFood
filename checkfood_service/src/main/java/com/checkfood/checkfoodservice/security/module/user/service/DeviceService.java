@@ -14,7 +14,8 @@ import java.util.Optional;
  * Definuje operace pro orchestraci bezpečnostních mechanismů navázaných na konkrétní terminály.
  * Zajišťuje integritu Refresh tokenů skrze perzistentní sledování aktivních session.
  *
- * ✅ UPRAVENO: Rozšířeno o podporu String deviceIdentifier pro konzistenci s JWT tokeny.
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface DeviceService {
 
@@ -53,10 +54,10 @@ public interface DeviceService {
     List<DeviceEntity> findAllByUser(UserEntity user);
 
     /**
-     * ✅ UPRAVENO: Vrátí seznam zařízení převedený na DTO s příznakem aktuálního zařízení.
+     * Vrátí seznam zařízení převedený na DTO s příznakem aktuálního zařízení.
      * Porovná deviceIdentifier s identifikátorem v Access Tokenu a označí současné zařízení.
      *
-     * @param email emailová adresa uživatele
+     * @param email       emailová adresa uživatele
      * @param accessToken JWT access token obsahující deviceIdentifier
      * @return seznam zařízení s označením aktuálního terminálu
      */
@@ -99,12 +100,12 @@ public interface DeviceService {
     void removeByIdAndUser(Long deviceId, UserEntity user);
 
     /**
-     * ✅ NOVÁ METODA: Autorizované odstranění relace pomocí String identifikátoru.
+     * Autorizované odstranění relace pomocí String identifikátoru.
      * Bezpečnější alternativa k removeByIdAndUser, která neodhaluje interní Long ID.
      * Umožňuje frontendové aplikaci odstranit zařízení pomocí UUID identifikátoru.
      *
      * @param deviceIdentifier String identifikátor zařízení (UUID)
-     * @param user subjekt provádějící operaci
+     * @param user             subjekt provádějící operaci
      * @throws UserException pokud cílová relace neexistuje nebo nepatří danému uživateli
      */
     void removeByIdentifierAndUser(String deviceIdentifier, UserEntity user);
@@ -125,6 +126,33 @@ public interface DeviceService {
      * @param currentDeviceIdentifier identifikátor aktuálního zařízení (zachová se)
      */
     void removeAllByUserExceptCurrent(UserEntity user, String currentDeviceIdentifier);
+
+    /**
+     * Deaktivuje zařízení pomocí identifikátoru (soft-logout).
+     * Záznam zůstane v DB s isActive = false.
+     *
+     * @param deviceIdentifier identifikátor zařízení
+     * @param user vlastník zařízení
+     */
+    void deactivateByIdentifierAndUser(String deviceIdentifier, UserEntity user);
+
+    /**
+     * Deaktivuje konkrétní zařízení podle ID (soft-logout).
+     * Záznam zůstane v DB s isActive = false.
+     *
+     * @param deviceId interní ID zařízení
+     * @param user vlastník zařízení
+     */
+    void deactivateByIdAndUser(Long deviceId, UserEntity user);
+
+    /**
+     * Deaktivuje všechna zařízení uživatele kromě aktuálního (bulk soft-logout).
+     * Záznamy zůstanou v DB s isActive = false.
+     *
+     * @param user uživatel
+     * @param currentDeviceIdentifier identifikátor aktuálního zařízení (zachová se aktivní)
+     */
+    void deactivateAllByUserExceptCurrent(UserEntity user, String currentDeviceIdentifier);
 
     /**
      * Aktualizuje FCM token a preference notifikaci pro dane zarizeni.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A compact dropdown for selecting an employee's role (MANAGER or STAFF).
 class EmployeeRoleSelector extends StatelessWidget {
   final String currentRole;
   final ValueChanged<String> onRoleChanged;
@@ -21,7 +22,8 @@ class EmployeeRoleSelector extends StatelessWidget {
       decoration: const InputDecoration(
         labelText: 'Role',
         border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        isDense: true,
       ),
       items: _roles.map((role) {
         return DropdownMenuItem(

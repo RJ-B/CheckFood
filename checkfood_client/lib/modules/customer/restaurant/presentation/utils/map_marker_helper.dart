@@ -5,65 +5,87 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../core/theme/colors.dart';
 
-/// Generates and caches cluster and restaurant pin bitmaps for the map.
+/// Generates and caches Qerko-style map markers for restaurants and clusters.
 ///
-/// Cluster diameter formula:
-///   diameterPx = clamp(36, 68, base + k * log10(count) - zoomScale * zoom)
-/// Produces icons between 36px and 68px diameter (18-34px radius).
+/// Individual marker layout (bottom-anchored):
+///   [name label]
+///   [circle avatar (letter or icon)]
+///   [small green teardrop pin]
+///
+/// Cluster marker:
+///   Emerald green circle with white count label +
+///   small orange dot indicator at top-right.
 class MapMarkerHelper {
   static final Map<String, BitmapDescriptor> _clusterCache = {};
   static final Map<String, BitmapDescriptor> _pinCache = {};
 
-  static const double _minDiameter = 36;
-  static const double _maxDiameter = 68;
-  static const double _base = 30;
-  static const double _k = 20;
-  static const double _zoomScale = 0.8;
+  static const double _minDiameter = 44;
+  static const double _maxDiameter = 80;
+  static const double _base = 40;
+  static const double _k = 22;
+  static const double _zoomScale = 0.6;
+
+  static const double _circleDiameter = 48.0;
+  static const double _circleRadius = _circleDiameter / 2;
+  static const double _borderWidth = 3.0;
+  static const double _selectedCircleDiameter = 58.0;
+  static const double _selectedCircleRadius = _selectedCircleDiameter / 2;
+  static const double _selectedBorderWidth = 3.5;
+
+  static const double _pinWidth = 10.0;
+  static const double _pinHeight = 8.0;
+
+  static const double _labelFontSize = 10.0;
+  static const double _labelPadH = 6.0;
+  static const double _labelPadV = 3.0;
+  static const double _labelRadius = 4.0;
+  static const double _labelMaxWidth = 80.0;
+
+  static const double _scale = 2.5;
 
   /// Returns the pixel diameter for a cluster icon.
-  /// [count] — number of restaurants in the cluster.
-  /// [zoom] — current map zoom level.
   static int clusterIconSize(int count, {int zoom = 14}) {
     final logPart = count > 1 ? math.log(count) / math.ln10 : 0.0;
     final raw = _base + _k * logPart - _zoomScale * zoom;
     return raw.clamp(_minDiameter, _maxDiameter).round();
   }
 
-  /// Creates a cluster bitmap (emerald circle with label).
-  /// Uses caching by size+text to avoid flickering and redundant rasterization.
+  /// Creates a cluster bitmap — emerald circle + white count + orange dot.
   static Future<BitmapDescriptor> getClusterBitmap(
     int size, {
     required String text,
   }) async {
-    final cacheKey = '${size}_$text';
+    final cacheKey = 'cluster_${size}_$text';
     if (_clusterCache.containsKey(cacheKey)) {
       return _clusterCache[cacheKey]!;
     }
 
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint = Paint()..color = AppColors.primary; // Emerald #10B981
+    const double dotRadius = 5.0;
+    final double canvasSize = size + dotRadius * 2;
+    final double cx = canvasSize / 2;
+    final double cy = canvasSize / 2;
+    final double r = size / 2;
 
-    final double radius = size / 2;
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(recorder);
 
-    // Background circle
-    canvas.drawCircle(Offset(radius, radius), radius, paint);
-
-    // White border ring — scales proportionally with icon size
-    final borderWidth = (size * 0.06).clamp(1.5, 3.0);
-    final Paint strokePaint =
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = borderWidth;
     canvas.drawCircle(
-      Offset(radius, radius),
-      radius - borderWidth / 2,
-      strokePaint,
+      Offset(cx, cy),
+      r,
+      Paint()..color = AppColors.primary,
     );
 
-    // Label text — font size proportional to diameter
-    final fontSize = (radius * 0.55).clamp(8.0, 16.0);
+    final borderWidth = (size * 0.06).clamp(1.5, 3.0);
+    canvas.drawCircle(
+      Offset(cx, cy),
+      r - borderWidth / 2,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = borderWidth,
+    );
+
+    final fontSize = (r * 0.55).clamp(8.0, 16.0);
     final textPainter = TextPainter(
       textDirection: TextDirection.ltr,
       text: TextSpan(
@@ -75,156 +97,277 @@ class MapMarkerHelper {
         ),
       ),
     );
-
     textPainter.layout();
     textPainter.paint(
       canvas,
-      Offset(radius - textPainter.width / 2, radius - textPainter.height / 2),
+      Offset(cx - textPainter.width / 2, cy - textPainter.height / 2),
     );
 
-    final img = await pictureRecorder.endRecording().toImage(size, size);
+    final double dotCx = cx + r * math.cos(-math.pi / 4);
+    final double dotCy = cy + r * math.sin(-math.pi / 4);
+    canvas.drawCircle(
+      Offset(dotCx, dotCy),
+      dotRadius,
+      Paint()..color = const Color(0xFFF59E0B), // Amber-400
+    );
+    canvas.drawCircle(
+      Offset(dotCx, dotCy),
+      dotRadius,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
+
+    final imgSize = canvasSize.round();
+    final img = await recorder.endRecording().toImage(imgSize, imgSize);
     final ByteData? data = await img.toByteData(format: ui.ImageByteFormat.png);
 
-    if (data == null) {
-      return BitmapDescriptor.defaultMarker;
-    }
+    if (data == null) return BitmapDescriptor.defaultMarker;
 
-    final BitmapDescriptor bitmap = BitmapDescriptor.bytes(
-      data.buffer.asUint8List(),
-    );
-
+    final bitmap = BitmapDescriptor.bytes(data.buffer.asUint8List());
     _clusterCache[cacheKey] = bitmap;
     return bitmap;
   }
 
-  /// Creates a branded teardrop restaurant pin.
-  /// [isSelected] — true = emerald fill + larger size, false = dark teal fill.
-  /// Uses caching by key `rest_${isSelected}`.
+  /// Creates a Qerko-style restaurant marker:
+  ///   • White-bordered circle avatar (letter or fork icon)
+  ///   • Small green teardrop pin below the circle
+  ///   • Restaurant name label at the bottom
+  ///
+  /// [id] — used for cache key differentiation.
+  /// [name] — displayed as label and used for the letter avatar.
+  /// [isSelected] — selected state is larger with a drop shadow.
   static Future<BitmapDescriptor> getRestaurantBitmap({
+    required String id,
+    String? name,
+    String? logoUrl,
     bool isSelected = false,
   }) async {
-    final cacheKey = 'rest_$isSelected';
+    final cacheKey = 'rest_${id}_$isSelected';
     if (_pinCache.containsKey(cacheKey)) {
       return _pinCache[cacheKey]!;
     }
 
-    // Device pixel ratio scaling — use 2.0 as base for crisp rendering
-    const double scale = 2.0;
-    final double w = (isSelected ? 56 : 48) * scale;
-    final double h = (isSelected ? 72 : 64) * scale;
+    final double circleD =
+        isSelected ? _selectedCircleDiameter : _circleDiameter;
+    final double circleR =
+        isSelected ? _selectedCircleRadius : _circleRadius;
+    final double border = isSelected ? _selectedBorderWidth : _borderWidth;
 
-    final ui.PictureRecorder recorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(recorder, Rect.fromLTWH(0, 0, w, h));
+    final String displayName = name ?? '';
+    final bool hasName = displayName.isNotEmpty;
 
-    final Color fillColor =
-        isSelected ? AppColors.primary : AppColors.brandDark;
-
-    // Shadow for selected
-    if (isSelected) {
-      final Paint shadowPaint =
-          Paint()
-            ..color = Colors.black.withValues(alpha: 0.3)
-            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-      _drawTeardrop(canvas, w, h, shadowPaint, offsetY: 3);
+    final labelPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      maxLines: 2,
+      ellipsis: '…',
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: displayName,
+        style: const TextStyle(
+          fontSize: _labelFontSize,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+    );
+    if (hasName) {
+      labelPainter.layout(maxWidth: _labelMaxWidth);
     }
 
-    // Main teardrop body
-    final Paint bodyPaint = Paint()..color = fillColor;
-    _drawTeardrop(canvas, w, h, bodyPaint);
+    final double labelW =
+        hasName ? labelPainter.width + _labelPadH * 2 : 0;
+    final double labelH =
+        hasName ? labelPainter.height + _labelPadV * 2 : 0;
+    const double labelSpacing = 3.0; // gap between pin tip and label
 
-    // White border
-    final Paint borderPaint =
+    const double shadowBlur = 6.0;
+    final double shadowPad = isSelected ? shadowBlur : 0;
+
+    final double totalW =
+        math.max(circleD + shadowPad * 2, labelW) + shadowPad * 2;
+    final double totalH =
+        shadowPad + circleD + _pinHeight + (hasName ? labelSpacing + labelH : 0) + shadowPad;
+
+    final double sw = totalW * _scale;
+    final double sh = totalH * _scale;
+
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(recorder, Rect.fromLTWH(0, 0, sw, sh));
+    canvas.scale(_scale);
+
+    final double cx = totalW / 2;          // horizontal centre
+    final double circleTop = shadowPad;    // top of the circle
+    final double circleCy = circleTop + circleR; // vertical centre of circle
+
+    if (isSelected) {
+      canvas.drawCircle(
+        Offset(cx, circleCy + 2),
+        circleR,
         Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.5 * scale;
-    _drawTeardrop(canvas, w, h, borderPaint);
+          ..color = Colors.black.withValues(alpha: 0.25)
+          ..maskFilter =
+              const MaskFilter.blur(BlurStyle.normal, shadowBlur),
+      );
+    }
 
-    // Restaurant icon (fork+knife) in center of circular head
-    final double iconSize = (isSelected ? 22 : 18) * scale;
-    final double headCenterX = w / 2;
-    final double headRadius = w * 0.42;
-    final double headCenterY = headRadius;
+    final bool useLetter = hasName;
+    final Color circleFill =
+        useLetter ? AppColors.brandDark : AppColors.primary;
 
-    final ui.ParagraphBuilder pb = ui.ParagraphBuilder(
+    canvas.drawCircle(
+      Offset(cx, circleCy),
+      circleR,
+      Paint()..color = circleFill,
+    );
+
+    canvas.drawCircle(
+      Offset(cx, circleCy),
+      circleR - border / 2,
+      Paint()
+        ..color = isSelected ? AppColors.primary : Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = border,
+    );
+
+    if (useLetter) {
+      _drawLetter(
+        canvas,
+        letter: displayName[0].toUpperCase(),
+        cx: cx,
+        cy: circleCy,
+        fontSize: circleR * 0.85,
+      );
+    } else {
+      _drawIcon(
+        canvas,
+        iconCode: Icons.restaurant.codePoint,
+        cx: cx,
+        cy: circleCy,
+        size: circleR * 0.95,
+      );
+    }
+
+    final double pinTop = circleTop + circleD;
+    final double pinCx = cx;
+    _drawPin(canvas, cx: pinCx, top: pinTop);
+
+    if (hasName) {
+      final double labelTop = pinTop + _pinHeight + labelSpacing;
+      final double labelLeft = cx - labelW / 2;
+
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(labelLeft, labelTop, labelW, labelH),
+          const Radius.circular(_labelRadius),
+        ),
+        Paint()..color = AppColors.brandDark.withValues(alpha: 0.85),
+      );
+
+      labelPainter.paint(
+        canvas,
+        Offset(labelLeft + _labelPadH, labelTop + _labelPadV),
+      );
+    }
+
+    final img = await recorder
+        .endRecording()
+        .toImage(sw.round(), sh.round());
+    final ByteData? data =
+        await img.toByteData(format: ui.ImageByteFormat.png);
+
+    if (data == null) return BitmapDescriptor.defaultMarker;
+
+    final bitmap = BitmapDescriptor.bytes(
+      data.buffer.asUint8List(),
+      imagePixelRatio: _scale,
+    );
+    _pinCache[cacheKey] = bitmap;
+    return bitmap;
+  }
+
+  /// Draws a small downward-pointing teardrop/pin below the circle.
+  static void _drawPin(Canvas canvas, {required double cx, required double top}) {
+    const double halfW = _pinWidth / 2;
+    final path = Path()
+      ..moveTo(cx - halfW, top)
+      ..quadraticBezierTo(cx - halfW * 0.4, top + _pinHeight * 0.6, cx, top + _pinHeight)
+      ..quadraticBezierTo(cx + halfW * 0.4, top + _pinHeight * 0.6, cx + halfW, top)
+      ..close();
+
+    canvas.drawPath(path, Paint()..color = AppColors.primary);
+  }
+
+  /// Draws a single character centred in the circle using ui.Paragraph.
+  static void _drawLetter(
+    Canvas canvas, {
+    required String letter,
+    required double cx,
+    required double cy,
+    required double fontSize,
+  }) {
+    final pb = ui.ParagraphBuilder(
       ui.ParagraphStyle(
         textAlign: TextAlign.center,
-        fontSize: iconSize,
+        fontSize: fontSize,
       ),
     )
       ..pushStyle(
         ui.TextStyle(
           color: Colors.white,
-          fontSize: iconSize,
-          fontFamily: 'MaterialIcons',
+          fontSize: fontSize,
+          fontWeight: ui.FontWeight.bold,
         ),
       )
-      ..addText(String.fromCharCode(Icons.restaurant.codePoint));
+      ..addText(letter);
 
-    final ui.Paragraph paragraph = pb.build()
-      ..layout(ui.ParagraphConstraints(width: iconSize + 4));
+    final paragraph = pb.build()
+      ..layout(ui.ParagraphConstraints(width: fontSize * 2));
 
     canvas.drawParagraph(
       paragraph,
-      Offset(
-        headCenterX - paragraph.width / 2,
-        headCenterY - paragraph.height / 2,
-      ),
+      Offset(cx - paragraph.width / 2, cy - paragraph.height / 2),
     );
-
-    final img = await recorder
-        .endRecording()
-        .toImage(w.round(), h.round());
-    final ByteData? data = await img.toByteData(
-      format: ui.ImageByteFormat.png,
-    );
-
-    if (data == null) {
-      return BitmapDescriptor.defaultMarker;
-    }
-
-    final BitmapDescriptor bitmap = BitmapDescriptor.bytes(
-      data.buffer.asUint8List(),
-      imagePixelRatio: scale,
-    );
-
-    _pinCache[cacheKey] = bitmap;
-    return bitmap;
   }
 
-  /// Draws a teardrop path (circle on top, pointed bottom).
-  static void _drawTeardrop(
-    Canvas canvas,
-    double w,
-    double h,
-    Paint paint, {
-    double offsetY = 0,
+  /// Draws a Material icon glyph centred in the circle using ui.Paragraph.
+  static void _drawIcon(
+    Canvas canvas, {
+    required int iconCode,
+    required double cx,
+    required double cy,
+    required double size,
   }) {
-    final double r = w * 0.42; // radius of circular head
-    final double cx = w / 2;
-    final double cy = r + offsetY;
+    final pb = ui.ParagraphBuilder(
+      ui.ParagraphStyle(
+        textAlign: TextAlign.center,
+        fontSize: size,
+      ),
+    )
+      ..pushStyle(
+        ui.TextStyle(
+          color: Colors.white,
+          fontSize: size,
+          fontFamily: 'MaterialIcons',
+        ),
+      )
+      ..addText(String.fromCharCode(iconCode));
 
-    final Path path = Path();
+    final paragraph = pb.build()
+      ..layout(ui.ParagraphConstraints(width: size + 4));
 
-    // Circle arc top + sides
-    path.addArc(
-      Rect.fromCircle(center: Offset(cx, cy), radius: r),
-      math.pi * 0.75,  // start ~225°
-      math.pi * 1.5,   // sweep 270° (leaving gap at bottom for point)
+    canvas.drawParagraph(
+      paragraph,
+      Offset(cx - paragraph.width / 2, cy - paragraph.height / 2),
     );
-
-    // Lines converging to point at bottom
-    path.lineTo(cx, h - offsetY);
-    path.close();
-
-    canvas.drawPath(path, paint);
   }
 
-  /// Pre-generate all 2 pin variants (selected/unselected) for fast first render.
+  /// Pre-generates two generic pin variants (no id, no name) for fast first render.
   static Future<void> preGeneratePins() async {
     await Future.wait([
-      getRestaurantBitmap(isSelected: false),
-      getRestaurantBitmap(isSelected: true),
+      getRestaurantBitmap(id: '_default', isSelected: false),
+      getRestaurantBitmap(id: '_default', isSelected: true),
     ]);
   }
 

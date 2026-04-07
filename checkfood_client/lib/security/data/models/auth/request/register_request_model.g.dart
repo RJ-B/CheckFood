@@ -13,6 +13,9 @@ _$RegisterRequestModelImpl _$$RegisterRequestModelImplFromJson(
   password: json['password'] as String,
   firstName: json['firstName'] as String,
   lastName: json['lastName'] as String,
+  ownerRegistration: json['ownerRegistration'] as bool? ?? false,
+  latitude: (json['latitude'] as num?)?.toDouble(),
+  longitude: (json['longitude'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$$RegisterRequestModelImplToJson(
@@ -22,4 +25,7 @@ Map<String, dynamic> _$$RegisterRequestModelImplToJson(
   'password': instance.password,
   'firstName': instance.firstName,
   'lastName': instance.lastName,
+  'ownerRegistration': instance.ownerRegistration,
+  'latitude': instance.latitude,
+  'longitude': instance.longitude,
 };

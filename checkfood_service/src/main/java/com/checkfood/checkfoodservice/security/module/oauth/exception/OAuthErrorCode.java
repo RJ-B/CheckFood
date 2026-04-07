@@ -1,26 +1,28 @@
 package com.checkfood.checkfoodservice.security.module.oauth.exception;
 
 /**
- * Enumerace chybových kódů pro modul OAuth.
- * Obsahuje metadata pro automatické rozhodování o logování (Severity) v ExceptionHandleru.
+ * Výčet chybových kódů pro OAuth modul s metadaty kategorie pro rozhodování o úrovni logování.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public enum OAuthErrorCode {
 
-    // --- SECURITY INCIDENTS (WARN) ---
-    /** ID Token od poskytovatele je neplatný/podvržený. */
+    /** ID token od poskytovatele je neplatný nebo podvržený. */
     OAUTH_TOKEN_INVALID("SECURITY_INCIDENT"),
-    /** Konflikt providerů (např. email registrován přes Google, ale přihlášení přes Apple). */
+
+    /** Konflikt poskytovatelů — email je registrován přes jiného poskytovatele. */
     OAUTH_PROVIDER_MISMATCH("SECURITY_ACCOUNT_STATE"),
 
-    // --- VALIDATION / CONFIG (INFO) ---
-    /** Poskytovatel není podporován (chybný request). */
+    /** Poskytovatel není podporován. */
     OAUTH_PROVIDER_NOT_SUPPORTED("VALIDATION"),
-    /** Chybí povinná data (email) od poskytovatele. */
+
+    /** Poskytovatel nevrátil povinné údaje (email). */
     OAUTH_USER_DATA_MISSING("VALIDATION"),
 
-    // --- SYSTEM ERRORS (ERROR) ---
-    /** Chyba komunikace s externím API (Google/Apple down). */
+    /** Chyba komunikace s externím API poskytovatele. */
     OAUTH_PROVIDER_COMMUNICATION_ERROR("SYSTEM"),
+
     /** Interní chyba zpracování (kryptografie, JSON parsing). */
     OAUTH_INTERNAL_ERROR("SYSTEM");
 
@@ -30,14 +32,29 @@ public enum OAuthErrorCode {
         this.category = category;
     }
 
+    /**
+     * Vrátí kategorii chybového kódu pro rozhodování o úrovni logování.
+     *
+     * @return název kategorie
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Určí, zda chyba reprezentuje bezpečnostní incident vyžadující zvýšenou pozornost.
+     *
+     * @return true pro kategorie SECURITY_INCIDENT a SECURITY_ACCOUNT_STATE
+     */
     public boolean isSecurityEvent() {
         return "SECURITY_INCIDENT".equals(category) || "SECURITY_ACCOUNT_STATE".equals(category);
     }
 
+    /**
+     * Určí, zda chyba představuje systémovou chybu infrastruktury.
+     *
+     * @return true pro kategorii SYSTEM
+     */
     public boolean isSystemError() {
         return "SYSTEM".equals(category);
     }

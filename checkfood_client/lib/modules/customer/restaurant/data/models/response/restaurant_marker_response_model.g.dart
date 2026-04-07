@@ -13,6 +13,8 @@ _$$RestaurantMarkerResponseModelImplFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       count: (json['count'] as num).toInt(),
+      name: json['name'] as String?,
+      logoUrl: json['logoUrl'] as String?,
     );
 
 Map<String, dynamic> _$$RestaurantMarkerResponseModelImplToJson(
@@ -22,4 +24,6 @@ Map<String, dynamic> _$$RestaurantMarkerResponseModelImplToJson(
   'latitude': instance.latitude,
   'longitude': instance.longitude,
   'count': instance.count,
+  'name': instance.name,
+  'logoUrl': instance.logoUrl,
 };

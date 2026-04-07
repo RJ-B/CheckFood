@@ -1,15 +1,13 @@
 package com.checkfood.checkfoodservice.scheduler.job;
 
 /**
- * Úloha pro expirování rezervací.
+ * Plánovaná úloha pro expirování rezervací.
+ * Mění stav rezervace a publikuje ReservationExpiredEvent.
  *
- * Typický business-trigger:
- * - změní stav rezervace
- * - publikuje event
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class ReservationExpirationJob {
 
-    // TODO:
-    // - @Scheduled
-    // - publikace ReservationExpiredEvent
+    // TODO: @Scheduled, publikace ReservationExpiredEvent
 }

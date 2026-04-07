@@ -29,6 +29,10 @@ mixin _$Reservation {
   int get partySize => throw _privateConstructorUsedError;
   bool get canEdit => throw _privateConstructorUsedError;
   bool get canCancel => throw _privateConstructorUsedError;
+  String? get pendingChangeRequestId => throw _privateConstructorUsedError;
+  String? get pendingProposedStartTime => throw _privateConstructorUsedError;
+  String? get pendingProposedTableId => throw _privateConstructorUsedError;
+  String? get pendingProposedTableLabel => throw _privateConstructorUsedError;
 
   /// Create a copy of Reservation
   /// with the given fields replaced by the non-null parameter values.
@@ -57,6 +61,10 @@ abstract class $ReservationCopyWith<$Res> {
     int partySize,
     bool canEdit,
     bool canCancel,
+    String? pendingChangeRequestId,
+    String? pendingProposedStartTime,
+    String? pendingProposedTableId,
+    String? pendingProposedTableLabel,
   });
 }
 
@@ -87,6 +95,10 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
     Object? partySize = null,
     Object? canEdit = null,
     Object? canCancel = null,
+    Object? pendingChangeRequestId = freezed,
+    Object? pendingProposedStartTime = freezed,
+    Object? pendingProposedTableId = freezed,
+    Object? pendingProposedTableLabel = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -150,6 +162,26 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
                     ? _value.canCancel
                     : canCancel // ignore: cast_nullable_to_non_nullable
                         as bool,
+            pendingChangeRequestId:
+                freezed == pendingChangeRequestId
+                    ? _value.pendingChangeRequestId
+                    : pendingChangeRequestId // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            pendingProposedStartTime:
+                freezed == pendingProposedStartTime
+                    ? _value.pendingProposedStartTime
+                    : pendingProposedStartTime // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            pendingProposedTableId:
+                freezed == pendingProposedTableId
+                    ? _value.pendingProposedTableId
+                    : pendingProposedTableId // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            pendingProposedTableLabel:
+                freezed == pendingProposedTableLabel
+                    ? _value.pendingProposedTableLabel
+                    : pendingProposedTableLabel // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -178,6 +210,10 @@ abstract class _$$ReservationImplCopyWith<$Res>
     int partySize,
     bool canEdit,
     bool canCancel,
+    String? pendingChangeRequestId,
+    String? pendingProposedStartTime,
+    String? pendingProposedTableId,
+    String? pendingProposedTableLabel,
   });
 }
 
@@ -207,6 +243,10 @@ class __$$ReservationImplCopyWithImpl<$Res>
     Object? partySize = null,
     Object? canEdit = null,
     Object? canCancel = null,
+    Object? pendingChangeRequestId = freezed,
+    Object? pendingProposedStartTime = freezed,
+    Object? pendingProposedTableId = freezed,
+    Object? pendingProposedTableLabel = freezed,
   }) {
     return _then(
       _$ReservationImpl(
@@ -270,6 +310,26 @@ class __$$ReservationImplCopyWithImpl<$Res>
                 ? _value.canCancel
                 : canCancel // ignore: cast_nullable_to_non_nullable
                     as bool,
+        pendingChangeRequestId:
+            freezed == pendingChangeRequestId
+                ? _value.pendingChangeRequestId
+                : pendingChangeRequestId // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        pendingProposedStartTime:
+            freezed == pendingProposedStartTime
+                ? _value.pendingProposedStartTime
+                : pendingProposedStartTime // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        pendingProposedTableId:
+            freezed == pendingProposedTableId
+                ? _value.pendingProposedTableId
+                : pendingProposedTableId // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        pendingProposedTableLabel:
+            freezed == pendingProposedTableLabel
+                ? _value.pendingProposedTableLabel
+                : pendingProposedTableLabel // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -291,6 +351,10 @@ class _$ReservationImpl extends _Reservation {
     required this.partySize,
     this.canEdit = false,
     this.canCancel = false,
+    this.pendingChangeRequestId,
+    this.pendingProposedStartTime,
+    this.pendingProposedTableId,
+    this.pendingProposedTableLabel,
   }) : super._();
 
   @override
@@ -319,10 +383,18 @@ class _$ReservationImpl extends _Reservation {
   @override
   @JsonKey()
   final bool canCancel;
+  @override
+  final String? pendingChangeRequestId;
+  @override
+  final String? pendingProposedStartTime;
+  @override
+  final String? pendingProposedTableId;
+  @override
+  final String? pendingProposedTableLabel;
 
   @override
   String toString() {
-    return 'Reservation(id: $id, restaurantId: $restaurantId, tableId: $tableId, restaurantName: $restaurantName, tableLabel: $tableLabel, date: $date, startTime: $startTime, endTime: $endTime, status: $status, partySize: $partySize, canEdit: $canEdit, canCancel: $canCancel)';
+    return 'Reservation(id: $id, restaurantId: $restaurantId, tableId: $tableId, restaurantName: $restaurantName, tableLabel: $tableLabel, date: $date, startTime: $startTime, endTime: $endTime, status: $status, partySize: $partySize, canEdit: $canEdit, canCancel: $canCancel, pendingChangeRequestId: $pendingChangeRequestId, pendingProposedStartTime: $pendingProposedStartTime, pendingProposedTableId: $pendingProposedTableId, pendingProposedTableLabel: $pendingProposedTableLabel)';
   }
 
   @override
@@ -347,7 +419,21 @@ class _$ReservationImpl extends _Reservation {
                 other.partySize == partySize) &&
             (identical(other.canEdit, canEdit) || other.canEdit == canEdit) &&
             (identical(other.canCancel, canCancel) ||
-                other.canCancel == canCancel));
+                other.canCancel == canCancel) &&
+            (identical(other.pendingChangeRequestId, pendingChangeRequestId) ||
+                other.pendingChangeRequestId == pendingChangeRequestId) &&
+            (identical(
+                  other.pendingProposedStartTime,
+                  pendingProposedStartTime,
+                ) ||
+                other.pendingProposedStartTime == pendingProposedStartTime) &&
+            (identical(other.pendingProposedTableId, pendingProposedTableId) ||
+                other.pendingProposedTableId == pendingProposedTableId) &&
+            (identical(
+                  other.pendingProposedTableLabel,
+                  pendingProposedTableLabel,
+                ) ||
+                other.pendingProposedTableLabel == pendingProposedTableLabel));
   }
 
   @override
@@ -365,6 +451,10 @@ class _$ReservationImpl extends _Reservation {
     partySize,
     canEdit,
     canCancel,
+    pendingChangeRequestId,
+    pendingProposedStartTime,
+    pendingProposedTableId,
+    pendingProposedTableLabel,
   );
 
   /// Create a copy of Reservation
@@ -390,6 +480,10 @@ abstract class _Reservation extends Reservation {
     required final int partySize,
     final bool canEdit,
     final bool canCancel,
+    final String? pendingChangeRequestId,
+    final String? pendingProposedStartTime,
+    final String? pendingProposedTableId,
+    final String? pendingProposedTableLabel,
   }) = _$ReservationImpl;
   const _Reservation._() : super._();
 
@@ -417,6 +511,14 @@ abstract class _Reservation extends Reservation {
   bool get canEdit;
   @override
   bool get canCancel;
+  @override
+  String? get pendingChangeRequestId;
+  @override
+  String? get pendingProposedStartTime;
+  @override
+  String? get pendingProposedTableId;
+  @override
+  String? get pendingProposedTableLabel;
 
   /// Create a copy of Reservation
   /// with the given fields replaced by the non-null parameter values.

@@ -22,9 +22,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * Resolver veřejných klíčů Apple (JDK 21).
- * Implementuje rozhraní Locator (JJWT 0.12.x) pro dynamické vyhledání klíče podle 'kid'.
- * Obsahuje in-memory caching pro optimalizaci výkonu.
+ * Resolver veřejných RSA klíčů Apple implementující JJWT rozhraní Locator pro dynamické
+ * vyhledání klíče podle identifikátoru 'kid' z JWS hlavičky.
+ * Klíče jsou cachovány v paměti s TTL 24 hodin pro optimalizaci výkonu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Slf4j
 @Component
@@ -35,8 +38,15 @@ public class AppleSigningKeyResolver implements Locator<Key> {
 
     private final Map<String, Key> keyCache = new ConcurrentHashMap<>();
     private long lastFetchTime = 0;
-    private static final long CACHE_TTL = 24 * 60 * 60 * 1000L; // 24 hodin
+    private static final long CACHE_TTL = 24 * 60 * 60 * 1000L;
 
+    /**
+     * Vyhledá veřejný klíč odpovídající identifikátoru 'kid' z JWS hlavičky tokenu.
+     *
+     * @param header JWS hlavička obsahující identifikátor klíče
+     * @return veřejný RSA klíč pro ověření podpisu
+     * @throws OAuthException pokud hlavička neobsahuje 'kid' nebo klíč není nalezen
+     */
     @Override
     public Key locate(Header header) {
         if (!(header instanceof JwsHeader jwsHeader)) {
@@ -48,15 +58,12 @@ public class AppleSigningKeyResolver implements Locator<Key> {
             throw OAuthException.invalidToken("V hlavičce Apple tokenu chybí 'kid'.");
         }
 
-        // 1. Zkusíme najít v cache
         if (keyCache.containsKey(kid) && !isCacheExpired()) {
             return keyCache.get(kid);
         }
 
-        // 2. Synchronizované obnovení klíčů
         refreshKeys();
 
-        // 3. Pokus o získání klíče po refreshu
         var key = keyCache.get(kid);
         if (key == null) {
             throw OAuthException.invalidToken("Veřejný klíč Apple (kid: " + kid + ") nebyl nalezen ani po aktualizaci.");
@@ -70,12 +77,11 @@ public class AppleSigningKeyResolver implements Locator<Key> {
     }
 
     private synchronized void refreshKeys() {
-        // Double-check locking pattern (v rámci synchronized)
         if (!isCacheExpired() && !keyCache.isEmpty()) {
             return;
         }
 
-        log.info("Obnovuji Apple veřejné klíče z API...");
+        log.info("Obnovuji Apple verejne klice z API...");
         try {
             var response = appleFeignClient.getApplePublicKeys();
 
@@ -88,14 +94,12 @@ public class AppleSigningKeyResolver implements Locator<Key> {
             keyCache.clear();
             keyCache.putAll(newKeys);
             lastFetchTime = System.currentTimeMillis();
-            log.info("Apple klíče úspěšně obnoveny. Počet klíčů: {}", newKeys.size());
+            log.info("Apple klice uspesne obnoveny. Pocet klicu: {}", newKeys.size());
 
         } catch (OAuthException ex) {
-            // Pokud už je to naše výjimka (z generatePublicKey), jen ji pošleme dál
             throw ex;
         } catch (Exception e) {
-            // Chyba komunikace - nelogujeme error zde, Handler to udělá
-            throw OAuthException.communicationError("APPLE", "Nelze stáhnout veřejné klíče: " + e.getMessage(), e);
+            throw OAuthException.communicationError("APPLE", "Nelze stahnout verejne klice: " + e.getMessage(), e);
         }
     }
 
@@ -112,8 +116,7 @@ public class AppleSigningKeyResolver implements Locator<Key> {
             return KeyFactory.getInstance("RSA").generatePublic(spec);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            // Předáváme 'e' jako cause pro detailní logování v Handleru
-            throw OAuthException.internalError("Chyba konverze Apple klíče: " + e.getMessage(), e);
+            throw OAuthException.internalError("Chyba konverze Apple klice: " + e.getMessage(), e);
         }
     }
 }

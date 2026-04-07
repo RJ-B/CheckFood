@@ -3,7 +3,7 @@ import '../data/models/auth/response/auth_error_response_model.dart';
 /// Základní třída pro všechny výjimky v modulu security.
 abstract class SecurityException implements Exception {
   final String message;
-  // Přidáváme volitelný model pro případy, kdy server vrátí detailní data
+  /// Volitelný model pro případy, kdy server vrátí detailní data chyby.
   final AuthErrorResponseModel? errorModel;
 
   const SecurityException(this.message, {this.errorModel});
@@ -43,8 +43,9 @@ class AuthServerException extends SecurityException {
   const AuthServerException(super.message, {super.errorModel});
 }
 
-/// ✅ KLÍČOVÁ ZMĚNA: Výjimka vyhozená, pokud účet není ověřený (403/410).
-/// Vyžaduje AuthErrorResponseModel, který nese zprávu, email a příznak expirace.
+/// Výjimka vyhozená, pokud účet není ověřený (403/410).
+///
+/// Vyžaduje [AuthErrorResponseModel], který nese zprávu, email a příznak expirace.
 class AccountNotVerifiedException extends SecurityException {
   AccountNotVerifiedException(AuthErrorResponseModel model)
     : super(model.message, errorModel: model);

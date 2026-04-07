@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Systém zaoblení rohů pro konzistentní border-radius v celé aplikaci.
 class AppRadius {
   static const sm = BorderRadius.all(Radius.circular(8));
   static const md = BorderRadius.all(Radius.circular(12));

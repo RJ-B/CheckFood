@@ -15,6 +15,7 @@ _$OrderSummaryResponseModelImpl _$$OrderSummaryResponseModelImplFromJson(
   currency: json['currency'] as String?,
   itemCount: (json['itemCount'] as num?)?.toInt(),
   createdAt: json['createdAt'] as String?,
+  paymentStatus: json['paymentStatus'] as String?,
 );
 
 Map<String, dynamic> _$$OrderSummaryResponseModelImplToJson(
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$OrderSummaryResponseModelImplToJson(
   'currency': instance.currency,
   'itemCount': instance.itemCount,
   'createdAt': instance.createdAt,
+  'paymentStatus': instance.paymentStatus,
 };

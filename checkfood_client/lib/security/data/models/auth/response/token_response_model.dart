@@ -6,6 +6,7 @@ import '../../../../utils/converters/duration_epoch_converter.dart';
 part 'token_response_model.freezed.dart';
 part 'token_response_model.g.dart';
 
+/// Datový model pro odpověď po obnově tokenů.
 @freezed
 class TokenResponseModel with _$TokenResponseModel {
   const TokenResponseModel._();

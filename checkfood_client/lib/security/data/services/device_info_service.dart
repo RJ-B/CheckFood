@@ -4,37 +4,67 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
-/**
- * Služba pro získávání informací o zařízení a správu unikátní identity instance aplikace.
- * Zajišťuje, že zařízení bude pro backend rozpoznatelné i po restartu aplikace.
- */
+/// Služba pro získávání informací o zařízení a správu unikátní identity instance aplikace.
+///
+/// Zajišťuje, že zařízení bude pro backend rozpoznatelné i po restartu aplikace.
+/// Identifikátor je persistován v [FlutterSecureStorage] stejnými options jako [TokenStorage].
 class DeviceInfoService {
   final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
   final FlutterSecureStorage _storage;
 
   static const String _storageKeyDeviceId = 'device_unique_instance_id';
 
+  static const AndroidOptions _androidOptions = AndroidOptions(
+    encryptedSharedPreferences: true,
+  );
+  static const IOSOptions _iosOptions = IOSOptions(
+    accessibility: KeychainAccessibility.first_unlock,
+  );
+
   DeviceInfoService(this._storage);
 
-  /// ✅ OPRAVA: Metoda pro získání unikátního ID (řeší první chybu v LoginForm)
+  /// Vrátí unikátní identifikátor instance aplikace.
+  ///
+  /// Při prvním volání vygeneruje UUID v4, uloží ho do SecureStorage a vrátí.
+  /// Při dalším volání načte uloženou hodnotu. Při chybě úložiště vrátí
+  /// ephemeral UUID bez záruky persistence.
   Future<String> getDeviceIdentifier() async {
     try {
-      String? storedId = await _storage.read(key: _storageKeyDeviceId);
+      String? storedId = await _storage.read(
+        key: _storageKeyDeviceId,
+        aOptions: _androidOptions,
+        iOptions: _iosOptions,
+      );
 
       if (storedId != null && storedId.isNotEmpty) {
         return storedId;
       }
 
       final newId = const Uuid().v4();
-      await _storage.write(key: _storageKeyDeviceId, value: newId);
+      await _storage.write(
+        key: _storageKeyDeviceId,
+        value: newId,
+        aOptions: _androidOptions,
+        iOptions: _iosOptions,
+      );
       return newId;
-    } catch (e) {
-      debugPrint('Chyba při přístupu k SecureStorage: $e');
-      return const Uuid().v4(); // Fallback
+    } catch (_) {
+      final fallbackId = const Uuid().v4();
+      try {
+        await _storage.write(
+          key: _storageKeyDeviceId,
+          value: fallbackId,
+          aOptions: _androidOptions,
+          iOptions: _iosOptions,
+        );
+      } catch (_) {}
+      return fallbackId;
     }
   }
 
-  /// ✅ OPRAVA: Metoda pro získání názvu zařízení (řeší druhou chybu v LoginForm)
+  /// Vrátí zobrazitelný název zařízení (např. "Samsung Galaxy S24").
+  ///
+  /// Na Androidu kombinuje brand a model, přičemž eliminuje duplicity.
   Future<String> getDeviceName() async {
     try {
       if (kIsWeb) {
@@ -42,18 +72,21 @@ class DeviceInfoService {
         return webInfo.userAgent ?? 'Web Browser';
       } else if (Platform.isAndroid) {
         final androidInfo = await _deviceInfo.androidInfo;
-        return '${androidInfo.brand} ${androidInfo.model}';
+        final brand = androidInfo.brand;
+        final model = androidInfo.model;
+        if (model.toLowerCase().startsWith(brand.toLowerCase())) {
+          return model;
+        }
+        return '$brand $model';
       } else if (Platform.isIOS) {
         final iosInfo = await _deviceInfo.iosInfo;
         return iosInfo.name;
       }
-    } catch (e) {
-      debugPrint('Chyba při získávání názvu zařízení: $e');
-    }
+    } catch (_) {}
     return 'Unknown Device';
   }
 
-  /// ✅ OPRAVA: Metoda pro získání typu zařízení (řeší třetí chybu v LoginForm)
+  /// Vrátí typ zařízení jako řetězec (`ANDROID`, `IOS`, `WEB`, `UNKNOWN`).
   Future<String> getDeviceType() async {
     if (kIsWeb) return 'WEB';
     if (Platform.isAndroid) return 'ANDROID';
@@ -61,7 +94,7 @@ class DeviceInfoService {
     return 'UNKNOWN';
   }
 
-  /// Ponecháno pro zpětnou kompatibilitu, pokud metodu využíváte jinde
+  /// Vrátí mapu se všemi device-info hodnotami pro registrační požadavek.
   Future<Map<String, String>> getDeviceData() async {
     return {
       'deviceIdentifier': await getDeviceIdentifier(),

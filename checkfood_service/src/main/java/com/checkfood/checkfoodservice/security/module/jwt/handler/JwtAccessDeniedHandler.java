@@ -12,7 +12,10 @@ import java.io.IOException;
 
 /**
  * Handler pro zpracování výjimek odepření přístupu (HTTP 403 Forbidden).
- * Vyvolá se, když je uživatel autentizován, ale postrádá potřebná oprávnění (Role/Authority).
+ * Vyvolá se, když je uživatel autentizován, ale postrádá potřebná oprávnění.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 @RequiredArgsConstructor
@@ -21,6 +24,14 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     private final SecurityErrorResponseWriter errorResponseWriter;
     private final JwtLogger jwtLogger;
 
+    /**
+     * Zapíše HTTP 403 odpověď při pokusu o přístup k nepovoleném zdroji.
+     *
+     * @param request              HTTP požadavek
+     * @param response             HTTP odpověď pro zápis chybové odpovědi
+     * @param accessDeniedException výjimka popisující důvod odepření přístupu
+     * @throws IOException při chybě zápisu odpovědi
+     */
     @Override
     public void handle(
             HttpServletRequest request,
@@ -28,7 +39,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             AccessDeniedException accessDeniedException
     ) throws IOException {
 
-        // Logování incidentu do bezpečnostního auditu
         jwtLogger.logAccessDenied(request.getRequestURI(), accessDeniedException.getMessage());
 
         errorResponseWriter.writeErrorResponse(

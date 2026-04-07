@@ -3,6 +3,7 @@ import '../../core/theme/spacing.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/radius.dart';
 
+/// Pojmenované vstupní pole pro heslo s tlačítkem pro přepínání viditelnosti.
 class PasswordField extends StatefulWidget {
   final String label;
   final String? hint;
@@ -21,6 +22,7 @@ class PasswordField extends StatefulWidget {
   State<PasswordField> createState() => _PasswordFieldState();
 }
 
+/// Stav pro [PasswordField]: spravuje přepínání mezi skrytým a viditelným textem.
 class _PasswordFieldState extends State<PasswordField> {
   bool _obscure = true;
 

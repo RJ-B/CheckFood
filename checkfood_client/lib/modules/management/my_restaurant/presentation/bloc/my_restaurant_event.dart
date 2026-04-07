@@ -2,12 +2,18 @@ import '../../data/models/request/add_employee_request_model.dart';
 import '../../data/models/request/update_employee_role_request_model.dart';
 import '../../data/models/request/update_restaurant_request_model.dart';
 
+/// Base class for [MyRestaurantBloc] events.
 abstract class MyRestaurantEvent {
   const MyRestaurantEvent();
 }
 
 class LoadMyRestaurant extends MyRestaurantEvent {
   const LoadMyRestaurant();
+}
+
+class SelectRestaurant extends MyRestaurantEvent {
+  final String restaurantId;
+  const SelectRestaurant(this.restaurantId);
 }
 
 class UpdateRestaurant extends MyRestaurantEvent {
@@ -33,4 +39,10 @@ class UpdateEmployeeRole extends MyRestaurantEvent {
 class RemoveEmployee extends MyRestaurantEvent {
   final int employeeId;
   const RemoveEmployee(this.employeeId);
+}
+
+class UpdateEmployeePermissions extends MyRestaurantEvent {
+  final int employeeId;
+  final List<String> permissions;
+  const UpdateEmployeePermissions(this.employeeId, this.permissions);
 }

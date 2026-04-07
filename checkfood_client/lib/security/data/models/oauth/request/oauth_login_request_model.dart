@@ -4,6 +4,7 @@ import '../../../../config/security_json_keys.dart';
 part 'oauth_login_request_model.freezed.dart';
 part 'oauth_login_request_model.g.dart';
 
+/// Datový model pro OAuth přihlašovací požadavek (Google nebo Apple).
 @freezed
 class OAuthLoginRequestModel with _$OAuthLoginRequestModel {
   const factory OAuthLoginRequestModel({

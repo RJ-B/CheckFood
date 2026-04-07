@@ -8,6 +8,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
+/**
+ * Response DTO s detaily rezervace pro zobrazení v rozhraní personálu restaurace.
+ * Obsahuje příznaky akcí ({@code canConfirm}, {@code canReject}, {@code canCheckIn}, {@code canComplete},
+ * {@code canEdit}, {@code canExtend}) pro řízení dostupných operací v UI.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -27,4 +35,8 @@ public class StaffReservationResponse {
     private boolean canReject;
     private boolean canCheckIn;
     private boolean canComplete;
+    private String userName;
+    private boolean canEdit;
+    private boolean canExtend;
+    private boolean hasPendingChange;
 }

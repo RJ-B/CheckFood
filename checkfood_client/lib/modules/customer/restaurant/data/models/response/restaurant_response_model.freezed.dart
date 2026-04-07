@@ -39,6 +39,8 @@ mixin _$RestaurantResponseModel {
       throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
   bool get isFavourite => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>> get specialDays =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this RestaurantResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -72,6 +74,7 @@ abstract class $RestaurantResponseModelCopyWith<$Res> {
     List<OpeningHoursModel> openingHours,
     List<String> tags,
     bool isFavourite,
+    List<Map<String, dynamic>> specialDays,
   });
 
   $AddressModelCopyWith<$Res>? get address;
@@ -109,6 +112,7 @@ class _$RestaurantResponseModelCopyWithImpl<
     Object? openingHours = null,
     Object? tags = null,
     Object? isFavourite = null,
+    Object? specialDays = null,
   }) {
     return _then(
       _value.copyWith(
@@ -182,6 +186,11 @@ class _$RestaurantResponseModelCopyWithImpl<
                     ? _value.isFavourite
                     : isFavourite // ignore: cast_nullable_to_non_nullable
                         as bool,
+            specialDays:
+                null == specialDays
+                    ? _value.specialDays
+                    : specialDays // ignore: cast_nullable_to_non_nullable
+                        as List<Map<String, dynamic>>,
           )
           as $Val,
     );
@@ -226,6 +235,7 @@ abstract class _$$RestaurantResponseModelImplCopyWith<$Res>
     List<OpeningHoursModel> openingHours,
     List<String> tags,
     bool isFavourite,
+    List<Map<String, dynamic>> specialDays,
   });
 
   @override
@@ -264,6 +274,7 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
     Object? openingHours = null,
     Object? tags = null,
     Object? isFavourite = null,
+    Object? specialDays = null,
   }) {
     return _then(
       _$RestaurantResponseModelImpl(
@@ -337,6 +348,11 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
                 ? _value.isFavourite
                 : isFavourite // ignore: cast_nullable_to_non_nullable
                     as bool,
+        specialDays:
+            null == specialDays
+                ? _value._specialDays
+                : specialDays // ignore: cast_nullable_to_non_nullable
+                    as List<Map<String, dynamic>>,
       ),
     );
   }
@@ -360,8 +376,10 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     final List<OpeningHoursModel> openingHours = const [],
     final List<String> tags = const [],
     this.isFavourite = false,
+    final List<Map<String, dynamic>> specialDays = const [],
   }) : _openingHours = openingHours,
        _tags = tags,
+       _specialDays = specialDays,
        super._();
 
   factory _$RestaurantResponseModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -411,10 +429,18 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
   @override
   @JsonKey()
   final bool isFavourite;
+  final List<Map<String, dynamic>> _specialDays;
+  @override
+  @JsonKey()
+  List<Map<String, dynamic>> get specialDays {
+    if (_specialDays is EqualUnmodifiableListView) return _specialDays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_specialDays);
+  }
 
   @override
   String toString() {
-    return 'RestaurantResponseModel(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite)';
+    return 'RestaurantResponseModel(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite, specialDays: $specialDays)';
   }
 
   @override
@@ -443,7 +469,11 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
             ) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.isFavourite, isFavourite) ||
-                other.isFavourite == isFavourite));
+                other.isFavourite == isFavourite) &&
+            const DeepCollectionEquality().equals(
+              other._specialDays,
+              _specialDays,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -464,6 +494,7 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     const DeepCollectionEquality().hash(_openingHours),
     const DeepCollectionEquality().hash(_tags),
     isFavourite,
+    const DeepCollectionEquality().hash(_specialDays),
   );
 
   /// Create a copy of RestaurantResponseModel
@@ -498,6 +529,7 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
     final List<OpeningHoursModel> openingHours,
     final List<String> tags,
     final bool isFavourite,
+    final List<Map<String, dynamic>> specialDays,
   }) = _$RestaurantResponseModelImpl;
   const _RestaurantResponseModel._() : super._();
 
@@ -533,6 +565,8 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
   List<String> get tags;
   @override
   bool get isFavourite;
+  @override
+  List<Map<String, dynamic>> get specialDays;
 
   /// Create a copy of RestaurantResponseModel
   /// with the given fields replaced by the non-null parameter values.

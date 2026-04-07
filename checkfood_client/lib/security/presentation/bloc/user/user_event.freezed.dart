@@ -26,6 +26,8 @@ mixin _$UserEvent {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -41,6 +43,8 @@ mixin _$UserEvent {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -56,6 +60,8 @@ mixin _$UserEvent {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -73,6 +79,9 @@ mixin _$UserEvent {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -89,6 +98,9 @@ mixin _$UserEvent {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -105,6 +117,9 @@ mixin _$UserEvent {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -185,6 +200,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -204,6 +221,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -223,6 +242,8 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -247,6 +268,9 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -267,6 +291,9 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -287,6 +314,9 @@ class _$ProfileRequestedImpl implements ProfileRequested {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -356,6 +386,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -375,6 +407,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -394,6 +428,8 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -418,6 +454,9 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -438,6 +477,9 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -458,6 +500,9 @@ class _$DevicesRequestedImpl implements DevicesRequested {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -569,6 +614,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -588,6 +635,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -607,6 +656,8 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -631,6 +682,9 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -651,6 +705,9 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -671,6 +728,9 @@ class _$ProfileUpdatedImpl implements ProfileUpdated {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -790,6 +850,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -809,6 +871,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -828,6 +892,8 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -852,6 +918,9 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -872,6 +941,9 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -892,6 +964,9 @@ class _$PasswordChangeRequestedImpl implements PasswordChangeRequested {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -972,6 +1047,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -991,6 +1068,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -1010,6 +1089,8 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -1034,6 +1115,9 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -1054,6 +1138,9 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1074,6 +1161,9 @@ class _$AllDevicesLogoutRequestedImpl implements AllDevicesLogoutRequested {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1174,6 +1264,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -1193,6 +1285,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -1212,6 +1306,8 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -1236,6 +1332,9 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -1256,6 +1355,9 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1276,6 +1378,9 @@ class _$DeviceLoggedOutImpl implements DeviceLoggedOut {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1301,6 +1406,415 @@ abstract class DeviceLoggedOut implements UserEvent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DeviceLoggedOutImplCopyWith<_$DeviceLoggedOutImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DeviceDeletedImplCopyWith<$Res> {
+  factory _$$DeviceDeletedImplCopyWith(
+    _$DeviceDeletedImpl value,
+    $Res Function(_$DeviceDeletedImpl) then,
+  ) = __$$DeviceDeletedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int deviceId});
+}
+
+/// @nodoc
+class __$$DeviceDeletedImplCopyWithImpl<$Res>
+    extends _$UserEventCopyWithImpl<$Res, _$DeviceDeletedImpl>
+    implements _$$DeviceDeletedImplCopyWith<$Res> {
+  __$$DeviceDeletedImplCopyWithImpl(
+    _$DeviceDeletedImpl _value,
+    $Res Function(_$DeviceDeletedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? deviceId = null}) {
+    return _then(
+      _$DeviceDeletedImpl(
+        null == deviceId
+            ? _value.deviceId
+            : deviceId // ignore: cast_nullable_to_non_nullable
+                as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$DeviceDeletedImpl implements DeviceDeleted {
+  const _$DeviceDeletedImpl(this.deviceId);
+
+  @override
+  final int deviceId;
+
+  @override
+  String toString() {
+    return 'UserEvent.deviceDeleted(deviceId: $deviceId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DeviceDeletedImpl &&
+            (identical(other.deviceId, deviceId) ||
+                other.deviceId == deviceId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, deviceId);
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DeviceDeletedImplCopyWith<_$DeviceDeletedImpl> get copyWith =>
+      __$$DeviceDeletedImplCopyWithImpl<_$DeviceDeletedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
+    required TResult Function(UpdateProfileRequestModel request) profileUpdated,
+    required TResult Function(ChangePasswordRequestModel request)
+    passwordChangeRequested,
+    required TResult Function() allDevicesLogoutRequested,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
+    required TResult Function() clearDataRequested,
+    required TResult Function() notificationPreferenceRequested,
+    required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
+  }) {
+    return deviceDeleted(deviceId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
+    TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult? Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult? Function()? allDevicesLogoutRequested,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
+    TResult? Function()? clearDataRequested,
+    TResult? Function()? notificationPreferenceRequested,
+    TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
+  }) {
+    return deviceDeleted?.call(deviceId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
+    TResult Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult Function()? allDevicesLogoutRequested,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
+    TResult Function()? clearDataRequested,
+    TResult Function()? notificationPreferenceRequested,
+    TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
+    required TResult orElse(),
+  }) {
+    if (deviceDeleted != null) {
+      return deviceDeleted(deviceId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
+    required TResult Function(ProfileUpdated value) profileUpdated,
+    required TResult Function(PasswordChangeRequested value)
+    passwordChangeRequested,
+    required TResult Function(AllDevicesLogoutRequested value)
+    allDevicesLogoutRequested,
+    required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
+    required TResult Function(NotificationPreferenceRequested value)
+    notificationPreferenceRequested,
+    required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
+  }) {
+    return deviceDeleted(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
+    TResult? Function(ProfileUpdated value)? profileUpdated,
+    TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult? Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
+    TResult? Function(NotificationPreferenceRequested value)?
+    notificationPreferenceRequested,
+    TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
+  }) {
+    return deviceDeleted?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
+    TResult Function(ProfileUpdated value)? profileUpdated,
+    TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
+    TResult Function(NotificationPreferenceRequested value)?
+    notificationPreferenceRequested,
+    TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
+    required TResult orElse(),
+  }) {
+    if (deviceDeleted != null) {
+      return deviceDeleted(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DeviceDeleted implements UserEvent {
+  const factory DeviceDeleted(final int deviceId) = _$DeviceDeletedImpl;
+
+  int get deviceId;
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DeviceDeletedImplCopyWith<_$DeviceDeletedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AllDevicesDeleteRequestedImplCopyWith<$Res> {
+  factory _$$AllDevicesDeleteRequestedImplCopyWith(
+    _$AllDevicesDeleteRequestedImpl value,
+    $Res Function(_$AllDevicesDeleteRequestedImpl) then,
+  ) = __$$AllDevicesDeleteRequestedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$AllDevicesDeleteRequestedImplCopyWithImpl<$Res>
+    extends _$UserEventCopyWithImpl<$Res, _$AllDevicesDeleteRequestedImpl>
+    implements _$$AllDevicesDeleteRequestedImplCopyWith<$Res> {
+  __$$AllDevicesDeleteRequestedImplCopyWithImpl(
+    _$AllDevicesDeleteRequestedImpl _value,
+    $Res Function(_$AllDevicesDeleteRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UserEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$AllDevicesDeleteRequestedImpl implements AllDevicesDeleteRequested {
+  const _$AllDevicesDeleteRequestedImpl();
+
+  @override
+  String toString() {
+    return 'UserEvent.allDevicesDeleteRequested()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AllDevicesDeleteRequestedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() profileRequested,
+    required TResult Function() devicesRequested,
+    required TResult Function(UpdateProfileRequestModel request) profileUpdated,
+    required TResult Function(ChangePasswordRequestModel request)
+    passwordChangeRequested,
+    required TResult Function() allDevicesLogoutRequested,
+    required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
+    required TResult Function() clearDataRequested,
+    required TResult Function() notificationPreferenceRequested,
+    required TResult Function(bool enabled) notificationToggled,
+    required TResult Function(Uint8List imageBytes, String filename)
+    profilePhotoUploadRequested,
+  }) {
+    return allDevicesDeleteRequested();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? profileRequested,
+    TResult? Function()? devicesRequested,
+    TResult? Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult? Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult? Function()? allDevicesLogoutRequested,
+    TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
+    TResult? Function()? clearDataRequested,
+    TResult? Function()? notificationPreferenceRequested,
+    TResult? Function(bool enabled)? notificationToggled,
+    TResult? Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
+  }) {
+    return allDevicesDeleteRequested?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? profileRequested,
+    TResult Function()? devicesRequested,
+    TResult Function(UpdateProfileRequestModel request)? profileUpdated,
+    TResult Function(ChangePasswordRequestModel request)?
+    passwordChangeRequested,
+    TResult Function()? allDevicesLogoutRequested,
+    TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
+    TResult Function()? clearDataRequested,
+    TResult Function()? notificationPreferenceRequested,
+    TResult Function(bool enabled)? notificationToggled,
+    TResult Function(Uint8List imageBytes, String filename)?
+    profilePhotoUploadRequested,
+    required TResult orElse(),
+  }) {
+    if (allDevicesDeleteRequested != null) {
+      return allDevicesDeleteRequested();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileRequested value) profileRequested,
+    required TResult Function(DevicesRequested value) devicesRequested,
+    required TResult Function(ProfileUpdated value) profileUpdated,
+    required TResult Function(PasswordChangeRequested value)
+    passwordChangeRequested,
+    required TResult Function(AllDevicesLogoutRequested value)
+    allDevicesLogoutRequested,
+    required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
+    required TResult Function(ClearDataRequested value) clearDataRequested,
+    required TResult Function(NotificationPreferenceRequested value)
+    notificationPreferenceRequested,
+    required TResult Function(NotificationToggled value) notificationToggled,
+    required TResult Function(ProfilePhotoUploadRequested value)
+    profilePhotoUploadRequested,
+  }) {
+    return allDevicesDeleteRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileRequested value)? profileRequested,
+    TResult? Function(DevicesRequested value)? devicesRequested,
+    TResult? Function(ProfileUpdated value)? profileUpdated,
+    TResult? Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult? Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
+    TResult? Function(ClearDataRequested value)? clearDataRequested,
+    TResult? Function(NotificationPreferenceRequested value)?
+    notificationPreferenceRequested,
+    TResult? Function(NotificationToggled value)? notificationToggled,
+    TResult? Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
+  }) {
+    return allDevicesDeleteRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileRequested value)? profileRequested,
+    TResult Function(DevicesRequested value)? devicesRequested,
+    TResult Function(ProfileUpdated value)? profileUpdated,
+    TResult Function(PasswordChangeRequested value)? passwordChangeRequested,
+    TResult Function(AllDevicesLogoutRequested value)?
+    allDevicesLogoutRequested,
+    TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
+    TResult Function(ClearDataRequested value)? clearDataRequested,
+    TResult Function(NotificationPreferenceRequested value)?
+    notificationPreferenceRequested,
+    TResult Function(NotificationToggled value)? notificationToggled,
+    TResult Function(ProfilePhotoUploadRequested value)?
+    profilePhotoUploadRequested,
+    required TResult orElse(),
+  }) {
+    if (allDevicesDeleteRequested != null) {
+      return allDevicesDeleteRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AllDevicesDeleteRequested implements UserEvent {
+  const factory AllDevicesDeleteRequested() = _$AllDevicesDeleteRequestedImpl;
 }
 
 /// @nodoc
@@ -1353,6 +1867,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -1372,6 +1888,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -1391,6 +1909,8 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -1415,6 +1935,9 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -1435,6 +1958,9 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1455,6 +1981,9 @@ class _$ClearDataRequestedImpl implements ClearDataRequested {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1526,6 +2055,8 @@ class _$NotificationPreferenceRequestedImpl
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -1545,6 +2076,8 @@ class _$NotificationPreferenceRequestedImpl
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -1564,6 +2097,8 @@ class _$NotificationPreferenceRequestedImpl
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -1588,6 +2123,9 @@ class _$NotificationPreferenceRequestedImpl
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -1608,6 +2146,9 @@ class _$NotificationPreferenceRequestedImpl
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1628,6 +2169,9 @@ class _$NotificationPreferenceRequestedImpl
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1728,6 +2272,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -1747,6 +2293,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -1766,6 +2314,8 @@ class _$NotificationToggledImpl implements NotificationToggled {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -1790,6 +2340,9 @@ class _$NotificationToggledImpl implements NotificationToggled {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -1810,6 +2363,9 @@ class _$NotificationToggledImpl implements NotificationToggled {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1830,6 +2386,9 @@ class _$NotificationToggledImpl implements NotificationToggled {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -1952,6 +2511,8 @@ class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
     passwordChangeRequested,
     required TResult Function() allDevicesLogoutRequested,
     required TResult Function(int deviceId) deviceLoggedOut,
+    required TResult Function(int deviceId) deviceDeleted,
+    required TResult Function() allDevicesDeleteRequested,
     required TResult Function() clearDataRequested,
     required TResult Function() notificationPreferenceRequested,
     required TResult Function(bool enabled) notificationToggled,
@@ -1971,6 +2532,8 @@ class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
     passwordChangeRequested,
     TResult? Function()? allDevicesLogoutRequested,
     TResult? Function(int deviceId)? deviceLoggedOut,
+    TResult? Function(int deviceId)? deviceDeleted,
+    TResult? Function()? allDevicesDeleteRequested,
     TResult? Function()? clearDataRequested,
     TResult? Function()? notificationPreferenceRequested,
     TResult? Function(bool enabled)? notificationToggled,
@@ -1990,6 +2553,8 @@ class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
     passwordChangeRequested,
     TResult Function()? allDevicesLogoutRequested,
     TResult Function(int deviceId)? deviceLoggedOut,
+    TResult Function(int deviceId)? deviceDeleted,
+    TResult Function()? allDevicesDeleteRequested,
     TResult Function()? clearDataRequested,
     TResult Function()? notificationPreferenceRequested,
     TResult Function(bool enabled)? notificationToggled,
@@ -2014,6 +2579,9 @@ class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
     required TResult Function(AllDevicesLogoutRequested value)
     allDevicesLogoutRequested,
     required TResult Function(DeviceLoggedOut value) deviceLoggedOut,
+    required TResult Function(DeviceDeleted value) deviceDeleted,
+    required TResult Function(AllDevicesDeleteRequested value)
+    allDevicesDeleteRequested,
     required TResult Function(ClearDataRequested value) clearDataRequested,
     required TResult Function(NotificationPreferenceRequested value)
     notificationPreferenceRequested,
@@ -2034,6 +2602,9 @@ class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
     TResult? Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult? Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult? Function(DeviceDeleted value)? deviceDeleted,
+    TResult? Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult? Function(ClearDataRequested value)? clearDataRequested,
     TResult? Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,
@@ -2054,6 +2625,9 @@ class _$ProfilePhotoUploadRequestedImpl implements ProfilePhotoUploadRequested {
     TResult Function(AllDevicesLogoutRequested value)?
     allDevicesLogoutRequested,
     TResult Function(DeviceLoggedOut value)? deviceLoggedOut,
+    TResult Function(DeviceDeleted value)? deviceDeleted,
+    TResult Function(AllDevicesDeleteRequested value)?
+    allDevicesDeleteRequested,
     TResult Function(ClearDataRequested value)? clearDataRequested,
     TResult Function(NotificationPreferenceRequested value)?
     notificationPreferenceRequested,

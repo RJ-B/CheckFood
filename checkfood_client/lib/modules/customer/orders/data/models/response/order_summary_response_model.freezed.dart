@@ -29,6 +29,7 @@ mixin _$OrderSummaryResponseModel {
   String? get currency => throw _privateConstructorUsedError;
   int? get itemCount => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
+  String? get paymentStatus => throw _privateConstructorUsedError;
 
   /// Serializes this OrderSummaryResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,6 +55,7 @@ abstract class $OrderSummaryResponseModelCopyWith<$Res> {
     String? currency,
     int? itemCount,
     String? createdAt,
+    String? paymentStatus,
   });
 }
 
@@ -81,6 +83,7 @@ class _$OrderSummaryResponseModelCopyWithImpl<
     Object? currency = freezed,
     Object? itemCount = freezed,
     Object? createdAt = freezed,
+    Object? paymentStatus = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -114,6 +117,11 @@ class _$OrderSummaryResponseModelCopyWithImpl<
                     ? _value.createdAt
                     : createdAt // ignore: cast_nullable_to_non_nullable
                         as String?,
+            paymentStatus:
+                freezed == paymentStatus
+                    ? _value.paymentStatus
+                    : paymentStatus // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -136,6 +144,7 @@ abstract class _$$OrderSummaryResponseModelImplCopyWith<$Res>
     String? currency,
     int? itemCount,
     String? createdAt,
+    String? paymentStatus,
   });
 }
 
@@ -163,6 +172,7 @@ class __$$OrderSummaryResponseModelImplCopyWithImpl<$Res>
     Object? currency = freezed,
     Object? itemCount = freezed,
     Object? createdAt = freezed,
+    Object? paymentStatus = freezed,
   }) {
     return _then(
       _$OrderSummaryResponseModelImpl(
@@ -196,6 +206,11 @@ class __$$OrderSummaryResponseModelImplCopyWithImpl<$Res>
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                     as String?,
+        paymentStatus:
+            freezed == paymentStatus
+                ? _value.paymentStatus
+                : paymentStatus // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -211,6 +226,7 @@ class _$OrderSummaryResponseModelImpl extends _OrderSummaryResponseModel {
     this.currency,
     this.itemCount,
     this.createdAt,
+    this.paymentStatus,
   }) : super._();
 
   factory _$OrderSummaryResponseModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -228,10 +244,12 @@ class _$OrderSummaryResponseModelImpl extends _OrderSummaryResponseModel {
   final int? itemCount;
   @override
   final String? createdAt;
+  @override
+  final String? paymentStatus;
 
   @override
   String toString() {
-    return 'OrderSummaryResponseModel(id: $id, status: $status, totalPriceMinor: $totalPriceMinor, currency: $currency, itemCount: $itemCount, createdAt: $createdAt)';
+    return 'OrderSummaryResponseModel(id: $id, status: $status, totalPriceMinor: $totalPriceMinor, currency: $currency, itemCount: $itemCount, createdAt: $createdAt, paymentStatus: $paymentStatus)';
   }
 
   @override
@@ -248,7 +266,9 @@ class _$OrderSummaryResponseModelImpl extends _OrderSummaryResponseModel {
             (identical(other.itemCount, itemCount) ||
                 other.itemCount == itemCount) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.paymentStatus, paymentStatus) ||
+                other.paymentStatus == paymentStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -261,6 +281,7 @@ class _$OrderSummaryResponseModelImpl extends _OrderSummaryResponseModel {
     currency,
     itemCount,
     createdAt,
+    paymentStatus,
   );
 
   /// Create a copy of OrderSummaryResponseModel
@@ -287,6 +308,7 @@ abstract class _OrderSummaryResponseModel extends OrderSummaryResponseModel {
     final String? currency,
     final int? itemCount,
     final String? createdAt,
+    final String? paymentStatus,
   }) = _$OrderSummaryResponseModelImpl;
   const _OrderSummaryResponseModel._() : super._();
 
@@ -305,6 +327,8 @@ abstract class _OrderSummaryResponseModel extends OrderSummaryResponseModel {
   int? get itemCount;
   @override
   String? get createdAt;
+  @override
+  String? get paymentStatus;
 
   /// Create a copy of OrderSummaryResponseModel
   /// with the given fields replaced by the non-null parameter values.

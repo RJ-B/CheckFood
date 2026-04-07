@@ -24,7 +24,11 @@ mixin _$MyReservationsState {
   List<Reservation> get history => throw _privateConstructorUsedError;
   int get totalHistoryCount => throw _privateConstructorUsedError;
   bool get showingAllHistory => throw _privateConstructorUsedError;
-  bool get isLoadingHistory => throw _privateConstructorUsedError; // Cancel
+  bool get isLoadingHistory =>
+      throw _privateConstructorUsedError; // Pending changes
+  List<PendingChange> get pendingChanges => throw _privateConstructorUsedError;
+  String? get pendingChangeActionId =>
+      throw _privateConstructorUsedError; // Cancel
   String? get cancellingId => throw _privateConstructorUsedError;
   bool get cancelSuccess => throw _privateConstructorUsedError; // Edit
   Reservation? get editingReservation => throw _privateConstructorUsedError;
@@ -38,7 +42,11 @@ mixin _$MyReservationsState {
   bool get isSubmittingEdit => throw _privateConstructorUsedError;
   bool get editSuccess => throw _privateConstructorUsedError;
   bool get editConflict => throw _privateConstructorUsedError;
-  String? get editError => throw _privateConstructorUsedError;
+  String? get editError => throw _privateConstructorUsedError; // Recurring
+  List<RecurringReservation> get recurringReservations =>
+      throw _privateConstructorUsedError;
+  bool get isLoadingRecurring => throw _privateConstructorUsedError;
+  bool get recurringSuccess => throw _privateConstructorUsedError;
 
   /// Create a copy of MyReservationsState
   /// with the given fields replaced by the non-null parameter values.
@@ -62,6 +70,8 @@ abstract class $MyReservationsStateCopyWith<$Res> {
     int totalHistoryCount,
     bool showingAllHistory,
     bool isLoadingHistory,
+    List<PendingChange> pendingChanges,
+    String? pendingChangeActionId,
     String? cancellingId,
     bool cancelSuccess,
     Reservation? editingReservation,
@@ -76,6 +86,9 @@ abstract class $MyReservationsStateCopyWith<$Res> {
     bool editSuccess,
     bool editConflict,
     String? editError,
+    List<RecurringReservation> recurringReservations,
+    bool isLoadingRecurring,
+    bool recurringSuccess,
   });
 
   $ReservationCopyWith<$Res>? get editingReservation;
@@ -104,6 +117,8 @@ class _$MyReservationsStateCopyWithImpl<$Res, $Val extends MyReservationsState>
     Object? totalHistoryCount = null,
     Object? showingAllHistory = null,
     Object? isLoadingHistory = null,
+    Object? pendingChanges = null,
+    Object? pendingChangeActionId = freezed,
     Object? cancellingId = freezed,
     Object? cancelSuccess = null,
     Object? editingReservation = freezed,
@@ -118,6 +133,9 @@ class _$MyReservationsStateCopyWithImpl<$Res, $Val extends MyReservationsState>
     Object? editSuccess = null,
     Object? editConflict = null,
     Object? editError = freezed,
+    Object? recurringReservations = null,
+    Object? isLoadingRecurring = null,
+    Object? recurringSuccess = null,
   }) {
     return _then(
       _value.copyWith(
@@ -156,6 +174,16 @@ class _$MyReservationsStateCopyWithImpl<$Res, $Val extends MyReservationsState>
                     ? _value.isLoadingHistory
                     : isLoadingHistory // ignore: cast_nullable_to_non_nullable
                         as bool,
+            pendingChanges:
+                null == pendingChanges
+                    ? _value.pendingChanges
+                    : pendingChanges // ignore: cast_nullable_to_non_nullable
+                        as List<PendingChange>,
+            pendingChangeActionId:
+                freezed == pendingChangeActionId
+                    ? _value.pendingChangeActionId
+                    : pendingChangeActionId // ignore: cast_nullable_to_non_nullable
+                        as String?,
             cancellingId:
                 freezed == cancellingId
                     ? _value.cancellingId
@@ -226,6 +254,21 @@ class _$MyReservationsStateCopyWithImpl<$Res, $Val extends MyReservationsState>
                     ? _value.editError
                     : editError // ignore: cast_nullable_to_non_nullable
                         as String?,
+            recurringReservations:
+                null == recurringReservations
+                    ? _value.recurringReservations
+                    : recurringReservations // ignore: cast_nullable_to_non_nullable
+                        as List<RecurringReservation>,
+            isLoadingRecurring:
+                null == isLoadingRecurring
+                    ? _value.isLoadingRecurring
+                    : isLoadingRecurring // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            recurringSuccess:
+                null == recurringSuccess
+                    ? _value.recurringSuccess
+                    : recurringSuccess // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -277,6 +320,8 @@ abstract class _$$MyReservationsStateImplCopyWith<$Res>
     int totalHistoryCount,
     bool showingAllHistory,
     bool isLoadingHistory,
+    List<PendingChange> pendingChanges,
+    String? pendingChangeActionId,
     String? cancellingId,
     bool cancelSuccess,
     Reservation? editingReservation,
@@ -291,6 +336,9 @@ abstract class _$$MyReservationsStateImplCopyWith<$Res>
     bool editSuccess,
     bool editConflict,
     String? editError,
+    List<RecurringReservation> recurringReservations,
+    bool isLoadingRecurring,
+    bool recurringSuccess,
   });
 
   @override
@@ -320,6 +368,8 @@ class __$$MyReservationsStateImplCopyWithImpl<$Res>
     Object? totalHistoryCount = null,
     Object? showingAllHistory = null,
     Object? isLoadingHistory = null,
+    Object? pendingChanges = null,
+    Object? pendingChangeActionId = freezed,
     Object? cancellingId = freezed,
     Object? cancelSuccess = null,
     Object? editingReservation = freezed,
@@ -334,6 +384,9 @@ class __$$MyReservationsStateImplCopyWithImpl<$Res>
     Object? editSuccess = null,
     Object? editConflict = null,
     Object? editError = freezed,
+    Object? recurringReservations = null,
+    Object? isLoadingRecurring = null,
+    Object? recurringSuccess = null,
   }) {
     return _then(
       _$MyReservationsStateImpl(
@@ -372,6 +425,16 @@ class __$$MyReservationsStateImplCopyWithImpl<$Res>
                 ? _value.isLoadingHistory
                 : isLoadingHistory // ignore: cast_nullable_to_non_nullable
                     as bool,
+        pendingChanges:
+            null == pendingChanges
+                ? _value._pendingChanges
+                : pendingChanges // ignore: cast_nullable_to_non_nullable
+                    as List<PendingChange>,
+        pendingChangeActionId:
+            freezed == pendingChangeActionId
+                ? _value.pendingChangeActionId
+                : pendingChangeActionId // ignore: cast_nullable_to_non_nullable
+                    as String?,
         cancellingId:
             freezed == cancellingId
                 ? _value.cancellingId
@@ -442,6 +505,21 @@ class __$$MyReservationsStateImplCopyWithImpl<$Res>
                 ? _value.editError
                 : editError // ignore: cast_nullable_to_non_nullable
                     as String?,
+        recurringReservations:
+            null == recurringReservations
+                ? _value._recurringReservations
+                : recurringReservations // ignore: cast_nullable_to_non_nullable
+                    as List<RecurringReservation>,
+        isLoadingRecurring:
+            null == isLoadingRecurring
+                ? _value.isLoadingRecurring
+                : isLoadingRecurring // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        recurringSuccess:
+            null == recurringSuccess
+                ? _value.recurringSuccess
+                : recurringSuccess // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -458,6 +536,8 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
     this.totalHistoryCount = 0,
     this.showingAllHistory = false,
     this.isLoadingHistory = false,
+    final List<PendingChange> pendingChanges = const [],
+    this.pendingChangeActionId,
     this.cancellingId,
     this.cancelSuccess = false,
     this.editingReservation,
@@ -472,9 +552,14 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
     this.editSuccess = false,
     this.editConflict = false,
     this.editError,
+    final List<RecurringReservation> recurringReservations = const [],
+    this.isLoadingRecurring = false,
+    this.recurringSuccess = false,
   }) : _upcoming = upcoming,
        _history = history,
+       _pendingChanges = pendingChanges,
        _editTables = editTables,
+       _recurringReservations = recurringReservations,
        super._();
 
   // Overview
@@ -510,6 +595,19 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
   @override
   @JsonKey()
   final bool isLoadingHistory;
+  // Pending changes
+  final List<PendingChange> _pendingChanges;
+  // Pending changes
+  @override
+  @JsonKey()
+  List<PendingChange> get pendingChanges {
+    if (_pendingChanges is EqualUnmodifiableListView) return _pendingChanges;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_pendingChanges);
+  }
+
+  @override
+  final String? pendingChangeActionId;
   // Cancel
   @override
   final String? cancellingId;
@@ -552,10 +650,28 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
   final bool editConflict;
   @override
   final String? editError;
+  // Recurring
+  final List<RecurringReservation> _recurringReservations;
+  // Recurring
+  @override
+  @JsonKey()
+  List<RecurringReservation> get recurringReservations {
+    if (_recurringReservations is EqualUnmodifiableListView)
+      return _recurringReservations;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_recurringReservations);
+  }
+
+  @override
+  @JsonKey()
+  final bool isLoadingRecurring;
+  @override
+  @JsonKey()
+  final bool recurringSuccess;
 
   @override
   String toString() {
-    return 'MyReservationsState(isLoading: $isLoading, loadError: $loadError, upcoming: $upcoming, history: $history, totalHistoryCount: $totalHistoryCount, showingAllHistory: $showingAllHistory, isLoadingHistory: $isLoadingHistory, cancellingId: $cancellingId, cancelSuccess: $cancelSuccess, editingReservation: $editingReservation, editTables: $editTables, isLoadingEditSlots: $isLoadingEditSlots, editSlots: $editSlots, editSelectedTableId: $editSelectedTableId, editSelectedDate: $editSelectedDate, editSelectedTime: $editSelectedTime, editPartySize: $editPartySize, isSubmittingEdit: $isSubmittingEdit, editSuccess: $editSuccess, editConflict: $editConflict, editError: $editError)';
+    return 'MyReservationsState(isLoading: $isLoading, loadError: $loadError, upcoming: $upcoming, history: $history, totalHistoryCount: $totalHistoryCount, showingAllHistory: $showingAllHistory, isLoadingHistory: $isLoadingHistory, pendingChanges: $pendingChanges, pendingChangeActionId: $pendingChangeActionId, cancellingId: $cancellingId, cancelSuccess: $cancelSuccess, editingReservation: $editingReservation, editTables: $editTables, isLoadingEditSlots: $isLoadingEditSlots, editSlots: $editSlots, editSelectedTableId: $editSelectedTableId, editSelectedDate: $editSelectedDate, editSelectedTime: $editSelectedTime, editPartySize: $editPartySize, isSubmittingEdit: $isSubmittingEdit, editSuccess: $editSuccess, editConflict: $editConflict, editError: $editError, recurringReservations: $recurringReservations, isLoadingRecurring: $isLoadingRecurring, recurringSuccess: $recurringSuccess)';
   }
 
   @override
@@ -575,6 +691,12 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
                 other.showingAllHistory == showingAllHistory) &&
             (identical(other.isLoadingHistory, isLoadingHistory) ||
                 other.isLoadingHistory == isLoadingHistory) &&
+            const DeepCollectionEquality().equals(
+              other._pendingChanges,
+              _pendingChanges,
+            ) &&
+            (identical(other.pendingChangeActionId, pendingChangeActionId) ||
+                other.pendingChangeActionId == pendingChangeActionId) &&
             (identical(other.cancellingId, cancellingId) ||
                 other.cancellingId == cancellingId) &&
             (identical(other.cancelSuccess, cancelSuccess) ||
@@ -604,7 +726,15 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
             (identical(other.editConflict, editConflict) ||
                 other.editConflict == editConflict) &&
             (identical(other.editError, editError) ||
-                other.editError == editError));
+                other.editError == editError) &&
+            const DeepCollectionEquality().equals(
+              other._recurringReservations,
+              _recurringReservations,
+            ) &&
+            (identical(other.isLoadingRecurring, isLoadingRecurring) ||
+                other.isLoadingRecurring == isLoadingRecurring) &&
+            (identical(other.recurringSuccess, recurringSuccess) ||
+                other.recurringSuccess == recurringSuccess));
   }
 
   @override
@@ -617,6 +747,8 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
     totalHistoryCount,
     showingAllHistory,
     isLoadingHistory,
+    const DeepCollectionEquality().hash(_pendingChanges),
+    pendingChangeActionId,
     cancellingId,
     cancelSuccess,
     editingReservation,
@@ -631,6 +763,9 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
     editSuccess,
     editConflict,
     editError,
+    const DeepCollectionEquality().hash(_recurringReservations),
+    isLoadingRecurring,
+    recurringSuccess,
   ]);
 
   /// Create a copy of MyReservationsState
@@ -654,6 +789,8 @@ abstract class _MyReservationsState extends MyReservationsState {
     final int totalHistoryCount,
     final bool showingAllHistory,
     final bool isLoadingHistory,
+    final List<PendingChange> pendingChanges,
+    final String? pendingChangeActionId,
     final String? cancellingId,
     final bool cancelSuccess,
     final Reservation? editingReservation,
@@ -668,6 +805,9 @@ abstract class _MyReservationsState extends MyReservationsState {
     final bool editSuccess,
     final bool editConflict,
     final String? editError,
+    final List<RecurringReservation> recurringReservations,
+    final bool isLoadingRecurring,
+    final bool recurringSuccess,
   }) = _$MyReservationsStateImpl;
   const _MyReservationsState._() : super._();
 
@@ -685,7 +825,11 @@ abstract class _MyReservationsState extends MyReservationsState {
   @override
   bool get showingAllHistory;
   @override
-  bool get isLoadingHistory; // Cancel
+  bool get isLoadingHistory; // Pending changes
+  @override
+  List<PendingChange> get pendingChanges;
+  @override
+  String? get pendingChangeActionId; // Cancel
   @override
   String? get cancellingId;
   @override
@@ -713,7 +857,13 @@ abstract class _MyReservationsState extends MyReservationsState {
   @override
   bool get editConflict;
   @override
-  String? get editError;
+  String? get editError; // Recurring
+  @override
+  List<RecurringReservation> get recurringReservations;
+  @override
+  bool get isLoadingRecurring;
+  @override
+  bool get recurringSuccess;
 
   /// Create a copy of MyReservationsState
   /// with the given fields replaced by the non-null parameter values.

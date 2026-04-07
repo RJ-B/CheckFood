@@ -2,10 +2,10 @@ package com.checkfood.checkfoodservice.feature.model;
 
 /**
  * Výčet všech feature flagů v systému.
+ * Slouží jako centrální přehled dostupných funkcionalit a ochrana proti magic stringům.
  *
- * Slouží jako:
- * - centrální přehled feature
- * - ochrana proti "magic stringům"
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public enum FeatureFlag {
 
@@ -14,5 +14,4 @@ public enum FeatureFlag {
     PAYMENT_PROCESSING,
     AUDIT_ENABLED,
     CACHE_ENABLED
-
 }

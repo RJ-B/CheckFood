@@ -1,6 +1,7 @@
 import '../entities/panorama_session.dart';
 import '../repositories/onboarding_repository.dart';
 
+/// Creates a new panorama stitching session for the restaurant.
 class CreatePanoramaSessionUseCase {
   final OnboardingRepository _repository;
 

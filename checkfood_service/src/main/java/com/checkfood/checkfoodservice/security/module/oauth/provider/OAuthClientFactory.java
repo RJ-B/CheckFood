@@ -12,6 +12,9 @@ import java.util.Optional;
 /**
  * Továrna pro dynamický výběr OAuth klientů.
  * Automaticky registruje všechny implementace rozhraní OAuthClient dostupné v kontextu aplikace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class OAuthClientFactory {

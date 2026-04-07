@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import '../entities/panorama_photo.dart';
 import '../repositories/onboarding_repository.dart';
 
+/// Uploads a single photo for a panorama session at a specified angle.
 class UploadPanoramaPhotoUseCase {
   final OnboardingRepository _repository;
 

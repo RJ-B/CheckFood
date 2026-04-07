@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 /**
- * Exception handler pro OAuth modul.
- * * SENIOR IMPLEMENTACE (JDK 21):
- * - Využívá Switch Expressions.
- * - Odstraněny duplicitní metody (využívá implementaci z SecurityExceptionHandler).
+ * Exception handler pro OAuth modul zpracovávající OAuthException a logující kontext požadavku
+ * s odpovídající úrovní závažnosti podle chybového kódu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @RestControllerAdvice
 @Component
@@ -25,6 +26,13 @@ public class OAuthExceptionHandler extends SecurityExceptionHandler {
         super(errorResponseBuilder);
     }
 
+    /**
+     * Zpracuje OAuthException, zaloguje kontext a vrátí standardizovanou chybovou odpověď.
+     *
+     * @param ex      zachycená výjimka
+     * @param request kontext HTTP požadavku
+     * @return chybová odpověď s příslušným HTTP stavovým kódem
+     */
     @ExceptionHandler(OAuthException.class)
     public ResponseEntity<ErrorResponse> handleOAuthException(OAuthException ex, WebRequest request) {
         logOAuthExceptionContext(ex, request);
@@ -39,7 +47,6 @@ public class OAuthExceptionHandler extends SecurityExceptionHandler {
     }
 
     private void logOAuthExceptionContext(OAuthException ex, WebRequest request) {
-        // Tyto metody jsou volány z rodičovské třídy SecurityExceptionHandler
         String uri = extractRequestUri(request);
         String ip = getRemoteAddress(request);
         String ua = request.getHeader("User-Agent");
@@ -50,7 +57,6 @@ public class OAuthExceptionHandler extends SecurityExceptionHandler {
             return;
         }
 
-        // JDK 21 Switch Expression
         switch (errorCode) {
             case OAUTH_TOKEN_INVALID ->
                     log.warn("SECURITY: Invalid OAuth Token - Provider: {}, IP: {}, URI: {}", provider, ip, uri);

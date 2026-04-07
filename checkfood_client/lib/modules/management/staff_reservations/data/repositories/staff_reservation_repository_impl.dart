@@ -1,15 +1,18 @@
 import '../../domain/entities/staff_reservation.dart';
+import '../../domain/entities/staff_table.dart';
 import '../../domain/repositories/staff_reservation_repository.dart';
 import '../datasources/staff_reservation_remote_datasource.dart';
 
+/// Repository implementation that delegates to [StaffReservationRemoteDataSource]
+/// and maps response models to domain entities.
 class StaffReservationRepositoryImpl implements StaffReservationRepository {
   final StaffReservationRemoteDataSource _remoteDataSource;
 
   StaffReservationRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<List<StaffReservation>> getReservations(String date) async {
-    final models = await _remoteDataSource.getReservations(date);
+  Future<List<StaffReservation>> getReservations(String date, {String? restaurantId}) async {
+    final models = await _remoteDataSource.getReservations(date, restaurantId: restaurantId);
     return models.map((m) => m.toEntity()).toList();
   }
 
@@ -31,5 +34,21 @@ class StaffReservationRepositoryImpl implements StaffReservationRepository {
   @override
   Future<void> completeReservation(String id) {
     return _remoteDataSource.completeReservation(id);
+  }
+
+  @override
+  Future<List<StaffTable>> getRestaurantTables({String? restaurantId}) async {
+    final models = await _remoteDataSource.getRestaurantTables(restaurantId: restaurantId);
+    return models.map((m) => m.toEntity()).toList();
+  }
+
+  @override
+  Future<void> proposeChange(String reservationId, {String? startTime, String? tableId}) {
+    return _remoteDataSource.proposeChange(reservationId, startTime: startTime, tableId: tableId);
+  }
+
+  @override
+  Future<void> extendReservation(String reservationId, String endTime) {
+    return _remoteDataSource.extendReservation(reservationId, endTime);
   }
 }

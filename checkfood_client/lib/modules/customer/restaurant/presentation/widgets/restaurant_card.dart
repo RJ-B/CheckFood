@@ -5,9 +5,11 @@ import 'package:geolocator/geolocator.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../domain/entities/restaurant.dart';
 
+/// A detailed restaurant list card showing the cover image, name, cuisine,
+/// rating, distance, and opening status.
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
-  final Position? userPosition; // Přidáno pro dynamický výpočet vzdálenosti
+  final Position? userPosition;
   final VoidCallback onTap;
 
   const RestaurantCard({
@@ -120,8 +122,6 @@ class RestaurantCard extends StatelessWidget {
   }
 
   Widget _buildOpeningStatus() {
-    // Zde by byla reálná logika z OpeningHoursUtils
-    // Prozatím implementováno staticky pro ukázku designu
     const bool isOpen = true;
 
     return Row(

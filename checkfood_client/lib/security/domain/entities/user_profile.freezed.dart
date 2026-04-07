@@ -22,6 +22,11 @@ mixin _$UserProfile {
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
   String? get profileImageUrl => throw _privateConstructorUsedError;
+  String get phone => throw _privateConstructorUsedError;
+  String get addressStreet => throw _privateConstructorUsedError;
+  String get addressCity => throw _privateConstructorUsedError;
+  String get addressPostalCode => throw _privateConstructorUsedError;
+  String get addressCountry => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
   DateTime? get lastLogin => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -48,6 +53,11 @@ abstract class $UserProfileCopyWith<$Res> {
     String firstName,
     String lastName,
     String? profileImageUrl,
+    String phone,
+    String addressStreet,
+    String addressCity,
+    String addressPostalCode,
+    String addressCountry,
     bool isActive,
     DateTime? lastLogin,
     DateTime createdAt,
@@ -76,6 +86,11 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? firstName = null,
     Object? lastName = null,
     Object? profileImageUrl = freezed,
+    Object? phone = null,
+    Object? addressStreet = null,
+    Object? addressCity = null,
+    Object? addressPostalCode = null,
+    Object? addressCountry = null,
     Object? isActive = null,
     Object? lastLogin = freezed,
     Object? createdAt = null,
@@ -109,6 +124,31 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
                     ? _value.profileImageUrl
                     : profileImageUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
+            phone:
+                null == phone
+                    ? _value.phone
+                    : phone // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressStreet:
+                null == addressStreet
+                    ? _value.addressStreet
+                    : addressStreet // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressCity:
+                null == addressCity
+                    ? _value.addressCity
+                    : addressCity // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressPostalCode:
+                null == addressPostalCode
+                    ? _value.addressPostalCode
+                    : addressPostalCode // ignore: cast_nullable_to_non_nullable
+                        as String,
+            addressCountry:
+                null == addressCountry
+                    ? _value.addressCountry
+                    : addressCountry // ignore: cast_nullable_to_non_nullable
+                        as String,
             isActive:
                 null == isActive
                     ? _value.isActive
@@ -155,6 +195,11 @@ abstract class _$$UserProfileImplCopyWith<$Res>
     String firstName,
     String lastName,
     String? profileImageUrl,
+    String phone,
+    String addressStreet,
+    String addressCity,
+    String addressPostalCode,
+    String addressCountry,
     bool isActive,
     DateTime? lastLogin,
     DateTime createdAt,
@@ -182,6 +227,11 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     Object? firstName = null,
     Object? lastName = null,
     Object? profileImageUrl = freezed,
+    Object? phone = null,
+    Object? addressStreet = null,
+    Object? addressCity = null,
+    Object? addressPostalCode = null,
+    Object? addressCountry = null,
     Object? isActive = null,
     Object? lastLogin = freezed,
     Object? createdAt = null,
@@ -215,6 +265,31 @@ class __$$UserProfileImplCopyWithImpl<$Res>
                 ? _value.profileImageUrl
                 : profileImageUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
+        phone:
+            null == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressStreet:
+            null == addressStreet
+                ? _value.addressStreet
+                : addressStreet // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressCity:
+            null == addressCity
+                ? _value.addressCity
+                : addressCity // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressPostalCode:
+            null == addressPostalCode
+                ? _value.addressPostalCode
+                : addressPostalCode // ignore: cast_nullable_to_non_nullable
+                    as String,
+        addressCountry:
+            null == addressCountry
+                ? _value.addressCountry
+                : addressCountry // ignore: cast_nullable_to_non_nullable
+                    as String,
         isActive:
             null == isActive
                 ? _value.isActive
@@ -254,6 +329,11 @@ class _$UserProfileImpl extends _UserProfile {
     required this.firstName,
     required this.lastName,
     this.profileImageUrl,
+    this.phone = '',
+    this.addressStreet = '',
+    this.addressCity = '',
+    this.addressPostalCode = '',
+    this.addressCountry = '',
     required this.isActive,
     this.lastLogin,
     required this.createdAt,
@@ -272,6 +352,21 @@ class _$UserProfileImpl extends _UserProfile {
   @override
   final String? profileImageUrl;
   @override
+  @JsonKey()
+  final String phone;
+  @override
+  @JsonKey()
+  final String addressStreet;
+  @override
+  @JsonKey()
+  final String addressCity;
+  @override
+  @JsonKey()
+  final String addressPostalCode;
+  @override
+  @JsonKey()
+  final String addressCountry;
+  @override
   final bool isActive;
   @override
   final DateTime? lastLogin;
@@ -285,7 +380,7 @@ class _$UserProfileImpl extends _UserProfile {
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, roleName: $roleName, authProvider: $authProvider)';
+    return 'UserProfile(id: $id, email: $email, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, phone: $phone, addressStreet: $addressStreet, addressCity: $addressCity, addressPostalCode: $addressPostalCode, addressCountry: $addressCountry, isActive: $isActive, lastLogin: $lastLogin, createdAt: $createdAt, roleName: $roleName, authProvider: $authProvider)';
   }
 
   @override
@@ -301,6 +396,15 @@ class _$UserProfileImpl extends _UserProfile {
                 other.lastName == lastName) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.addressStreet, addressStreet) ||
+                other.addressStreet == addressStreet) &&
+            (identical(other.addressCity, addressCity) ||
+                other.addressCity == addressCity) &&
+            (identical(other.addressPostalCode, addressPostalCode) ||
+                other.addressPostalCode == addressPostalCode) &&
+            (identical(other.addressCountry, addressCountry) ||
+                other.addressCountry == addressCountry) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
             (identical(other.lastLogin, lastLogin) ||
@@ -321,6 +425,11 @@ class _$UserProfileImpl extends _UserProfile {
     firstName,
     lastName,
     profileImageUrl,
+    phone,
+    addressStreet,
+    addressCity,
+    addressPostalCode,
+    addressCountry,
     isActive,
     lastLogin,
     createdAt,
@@ -344,6 +453,11 @@ abstract class _UserProfile extends UserProfile {
     required final String firstName,
     required final String lastName,
     final String? profileImageUrl,
+    final String phone,
+    final String addressStreet,
+    final String addressCity,
+    final String addressPostalCode,
+    final String addressCountry,
     required final bool isActive,
     final DateTime? lastLogin,
     required final DateTime createdAt,
@@ -362,6 +476,16 @@ abstract class _UserProfile extends UserProfile {
   String get lastName;
   @override
   String? get profileImageUrl;
+  @override
+  String get phone;
+  @override
+  String get addressStreet;
+  @override
+  String get addressCity;
+  @override
+  String get addressPostalCode;
+  @override
+  String get addressCountry;
   @override
   bool get isActive;
   @override

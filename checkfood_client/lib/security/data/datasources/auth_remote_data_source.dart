@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../config/security_endpoints.dart';
 
-// Request Models
 import '../models/auth/request/login_request_model.dart';
 import '../models/auth/request/register_request_model.dart';
 import '../models/auth/request/refresh_token_request_model.dart';
@@ -10,13 +9,12 @@ import '../models/auth/request/logout_request_model.dart';
 import '../models/auth/request/resend_verification_request_model.dart';
 import '../models/auth/request/forgot_password_request_model.dart';
 import '../models/auth/request/reset_password_request_model.dart';
-
-// Response Models
 import '../models/auth/response/auth_response_model.dart';
 import '../models/auth/response/token_response_model.dart';
 
-/// Rozhraní pro vzdálený zdroj dat autentizace.
-/// V Cestě A každá metoda striktně vyžaduje svůj Request Model.
+/// Abstraktní kontrakt pro vzdálený zdroj dat autentizace.
+///
+/// Každá metoda striktně vyžaduje příslušný request model.
 abstract class AuthRemoteDataSource {
   Future<AuthResponseModel> login(LoginRequestModel request);
   Future<void> register(RegisterRequestModel request);
@@ -29,6 +27,7 @@ abstract class AuthRemoteDataSource {
   Future<void> resetPassword(ResetPasswordRequestModel request);
 }
 
+/// Implementace [AuthRemoteDataSource] komunikující s backendem přes [Dio].
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
 
@@ -55,7 +54,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> verifyEmail(VerifyEmailRequestModel request) async {
-    // GET požadavek s tokenem v query parametrech
     await _dio.get(
       SecurityEndpoints.verifyEmail,
       queryParameters: {'token': request.token},

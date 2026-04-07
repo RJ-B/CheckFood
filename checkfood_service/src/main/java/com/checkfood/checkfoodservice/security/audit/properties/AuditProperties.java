@@ -9,6 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Konfigurační properties pro auditní modul.
  * Načítá hodnoty z application properties s prefixem "security.audit".
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see com.checkfood.checkfoodservice.security.audit.config.AuditConfig
  */
 @Getter

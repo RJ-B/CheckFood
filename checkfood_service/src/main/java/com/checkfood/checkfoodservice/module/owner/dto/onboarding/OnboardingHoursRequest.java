@@ -7,6 +7,12 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Požadavek na nastavení otevírací doby restaurace v průběhu onboardingu majitele.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

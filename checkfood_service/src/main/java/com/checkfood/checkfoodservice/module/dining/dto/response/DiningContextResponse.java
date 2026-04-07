@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Response DTO popisující aktivní kontext stravování uživatele — restauraci, stůl, rezervaci a sezení.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

@@ -29,6 +29,10 @@ mixin _$RegisterRequestModel {
   String get firstName => throw _privateConstructorUsedError;
   @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ownerRegistration')
+  bool get ownerRegistration => throw _privateConstructorUsedError;
+  double? get latitude => throw _privateConstructorUsedError;
+  double? get longitude => throw _privateConstructorUsedError;
 
   /// Serializes this RegisterRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,6 +56,9 @@ abstract class $RegisterRequestModelCopyWith<$Res> {
     @JsonKey(name: SecurityJsonKeys.password) String password,
     @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
+    @JsonKey(name: 'ownerRegistration') bool ownerRegistration,
+    double? latitude,
+    double? longitude,
   });
 }
 
@@ -77,6 +84,9 @@ class _$RegisterRequestModelCopyWithImpl<
     Object? password = null,
     Object? firstName = null,
     Object? lastName = null,
+    Object? ownerRegistration = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -100,6 +110,21 @@ class _$RegisterRequestModelCopyWithImpl<
                     ? _value.lastName
                     : lastName // ignore: cast_nullable_to_non_nullable
                         as String,
+            ownerRegistration:
+                null == ownerRegistration
+                    ? _value.ownerRegistration
+                    : ownerRegistration // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            latitude:
+                freezed == latitude
+                    ? _value.latitude
+                    : latitude // ignore: cast_nullable_to_non_nullable
+                        as double?,
+            longitude:
+                freezed == longitude
+                    ? _value.longitude
+                    : longitude // ignore: cast_nullable_to_non_nullable
+                        as double?,
           )
           as $Val,
     );
@@ -120,6 +145,9 @@ abstract class _$$RegisterRequestModelImplCopyWith<$Res>
     @JsonKey(name: SecurityJsonKeys.password) String password,
     @JsonKey(name: SecurityJsonKeys.firstName) String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) String lastName,
+    @JsonKey(name: 'ownerRegistration') bool ownerRegistration,
+    double? latitude,
+    double? longitude,
   });
 }
 
@@ -141,6 +169,9 @@ class __$$RegisterRequestModelImplCopyWithImpl<$Res>
     Object? password = null,
     Object? firstName = null,
     Object? lastName = null,
+    Object? ownerRegistration = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(
       _$RegisterRequestModelImpl(
@@ -164,6 +195,21 @@ class __$$RegisterRequestModelImplCopyWithImpl<$Res>
                 ? _value.lastName
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String,
+        ownerRegistration:
+            null == ownerRegistration
+                ? _value.ownerRegistration
+                : ownerRegistration // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        latitude:
+            freezed == latitude
+                ? _value.latitude
+                : latitude // ignore: cast_nullable_to_non_nullable
+                    as double?,
+        longitude:
+            freezed == longitude
+                ? _value.longitude
+                : longitude // ignore: cast_nullable_to_non_nullable
+                    as double?,
       ),
     );
   }
@@ -177,6 +223,9 @@ class _$RegisterRequestModelImpl implements _RegisterRequestModel {
     @JsonKey(name: SecurityJsonKeys.password) required this.password,
     @JsonKey(name: SecurityJsonKeys.firstName) required this.firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) required this.lastName,
+    @JsonKey(name: 'ownerRegistration') this.ownerRegistration = false,
+    this.latitude,
+    this.longitude,
   });
 
   factory _$RegisterRequestModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -194,10 +243,17 @@ class _$RegisterRequestModelImpl implements _RegisterRequestModel {
   @override
   @JsonKey(name: SecurityJsonKeys.lastName)
   final String lastName;
+  @override
+  @JsonKey(name: 'ownerRegistration')
+  final bool ownerRegistration;
+  @override
+  final double? latitude;
+  @override
+  final double? longitude;
 
   @override
   String toString() {
-    return 'RegisterRequestModel(email: $email, password: $password, firstName: $firstName, lastName: $lastName)';
+    return 'RegisterRequestModel(email: $email, password: $password, firstName: $firstName, lastName: $lastName, ownerRegistration: $ownerRegistration, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -211,13 +267,27 @@ class _$RegisterRequestModelImpl implements _RegisterRequestModel {
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
-                other.lastName == lastName));
+                other.lastName == lastName) &&
+            (identical(other.ownerRegistration, ownerRegistration) ||
+                other.ownerRegistration == ownerRegistration) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, email, password, firstName, lastName);
+  int get hashCode => Object.hash(
+    runtimeType,
+    email,
+    password,
+    firstName,
+    lastName,
+    ownerRegistration,
+    latitude,
+    longitude,
+  );
 
   /// Create a copy of RegisterRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -243,6 +313,9 @@ abstract class _RegisterRequestModel implements RegisterRequestModel {
     @JsonKey(name: SecurityJsonKeys.password) required final String password,
     @JsonKey(name: SecurityJsonKeys.firstName) required final String firstName,
     @JsonKey(name: SecurityJsonKeys.lastName) required final String lastName,
+    @JsonKey(name: 'ownerRegistration') final bool ownerRegistration,
+    final double? latitude,
+    final double? longitude,
   }) = _$RegisterRequestModelImpl;
 
   factory _RegisterRequestModel.fromJson(Map<String, dynamic> json) =
@@ -260,6 +333,13 @@ abstract class _RegisterRequestModel implements RegisterRequestModel {
   @override
   @JsonKey(name: SecurityJsonKeys.lastName)
   String get lastName;
+  @override
+  @JsonKey(name: 'ownerRegistration')
+  bool get ownerRegistration;
+  @override
+  double? get latitude;
+  @override
+  double? get longitude;
 
   /// Create a copy of RegisterRequestModel
   /// with the given fields replaced by the non-null parameter values.

@@ -2,14 +2,19 @@ package com.checkfood.checkfoodservice.module.restaurant.dto.request;
 
 import com.checkfood.checkfoodservice.module.restaurant.dto.common.AddressDto;
 import com.checkfood.checkfoodservice.module.restaurant.dto.common.OpeningHoursDto;
+import com.checkfood.checkfoodservice.module.restaurant.dto.common.SpecialDayDto;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.List;
 
+/**
+ * Požadavek na aktualizaci základních informací o restauraci, otevírací doby a výjimečných dní.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -34,4 +39,11 @@ public class UpdateMyRestaurantRequest {
 
     @Valid
     private List<OpeningHoursDto> openingHours;
+
+    @Min(value = 15, message = "Minimální délka rezervace je 15 minut")
+    @Max(value = 480, message = "Maximální délka rezervace je 8 hodin")
+    private Integer defaultReservationDurationMinutes;
+
+    @Valid
+    private List<SpecialDayDto> specialDays;
 }

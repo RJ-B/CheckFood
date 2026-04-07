@@ -8,11 +8,9 @@ part 'onboarding_wizard_event.freezed.dart';
 
 @freezed
 class OnboardingWizardEvent with _$OnboardingWizardEvent {
-  // Navigation
   const factory OnboardingWizardEvent.loadOnboarding() = LoadOnboarding;
   const factory OnboardingWizardEvent.goToStep(int step) = GoToStep;
 
-  // Step 1: Info
   const factory OnboardingWizardEvent.updateInfo({
     required String name,
     String? description,
@@ -22,10 +20,8 @@ class OnboardingWizardEvent with _$OnboardingWizardEvent {
     String? cuisineType,
   }) = UpdateInfo;
 
-  // Step 2: Hours
   const factory OnboardingWizardEvent.updateHours(List<OpeningHoursModel> hours) = UpdateHours;
 
-  // Step 3: Tables
   const factory OnboardingWizardEvent.loadTables() = LoadTables;
   const factory OnboardingWizardEvent.addTable({
     required String label,
@@ -38,7 +34,6 @@ class OnboardingWizardEvent with _$OnboardingWizardEvent {
   }) = UpdateTable;
   const factory OnboardingWizardEvent.deleteTable(String id) = DeleteTable;
 
-  // Step 4: Menu
   const factory OnboardingWizardEvent.loadMenu() = LoadMenu;
   const factory OnboardingWizardEvent.createCategory(String name) = CreateCategory;
   const factory OnboardingWizardEvent.updateCategory({
@@ -60,7 +55,6 @@ class OnboardingWizardEvent with _$OnboardingWizardEvent {
   }) = UpdateItem;
   const factory OnboardingWizardEvent.deleteItem(String id) = DeleteItem;
 
-  // Step 5: Panorama
   const factory OnboardingWizardEvent.createPanoramaSession() = CreatePanoramaSession;
   const factory OnboardingWizardEvent.uploadPhoto({
     required String sessionId,
@@ -75,6 +69,5 @@ class OnboardingWizardEvent with _$OnboardingWizardEvent {
   const factory OnboardingWizardEvent.loadPanoramaSessions() = LoadPanoramaSessions;
   const factory OnboardingWizardEvent.pollPanoramaStatus(String sessionId) = PollPanoramaStatus;
 
-  // Step 6: Publish
   const factory OnboardingWizardEvent.publish() = Publish;
 }

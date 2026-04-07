@@ -3,6 +3,14 @@ package com.checkfood.checkfoodservice.module.reservation.exception;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Výčet chybových kódů modulu rezervací kategorizovaných do skupin:
+ * {@code BUSINESS} (obchodní pravidla), {@code VALIDATION} (validace vstupu),
+ * {@code SECURITY} (přístupová práva) a {@code SYSTEM} (systémové chyby).
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @RequiredArgsConstructor
 public enum ReservationErrorCode {
@@ -19,7 +27,13 @@ public enum ReservationErrorCode {
     INVALID_STATUS_TRANSITION("BUSINESS"),
     NOT_RESTAURANT_STAFF("SECURITY"),
     CHECKIN_OUTSIDE_WINDOW("BUSINESS"),
-    RESERVATION_SYSTEM_ERROR("SYSTEM");
+    PENDING_CHANGE_EXISTS("BUSINESS"),
+    CHANGE_REQUEST_NOT_FOUND("BUSINESS"),
+    RESERVATION_LIMIT("BUSINESS"),
+    RESERVATION_SYSTEM_ERROR("SYSTEM"),
+    RECURRING_RESERVATION_NOT_FOUND("BUSINESS"),
+    RECURRING_RESERVATION_ALREADY_ACTIVE("BUSINESS"),
+    RECURRING_NO_INSTANCES_GENERATED("BUSINESS");
 
     private final String category;
 }

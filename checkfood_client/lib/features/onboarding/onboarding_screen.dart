@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // ✅ Nutný import pro uložení stavu
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/theme/spacing.dart';
 import '../../core/theme/typography.dart';
@@ -9,6 +9,10 @@ import '../../components/buttons/ghost_button.dart';
 import '../../security/presentation/pages/auth/login_page.dart';
 import '../../l10n/generated/app_localizations.dart';
 
+/// Vícestránkový onboarding zobrazený novým uživatelům při prvním spuštění.
+///
+/// Po dokončení uloží příznak do [SharedPreferences], aby se onboarding
+/// při dalším spuštění přeskočil.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -16,6 +20,8 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
+/// Stav pro [OnboardingScreen]: sleduje index aktuální stránky a řídí
+/// přechody mezi stránkami a dokončení onboardingu.
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _index = 0;
@@ -56,18 +62,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  /// ✅ Tato metoda nyní uloží do paměti, že uživatel onboarding viděl.
+  /// Označí onboarding jako zobrazený a přejde na [LoginPage].
   Future<void> _finish() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding_seen', true);
-    } catch (e) {
-      debugPrint('Chyba při ukládání onboarding stavu: $e');
-    }
+    } catch (_) {}
 
     if (!mounted) return;
 
-    // Přesměrování na Login Page
     Navigator.of(
       context,
     ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
@@ -95,7 +98,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
               child: Row(
                 children: [
-                  // Indikátor stránek (tečky)
                   Row(
                     children: List.generate(
                       pages.length,
@@ -115,20 +117,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   const Spacer(),
-                  // Tlačítko Skip
                   if (!isLast)
                     GhostButton(
                       label: l.skip,
-                      // Skip jen přeskočí na poslední slide.
-                      // Pokud bys chtěl, aby Skip rovnou ukončil onboarding,
-                      // změň to na: onTap: _finish,
                       onTap: () => _controller.jumpToPage(pages.length - 1),
                     ),
                 ],
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            // Hlavní tlačítko Next / Get Started
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
               child: PrimaryButton(
@@ -144,8 +141,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-
+/// Jedna stránka onboardingového karuselu zobrazující ikonu, nadpis a podnadpis.
 class _OnboardingPage extends StatelessWidget {
   final _OnboardingPageData data;
 
@@ -179,6 +175,7 @@ class _OnboardingPage extends StatelessWidget {
   }
 }
 
+/// Datový kontejner pro ikonu, nadpis a podnadpis jedné onboardingové stránky.
 class _OnboardingPageData {
   final IconData icon;
   final String title;

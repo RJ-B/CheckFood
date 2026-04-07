@@ -8,6 +8,8 @@ import '../bloc/my_reservations_event.dart';
 import '../bloc/my_reservations_state.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
+/// A bottom sheet that allows the user to change the date, table, time slot,
+/// and party size of an existing reservation.
 class EditReservationSheet extends StatelessWidget {
   const EditReservationSheet({super.key});
 
@@ -38,7 +40,6 @@ class EditReservationSheet extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Handle
                 Center(
                   child: Container(
                     width: 40,
@@ -51,7 +52,6 @@ class EditReservationSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Title
                 Text(
                   l.editReservation,
                   style: Theme.of(context)
@@ -66,7 +66,6 @@ class EditReservationSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // Date picker
                 _DatePickerField(
                   selectedDate: state.editSelectedDate ?? reservation.date,
                   onDateChanged: (date) => context
@@ -75,7 +74,6 @@ class EditReservationSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Table picker
                 if (state.editTables.isNotEmpty) ...[
                   _TablePicker(
                     tables: state.editTables,
@@ -89,7 +87,6 @@ class EditReservationSheet extends StatelessWidget {
                   const SizedBox(height: 16),
                 ],
 
-                // Party size
                 _PartySizePicker(
                   partySize: state.editPartySize ?? reservation.partySize,
                   onChanged: (size) => context
@@ -99,7 +96,6 @@ class EditReservationSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Time slots
                 Text(
                   l.availableTimes,
                   style: const TextStyle(fontWeight: FontWeight.w600),
@@ -132,7 +128,6 @@ class EditReservationSheet extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Error messages
                 if (state.editConflict)
                   Container(
                     padding: const EdgeInsets.all(10),
@@ -160,7 +155,6 @@ class EditReservationSheet extends StatelessWidget {
                     ),
                   ),
 
-                // Submit button
                 ElevatedButton(
                   onPressed: state.canSubmitEdit
                       ? () => context
@@ -194,8 +188,7 @@ class EditReservationSheet extends StatelessWidget {
   }
 }
 
-// ── Date Picker ──────────────────────────────────────────────────────────
-
+/// An input field that opens the system date picker on tap.
 class _DatePickerField extends StatelessWidget {
   final String selectedDate;
   final ValueChanged<String> onDateChanged;
@@ -239,8 +232,7 @@ class _DatePickerField extends StatelessWidget {
   }
 }
 
-// ── Table Picker ─────────────────────────────────────────────────────────
-
+/// A dropdown that lets the user switch to a different table in the same scene.
 class _TablePicker extends StatelessWidget {
   final List<SceneTable> tables;
   final String selectedTableId;
@@ -280,8 +272,7 @@ class _TablePicker extends StatelessWidget {
   }
 }
 
-// ── Party Size Picker ────────────────────────────────────────────────────
-
+/// A stepper control for adjusting the number of guests (1–20).
 class _PartySizePicker extends StatelessWidget {
   final int partySize;
   final ValueChanged<int> onChanged;
@@ -323,8 +314,7 @@ class _PartySizePicker extends StatelessWidget {
   }
 }
 
-// ── Time Slots Grid ──────────────────────────────────────────────────────
-
+/// A wrapping grid of selectable time-slot chips.
 class _TimeSlotsGrid extends StatelessWidget {
   final List<String> slots;
   final String? selectedTime;

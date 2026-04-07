@@ -1,3 +1,4 @@
+/// Cuisine category for a restaurant listing.
 enum CuisineType {
   ITALIAN,
   CZECH,

@@ -1,6 +1,7 @@
 package com.checkfood.checkfoodservice.module.restaurant.service;
 
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRequest;
+import com.checkfood.checkfoodservice.module.restaurant.dto.response.AllMarkersResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantResponse;
 
@@ -53,7 +54,7 @@ public interface RestaurantService {
      * @param maxLng Pravá hranice zeměpisné délky
      * @return Seznam markerů
      */
-    List<RestaurantMarkerResponse> getMarkersInBounds(double minLat, double maxLat, double minLng, double maxLng, int zoom);
+    List<RestaurantMarkerResponse> getMarkersInBounds(double minLat, double maxLat, double minLng, double maxLng, int zoom, Double clusterRadius);
 
     /**
      * Získá seznam restaurací seřazený podle vzdálenosti od uživatele.
@@ -75,4 +76,24 @@ public interface RestaurantService {
                                                      Set<UUID> favouriteIds);
 
     UserEntity resolveUser(String email);
+
+    // --- MARKER VERSIONING ---
+
+    /**
+     * Vrací všechny aktivní restaurace jako odlehčené markery s aktuální verzí.
+     * Výsledek je cachován po dobu 5 minut.
+     */
+    AllMarkersResponse getAllActiveMarkers();
+
+    /**
+     * Vrací aktuální verzi sady markerů bez dat.
+     * Klient ji porovná se svou lokální verzí pro detekci staleness.
+     */
+    long getMarkerVersion();
+
+    /**
+     * Inkrementuje verzi markerů a invaliduje cache.
+     * Volá se po každé mutaci restaurace (create/update/delete).
+     */
+    void incrementMarkerVersion();
 }

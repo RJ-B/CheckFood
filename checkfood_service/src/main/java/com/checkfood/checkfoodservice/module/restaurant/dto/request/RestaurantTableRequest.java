@@ -3,6 +3,12 @@ package com.checkfood.checkfoodservice.module.restaurant.dto.request;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+/**
+ * Požadavek na vytvoření nebo aktualizaci fyzického stolu v restauraci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

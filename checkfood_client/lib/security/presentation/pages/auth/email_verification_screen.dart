@@ -7,6 +7,7 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../bloc/auth/auth_event.dart';
 
+/// Obrazovka potvrzující odeslání ověřovacího e-mailu a umožňující jeho opětovné zaslání.
 class EmailVerificationScreen extends StatelessWidget {
   final String? email;
 

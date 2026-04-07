@@ -7,6 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Response DTO pro položku menu zobrazovanou zákazníkovi nebo vlastníkovi restaurace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

@@ -16,23 +16,56 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repozitář pro správu entit restaurací. Kombinuje standardní JPA operace se specializovanými
+ * prostorovými dotazy PostGIS a podporou synchronizace s Overture Maps.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, RestaurantRepositoryCustom {
 
-    // OPRAVENO: Odstraněno "Is". Spring hledá field 'active', ne getter 'isActive'.
+    /**
+     * Načte všechny aktivní restaurace s daným statusem.
+     *
+     * @param status požadovaný status restaurace
+     * @return seznam aktivních restaurací
+     */
     List<Restaurant> findAllByActiveTrueAndStatus(RestaurantStatus status);
 
+    /**
+     * Načte všechny restaurace daného majitele.
+     *
+     * @param ownerId UUID majitele
+     * @return seznam restaurací majitele
+     */
     List<Restaurant> findAllByOwnerId(UUID ownerId);
 
+    /**
+     * Ověří, zda restaurace s daným názvem již existuje.
+     *
+     * @param name název restaurace
+     * @return {@code true} pokud restaurace s tímto názvem existuje
+     */
     boolean existsByName(String name);
 
+    /**
+     * Ověří, zda restaurace s daným ID patří danému majiteli.
+     *
+     * @param id      UUID restaurace
+     * @param ownerId UUID majitele
+     * @return {@code true} pokud restaurace patří danému majiteli
+     */
     boolean existsByIdAndOwnerId(UUID id, UUID ownerId);
 
+    /**
+     * Vyhledá restauraci podle IČO.
+     *
+     * @param ico osmimístné IČO
+     * @return Optional obsahující restauraci, nebo prázdný pokud neexistuje
+     */
     Optional<Restaurant> findByIco(String ico);
-
-    // ===================================================================================
-    // SYNCHRONIZACE S OVERTURE MAPS (UPSERT & SOFT-DELETE)
-    // ===================================================================================
 
     /**
      * Dávkové vyhledání restaurací podle jejich unikátního Overture ID.
@@ -62,7 +95,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
      */
     @Query(value = """
             WITH filtered_restaurants AS (
-                SELECT id, location
+                SELECT id, location, name, logo_url
                 FROM restaurant
                 WHERE is_active = true
                   AND location && ST_MakeEnvelope(:minLng, :minLat, :maxLng, :maxLat, 4326)
@@ -73,6 +106,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
                 SELECT
                     id,
                     location,
+                    name,
+                    logo_url,
                     ST_ClusterDBScan(location, eps := :distance, minpoints := 1) OVER () AS cluster_id
                 FROM filtered_restaurants
             )
@@ -80,7 +115,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
                 CASE WHEN COUNT(*) = 1 THEN CAST(MAX(CAST(id AS TEXT)) AS UUID) ELSE NULL END as id,
                 ST_Y(ST_Centroid(ST_Collect(location))) as latitude,
                 ST_X(ST_Centroid(ST_Collect(location))) as longitude,
-                CAST(COUNT(*) AS INTEGER) as count
+                CAST(COUNT(*) AS INTEGER) as count,
+                CASE WHEN COUNT(*) = 1 THEN MAX(name) ELSE NULL END as name,
+                CASE WHEN COUNT(*) = 1 THEN MAX(logo_url) ELSE NULL END as logo_url
             FROM clusters
             GROUP BY cluster_id
             """, nativeQuery = true)
@@ -99,7 +136,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
      */
     @Query(value = """
             SELECT id, ST_Y(location) as latitude, ST_X(location) as longitude,
-                   CAST(1 AS INTEGER) as count
+                   CAST(1 AS INTEGER) as count, name, logo_url
             FROM restaurant
             WHERE is_active = true
               AND location && ST_MakeEnvelope(:minLng, :minLat, :maxLng, :maxLat, 4326)
@@ -113,6 +150,19 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
             @Param("maxLng") double maxLng,
             @Param("pointLimit") int pointLimit
     );
+
+    /**
+     * Vrací všechny aktivní restaurace jako odlehčené markery (bez bounding-box filtru).
+     * Slouží pro endpoint /all-markers — klient si stáhne jednou a cachuje lokálně.
+     */
+    @Query(value = """
+            SELECT id, ST_Y(location) as latitude, ST_X(location) as longitude,
+                   CAST(1 AS INTEGER) as count, name, logo_url
+            FROM restaurant
+            WHERE is_active = true
+            ORDER BY name
+            """, nativeQuery = true)
+    List<Object[]> findAllActiveMarkers();
 
     /**
      * Nativní PostGIS dotaz pro nejbližší restaurace pomocí K-NN.

@@ -11,6 +11,7 @@ import '../../../bloc/user/user_bloc.dart';
 import '../../../bloc/user/user_event.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 
+/// Hlavička profilu zobrazující avatar (s možností změny fotografie), jméno, e-mail a stav účtu.
 class ProfileHeader extends StatelessWidget {
   final UserProfile profile;
 
@@ -32,7 +33,6 @@ class ProfileHeader extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    // Show loading indicator
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -40,12 +40,11 @@ class ProfileHeader extends StatelessWidget {
     );
 
     try {
-      // Upload photo and update profile
       final userBloc = context.read<UserBloc>();
       userBloc.add(UserEvent.profilePhotoUploadRequested(bytes, filename));
     } catch (e) {
       if (context.mounted) {
-        Navigator.of(context).pop(); // dismiss loading
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).photoUploadError(e.toString())),
@@ -73,7 +72,6 @@ class ProfileHeader extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // --- AVATAR (tapable for photo upload) ---
           GestureDetector(
             onTap: () => _onAvatarTap(context),
             child: Stack(
@@ -118,7 +116,6 @@ class ProfileHeader extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // --- JMÉNO ---
           Text(
             displayFullName.isNotEmpty ? displayFullName : S.of(context).userNoName,
             textAlign: TextAlign.center,
@@ -132,13 +129,11 @@ class ProfileHeader extends StatelessWidget {
 
           const SizedBox(height: 4),
 
-          // --- EMAIL ---
           Text(
             profile.email,
             style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
 
-          // --- STATUS NEAKTIVNÍHO ÚČTU ---
           if (!profile.isActive) ...[
             const SizedBox(height: 12),
             Container(

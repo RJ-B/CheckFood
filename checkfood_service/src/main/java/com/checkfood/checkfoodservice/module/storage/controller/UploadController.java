@@ -12,6 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * REST kontroler pro nahrávání souborů do úložiště.
+ * Přístupný pro uživatele s rolí OWNER nebo MANAGER.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @RestController
 @RequestMapping("/api/v1/uploads")
 @PreAuthorize("hasAnyRole('OWNER', 'MANAGER')")
@@ -20,6 +27,14 @@ public class UploadController {
 
     private final StorageService storageService;
 
+    /**
+     * Nahraje soubor do zadaného adresáře úložiště a vrátí veřejnou URL.
+     *
+     * @param file      nahrávaný soubor
+     * @param directory cílový adresář v úložišti
+     * @return URL a název uloženého souboru
+     * @throws IOException při chybě čtení obsahu souboru
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UploadResponse> upload(
             @RequestParam("file") MultipartFile file,

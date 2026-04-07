@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Request DTO pro vytvoření nové objednávky zákazníkem.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

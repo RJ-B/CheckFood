@@ -9,6 +9,9 @@ import java.util.List;
 /**
  * Service interface pro správu uživatelských účtů a profilů.
  * Definuje operace pro manipulaci s identitou uživatele, správu hesel a řízení přístupu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface UserService {
 
@@ -99,4 +102,12 @@ public interface UserService {
      * @param roleName název role (např. "ADMIN", "MODERATOR")
      */
     void assignRole(Long userId, String roleName);
+
+    /**
+     * Odebere uživateli roli.
+     *
+     * @param userId ID uživatele
+     * @param roleName název role k odebrání (např. "STAFF", "MANAGER")
+     */
+    void removeRole(Long userId, String roleName);
 }

@@ -3,6 +3,9 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/radius.dart';
 
+/// Hlavní akční tlačítko s vyplněným pozadím primární barvy.
+///
+/// Zobrazuje spinner při [isLoading] a ztlumí se při [isDisabled].
 class PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;

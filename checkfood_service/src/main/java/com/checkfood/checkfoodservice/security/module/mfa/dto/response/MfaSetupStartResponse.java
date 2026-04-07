@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Odpověď při zahájení MFA setupu.
+ * DTO odpovědi při zahájení nastavení MFA obsahující QR kód a tajný klíč pro ruční zadání.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

@@ -12,13 +12,18 @@ import '../bloc/my_restaurant_bloc.dart';
 import '../bloc/my_restaurant_event.dart';
 import '../bloc/my_restaurant_state.dart';
 import '../widgets/add_employee_dialog.dart';
+import '../../domain/entities/employee.dart';
+import '../widgets/employee_permissions_dialog.dart';
 import '../widgets/employees_list.dart';
-import '../widgets/panorama_tab.dart';
 import '../widgets/restaurant_info_form.dart';
+import '../widgets/statistics_tab.dart';
 
 import '../../../../management/staff_reservations/presentation/bloc/staff_reservations_bloc.dart';
+import '../../../../management/staff_reservations/presentation/bloc/staff_reservations_event.dart';
 import '../../../../management/staff_reservations/presentation/pages/staff_reservations_page.dart';
 
+/// The owner/manager dashboard page, providing tabs for reservations, employees,
+/// statistics, and restaurant settings, with unsaved-changes guard on the settings tab.
 class MyRestaurantPage extends StatefulWidget {
   const MyRestaurantPage({super.key});
 
@@ -27,10 +32,40 @@ class MyRestaurantPage extends StatefulWidget {
 }
 
 class _MyRestaurantPageState extends State<MyRestaurantPage> {
+  bool _hasUnsavedChanges = false;
+
   @override
   void initState() {
     super.initState();
     context.read<MyRestaurantBloc>().add(const LoadMyRestaurant());
+  }
+
+  /// Shows confirm dialog when user tries to navigate away with unsaved changes.
+  /// Returns true if user wants to proceed (discard or save), false to stay.
+  Future<bool> _confirmUnsavedChanges(BuildContext context) async {
+    if (!_hasUnsavedChanges) return true;
+    final result = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Neuložené změny'),
+        content: const Text('Máte neuložené změny v nastavení. Co chcete udělat?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, 'stay'),
+            child: const Text('Zůstat'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, 'discard'),
+            child: Text('Zahodit', style: TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+    if (result == 'discard') {
+      _hasUnsavedChanges = false;
+      return true;
+    }
+    return false;
   }
 
   UserRole _getCurrentUserRole(BuildContext context) {
@@ -43,7 +78,23 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyRestaurantBloc, MyRestaurantState>(
+    return BlocConsumer<MyRestaurantBloc, MyRestaurantState>(
+      listenWhen: (prev, curr) {
+        if (prev is MyRestaurantLoaded && curr is MyRestaurantLoaded) {
+          return prev.isUpdating && !curr.isUpdating
+              && prev.selectedRestaurantId == curr.selectedRestaurantId;
+        }
+        return false;
+      },
+      listener: (context, state) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Změny byly uloženy.'),
+            backgroundColor: AppColors.success,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -87,44 +138,114 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
       final l = S.of(context);
       final tabs = <Tab>[
         Tab(icon: const Icon(Icons.calendar_today), text: l.reservationsTab),
-        Tab(icon: const Icon(Icons.info_outline), text: l.infoTab),
         if (isManagerOrOwner)
           Tab(icon: const Icon(Icons.people_outline), text: l.employeesTab),
-        if (isOwner)
-          Tab(icon: const Icon(Icons.panorama), text: l.panorama),
+        if (isManagerOrOwner)
+          Tab(icon: const Icon(Icons.bar_chart), text: l.statisticsTab),
+        Tab(icon: const Icon(Icons.settings), text: l.settingsTab),
       ];
 
       final tabViews = <Widget>[
-        // Tab 1: Staff Reservations
         BlocProvider(
           create: (_) => sl<StaffReservationsBloc>(),
-          child: const StaffReservationsPage(),
+          child: BlocListener<MyRestaurantBloc, MyRestaurantState>(
+            listenWhen: (prev, curr) {
+              if (prev is MyRestaurantLoaded && curr is MyRestaurantLoaded) {
+                return prev.selectedRestaurantId != curr.selectedRestaurantId;
+              }
+              return false;
+            },
+            listener: (context, myState) {
+              if (myState is MyRestaurantLoaded) {
+                context.read<StaffReservationsBloc>().add(
+                  LoadStaffReservations(
+                    context.read<StaffReservationsBloc>().state.selectedDate,
+                    restaurantId: myState.selectedRestaurantId,
+                  ),
+                );
+              }
+            },
+            child: const StaffReservationsPage(),
+          ),
         ),
-        // Tab 2: Restaurant Info
+        if (isManagerOrOwner)
+          _buildEmployeesTab(context, state, isOwner),
+        if (isManagerOrOwner)
+          StatisticsTab(
+            employeeCount: state.employees.length,
+            isActive: state.restaurant.isActive,
+            hasPanorama: state.restaurant.panoramaUrl != null,
+          ),
         RestaurantInfoForm(
           restaurant: state.restaurant,
           isUpdating: state.isUpdating,
+          panoramaUrl: state.restaurant.panoramaUrl,
+          isOwner: isOwner,
           onSubmit: (request) {
             context.read<MyRestaurantBloc>().add(UpdateRestaurant(request));
           },
+          onDirtyChanged: (dirty) => _hasUnsavedChanges = dirty,
         ),
-        if (isManagerOrOwner)
-          // Tab 3: Employees (manager/owner only)
-          _buildEmployeesTab(context, state, isOwner),
-        if (isOwner)
-          // Tab 4: Panorama (owner only)
-          PanoramaTab(activePanoramaUrl: state.restaurant.panoramaUrl),
       ];
 
       return DefaultTabController(
         length: tabs.length,
-        child: Column(
+        child: Builder(
+          builder: (context) {
+            final tabController = DefaultTabController.of(context);
+            final settingsTabIndex = tabs.length - 1;
+            tabController.addListener(() {
+              FocusScope.of(context).unfocus();
+              if (tabController.previousIndex == settingsTabIndex &&
+                  tabController.index != settingsTabIndex &&
+                  _hasUnsavedChanges) {
+                final targetIndex = tabController.index;
+                tabController.index = settingsTabIndex;
+                _confirmUnsavedChanges(context).then((proceed) {
+                  if (proceed && context.mounted) {
+                    tabController.animateTo(targetIndex);
+                  }
+                });
+              }
+            });
+            return Column(
           children: [
-            TabBar(tabs: tabs),
+            if (state.restaurants.length > 1)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: DropdownButtonFormField<String>(
+                  value: state.selectedRestaurantId,
+                  decoration: InputDecoration(
+                    labelText: l.selectRestaurant,
+                    border: const OutlineInputBorder(),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  items: state.restaurants.map((r) => DropdownMenuItem<String>(
+                    value: r.id,
+                    child: Text(r.name),
+                  )).toList(),
+                  onChanged: (newId) async {
+                    if (newId == null) return;
+                    if (!await _confirmUnsavedChanges(context)) return;
+                    if (context.mounted) {
+                      context.read<MyRestaurantBloc>().add(SelectRestaurant(newId));
+                    }
+                  },
+                ),
+              ),
+            TabBar(
+              tabs: tabs,
+              isScrollable: false,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 2),
+              labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+              unselectedLabelStyle: const TextStyle(fontSize: 11),
+            ),
             Expanded(
               child: TabBarView(children: tabViews),
             ),
           ],
+        );
+          },
         ),
       );
     }
@@ -149,6 +270,9 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
           onRemove: (employeeId) {
             context.read<MyRestaurantBloc>().add(RemoveEmployee(employeeId));
           },
+          onPermissions: isOwner
+              ? (employee) => _showPermissionsDialog(context, employee)
+              : null,
         ),
         if (isOwner)
           Positioned(
@@ -170,6 +294,35 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
       builder: (_) => AddEmployeeDialog(
         onSubmit: (request) {
           context.read<MyRestaurantBloc>().add(AddEmployee(request));
+        },
+      ),
+    );
+  }
+
+  void _showPermissionsDialog(BuildContext context, Employee employee) {
+    final userRole = _getCurrentUserRole(context);
+    List<String>? grantablePermissions;
+    if (userRole != UserRole.owner) {
+      final myState = context.read<MyRestaurantBloc>().state;
+      if (myState is MyRestaurantLoaded) {
+        final authEmail = context.read<AuthBloc>().state.maybeWhen(
+              authenticated: (user) => user.email,
+              orElse: () => null,
+            );
+        final me = myState.employees.where((e) => e.email == authEmail).firstOrNull;
+        grantablePermissions = me?.permissions ?? [];
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) => EmployeePermissionsDialog(
+        employee: employee,
+        grantablePermissions: grantablePermissions,
+        onSave: (permissions) {
+          context.read<MyRestaurantBloc>().add(
+                UpdateEmployeePermissions(employee.id, permissions),
+              );
         },
       ),
     );

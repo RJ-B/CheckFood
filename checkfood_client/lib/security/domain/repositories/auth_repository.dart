@@ -2,6 +2,7 @@ import '../entities/auth_tokens.dart';
 import '../entities/user.dart';
 import '../usecases/auth/params/auth_params.dart';
 
+/// Abstraktní kontrakt pro autentizační operace.
 abstract class AuthRepository {
   /// Přihlášení uživatele pomocí doménových parametrů.
   Future<AuthTokens> login(LoginParams params);

@@ -4,10 +4,10 @@ import com.checkfood.checkfoodservice.security.exception.SecurityException;
 import org.springframework.http.HttpStatus;
 
 /**
- * Výjimka pro modul OAuth.
- * Poskytuje tovární metody pro chyby při externí autentizaci.
+ * Výjimka pro OAuth modul poskytující tovární metody pro typické chybové scénáře při externí autentizaci.
  *
- * @see SecurityException
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see OAuthErrorCode
  */
 public class OAuthException extends SecurityException {
@@ -55,6 +55,12 @@ public class OAuthException extends SecurityException {
         );
     }
 
+    /**
+     * Vyvolá výjimku, pokud poskytovatel nevrátil povinné údaje (e-mail).
+     *
+     * @param provider název poskytovatele
+     * @return výjimka s HTTP 400
+     */
     public static OAuthException userDataMissing(String provider) {
         return new OAuthException(
                 OAuthErrorCode.OAUTH_USER_DATA_MISSING,
@@ -63,6 +69,13 @@ public class OAuthException extends SecurityException {
         );
     }
 
+    /**
+     * Vyvolá výjimku při interní chybě OAuth modulu (kryptografie, parsing).
+     *
+     * @param details popis chyby
+     * @param cause   původní výjimka
+     * @return výjimka s HTTP 500
+     */
     public static OAuthException internalError(String details, Throwable cause) {
         return new OAuthException(
                 OAuthErrorCode.OAUTH_INTERNAL_ERROR,

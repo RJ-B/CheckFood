@@ -1,6 +1,7 @@
 package com.checkfood.checkfoodservice.module.restaurant.service;
 
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRequest;
+import com.checkfood.checkfoodservice.module.restaurant.dto.response.AllMarkersResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantResponse;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
@@ -20,11 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
- * Implementace služeb pro správu restaurací.
- * Obsahuje logiku pro CRUD operace a pokročilé geoprostorové vyhledávání.
+ * Implementace {@link RestaurantService} pro správu restaurací.
+ * Obsahuje logiku pro CRUD operace, pokročilé geoprostorové vyhledávání a správu verzí markerů.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Slf4j
 @Service
@@ -36,40 +41,48 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantMapper restaurantMapper;
     private final UserService userService;
 
-    // ── Zoom-adaptive clustering configuration ──────────────────────────
-    // Each bucket defines: maxZoom (inclusive), radiusPx for DBSCAN, inputLimit
-    // for the CTE that feeds DBSCAN, and pointLimit for raw-point mode.
-    //
-    // | Zoom   | Mode    | radiusPx | inputLimit | pointLimit |
-    // |--------|---------|----------|------------|------------|
-    // | 0-7    | CLUSTER | 120      | 3000       | n/a        |
-    // | 8-10   | CLUSTER | 100      | 4000       | n/a        |
-    // | 11-13  | CLUSTER | 60       | 5000       | n/a        |
-    // | 14-16  | CLUSTER | 40       | 6000       | n/a        |
-    // | 17+    | POINTS  | n/a      | n/a        | 1000       |
+    private final AtomicLong markerVersion = new AtomicLong(1);
+    private volatile List<RestaurantMarkerResponse> cachedAllMarkers;
+    private volatile long cacheTimestamp;
+    private static final long CACHE_TTL_MS = 300_000;
 
-    private static final int MAX_CLUSTER_ZOOM = 17;
+    /** Od tohoto zoomu se vrací přímo jednotlivé body bez DBSCAN shlukování. */
+    private static final int MAX_CLUSTER_ZOOM = 19;
 
-    private int radiusPxForZoom(int zoom) {
-        if (zoom <= 7)  return 120;
-        if (zoom <= 10) return 100;
-        if (zoom <= 13) return 60;
-        return 40; // 14-16
+    /**
+     * Vypočítá dynamický poloměr shlukování v pixelech pomocí asymetrické Gaussovy funkce.
+     * Vrchol je na zoom 13 (~42px). Strmý nárůst vlevo (sigma=0.9), pozvolný pokles vpravo (sigma=5.0).
+     * Baseline=22px, amplituda=20px.
+     *
+     * @param zoom úroveň přiblížení mapy
+     * @return poloměr shlukování v pixelech
+     */
+    private double dynamicRadiusPx(double zoom) {
+        double peak = 13.0;
+        double diff = zoom - peak;
+        double sigma = diff < 0 ? 0.9 : 5.0; // strmý nárůst vlevo, pozvolný pokles vpravo
+        return 22.0 + 20.0 * Math.exp(-(diff * diff) / (2.0 * sigma * sigma));
     }
 
+    /**
+     * Vrátí limit vstupních bodů pro DBSCAN CTE. Roste lineárně se zoomem.
+     *
+     * @param zoom úroveň přiblížení mapy
+     * @return maximální počet restaurací vstupujících do shlukování
+     */
     private int inputLimitForZoom(int zoom) {
-        if (zoom <= 7)  return 3000;
-        if (zoom <= 10) return 4000;
-        if (zoom <= 13) return 5000;
-        return 6000; // 14-16
+        return Math.min(2000 + zoom * 400, 10000);
     }
 
+    /**
+     * Vrátí limit bodů pro přímý výpis (bez shlukování) na vysokých zoomech.
+     *
+     * @param zoom úroveň přiblížení mapy
+     * @return maximální počet vrácených bodů
+     */
     private int pointLimitForZoom(int zoom) {
-        if (zoom <= 17) return 1000;
-        return 1500; // very close street view
+        return 1500;
     }
-
-    // --- CRUD OPERACE (beze změny) ---
 
     @Override
     public RestaurantResponse createRestaurant(RestaurantRequest request, UUID ownerId) {
@@ -80,6 +93,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setActive(true);
 
         var savedRestaurant = restaurantRepository.save(restaurant);
+        incrementMarkerVersion();
         return restaurantMapper.toResponse(savedRestaurant);
     }
 
@@ -107,6 +121,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         updatedEntity.setRating(restaurant.getRating());
 
         var saved = restaurantRepository.save(updatedEntity);
+        incrementMarkerVersion();
         return restaurantMapper.toResponse(saved);
     }
 
@@ -130,14 +145,42 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setActive(false);
         restaurant.setStatus(RestaurantStatus.ARCHIVED);
         restaurantRepository.save(restaurant);
+        incrementMarkerVersion();
     }
 
-    // --- GEO METODY (POSTGIS SMART CLUSTERING) ---
+    @Override
+    @Transactional(readOnly = true)
+    public AllMarkersResponse getAllActiveMarkers() {
+        if (cachedAllMarkers != null && System.currentTimeMillis() - cacheTimestamp < CACHE_TTL_MS) {
+            return AllMarkersResponse.builder()
+                    .version(markerVersion.get())
+                    .data(cachedAllMarkers)
+                    .build();
+        }
+        List<Object[]> raw = restaurantRepository.findAllActiveMarkers();
+        cachedAllMarkers = restaurantMapper.toMarkerResponseList(raw);
+        cacheTimestamp = System.currentTimeMillis();
+        return AllMarkersResponse.builder()
+                .version(markerVersion.get())
+                .data(cachedAllMarkers)
+                .build();
+    }
+
+    @Override
+    public long getMarkerVersion() {
+        return markerVersion.get();
+    }
+
+    @Override
+    public void incrementMarkerVersion() {
+        markerVersion.incrementAndGet();
+        cachedAllMarkers = null;
+    }
 
     /**
-     * Vrací shluky (clustery) nebo jednotlivé markery pro zobrazení na mapě.
-     * Při zoom >= MAX_CLUSTER_ZOOM vrací přímo jednotlivé body bez shlukování.
-     * Jinak vypočítá DBSCAN epsilon z úrovně zoomu pro konzistentní velikost shluků.
+     * {@inheritDoc}
+     * Při zoom >= MAX_CLUSTER_ZOOM vrací přímo jednotlivé body bez DBSCAN shlukování.
+     * Na nižších zoomech vypočítá epsilon z pixelového poloměru a spustí DBSCAN na straně databáze.
      */
     @Override
     @Transactional(readOnly = true)
@@ -146,24 +189,23 @@ public class RestaurantServiceImpl implements RestaurantService {
             double maxLat,
             double minLng,
             double maxLng,
-            int zoom
+            int zoom,
+            Double clusterRadius
     ) {
-        long start = System.currentTimeMillis();
+        double effectiveRadius = (clusterRadius != null) ? clusterRadius : dynamicRadiusPx(zoom);
 
-        // Street level: raw points without DBSCAN
+        // Úroveň ulice: přímé body bez DBSCAN
         if (zoom >= MAX_CLUSTER_ZOOM) {
             int limit = pointLimitForZoom(zoom);
             List<Object[]> raw = restaurantRepository.findMarkersInBounds(
                     minLat, maxLat, minLng, maxLng, limit
             );
             List<RestaurantMarkerResponse> result = restaurantMapper.toMarkerResponseList(raw);
-            log.debug("markers zoom={} mode=POINTS limit={} returned={} ms={}",
-                    zoom, limit, result.size(), System.currentTimeMillis() - start);
             return result;
         }
 
-        // Adaptive DBSCAN: radius and input limit depend on zoom
-        double eps = computeClusterEps(zoom);
+        // Adaptivní DBSCAN: poloměr a vstupní limit závisí na úrovni zoomu
+        double eps = computeClusterEps(zoom, effectiveRadius);
         int inputLimit = inputLimitForZoom(zoom);
 
         List<Object[]> rawResults = restaurantRepository.findClusteredMarkers(
@@ -172,24 +214,19 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         List<RestaurantMarkerResponse> result = restaurantMapper.toMarkerResponseList(rawResults);
 
-        // Log cluster stats: max count shows if real counts flow through
-        int maxCount = result.stream().mapToInt(RestaurantMarkerResponse::getCount).max().orElse(0);
-        int clusterCount = (int) result.stream().filter(RestaurantMarkerResponse::isCluster).count();
-        int pointCount = result.size() - clusterCount;
-        log.debug("markers zoom={} mode=CLUSTER radiusPx={} eps={} inputLimit={} clusters={} points={} maxCount={} ms={}",
-                zoom, radiusPxForZoom(zoom), String.format("%.6f", eps), inputLimit,
-                clusterCount, pointCount, maxCount, System.currentTimeMillis() - start);
-
         return result;
     }
 
     /**
-     * Converts zoom level to DBSCAN epsilon in geographic degrees.
-     * Uses zoom-adaptive radiusPx so higher zooms produce tighter, smaller clusters.
-     * Formula: eps = radiusPx * 360 / (256 * 2^zoom)
+     * Převede pixelový poloměr shlukování na geografické stupně pro daný zoom.
+     * Vzorec: eps = radiusPx * 360 / (256 * 2^zoom)
+     *
+     * @param zoom     úroveň přiblížení mapy
+     * @param radiusPx poloměr shlukování v pixelech
+     * @return epsilon pro DBSCAN v geografických stupních
      */
-    private double computeClusterEps(int zoom) {
-        return radiusPxForZoom(zoom) * 360.0 / (256.0 * Math.pow(2, zoom));
+    private double computeClusterEps(int zoom, double radiusPx) {
+        return radiusPx * 360.0 / (256.0 * Math.pow(2, zoom));
     }
 
     @Override

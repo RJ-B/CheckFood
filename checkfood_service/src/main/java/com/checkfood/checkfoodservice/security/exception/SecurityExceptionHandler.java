@@ -128,15 +128,15 @@ public abstract class SecurityExceptionHandler extends ServiceExceptionHandler {
     }
 
     // =========================================================================
-    // PROTECTED UTILITY METHODS - Shared infrastructure pro potomky
+    // CHRÁNĚNÉ POMOCNÉ METODY – Sdílená infrastruktura pro potomky
     // =========================================================================
 
     /**
-     * Extrahuje URI path z WebRequest pro audit logging a error tracking.
-     * Parsuje "uri=/api/auth/login" format na clean URI path.
+     * Extrahuje cestu URI z WebRequest pro auditní logování a sledování chyb.
+     * Parsuje formát "uri=/api/auth/login" na čistou cestu URI.
      *
-     * @param request WebRequest instance s request metadata
-     * @return clean URI path nebo "unknown" při parsing failure
+     * @param request WebRequest instance s metadaty požadavku
+     * @return čistá cesta URI nebo "unknown" při chybě parsování
      */
     protected String extractRequestUri(WebRequest request) {
         String description = request.getDescription(false);
@@ -144,11 +144,11 @@ public abstract class SecurityExceptionHandler extends ServiceExceptionHandler {
     }
 
     /**
-     * Extrahuje client IP adresu s podporou proxy headers pro accurate logging.
-     * Priority: X-Forwarded-For -> RemoteUser -> "unknown".
+     * Extrahuje IP adresu klienta s podporou proxy hlaviček pro přesné logování.
+     * Priorita: X-Forwarded-For → RemoteUser → "unknown".
      *
-     * @param request WebRequest s HTTP headers
-     * @return client IP adresa nebo "unknown"
+     * @param request WebRequest s HTTP hlavičkami
+     * @return IP adresa klienta nebo "unknown"
      */
     protected String getRemoteAddress(WebRequest request) {
         String xForwardedFor = request.getHeader("X-Forwarded-For");

@@ -18,7 +18,6 @@ class UserState with _$UserState {
 
   const factory UserState.failure(String message) = _Failure;
 
-  // Speciální stavy pro jednorázové akce (Toast/Snackbar)
   const factory UserState.passwordChangeSuccess() = _PasswordChangeSuccess;
   const factory UserState.devicesLogoutSuccess() = _DevicesLogoutSuccess;
 }

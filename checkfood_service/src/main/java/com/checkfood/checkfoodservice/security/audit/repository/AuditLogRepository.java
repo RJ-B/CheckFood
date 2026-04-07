@@ -15,6 +15,8 @@ import java.time.Instant;
  * JPA repository pro správu auditních záznamů v databázi.
  * Poskytuje metody pro dotazování a mazání auditních logů.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see AuditLogEntity
  */
 @Repository

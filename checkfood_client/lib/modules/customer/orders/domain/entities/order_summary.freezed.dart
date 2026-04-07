@@ -23,6 +23,7 @@ mixin _$OrderSummary {
   String get currency => throw _privateConstructorUsedError;
   int get itemCount => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
+  String? get paymentStatus => throw _privateConstructorUsedError;
 
   /// Create a copy of OrderSummary
   /// with the given fields replaced by the non-null parameter values.
@@ -45,6 +46,7 @@ abstract class $OrderSummaryCopyWith<$Res> {
     String currency,
     int itemCount,
     String createdAt,
+    String? paymentStatus,
   });
 }
 
@@ -69,6 +71,7 @@ class _$OrderSummaryCopyWithImpl<$Res, $Val extends OrderSummary>
     Object? currency = null,
     Object? itemCount = null,
     Object? createdAt = null,
+    Object? paymentStatus = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -102,6 +105,11 @@ class _$OrderSummaryCopyWithImpl<$Res, $Val extends OrderSummary>
                     ? _value.createdAt
                     : createdAt // ignore: cast_nullable_to_non_nullable
                         as String,
+            paymentStatus:
+                freezed == paymentStatus
+                    ? _value.paymentStatus
+                    : paymentStatus // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -124,6 +132,7 @@ abstract class _$$OrderSummaryImplCopyWith<$Res>
     String currency,
     int itemCount,
     String createdAt,
+    String? paymentStatus,
   });
 }
 
@@ -147,6 +156,7 @@ class __$$OrderSummaryImplCopyWithImpl<$Res>
     Object? currency = null,
     Object? itemCount = null,
     Object? createdAt = null,
+    Object? paymentStatus = freezed,
   }) {
     return _then(
       _$OrderSummaryImpl(
@@ -180,6 +190,11 @@ class __$$OrderSummaryImplCopyWithImpl<$Res>
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                     as String,
+        paymentStatus:
+            freezed == paymentStatus
+                ? _value.paymentStatus
+                : paymentStatus // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -195,6 +210,7 @@ class _$OrderSummaryImpl extends _OrderSummary {
     required this.currency,
     required this.itemCount,
     required this.createdAt,
+    this.paymentStatus,
   }) : super._();
 
   @override
@@ -209,10 +225,12 @@ class _$OrderSummaryImpl extends _OrderSummary {
   final int itemCount;
   @override
   final String createdAt;
+  @override
+  final String? paymentStatus;
 
   @override
   String toString() {
-    return 'OrderSummary(id: $id, status: $status, totalPriceMinor: $totalPriceMinor, currency: $currency, itemCount: $itemCount, createdAt: $createdAt)';
+    return 'OrderSummary(id: $id, status: $status, totalPriceMinor: $totalPriceMinor, currency: $currency, itemCount: $itemCount, createdAt: $createdAt, paymentStatus: $paymentStatus)';
   }
 
   @override
@@ -229,7 +247,9 @@ class _$OrderSummaryImpl extends _OrderSummary {
             (identical(other.itemCount, itemCount) ||
                 other.itemCount == itemCount) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.paymentStatus, paymentStatus) ||
+                other.paymentStatus == paymentStatus));
   }
 
   @override
@@ -241,6 +261,7 @@ class _$OrderSummaryImpl extends _OrderSummary {
     currency,
     itemCount,
     createdAt,
+    paymentStatus,
   );
 
   /// Create a copy of OrderSummary
@@ -260,6 +281,7 @@ abstract class _OrderSummary extends OrderSummary {
     required final String currency,
     required final int itemCount,
     required final String createdAt,
+    final String? paymentStatus,
   }) = _$OrderSummaryImpl;
   const _OrderSummary._() : super._();
 
@@ -275,6 +297,8 @@ abstract class _OrderSummary extends OrderSummary {
   int get itemCount;
   @override
   String get createdAt;
+  @override
+  String? get paymentStatus;
 
   /// Create a copy of OrderSummary
   /// with the given fields replaced by the non-null parameter values.

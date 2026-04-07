@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * JPA repozitář pro entitu {@link UserFavouriteRestaurant} poskytující dotazy pro správu oblíbených
+ * restaurací uživatele — přidání, odebrání, kontrola existence a načtení seznamu.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Repository
 public interface UserFavouriteRestaurantRepository extends JpaRepository<UserFavouriteRestaurant, Long> {
 

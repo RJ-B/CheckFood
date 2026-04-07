@@ -4,6 +4,7 @@ import '../../../../config/security_json_keys.dart';
 part 'login_request_model.freezed.dart';
 part 'login_request_model.g.dart';
 
+/// Datový model pro přihlašovací požadavek.
 @freezed
 class LoginRequestModel with _$LoginRequestModel {
   const factory LoginRequestModel({

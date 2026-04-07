@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/theme/colors.dart';
 
+import '../../domain/entities/reservation.dart';
 import '../bloc/my_reservations_bloc.dart';
 import '../bloc/my_reservations_event.dart';
 import '../bloc/my_reservations_state.dart';
@@ -9,6 +10,8 @@ import '../widgets/edit_reservation_sheet.dart';
 import '../widgets/reservation_card.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
+/// Screen displaying the user's upcoming and past reservations with support for
+/// editing, cancelling, responding to pending change proposals, and creating recurring reservations.
 class ReservationsScreen extends StatefulWidget {
   const ReservationsScreen({super.key});
 
@@ -16,11 +19,15 @@ class ReservationsScreen extends StatefulWidget {
   State<ReservationsScreen> createState() => _ReservationsScreenState();
 }
 
+/// State for [ReservationsScreen]: triggers the initial load of reservations
+/// and pending changes on mount.
 class _ReservationsScreenState extends State<ReservationsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<MyReservationsBloc>().add(const MyReservationsEvent.load());
+    context.read<MyReservationsBloc>()
+      ..add(const MyReservationsEvent.load())
+      ..add(const MyReservationsEvent.loadPendingChanges());
   }
 
   @override
@@ -88,7 +95,6 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               children: [
-                // ── Upcoming section ──
                 _SectionHeader(
                   title: l.upcoming,
                   icon: Icons.event_available,
@@ -99,10 +105,30 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                     icon: Icons.calendar_today_outlined,
                   )
                 else
-                  ...state.upcoming.map(
-                    (r) => ReservationCard(
+                  ...state.upcoming.map((r) {
+                    final pendingChange = state.pendingChanges
+                        .where((c) => c.reservationId == r.id)
+                        .firstOrNull;
+                    return ReservationCard(
                       reservation: r,
                       isCancelling: state.cancellingId == r.id,
+                      pendingChange: pendingChange,
+                      isPendingChangeLoading:
+                          state.pendingChangeActionId != null &&
+                          pendingChange != null &&
+                          state.pendingChangeActionId == pendingChange.id,
+                      onAcceptChange: pendingChange != null
+                          ? () => context.read<MyReservationsBloc>().add(
+                                MyReservationsEvent.acceptChangeRequest(
+                                    changeRequestId: pendingChange.id),
+                              )
+                          : null,
+                      onDeclineChange: pendingChange != null
+                          ? () => context.read<MyReservationsBloc>().add(
+                                MyReservationsEvent.declineChangeRequest(
+                                    changeRequestId: pendingChange.id),
+                              )
+                          : null,
                       onEdit: () {
                         context.read<MyReservationsBloc>().add(
                               MyReservationsEvent.startEdit(reservation: r),
@@ -110,12 +136,12 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                         _showEditSheet(context);
                       },
                       onCancel: () => _showCancelDialog(context, r.id),
-                    ),
-                  ),
+                      onCreateRecurring: () => _showCreateRecurringDialog(context, r),
+                    );
+                  }),
 
                 const SizedBox(height: 24),
 
-                // ── History section ──
                 _SectionHeader(
                   title: l.history,
                   icon: Icons.history,
@@ -132,6 +158,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                       isCancelling: false,
                       onEdit: null,
                       onCancel: null,
+                      onCreateRecurring: () => _showCreateRecurringDialog(context, r),
                     ),
                   ),
                   if (!state.showingAllHistory &&
@@ -176,6 +203,76 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
     );
   }
 
+  void _showCreateRecurringDialog(BuildContext context, Reservation reservation) {
+    final days = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
+    final resDate = DateTime.tryParse(reservation.date ?? '');
+    int selectedDay = resDate != null ? resDate.weekday : 1;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Vytvořit opakovanou rezervaci'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${reservation.restaurantName ?? "Restaurace"} — ${reservation.tableLabel ?? "Stůl"}',
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              Text(
+                'Čas: ${reservation.startTime?.substring(0, 5) ?? ""}',
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+              ),
+              const SizedBox(height: 16),
+              const Text('Den v týdnu:', style: TextStyle(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<int>(
+                value: selectedDay,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                ),
+                items: List.generate(7, (i) => DropdownMenuItem(
+                  value: i + 1,
+                  child: Text(days[i]),
+                )),
+                onChanged: (val) => setDialogState(() => selectedDay = val ?? selectedDay),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Rezervace bude čekat na potvrzení od restaurace.',
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Zrušit'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                context.read<MyReservationsBloc>().add(
+                  MyReservationsEvent.createRecurring(
+                    restaurantId: reservation.restaurantId ?? '',
+                    tableId: reservation.tableId ?? '',
+                    dayOfWeek: selectedDay.toString(),
+                    startTime: reservation.startTime?.substring(0, 5) ?? '18:00',
+                    partySize: reservation.partySize ?? 2,
+                  ),
+                );
+              },
+              child: const Text('Vytvořit'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showCancelDialog(BuildContext context, String reservationId) {
     final l = S.of(context);
     showDialog(
@@ -204,8 +301,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   }
 }
 
-// ── Section Header ───────────────────────────────────────────────────────
-
+/// A section heading row with a leading icon and title text.
 class _SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -233,8 +329,7 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-// ── Empty State ──────────────────────────────────────────────────────────
-
+/// A centred placeholder shown when a section has no items.
 class _EmptyState extends StatelessWidget {
   final String message;
   final IconData icon;

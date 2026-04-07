@@ -4,12 +4,11 @@ import com.checkfood.checkfoodservice.security.logging.SecurityLogger;
 import org.springframework.stereotype.Component;
 
 /**
- * Specializovaný logger pro autentizační operace.
- * Dědí ze SecurityLogger a poskytuje sémantické metody pro logování
- * POUZE ÚSPĚŠNÝCH událostí (Happy Path).
+ * Specializovaný logger pro autentizační operace (happy path).
+ * Chybové stavy a bezpečnostní incidenty jsou logovány v {@code AuthExceptionHandler}.
  *
- * Chybové stavy a bezpečnostní incidenty jsou logovány v AuthExceptionHandler.
- *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see SecurityLogger
  * @see com.checkfood.checkfoodservice.security.module.auth.exception.AuthExceptionHandler
  */
@@ -18,7 +17,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje úspěšné přihlášení uživatele.
-     * Voláno po úspěšném ověření hesla a vygenerování tokenů.
+     *
+     * @param email email přihlášeného uživatele
      */
     public void logSuccessfulLogin(String email) {
         this.info("Uživatel '{}' se úspěšně přihlásil.", email);
@@ -26,7 +26,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje registraci nového uživatele.
-     * Voláno po uložení entity do databáze.
+     *
+     * @param email email registrovaného uživatele
      */
     public void logRegistration(String email) {
         this.info("Registrace nového uživatele '{}' proběhla úspěšně.", email);
@@ -34,6 +35,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje odeslání verifikačního emailu.
+     *
+     * @param email cílová emailová adresa
      */
     public void logVerificationEmailSent(String email) {
         this.info("Odesílám verifikační email na adresu '{}'.", email);
@@ -41,6 +44,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje úspěšnou aktivaci účtu.
+     *
+     * @param email email aktivovaného uživatele
      */
     public void logAccountActivated(String email) {
         this.info("Účet '{}' byl úspěšně aktivován a je připraven k použití.", email);
@@ -48,6 +53,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje žádost o opětovné zaslání verifikačního kódu.
+     *
+     * @param email email uživatele, jemuž se zasílá nový kód
      */
     public void logResendVerificationCode(String email) {
         this.info("Zasílám nový verifikační kód pro uživatele '{}'.", email);
@@ -55,14 +62,17 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje odhlášení uživatele.
+     *
+     * @param email email odhlášeného uživatele
      */
     public void logLogout(String email) {
         this.info("Uživatel '{}' se úspěšně odhlásil.", email);
     }
 
     /**
-     * Zaloguje obnovení přístupového tokenu (Refresh).
-     * Logujeme jako INFO, protože jde o významnou bezpečnostní událost (prodloužení session).
+     * Zaloguje obnovení přístupového tokenu.
+     *
+     * @param email email uživatele, jehož token byl obnoven
      */
     public void logTokenRefresh(String email) {
         this.info("Obnovení přístupového tokenu (Refresh) pro uživatele '{}'.", email);
@@ -70,6 +80,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje žádost o obnovu hesla.
+     *
+     * @param email email uživatele, který žádá o reset hesla
      */
     public void logPasswordResetRequested(String email) {
         this.info("Žádost o obnovu hesla pro uživatele '{}'.", email);
@@ -77,6 +89,8 @@ public class AuthLogger extends SecurityLogger {
 
     /**
      * Zaloguje úspěšný reset hesla.
+     *
+     * @param email email uživatele, jehož heslo bylo resetováno
      */
     public void logPasswordResetCompleted(String email) {
         this.info("Heslo uživatele '{}' bylo úspěšně změněno přes reset odkaz.", email);

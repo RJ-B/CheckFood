@@ -11,29 +11,18 @@ class ReservationState with _$ReservationState {
   const ReservationState._();
 
   const factory ReservationState({
-    // Scene
     @Default(false) bool sceneLoading,
     ReservationScene? scene,
     String? sceneError,
-
-    // Statuses
     @Default([]) List<TableStatus> tableStatuses,
-
-    // Selection
     String? selectedTableId,
     String? selectedTableLabel,
     int? selectedTableCapacity,
     required String selectedDate,
-
-    // Party size
     @Default(2) int selectedPartySize,
-
-    // Slots
     @Default(false) bool slotsLoading,
     AvailableSlots? availableSlots,
     String? selectedStartTime,
-
-    // Submit
     @Default(false) bool submitting,
     @Default(false) bool submitSuccess,
     @Default(false) bool submitConflict,

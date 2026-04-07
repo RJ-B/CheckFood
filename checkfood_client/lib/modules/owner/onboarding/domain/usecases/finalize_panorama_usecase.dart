@@ -1,6 +1,7 @@
 import '../entities/panorama_session.dart';
 import '../repositories/onboarding_repository.dart';
 
+/// Signals the backend to start stitching a completed panorama session.
 class FinalizePanoramaUseCase {
   final OnboardingRepository _repository;
 

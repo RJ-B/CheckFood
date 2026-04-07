@@ -3,6 +3,8 @@ import 'package:gap/gap.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 
+/// Dialog vysvětlující, proč je potřeba přístup k poloze, a umožňující uživateli
+/// jej povolit nebo zadat polohu ručně.
 class LocationPermissionDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final VoidCallback onCancel;

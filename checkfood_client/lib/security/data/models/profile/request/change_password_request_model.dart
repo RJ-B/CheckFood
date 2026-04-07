@@ -4,6 +4,7 @@ import '../../../../config/security_json_keys.dart';
 part 'change_password_request_model.freezed.dart';
 part 'change_password_request_model.g.dart';
 
+/// Datový model pro požadavek změny hesla.
 @freezed
 class ChangePasswordRequestModel with _$ChangePasswordRequestModel {
   const factory ChangePasswordRequestModel({

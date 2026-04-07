@@ -13,6 +13,7 @@ import 'package:checkfood_client/modules/customer/restaurant/data/models/request
 import 'package:checkfood_client/modules/customer/restaurant/data/models/request/restaurant_request_model.dart';
 import 'package:checkfood_client/modules/customer/restaurant/data/models/request/restaurant_table_request_model.dart';
 import 'package:checkfood_client/modules/customer/restaurant/domain/entities/restaurant_marker.dart';
+import 'package:checkfood_client/modules/customer/restaurant/domain/entities/restaurant_marker_light.dart';
 import 'package:checkfood_client/modules/customer/restaurant/domain/entities/restaurant_table.dart';
 
 // --- Fakes ---
@@ -46,6 +47,10 @@ class FakeRestaurantRepository implements RestaurantRepository {
   Future<RestaurantTable> addTable(String restaurantId, RestaurantTableRequestModel request) => throw UnimplementedError();
   @override
   Future<List<RestaurantTable>> getTables(String restaurantId) async => [];
+  @override
+  Future<({int version, List<RestaurantMarkerLight> data})> getAllMarkers() async => (version: 1, data: <RestaurantMarkerLight>[]);
+  @override
+  Future<int> getMarkersVersion() async => 1;
 }
 
 class FakeFavouriteDataSource implements FavouriteRemoteDataSource {

@@ -6,6 +6,7 @@ import '../common/opening_hours_model.dart';
 part 'restaurant_request_model.freezed.dart';
 part 'restaurant_request_model.g.dart';
 
+/// Request payload for creating a new restaurant listing.
 @freezed
 class RestaurantRequestModel with _$RestaurantRequestModel {
   const factory RestaurantRequestModel({

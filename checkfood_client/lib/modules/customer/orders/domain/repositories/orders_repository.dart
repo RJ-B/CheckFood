@@ -2,6 +2,7 @@ import '../entities/dining_context.dart';
 import '../entities/menu_category.dart';
 import '../entities/order_summary.dart';
 
+/// Doménový kontrakt pro repozitář objednávek.
 abstract class OrdersRepository {
   Future<DiningContext> getDiningContext();
 
@@ -13,4 +14,8 @@ abstract class OrdersRepository {
   });
 
   Future<List<OrderSummary>> getCurrentOrders();
+
+  Future<String> initiatePayment(String orderId);
+
+  Future<String> getPaymentStatus(String orderId);
 }

@@ -20,12 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 /**
- * Implementace OAuth flow.
+ * Implementace OAuth autentizačního flow zahrnující ověření tokenu, JIT provisioning uživatele,
+ * registraci zařízení a vydání JWT tokenů.
  *
- * Změny pro JDK 21:
- * - Odstraněny try-catch bloky pro logování chyb.
- * - Výjimky se propagují (nebo balí do OAuthException) a řeší je Handler.
- * - Logování pouze happy path (pokus, verifikace OK, login OK).
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Service
 @RequiredArgsConstructor
@@ -45,41 +44,30 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     @Transactional
     public AuthResponse login(OAuthLoginRequest request) {
-        // 1. Logování pokusu (Info)
         oauthLogger.logAuthenticationAttempt(request.getProvider());
 
-        // 2. Verifikace u providera
         OAuthUserInfo userInfo;
         try {
             var client = oauthClientFactory.getClient(request.getProvider());
             userInfo = client.verifyAndGetUserInfo(request.getIdToken());
         } catch (IllegalArgumentException e) {
-            // Factory nenašla klienta -> Nepodporovaný provider (Handler zaloguje)
             throw OAuthException.providerNotSupported(request.getProvider().toString());
         } catch (Exception e) {
-            // Chyba knihovny nebo neplatný token (Handler zaloguje i s cause)
             throw OAuthException.invalidToken(e.getMessage());
         }
 
-        // Logování úspěšné verifikace
         oauthLogger.logProviderVerificationSuccess(request.getProvider(), userInfo.getProviderUserId());
 
-        // Kontrola dat
         if (userInfo.getEmail() == null || userInfo.getEmail().isBlank()) {
             throw OAuthException.userDataMissing(request.getProvider().toString());
         }
 
-        // Doplnění jména
         if (isNameMissing(userInfo)) {
             userInfo = enrichUserInfoWithRequestData(userInfo, request);
         }
 
-        // 3. Získání/Vytvoření uživatele
         var user = oauthUserService.getOrCreateUser(userInfo);
 
-        // 4. Registrace zařízení
-        // Zde nespouštíme chybu, pokud selže statistika zařízení (silent fail),
-        // ale ani nelogujeme chybu (clean logs).
         String finalDeviceIdentifier = request.getDeviceIdentifier();
         try {
             var device = registerOrUpdateDevice(user, request);
@@ -87,10 +75,8 @@ public class OAuthServiceImpl implements OAuthService {
                 finalDeviceIdentifier = device.getDeviceIdentifier();
             }
         } catch (Exception ignored) {
-            // Ignorujeme chybu zařízení, nechceme blokovat login
         }
 
-        // 5. Generování tokenů
         try {
             String accessToken = jwtService.generateAccessToken(user, finalDeviceIdentifier);
             String refreshToken = jwtService.generateRefreshToken(user, finalDeviceIdentifier);
@@ -99,10 +85,17 @@ public class OAuthServiceImpl implements OAuthService {
 
             return oauthMapper.toResponse(accessToken, refreshToken, accessTokenExpiration, user);
         } catch (Exception e) {
-            throw OAuthException.internalError("Chyba při generování tokenů.", e);
+            throw OAuthException.internalError("Chyba pri generovani tokenu.", e);
         }
     }
 
+    /**
+     * Zaregistruje nebo aktualizuje záznam zařízení po úspěšném OAuth přihlášení.
+     *
+     * @param user přihlášený uživatel
+     * @param dto  OAuth požadavek obsahující metadata zařízení
+     * @return uložená entita zařízení nebo {@code null} pokud deviceIdentifier není uveden
+     */
     private DeviceEntity registerOrUpdateDevice(UserEntity user, OAuthLoginRequest dto) {
         if (dto.getDeviceIdentifier() == null) return null;
 
@@ -114,7 +107,7 @@ public class OAuthServiceImpl implements OAuthService {
                 });
 
         device.setUser(user);
-        device.setDeviceName(dto.getDeviceName() != null ? dto.getDeviceName() : "Neznámé OAuth zařízení");
+        device.setDeviceName(dto.getDeviceName() != null ? dto.getDeviceName() : "Nezname OAuth zarizeni");
         device.setDeviceType(dto.getDeviceType() != null ? dto.getDeviceType() : "UNKNOWN");
         device.setLastLogin(LocalDateTime.now());
 
@@ -128,10 +121,23 @@ public class OAuthServiceImpl implements OAuthService {
         return deviceService.save(device);
     }
 
+    /**
+     * Zjistí, zda chybí křestní jméno v datech uživatele z OAuth poskytovatele.
+     *
+     * @param userInfo data uživatele z poskytovatele
+     * @return {@code true} pokud křestní jméno chybí nebo je prázdné
+     */
     private boolean isNameMissing(OAuthUserInfo userInfo) {
         return userInfo.getFirstName() == null || userInfo.getFirstName().isBlank();
     }
 
+    /**
+     * Doplní chybějící jméno uživatele z dat přijatých v OAuth požadavku (použitelné pro Apple).
+     *
+     * @param info    data uživatele z poskytovatele
+     * @param request původní OAuth požadavek
+     * @return obohacená data uživatele
+     */
     private OAuthUserInfo enrichUserInfoWithRequestData(OAuthUserInfo info, OAuthLoginRequest request) {
         return OAuthUserInfo.builder()
                 .providerUserId(info.getProviderUserId())

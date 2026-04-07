@@ -3,22 +3,21 @@ package com.checkfood.checkfoodservice.security.module.oauth.module.google.prope
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration; // ✅ Přidáno
+import org.springframework.context.annotation.Configuration;
 import jakarta.validation.constraints.NotBlank;
 
 /**
- * Konfigurační vlastnosti pro Google OAuth.
- * Načítá hodnoty z application.yml pod prefixem security.oauth.google.
+ * Konfigurační vlastnosti pro Google OAuth načítané z application.properties
+ * pod prefixem security.oauth.google.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "security.oauth.google")
 public class GoogleOAuthProperties {
 
-    /**
-     * Google Client ID (Web Client ID z Google Cloud Console).
-     * Slouží k ověření 'aud' claimu v ID tokenu.
-     */
     @NotBlank(message = "Google Client ID nesmí být prázdné")
     private String clientId;
 }

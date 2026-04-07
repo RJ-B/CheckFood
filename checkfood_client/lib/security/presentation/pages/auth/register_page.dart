@@ -7,12 +7,12 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../widgets/auth/register_form.dart';
 
+/// Obrazovka registrace nového uživatele.
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Použití Theme pro konzistentní barvy
     final theme = Theme.of(context);
 
     final l = S.of(context);
@@ -39,16 +39,12 @@ class RegisterPage extends StatelessWidget {
               );
               Navigator.of(context).pushReplacementNamed(AppRouter.verifyEmail);
             },
-            // 2. CHYBA -> Zobrazení hlášky
             failure: (error) {
-              FocusScope.of(
-                context,
-              ).unfocus(); // Skrýt klávesnici pro lepší viditelnost chyby
+              FocusScope.of(context).unfocus();
 
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  // Zde se zobrazí lokalizovaná hláška, pokud ji backend/mapper připravil
                   content: Text(error.message),
                   backgroundColor: theme.colorScheme.error,
                   behavior: SnackBarBehavior.floating,
@@ -58,10 +54,8 @@ class RegisterPage extends StatelessWidget {
             orElse: () {},
           );
         },
-        // Použijeme Stack pro zobrazení Loading Overlay přes celou obrazovku
         child: Stack(
           children: [
-            // --- Hlavní obsah ---
             SafeArea(
               child: Center(
                 child: SingleChildScrollView(
@@ -75,8 +69,7 @@ class RegisterPage extends StatelessWidget {
                       Icon(
                         Icons.person_add_rounded,
                         size: 80,
-                        color:
-                            theme.colorScheme.primary, // Použití primární barvy
+                        color: theme.colorScheme.primary,
                       ),
                       const SizedBox(height: 24),
                       Text(
@@ -97,13 +90,10 @@ class RegisterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
 
-                      // --- Formulář ---
                       const RegisterForm(),
 
                       const SizedBox(height: 24),
 
-                      // --- Patička (Login link) ---
-                      // Obalíme do BlocBuilderu, abychom tento odkaz deaktivovali při načítání
                       BlocBuilder<AuthBloc, AuthState>(
                         builder: (context, state) {
                           final isLoading = state.maybeWhen(
@@ -156,8 +146,6 @@ class RegisterPage extends StatelessWidget {
               ),
             ),
 
-            // --- Loading Overlay ---
-            // Překryje celou obrazovku poloprůhlednou vrstvou, když se načítá
             BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 return state.maybeWhen(

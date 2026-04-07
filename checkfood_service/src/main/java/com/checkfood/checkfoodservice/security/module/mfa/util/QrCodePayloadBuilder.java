@@ -7,7 +7,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Builder pro QR payload (otpauth://).
+ * Builder pro sestavení otpauth:// URI payloadu určeného ke skenování QR kódem v autentizační aplikaci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class QrCodePayloadBuilder {
@@ -17,7 +20,11 @@ public class QrCodePayloadBuilder {
 
 
     /**
-     * Vytvoří payload pro QR kód.
+     * Sestaví otpauth:// URI pro skenování QR kódem v autentizační aplikaci.
+     *
+     * @param email  e-mailová adresa uživatele použitá jako label
+     * @param secret Base32 tajný klíč
+     * @return otpauth:// URI řetězec
      */
     public String build(String email, String secret) {
 

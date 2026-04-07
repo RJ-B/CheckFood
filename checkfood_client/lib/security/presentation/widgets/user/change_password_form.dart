@@ -9,6 +9,9 @@ import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
 import '../../bloc/user/user_state.dart';
 
+/// Formulář pro změnu hesla přihlášeného uživatele.
+///
+/// Vyžaduje stávající heslo a dvakrát nové heslo (s validací shody a síly).
 class ChangePasswordForm extends StatefulWidget {
   const ChangePasswordForm({super.key});
 
@@ -19,7 +22,6 @@ class ChangePasswordForm extends StatefulWidget {
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllery
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -38,7 +40,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
 
-      // Vytvoření modelu se správnými názvy parametrů
       final request = ChangePasswordRequestModel(
         currentPassword: _oldPasswordController.text,
         newPassword: _newPasswordController.text,

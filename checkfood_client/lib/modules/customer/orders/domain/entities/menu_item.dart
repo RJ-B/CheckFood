@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'menu_item.freezed.dart';
 
+/// A single orderable item from a restaurant's menu.
 @freezed
 class MenuItem with _$MenuItem {
   const MenuItem._();

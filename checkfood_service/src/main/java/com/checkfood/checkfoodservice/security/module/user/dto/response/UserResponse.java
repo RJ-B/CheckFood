@@ -6,6 +6,9 @@ import java.util.Set;
 /**
  * Základní identita uživatele pro potřeby autentizace.
  * Odpovídá UserResponseModel ve Flutteru.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -15,8 +18,10 @@ import java.util.Set;
 public class UserResponse {
     private Long id;
     private String email;
+    private String firstName;
+    private String lastName;
+    private String phone;
 
-    // Stav účtu
     private Boolean isActive;
 
     /**

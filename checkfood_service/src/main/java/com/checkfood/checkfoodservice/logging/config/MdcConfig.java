@@ -3,15 +3,13 @@ package com.checkfood.checkfoodservice.logging.config;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Konfigurace MDC (Mapped Diagnostic Context).
+ * Konfigurace MDC (Mapped Diagnostic Context) pro automatické přidávání kontextu do každého logu.
  *
- * MDC umožňuje:
- * - přidávat kontext (userId, traceId)
- * - automaticky ho mít v každém logu
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 public class MdcConfig {
 
-    // TODO:
-    // - definice MDC klíčů
+    // TODO: definice MDC klíčů (userId, traceId, requestId)
 }

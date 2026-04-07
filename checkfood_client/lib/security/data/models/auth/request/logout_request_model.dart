@@ -4,6 +4,7 @@ import '../../../../config/security_json_keys.dart';
 part 'logout_request_model.freezed.dart';
 part 'logout_request_model.g.dart';
 
+/// Datový model pro požadavek odhlášení.
 @freezed
 class LogoutRequestModel with _$LogoutRequestModel {
   const factory LogoutRequestModel({

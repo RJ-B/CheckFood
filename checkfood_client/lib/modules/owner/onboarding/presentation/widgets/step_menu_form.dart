@@ -7,6 +7,7 @@ import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 
+/// Onboarding step 4: form for building the restaurant's menu by creating categories and adding items with names, descriptions, and prices.
 class StepMenuForm extends StatefulWidget {
   const StepMenuForm({super.key});
 
@@ -14,6 +15,8 @@ class StepMenuForm extends StatefulWidget {
   State<StepMenuForm> createState() => _StepMenuFormState();
 }
 
+/// State for [StepMenuForm]: triggers the initial menu load and manages dialogs
+/// for creating categories and adding items.
 class _StepMenuFormState extends State<StepMenuForm> {
   bool _loaded = false;
 

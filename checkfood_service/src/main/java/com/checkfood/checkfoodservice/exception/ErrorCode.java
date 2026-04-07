@@ -3,6 +3,9 @@ package com.checkfood.checkfoodservice.exception;
 /**
  * Obecné chybové kódy pro celou aplikaci.
  * Poskytuje standardizované identifikátory chyb použitelné napříč všemi vrstvami.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public enum ErrorCode {
 

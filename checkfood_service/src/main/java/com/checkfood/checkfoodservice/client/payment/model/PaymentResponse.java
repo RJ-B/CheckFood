@@ -1,7 +1,10 @@
 package com.checkfood.checkfoodservice.client.payment.model;
 
 /**
- * Odpověď platebního systému.
+ * Odpověď platebního systému po provedení platby.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class PaymentResponse {
 

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../../core/theme/colors.dart';
-import '../../domain/entities/google_place.dart';
+import '../../domain/entities/restaurant.dart';
 
-class PlaceCard extends StatelessWidget {
-  final GooglePlace place;
+/// A compact list card showing a restaurant's thumbnail, name, address, and rating.
+class RestaurantListCard extends StatelessWidget {
+  final Restaurant restaurant;
   final VoidCallback? onTap;
 
-  const PlaceCard({super.key, required this.place, this.onTap});
+  const RestaurantListCard({super.key, required this.restaurant, this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = restaurant.coverImageUrl ?? restaurant.logoUrl;
+    final address = restaurant.address.fullAddress;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -23,15 +27,14 @@ class PlaceCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: SizedBox(
                 width: 64,
                 height: 64,
-                child: place.photoUrl != null
+                child: imageUrl != null
                     ? CachedNetworkImage(
-                        imageUrl: place.photoUrl!,
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
                         placeholder: (_, __) => _placeholder(),
                         errorWidget: (_, __, ___) => _placeholder(),
@@ -40,14 +43,13 @@ class PlaceCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    place.name,
+                    restaurant.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -56,10 +58,10 @@ class PlaceCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (place.address != null) ...[
+                  if (address.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
-                      place.address!,
+                      address,
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
@@ -69,9 +71,9 @@ class PlaceCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      if (place.rating != null) ...[
+                  if (restaurant.rating != null)
+                    Row(
+                      children: [
                         const Icon(
                           Icons.star_rounded,
                           size: 14,
@@ -79,46 +81,15 @@ class PlaceCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 2),
                         Text(
-                          place.rating!.toStringAsFixed(1),
+                          restaurant.rating!.toStringAsFixed(1),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        if (place.userRatingCount != null) ...[
-                          const SizedBox(width: 2),
-                          Text(
-                            '(${place.userRatingCount})',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textMuted,
-                            ),
-                          ),
-                        ],
-                        const SizedBox(width: 8),
                       ],
-                      if (place.isOpen)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.green.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'Otevřeno',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
                 ],
               ),
             ),

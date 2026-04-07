@@ -1,11 +1,10 @@
 package com.checkfood.checkfoodservice.monitoring.tracing;
 
 /**
- * Kontext trasování aktuálního requestu.
+ * Kontext trasování aktuálního requestu obsahující traceId a spanId.
  *
- * Obsahuje:
- * - traceId
- * - spanId
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class TraceContext {
 

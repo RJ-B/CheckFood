@@ -10,6 +10,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Implementace souborového úložiště ukládající soubory na lokální filesystem.
+ * Aktivní pro profily {@code local} a {@code test}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @Service
 @Profile({"local", "test"})
@@ -17,6 +24,11 @@ public class LocalFilesystemStorageService implements StorageService {
 
     private final Path uploadDir;
 
+    /**
+     * Vytvoří službu a zajistí existenci konfigurovaneho adresáře pro nahrávání souborů.
+     *
+     * @param uploadDirPath cesta k adresáři pro ukládání souborů (výchozí: {@code ./uploads})
+     */
     public LocalFilesystemStorageService(
             @Value("${app.storage.upload-dir:./uploads}") String uploadDirPath) {
         this.uploadDir = Paths.get(uploadDirPath).toAbsolutePath().normalize();
@@ -27,6 +39,9 @@ public class LocalFilesystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String store(String directory, String filename, byte[] data, String contentType) {
         try {
@@ -50,6 +65,9 @@ public class LocalFilesystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(String path) {
         try {
@@ -64,6 +82,9 @@ public class LocalFilesystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getPublicUrl(String path) {
         return "/uploads/" + path;

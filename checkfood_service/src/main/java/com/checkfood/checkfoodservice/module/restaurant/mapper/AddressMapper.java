@@ -4,21 +4,38 @@ import com.checkfood.checkfoodservice.module.restaurant.dto.common.AddressDto;
 import com.checkfood.checkfoodservice.module.restaurant.entity.common.Address;
 import org.mapstruct.*;
 
+/**
+ * MapStruct mapper pro konverzi mezi entitou {@link Address} a DTO {@link AddressDto}.
+ * Po vytvoření entity automaticky nastaví PostGIS Point ze souřadnic v DTO.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AddressMapper {
 
-    // Entity -> DTO
-    // Funguje automaticky, protože Address má getLatitude() a getLongitude()
+    /**
+     * Převede entitu adresy na DTO. Latitude a longitude jsou extrahovány z PostGIS Point.
+     *
+     * @param address entita adresy
+     * @return DTO adresy
+     */
     AddressDto toDto(Address address);
 
-    // DTO -> Entity
-    // MapStruct neví, jak nacpat lat/lng do "Point location", musíme mu pomoct
-    @Mapping(target = "location", ignore = true) // Ignorujeme přímé mapování, vyřešíme v @AfterMapping
+    /**
+     * Převede DTO adresy na entitu. Pole {@code location} je ignorováno — nastavuje se v {@link #mapCoordinates}.
+     *
+     * @param addressDto DTO adresy
+     * @return entita adresy bez PostGIS Point
+     */
+    @Mapping(target = "location", ignore = true)
     Address toEntity(AddressDto addressDto);
 
     /**
-     * Tato metoda se zavolá automaticky po vytvoření entity.
-     * Vezme lat/lng z DTO a pomocí tvé metody setCoordinates vytvoří PostGIS Point.
+     * After-mapping hook: vytvoří PostGIS Point ze souřadnic v DTO a nastaví ho na entitě.
+     *
+     * @param dto    zdrojové DTO s latitude a longitude
+     * @param entity cílová entita, na které bude nastaven PostGIS Point
      */
     @AfterMapping
     default void mapCoordinates(AddressDto dto, @MappingTarget Address entity) {

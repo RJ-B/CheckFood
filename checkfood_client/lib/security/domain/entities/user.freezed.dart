@@ -21,6 +21,9 @@ mixin _$User {
   String get email => throw _privateConstructorUsedError;
   UserRole get role => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  String get firstName => throw _privateConstructorUsedError;
+  String get lastName => throw _privateConstructorUsedError;
+  String get phone => throw _privateConstructorUsedError;
   List<String> get permissions => throw _privateConstructorUsedError;
   bool get needsRestaurantClaim => throw _privateConstructorUsedError;
   bool get needsOnboarding => throw _privateConstructorUsedError;
@@ -41,6 +44,9 @@ abstract class $UserCopyWith<$Res> {
     String email,
     UserRole role,
     bool isActive,
+    String firstName,
+    String lastName,
+    String phone,
     List<String> permissions,
     bool needsRestaurantClaim,
     bool needsOnboarding,
@@ -66,6 +72,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? email = null,
     Object? role = null,
     Object? isActive = null,
+    Object? firstName = null,
+    Object? lastName = null,
+    Object? phone = null,
     Object? permissions = null,
     Object? needsRestaurantClaim = null,
     Object? needsOnboarding = null,
@@ -92,6 +101,21 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
                     ? _value.isActive
                     : isActive // ignore: cast_nullable_to_non_nullable
                         as bool,
+            firstName:
+                null == firstName
+                    ? _value.firstName
+                    : firstName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            lastName:
+                null == lastName
+                    ? _value.lastName
+                    : lastName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            phone:
+                null == phone
+                    ? _value.phone
+                    : phone // ignore: cast_nullable_to_non_nullable
+                        as String,
             permissions:
                 null == permissions
                     ? _value.permissions
@@ -126,6 +150,9 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
     String email,
     UserRole role,
     bool isActive,
+    String firstName,
+    String lastName,
+    String phone,
     List<String> permissions,
     bool needsRestaurantClaim,
     bool needsOnboarding,
@@ -148,6 +175,9 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? email = null,
     Object? role = null,
     Object? isActive = null,
+    Object? firstName = null,
+    Object? lastName = null,
+    Object? phone = null,
     Object? permissions = null,
     Object? needsRestaurantClaim = null,
     Object? needsOnboarding = null,
@@ -174,6 +204,21 @@ class __$$UserImplCopyWithImpl<$Res>
                 ? _value.isActive
                 : isActive // ignore: cast_nullable_to_non_nullable
                     as bool,
+        firstName:
+            null == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        lastName:
+            null == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        phone:
+            null == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                    as String,
         permissions:
             null == permissions
                 ? _value._permissions
@@ -202,6 +247,9 @@ class _$UserImpl extends _User {
     required this.email,
     required this.role,
     required this.isActive,
+    this.firstName = '',
+    this.lastName = '',
+    this.phone = '',
     final List<String> permissions = const [],
     this.needsRestaurantClaim = false,
     this.needsOnboarding = false,
@@ -216,6 +264,15 @@ class _$UserImpl extends _User {
   final UserRole role;
   @override
   final bool isActive;
+  @override
+  @JsonKey()
+  final String firstName;
+  @override
+  @JsonKey()
+  final String lastName;
+  @override
+  @JsonKey()
+  final String phone;
   final List<String> _permissions;
   @override
   @JsonKey()
@@ -234,7 +291,7 @@ class _$UserImpl extends _User {
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, role: $role, isActive: $isActive, permissions: $permissions, needsRestaurantClaim: $needsRestaurantClaim, needsOnboarding: $needsOnboarding)';
+    return 'User(id: $id, email: $email, role: $role, isActive: $isActive, firstName: $firstName, lastName: $lastName, phone: $phone, permissions: $permissions, needsRestaurantClaim: $needsRestaurantClaim, needsOnboarding: $needsOnboarding)';
   }
 
   @override
@@ -247,6 +304,11 @@ class _$UserImpl extends _User {
             (identical(other.role, role) || other.role == role) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
+            (identical(other.firstName, firstName) ||
+                other.firstName == firstName) &&
+            (identical(other.lastName, lastName) ||
+                other.lastName == lastName) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
             const DeepCollectionEquality().equals(
               other._permissions,
               _permissions,
@@ -264,6 +326,9 @@ class _$UserImpl extends _User {
     email,
     role,
     isActive,
+    firstName,
+    lastName,
+    phone,
     const DeepCollectionEquality().hash(_permissions),
     needsRestaurantClaim,
     needsOnboarding,
@@ -284,6 +349,9 @@ abstract class _User extends User {
     required final String email,
     required final UserRole role,
     required final bool isActive,
+    final String firstName,
+    final String lastName,
+    final String phone,
     final List<String> permissions,
     final bool needsRestaurantClaim,
     final bool needsOnboarding,
@@ -298,6 +366,12 @@ abstract class _User extends User {
   UserRole get role;
   @override
   bool get isActive;
+  @override
+  String get firstName;
+  @override
+  String get lastName;
+  @override
+  String get phone;
   @override
   List<String> get permissions;
   @override

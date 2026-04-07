@@ -15,14 +15,21 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Implementation of custom repository using EntityManager for dynamic native SQL.
- * Spring Data JPA auto-detects this via the "Impl" suffix convention.
+ * Implementace vlastního fragmentu repozitáře využívající EntityManager pro dynamické nativní SQL dotazy.
+ * Spring Data JPA tuto implementaci detekuje automaticky díky suffixu "Impl".
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * {@inheritDoc}
+     * Deleguje na přetíženou variantu s {@code favouriteIds = null}.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public Page<Restaurant> findNearestWithFilters(
@@ -37,6 +44,10 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         return findNearestWithFilters(lat, lng, searchQuery, cuisineTypes, minRating, openNow, null, pageable);
     }
 
+    /**
+     * {@inheritDoc}
+     * Dynamicky sestavuje nativní SQL dotaz na základě předaných filtrů a spouští jej pomocí EntityManager.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public Page<Restaurant> findNearestWithFilters(
@@ -52,22 +63,16 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         StringBuilder sql = new StringBuilder();
         StringBuilder countSql = new StringBuilder();
 
-        // Base query
         sql.append("SELECT * FROM restaurant r WHERE r.is_active = true");
         countSql.append("SELECT COUNT(*) FROM restaurant r WHERE r.is_active = true");
 
-        // Dynamic WHERE clauses
         String filters = buildFilterClauses(searchQuery, cuisineTypes, minRating, openNow, favouriteIds);
         sql.append(filters);
         countSql.append(filters);
 
-        // K-NN ordering
         sql.append(" ORDER BY r.location <-> ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)");
-
-        // Pagination
         sql.append(" LIMIT :limit OFFSET :offset");
 
-        // Data query
         Query dataQuery = entityManager.createNativeQuery(sql.toString(), Restaurant.class);
         setParameters(dataQuery, lat, lng, searchQuery, cuisineTypes, minRating, openNow, favouriteIds);
         dataQuery.setParameter("limit", pageable.getPageSize());
@@ -75,7 +80,6 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
 
         List<Restaurant> results = dataQuery.getResultList();
 
-        // Count query
         Query countQuery = entityManager.createNativeQuery(countSql.toString());
         setParameters(countQuery, lat, lng, searchQuery, cuisineTypes, minRating, openNow, favouriteIds);
         long total = ((Number) countQuery.getSingleResult()).longValue();
@@ -83,6 +87,16 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         return new PageImpl<>(results, pageable, total);
     }
 
+    /**
+     * Sestaví dynamické klauzule WHERE na základě zadaných filtrů.
+     *
+     * @param searchQuery  fulltextový výraz (může být null)
+     * @param cuisineTypes typy kuchyní (může být null nebo prázdný)
+     * @param minRating    minimální hodnocení (může být null)
+     * @param openNow      filtr pouze otevřených (může být null)
+     * @param favouriteIds sada ID oblíbených (může být null nebo prázdná)
+     * @return řetězec s SQL podmínkami začínající mezerou
+     */
     private String buildFilterClauses(
             String searchQuery,
             List<String> cuisineTypes,
@@ -121,6 +135,19 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         return clauses.toString();
     }
 
+    /**
+     * Nastaví parametry dotazu na základě zadaných filtrů.
+     * Parametry lat/lng jsou nastaveny v try-catch, protože count dotaz je nemá.
+     *
+     * @param query        dotaz, na který se nastavují parametry
+     * @param lat          zeměpisná šířka
+     * @param lng          zeměpisná délka
+     * @param searchQuery  fulltextový výraz
+     * @param cuisineTypes typy kuchyní
+     * @param minRating    minimální hodnocení
+     * @param openNow      filtr otevřených
+     * @param favouriteIds sada oblíbených ID
+     */
     private void setParameters(
             Query query,
             double lat,
@@ -131,12 +158,11 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
             Boolean openNow,
             Set<UUID> favouriteIds
     ) {
-        // Always set lat/lng — count query doesn't use them but won't fail with extra params
         try {
             query.setParameter("lat", lat);
             query.setParameter("lng", lng);
         } catch (IllegalArgumentException ignored) {
-            // Count query doesn't have lat/lng params
+            // Count dotaz nepoužívá parametry lat/lng
         }
 
         if (searchQuery != null && !searchQuery.isBlank()) {

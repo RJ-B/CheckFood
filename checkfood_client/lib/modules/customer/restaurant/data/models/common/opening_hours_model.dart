@@ -4,22 +4,22 @@ import '../../../domain/entities/opening_hours.dart';
 part 'opening_hours_model.freezed.dart';
 part 'opening_hours_model.g.dart';
 
+/// API response/request model for a single day's opening hours.
 @freezed
 class OpeningHoursModel with _$OpeningHoursModel {
   const OpeningHoursModel._();
 
   const factory OpeningHoursModel({
-    @JsonKey(name: 'dayOfWeek') required String dayString, // Přijme "MONDAY"
+    @JsonKey(name: 'dayOfWeek') required String dayString,
     String? openAt,
     String? closeAt,
     @JsonKey(name: 'closed')
-    required bool isClosed, // Mapuje 'closed' z JSONu na 'isClosed'
+    required bool isClosed,
   }) = _OpeningHoursModel;
 
   factory OpeningHoursModel.fromJson(Map<String, dynamic> json) =>
       _$OpeningHoursModelFromJson(json);
 
-  /// Bezpečný převod na doménovou entitu
   OpeningHours toEntity() {
     return OpeningHours(
       dayOfWeek: _mapDayToNumber(dayString),
@@ -29,7 +29,6 @@ class OpeningHoursModel with _$OpeningHoursModel {
     );
   }
 
-  /// Převede textový den na ISO standard (1-7)
   int _mapDayToNumber(String day) {
     switch (day.toUpperCase()) {
       case 'MONDAY':
@@ -47,7 +46,7 @@ class OpeningHoursModel with _$OpeningHoursModel {
       case 'SUNDAY':
         return 7;
       default:
-        return 1; // Fallback pro nečekané hodnoty
+        return 1;
     }
   }
 }

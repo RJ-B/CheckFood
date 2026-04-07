@@ -7,10 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Entita reprezentující uživatelskou roli v systému.
- * Role definují základní rozsah oprávnění (např. ADMIN, USER, MODERATOR).
- * Každá role může obsahovat sadu jemnějších oprávnění (permissions).
+ * JPA entita reprezentující uživatelskou roli v RBAC systému.
+ * Role definují základní rozsah oprávnění a mohou obsahovat sadu jemnějších oprávnění.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see UserEntity
  * @see PermissionEntity
  */

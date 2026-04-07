@@ -3,6 +3,9 @@ package com.checkfood.checkfoodservice.security.audit.event;
 /**
  * Enumrace stavů výsledku auditované akce.
  * Určuje, zda byla akce úspěšně dokončena, selhala nebo byla zablokována.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public enum AuditStatus {
 

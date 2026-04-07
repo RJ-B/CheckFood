@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Definuje kategorie kuchyní pro účely kategorizace a filtrování restaurací.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @RequiredArgsConstructor

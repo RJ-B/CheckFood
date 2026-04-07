@@ -39,6 +39,9 @@ class EditorTable {
       };
 }
 
+/// Full-screen panorama editor that loads a 360° image into a Three.js WebView
+/// and lets the owner place, label, and save table markers by clicking on the
+/// panorama surface.
 class PanoramaEditorScreen extends StatefulWidget {
   final String panoramaUrl;
   final List<EditorTable> existingTables;
@@ -55,6 +58,8 @@ class PanoramaEditorScreen extends StatefulWidget {
   State<PanoramaEditorScreen> createState() => _PanoramaEditorScreenState();
 }
 
+/// State for [PanoramaEditorScreen]: initialises the WebView, bridges JS messages,
+/// and manages the mutable list of [EditorTable] markers.
 class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
   late final WebViewController _webController;
   bool _webViewReady = false;
@@ -114,7 +119,6 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
     final yaw = (data['yaw'] as num).toDouble();
     final pitch = (data['pitch'] as num).toDouble();
 
-    // Show dialog to set label and capacity
     _showEditDialog(
       title: S.of(context).newTable,
       initialLabel: S.of(context).table,
@@ -207,7 +211,6 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
     }
   }
 
-  // Push panorama + tables to JS
   void _pushDataToJs() {
     if (!_webViewReady || _dataPushed) return;
     _dataPushed = true;
@@ -233,9 +236,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
       final bundle = await NetworkAssetBundle(Uri.parse(fullUrl)).load(fullUrl);
       final base64 = base64Encode(bundle.buffer.asUint8List());
       _webController.runJavaScript("window.setPanoramaBase64('$base64')");
-    } catch (e) {
-      debugPrint('[PanoramaEditor] Failed to load panorama: $e');
-    }
+    } catch (_) {}
   }
 
   String _escapeJs(String s) => s.replaceAll('\\', '\\\\').replaceAll("'", "\\'");

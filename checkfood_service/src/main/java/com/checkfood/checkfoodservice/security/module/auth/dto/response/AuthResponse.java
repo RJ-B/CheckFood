@@ -4,10 +4,10 @@ import com.checkfood.checkfoodservice.security.module.user.dto.response.UserResp
 import lombok.*;
 
 /**
- * Response DTO pro úspěšnou autentizaci obsahující JWT tokens a user profile.
+ * Response DTO pro úspěšnou autentizaci obsahující JWT tokeny a profil uživatele.
  *
- * Kompletní authentication response kombinující session tokens s user
- * information pro client-side state initialization po successful login.
+ * Úplná autentizační odpověď kombinující session tokeny s informacemi o uživateli
+ * pro inicializaci stavu klienta po úspěšném přihlášení.
  *
  * @author Rostislav Jirák
  * @version 1.0.0
@@ -21,30 +21,30 @@ import lombok.*;
 public class AuthResponse {
 
     /**
-     * JWT access token pro API authorization.
-     * Short-lived token používaný v Authorization header jako "Bearer {token}".
+     * JWT access token pro autorizaci API.
+     * Krátkodobý token používaný v hlavičce Authorization ve formátu "Bearer {token}".
      */
     private String accessToken;
 
     /**
-     * Refresh token pro access token renewal.
-     * Long-lived token pro seamless session extension bez re-authentication.
+     * Refresh token pro obnovu access tokenu.
+     * Dlouhodobý token pro plynulé prodloužení relace bez opětovné autentizace.
      */
     private String refreshToken;
 
     /**
-     * Token type identifier pro Authorization header formatting.
+     * Typ tokenu pro formátování hlavičky Authorization.
      */
     @Builder.Default
     private String tokenType = "Bearer";
 
     /**
-     * Access token expiration time v sekundách pro client-side refresh logic.
+     * Čas platnosti access tokenu v sekundách pro logiku obnovy na straně klienta.
      */
     private Long expiresIn;
 
     /**
-     * Complete user profile information pro client state initialization.
+     * Úplné profilové informace uživatele pro inicializaci stavu klienta.
      */
     private UserResponse user;
 }

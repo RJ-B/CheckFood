@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'typography.dart';
 
+/// Továrna pro [ThemeData] aplikace CheckFood.
 class AppTheme {
+  /// Sestaví a vrátí světlé téma s Material 3.
   static ThemeData light() {
     return ThemeData(
       useMaterial3: true,
@@ -32,7 +34,7 @@ class AppTheme {
         bodySmall: AppTypography.bodySm,
         labelSmall: AppTypography.caption,
       ),
-      // --- Component themes ---
+      // --- Témata komponent ---
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,

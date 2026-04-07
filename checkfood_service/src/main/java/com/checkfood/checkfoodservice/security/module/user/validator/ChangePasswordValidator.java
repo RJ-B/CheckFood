@@ -6,10 +6,11 @@ import com.checkfood.checkfoodservice.security.module.user.exception.UserExcepti
 import org.springframework.stereotype.Component;
 
 /**
- * Validátor pro změnu hesla uživatele.
- * Řeší business pravidla nad rámec základních @Valid anotací.
- * Kontroluje shodu nového hesla s potvrzením a zajišťuje, že nové heslo je odlišné od současného.
+ * Validátor pro změnu hesla kontrolující business pravidla nad rámec standardních Jakarta anotací.
+ * Ověřuje shodu nového hesla s potvrzením a odlišnost od aktuálního hesla.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see ChangePasswordRequest
  */
 @Component

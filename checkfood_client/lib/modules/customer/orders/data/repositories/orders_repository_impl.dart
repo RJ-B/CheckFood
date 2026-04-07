@@ -6,6 +6,8 @@ import '../datasources/orders_remote_datasource.dart';
 import '../models/request/create_order_request_model.dart';
 import '../models/request/order_item_request_model.dart';
 
+/// Implementace repozitáře delegující na [OrdersRemoteDataSource]
+/// a mapující modely odpovědí na doménové entity.
 class OrdersRepositoryImpl implements OrdersRepository {
   final OrdersRemoteDataSource _remoteDataSource;
 
@@ -45,5 +47,15 @@ class OrdersRepositoryImpl implements OrdersRepository {
   Future<List<OrderSummary>> getCurrentOrders() async {
     final models = await _remoteDataSource.getCurrentOrders();
     return models.map((m) => m.toEntity()).toList();
+  }
+
+  @override
+  Future<String> initiatePayment(String orderId) async {
+    return await _remoteDataSource.initiatePayment(orderId);
+  }
+
+  @override
+  Future<String> getPaymentStatus(String orderId) async {
+    return await _remoteDataSource.getPaymentStatus(orderId);
   }
 }

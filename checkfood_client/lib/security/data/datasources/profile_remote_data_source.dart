@@ -4,14 +4,12 @@ import 'package:dio/dio.dart';
 
 import '../../config/security_endpoints.dart';
 
-// Importy Response Modelů
 import '../models/profile/response/user_profile_response_model.dart';
 import '../models/device/response/device_response_model.dart';
-
-// Importy Request Modelů
 import '../models/profile/request/update_profile_request_model.dart';
 import '../models/profile/request/change_password_request_model.dart';
 
+/// Abstraktní kontrakt pro vzdálený zdroj dat profilu a správy zařízení.
 abstract class ProfileRemoteDataSource {
   /// Načte profil uživatele (GET /api/user/me).
   Future<UserProfileResponseModel> getUserProfile();
@@ -27,8 +25,14 @@ abstract class ProfileRemoteDataSource {
 
   Future<void> logoutAllDevices();
 
-  /// Odhlásí konkrétní zařízení (DELETE /api/user/devices/{id}).
+  /// Odhlásí (deaktivuje) konkrétní zařízení (POST /api/user/devices/{id}/logout).
   Future<void> logoutDevice(int deviceId);
+
+  /// Smaže konkrétní zařízení z DB (DELETE /api/user/devices/{id}).
+  Future<void> deleteDevice(int deviceId);
+
+  /// Smaže všechna zařízení kromě aktuálního (DELETE /api/user/devices/all).
+  Future<void> deleteAllDevices();
 
   /// Aktualizuje preferenci notifikaci pro zarizeni (PUT /api/user/devices/notifications).
   Future<Map<String, dynamic>> updateNotificationPreference({
@@ -47,6 +51,7 @@ abstract class ProfileRemoteDataSource {
   Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
 }
 
+/// Implementace [ProfileRemoteDataSource] komunikující s backendem přes [Dio].
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final Dio _dio;
 
@@ -93,7 +98,17 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<void> logoutDevice(int deviceId) async {
-    await _dio.delete(SecurityEndpoints.logoutDevice(deviceId));
+    await _dio.post(SecurityEndpoints.logoutDevice(deviceId));
+  }
+
+  @override
+  Future<void> deleteDevice(int deviceId) async {
+    await _dio.delete(SecurityEndpoints.deleteDevice(deviceId));
+  }
+
+  @override
+  Future<void> deleteAllDevices() async {
+    await _dio.delete(SecurityEndpoints.deleteAllDevices);
   }
 
   @override

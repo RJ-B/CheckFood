@@ -8,6 +8,8 @@ import '../../domain/usecases/get_table_statuses_usecase.dart';
 import 'reservation_event.dart';
 import 'reservation_state.dart';
 
+/// BLoC that drives the reservation flow: loading the panorama scene, fetching
+/// table statuses and available time slots, and submitting a new reservation.
 class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
   final GetReservationSceneUseCase _getSceneUseCase;
   final GetTableStatusesUseCase _getStatusesUseCase;
@@ -43,7 +45,6 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       final scene = await _getSceneUseCase.call(event.restaurantId);
       emit(state.copyWith(sceneLoading: false, scene: scene));
 
-      // Auto-load statuses for today
       add(LoadStatuses(date: state.selectedDate));
     } catch (e) {
       emit(state.copyWith(sceneLoading: false, sceneError: e.toString()));
@@ -56,9 +57,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     try {
       final result = await _getStatusesUseCase.call(_restaurantId!, event.date);
       emit(state.copyWith(tableStatuses: result.tables));
-    } catch (_) {
-      // Statuses are non-critical; markers stay default color
-    }
+    } catch (_) {}
   }
 
   Future<void> _onSelectTable(SelectTable event, Emitter<ReservationState> emit) async {
@@ -74,7 +73,6 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       submitError: null,
     ));
 
-    // Load slots for the selected table
     await _loadSlots(event.tableId, state.selectedDate, emit);
   }
 
@@ -90,10 +88,8 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       submitError: null,
     ));
 
-    // Reload statuses for new date
     add(LoadStatuses(date: event.date));
 
-    // Reload slots if a table is selected
     if (state.selectedTableId != null) {
       await _loadSlots(state.selectedTableId!, event.date, emit);
     }
@@ -136,12 +132,10 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
         partySize: state.selectedPartySize,
       );
 
-      // Page will navigate away — no further emissions needed
       emit(state.copyWith(submitting: false, submitSuccess: true));
     } on DioException catch (e) {
       if (e.response?.statusCode == 409) {
         emit(state.copyWith(submitting: false, submitConflict: true));
-        // Refresh slots to show updated availability
         if (state.selectedTableId != null) {
           await _loadSlots(state.selectedTableId!, state.selectedDate, emit);
         }

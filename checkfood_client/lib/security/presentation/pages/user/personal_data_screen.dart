@@ -9,6 +9,7 @@ import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
 import '../../bloc/user/user_state.dart';
 
+/// Obrazovka pro úpravu základních osobních údajů uživatele (jméno, příjmení, e-mail).
 class PersonalDataScreen extends StatefulWidget {
   const PersonalDataScreen({super.key});
 
@@ -30,12 +31,9 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
     _lastNameController = TextEditingController();
     _emailController = TextEditingController();
 
-    // Předvyplnění dat.
-    // Protože sem jdeme z profilu, kde jsou data načtená, můžeme je rovnou vzít.
     final state = context.read<UserBloc>().state;
     state.maybeWhen(
       loaded: (profile, _, __, ___) {
-        // Ignorujeme devices
         _firstNameController.text = profile.firstName;
         _lastNameController.text = profile.lastName;
         _emailController.text = profile.email;

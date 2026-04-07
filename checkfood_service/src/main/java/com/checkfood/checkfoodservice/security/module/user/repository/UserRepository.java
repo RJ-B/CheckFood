@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Repository pro správu uživatelských účtů v systému.
- * Poskytuje optimalizované dotazy s EntityGraph pro efektivní načítání vztahů.
+ * Repository pro správu uživatelských účtů s optimalizovanými dotazy pro prevenci N+1 problému.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {

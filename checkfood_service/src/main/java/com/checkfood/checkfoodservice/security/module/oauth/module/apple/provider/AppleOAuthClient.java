@@ -8,6 +8,13 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implementace OAuth klienta pro Apple Sign In.
+ * Ověřuje Apple ID token a extrahuje data uživatele z JWT claims.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Component
 @RequiredArgsConstructor
 public class AppleOAuthClient implements OAuthClient {
@@ -15,19 +22,22 @@ public class AppleOAuthClient implements OAuthClient {
     private final AppleIdTokenVerifier appleVerifier;
     private final OAuthLogger oauthLogger;
 
+    /**
+     * Ověří Apple ID token kryptograficky a extrahuje data uživatele.
+     * Jméno uživatele není součástí tokenu (Apple ho posílá pouze při prvním přihlášení)
+     * a musí být doplněno z dat přijatých v požadavku.
+     *
+     * @param idToken surový Apple ID token z mobilní aplikace
+     * @return normalizovaná data uživatele
+     */
     @Override
     public OAuthUserInfo verifyAndGetUserInfo(String idToken) {
-        // Logování pokusu
         oauthLogger.logAuthenticationAttempt(getProviderType());
 
-        // Verifikace
         Claims claims = appleVerifier.verify(idToken);
 
         String providerUserId = claims.getSubject();
         String email = claims.get("email", String.class);
-
-        // Poznámka: Apple tokeny obsahují email, ale neobsahují jméno (to chodí jen při prvním req).
-        // To řešíme v OAuthServiceImpl (enrichUserInfoWithName).
 
         oauthLogger.logProviderVerificationSuccess(getProviderType(), providerUserId);
 

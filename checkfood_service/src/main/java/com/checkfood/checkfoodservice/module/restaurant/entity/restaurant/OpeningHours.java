@@ -11,6 +11,9 @@ import java.time.LocalTime;
 
 /**
  * Value object reprezentující provozní dobu pro konkrétní den.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Getter
 @Setter

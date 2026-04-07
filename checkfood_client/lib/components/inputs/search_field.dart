@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/colors.dart';
 import '../../l10n/generated/app_localizations.dart';
 
+/// Zaoblené vyhledávací vstupní pole s ikonou vyhledávání na začátku.
 class SearchField extends StatelessWidget {
   const SearchField({super.key});
 

@@ -38,14 +38,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthController {
 
-    /**
-     * Authentication service pro business logic execution.
-     */
     private final AuthService authService;
-
-    /**
-     * Repository pro přímý lookup tokenu při GET redirect validaci.
-     */
     private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     /**
@@ -70,6 +63,12 @@ public class AuthController {
         return ResponseEntity.accepted().build();
     }
 
+    /**
+     * Registruje nového majitele restaurace s rate limiting protection.
+     *
+     * @param request validované registrační data majitele
+     * @return ResponseEntity s HTTP 202 status
+     */
     @RateLimited(
             key = "auth:register-owner",
             limit = 5,
@@ -118,10 +117,8 @@ public class AuthController {
     public void verifyAccount(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
         try {
             authService.verifyAccount(token);
-            // Deep link pro úspěšnou verifikaci
             response.sendRedirect("checkfood://app/login?status=success");
         } catch (Exception e) {
-            // Error handling s URL encoding pro safe parameter passing
             String errorType = "VERIFICATION_ERROR";
             String encodedMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
 
@@ -258,13 +255,10 @@ public class AuthController {
     }
 
     /**
-     * Získává profile information pro aktuálně autentizovaného uživatele.
+     * Vrátí profil aktuálně přihlášeného uživatele.
      *
-     * @AuthenticationPrincipal extrahuje UserDetails ze security contextu,
-     * eliminuje potřebu manual JWT token parsing.
-     *
-     * @param userDetails Spring Security principal z authentication context
-     * @return UserResponse s user profile data
+     * @param userDetails Spring Security principal z authentication contextu
+     * @return UserResponse s daty uživatelského profilu
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {

@@ -29,6 +29,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementace onboardingu majitele restaurace — spravuje informace, otevírací dobu, stoly a publikaci restaurace.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,6 +48,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
     private final RestaurantTableMapper tableMapper;
     private final UserService userService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public RestaurantResponse getMyRestaurant(String userEmail) {
@@ -49,6 +58,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return restaurantMapper.toResponse(membership.getRestaurant());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestaurantResponse updateInfo(String userEmail, OnboardingInfoRequest request) {
         var membership = findOwnerMembership(userEmail);
@@ -83,6 +95,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return restaurantMapper.toResponse(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestaurantResponse updateHours(String userEmail, OnboardingHoursRequest request) {
         var membership = findOwnerMembership(userEmail);
@@ -103,6 +118,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return restaurantMapper.toResponse(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public List<RestaurantTableResponse> getTables(String userEmail) {
@@ -111,6 +129,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return tables.stream().map(tableMapper::toResponse).toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestaurantTableResponse addTable(String userEmail, RestaurantTableRequest request) {
         var membership = findOwnerMembership(userEmail);
@@ -120,6 +141,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return tableMapper.toResponse(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestaurantTableResponse updateTable(String userEmail, UUID tableId, RestaurantTableRequest request) {
         var membership = findOwnerMembership(userEmail);
@@ -136,6 +160,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return tableMapper.toResponse(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteTable(String userEmail, UUID tableId) {
         var membership = findOwnerMembership(userEmail);
@@ -144,6 +171,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         tableRepository.delete(table);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public OnboardingStatusResponse getOnboardingStatus(String userEmail) {
@@ -167,12 +197,14 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestaurantResponse publish(String userEmail) {
         var membership = findOwnerMembership(userEmail);
         var restaurant = membership.getRestaurant();
 
-        // Validate minimum requirements
         if (restaurant.getName() == null || restaurant.getName().isBlank()) {
             throw RestaurantException.validationError("Název restaurace je povinný pro publikaci.");
         }
@@ -195,11 +227,9 @@ public class OwnerOnboardingServiceImpl implements OwnerOnboardingService {
         return restaurantMapper.toResponse(saved);
     }
 
-    // --- Private Helpers ---
-
     private RestaurantEmployee findOwnerMembership(String userEmail) {
         var user = userService.findByEmail(userEmail);
-        var membership = employeeRepository.findByUserIdAndRole(user.getId(), RestaurantEmployeeRole.OWNER)
+        var membership = employeeRepository.findFirstByUserIdAndRole(user.getId(), RestaurantEmployeeRole.OWNER)
                 .orElseThrow(RestaurantException::noRestaurantAssigned);
         return membership;
     }

@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service interface pro správu uživatelských rolí v rámci RBAC systému.
- * Poskytuje operace pro CRUD rolí, vyhledávání a optimalizované načítání s permissions.
+ * Rozhraní servisní vrstvy pro správu uživatelských rolí v rámci RBAC systému.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface RoleService {
 

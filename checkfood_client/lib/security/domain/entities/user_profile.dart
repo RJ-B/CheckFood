@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_profile.freezed.dart';
 
+/// Doménová entita detailního profilu uživatele, včetně kontaktních a adresních údajů.
 @freezed
 class UserProfile with _$UserProfile {
   const UserProfile._();
@@ -12,6 +13,11 @@ class UserProfile with _$UserProfile {
     required String firstName,
     required String lastName,
     String? profileImageUrl,
+    @Default('') String phone,
+    @Default('') String addressStreet,
+    @Default('') String addressCity,
+    @Default('') String addressPostalCode,
+    @Default('') String addressCountry,
     required bool isActive,
     DateTime? lastLogin,
     required DateTime createdAt,

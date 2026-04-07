@@ -6,6 +6,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * JPA entita reprezentující jednu fotografii nahranou v rámci panoramatické session.
+ * Uchovává informace o úhlu snímání a URL uložené fotografie.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor

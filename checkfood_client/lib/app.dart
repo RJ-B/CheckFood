@@ -6,6 +6,9 @@ import 'l10n/generated/app_localizations.dart';
 import 'navigation/app_router.dart';
 import 'features/splash/splash_screen.dart';
 
+/// Kořenová aplikace CheckFood.
+///
+/// Reaguje na změny [LocaleCubit] a překreslí [MaterialApp] při přepnutí jazyka.
 class CheckFoodApp extends StatelessWidget {
   const CheckFoodApp({super.key});
 

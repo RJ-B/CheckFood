@@ -9,6 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Globální handler výjimek modulu rezervací.
+ * Zpracovává {@link ReservationException} a převádí je na standardizovanou {@link ErrorResponse}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @RestControllerAdvice
 @Order(1)
@@ -17,6 +24,13 @@ public class ReservationExceptionHandler {
 
     private final ErrorResponseBuilder errorResponseBuilder;
 
+    /**
+     * Zpracuje výjimku rezervace a vrátí odpovídající HTTP odpověď s chybovým tělem.
+     * Kolizní chyby jsou logovány na úrovni INFO, systémové chyby na ERROR, ostatní na DEBUG.
+     *
+     * @param ex zachycená výjimka
+     * @return HTTP odpověď se standardizovaným chybovým tělem
+     */
     @ExceptionHandler(ReservationException.class)
     public ResponseEntity<ErrorResponse> handleReservationException(ReservationException ex) {
         var errorCode = (ReservationErrorCode) ex.getErrorCode();

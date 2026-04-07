@@ -4,7 +4,10 @@ import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider
 
 /**
  * Kontrakt pro implementaci specifických OAuth2 klientů.
- * Definuje sjednocené rozhraní pro ověřování externích identit.
+ * Definuje sjednocené rozhraní pro ověřování externích identit (Google, Apple).
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface OAuthClient {
 

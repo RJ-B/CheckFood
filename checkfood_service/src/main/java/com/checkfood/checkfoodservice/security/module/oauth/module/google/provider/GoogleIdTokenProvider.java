@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.time.Instant;
 import java.util.Collections;
 
 /**
- * Poskytovatel verifikace pro Google ID Tokeny s rozšířenou diagnostikou.
- * Zapouzdřuje oficiální Google knihovnu a zajišťuje její správnou inicializaci s tolerancí na časový posun.
+ * Poskytovatel verifikace pro Google ID tokeny s diagnostickým logováním.
+ * Zapouzdřuje oficiální Google knihovnu a zajišťuje její správnou inicializaci s tolerancí
+ * na časový posun (clock skew) 60 sekund.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Slf4j
 @Component
@@ -24,10 +27,14 @@ public class GoogleIdTokenProvider {
     private final GoogleIdTokenVerifier verifier;
     private final String expectedClientId;
 
+    /**
+     * Inicializuje Google ID token verifier s konfigurovaným Client ID a tolerancí na časový posun.
+     *
+     * @param googleProperties konfigurační vlastnosti Google OAuth
+     */
     public GoogleIdTokenProvider(GoogleOAuthProperties googleProperties) {
         this.expectedClientId = googleProperties.getClientId();
 
-        // Inicializace verifieru s tolerancí 60 sekund pro vyrovnání časových rozdílů (clock skew) [cite: 2026-01-23]
         this.verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Collections.singletonList(expectedClientId))
                 .setAcceptableTimeSkewSeconds(60)
@@ -35,32 +42,30 @@ public class GoogleIdTokenProvider {
     }
 
     /**
-     * Provede nízkoúrovňovou verifikaci tokenu s detailním logováním pro účely debugování. [cite: 2026-01-23]
+     * Provede kryptografické ověření Google ID tokenu a vrátí jeho strukturovanou reprezentaci.
+     *
+     * @param idTokenString surový Google ID token jako JWT řetězec
+     * @return ověřený Google ID token nebo null pokud je token neplatný
+     * @throws GeneralSecurityException při chybě kryptografické operace
+     * @throws IOException              při chybě komunikace s Google API
      */
     public GoogleIdToken verify(String idTokenString) throws GeneralSecurityException, IOException {
-        log.info("🔍 [DEBUG-OAUTH] Zahájení verifikace Google tokenu.");
-        log.info("🔍 [DEBUG-OAUTH] Očekávané Client ID na backendu: {}", expectedClientId);
-        log.info("🔍 [DEBUG-OAUTH] Aktuální čas serveru (UTC): {}", Instant.now());
+        log.info("[OAUTH] Zahajuji verifikaci Google tokenu. Ocekavane Client ID: {}", expectedClientId);
 
         try {
             GoogleIdToken idToken = verifier.verify(idTokenString);
 
             if (idToken == null) {
-                log.error("❌ [DEBUG-OAUTH] Verifikace selhala: verifier.verify() vrátil null.");
-                log.error("💡 Tip: Porovnejte výše uvedené Client ID s hodnotou 'aud' v tokenu z Flutter logu.");
+                log.error("[OAUTH] Verifikace selhala: verifier.verify() vratil null.");
                 return null;
             }
 
             GoogleIdToken.Payload payload = idToken.getPayload();
-            log.info("✅ [DEBUG-OAUTH] Verifikace proběhla úspěšně.");
-            log.info("ℹ️ [DEBUG-OAUTH] Vystaveno v (iat): {}", Instant.ofEpochSecond(payload.getIssuedAtTimeSeconds()));
-            log.info("ℹ️ [DEBUG-OAUTH] Vyprší v (exp): {}", Instant.ofEpochSecond(payload.getExpirationTimeSeconds()));
-            log.info("ℹ️ [DEBUG-OAUTH] Audience v přijatém tokenu (aud): {}", payload.getAudience());
-            log.info("ℹ️ [DEBUG-OAUTH] Email uživatele: {}", payload.getEmail());
+            log.info("[OAUTH] Verifikace uspesna. Email: {}", payload.getEmail());
 
             return idToken;
         } catch (Exception e) {
-            log.error("💥 [DEBUG-OAUTH] Kritická technická chyba při verifikaci: {}", e.getMessage());
+            log.error("[OAUTH] Kriticka chyba pri verifikaci Google tokenu: {}", e.getMessage());
             throw e;
         }
     }

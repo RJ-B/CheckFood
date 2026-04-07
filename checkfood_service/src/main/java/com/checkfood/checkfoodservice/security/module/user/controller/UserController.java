@@ -30,8 +30,10 @@ import java.util.List;
 /**
  * REST kontroler pro správu uživatelských účtů a profilů.
  * Poskytuje endpointy pro zobrazení profilu, změnu hesla, aktualizaci profilu a správu zařízení.
- * Admin endpointy jsou chráněny @PreAuthorize("hasRole('ADMIN')").
+ * Admin endpointy jsou chráněny {@code @PreAuthorize("hasRole('ADMIN')")}.
  *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  * @see UserService
  * @see DeviceService
  */
@@ -48,8 +50,11 @@ public class UserController {
     private final UpdateProfileValidator updateProfileValidator;
 
     /**
-     * Vrátí pouze profilové informace o uživateli.
-     * Seznam zařízení se již neposílá (je dostupný přes /devices).
+     * Vrátí profilové informace o přihlášeném uživateli.
+     * Seznam zařízení není součástí profilu, je dostupný přes {@code /devices}.
+     *
+     * @param userDetails autentizační detaily z Security kontextu
+     * @return detailní profilová data uživatele
      */
     @GetMapping("/me")
     public ResponseEntity<UserProfileResponse> getProfile(
@@ -74,13 +79,7 @@ public class UserController {
     ) {
         changePasswordValidator.validate(request);
         UserEntity user = userService.findByEmail(userDetails.getUsername());
-
-        // FIX: Removed confirmPassword, as service only expects (id, oldPass, newPass)
-        userService.changePassword(
-                user.getId(),
-                request.getCurrentPassword(),
-                request.getNewPassword()
-        );
+        userService.changePassword(user.getId(), request.getCurrentPassword(), request.getNewPassword());
 
         return ResponseEntity.noContent().build();
     }
@@ -151,9 +150,8 @@ public class UserController {
     }
 
     /**
-     * Odhlásí uživatele ze všech ostatních zařízení.
-     * Zachová aktuální zařízení (identifikované z JWT tokenu).
-     * Invaliduje refresh tokeny ostatních zařízení.
+     * Odhlásí uživatele ze všech ostatních zařízení (soft-logout — deaktivace, zachování v DB).
+     * Zachová aktuální zařízení (identifikované z JWT tokenu) aktivní.
      *
      * @param userDetails autentizační detaily z Security kontextu
      * @param token Authorization header pro identifikaci aktuálního zařízení
@@ -166,13 +164,36 @@ public class UserController {
     ) {
         UserEntity user = userService.findByEmail(userDetails.getUsername());
         String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(token);
+        deviceService.deactivateAllByUserExceptCurrent(user, currentDeviceIdentifier);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Fyzicky smaže všechna zařízení uživatele kromě aktuálního.
+     * Hard-delete — záznamy jsou odstraněny z DB.
+     *
+     * @param userDetails autentizační detaily z Security kontextu
+     * @param token Authorization header pro identifikaci aktuálního zařízení
+     * @return HTTP 204 No Content po úspěšném smazání
+     */
+    @DeleteMapping("/devices/all")
+    public ResponseEntity<Void> deleteAllDevices(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        UserEntity user = userService.findByEmail(userDetails.getUsername());
+        String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(token);
         deviceService.removeAllByUserExceptCurrent(user, currentDeviceIdentifier);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * ✅ NOVÝ ENDPOINT: Vrátí samostatný seznam zařízení.
-     * Vypočítá, které zařízení je aktuální (isCurrentDevice = true) na základě tokenu.
+     * Vrátí seznam všech zařízení přihlášeného uživatele s příznakem aktuální session.
+     * Příznak {@code currentDevice = true} je nastaven na základě deviceIdentifier z JWT tokenu.
+     *
+     * @param userDetails autentizační detaily z Security kontextu
+     * @param token       Authorization header pro identifikaci aktuálního zařízení
+     * @return seznam zařízení s označením aktuálního terminálu
      */
     @GetMapping("/devices")
     public ResponseEntity<List<DeviceResponse>> getUserDevices(
@@ -187,8 +208,33 @@ public class UserController {
     }
 
     /**
-     * Odhlásí konkrétní zařízení uživatele.
-     * Používá se pro selektivní ukončení relace z určitého zařízení.
+     * Soft-logout konkrétního zařízení — deaktivuje zařízení (isActive = false), zachová v DB.
+     * Používá se pro vzdálené odhlášení z jiného zařízení bez fyzického smazání záznamu.
+     *
+     * @param deviceId ID zařízení k deaktivaci
+     * @param userDetails autentizační detaily z Security kontextu
+     * @return HTTP 204 No Content po úspěšné deaktivaci
+     */
+    @PostMapping("/devices/{deviceId}/logout")
+    public ResponseEntity<Void> logoutDevice(
+            @PathVariable Long deviceId,
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        UserEntity user = userService.findByEmail(userDetails.getUsername());
+        String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(token);
+        deviceService.findById(deviceId).ifPresent(device -> {
+            if (device.getDeviceIdentifier().equals(currentDeviceIdentifier)) {
+                throw com.checkfood.checkfoodservice.security.module.user.exception.UserException
+                        .invalidOperation("Nelze odhlásit aktuální zařízení. Použijte standardní odhlášení.");
+            }
+        });
+        deviceService.deactivateByIdAndUser(deviceId, user);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Hard-delete konkrétního zařízení — fyzicky odstraní záznam z DB.
      * Ověřuje vlastnictví zařízení před smazáním.
      *
      * @param deviceId ID zařízení k odstranění
@@ -196,11 +242,19 @@ public class UserController {
      * @return HTTP 204 No Content po úspěšném odstranění
      */
     @DeleteMapping("/devices/{deviceId}")
-    public ResponseEntity<Void> logoutDevice(
+    public ResponseEntity<Void> deleteDevice(
             @PathVariable Long deviceId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
         UserEntity user = userService.findByEmail(userDetails.getUsername());
+        String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(token);
+        deviceService.findById(deviceId).ifPresent(device -> {
+            if (device.getDeviceIdentifier().equals(currentDeviceIdentifier)) {
+                throw com.checkfood.checkfoodservice.security.module.user.exception.UserException
+                        .invalidOperation("Nelze smazat aktuální zařízení. Použijte standardní odhlášení.");
+            }
+        });
         deviceService.removeByIdAndUser(deviceId, user);
         return ResponseEntity.noContent().build();
     }

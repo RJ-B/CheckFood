@@ -5,6 +5,12 @@ import lombok.*;
 
 import java.util.UUID;
 
+/**
+ * JPA entita položky menu s cenou, dostupností a příslušností ke kategorii a restauraci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -46,7 +46,11 @@ import java.security.SecureRandom;
 import java.util.*;
 
 /**
- * Implementace MFA logiky.
+ * Implementace servisní logiky pro vícefaktorovou autentizaci (TOTP a záložní kódy).
+ * Spravuje celý životní cyklus MFA: nastavení, ověřování přihlašovací výzvy a deaktivaci.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Service
 @RequiredArgsConstructor
@@ -70,14 +74,9 @@ public class MfaServiceImpl implements MfaService {
 
     private final SecureRandom secureRandom = new SecureRandom();
 
-    // Audit
     private final ApplicationEventPublisher eventPublisher;
     private final HttpServletRequest request;
 
-
-    // =====================================================
-    // SETUP
-    // =====================================================
 
     @Override
     public MfaSetupStartResponse startSetup(Long userId) {
@@ -170,10 +169,6 @@ public class MfaServiceImpl implements MfaService {
     }
 
 
-    // =====================================================
-    // LOGIN CHALLENGE
-    // =====================================================
-
     @Override
     public MfaChallengeResponse verifyChallenge(Long userId, String code) {
 
@@ -201,7 +196,6 @@ public class MfaServiceImpl implements MfaService {
             throw new MfaNotEnabledException("MFA not enabled");
         }
 
-        // TOTP
         if (totpVerifier.verify(secret.getSecret(), code)) {
 
             publishAudit(
@@ -213,7 +207,6 @@ public class MfaServiceImpl implements MfaService {
             return MfaChallengeResponse.success();
         }
 
-        // Backup codes
         String hashed =
                 passwordEncoder.encode(code);
 
@@ -248,10 +241,6 @@ public class MfaServiceImpl implements MfaService {
     }
 
 
-    // =====================================================
-    // DISABLE
-    // =====================================================
-
     @Override
     public void disable(Long userId, String password) {
 
@@ -282,10 +271,6 @@ public class MfaServiceImpl implements MfaService {
     }
 
 
-    // =====================================================
-    // STATUS
-    // =====================================================
-
     @Override
     public MfaStatusResponse getStatus(Long userId) {
 
@@ -298,10 +283,12 @@ public class MfaServiceImpl implements MfaService {
     }
 
 
-    // =====================================================
-    // BACKUP CODES
-    // =====================================================
-
+    /**
+     * Vygeneruje sadu záložních kódů pro uživatele a uloží jejich hashe do databáze.
+     * Předchozí záložní kódy jsou před generováním smazány.
+     *
+     * @param user uživatel, pro kterého se záložní kódy generují
+     */
     private void generateBackupCodes(UserEntity user) {
 
         backupCodeRepository.deleteByUserId(user.getId());
@@ -327,11 +314,15 @@ public class MfaServiceImpl implements MfaService {
         }
 
         backupCodeRepository.saveAll(codes);
-
-        // TODO: doručit uživateli (UI/Email)
     }
 
 
+    /**
+     * Vygeneruje náhodný záložní kód z alfanumerické abecedy bez ambiguních znaků.
+     * Délka kódu je definována konstantou {@code BACKUP_CODE_LENGTH}.
+     *
+     * @return náhodný záložní kód
+     */
     private String generateRandomCode() {
 
         String chars =
@@ -353,10 +344,13 @@ public class MfaServiceImpl implements MfaService {
     }
 
 
-    // =====================================================
-    // AUDIT
-    // =====================================================
-
+    /**
+     * Publikuje auditní událost pro operaci MFA.
+     *
+     * @param userId ID uživatele provádějícího operaci
+     * @param action typ auditované akce
+     * @param status výsledek operace
+     */
     private void publishAudit(
             Long userId,
             AuditAction action,

@@ -5,12 +5,18 @@ import com.checkfood.checkfoodservice.client.mail.model.MailResponse;
 
 /**
  * Abstraktní kontrakt pro odesílání e-mailů.
+ * Application service pracuje výhradně s tímto rozhraním a nezná konkrétního poskytovatele.
  *
- * Application service:
- * - zná pouze toto rozhraní
- * - neřeší implementaci ani poskytovatele
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface MailClient {
 
+    /**
+     * Odešle e-mail podle zadaného požadavku.
+     *
+     * @param request požadavek na odeslání e-mailu
+     * @return výsledek operace odeslání
+     */
     MailResponse send(MailRequest request);
 }

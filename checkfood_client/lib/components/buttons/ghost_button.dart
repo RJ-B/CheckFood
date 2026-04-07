@@ -3,6 +3,7 @@ import '../../core/theme/spacing.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/radius.dart';
 
+/// Průhledné textové tlačítko pro sekundární nebo přeskakující akce.
 class GhostButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;

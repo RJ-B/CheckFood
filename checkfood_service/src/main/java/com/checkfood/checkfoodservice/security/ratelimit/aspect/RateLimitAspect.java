@@ -33,10 +33,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RateLimitAspect {
 
-    /**
-     * Rate limit service pro actual limit checking a enforcement.
-     * Abstraction umožňuje různé implementace (in-memory, Redis, database).
-     */
     private final RateLimitService rateLimitService;
 
     /**
@@ -51,20 +47,14 @@ public class RateLimitAspect {
     @Around("@annotation(rateLimited)")
     public Object applyRateLimit(ProceedingJoinPoint joinPoint, RateLimited rateLimited) throws Throwable {
 
-        // Dynamic key construction based na annotation config
         String key = buildKey(rateLimited);
-
-        // Time unit conversion pro service compatibility
         long windowMillis = TimeUnit.MILLISECONDS.convert(rateLimited.duration(), rateLimited.unit());
-
-        // Rate limit check přes pluggable service
         boolean allowed = rateLimitService.tryAcquire(key, rateLimited.limit(), windowMillis);
 
         if (!allowed) {
             throw new RateLimitExceededException("Too many requests");
         }
 
-        // Proceed s original method execution
         return joinPoint.proceed();
     }
 
@@ -79,7 +69,6 @@ public class RateLimitAspect {
         StringBuilder sb = new StringBuilder();
         sb.append(config.key());
 
-        // Per-IP rate limiting pro DDoS protection
         if (config.perIp()) {
             String ip = getClientIp();
             if (ip != null) {
@@ -87,10 +76,8 @@ public class RateLimitAspect {
             }
         }
 
-        // Per-user rate limiting pro authenticated abuse prevention
         if (config.perUser()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
             if (auth != null && auth.isAuthenticated() && auth.getPrincipal() != null) {
                 sb.append(":user=").append(auth.getName());
             }

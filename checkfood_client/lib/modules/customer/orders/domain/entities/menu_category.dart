@@ -3,6 +3,7 @@ import 'menu_item.dart';
 
 part 'menu_category.freezed.dart';
 
+/// A named group of [MenuItem]s within a restaurant's menu.
 @freezed
 class MenuCategory with _$MenuCategory {
   const MenuCategory._();

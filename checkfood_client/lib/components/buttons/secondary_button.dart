@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/radius.dart';
 
+/// Ohraničené tlačítko pro sekundární akce, stylizované primární barvou okraje.
+///
+/// Zobrazuje spinner při [isLoading] a ztlumí se při [isDisabled].
 class SecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;

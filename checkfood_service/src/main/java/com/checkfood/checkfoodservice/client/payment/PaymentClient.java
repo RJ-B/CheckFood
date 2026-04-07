@@ -5,12 +5,18 @@ import com.checkfood.checkfoodservice.client.payment.model.PaymentResponse;
 
 /**
  * Abstraktní kontrakt pro platební systémy.
+ * Service vrstva pracuje výhradně s tímto rozhraním a nezná konkrétního poskytovatele.
  *
- * Service vrstva:
- * - nikdy neřeší konkrétního poskytovatele
- * - pracuje pouze s tímto rozhraním
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 public interface PaymentClient {
 
+    /**
+     * Provede platbu podle zadaného požadavku.
+     *
+     * @param request požadavek na provedení platby
+     * @return výsledek platební operace
+     */
     PaymentResponse pay(PaymentRequest request);
 }

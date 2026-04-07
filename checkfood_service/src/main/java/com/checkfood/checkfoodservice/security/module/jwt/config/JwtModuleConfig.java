@@ -15,15 +15,22 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Centrální konfigurace JWT modulu.
- * Zodpovídá za aktivaci vlastností a vytvoření kryptografických komponent.
+ * Centrální konfigurace JWT modulu. Vytváří JwtEncoder a JwtDecoder beany
+ * s HS256 algoritmem a secret klíčem načteným z {@link JwtProperties}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ * @see JwtProperties
  */
 @Configuration
 @ConfigurationPropertiesScan(basePackages = "com.checkfood.checkfoodservice.security.module.jwt")
 public class JwtModuleConfig {
 
     /**
-     * Vytvoří encoder pro podepisování tokenů.
+     * Vytvoří JwtEncoder pro podepisování JWT tokenů algoritmem HS256.
+     *
+     * @param properties konfigurační properties s JWT secret klíčem
+     * @return nakonfigurovaný NimbusJwtEncoder
      */
     @Bean
     public JwtEncoder jwtEncoder(JwtProperties properties) {
@@ -35,7 +42,10 @@ public class JwtModuleConfig {
     }
 
     /**
-     * Vytvoří decoder pro validaci tokenů.
+     * Vytvoří JwtDecoder pro validaci a dekódování JWT tokenů algoritmem HS256.
+     *
+     * @param properties konfigurační properties s JWT secret klíčem
+     * @return nakonfigurovaný NimbusJwtDecoder
      */
     @Bean
     public JwtDecoder jwtDecoder(JwtProperties properties) {

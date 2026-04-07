@@ -10,7 +10,10 @@ import java.security.GeneralSecurityException;
 import java.time.Instant;
 
 /**
- * Generátor TOTP kódů (RFC 6238).
+ * Generátor TOTP kódů dle RFC 6238 využívající HMAC-SHA1 algoritmus.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Component
 public class TotpGenerator {
@@ -23,7 +26,10 @@ public class TotpGenerator {
 
 
     /**
-     * Vygeneruje TOTP kód pro daný čas.
+     * Vygeneruje TOTP kód pro aktuální časové okno.
+     *
+     * @param base32Secret Base32 tajný klíč
+     * @return šestimístný TOTP kód
      */
     public String generate(String base32Secret) {
 
@@ -34,6 +40,13 @@ public class TotpGenerator {
     }
 
 
+    /**
+     * Vygeneruje TOTP kód pro konkrétní hodnotu čítače (časového okna).
+     *
+     * @param secret  Base32 tajný klíč
+     * @param counter hodnota čítače odpovídající časovému oknu
+     * @return šestimístný TOTP kód
+     */
     public String generateForCounter(String secret, long counter) {
 
         try {
@@ -71,9 +84,6 @@ public class TotpGenerator {
     }
 
 
-    /**
-     * Dekóduje Base32 secret.
-     */
     private byte[] decodeSecret(String secret) {
 
         return java.util.Base64.getDecoder().decode(secret);

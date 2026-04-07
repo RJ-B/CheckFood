@@ -8,6 +8,9 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 
+/// Stránka pro nastavení nového hesla po kliknutí na odkaz z e-mailu.
+///
+/// Přijímá [token] z deep linku a po úspěšné změně přesměruje na přihlášení.
 class ResetPasswordPage extends StatefulWidget {
   final String token;
 

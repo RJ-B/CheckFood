@@ -24,7 +24,16 @@ mixin _$ExploreEvent {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -33,7 +42,16 @@ mixin _$ExploreEvent {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -42,7 +60,16 @@ mixin _$ExploreEvent {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -54,6 +81,8 @@ mixin _$ExploreEvent {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -63,6 +92,8 @@ mixin _$ExploreEvent {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -72,6 +103,8 @@ mixin _$ExploreEvent {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -147,7 +180,16 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) {
     return initializeRequested();
   }
@@ -160,7 +202,16 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) {
     return initializeRequested?.call();
   }
@@ -173,7 +224,16 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (initializeRequested != null) {
@@ -192,6 +252,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) {
     return initializeRequested(this);
   }
@@ -205,6 +267,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) {
     return initializeRequested?.call(this);
   }
@@ -218,6 +282,8 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (initializeRequested != null) {
@@ -309,7 +375,16 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) {
     return permissionResultReceived(granted);
   }
@@ -322,7 +397,16 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) {
     return permissionResultReceived?.call(granted);
   }
@@ -335,7 +419,16 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (permissionResultReceived != null) {
@@ -354,6 +447,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) {
     return permissionResultReceived(this);
   }
@@ -367,6 +462,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) {
     return permissionResultReceived?.call(this);
   }
@@ -380,6 +477,8 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (permissionResultReceived != null) {
@@ -493,7 +592,16 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) {
     return mapBoundsChanged(params);
   }
@@ -506,7 +614,16 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) {
     return mapBoundsChanged?.call(params);
   }
@@ -519,7 +636,16 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (mapBoundsChanged != null) {
@@ -538,6 +664,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) {
     return mapBoundsChanged(this);
   }
@@ -551,6 +679,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) {
     return mapBoundsChanged?.call(this);
   }
@@ -564,6 +694,8 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (mapBoundsChanged != null) {
@@ -634,7 +766,16 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) {
     return refreshRequested();
   }
@@ -647,7 +788,16 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) {
     return refreshRequested?.call();
   }
@@ -660,7 +810,16 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (refreshRequested != null) {
@@ -679,6 +838,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) {
     return refreshRequested(this);
   }
@@ -692,6 +853,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) {
     return refreshRequested?.call(this);
   }
@@ -705,6 +868,8 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (refreshRequested != null) {
@@ -794,7 +959,16 @@ class _$SearchChangedImpl implements SearchChanged {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) {
     return searchChanged(query);
   }
@@ -807,7 +981,16 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) {
     return searchChanged?.call(query);
   }
@@ -820,7 +1003,16 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (searchChanged != null) {
@@ -839,6 +1031,8 @@ class _$SearchChangedImpl implements SearchChanged {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) {
     return searchChanged(this);
   }
@@ -852,6 +1046,8 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) {
     return searchChanged?.call(this);
   }
@@ -865,6 +1061,8 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (searchChanged != null) {
@@ -894,7 +1092,7 @@ abstract class _$$MarkerSelectedImplCopyWith<$Res> {
     $Res Function(_$MarkerSelectedImpl) then,
   ) = __$$MarkerSelectedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String? placeId});
+  $Res call({String? restaurantId});
 }
 
 /// @nodoc
@@ -910,13 +1108,13 @@ class __$$MarkerSelectedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? placeId = freezed}) {
+  $Res call({Object? restaurantId = freezed}) {
     return _then(
       _$MarkerSelectedImpl(
-        placeId:
-            freezed == placeId
-                ? _value.placeId
-                : placeId // ignore: cast_nullable_to_non_nullable
+        restaurantId:
+            freezed == restaurantId
+                ? _value.restaurantId
+                : restaurantId // ignore: cast_nullable_to_non_nullable
                     as String?,
       ),
     );
@@ -926,14 +1124,14 @@ class __$$MarkerSelectedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MarkerSelectedImpl implements MarkerSelected {
-  const _$MarkerSelectedImpl({this.placeId});
+  const _$MarkerSelectedImpl({this.restaurantId});
 
   @override
-  final String? placeId;
+  final String? restaurantId;
 
   @override
   String toString() {
-    return 'ExploreEvent.markerSelected(placeId: $placeId)';
+    return 'ExploreEvent.markerSelected(restaurantId: $restaurantId)';
   }
 
   @override
@@ -941,11 +1139,12 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MarkerSelectedImpl &&
-            (identical(other.placeId, placeId) || other.placeId == placeId));
+            (identical(other.restaurantId, restaurantId) ||
+                other.restaurantId == restaurantId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, placeId);
+  int get hashCode => Object.hash(runtimeType, restaurantId);
 
   /// Create a copy of ExploreEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -966,9 +1165,18 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
-    required TResult Function(String? placeId) markerSelected,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
   }) {
-    return markerSelected(placeId);
+    return markerSelected(restaurantId);
   }
 
   @override
@@ -979,9 +1187,18 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
-    TResult? Function(String? placeId)? markerSelected,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
   }) {
-    return markerSelected?.call(placeId);
+    return markerSelected?.call(restaurantId);
   }
 
   @override
@@ -992,11 +1209,20 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
-    TResult Function(String? placeId)? markerSelected,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (markerSelected != null) {
-      return markerSelected(placeId);
+      return markerSelected(restaurantId);
     }
     return orElse();
   }
@@ -1011,6 +1237,8 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
     required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
   }) {
     return markerSelected(this);
   }
@@ -1024,6 +1252,8 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
   }) {
     return markerSelected?.call(this);
   }
@@ -1037,6 +1267,8 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
     TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
     required TResult orElse(),
   }) {
     if (markerSelected != null) {
@@ -1047,13 +1279,484 @@ class _$MarkerSelectedImpl implements MarkerSelected {
 }
 
 abstract class MarkerSelected implements ExploreEvent {
-  const factory MarkerSelected({final String? placeId}) = _$MarkerSelectedImpl;
+  const factory MarkerSelected({final String? restaurantId}) =
+      _$MarkerSelectedImpl;
 
-  String? get placeId;
+  String? get restaurantId;
 
   /// Create a copy of ExploreEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MarkerSelectedImplCopyWith<_$MarkerSelectedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ViewportChangedImplCopyWith<$Res> {
+  factory _$$ViewportChangedImplCopyWith(
+    _$ViewportChangedImpl value,
+    $Res Function(_$ViewportChangedImpl) then,
+  ) = __$$ViewportChangedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({
+    double minLat,
+    double maxLat,
+    double minLng,
+    double maxLng,
+    int zoom,
+  });
+}
+
+/// @nodoc
+class __$$ViewportChangedImplCopyWithImpl<$Res>
+    extends _$ExploreEventCopyWithImpl<$Res, _$ViewportChangedImpl>
+    implements _$$ViewportChangedImplCopyWith<$Res> {
+  __$$ViewportChangedImplCopyWithImpl(
+    _$ViewportChangedImpl _value,
+    $Res Function(_$ViewportChangedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? minLat = null,
+    Object? maxLat = null,
+    Object? minLng = null,
+    Object? maxLng = null,
+    Object? zoom = null,
+  }) {
+    return _then(
+      _$ViewportChangedImpl(
+        minLat:
+            null == minLat
+                ? _value.minLat
+                : minLat // ignore: cast_nullable_to_non_nullable
+                    as double,
+        maxLat:
+            null == maxLat
+                ? _value.maxLat
+                : maxLat // ignore: cast_nullable_to_non_nullable
+                    as double,
+        minLng:
+            null == minLng
+                ? _value.minLng
+                : minLng // ignore: cast_nullable_to_non_nullable
+                    as double,
+        maxLng:
+            null == maxLng
+                ? _value.maxLng
+                : maxLng // ignore: cast_nullable_to_non_nullable
+                    as double,
+        zoom:
+            null == zoom
+                ? _value.zoom
+                : zoom // ignore: cast_nullable_to_non_nullable
+                    as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$ViewportChangedImpl implements ViewportChanged {
+  const _$ViewportChangedImpl({
+    required this.minLat,
+    required this.maxLat,
+    required this.minLng,
+    required this.maxLng,
+    required this.zoom,
+  });
+
+  @override
+  final double minLat;
+  @override
+  final double maxLat;
+  @override
+  final double minLng;
+  @override
+  final double maxLng;
+  @override
+  final int zoom;
+
+  @override
+  String toString() {
+    return 'ExploreEvent.viewportChanged(minLat: $minLat, maxLat: $maxLat, minLng: $minLng, maxLng: $maxLng, zoom: $zoom)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ViewportChangedImpl &&
+            (identical(other.minLat, minLat) || other.minLat == minLat) &&
+            (identical(other.maxLat, maxLat) || other.maxLat == maxLat) &&
+            (identical(other.minLng, minLng) || other.minLng == minLng) &&
+            (identical(other.maxLng, maxLng) || other.maxLng == maxLng) &&
+            (identical(other.zoom, zoom) || other.zoom == zoom));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, minLat, maxLat, minLng, maxLng, zoom);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ViewportChangedImplCopyWith<_$ViewportChangedImpl> get copyWith =>
+      __$$ViewportChangedImplCopyWithImpl<_$ViewportChangedImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializeRequested,
+    required TResult Function(bool granted) permissionResultReceived,
+    required TResult Function(MapParamsModel params) mapBoundsChanged,
+    required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
+  }) {
+    return viewportChanged(minLat, maxLat, minLng, maxLng, zoom);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializeRequested,
+    TResult? Function(bool granted)? permissionResultReceived,
+    TResult? Function(MapParamsModel params)? mapBoundsChanged,
+    TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
+  }) {
+    return viewportChanged?.call(minLat, maxLat, minLng, maxLng, zoom);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializeRequested,
+    TResult Function(bool granted)? permissionResultReceived,
+    TResult Function(MapParamsModel params)? mapBoundsChanged,
+    TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
+    required TResult orElse(),
+  }) {
+    if (viewportChanged != null) {
+      return viewportChanged(minLat, maxLat, minLng, maxLng, zoom);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(InitializeRequested value) initializeRequested,
+    required TResult Function(PermissionResultReceived value)
+    permissionResultReceived,
+    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
+    required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
+  }) {
+    return viewportChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(InitializeRequested value)? initializeRequested,
+    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
+  }) {
+    return viewportChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(InitializeRequested value)? initializeRequested,
+    TResult Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
+    required TResult orElse(),
+  }) {
+    if (viewportChanged != null) {
+      return viewportChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ViewportChanged implements ExploreEvent {
+  const factory ViewportChanged({
+    required final double minLat,
+    required final double maxLat,
+    required final double minLng,
+    required final double maxLng,
+    required final int zoom,
+  }) = _$ViewportChangedImpl;
+
+  double get minLat;
+  double get maxLat;
+  double get minLng;
+  double get maxLng;
+  int get zoom;
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ViewportChangedImplCopyWith<_$ViewportChangedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$MarkersRefreshedImplCopyWith<$Res> {
+  factory _$$MarkersRefreshedImplCopyWith(
+    _$MarkersRefreshedImpl value,
+    $Res Function(_$MarkersRefreshedImpl) then,
+  ) = __$$MarkersRefreshedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int version});
+}
+
+/// @nodoc
+class __$$MarkersRefreshedImplCopyWithImpl<$Res>
+    extends _$ExploreEventCopyWithImpl<$Res, _$MarkersRefreshedImpl>
+    implements _$$MarkersRefreshedImplCopyWith<$Res> {
+  __$$MarkersRefreshedImplCopyWithImpl(
+    _$MarkersRefreshedImpl _value,
+    $Res Function(_$MarkersRefreshedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? version = null}) {
+    return _then(
+      _$MarkersRefreshedImpl(
+        version:
+            null == version
+                ? _value.version
+                : version // ignore: cast_nullable_to_non_nullable
+                    as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$MarkersRefreshedImpl implements MarkersRefreshed {
+  const _$MarkersRefreshedImpl({required this.version});
+
+  @override
+  final int version;
+
+  @override
+  String toString() {
+    return 'ExploreEvent.markersRefreshed(version: $version)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MarkersRefreshedImpl &&
+            (identical(other.version, version) || other.version == version));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, version);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MarkersRefreshedImplCopyWith<_$MarkersRefreshedImpl> get copyWith =>
+      __$$MarkersRefreshedImplCopyWithImpl<_$MarkersRefreshedImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializeRequested,
+    required TResult Function(bool granted) permissionResultReceived,
+    required TResult Function(MapParamsModel params) mapBoundsChanged,
+    required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
+  }) {
+    return markersRefreshed(version);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializeRequested,
+    TResult? Function(bool granted)? permissionResultReceived,
+    TResult? Function(MapParamsModel params)? mapBoundsChanged,
+    TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
+  }) {
+    return markersRefreshed?.call(version);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializeRequested,
+    TResult Function(bool granted)? permissionResultReceived,
+    TResult Function(MapParamsModel params)? mapBoundsChanged,
+    TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
+    required TResult orElse(),
+  }) {
+    if (markersRefreshed != null) {
+      return markersRefreshed(version);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(InitializeRequested value) initializeRequested,
+    required TResult Function(PermissionResultReceived value)
+    permissionResultReceived,
+    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
+    required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
+  }) {
+    return markersRefreshed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(InitializeRequested value)? initializeRequested,
+    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
+  }) {
+    return markersRefreshed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(InitializeRequested value)? initializeRequested,
+    TResult Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
+    required TResult orElse(),
+  }) {
+    if (markersRefreshed != null) {
+      return markersRefreshed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class MarkersRefreshed implements ExploreEvent {
+  const factory MarkersRefreshed({required final int version}) =
+      _$MarkersRefreshedImpl;
+
+  int get version;
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$MarkersRefreshedImplCopyWith<_$MarkersRefreshedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

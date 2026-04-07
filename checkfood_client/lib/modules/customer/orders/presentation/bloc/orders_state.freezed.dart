@@ -32,7 +32,27 @@ mixin _$OrdersState {
   String? get submitError =>
       throw _privateConstructorUsedError; // Current orders
   bool get ordersLoading => throw _privateConstructorUsedError;
-  List<OrderSummary> get currentOrders => throw _privateConstructorUsedError;
+  List<OrderSummary> get currentOrders =>
+      throw _privateConstructorUsedError; // Payment
+  bool get paymentInitiating => throw _privateConstructorUsedError;
+  String? get paymentError => throw _privateConstructorUsedError;
+  String? get paymentRedirectUrl =>
+      throw _privateConstructorUsedError; // Map of orderId -> paymentStatus string
+  Map<String, String> get paymentStatuses =>
+      throw _privateConstructorUsedError; // Session
+  DiningSession? get session => throw _privateConstructorUsedError;
+  List<SessionOrderItem> get sessionItems => throw _privateConstructorUsedError;
+  Set<String> get selectedItemIds => throw _privateConstructorUsedError;
+  bool get sessionLoading => throw _privateConstructorUsedError;
+  String? get sessionError =>
+      throw _privateConstructorUsedError; // Payment summary totals (minor units)
+  int get sessionTotalMinor => throw _privateConstructorUsedError;
+  int get sessionPaidMinor => throw _privateConstructorUsedError;
+  int get sessionRemainingMinor =>
+      throw _privateConstructorUsedError; // QR invite code to display
+  String? get sessionInviteCode => throw _privateConstructorUsedError;
+  bool get sessionJoining => throw _privateConstructorUsedError;
+  String? get sessionJoinError => throw _privateConstructorUsedError;
 
   /// Create a copy of OrdersState
   /// with the given fields replaced by the non-null parameter values.
@@ -62,9 +82,25 @@ abstract class $OrdersStateCopyWith<$Res> {
     String? submitError,
     bool ordersLoading,
     List<OrderSummary> currentOrders,
+    bool paymentInitiating,
+    String? paymentError,
+    String? paymentRedirectUrl,
+    Map<String, String> paymentStatuses,
+    DiningSession? session,
+    List<SessionOrderItem> sessionItems,
+    Set<String> selectedItemIds,
+    bool sessionLoading,
+    String? sessionError,
+    int sessionTotalMinor,
+    int sessionPaidMinor,
+    int sessionRemainingMinor,
+    String? sessionInviteCode,
+    bool sessionJoining,
+    String? sessionJoinError,
   });
 
   $DiningContextCopyWith<$Res>? get diningContext;
+  $DiningSessionCopyWith<$Res>? get session;
 }
 
 /// @nodoc
@@ -95,6 +131,21 @@ class _$OrdersStateCopyWithImpl<$Res, $Val extends OrdersState>
     Object? submitError = freezed,
     Object? ordersLoading = null,
     Object? currentOrders = null,
+    Object? paymentInitiating = null,
+    Object? paymentError = freezed,
+    Object? paymentRedirectUrl = freezed,
+    Object? paymentStatuses = null,
+    Object? session = freezed,
+    Object? sessionItems = null,
+    Object? selectedItemIds = null,
+    Object? sessionLoading = null,
+    Object? sessionError = freezed,
+    Object? sessionTotalMinor = null,
+    Object? sessionPaidMinor = null,
+    Object? sessionRemainingMinor = null,
+    Object? sessionInviteCode = freezed,
+    Object? sessionJoining = null,
+    Object? sessionJoinError = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -163,6 +214,81 @@ class _$OrdersStateCopyWithImpl<$Res, $Val extends OrdersState>
                     ? _value.currentOrders
                     : currentOrders // ignore: cast_nullable_to_non_nullable
                         as List<OrderSummary>,
+            paymentInitiating:
+                null == paymentInitiating
+                    ? _value.paymentInitiating
+                    : paymentInitiating // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            paymentError:
+                freezed == paymentError
+                    ? _value.paymentError
+                    : paymentError // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            paymentRedirectUrl:
+                freezed == paymentRedirectUrl
+                    ? _value.paymentRedirectUrl
+                    : paymentRedirectUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            paymentStatuses:
+                null == paymentStatuses
+                    ? _value.paymentStatuses
+                    : paymentStatuses // ignore: cast_nullable_to_non_nullable
+                        as Map<String, String>,
+            session:
+                freezed == session
+                    ? _value.session
+                    : session // ignore: cast_nullable_to_non_nullable
+                        as DiningSession?,
+            sessionItems:
+                null == sessionItems
+                    ? _value.sessionItems
+                    : sessionItems // ignore: cast_nullable_to_non_nullable
+                        as List<SessionOrderItem>,
+            selectedItemIds:
+                null == selectedItemIds
+                    ? _value.selectedItemIds
+                    : selectedItemIds // ignore: cast_nullable_to_non_nullable
+                        as Set<String>,
+            sessionLoading:
+                null == sessionLoading
+                    ? _value.sessionLoading
+                    : sessionLoading // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            sessionError:
+                freezed == sessionError
+                    ? _value.sessionError
+                    : sessionError // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            sessionTotalMinor:
+                null == sessionTotalMinor
+                    ? _value.sessionTotalMinor
+                    : sessionTotalMinor // ignore: cast_nullable_to_non_nullable
+                        as int,
+            sessionPaidMinor:
+                null == sessionPaidMinor
+                    ? _value.sessionPaidMinor
+                    : sessionPaidMinor // ignore: cast_nullable_to_non_nullable
+                        as int,
+            sessionRemainingMinor:
+                null == sessionRemainingMinor
+                    ? _value.sessionRemainingMinor
+                    : sessionRemainingMinor // ignore: cast_nullable_to_non_nullable
+                        as int,
+            sessionInviteCode:
+                freezed == sessionInviteCode
+                    ? _value.sessionInviteCode
+                    : sessionInviteCode // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            sessionJoining:
+                null == sessionJoining
+                    ? _value.sessionJoining
+                    : sessionJoining // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            sessionJoinError:
+                freezed == sessionJoinError
+                    ? _value.sessionJoinError
+                    : sessionJoinError // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -179,6 +305,20 @@ class _$OrdersStateCopyWithImpl<$Res, $Val extends OrdersState>
 
     return $DiningContextCopyWith<$Res>(_value.diningContext!, (value) {
       return _then(_value.copyWith(diningContext: value) as $Val);
+    });
+  }
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DiningSessionCopyWith<$Res>? get session {
+    if (_value.session == null) {
+      return null;
+    }
+
+    return $DiningSessionCopyWith<$Res>(_value.session!, (value) {
+      return _then(_value.copyWith(session: value) as $Val);
     });
   }
 }
@@ -206,10 +346,27 @@ abstract class _$$OrdersStateImplCopyWith<$Res>
     String? submitError,
     bool ordersLoading,
     List<OrderSummary> currentOrders,
+    bool paymentInitiating,
+    String? paymentError,
+    String? paymentRedirectUrl,
+    Map<String, String> paymentStatuses,
+    DiningSession? session,
+    List<SessionOrderItem> sessionItems,
+    Set<String> selectedItemIds,
+    bool sessionLoading,
+    String? sessionError,
+    int sessionTotalMinor,
+    int sessionPaidMinor,
+    int sessionRemainingMinor,
+    String? sessionInviteCode,
+    bool sessionJoining,
+    String? sessionJoinError,
   });
 
   @override
   $DiningContextCopyWith<$Res>? get diningContext;
+  @override
+  $DiningSessionCopyWith<$Res>? get session;
 }
 
 /// @nodoc
@@ -239,6 +396,21 @@ class __$$OrdersStateImplCopyWithImpl<$Res>
     Object? submitError = freezed,
     Object? ordersLoading = null,
     Object? currentOrders = null,
+    Object? paymentInitiating = null,
+    Object? paymentError = freezed,
+    Object? paymentRedirectUrl = freezed,
+    Object? paymentStatuses = null,
+    Object? session = freezed,
+    Object? sessionItems = null,
+    Object? selectedItemIds = null,
+    Object? sessionLoading = null,
+    Object? sessionError = freezed,
+    Object? sessionTotalMinor = null,
+    Object? sessionPaidMinor = null,
+    Object? sessionRemainingMinor = null,
+    Object? sessionInviteCode = freezed,
+    Object? sessionJoining = null,
+    Object? sessionJoinError = freezed,
   }) {
     return _then(
       _$OrdersStateImpl(
@@ -307,6 +479,81 @@ class __$$OrdersStateImplCopyWithImpl<$Res>
                 ? _value._currentOrders
                 : currentOrders // ignore: cast_nullable_to_non_nullable
                     as List<OrderSummary>,
+        paymentInitiating:
+            null == paymentInitiating
+                ? _value.paymentInitiating
+                : paymentInitiating // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        paymentError:
+            freezed == paymentError
+                ? _value.paymentError
+                : paymentError // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        paymentRedirectUrl:
+            freezed == paymentRedirectUrl
+                ? _value.paymentRedirectUrl
+                : paymentRedirectUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        paymentStatuses:
+            null == paymentStatuses
+                ? _value._paymentStatuses
+                : paymentStatuses // ignore: cast_nullable_to_non_nullable
+                    as Map<String, String>,
+        session:
+            freezed == session
+                ? _value.session
+                : session // ignore: cast_nullable_to_non_nullable
+                    as DiningSession?,
+        sessionItems:
+            null == sessionItems
+                ? _value._sessionItems
+                : sessionItems // ignore: cast_nullable_to_non_nullable
+                    as List<SessionOrderItem>,
+        selectedItemIds:
+            null == selectedItemIds
+                ? _value._selectedItemIds
+                : selectedItemIds // ignore: cast_nullable_to_non_nullable
+                    as Set<String>,
+        sessionLoading:
+            null == sessionLoading
+                ? _value.sessionLoading
+                : sessionLoading // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        sessionError:
+            freezed == sessionError
+                ? _value.sessionError
+                : sessionError // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        sessionTotalMinor:
+            null == sessionTotalMinor
+                ? _value.sessionTotalMinor
+                : sessionTotalMinor // ignore: cast_nullable_to_non_nullable
+                    as int,
+        sessionPaidMinor:
+            null == sessionPaidMinor
+                ? _value.sessionPaidMinor
+                : sessionPaidMinor // ignore: cast_nullable_to_non_nullable
+                    as int,
+        sessionRemainingMinor:
+            null == sessionRemainingMinor
+                ? _value.sessionRemainingMinor
+                : sessionRemainingMinor // ignore: cast_nullable_to_non_nullable
+                    as int,
+        sessionInviteCode:
+            freezed == sessionInviteCode
+                ? _value.sessionInviteCode
+                : sessionInviteCode // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        sessionJoining:
+            null == sessionJoining
+                ? _value.sessionJoining
+                : sessionJoining // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        sessionJoinError:
+            freezed == sessionJoinError
+                ? _value.sessionJoinError
+                : sessionJoinError // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -329,9 +576,27 @@ class _$OrdersStateImpl extends _OrdersState {
     this.submitError,
     this.ordersLoading = false,
     final List<OrderSummary> currentOrders = const [],
+    this.paymentInitiating = false,
+    this.paymentError,
+    this.paymentRedirectUrl,
+    final Map<String, String> paymentStatuses = const {},
+    this.session,
+    final List<SessionOrderItem> sessionItems = const [],
+    final Set<String> selectedItemIds = const {},
+    this.sessionLoading = false,
+    this.sessionError,
+    this.sessionTotalMinor = 0,
+    this.sessionPaidMinor = 0,
+    this.sessionRemainingMinor = 0,
+    this.sessionInviteCode,
+    this.sessionJoining = false,
+    this.sessionJoinError,
   }) : _menuCategories = menuCategories,
        _cartItems = cartItems,
        _currentOrders = currentOrders,
+       _paymentStatuses = paymentStatuses,
+       _sessionItems = sessionItems,
+       _selectedItemIds = selectedItemIds,
        super._();
 
   // Context
@@ -393,9 +658,73 @@ class _$OrdersStateImpl extends _OrdersState {
     return EqualUnmodifiableListView(_currentOrders);
   }
 
+  // Payment
+  @override
+  @JsonKey()
+  final bool paymentInitiating;
+  @override
+  final String? paymentError;
+  @override
+  final String? paymentRedirectUrl;
+  // Map of orderId -> paymentStatus string
+  final Map<String, String> _paymentStatuses;
+  // Map of orderId -> paymentStatus string
+  @override
+  @JsonKey()
+  Map<String, String> get paymentStatuses {
+    if (_paymentStatuses is EqualUnmodifiableMapView) return _paymentStatuses;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_paymentStatuses);
+  }
+
+  // Session
+  @override
+  final DiningSession? session;
+  final List<SessionOrderItem> _sessionItems;
+  @override
+  @JsonKey()
+  List<SessionOrderItem> get sessionItems {
+    if (_sessionItems is EqualUnmodifiableListView) return _sessionItems;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_sessionItems);
+  }
+
+  final Set<String> _selectedItemIds;
+  @override
+  @JsonKey()
+  Set<String> get selectedItemIds {
+    if (_selectedItemIds is EqualUnmodifiableSetView) return _selectedItemIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_selectedItemIds);
+  }
+
+  @override
+  @JsonKey()
+  final bool sessionLoading;
+  @override
+  final String? sessionError;
+  // Payment summary totals (minor units)
+  @override
+  @JsonKey()
+  final int sessionTotalMinor;
+  @override
+  @JsonKey()
+  final int sessionPaidMinor;
+  @override
+  @JsonKey()
+  final int sessionRemainingMinor;
+  // QR invite code to display
+  @override
+  final String? sessionInviteCode;
+  @override
+  @JsonKey()
+  final bool sessionJoining;
+  @override
+  final String? sessionJoinError;
+
   @override
   String toString() {
-    return 'OrdersState(contextLoading: $contextLoading, diningContext: $diningContext, noActiveContext: $noActiveContext, contextError: $contextError, menuLoading: $menuLoading, menuCategories: $menuCategories, menuError: $menuError, cartItems: $cartItems, submitting: $submitting, submitSuccess: $submitSuccess, submitError: $submitError, ordersLoading: $ordersLoading, currentOrders: $currentOrders)';
+    return 'OrdersState(contextLoading: $contextLoading, diningContext: $diningContext, noActiveContext: $noActiveContext, contextError: $contextError, menuLoading: $menuLoading, menuCategories: $menuCategories, menuError: $menuError, cartItems: $cartItems, submitting: $submitting, submitSuccess: $submitSuccess, submitError: $submitError, ordersLoading: $ordersLoading, currentOrders: $currentOrders, paymentInitiating: $paymentInitiating, paymentError: $paymentError, paymentRedirectUrl: $paymentRedirectUrl, paymentStatuses: $paymentStatuses, session: $session, sessionItems: $sessionItems, selectedItemIds: $selectedItemIds, sessionLoading: $sessionLoading, sessionError: $sessionError, sessionTotalMinor: $sessionTotalMinor, sessionPaidMinor: $sessionPaidMinor, sessionRemainingMinor: $sessionRemainingMinor, sessionInviteCode: $sessionInviteCode, sessionJoining: $sessionJoining, sessionJoinError: $sessionJoinError)';
   }
 
   @override
@@ -434,11 +763,46 @@ class _$OrdersStateImpl extends _OrdersState {
             const DeepCollectionEquality().equals(
               other._currentOrders,
               _currentOrders,
-            ));
+            ) &&
+            (identical(other.paymentInitiating, paymentInitiating) ||
+                other.paymentInitiating == paymentInitiating) &&
+            (identical(other.paymentError, paymentError) ||
+                other.paymentError == paymentError) &&
+            (identical(other.paymentRedirectUrl, paymentRedirectUrl) ||
+                other.paymentRedirectUrl == paymentRedirectUrl) &&
+            const DeepCollectionEquality().equals(
+              other._paymentStatuses,
+              _paymentStatuses,
+            ) &&
+            (identical(other.session, session) || other.session == session) &&
+            const DeepCollectionEquality().equals(
+              other._sessionItems,
+              _sessionItems,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._selectedItemIds,
+              _selectedItemIds,
+            ) &&
+            (identical(other.sessionLoading, sessionLoading) ||
+                other.sessionLoading == sessionLoading) &&
+            (identical(other.sessionError, sessionError) ||
+                other.sessionError == sessionError) &&
+            (identical(other.sessionTotalMinor, sessionTotalMinor) ||
+                other.sessionTotalMinor == sessionTotalMinor) &&
+            (identical(other.sessionPaidMinor, sessionPaidMinor) ||
+                other.sessionPaidMinor == sessionPaidMinor) &&
+            (identical(other.sessionRemainingMinor, sessionRemainingMinor) ||
+                other.sessionRemainingMinor == sessionRemainingMinor) &&
+            (identical(other.sessionInviteCode, sessionInviteCode) ||
+                other.sessionInviteCode == sessionInviteCode) &&
+            (identical(other.sessionJoining, sessionJoining) ||
+                other.sessionJoining == sessionJoining) &&
+            (identical(other.sessionJoinError, sessionJoinError) ||
+                other.sessionJoinError == sessionJoinError));
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     runtimeType,
     contextLoading,
     diningContext,
@@ -453,7 +817,22 @@ class _$OrdersStateImpl extends _OrdersState {
     submitError,
     ordersLoading,
     const DeepCollectionEquality().hash(_currentOrders),
-  );
+    paymentInitiating,
+    paymentError,
+    paymentRedirectUrl,
+    const DeepCollectionEquality().hash(_paymentStatuses),
+    session,
+    const DeepCollectionEquality().hash(_sessionItems),
+    const DeepCollectionEquality().hash(_selectedItemIds),
+    sessionLoading,
+    sessionError,
+    sessionTotalMinor,
+    sessionPaidMinor,
+    sessionRemainingMinor,
+    sessionInviteCode,
+    sessionJoining,
+    sessionJoinError,
+  ]);
 
   /// Create a copy of OrdersState
   /// with the given fields replaced by the non-null parameter values.
@@ -479,6 +858,21 @@ abstract class _OrdersState extends OrdersState {
     final String? submitError,
     final bool ordersLoading,
     final List<OrderSummary> currentOrders,
+    final bool paymentInitiating,
+    final String? paymentError,
+    final String? paymentRedirectUrl,
+    final Map<String, String> paymentStatuses,
+    final DiningSession? session,
+    final List<SessionOrderItem> sessionItems,
+    final Set<String> selectedItemIds,
+    final bool sessionLoading,
+    final String? sessionError,
+    final int sessionTotalMinor,
+    final int sessionPaidMinor,
+    final int sessionRemainingMinor,
+    final String? sessionInviteCode,
+    final bool sessionJoining,
+    final String? sessionJoinError,
   }) = _$OrdersStateImpl;
   const _OrdersState._() : super._();
 
@@ -508,7 +902,37 @@ abstract class _OrdersState extends OrdersState {
   @override
   bool get ordersLoading;
   @override
-  List<OrderSummary> get currentOrders;
+  List<OrderSummary> get currentOrders; // Payment
+  @override
+  bool get paymentInitiating;
+  @override
+  String? get paymentError;
+  @override
+  String? get paymentRedirectUrl; // Map of orderId -> paymentStatus string
+  @override
+  Map<String, String> get paymentStatuses; // Session
+  @override
+  DiningSession? get session;
+  @override
+  List<SessionOrderItem> get sessionItems;
+  @override
+  Set<String> get selectedItemIds;
+  @override
+  bool get sessionLoading;
+  @override
+  String? get sessionError; // Payment summary totals (minor units)
+  @override
+  int get sessionTotalMinor;
+  @override
+  int get sessionPaidMinor;
+  @override
+  int get sessionRemainingMinor; // QR invite code to display
+  @override
+  String? get sessionInviteCode;
+  @override
+  bool get sessionJoining;
+  @override
+  String? get sessionJoinError;
 
   /// Create a copy of OrdersState
   /// with the given fields replaced by the non-null parameter values.

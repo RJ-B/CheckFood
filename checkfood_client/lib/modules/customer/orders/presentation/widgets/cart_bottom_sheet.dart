@@ -5,6 +5,8 @@ import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
 
+/// A draggable bottom sheet showing the current cart items with a note field
+/// and a submit button to place the order.
 class CartBottomSheet extends StatefulWidget {
   const CartBottomSheet({super.key});
 
@@ -51,7 +53,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
           builder: (context, scrollController) {
             return Column(
               children: [
-                // Handle
                 Container(
                   margin: const EdgeInsets.only(top: 12),
                   width: 40,
@@ -62,7 +63,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                   ),
                 ),
 
-                // Title
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -83,7 +83,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                   ),
                 ),
 
-                // Items list
                 Expanded(
                   child: ListView.builder(
                     controller: scrollController,
@@ -132,7 +131,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                   ),
                 ),
 
-                // Note field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextField(
@@ -147,7 +145,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                   ),
                 ),
 
-                // Total + submit
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(

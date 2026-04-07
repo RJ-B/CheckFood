@@ -8,6 +8,7 @@ import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 
+/// Onboarding step 2: form for configuring the restaurant's weekly opening hours.
 class StepHoursForm extends StatefulWidget {
   const StepHoursForm({super.key});
 
@@ -15,6 +16,8 @@ class StepHoursForm extends StatefulWidget {
   State<StepHoursForm> createState() => _StepHoursFormState();
 }
 
+/// State for [StepHoursForm]: maintains the per-day open/close times and
+/// initialises them from the existing restaurant data on first render.
 class _StepHoursFormState extends State<StepHoursForm> {
   static const _dayNames = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 

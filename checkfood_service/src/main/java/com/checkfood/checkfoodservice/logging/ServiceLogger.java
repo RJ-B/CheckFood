@@ -6,7 +6,10 @@ import org.springframework.stereotype.Component;
 /**
  * Základní logger pro celou aplikaci.
  * Poskytuje centralizované metody pro logování na různých úrovních.
- * Slouží jako rodičovská třída pro specifické loggery jednotlivých vrstev (security, business logic, atd.).
+ * Slouží jako rodičovská třída pro specifické loggery jednotlivých vrstev.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Slf4j
 @Component

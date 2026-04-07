@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../data/models/request/add_employee_request_model.dart';
 
+/// A dialog for inviting a new employee by email address and assigning an initial role.
 class AddEmployeeDialog extends StatefulWidget {
   final void Function(AddEmployeeRequestModel request) onSubmit;
 

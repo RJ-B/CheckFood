@@ -8,7 +8,12 @@ import '../widgets/cart_summary_bar.dart';
 import '../widgets/current_orders_widget.dart';
 import '../widgets/menu_list_widget.dart';
 import '../widgets/no_context_widget.dart';
+import '../widgets/session_bill_widget.dart';
 
+/// Top-level page for the orders tab.
+///
+/// Loads the dining context on mount and routes to [_OrdersTabView] when a
+/// context is available, or to [NoContextWidget] when none is active.
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
 
@@ -16,11 +21,25 @@ class OrdersPage extends StatefulWidget {
   State<OrdersPage> createState() => _OrdersPageState();
 }
 
-class _OrdersPageState extends State<OrdersPage> {
+class _OrdersPageState extends State<OrdersPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     context.read<OrdersBloc>().add(const OrdersEvent.loadContext());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<OrdersBloc>().add(const OrdersEvent.loadContext());
+    }
   }
 
   @override
@@ -32,7 +51,6 @@ class _OrdersPageState extends State<OrdersPage> {
           prev.hasContext != curr.hasContext ||
           prev.contextError != curr.contextError,
       builder: (context, state) {
-        // Loading context
         final l = S.of(context);
         if (state.contextLoading) {
           return Scaffold(
@@ -41,15 +59,15 @@ class _OrdersPageState extends State<OrdersPage> {
           );
         }
 
-        // No active context
         if (state.noActiveContext) {
           return Scaffold(
             appBar: AppBar(title: Text(l.ordersTitle)),
-            body: const NoContextWidget(),
+            body: NoContextWidget(
+              onRefresh: () => context.read<OrdersBloc>().add(const OrdersEvent.loadContext()),
+            ),
           );
         }
 
-        // Context error
         if (state.contextError != null) {
           return Scaffold(
             appBar: AppBar(title: Text(l.ordersTitle)),
@@ -71,7 +89,6 @@ class _OrdersPageState extends State<OrdersPage> {
           );
         }
 
-        // Has context — show menu + orders tabs
         return _OrdersTabView(
           restaurantName: state.diningContext?.restaurantName ?? '',
           tableLabel: state.diningContext?.tableLabel ?? '',
@@ -81,6 +98,7 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 }
 
+/// Three-tab scaffold showing the menu, active orders, and the shared session bill.
 class _OrdersTabView extends StatelessWidget {
   final String restaurantName;
   final String tableLabel;
@@ -93,7 +111,7 @@ class _OrdersTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Column(
@@ -115,6 +133,7 @@ class _OrdersTabView extends StatelessWidget {
             tabs: [
               Tab(icon: const Icon(Icons.restaurant_menu), text: S.of(context).menu),
               Tab(icon: const Icon(Icons.receipt_long), text: S.of(context).myOrders),
+              const Tab(icon: Icon(Icons.receipt), text: 'Účet'),
             ],
           ),
         ),
@@ -124,6 +143,7 @@ class _OrdersTabView extends StatelessWidget {
               children: [
                 MenuListWidget(),
                 CurrentOrdersWidget(),
+                SessionBillWidget(),
               ],
             ),
             Positioned(

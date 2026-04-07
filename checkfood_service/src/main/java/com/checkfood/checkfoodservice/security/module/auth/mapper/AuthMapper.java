@@ -53,8 +53,8 @@ public class AuthMapper {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .authProvider(AuthProvider.LOCAL)
-                .providerId(request.getEmail()) // LOCAL provider uses email jako providerId
-                .enabled(false) // Requires email verification
+                .providerId(request.getEmail())
+                .enabled(false)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -82,7 +82,7 @@ public class AuthMapper {
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")
                 .expiresIn(expiresIn)
-                .user(toUserResponse(user)) // Delegation pro user data mapping
+                .user(toUserResponse(user))
                 .build();
     }
 

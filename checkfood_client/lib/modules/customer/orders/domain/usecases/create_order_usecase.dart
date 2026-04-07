@@ -1,6 +1,7 @@
 import '../entities/order_summary.dart';
 import '../repositories/orders_repository.dart';
 
+/// Odešle novou objednávku s danými položkami košíku a volitelnou poznámkou.
 class CreateOrderUseCase {
   final OrdersRepository _repository;
 

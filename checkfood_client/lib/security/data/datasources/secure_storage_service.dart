@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../config/security_config.dart';
 
+/// Abstraktní kontrakt pro bezpečné úložiště tokenů a role uživatele.
 abstract class SecureStorageService {
   Future<void> saveTokens({required String access, required String refresh});
   Future<String?> getAccessToken();
@@ -10,6 +11,7 @@ abstract class SecureStorageService {
   Future<void> deleteAll();
 }
 
+/// Implementace [SecureStorageService] využívající [FlutterSecureStorage].
 class SecureStorageServiceImpl implements SecureStorageService {
   final FlutterSecureStorage _storage;
 

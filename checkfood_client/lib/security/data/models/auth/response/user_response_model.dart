@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../config/security_json_keys.dart';
 import '../../../../domain/entities/user.dart';
-import '../../../../domain/enums/user_role.dart'; // Import našeho enumu
+import '../../../../domain/enums/user_role.dart';
 
 part 'user_response_model.freezed.dart';
 part 'user_response_model.g.dart';
 
+/// Datový model uživatele vrácený při přihlášení nebo registraci.
 @freezed
 class UserResponseModel with _$UserResponseModel {
   const UserResponseModel._();
@@ -24,6 +25,9 @@ class UserResponseModel with _$UserResponseModel {
     @JsonKey(name: 'needsOnboarding')
     @Default(false)
     bool needsOnboarding,
+    @Default('') String firstName,
+    @Default('') String lastName,
+    @Default('') String phone,
   }) = _UserResponseModel;
 
   factory UserResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -38,6 +42,9 @@ class UserResponseModel with _$UserResponseModel {
       permissions: authorities,
       needsRestaurantClaim: needsRestaurantClaim,
       needsOnboarding: needsOnboarding,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
     );
   }
 }

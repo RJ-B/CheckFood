@@ -5,6 +5,8 @@ import '../bloc/orders_state.dart';
 import 'cart_bottom_sheet.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
+/// A sticky bar anchored to the bottom of the screen that shows the cart item
+/// count and total, and opens [CartBottomSheet] when tapped.
 class CartSummaryBar extends StatelessWidget {
   const CartSummaryBar({super.key});
 
@@ -21,7 +23,7 @@ class CartSummaryBar extends StatelessWidget {
         }
 
         return Container(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 8 + MediaQuery.of(context).viewPadding.bottom),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
             boxShadow: [

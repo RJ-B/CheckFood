@@ -31,6 +31,8 @@ mixin _$Restaurant {
   List<OpeningHours> get openingHours => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
   bool get isFavourite => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>> get specialDays =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of Restaurant
   /// with the given fields replaced by the non-null parameter values.
@@ -61,6 +63,7 @@ abstract class $RestaurantCopyWith<$Res> {
     List<OpeningHours> openingHours,
     List<String> tags,
     bool isFavourite,
+    List<Map<String, dynamic>> specialDays,
   });
 
   $AddressCopyWith<$Res> get address;
@@ -95,6 +98,7 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
     Object? openingHours = null,
     Object? tags = null,
     Object? isFavourite = null,
+    Object? specialDays = null,
   }) {
     return _then(
       _value.copyWith(
@@ -168,6 +172,11 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
                     ? _value.isFavourite
                     : isFavourite // ignore: cast_nullable_to_non_nullable
                         as bool,
+            specialDays:
+                null == specialDays
+                    ? _value.specialDays
+                    : specialDays // ignore: cast_nullable_to_non_nullable
+                        as List<Map<String, dynamic>>,
           )
           as $Val,
     );
@@ -208,6 +217,7 @@ abstract class _$$RestaurantImplCopyWith<$Res>
     List<OpeningHours> openingHours,
     List<String> tags,
     bool isFavourite,
+    List<Map<String, dynamic>> specialDays,
   });
 
   @override
@@ -242,6 +252,7 @@ class __$$RestaurantImplCopyWithImpl<$Res>
     Object? openingHours = null,
     Object? tags = null,
     Object? isFavourite = null,
+    Object? specialDays = null,
   }) {
     return _then(
       _$RestaurantImpl(
@@ -315,6 +326,11 @@ class __$$RestaurantImplCopyWithImpl<$Res>
                 ? _value.isFavourite
                 : isFavourite // ignore: cast_nullable_to_non_nullable
                     as bool,
+        specialDays:
+            null == specialDays
+                ? _value._specialDays
+                : specialDays // ignore: cast_nullable_to_non_nullable
+                    as List<Map<String, dynamic>>,
       ),
     );
   }
@@ -338,8 +354,10 @@ class _$RestaurantImpl extends _Restaurant {
     required final List<OpeningHours> openingHours,
     final List<String> tags = const [],
     this.isFavourite = false,
+    final List<Map<String, dynamic>> specialDays = const [],
   }) : _openingHours = openingHours,
        _tags = tags,
+       _specialDays = specialDays,
        super._();
 
   @override
@@ -384,10 +402,18 @@ class _$RestaurantImpl extends _Restaurant {
   @override
   @JsonKey()
   final bool isFavourite;
+  final List<Map<String, dynamic>> _specialDays;
+  @override
+  @JsonKey()
+  List<Map<String, dynamic>> get specialDays {
+    if (_specialDays is EqualUnmodifiableListView) return _specialDays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_specialDays);
+  }
 
   @override
   String toString() {
-    return 'Restaurant(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite)';
+    return 'Restaurant(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite, specialDays: $specialDays)';
   }
 
   @override
@@ -416,7 +442,11 @@ class _$RestaurantImpl extends _Restaurant {
             ) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.isFavourite, isFavourite) ||
-                other.isFavourite == isFavourite));
+                other.isFavourite == isFavourite) &&
+            const DeepCollectionEquality().equals(
+              other._specialDays,
+              _specialDays,
+            ));
   }
 
   @override
@@ -436,6 +466,7 @@ class _$RestaurantImpl extends _Restaurant {
     const DeepCollectionEquality().hash(_openingHours),
     const DeepCollectionEquality().hash(_tags),
     isFavourite,
+    const DeepCollectionEquality().hash(_specialDays),
   );
 
   /// Create a copy of Restaurant
@@ -463,6 +494,7 @@ abstract class _Restaurant extends Restaurant {
     required final List<OpeningHours> openingHours,
     final List<String> tags,
     final bool isFavourite,
+    final List<Map<String, dynamic>> specialDays,
   }) = _$RestaurantImpl;
   const _Restaurant._() : super._();
 
@@ -494,6 +526,8 @@ abstract class _Restaurant extends Restaurant {
   List<String> get tags;
   @override
   bool get isFavourite;
+  @override
+  List<Map<String, dynamic>> get specialDays;
 
   /// Create a copy of Restaurant
   /// with the given fields replaced by the non-null parameter values.

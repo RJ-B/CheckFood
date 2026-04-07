@@ -4,22 +4,15 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 /**
- * AOP aspekt pro logování servisní vrstvy.
+ * AOP aspekt pro jednotné logování vstupu, výstupu a doby trvání metod servisní vrstvy.
+ * Neobsahuje business logiku ani rozhodování o chování aplikace.
  *
- * Slouží k:
- * - jednotnému logování vstupu / výstupu service metod
- * - měření doby trvání
- * - zachycení výjimek
- *
- *   Neobsahuje business logiku
- *   Nerozhoduje o chování aplikace
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Aspect
 @Component
 public class ServiceLoggingAspect {
 
-    // TODO:
-    // - @Around pro application.service
-    // - log entry/exit
-    // - měření execution time
+    // TODO: @Around pro application.service — log entry/exit, měření execution time
 }
