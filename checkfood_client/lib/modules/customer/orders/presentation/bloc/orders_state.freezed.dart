@@ -17,39 +17,31 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OrdersState {
-  // Context
   bool get contextLoading => throw _privateConstructorUsedError;
   DiningContext? get diningContext => throw _privateConstructorUsedError;
   bool get noActiveContext => throw _privateConstructorUsedError;
-  String? get contextError => throw _privateConstructorUsedError; // Menu
+  String? get contextError => throw _privateConstructorUsedError;
   bool get menuLoading => throw _privateConstructorUsedError;
   List<MenuCategory> get menuCategories => throw _privateConstructorUsedError;
-  String? get menuError => throw _privateConstructorUsedError; // Cart
-  List<CartItem> get cartItems =>
-      throw _privateConstructorUsedError; // Order submission
+  String? get menuError => throw _privateConstructorUsedError;
+  List<CartItem> get cartItems => throw _privateConstructorUsedError;
   bool get submitting => throw _privateConstructorUsedError;
   bool get submitSuccess => throw _privateConstructorUsedError;
-  String? get submitError =>
-      throw _privateConstructorUsedError; // Current orders
+  String? get submitError => throw _privateConstructorUsedError;
   bool get ordersLoading => throw _privateConstructorUsedError;
-  List<OrderSummary> get currentOrders =>
-      throw _privateConstructorUsedError; // Payment
+  List<OrderSummary> get currentOrders => throw _privateConstructorUsedError;
   bool get paymentInitiating => throw _privateConstructorUsedError;
   String? get paymentError => throw _privateConstructorUsedError;
-  String? get paymentRedirectUrl =>
-      throw _privateConstructorUsedError; // Map of orderId -> paymentStatus string
-  Map<String, String> get paymentStatuses =>
-      throw _privateConstructorUsedError; // Session
+  String? get paymentRedirectUrl => throw _privateConstructorUsedError;
+  Map<String, String> get paymentStatuses => throw _privateConstructorUsedError;
   DiningSession? get session => throw _privateConstructorUsedError;
   List<SessionOrderItem> get sessionItems => throw _privateConstructorUsedError;
   Set<String> get selectedItemIds => throw _privateConstructorUsedError;
   bool get sessionLoading => throw _privateConstructorUsedError;
-  String? get sessionError =>
-      throw _privateConstructorUsedError; // Payment summary totals (minor units)
+  String? get sessionError => throw _privateConstructorUsedError;
   int get sessionTotalMinor => throw _privateConstructorUsedError;
   int get sessionPaidMinor => throw _privateConstructorUsedError;
-  int get sessionRemainingMinor =>
-      throw _privateConstructorUsedError; // QR invite code to display
+  int get sessionRemainingMinor => throw _privateConstructorUsedError;
   String? get sessionInviteCode => throw _privateConstructorUsedError;
   bool get sessionJoining => throw _privateConstructorUsedError;
   String? get sessionJoinError => throw _privateConstructorUsedError;
@@ -599,7 +591,6 @@ class _$OrdersStateImpl extends _OrdersState {
        _selectedItemIds = selectedItemIds,
        super._();
 
-  // Context
   @override
   @JsonKey()
   final bool contextLoading;
@@ -610,7 +601,6 @@ class _$OrdersStateImpl extends _OrdersState {
   final bool noActiveContext;
   @override
   final String? contextError;
-  // Menu
   @override
   @JsonKey()
   final bool menuLoading;
@@ -625,9 +615,7 @@ class _$OrdersStateImpl extends _OrdersState {
 
   @override
   final String? menuError;
-  // Cart
   final List<CartItem> _cartItems;
-  // Cart
   @override
   @JsonKey()
   List<CartItem> get cartItems {
@@ -636,7 +624,6 @@ class _$OrdersStateImpl extends _OrdersState {
     return EqualUnmodifiableListView(_cartItems);
   }
 
-  // Order submission
   @override
   @JsonKey()
   final bool submitting;
@@ -645,7 +632,6 @@ class _$OrdersStateImpl extends _OrdersState {
   final bool submitSuccess;
   @override
   final String? submitError;
-  // Current orders
   @override
   @JsonKey()
   final bool ordersLoading;
@@ -658,7 +644,6 @@ class _$OrdersStateImpl extends _OrdersState {
     return EqualUnmodifiableListView(_currentOrders);
   }
 
-  // Payment
   @override
   @JsonKey()
   final bool paymentInitiating;
@@ -666,9 +651,7 @@ class _$OrdersStateImpl extends _OrdersState {
   final String? paymentError;
   @override
   final String? paymentRedirectUrl;
-  // Map of orderId -> paymentStatus string
   final Map<String, String> _paymentStatuses;
-  // Map of orderId -> paymentStatus string
   @override
   @JsonKey()
   Map<String, String> get paymentStatuses {
@@ -677,7 +660,6 @@ class _$OrdersStateImpl extends _OrdersState {
     return EqualUnmodifiableMapView(_paymentStatuses);
   }
 
-  // Session
   @override
   final DiningSession? session;
   final List<SessionOrderItem> _sessionItems;
@@ -703,7 +685,6 @@ class _$OrdersStateImpl extends _OrdersState {
   final bool sessionLoading;
   @override
   final String? sessionError;
-  // Payment summary totals (minor units)
   @override
   @JsonKey()
   final int sessionTotalMinor;
@@ -713,7 +694,6 @@ class _$OrdersStateImpl extends _OrdersState {
   @override
   @JsonKey()
   final int sessionRemainingMinor;
-  // QR invite code to display
   @override
   final String? sessionInviteCode;
   @override
@@ -876,7 +856,6 @@ abstract class _OrdersState extends OrdersState {
   }) = _$OrdersStateImpl;
   const _OrdersState._() : super._();
 
-  // Context
   @override
   bool get contextLoading;
   @override
@@ -884,33 +863,33 @@ abstract class _OrdersState extends OrdersState {
   @override
   bool get noActiveContext;
   @override
-  String? get contextError; // Menu
+  String? get contextError;
   @override
   bool get menuLoading;
   @override
   List<MenuCategory> get menuCategories;
   @override
-  String? get menuError; // Cart
+  String? get menuError;
   @override
-  List<CartItem> get cartItems; // Order submission
+  List<CartItem> get cartItems;
   @override
   bool get submitting;
   @override
   bool get submitSuccess;
   @override
-  String? get submitError; // Current orders
+  String? get submitError;
   @override
   bool get ordersLoading;
   @override
-  List<OrderSummary> get currentOrders; // Payment
+  List<OrderSummary> get currentOrders;
   @override
   bool get paymentInitiating;
   @override
   String? get paymentError;
   @override
-  String? get paymentRedirectUrl; // Map of orderId -> paymentStatus string
+  String? get paymentRedirectUrl;
   @override
-  Map<String, String> get paymentStatuses; // Session
+  Map<String, String> get paymentStatuses;
   @override
   DiningSession? get session;
   @override
@@ -920,13 +899,13 @@ abstract class _OrdersState extends OrdersState {
   @override
   bool get sessionLoading;
   @override
-  String? get sessionError; // Payment summary totals (minor units)
+  String? get sessionError;
   @override
   int get sessionTotalMinor;
   @override
   int get sessionPaidMinor;
   @override
-  int get sessionRemainingMinor; // QR invite code to display
+  int get sessionRemainingMinor;
   @override
   String? get sessionInviteCode;
   @override

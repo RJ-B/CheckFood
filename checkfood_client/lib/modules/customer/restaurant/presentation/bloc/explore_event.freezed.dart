@@ -24,6 +24,7 @@ mixin _$ExploreEvent {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -42,6 +43,7 @@ mixin _$ExploreEvent {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -60,6 +62,7 @@ mixin _$ExploreEvent {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -80,6 +83,7 @@ mixin _$ExploreEvent {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -91,6 +95,7 @@ mixin _$ExploreEvent {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -102,6 +107,7 @@ mixin _$ExploreEvent {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -180,6 +186,7 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -202,6 +209,7 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -224,6 +232,7 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -251,6 +260,7 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -266,6 +276,7 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -281,6 +292,7 @@ class _$InitializeRequestedImpl implements InitializeRequested {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -375,6 +387,7 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -397,6 +410,7 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -419,6 +433,7 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -446,6 +461,7 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -461,6 +477,7 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -476,6 +493,7 @@ class _$PermissionResultReceivedImpl implements PermissionResultReceived {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -592,6 +610,7 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -614,6 +633,7 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -636,6 +656,7 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -663,6 +684,7 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -678,6 +700,7 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -693,6 +716,7 @@ class _$MapBoundsChangedImpl implements MapBoundsChanged {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -766,6 +790,7 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -788,6 +813,7 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -810,6 +836,7 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -837,6 +864,7 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -852,6 +880,7 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -867,6 +896,7 @@ class _$RefreshRequestedImpl implements RefreshRequested {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -959,6 +989,7 @@ class _$SearchChangedImpl implements SearchChanged {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -981,6 +1012,7 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -1003,6 +1035,7 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -1030,6 +1063,7 @@ class _$SearchChangedImpl implements SearchChanged {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -1045,6 +1079,7 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -1060,6 +1095,7 @@ class _$SearchChangedImpl implements SearchChanged {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -1082,6 +1118,229 @@ abstract class SearchChanged implements ExploreEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchChangedImplCopyWith<_$SearchChangedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FiltersChangedImplCopyWith<$Res> {
+  factory _$$FiltersChangedImplCopyWith(
+    _$FiltersChangedImpl value,
+    $Res Function(_$FiltersChangedImpl) then,
+  ) = __$$FiltersChangedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({RestaurantFilters filters});
+
+  $RestaurantFiltersCopyWith<$Res> get filters;
+}
+
+/// @nodoc
+class __$$FiltersChangedImplCopyWithImpl<$Res>
+    extends _$ExploreEventCopyWithImpl<$Res, _$FiltersChangedImpl>
+    implements _$$FiltersChangedImplCopyWith<$Res> {
+  __$$FiltersChangedImplCopyWithImpl(
+    _$FiltersChangedImpl _value,
+    $Res Function(_$FiltersChangedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? filters = null}) {
+    return _then(
+      _$FiltersChangedImpl(
+        filters:
+            null == filters
+                ? _value.filters
+                : filters // ignore: cast_nullable_to_non_nullable
+                    as RestaurantFilters,
+      ),
+    );
+  }
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RestaurantFiltersCopyWith<$Res> get filters {
+    return $RestaurantFiltersCopyWith<$Res>(_value.filters, (value) {
+      return _then(_value.copyWith(filters: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$FiltersChangedImpl implements FiltersChanged {
+  const _$FiltersChangedImpl({required this.filters});
+
+  @override
+  final RestaurantFilters filters;
+
+  @override
+  String toString() {
+    return 'ExploreEvent.filtersChanged(filters: $filters)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FiltersChangedImpl &&
+            (identical(other.filters, filters) || other.filters == filters));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, filters);
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FiltersChangedImplCopyWith<_$FiltersChangedImpl> get copyWith =>
+      __$$FiltersChangedImplCopyWithImpl<_$FiltersChangedImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializeRequested,
+    required TResult Function(bool granted) permissionResultReceived,
+    required TResult Function(MapParamsModel params) mapBoundsChanged,
+    required TResult Function() refreshRequested,
+    required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
+    required TResult Function(String? restaurantId) markerSelected,
+    required TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )
+    viewportChanged,
+    required TResult Function(int version) markersRefreshed,
+  }) {
+    return filtersChanged(filters);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializeRequested,
+    TResult? Function(bool granted)? permissionResultReceived,
+    TResult? Function(MapParamsModel params)? mapBoundsChanged,
+    TResult? Function()? refreshRequested,
+    TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
+    TResult? Function(String? restaurantId)? markerSelected,
+    TResult? Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult? Function(int version)? markersRefreshed,
+  }) {
+    return filtersChanged?.call(filters);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializeRequested,
+    TResult Function(bool granted)? permissionResultReceived,
+    TResult Function(MapParamsModel params)? mapBoundsChanged,
+    TResult Function()? refreshRequested,
+    TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
+    TResult Function(String? restaurantId)? markerSelected,
+    TResult Function(
+      double minLat,
+      double maxLat,
+      double minLng,
+      double maxLng,
+      int zoom,
+    )?
+    viewportChanged,
+    TResult Function(int version)? markersRefreshed,
+    required TResult orElse(),
+  }) {
+    if (filtersChanged != null) {
+      return filtersChanged(filters);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(InitializeRequested value) initializeRequested,
+    required TResult Function(PermissionResultReceived value)
+    permissionResultReceived,
+    required TResult Function(MapBoundsChanged value) mapBoundsChanged,
+    required TResult Function(RefreshRequested value) refreshRequested,
+    required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
+    required TResult Function(MarkerSelected value) markerSelected,
+    required TResult Function(ViewportChanged value) viewportChanged,
+    required TResult Function(MarkersRefreshed value) markersRefreshed,
+  }) {
+    return filtersChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(InitializeRequested value)? initializeRequested,
+    TResult? Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult? Function(RefreshRequested value)? refreshRequested,
+    TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
+    TResult? Function(MarkerSelected value)? markerSelected,
+    TResult? Function(ViewportChanged value)? viewportChanged,
+    TResult? Function(MarkersRefreshed value)? markersRefreshed,
+  }) {
+    return filtersChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(InitializeRequested value)? initializeRequested,
+    TResult Function(PermissionResultReceived value)? permissionResultReceived,
+    TResult Function(MapBoundsChanged value)? mapBoundsChanged,
+    TResult Function(RefreshRequested value)? refreshRequested,
+    TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
+    TResult Function(MarkerSelected value)? markerSelected,
+    TResult Function(ViewportChanged value)? viewportChanged,
+    TResult Function(MarkersRefreshed value)? markersRefreshed,
+    required TResult orElse(),
+  }) {
+    if (filtersChanged != null) {
+      return filtersChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class FiltersChanged implements ExploreEvent {
+  const factory FiltersChanged({required final RestaurantFilters filters}) =
+      _$FiltersChangedImpl;
+
+  RestaurantFilters get filters;
+
+  /// Create a copy of ExploreEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FiltersChangedImplCopyWith<_$FiltersChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1165,6 +1424,7 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -1187,6 +1447,7 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -1209,6 +1470,7 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -1236,6 +1498,7 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -1251,6 +1514,7 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -1266,6 +1530,7 @@ class _$MarkerSelectedImpl implements MarkerSelected {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -1421,6 +1686,7 @@ class _$ViewportChangedImpl implements ViewportChanged {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -1443,6 +1709,7 @@ class _$ViewportChangedImpl implements ViewportChanged {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -1465,6 +1732,7 @@ class _$ViewportChangedImpl implements ViewportChanged {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -1492,6 +1760,7 @@ class _$ViewportChangedImpl implements ViewportChanged {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -1507,6 +1776,7 @@ class _$ViewportChangedImpl implements ViewportChanged {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -1522,6 +1792,7 @@ class _$ViewportChangedImpl implements ViewportChanged {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,
@@ -1635,6 +1906,7 @@ class _$MarkersRefreshedImpl implements MarkersRefreshed {
     required TResult Function(MapParamsModel params) mapBoundsChanged,
     required TResult Function() refreshRequested,
     required TResult Function(String query) searchChanged,
+    required TResult Function(RestaurantFilters filters) filtersChanged,
     required TResult Function(String? restaurantId) markerSelected,
     required TResult Function(
       double minLat,
@@ -1657,6 +1929,7 @@ class _$MarkersRefreshedImpl implements MarkersRefreshed {
     TResult? Function(MapParamsModel params)? mapBoundsChanged,
     TResult? Function()? refreshRequested,
     TResult? Function(String query)? searchChanged,
+    TResult? Function(RestaurantFilters filters)? filtersChanged,
     TResult? Function(String? restaurantId)? markerSelected,
     TResult? Function(
       double minLat,
@@ -1679,6 +1952,7 @@ class _$MarkersRefreshedImpl implements MarkersRefreshed {
     TResult Function(MapParamsModel params)? mapBoundsChanged,
     TResult Function()? refreshRequested,
     TResult Function(String query)? searchChanged,
+    TResult Function(RestaurantFilters filters)? filtersChanged,
     TResult Function(String? restaurantId)? markerSelected,
     TResult Function(
       double minLat,
@@ -1706,6 +1980,7 @@ class _$MarkersRefreshedImpl implements MarkersRefreshed {
     required TResult Function(MapBoundsChanged value) mapBoundsChanged,
     required TResult Function(RefreshRequested value) refreshRequested,
     required TResult Function(SearchChanged value) searchChanged,
+    required TResult Function(FiltersChanged value) filtersChanged,
     required TResult Function(MarkerSelected value) markerSelected,
     required TResult Function(ViewportChanged value) viewportChanged,
     required TResult Function(MarkersRefreshed value) markersRefreshed,
@@ -1721,6 +1996,7 @@ class _$MarkersRefreshedImpl implements MarkersRefreshed {
     TResult? Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult? Function(RefreshRequested value)? refreshRequested,
     TResult? Function(SearchChanged value)? searchChanged,
+    TResult? Function(FiltersChanged value)? filtersChanged,
     TResult? Function(MarkerSelected value)? markerSelected,
     TResult? Function(ViewportChanged value)? viewportChanged,
     TResult? Function(MarkersRefreshed value)? markersRefreshed,
@@ -1736,6 +2012,7 @@ class _$MarkersRefreshedImpl implements MarkersRefreshed {
     TResult Function(MapBoundsChanged value)? mapBoundsChanged,
     TResult Function(RefreshRequested value)? refreshRequested,
     TResult Function(SearchChanged value)? searchChanged,
+    TResult Function(FiltersChanged value)? filtersChanged,
     TResult Function(MarkerSelected value)? markerSelected,
     TResult Function(ViewportChanged value)? viewportChanged,
     TResult Function(MarkersRefreshed value)? markersRefreshed,

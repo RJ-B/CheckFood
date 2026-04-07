@@ -17,29 +17,15 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ExploreData {
-  /// Restaurace z DB
   List<Restaurant> get restaurants => throw _privateConstructorUsedError;
-
-  /// Markery pro mapu (shluky nebo restaurace)
   List<RestaurantMarker> get markers => throw _privateConstructorUsedError;
-
-  /// Aktualni poloha uzivatele
   Position get userPosition => throw _privateConstructorUsedError;
-
-  /// Zda probiha aktualizace markeru na mape
   bool get isMapLoading => throw _privateConstructorUsedError;
-
-  /// ID vybrane restaurace (null = zadny vyber)
   String? get selectedRestaurantId => throw _privateConstructorUsedError;
-
-  /// Vybrana restaurace pro preview card
   Restaurant? get selectedRestaurant => throw _privateConstructorUsedError;
-
-  /// Aktivni search query
   String? get searchQuery => throw _privateConstructorUsedError;
-
-  /// Zda je client-side clustering engine pripraveny (data nactena z disku/backendu)
   bool get clusterEngineReady => throw _privateConstructorUsedError;
+  RestaurantFilters get activeFilters => throw _privateConstructorUsedError;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.
@@ -64,9 +50,11 @@ abstract class $ExploreDataCopyWith<$Res> {
     Restaurant? selectedRestaurant,
     String? searchQuery,
     bool clusterEngineReady,
+    RestaurantFilters activeFilters,
   });
 
   $RestaurantCopyWith<$Res>? get selectedRestaurant;
+  $RestaurantFiltersCopyWith<$Res> get activeFilters;
 }
 
 /// @nodoc
@@ -92,6 +80,7 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
     Object? selectedRestaurant = freezed,
     Object? searchQuery = freezed,
     Object? clusterEngineReady = null,
+    Object? activeFilters = null,
   }) {
     return _then(
       _value.copyWith(
@@ -135,6 +124,11 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
                     ? _value.clusterEngineReady
                     : clusterEngineReady // ignore: cast_nullable_to_non_nullable
                         as bool,
+            activeFilters:
+                null == activeFilters
+                    ? _value.activeFilters
+                    : activeFilters // ignore: cast_nullable_to_non_nullable
+                        as RestaurantFilters,
           )
           as $Val,
     );
@@ -151,6 +145,16 @@ class _$ExploreDataCopyWithImpl<$Res, $Val extends ExploreData>
 
     return $RestaurantCopyWith<$Res>(_value.selectedRestaurant!, (value) {
       return _then(_value.copyWith(selectedRestaurant: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ExploreData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RestaurantFiltersCopyWith<$Res> get activeFilters {
+    return $RestaurantFiltersCopyWith<$Res>(_value.activeFilters, (value) {
+      return _then(_value.copyWith(activeFilters: value) as $Val);
     });
   }
 }
@@ -173,10 +177,13 @@ abstract class _$$ExploreDataImplCopyWith<$Res>
     Restaurant? selectedRestaurant,
     String? searchQuery,
     bool clusterEngineReady,
+    RestaurantFilters activeFilters,
   });
 
   @override
   $RestaurantCopyWith<$Res>? get selectedRestaurant;
+  @override
+  $RestaurantFiltersCopyWith<$Res> get activeFilters;
 }
 
 /// @nodoc
@@ -201,6 +208,7 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
     Object? selectedRestaurant = freezed,
     Object? searchQuery = freezed,
     Object? clusterEngineReady = null,
+    Object? activeFilters = null,
   }) {
     return _then(
       _$ExploreDataImpl(
@@ -244,6 +252,11 @@ class __$$ExploreDataImplCopyWithImpl<$Res>
                 ? _value.clusterEngineReady
                 : clusterEngineReady // ignore: cast_nullable_to_non_nullable
                     as bool,
+        activeFilters:
+            null == activeFilters
+                ? _value.activeFilters
+                : activeFilters // ignore: cast_nullable_to_non_nullable
+                    as RestaurantFilters,
       ),
     );
   }
@@ -261,13 +274,11 @@ class _$ExploreDataImpl implements _ExploreData {
     this.selectedRestaurant = null,
     this.searchQuery = null,
     this.clusterEngineReady = false,
+    this.activeFilters = const RestaurantFilters(),
   }) : _restaurants = restaurants,
        _markers = markers;
 
-  /// Restaurace z DB
   final List<Restaurant> _restaurants;
-
-  /// Restaurace z DB
   @override
   List<Restaurant> get restaurants {
     if (_restaurants is EqualUnmodifiableListView) return _restaurants;
@@ -275,10 +286,7 @@ class _$ExploreDataImpl implements _ExploreData {
     return EqualUnmodifiableListView(_restaurants);
   }
 
-  /// Markery pro mapu (shluky nebo restaurace)
   final List<RestaurantMarker> _markers;
-
-  /// Markery pro mapu (shluky nebo restaurace)
   @override
   List<RestaurantMarker> get markers {
     if (_markers is EqualUnmodifiableListView) return _markers;
@@ -286,38 +294,30 @@ class _$ExploreDataImpl implements _ExploreData {
     return EqualUnmodifiableListView(_markers);
   }
 
-  /// Aktualni poloha uzivatele
   @override
   final Position userPosition;
-
-  /// Zda probiha aktualizace markeru na mape
   @override
   @JsonKey()
   final bool isMapLoading;
-
-  /// ID vybrane restaurace (null = zadny vyber)
   @override
   @JsonKey()
   final String? selectedRestaurantId;
-
-  /// Vybrana restaurace pro preview card
   @override
   @JsonKey()
   final Restaurant? selectedRestaurant;
-
-  /// Aktivni search query
   @override
   @JsonKey()
   final String? searchQuery;
-
-  /// Zda je client-side clustering engine pripraveny (data nactena z disku/backendu)
   @override
   @JsonKey()
   final bool clusterEngineReady;
+  @override
+  @JsonKey()
+  final RestaurantFilters activeFilters;
 
   @override
   String toString() {
-    return 'ExploreData(restaurants: $restaurants, markers: $markers, userPosition: $userPosition, isMapLoading: $isMapLoading, selectedRestaurantId: $selectedRestaurantId, selectedRestaurant: $selectedRestaurant, searchQuery: $searchQuery, clusterEngineReady: $clusterEngineReady)';
+    return 'ExploreData(restaurants: $restaurants, markers: $markers, userPosition: $userPosition, isMapLoading: $isMapLoading, selectedRestaurantId: $selectedRestaurantId, selectedRestaurant: $selectedRestaurant, searchQuery: $searchQuery, clusterEngineReady: $clusterEngineReady, activeFilters: $activeFilters)';
   }
 
   @override
@@ -341,7 +341,9 @@ class _$ExploreDataImpl implements _ExploreData {
             (identical(other.searchQuery, searchQuery) ||
                 other.searchQuery == searchQuery) &&
             (identical(other.clusterEngineReady, clusterEngineReady) ||
-                other.clusterEngineReady == clusterEngineReady));
+                other.clusterEngineReady == clusterEngineReady) &&
+            (identical(other.activeFilters, activeFilters) ||
+                other.activeFilters == activeFilters));
   }
 
   @override
@@ -355,6 +357,7 @@ class _$ExploreDataImpl implements _ExploreData {
     selectedRestaurant,
     searchQuery,
     clusterEngineReady,
+    activeFilters,
   );
 
   /// Create a copy of ExploreData
@@ -376,39 +379,27 @@ abstract class _ExploreData implements ExploreData {
     final Restaurant? selectedRestaurant,
     final String? searchQuery,
     final bool clusterEngineReady,
+    final RestaurantFilters activeFilters,
   }) = _$ExploreDataImpl;
 
-  /// Restaurace z DB
   @override
   List<Restaurant> get restaurants;
-
-  /// Markery pro mapu (shluky nebo restaurace)
   @override
   List<RestaurantMarker> get markers;
-
-  /// Aktualni poloha uzivatele
   @override
   Position get userPosition;
-
-  /// Zda probiha aktualizace markeru na mape
   @override
   bool get isMapLoading;
-
-  /// ID vybrane restaurace (null = zadny vyber)
   @override
   String? get selectedRestaurantId;
-
-  /// Vybrana restaurace pro preview card
   @override
   Restaurant? get selectedRestaurant;
-
-  /// Aktivni search query
   @override
   String? get searchQuery;
-
-  /// Zda je client-side clustering engine pripraveny (data nactena z disku/backendu)
   @override
   bool get clusterEngineReady;
+  @override
+  RestaurantFilters get activeFilters;
 
   /// Create a copy of ExploreData
   /// with the given fields replaced by the non-null parameter values.

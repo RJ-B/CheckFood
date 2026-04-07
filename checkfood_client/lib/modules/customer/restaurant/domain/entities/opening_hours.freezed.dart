@@ -17,10 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OpeningHours {
-  int get dayOfWeek =>
-      throw _privateConstructorUsedError; // 1 (pondělí) až 7 (neděle)
-  String? get openAt =>
-      throw _privateConstructorUsedError; // formát "HH:mm:ss" nebo "HH:mm"
+  int get dayOfWeek => throw _privateConstructorUsedError;
+  String? get openAt => throw _privateConstructorUsedError;
   String? get closeAt => throw _privateConstructorUsedError;
   bool get isClosed => throw _privateConstructorUsedError;
 
@@ -159,10 +157,8 @@ class _$OpeningHoursImpl extends _OpeningHours {
 
   @override
   final int dayOfWeek;
-  // 1 (pondělí) až 7 (neděle)
   @override
   final String? openAt;
-  // formát "HH:mm:ss" nebo "HH:mm"
   @override
   final String? closeAt;
   @override
@@ -209,9 +205,9 @@ abstract class _OpeningHours extends OpeningHours {
   const _OpeningHours._() : super._();
 
   @override
-  int get dayOfWeek; // 1 (pondělí) až 7 (neděle)
+  int get dayOfWeek;
   @override
-  String? get openAt; // formát "HH:mm:ss" nebo "HH:mm"
+  String? get openAt;
   @override
   String? get closeAt;
   @override

@@ -17,21 +17,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RestaurantMarker {
-  /// ID je null, pokud se jedná o shluk (cluster).
-  /// Pokud count == 1, obsahuje reálné ID restaurace.
   String? get id => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
-
-  /// Počet restaurací v tomto bodě.
-  /// 1 = samostatná restaurace
-  /// >1 = shluk
   int get count => throw _privateConstructorUsedError;
-
-  /// Název restaurace — zobrazuje se pod markerem jako label.
   String? get name => throw _privateConstructorUsedError;
-
-  /// URL loga restaurace — používá se pro avatar v markeru.
   String? get logoUrl => throw _privateConstructorUsedError;
 
   /// Create a copy of RestaurantMarker
@@ -207,26 +197,16 @@ class _$RestaurantMarkerImpl extends _RestaurantMarker {
     this.logoUrl,
   }) : super._();
 
-  /// ID je null, pokud se jedná o shluk (cluster).
-  /// Pokud count == 1, obsahuje reálné ID restaurace.
   @override
   final String? id;
   @override
   final double latitude;
   @override
   final double longitude;
-
-  /// Počet restaurací v tomto bodě.
-  /// 1 = samostatná restaurace
-  /// >1 = shluk
   @override
   final int count;
-
-  /// Název restaurace — zobrazuje se pod markerem jako label.
   @override
   final String? name;
-
-  /// URL loga restaurace — používá se pro avatar v markeru.
   @override
   final String? logoUrl;
 
@@ -277,26 +257,16 @@ abstract class _RestaurantMarker extends RestaurantMarker {
   }) = _$RestaurantMarkerImpl;
   const _RestaurantMarker._() : super._();
 
-  /// ID je null, pokud se jedná o shluk (cluster).
-  /// Pokud count == 1, obsahuje reálné ID restaurace.
   @override
   String? get id;
   @override
   double get latitude;
   @override
   double get longitude;
-
-  /// Počet restaurací v tomto bodě.
-  /// 1 = samostatná restaurace
-  /// >1 = shluk
   @override
   int get count;
-
-  /// Název restaurace — zobrazuje se pod markerem jako label.
   @override
   String? get name;
-
-  /// URL loga restaurace — používá se pro avatar v markeru.
   @override
   String? get logoUrl;
 

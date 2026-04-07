@@ -23,18 +23,11 @@ RestaurantMarkerResponseModel _$RestaurantMarkerResponseModelFromJson(
 
 /// @nodoc
 mixin _$RestaurantMarkerResponseModel {
-  /// Může přijít null z backendu, pokud jde o agregovaný bod
   String? get id => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
-
-  /// Backend nyní vrací počet prvků
   int get count => throw _privateConstructorUsedError;
-
-  /// Název restaurace (pouze pro count == 1)
   String? get name => throw _privateConstructorUsedError;
-
-  /// URL loga restaurace (pouze pro count == 1)
   @JsonKey(name: 'logoUrl')
   String? get logoUrl => throw _privateConstructorUsedError;
 
@@ -230,23 +223,16 @@ class _$RestaurantMarkerResponseModelImpl
     Map<String, dynamic> json,
   ) => _$$RestaurantMarkerResponseModelImplFromJson(json);
 
-  /// Může přijít null z backendu, pokud jde o agregovaný bod
   @override
   final String? id;
   @override
   final double latitude;
   @override
   final double longitude;
-
-  /// Backend nyní vrací počet prvků
   @override
   final int count;
-
-  /// Název restaurace (pouze pro count == 1)
   @override
   final String? name;
-
-  /// URL loga restaurace (pouze pro count == 1)
   @override
   @JsonKey(name: 'logoUrl')
   final String? logoUrl;
@@ -309,23 +295,16 @@ abstract class _RestaurantMarkerResponseModel
   factory _RestaurantMarkerResponseModel.fromJson(Map<String, dynamic> json) =
       _$RestaurantMarkerResponseModelImpl.fromJson;
 
-  /// Může přijít null z backendu, pokud jde o agregovaný bod
   @override
   String? get id;
   @override
   double get latitude;
   @override
   double get longitude;
-
-  /// Backend nyní vrací počet prvků
   @override
   int get count;
-
-  /// Název restaurace (pouze pro count == 1)
   @override
   String? get name;
-
-  /// URL loga restaurace (pouze pro count == 1)
   @override
   @JsonKey(name: 'logoUrl')
   String? get logoUrl;

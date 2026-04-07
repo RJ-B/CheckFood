@@ -17,20 +17,18 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ReservationState {
-  // Scene
   bool get sceneLoading => throw _privateConstructorUsedError;
   ReservationScene? get scene => throw _privateConstructorUsedError;
-  String? get sceneError => throw _privateConstructorUsedError; // Statuses
-  List<TableStatus> get tableStatuses =>
-      throw _privateConstructorUsedError; // Selection
+  String? get sceneError => throw _privateConstructorUsedError;
+  List<TableStatus> get tableStatuses => throw _privateConstructorUsedError;
   String? get selectedTableId => throw _privateConstructorUsedError;
   String? get selectedTableLabel => throw _privateConstructorUsedError;
   int? get selectedTableCapacity => throw _privateConstructorUsedError;
-  String get selectedDate => throw _privateConstructorUsedError; // Party size
-  int get selectedPartySize => throw _privateConstructorUsedError; // Slots
+  String get selectedDate => throw _privateConstructorUsedError;
+  int get selectedPartySize => throw _privateConstructorUsedError;
   bool get slotsLoading => throw _privateConstructorUsedError;
   AvailableSlots? get availableSlots => throw _privateConstructorUsedError;
-  String? get selectedStartTime => throw _privateConstructorUsedError; // Submit
+  String? get selectedStartTime => throw _privateConstructorUsedError;
   bool get submitting => throw _privateConstructorUsedError;
   bool get submitSuccess => throw _privateConstructorUsedError;
   bool get submitConflict => throw _privateConstructorUsedError;
@@ -396,7 +394,6 @@ class _$ReservationStateImpl extends _ReservationState {
   }) : _tableStatuses = tableStatuses,
        super._();
 
-  // Scene
   @override
   @JsonKey()
   final bool sceneLoading;
@@ -404,9 +401,7 @@ class _$ReservationStateImpl extends _ReservationState {
   final ReservationScene? scene;
   @override
   final String? sceneError;
-  // Statuses
   final List<TableStatus> _tableStatuses;
-  // Statuses
   @override
   @JsonKey()
   List<TableStatus> get tableStatuses {
@@ -415,7 +410,6 @@ class _$ReservationStateImpl extends _ReservationState {
     return EqualUnmodifiableListView(_tableStatuses);
   }
 
-  // Selection
   @override
   final String? selectedTableId;
   @override
@@ -424,11 +418,9 @@ class _$ReservationStateImpl extends _ReservationState {
   final int? selectedTableCapacity;
   @override
   final String selectedDate;
-  // Party size
   @override
   @JsonKey()
   final int selectedPartySize;
-  // Slots
   @override
   @JsonKey()
   final bool slotsLoading;
@@ -436,7 +428,6 @@ class _$ReservationStateImpl extends _ReservationState {
   final AvailableSlots? availableSlots;
   @override
   final String? selectedStartTime;
-  // Submit
   @override
   @JsonKey()
   final bool submitting;
@@ -548,15 +539,14 @@ abstract class _ReservationState extends ReservationState {
   }) = _$ReservationStateImpl;
   const _ReservationState._() : super._();
 
-  // Scene
   @override
   bool get sceneLoading;
   @override
   ReservationScene? get scene;
   @override
-  String? get sceneError; // Statuses
+  String? get sceneError;
   @override
-  List<TableStatus> get tableStatuses; // Selection
+  List<TableStatus> get tableStatuses;
   @override
   String? get selectedTableId;
   @override
@@ -564,15 +554,15 @@ abstract class _ReservationState extends ReservationState {
   @override
   int? get selectedTableCapacity;
   @override
-  String get selectedDate; // Party size
+  String get selectedDate;
   @override
-  int get selectedPartySize; // Slots
+  int get selectedPartySize;
   @override
   bool get slotsLoading;
   @override
   AvailableSlots? get availableSlots;
   @override
-  String? get selectedStartTime; // Submit
+  String? get selectedStartTime;
   @override
   bool get submitting;
   @override

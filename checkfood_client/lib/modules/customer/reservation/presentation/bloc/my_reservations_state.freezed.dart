@@ -17,20 +17,17 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MyReservationsState {
-  // Overview
   bool get isLoading => throw _privateConstructorUsedError;
   String? get loadError => throw _privateConstructorUsedError;
   List<Reservation> get upcoming => throw _privateConstructorUsedError;
   List<Reservation> get history => throw _privateConstructorUsedError;
   int get totalHistoryCount => throw _privateConstructorUsedError;
   bool get showingAllHistory => throw _privateConstructorUsedError;
-  bool get isLoadingHistory =>
-      throw _privateConstructorUsedError; // Pending changes
+  bool get isLoadingHistory => throw _privateConstructorUsedError;
   List<PendingChange> get pendingChanges => throw _privateConstructorUsedError;
-  String? get pendingChangeActionId =>
-      throw _privateConstructorUsedError; // Cancel
+  String? get pendingChangeActionId => throw _privateConstructorUsedError;
   String? get cancellingId => throw _privateConstructorUsedError;
-  bool get cancelSuccess => throw _privateConstructorUsedError; // Edit
+  bool get cancelSuccess => throw _privateConstructorUsedError;
   Reservation? get editingReservation => throw _privateConstructorUsedError;
   List<SceneTable> get editTables => throw _privateConstructorUsedError;
   bool get isLoadingEditSlots => throw _privateConstructorUsedError;
@@ -42,7 +39,7 @@ mixin _$MyReservationsState {
   bool get isSubmittingEdit => throw _privateConstructorUsedError;
   bool get editSuccess => throw _privateConstructorUsedError;
   bool get editConflict => throw _privateConstructorUsedError;
-  String? get editError => throw _privateConstructorUsedError; // Recurring
+  String? get editError => throw _privateConstructorUsedError;
   List<RecurringReservation> get recurringReservations =>
       throw _privateConstructorUsedError;
   bool get isLoadingRecurring => throw _privateConstructorUsedError;
@@ -562,7 +559,6 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
        _recurringReservations = recurringReservations,
        super._();
 
-  // Overview
   @override
   @JsonKey()
   final bool isLoading;
@@ -595,9 +591,7 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
   @override
   @JsonKey()
   final bool isLoadingHistory;
-  // Pending changes
   final List<PendingChange> _pendingChanges;
-  // Pending changes
   @override
   @JsonKey()
   List<PendingChange> get pendingChanges {
@@ -608,13 +602,11 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
 
   @override
   final String? pendingChangeActionId;
-  // Cancel
   @override
   final String? cancellingId;
   @override
   @JsonKey()
   final bool cancelSuccess;
-  // Edit
   @override
   final Reservation? editingReservation;
   final List<SceneTable> _editTables;
@@ -650,9 +642,7 @@ class _$MyReservationsStateImpl extends _MyReservationsState {
   final bool editConflict;
   @override
   final String? editError;
-  // Recurring
   final List<RecurringReservation> _recurringReservations;
-  // Recurring
   @override
   @JsonKey()
   List<RecurringReservation> get recurringReservations {
@@ -811,7 +801,6 @@ abstract class _MyReservationsState extends MyReservationsState {
   }) = _$MyReservationsStateImpl;
   const _MyReservationsState._() : super._();
 
-  // Overview
   @override
   bool get isLoading;
   @override
@@ -825,15 +814,15 @@ abstract class _MyReservationsState extends MyReservationsState {
   @override
   bool get showingAllHistory;
   @override
-  bool get isLoadingHistory; // Pending changes
+  bool get isLoadingHistory;
   @override
   List<PendingChange> get pendingChanges;
   @override
-  String? get pendingChangeActionId; // Cancel
+  String? get pendingChangeActionId;
   @override
   String? get cancellingId;
   @override
-  bool get cancelSuccess; // Edit
+  bool get cancelSuccess;
   @override
   Reservation? get editingReservation;
   @override
@@ -857,7 +846,7 @@ abstract class _MyReservationsState extends MyReservationsState {
   @override
   bool get editConflict;
   @override
-  String? get editError; // Recurring
+  String? get editError;
   @override
   List<RecurringReservation> get recurringReservations;
   @override

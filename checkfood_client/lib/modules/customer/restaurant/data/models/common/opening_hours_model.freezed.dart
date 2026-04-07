@@ -22,7 +22,7 @@ OpeningHoursModel _$OpeningHoursModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$OpeningHoursModel {
   @JsonKey(name: 'dayOfWeek')
-  String get dayString => throw _privateConstructorUsedError; // Přijme "MONDAY"
+  String get dayString => throw _privateConstructorUsedError;
   String? get openAt => throw _privateConstructorUsedError;
   String? get closeAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'closed')
@@ -180,7 +180,6 @@ class _$OpeningHoursModelImpl extends _OpeningHoursModel {
   @override
   @JsonKey(name: 'dayOfWeek')
   final String dayString;
-  // Přijme "MONDAY"
   @override
   final String? openAt;
   @override
@@ -243,7 +242,7 @@ abstract class _OpeningHoursModel extends OpeningHoursModel {
 
   @override
   @JsonKey(name: 'dayOfWeek')
-  String get dayString; // Přijme "MONDAY"
+  String get dayString;
   @override
   String? get openAt;
   @override
