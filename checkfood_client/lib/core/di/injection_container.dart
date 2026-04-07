@@ -228,7 +228,9 @@ Future<void> init() async {
       ),
     );
     dio.interceptors.add(apiPathGuard);
-    dio.interceptors.add(LogInterceptor(requestBody: false, responseBody: true));
+    if (kDebugMode) {
+      dio.interceptors.add(LogInterceptor(requestBody: false, responseBody: true));
+    }
     return dio;
   }, instanceName: 'dioAuth');
 
@@ -251,7 +253,9 @@ Future<void> init() async {
 
     dio.interceptors.add(apiPathGuard);
     dio.interceptors.add(AuthInterceptor(sl(), sl(), dio));
-    dio.interceptors.add(LogInterceptor(requestBody: false, responseBody: true));
+    if (kDebugMode) {
+      dio.interceptors.add(LogInterceptor(requestBody: false, responseBody: true));
+    }
     return dio;
   });
 

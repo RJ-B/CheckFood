@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/utils/error_helpers.dart';
 import '../../../domain/usecases/create_reservation_usecase.dart';
 import '../../../domain/usecases/get_available_slots_usecase.dart';
 import '../../../domain/usecases/get_reservation_scene_usecase.dart';
@@ -47,7 +48,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
 
       add(LoadStatuses(date: state.selectedDate));
     } catch (e) {
-      emit(state.copyWith(sceneLoading: false, sceneError: e.toString()));
+      emit(state.copyWith(sceneLoading: false, sceneError: userFriendlyError(e)));
     }
   }
 
@@ -146,7 +147,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
         ));
       }
     } catch (e) {
-      emit(state.copyWith(submitting: false, submitError: e.toString()));
+      emit(state.copyWith(submitting: false, submitError: userFriendlyError(e)));
     }
   }
 

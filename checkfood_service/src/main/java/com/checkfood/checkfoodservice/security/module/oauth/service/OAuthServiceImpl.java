@@ -5,6 +5,7 @@ import com.checkfood.checkfoodservice.security.module.jwt.service.JwtService;
 import com.checkfood.checkfoodservice.security.module.oauth.dto.request.OAuthLoginRequest;
 import com.checkfood.checkfoodservice.security.module.oauth.exception.OAuthException;
 import com.checkfood.checkfoodservice.security.module.oauth.logging.OAuthLogger;
+import lombok.extern.slf4j.Slf4j;
 import com.checkfood.checkfoodservice.security.module.oauth.mapper.OAuthMapper;
 import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthClientFactory;
 import com.checkfood.checkfoodservice.security.module.oauth.provider.OAuthUserInfo;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
  * @author Rostislav Jirák
  * @version 1.0.0
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService {
@@ -74,7 +76,9 @@ public class OAuthServiceImpl implements OAuthService {
             if (device != null) {
                 finalDeviceIdentifier = device.getDeviceIdentifier();
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            log.warn("[OAuth] Chyba při registraci/aktualizaci zařízení pro uživatele {}: {}",
+                    user.getEmail(), e.getMessage());
         }
 
         try {
@@ -115,7 +119,9 @@ public class OAuthServiceImpl implements OAuthService {
             try {
                 device.setLastIpAddress(httpServletRequest.getRemoteAddr());
                 device.setUserAgent(httpServletRequest.getHeader("User-Agent"));
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                log.warn("[OAuth] Nelze načíst IP/User-Agent pro zařízení: {}", e.getMessage());
+            }
         }
 
         return deviceService.save(device);

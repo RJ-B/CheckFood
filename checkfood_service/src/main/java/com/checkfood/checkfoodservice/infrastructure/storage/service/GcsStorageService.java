@@ -34,6 +34,9 @@ public class GcsStorageService implements StorageService {
 
     @Override
     public String store(String directory, String filename, byte[] data, String contentType) {
+        if (directory == null || directory.contains("..") || directory.startsWith("/")) {
+            throw new IllegalArgumentException("Neplatný adresář úložiště: " + directory);
+        }
         String objectPath = directory + "/" + filename;
 
         BlobId blobId = BlobId.of(bucketName, objectPath);

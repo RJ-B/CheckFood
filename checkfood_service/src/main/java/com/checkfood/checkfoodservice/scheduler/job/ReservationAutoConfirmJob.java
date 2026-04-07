@@ -34,19 +34,24 @@ public class ReservationAutoConfirmJob {
     @Scheduled(fixedRate = 60_000)
     @Transactional
     public void autoConfirmPendingReservations() {
-        var cutoff = LocalDateTime.now(clock).minusMinutes(AUTO_CONFIRM_AFTER_MINUTES);
-        var pending = reservationRepository.findPendingOlderThan(cutoff);
+        try {
+            var cutoff = LocalDateTime.now(clock).minusMinutes(AUTO_CONFIRM_AFTER_MINUTES);
+            var pending = reservationRepository.findPendingOlderThan(cutoff);
 
-        if (pending.isEmpty()) {
-            return;
+            if (pending.isEmpty()) {
+                return;
+            }
+
+            for (var reservation : pending) {
+                reservation.setStatus(ReservationStatus.CONFIRMED);
+            }
+            reservationRepository.saveAll(pending);
+
+            log.info("[AutoConfirm] Automaticky potvrzeno {} rezervací starších než {} minut.",
+                    pending.size(), AUTO_CONFIRM_AFTER_MINUTES);
+
+        } catch (Exception e) {
+            log.error("[AutoConfirm] Chyba při automatickém potvrzování rezervací: {}", e.getMessage(), e);
         }
-
-        for (var reservation : pending) {
-            reservation.setStatus(ReservationStatus.CONFIRMED);
-        }
-        reservationRepository.saveAll(pending);
-
-        log.info("[AutoConfirm] Automaticky potvrzeno {} rezervací starších než {} minut.",
-                pending.size(), AUTO_CONFIRM_AFTER_MINUTES);
     }
 }

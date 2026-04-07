@@ -1,9 +1,9 @@
 package com.checkfood.checkfoodservice.security.module.auth.email;
 
-import com.checkfood.checkfoodservice.security.module.auth.exception.AuthException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
  * @see EmailService
  * @see JavaMailSender
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -63,7 +64,8 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            throw AuthException.internalError("Chyba při odesílání verifikačního emailu: " + e.getMessage());
+            // Metoda běží asynchronně (@Async) — throw by byl ztracen v async kontextu.
+            log.error("[Email] Chyba při odesílání verifikačního emailu na {}: {}", to, e.getMessage(), e);
         }
     }
 
@@ -95,7 +97,8 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            throw AuthException.internalError("Chyba při odesílání emailu pro obnovu hesla: " + e.getMessage());
+            // Metoda běží asynchronně (@Async) — throw by byl ztracen v async kontextu.
+            log.error("[Email] Chyba při odesílání emailu pro obnovu hesla na {}: {}", to, e.getMessage(), e);
         }
     }
 }

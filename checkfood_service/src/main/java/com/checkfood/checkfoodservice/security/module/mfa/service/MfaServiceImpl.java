@@ -207,37 +207,35 @@ public class MfaServiceImpl implements MfaService {
             return MfaChallengeResponse.success();
         }
 
-        String hashed =
-                passwordEncoder.encode(code);
+        // Bcrypt generuje jiný hash při každém volání encode() — nelze hledat podle hash přímo.
+        // Načteme všechny nepoužité záložní kódy a porovnáme přes passwordEncoder.matches().
+        List<MfaBackupCodeEntity> backupCodes =
+                backupCodeRepository.findByUserIdAndUsedFalse(userId);
 
-        return backupCodeRepository
-                .findByUserIdAndCodeHashAndUsedFalse(
-                        userId,
-                        hashed
-                )
-                .map(backup -> {
+        Optional<MfaBackupCodeEntity> matched = backupCodes.stream()
+                .filter(bc -> passwordEncoder.matches(code, bc.getCodeHash()))
+                .findFirst();
 
-                    backup.setUsed(true);
+        if (matched.isPresent()) {
 
-                    publishAudit(
-                            userId,
-                            AuditAction.MFA_CHALLENGE,
-                            AuditStatus.SUCCESS
-                    );
+            matched.get().setUsed(true);
 
-                    return MfaChallengeResponse.success();
+            publishAudit(
+                    userId,
+                    AuditAction.MFA_CHALLENGE,
+                    AuditStatus.SUCCESS
+            );
 
-                })
-                .orElseThrow(() -> {
+            return MfaChallengeResponse.success();
+        }
 
-                    publishAudit(
-                            userId,
-                            AuditAction.MFA_CHALLENGE,
-                            AuditStatus.FAILED
-                    );
+        publishAudit(
+                userId,
+                AuditAction.MFA_CHALLENGE,
+                AuditStatus.FAILED
+        );
 
-                    return new MfaInvalidCodeException("Invalid MFA code");
-                });
+        throw new MfaInvalidCodeException("Invalid MFA code");
     }
 
 

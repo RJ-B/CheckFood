@@ -26,6 +26,31 @@ public class DiningSessionException extends AppException {
     }
 
     /**
+     * Vytvoří výjimku pro případ, kdy uživatel nemá žádné aktivní sezení.
+     *
+     * @return výjimka s HTTP 404
+     */
+    public static DiningSessionException noActiveSession() {
+        return new DiningSessionException(
+                DiningContextErrorCode.NO_ACTIVE_CONTEXT,
+                "Nemáte žádné aktivní sezení.",
+                HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Vytvoří výjimku pro případ, kdy uživatel není členem požadovaného sezení.
+     *
+     * @param sessionId UUID sezení
+     * @return výjimka s HTTP 403
+     */
+    public static DiningSessionException notMember(UUID sessionId) {
+        return new DiningSessionException(
+                DiningContextErrorCode.CONTEXT_MISMATCH,
+                "Nejste členem sezení " + sessionId + ".",
+                HttpStatus.FORBIDDEN);
+    }
+
+    /**
      * Vytvoří výjimku pro nenalezené sezení.
      *
      * @param sessionId UUID nenalezeného sezení

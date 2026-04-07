@@ -10,6 +10,7 @@ import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantR
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantTableResponse;
 import com.checkfood.checkfoodservice.module.restaurant.service.RestaurantService;
 import com.checkfood.checkfoodservice.module.restaurant.service.TableManagementService;
+import com.checkfood.checkfoodservice.security.ratelimit.annotation.RateLimited;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 import java.util.List;
 import java.util.Set;
@@ -47,6 +50,7 @@ public class RestaurantController {
      * @return odpověď s verzí a seznamem markerů
      */
     @GetMapping("/all-markers")
+    @RateLimited(key = "restaurant:all-markers", limit = 30, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
     public ResponseEntity<AllMarkersResponse> getAllMarkers() {
         return ResponseEntity.ok(restaurantService.getAllActiveMarkers());
     }
@@ -56,6 +60,7 @@ public class RestaurantController {
      * Slouží pro polling — pokud se verze liší od lokální cache, klient zavolá /all-markers.
      */
     @GetMapping("/markers-version")
+    @RateLimited(key = "restaurant:markers-version", limit = 60, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
     public ResponseEntity<MarkerVersionResponse> getMarkersVersion() {
         return ResponseEntity.ok(MarkerVersionResponse.builder()
                 .version(restaurantService.getMarkerVersion())
@@ -72,6 +77,7 @@ public class RestaurantController {
      * Příklad: /api/v1/restaurants/markers?minLat=49.7&maxLat=49.8&minLng=13.3&maxLng=13.4
      */
     @GetMapping("/markers")
+    @RateLimited(key = "restaurant:markers", limit = 60, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
     public ResponseEntity<List<RestaurantMarkerResponse>> getMarkers(
             @RequestParam double minLat,
             @RequestParam double maxLat,
@@ -92,6 +98,7 @@ public class RestaurantController {
      * Příklad: /api/v1/restaurants/nearest?lat=49.74&lng=13.37&page=0&size=10
      */
     @GetMapping("/nearest")
+    @RateLimited(key = "restaurant:nearest", limit = 60, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
     public ResponseEntity<List<RestaurantResponse>> getNearest(
             @RequestParam double lat,
             @RequestParam double lng,
@@ -118,6 +125,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
+    @RateLimited(key = "restaurant:detail", limit = 120, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
     public ResponseEntity<RestaurantResponse> getRestaurant(
             @PathVariable UUID id,
             @AuthenticationPrincipal UserDetails userDetails

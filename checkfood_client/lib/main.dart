@@ -60,8 +60,22 @@ void main() async {
     await di.init();
 
     runApp(const AppBootstrapper());
-  } catch (e) {
-    // Kritická chyba při startu — aplikaci nelze spustit.
+  } catch (e, stack) {
+    debugPrint('CRITICAL STARTUP ERROR: $e\n$stack');
+    runApp(const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(32),
+            child: Text(
+              'Aplikaci se nepodařilo spustit.\nZkuste ji restartovat.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+      ),
+    ));
   }
 }
 

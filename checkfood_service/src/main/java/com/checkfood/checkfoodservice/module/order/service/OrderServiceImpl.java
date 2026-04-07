@@ -246,7 +246,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void handlePaymentCallback(Map<String, Object> payload) {
-        log.info("Moone callback přijat: {}", payload);
+        // Nelogujeme celý payload — může obsahovat citlivá data. Logujeme jen klíčové hodnoty.
 
         // Moone API callback formát není zdokumentován — parsujeme transactionId best-effort z více možných klíčů
         String transactionId = null;
@@ -264,6 +264,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         final String txId = transactionId;
+        log.info("Moone callback přijat, transactionId={}", txId);
         orderRepository.findByPaymentTransactionId(txId).ifPresentOrElse(order -> {
             PaymentStatus newStatus = moonePaymentService.getTransactionStatus(txId);
             order.setPaymentStatus(newStatus);

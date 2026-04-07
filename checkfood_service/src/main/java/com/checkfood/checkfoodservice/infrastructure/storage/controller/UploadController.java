@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -25,6 +28,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UploadController {
 
+    private static final Set<String> ALLOWED_MIME_TYPES = Set.of(
+            "image/jpeg", "image/png", "image/webp", "image/gif"
+    );
+
+    /** Maximální velikost souboru: 10 MB */
+    private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024L;
+
     private final StorageService storageService;
 
     /**
@@ -39,6 +49,17 @@ public class UploadController {
     public ResponseEntity<UploadResponse> upload(
             @RequestParam("file") MultipartFile file,
             @RequestParam("directory") String directory) throws IOException {
+
+        String contentType = file.getContentType();
+        if (contentType == null || !ALLOWED_MIME_TYPES.contains(contentType.toLowerCase())) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                    "Nepodporovaný typ souboru. Povoleny jsou: " + ALLOWED_MIME_TYPES);
+        }
+
+        if (file.getSize() > MAX_FILE_SIZE_BYTES) {
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                    "Soubor je příliš velký. Maximální velikost je 10 MB.");
+        }
 
         String originalFilename = file.getOriginalFilename();
         String extension = "";

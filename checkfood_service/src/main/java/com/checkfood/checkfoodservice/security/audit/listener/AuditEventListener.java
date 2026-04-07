@@ -4,6 +4,7 @@ import com.checkfood.checkfoodservice.security.audit.event.AuditEvent;
 import com.checkfood.checkfoodservice.security.audit.service.AuditService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
  * @see AuditEvent
  * @see AuditService
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(
@@ -45,14 +47,18 @@ public class AuditEventListener {
     @Async
     @EventListener
     public void handleAuditEvent(AuditEvent event) {
-
-        auditService.log(
-                event.getUserId(),
-                event.getAction(),
-                event.getStatus(),
-                event.getIpAddress(),
-                event.getUserAgent()
-        );
+        try {
+            auditService.log(
+                    event.getUserId(),
+                    event.getAction(),
+                    event.getStatus(),
+                    event.getIpAddress(),
+                    event.getUserAgent()
+            );
+        } catch (Exception e) {
+            log.error("[Audit] Chyba při ukládání auditní události action={} userId={}: {}",
+                    event.getAction(), event.getUserId(), e.getMessage(), e);
+        }
     }
 
 }

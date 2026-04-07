@@ -6,6 +6,7 @@ import com.checkfood.checkfoodservice.module.order.dining.dto.response.DiningSes
 import com.checkfood.checkfoodservice.module.order.dining.entity.DiningSession;
 import com.checkfood.checkfoodservice.module.order.dining.entity.DiningSessionMember;
 import com.checkfood.checkfoodservice.module.order.dining.exception.DiningSessionException;
+import com.checkfood.checkfoodservice.module.order.dining.repository.DiningSessionMemberRepository;
 import com.checkfood.checkfoodservice.module.order.dining.service.DiningSessionService;
 import com.checkfood.checkfoodservice.module.order.dto.response.OrderResponse;
 import com.checkfood.checkfoodservice.module.order.service.OrderService;
@@ -34,6 +35,7 @@ import java.util.UUID;
 public class DiningSessionController {
 
     private final DiningSessionService diningSessionService;
+    private final DiningSessionMemberRepository memberRepository;
     private final OrderService orderService;
     private final UserService userService;
 
@@ -63,7 +65,7 @@ public class DiningSessionController {
     public ResponseEntity<DiningSessionResponse> getMySession(Authentication authentication) {
         Long userId = extractUserId(authentication);
         DiningSession session = diningSessionService.findActiveSessionForUser(userId)
-                .orElseThrow(() -> DiningSessionException.invalidCode("N/A"));
+                .orElseThrow(DiningSessionException::noActiveSession);
         return ResponseEntity.ok(toResponse(session));
     }
 
@@ -78,7 +80,10 @@ public class DiningSessionController {
     public ResponseEntity<List<OrderResponse>> getSessionOrders(
             @PathVariable UUID id,
             Authentication authentication) {
-        extractUserId(authentication);
+        Long userId = extractUserId(authentication);
+        if (!memberRepository.existsBySessionIdAndUserId(id, userId)) {
+            throw DiningSessionException.notMember(id);
+        }
         List<OrderResponse> orders = orderService.getSessionOrders(id);
         return ResponseEntity.ok(orders);
     }
@@ -129,7 +134,10 @@ public class DiningSessionController {
     public ResponseEntity<Map<String, Object>> getPaymentSummary(
             @PathVariable UUID id,
             Authentication authentication) {
-        extractUserId(authentication);
+        Long userId = extractUserId(authentication);
+        if (!memberRepository.existsBySessionIdAndUserId(id, userId)) {
+            throw DiningSessionException.notMember(id);
+        }
         return ResponseEntity.ok(orderService.getSessionPaymentSummary(id));
     }
 

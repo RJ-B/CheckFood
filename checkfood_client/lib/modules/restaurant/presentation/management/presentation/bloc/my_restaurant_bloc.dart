@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../core/utils/error_helpers.dart';
 import '../../domain/usecases/add_employee_usecase.dart';
 import '../../domain/usecases/get_employees_usecase.dart';
 import '../../domain/usecases/get_my_restaurant_usecase.dart';
@@ -75,7 +76,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
         employees: employees,
       ));
     } catch (e) {
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -100,7 +101,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       ));
     } catch (e) {
       emit(currentState.copyWith(isUpdating: false));
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -118,7 +119,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       emit(currentState.copyWith(restaurant: updated, isUpdating: false));
     } catch (e) {
       emit(currentState.copyWith(isUpdating: false));
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -133,7 +134,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       final employees = await _getEmployeesUseCase.execute(restaurantId: currentState.selectedRestaurantId);
       emit(currentState.copyWith(employees: employees));
     } catch (e) {
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -151,7 +152,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       emit(currentState.copyWith(employees: employees, isUpdating: false));
     } catch (e) {
       emit(currentState.copyWith(isUpdating: false));
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -169,7 +170,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       emit(currentState.copyWith(employees: employees, isUpdating: false));
     } catch (e) {
       emit(currentState.copyWith(isUpdating: false));
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -187,7 +188,7 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       emit(currentState.copyWith(employees: employees, isUpdating: false));
     } catch (e) {
       emit(currentState.copyWith(isUpdating: false));
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
@@ -211,14 +212,8 @@ class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
       emit(currentState.copyWith(employees: employees, isUpdating: false));
     } catch (e) {
       emit(currentState.copyWith(isUpdating: false));
-      emit(MyRestaurantError(_extractMessage(e)));
+      emit(MyRestaurantError(userFriendlyError(e)));
     }
   }
 
-  String _extractMessage(Object error) {
-    if (error is Exception) {
-      return error.toString().replaceFirst('Exception: ', '');
-    }
-    return 'Nastala neočekávaná chyba.';
-  }
 }
