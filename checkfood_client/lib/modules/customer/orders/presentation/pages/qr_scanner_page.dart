@@ -5,8 +5,8 @@ import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
 
-/// Full-screen QR code scanner that reads a table invite code and triggers
-/// [OrdersEvent.joinSession] on the parent [OrdersBloc].
+/// Celoobrazkový QR kód skener, který načte kód pozvánky ke stolu a spustí
+/// [OrdersEvent.joinSession] na nadřazeném [OrdersBloc].
 class QrScannerPage extends StatefulWidget {
   const QrScannerPage({super.key});
 
@@ -39,7 +39,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
     context.read<OrdersBloc>().add(OrdersEvent.joinSession(inviteCode: inviteCode));
   }
 
-  /// Extracts the invite code from [raw], which may be a bare code or a full URL.
+  /// Extrahuje kód pozvánky z [raw], který může být holý kód nebo celá URL adresa.
   String _extractInviteCode(String raw) {
     if (raw.startsWith('http://') || raw.startsWith('https://')) {
       final uri = Uri.tryParse(raw);

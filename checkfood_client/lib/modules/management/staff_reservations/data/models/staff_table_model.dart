@@ -1,6 +1,6 @@
 import '../../domain/entities/staff_table.dart';
 
-/// API response model for a table returned by the staff tables endpoint.
+/// API response model pro stůl vrácený endpointem stolů personálu.
 class StaffTableModel {
   final String id;
   final String label;

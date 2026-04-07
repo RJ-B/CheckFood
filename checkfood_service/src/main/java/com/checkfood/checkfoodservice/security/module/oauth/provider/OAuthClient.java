@@ -13,7 +13,7 @@ public interface OAuthClient {
 
     /**
      * Provede kryptografické ověření přijatého ID tokenu a extrahuje data.
-     * Každý poskytovatel (Google/Apple) implementuje vlastní logiku verifikace.
+     * Každý provider (Google/Apple) implementuje vlastní logiku verifikace.
      *
      * @param idToken Surový token získaný z mobilní aplikace
      * @return Normalizovaný objekt OAuthUserInfo s daty uživatele
@@ -21,7 +21,7 @@ public interface OAuthClient {
     OAuthUserInfo verifyAndGetUserInfo(String idToken);
 
     /**
-     * Vrací typ poskytovatele, kterého tento klient obsluhuje.
+     * Vrací typ providera, kterého tento klient obsluhuje.
      * Klíčové pro správné směrování v rámci OAuthClientFactory.
      *
      * @return AuthProvider (GOOGLE nebo APPLE)

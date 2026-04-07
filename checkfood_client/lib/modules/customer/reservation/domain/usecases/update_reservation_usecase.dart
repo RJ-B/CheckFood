@@ -1,7 +1,7 @@
 import '../entities/reservation.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Updates the time, table, or party size of an existing reservation.
+/// Aktualizuje čas, stůl nebo počet hostů existující rezervace.
 class UpdateReservationUseCase {
   final ReservationRepository _repository;
 

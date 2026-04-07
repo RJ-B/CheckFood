@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/colors.dart';
 import 'panorama_capture_screen.dart' show SpherePoint;
 
-/// AR overlay painter that projects sphere-grid capture points onto the camera
-/// preview using a simple 3D → 2D perspective projection with FOV culling.
+/// AR overlay painter promítající body zachycení na mřížce sféry do náhledu kamery
+/// pomocí jednoduché perspektivní projekce 3D → 2D s ořezem FOV.
 class SphereGuidancePainter extends CustomPainter {
   final double currentYaw;
   final double currentPitch;
@@ -108,14 +108,14 @@ class SphereGuidancePainter extends CustomPainter {
     }
   }
 
-  /// Unsigned shortest angular distance (0..180).
+  /// Nejkratší úhlová vzdálenost bez znaménka (0..180).
   double _angleDiff(double a, double b) {
     final diff = (a - b).abs() % 360;
     return diff > 180 ? 360 - diff : diff;
   }
 
-  /// Signed shortest angular distance (-180..180).
-  /// Positive means [target] is clockwise from [current].
+  /// Nejkratší úhlová vzdálenost se znaménkem (-180..180).
+  /// Kladná hodnota znamená, že [target] je po směru hodinových ručiček od [current].
   double _signedAngleDiff(double target, double current) {
     var diff = (target - current) % 360;
     if (diff > 180) diff -= 360;

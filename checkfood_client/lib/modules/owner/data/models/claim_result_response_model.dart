@@ -4,7 +4,7 @@ import '../../domain/entities/claim_result.dart';
 part 'claim_result_response_model.freezed.dart';
 part 'claim_result_response_model.g.dart';
 
-/// API response model for the result of a restaurant claim attempt.
+/// API response model pro výsledek pokusu o nárokování restaurace.
 @freezed
 class ClaimResultResponseModel with _$ClaimResultResponseModel {
   const ClaimResultResponseModel._();

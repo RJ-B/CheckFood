@@ -4,8 +4,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/staff_reservation.dart';
 
-/// A card showing a single staff-visible reservation with a coloured left
-/// border indicating status, time range, party size, and contextual action buttons.
+/// Karta zobrazující jednu rezervaci viditelnou personálem s barevným levým
+/// okrajem indikujícím stav, časové rozmezí, počet hostů a kontextová tlačítka akcí.
 class StaffReservationCard extends StatelessWidget {
   final StaffReservation reservation;
   final bool isActionInProgress;

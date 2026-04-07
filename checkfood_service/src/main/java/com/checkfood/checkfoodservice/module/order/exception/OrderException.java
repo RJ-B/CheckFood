@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.UUID;
 
 /**
- * Výjimka modulu objednávek poskytující tovární metody pro typické chybové scénáře.
+ * Výjimka modulu objednávek poskytující statické factory metody pro typické chybové scénáře.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

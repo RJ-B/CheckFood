@@ -7,8 +7,8 @@ import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 
-/// Onboarding step 6: a checklist summary of all completed steps with a publish
-/// button that becomes active once all required steps are done.
+/// Onboarding krok 6: souhrnný checklist všech dokončených kroků s tlačítkem
+/// pro zveřejnění, které se aktivuje po dokončení všech povinných kroků.
 class StepSummary extends StatelessWidget {
   const StepSummary({super.key});
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import '../../../../../core/theme/colors.dart';
 
-/// A summary tab in the owner dashboard showing key restaurant metrics
-/// (employee count, active status, panorama availability).
+/// Souhrnná záložka v dashboardu majitele zobrazující klíčové metriky restaurace
+/// (počet zaměstnanců, aktivní stav, dostupnost panoramatu).
 class StatisticsTab extends StatelessWidget {
   final int employeeCount;
   final bool isActive;

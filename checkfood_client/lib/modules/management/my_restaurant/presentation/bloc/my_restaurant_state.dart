@@ -1,7 +1,7 @@
 import '../../domain/entities/employee.dart';
 import '../../domain/entities/my_restaurant.dart';
 
-/// Base class for [MyRestaurantBloc] states.
+/// Základní třída pro stavy [MyRestaurantBloc].
 abstract class MyRestaurantState {
   const MyRestaurantState();
 }

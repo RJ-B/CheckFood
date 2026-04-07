@@ -4,7 +4,7 @@ import com.checkfood.checkfoodservice.module.exception.AppException;
 import org.springframework.http.HttpStatus;
 
 /**
- * Výjimka pro chyby dining context poskytující tovární metody pro typické scénáře chybějícího
+ * Výjimka pro chyby dining context poskytující factory metody pro typické scénáře chybějícího
  * nebo neodpovídajícího kontextu stravování.
  *
  * @author Rostislav Jirák

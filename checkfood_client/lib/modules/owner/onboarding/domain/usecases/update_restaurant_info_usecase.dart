@@ -2,8 +2,8 @@ import '../../data/models/address_model.dart';
 import '../../data/models/restaurant_response_model.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Updates the restaurant's basic info (name, description, address, cuisine type)
-/// during onboarding step 1.
+/// Aktualizuje základní informace o restauraci (název, popis, adresu, typ kuchyně)
+/// v průběhu onboarding kroku 1.
 class UpdateRestaurantInfoUseCase {
   final OnboardingRepository _repository;
 

@@ -21,8 +21,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/location_service.dart';
 import 'restaurant_detail_page.dart';
 
-/// Full-screen map view for discovering nearby restaurants, with client-side
-/// marker clustering, a sliding restaurant list panel, and text search.
+/// Celoobrazkový pohled mapy pro objevování restaurací v okolí, s klientským
+/// clusterováním markerů, vysouvacím panelem seznamu restaurací a textovým vyhledáváním.
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
 
@@ -30,8 +30,8 @@ class ExplorePage extends StatefulWidget {
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
-/// State for [ExplorePage]: manages the Google Maps controller, panel
-/// animations, search input, and marker clustering lifecycle.
+/// Stav pro [ExplorePage]: spravuje controller Google Maps, animace panelu,
+/// vstup vyhledávání a životní cyklus clusterování markerů.
 class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin {
   GoogleMapController? _googleMapController;
   final PanelController _panelController = PanelController();
@@ -161,7 +161,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     }
   }
 
-  /// Creates a copy of markers with the given alpha. Cheap — no bitmap regeneration.
+  /// Vytvoří kopii markerů se zadanou hodnotou alfa. Levné — bez regenerace bitmapy.
   Set<Marker> _setAlpha(Set<Marker> markers, double alpha) {
     return markers.map((m) => Marker(
       markerId: m.markerId,

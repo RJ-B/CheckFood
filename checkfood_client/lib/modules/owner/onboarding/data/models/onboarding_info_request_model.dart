@@ -4,7 +4,7 @@ import 'address_model.dart';
 part 'onboarding_info_request_model.freezed.dart';
 part 'onboarding_info_request_model.g.dart';
 
-/// Request payload for saving the restaurant's basic info during onboarding step 1.
+/// Request payload pro uložení základních informací o restauraci v průběhu onboarding kroku 1.
 @freezed
 class OnboardingInfoRequestModel with _$OnboardingInfoRequestModel {
   const factory OnboardingInfoRequestModel({

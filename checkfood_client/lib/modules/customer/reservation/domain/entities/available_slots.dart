@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'available_slots.freezed.dart';
 
-/// Available booking start times for a specific table on a given date.
+/// Dostupné časy začátku rezervace pro konkrétní stůl a datum.
 @freezed
 class AvailableSlots with _$AvailableSlots {
   const factory AvailableSlots({

@@ -18,8 +18,8 @@ import '../../../../owner/onboarding/presentation/bloc/onboarding_wizard_bloc.da
 import '../../../../owner/onboarding/presentation/widgets/panorama_capture_screen.dart';
 import '../../../../owner/onboarding/presentation/widgets/panorama_editor_screen.dart';
 
-/// A tab in the owner dashboard for managing panorama sessions:
-/// creating new captures, monitoring stitching progress, and activating a finished panorama.
+/// Záložka v dashboardu majitele pro správu panorama sessions:
+/// vytváření nových snímků, sledování průběhu stitchingu a aktivaci hotového panoramatu.
 class PanoramaTab extends StatefulWidget {
   final String? activePanoramaUrl;
 

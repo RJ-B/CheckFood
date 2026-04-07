@@ -1,6 +1,6 @@
 import '../repositories/staff_reservation_repository.dart';
 
-/// Marks a reservation as checked-in when the guests arrive.
+/// Označí rezervaci jako check-in při příjezdu hostů.
 class CheckInReservationUseCase {
   final StaffReservationRepository _repository;
 

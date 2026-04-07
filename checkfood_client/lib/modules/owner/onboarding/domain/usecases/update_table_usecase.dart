@@ -1,7 +1,7 @@
 import '../entities/onboarding_table.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Updates a table's label, capacity, active state, and optional panorama placement.
+/// Aktualizuje označení stolu, kapacitu, aktivní stav a volitelné umístění v panoramatu.
 class UpdateTableUseCase {
   final OnboardingRepository _repository;
 

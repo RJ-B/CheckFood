@@ -1,4 +1,4 @@
-/// A special operating day for a restaurant, such as a holiday, shortened hours, or full closure.
+/// Zvláštní provozní den restaurace, například svátek, zkrácená otevírací doba nebo úplné zavření.
 class SpecialDay {
   final DateTime date;
   final bool isClosed;

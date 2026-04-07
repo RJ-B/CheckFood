@@ -8,7 +8,7 @@ import '../common/opening_hours_model.dart';
 part 'restaurant_response_model.freezed.dart';
 part 'restaurant_response_model.g.dart';
 
-/// API response model for a restaurant listing, including address, opening hours, and metadata.
+/// API response model pro záznam restaurace, včetně adresy, otevírací doby a metadat.
 @freezed
 class RestaurantResponseModel with _$RestaurantResponseModel {
   const RestaurantResponseModel._();
@@ -34,7 +34,7 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
   factory RestaurantResponseModel.fromJson(Map<String, dynamic> json) =>
       _$RestaurantResponseModelFromJson(json);
 
-  /// Converts this model to a [Restaurant] domain entity, applying safe defaults for nullable fields.
+  /// Převede tento model na domain entitu [Restaurant] s bezpečnými výchozími hodnotami pro nullable pole.
   Restaurant toEntity() => Restaurant(
     id: id ?? '',
     ownerId: ownerId ?? '',

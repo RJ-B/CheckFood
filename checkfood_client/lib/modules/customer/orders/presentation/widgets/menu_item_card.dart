@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/menu_item.dart';
 
-/// A card representing a single menu item with its name, description, and
-/// price, plus inline quantity controls when the item is already in the cart.
+/// Karta reprezentující jednu položku menu s názvem, popisem a cenou;
+/// pokud je položka již v košíku, zobrazí vložené ovládání množství.
 class MenuItemCard extends StatelessWidget {
   final MenuItem menuItem;
   final int cartQuantity;

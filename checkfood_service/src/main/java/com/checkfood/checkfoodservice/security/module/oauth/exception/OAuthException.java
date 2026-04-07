@@ -4,7 +4,7 @@ import com.checkfood.checkfoodservice.security.exception.SecurityException;
 import org.springframework.http.HttpStatus;
 
 /**
- * Výjimka pro OAuth modul poskytující tovární metody pro typické chybové scénáře při externí autentizaci.
+ * Výjimka pro OAuth modul poskytující factory metody pro typické chybové scénáře při externí autentizaci.
  *
  * @author Rostislav Jirák
  * @version 1.0.0
@@ -32,39 +32,39 @@ public class OAuthException extends SecurityException {
     }
 
     /**
-     * Vyvolá výjimku, pokud je použit nepodporovaný poskytovatel.
+     * Vyvolá výjimku, pokud je použit nepodporovaný provider.
      */
     public static OAuthException providerNotSupported(String provider) {
         return new OAuthException(
                 OAuthErrorCode.OAUTH_PROVIDER_NOT_SUPPORTED,
-                "Poskytovatel '" + provider + "' není podporován.",
+                "Provider '" + provider + "' není podporován.",
                 HttpStatus.BAD_REQUEST
         );
     }
 
     /**
-     * Vyvolá výjimku při technickém selhání komunikace s API poskytovatele.
+     * Vyvolá výjimku při technickém selhání komunikace s API providera.
      * Přijímá cause pro zachování stack trace.
      */
     public static OAuthException communicationError(String provider, String details, Throwable cause) {
         return new OAuthException(
                 OAuthErrorCode.OAUTH_PROVIDER_COMMUNICATION_ERROR,
-                "Chyba při komunikaci s poskytovatelem " + provider + ": " + details,
+                "Chyba při komunikaci s providerem " + provider + ": " + details,
                 HttpStatus.SERVICE_UNAVAILABLE,
                 cause
         );
     }
 
     /**
-     * Vyvolá výjimku, pokud poskytovatel nevrátil povinné údaje (e-mail).
+     * Vyvolá výjimku, pokud provider nevrátil povinné údaje (e-mail).
      *
-     * @param provider název poskytovatele
+     * @param provider název providera
      * @return výjimka s HTTP 400
      */
     public static OAuthException userDataMissing(String provider) {
         return new OAuthException(
                 OAuthErrorCode.OAUTH_USER_DATA_MISSING,
-                "Od poskytovatele " + provider + " nebylo možné získat povinné údaje (email).",
+                "Od providera " + provider + " nebylo možné získat povinné údaje (email).",
                 HttpStatus.BAD_REQUEST
         );
     }
@@ -86,12 +86,12 @@ public class OAuthException extends SecurityException {
     }
 
     /**
-     * Vyvolá výjimku při konfliktu poskytovatelů (Account Linking Protection).
+     * Vyvolá výjimku při konfliktu providerů (Account Linking Protection).
      */
     public static OAuthException accountProviderMismatch(String email, String currentProvider) {
         String msg = "LOCAL".equalsIgnoreCase(currentProvider)
                 ? "Tento email je již registrován pomocí hesla. Použijte klasické přihlášení."
-                : String.format("Tento email je již propojen s účtem %s. Přihlaste se přes tohoto poskytovatele.", currentProvider);
+                : String.format("Tento email je již propojen s účtem %s. Přihlaste se přes tohoto providera.", currentProvider);
 
         return new OAuthException(
                 OAuthErrorCode.OAUTH_PROVIDER_MISMATCH,

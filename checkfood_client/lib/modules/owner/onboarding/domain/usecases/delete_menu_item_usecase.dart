@@ -1,6 +1,6 @@
 import '../repositories/onboarding_repository.dart';
 
-/// Permanently removes a single menu item.
+/// Trvale odstraní jednu položku menu.
 class DeleteMenuItemUseCase {
   final OnboardingRepository _repository;
 

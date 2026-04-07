@@ -28,7 +28,7 @@ public class AuthResponse {
 
     /**
      * Refresh token pro obnovu access tokenu.
-     * Dlouhodobý token pro plynulé prodloužení relace bez opětovné autentizace.
+     * Dlouhodobý token pro plynulé prodloužení session bez opětovné autentizace.
      */
     private String refreshToken;
 

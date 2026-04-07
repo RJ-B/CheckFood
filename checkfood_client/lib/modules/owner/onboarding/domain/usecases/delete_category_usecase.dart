@@ -1,6 +1,6 @@
 import '../repositories/onboarding_repository.dart';
 
-/// Permanently removes a menu category and all its items.
+/// Trvale odstraní kategorii menu a všechny její položky.
 class DeleteCategoryUseCase {
   final OnboardingRepository _repository;
 

@@ -1,6 +1,6 @@
 import '../repositories/staff_reservation_repository.dart';
 
-/// Confirms a pending reservation, moving it to CONFIRMED status.
+/// Potvrdí čekající rezervaci a přesune ji do stavu CONFIRMED.
 class ConfirmReservationUseCase {
   final StaffReservationRepository _repository;
 

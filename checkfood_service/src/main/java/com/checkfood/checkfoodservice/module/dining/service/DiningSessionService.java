@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Servisní rozhraní pro správu skupinových sezení u stolu — vytváření, připojování a uzavírání sezení.
+ * Service interface pro správu skupinových sezení u stolu — vytváření, připojování a uzavírání sezení.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

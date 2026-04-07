@@ -1,7 +1,7 @@
 import '../entities/onboarding_table.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Returns all tables configured for the owner's restaurant.
+/// Vrátí všechny nakonfigurované stoly restaurace majitele.
 class GetTablesUseCase {
   final OnboardingRepository _repository;
 

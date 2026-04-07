@@ -8,8 +8,8 @@ import '../bloc/my_reservations_event.dart';
 import '../bloc/my_reservations_state.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
-/// A bottom sheet that allows the user to change the date, table, time slot,
-/// and party size of an existing reservation.
+/// Bottom sheet umožňující uživateli změnit datum, stůl, časový slot
+/// a počet hostů existující rezervace.
 class EditReservationSheet extends StatelessWidget {
   const EditReservationSheet({super.key});
 
@@ -188,7 +188,7 @@ class EditReservationSheet extends StatelessWidget {
   }
 }
 
-/// An input field that opens the system date picker on tap.
+/// Vstupní pole, které po klepnutí otevře systémový výběr data.
 class _DatePickerField extends StatelessWidget {
   final String selectedDate;
   final ValueChanged<String> onDateChanged;
@@ -232,7 +232,7 @@ class _DatePickerField extends StatelessWidget {
   }
 }
 
-/// A dropdown that lets the user switch to a different table in the same scene.
+/// Rozbalovací seznam umožňující uživateli přepnout na jiný stůl ve stejné scéně.
 class _TablePicker extends StatelessWidget {
   final List<SceneTable> tables;
   final String selectedTableId;
@@ -272,7 +272,7 @@ class _TablePicker extends StatelessWidget {
   }
 }
 
-/// A stepper control for adjusting the number of guests (1–20).
+/// Ovládací prvek pro úpravu počtu hostů (1–20).
 class _PartySizePicker extends StatelessWidget {
   final int partySize;
   final ValueChanged<int> onChanged;
@@ -314,7 +314,7 @@ class _PartySizePicker extends StatelessWidget {
   }
 }
 
-/// A wrapping grid of selectable time-slot chips.
+/// Zalamující mřížka vybratelných čipů s časovými sloty.
 class _TimeSlotsGrid extends StatelessWidget {
   final List<String> slots;
   final String? selectedTime;

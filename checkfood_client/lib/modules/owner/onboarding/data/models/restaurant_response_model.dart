@@ -5,7 +5,7 @@ import 'opening_hours_model.dart';
 part 'restaurant_response_model.freezed.dart';
 part 'restaurant_response_model.g.dart';
 
-/// API response model for the owner's restaurant returned during onboarding.
+/// API response model pro restauraci majitele vrácenou v průběhu onboardingu.
 @freezed
 class OwnerRestaurantResponseModel with _$OwnerRestaurantResponseModel {
   const factory OwnerRestaurantResponseModel({

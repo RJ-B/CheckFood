@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public interface OAuthMapper {
 
     /**
-     * Mapuje externí data z poskytovatele na interní entitu uživatele.
+     * Mapuje externí data z providera na interní entitu uživatele.
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "providerId", source = "providerUserId")

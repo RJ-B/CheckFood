@@ -10,8 +10,8 @@ import '../../data/models/restaurant_response_model.dart';
 import '../../data/models/address_model.dart';
 import '../../data/models/opening_hours_model.dart';
 
-/// Domain contract for the restaurant onboarding wizard: restaurant info,
-/// opening hours, tables, menu, onboarding status, and panorama sessions.
+/// Doménový kontrakt pro průvodce onboardingem restaurace: základní informace,
+/// otevírací doby, stoly, menu, stav onboardingu a panorama sessions.
 abstract class OnboardingRepository {
   Future<OwnerRestaurantResponseModel> getMyRestaurant();
   Future<OwnerRestaurantResponseModel> updateInfo({

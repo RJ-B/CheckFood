@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * DTO pro požadavek na OAuth přihlášení obsahující ID token poskytovatele a data o zařízení.
+ * DTO pro požadavek na OAuth přihlášení obsahující ID token providera a data o zařízení.
  *
  * @author Rostislav Jirák
  * @version 1.0.0
@@ -19,7 +19,7 @@ public class OAuthLoginRequest {
     @NotBlank(message = "ID Token nesmí být prázdný")
     private String idToken;
 
-    @NotNull(message = "Poskytovatel musí být určen")
+    @NotNull(message = "Provider musí být určen")
     private AuthProvider provider;
 
     private String email;

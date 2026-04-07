@@ -8,8 +8,8 @@ import '../../../../security/presentation/bloc/auth/auth_event.dart';
 import '../../../../security/presentation/bloc/auth/auth_state.dart';
 import '../../../../security/presentation/widgets/auth/register_form.dart';
 
-/// Registration page for new restaurant owners, using the shared [RegisterForm]
-/// and dispatching an owner-specific register event to [AuthBloc].
+/// Registrační stránka pro nové majitele restaurací využívající sdílený [RegisterForm]
+/// a odesílající event registrace specifický pro majitele do [AuthBloc].
 class OwnerRegisterPage extends StatelessWidget {
   const OwnerRegisterPage({super.key});
 

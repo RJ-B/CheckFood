@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Service rozhraní pro správu vlastních restaurací, zaměstnanců a výjimečných dní z pohledu majitele nebo manažera.
+ * Service interface pro správu vlastních restaurací, zaměstnanců a výjimečných dní z pohledu majitele nebo manažera.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

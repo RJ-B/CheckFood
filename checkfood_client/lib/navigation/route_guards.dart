@@ -10,8 +10,8 @@ import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
 import '../modules/owner/onboarding/presentation/pages/onboarding_wizard_page.dart';
 import 'main_shell.dart';
 
-/// Guards the root route by inspecting [AuthBloc] state and redirecting to
-/// the appropriate screen (onboarding, claim flow, wizard, or main shell).
+/// Guard kořenové route — kontroluje stav [AuthBloc] a přesměrovává na
+/// příslušnou obrazovku (onboarding, claim flow, wizard nebo hlavní shell).
 class RootGuard extends StatelessWidget {
   const RootGuard({super.key});
 

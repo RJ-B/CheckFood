@@ -4,7 +4,7 @@ import '../../domain/entities/ares_company.dart';
 part 'ares_lookup_response_model.freezed.dart';
 part 'ares_lookup_response_model.g.dart';
 
-/// API response model for a company lookup in the ARES business register.
+/// API response model pro vyhledání společnosti v obchodním rejstříku ARES.
 @freezed
 class AresLookupResponseModel with _$AresLookupResponseModel {
   const AresLookupResponseModel._();

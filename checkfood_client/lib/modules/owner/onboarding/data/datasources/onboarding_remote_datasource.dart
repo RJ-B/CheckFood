@@ -10,7 +10,7 @@ import '../models/panorama_session_response_model.dart';
 import '../models/restaurant_response_model.dart';
 import '../models/table_response_model.dart';
 
-/// Remote data source contract for the onboarding wizard API endpoints.
+/// Kontrakt remote data source pro API endpointy průvodce onboardingem.
 abstract class OnboardingRemoteDataSource {
   Future<OwnerRestaurantResponseModel> getMyRestaurant();
   Future<OwnerRestaurantResponseModel> updateInfo(Map<String, dynamic> data);
@@ -36,7 +36,7 @@ abstract class OnboardingRemoteDataSource {
   Future<void> activatePanorama(String sessionId);
 }
 
-/// Dio-based implementation of [OnboardingRemoteDataSource].
+/// Implementace [OnboardingRemoteDataSource] využívající Dio.
 class OnboardingRemoteDataSourceImpl implements OnboardingRemoteDataSource {
   final Dio _dio;
 

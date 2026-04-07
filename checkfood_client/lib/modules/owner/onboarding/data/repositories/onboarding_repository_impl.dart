@@ -12,8 +12,8 @@ import '../models/address_model.dart';
 import '../models/opening_hours_model.dart';
 import '../models/restaurant_response_model.dart';
 
-/// Repository implementation that delegates to [OnboardingRemoteDataSource]
-/// and maps response models to domain entities.
+/// Implementace repository delegující na [OnboardingRemoteDataSource]
+/// a mapující response modely na doménové entity.
 class OnboardingRepositoryImpl implements OnboardingRepository {
   final OnboardingRemoteDataSource _remoteDataSource;
 

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.UUID;
 
 /**
- * Výjimka pro chyby skupinového sezení u stolu poskytující tovární metody
+ * Výjimka pro chyby skupinového sezení u stolu poskytující factory metody
  * pro typické scénáře — nenalezené, uzavřené nebo nepřístupné sezení.
  *
  * @author Rostislav Jirák

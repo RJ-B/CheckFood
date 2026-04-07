@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Rozhraní pro správu onboardingu majitele restaurace — aktualizace informací, otevírací doby, stolů a publikace.
+ * Interface pro správu onboardingu majitele restaurace — aktualizace informací, otevírací doby, stolů a publikace.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

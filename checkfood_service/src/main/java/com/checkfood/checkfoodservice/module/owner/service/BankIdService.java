@@ -3,7 +3,7 @@ package com.checkfood.checkfoodservice.module.owner.service;
 import com.checkfood.checkfoodservice.module.owner.dto.BankIdIdentity;
 
 /**
- * Rozhraní pro ověření identity uživatele prostřednictvím služby BankID.
+ * Interface pro ověření identity uživatele prostřednictvím služby BankID.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

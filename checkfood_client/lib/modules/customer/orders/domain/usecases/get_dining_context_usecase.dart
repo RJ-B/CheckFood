@@ -1,7 +1,7 @@
 import '../entities/dining_context.dart';
 import '../repositories/orders_repository.dart';
 
-/// Retrieves the active dining context (table, restaurant, reservation) for the current user.
+/// Načte aktivní stravovací kontext (stůl, restaurace, rezervace) pro aktuálního uživatele.
 class GetDiningContextUseCase {
   final OrdersRepository _repository;
 

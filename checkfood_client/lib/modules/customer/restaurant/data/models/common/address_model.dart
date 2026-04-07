@@ -4,7 +4,7 @@ import '../../../domain/entities/address.dart';
 part 'address_model.freezed.dart';
 part 'address_model.g.dart';
 
-/// API response/request model for a physical address with optional geo-coordinates.
+/// API response/request model pro fyzickou adresu s volitelnými geo-souřadnicemi.
 @freezed
 class AddressModel with _$AddressModel {
   const AddressModel._();

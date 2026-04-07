@@ -51,7 +51,7 @@ public class UserEntity implements UserDetails {
     private String lastName;
 
     /**
-     * URL adresa profilového obrázku získaná z OAuth poskytovatele (např. Google).
+     * URL adresa profilového obrázku získaná z OAuth providera (např. Google).
      */
     @Column(name = "profile_image_url", length = 512)
     private String profileImageUrl;

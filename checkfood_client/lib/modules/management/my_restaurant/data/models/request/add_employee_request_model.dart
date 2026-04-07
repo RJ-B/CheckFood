@@ -1,4 +1,4 @@
-/// Request payload for adding a new employee to a restaurant by email.
+/// Request payload pro přidání nového zaměstnance do restaurace pomocí e-mailu.
 class AddEmployeeRequestModel {
   final String email;
   final String role;

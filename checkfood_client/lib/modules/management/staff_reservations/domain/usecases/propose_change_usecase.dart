@@ -1,6 +1,6 @@
 import '../repositories/staff_reservation_repository.dart';
 
-/// Proposes a time or table change for a reservation, sending it for guest approval.
+/// Navrhne změnu času nebo stolu pro rezervaci a odešle ji ke schválení hostovi.
 class ProposeChangeUseCase {
   final StaffReservationRepository _repository;
   ProposeChangeUseCase(this._repository);

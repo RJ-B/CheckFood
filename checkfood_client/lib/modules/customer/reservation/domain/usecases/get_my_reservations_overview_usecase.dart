@@ -1,7 +1,7 @@
 import '../entities/my_reservations_overview.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Fetches a combined view of the user's upcoming and past reservations.
+/// Načte kombinovaný přehled nadcházejících a minulých rezervací uživatele.
 class GetMyReservationsOverviewUseCase {
   final ReservationRepository _repository;
 

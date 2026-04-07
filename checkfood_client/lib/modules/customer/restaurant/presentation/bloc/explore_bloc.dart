@@ -16,8 +16,8 @@ import '../utils/client_cluster_manager.dart';
 import 'explore_event.dart';
 import 'explore_state.dart';
 
-/// BLoC that manages the map explore flow: location permission, client-side
-/// clustering, background marker sync, restaurant search, and marker selection.
+/// BLoC spravující flow průzkumu mapy: oprávnění pro polohu, klientské
+/// clusterování, synchronizaci markerů na pozadí, vyhledávání restaurací a výběr markerů.
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   final GetLocationUseCase _getLocationUseCase;
   final GetRestaurantMarkersUseCase _getMarkersUseCase;

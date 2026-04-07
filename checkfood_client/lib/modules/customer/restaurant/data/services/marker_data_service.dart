@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/restaurant_marker_light.dart';
 
-/// Persists and retrieves the restaurant marker snapshot on the local filesystem.
+/// Ukládá a načítá snapshot markerů restaurací v lokálním souborovém systému.
 class MarkerDataService {
   static const _fileName = 'markers_cache.json';
 
@@ -12,7 +12,7 @@ class MarkerDataService {
     return File('${dir.path}/$_fileName');
   }
 
-  /// Loads the cached marker snapshot from disk. Returns null if the file does not exist or is corrupt.
+  /// Načte cachovaný snapshot markerů z disku. Vrátí null, pokud soubor neexistuje nebo je poškozený.
   Future<({int version, List<RestaurantMarkerLight> data})?> loadFromDisk() async {
     try {
       final file = await _file;
@@ -33,7 +33,7 @@ class MarkerDataService {
     }
   }
 
-  /// Persists the marker snapshot to disk.
+  /// Uloží snapshot markerů na disk.
   Future<void> saveToDisk(int version, List<RestaurantMarkerLight> data) async {
     try {
       final file = await _file;
@@ -45,7 +45,7 @@ class MarkerDataService {
     } catch (_) {}
   }
 
-  /// Returns only the version field from the cached file without deserializing the full data set.
+  /// Vrátí pouze pole verze z cachovaného souboru bez deserializace celé datové sady.
   Future<int?> getLocalVersion() async {
     try {
       final file = await _file;

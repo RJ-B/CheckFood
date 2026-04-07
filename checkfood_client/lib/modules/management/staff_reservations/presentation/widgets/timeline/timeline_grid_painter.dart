@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Custom painter that draws the horizontal row lines and vertical hour/half-hour
-/// grid for the reservation timeline.
+/// Custom painter kreslící horizontální čáry řádků a vertikální mřížku hodin/půlhodin
+/// pro timeline rezervací.
 class TimelineGridPainter extends CustomPainter {
   final int tableCount;
   final double rowHeight;

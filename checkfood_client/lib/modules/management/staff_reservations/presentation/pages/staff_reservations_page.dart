@@ -15,9 +15,9 @@ import '../widgets/timeline/reservation_detail_sheet.dart';
 import '../widgets/timeline/staff_edit_reservation_sheet.dart';
 
 
-/// The staff-facing reservations page showing either a timeline or a list view
-/// of reservations for the selected date, with actions to confirm, reject,
-/// check in, complete, edit, and extend individual reservations.
+/// Stránka rezervací pro personál zobrazující buď timeline nebo seznam
+/// rezervací pro vybraný den, s akcemi pro potvrzení, zamítnutí,
+/// check-in, dokončení, úpravu a prodloužení jednotlivých rezervací.
 class StaffReservationsPage extends StatefulWidget {
   const StaffReservationsPage({super.key});
 

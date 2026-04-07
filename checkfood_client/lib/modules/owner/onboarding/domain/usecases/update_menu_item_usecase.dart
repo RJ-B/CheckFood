@@ -1,7 +1,7 @@
 import '../entities/onboarding_menu_item.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Updates an existing menu item's name, description, price, and availability.
+/// Aktualizuje název, popis, cenu a dostupnost existující položky menu.
 class UpdateMenuItemUseCase {
   final OnboardingRepository _repository;
 

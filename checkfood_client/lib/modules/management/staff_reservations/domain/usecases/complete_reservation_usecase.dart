@@ -1,6 +1,6 @@
 import '../repositories/staff_reservation_repository.dart';
 
-/// Marks a reservation as completed when the guests have finished their visit.
+/// Označí rezervaci jako dokončenou po skončení návštěvy hostů.
 class CompleteReservationUseCase {
   final StaffReservationRepository _repository;
 

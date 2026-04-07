@@ -7,8 +7,8 @@ import '../../presentation/bloc/reservation_event.dart';
 import '../../presentation/bloc/reservation_state.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
-/// Bottom sheet shown after a table is tapped in the panorama view,
-/// allowing the user to select a time slot and party size before confirming the reservation.
+/// Bottom sheet zobrazený po klepnutí na stůl v panoramatickém pohledu —
+/// umožňuje uživateli vybrat časový slot a počet hostů před potvrzením rezervace.
 class TableBottomSheet extends StatelessWidget {
   const TableBottomSheet({super.key});
 
@@ -187,7 +187,7 @@ class TableBottomSheet extends StatelessWidget {
   }
 }
 
-/// A wrapping grid of tappable time-slot tiles showing start times.
+/// Zalamující mřížka klikatelných dlaždic s časovými sloty zobrazující časy začátku.
 class _TimeSlotsGrid extends StatelessWidget {
   final List<String> slots;
   final int durationMinutes;

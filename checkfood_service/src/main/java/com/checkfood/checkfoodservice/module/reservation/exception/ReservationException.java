@@ -7,7 +7,7 @@ import java.util.UUID;
 
 /**
  * Doménová výjimka pro modul rezervací.
- * Poskytuje tovární metody pro všechny typové chybové stavy modulu.
+ * Poskytuje factory metody pro všechny typové chybové stavy modulu.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

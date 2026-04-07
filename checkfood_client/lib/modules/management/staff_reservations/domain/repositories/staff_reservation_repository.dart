@@ -1,7 +1,7 @@
 import '../entities/staff_reservation.dart';
 import '../entities/staff_table.dart';
 
-/// Domain contract for staff-facing reservation management operations.
+/// Doménový kontrakt pro operace správy rezervací na straně personálu.
 abstract class StaffReservationRepository {
   Future<List<StaffReservation>> getReservations(String date, {String? restaurantId});
   Future<void> confirmReservation(String id);

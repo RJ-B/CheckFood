@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Servisní rozhraní pro správu objednávek zákazníků, zahrnující vytváření, dotazy a zpracování plateb.
+ * Service interface pro správu objednávek zákazníků, zahrnující vytváření, dotazy a zpracování plateb.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

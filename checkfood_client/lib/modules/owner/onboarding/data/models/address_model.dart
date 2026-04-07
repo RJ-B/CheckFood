@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'address_model.freezed.dart';
 part 'address_model.g.dart';
 
-/// API model for a restaurant's physical address, including coordinates and
-/// an optional Google Place ID.
+/// API model pro fyzickou adresu restaurace, včetně souřadnic
+/// a volitelného Google Place ID.
 @freezed
 class AddressModel with _$AddressModel {
   const factory AddressModel({

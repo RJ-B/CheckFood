@@ -16,8 +16,8 @@ import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 import 'angle_guidance_painter.dart';
 
-/// A single point on the capture sphere defined by horizontal (yaw) and
-/// vertical (pitch) angles in degrees.
+/// Jeden bod na zachycovací sféře definovaný horizontálním (yaw) a
+/// vertikálním (pitch) úhlem ve stupních.
 class SpherePoint {
   final int index;
   final double yaw;
@@ -25,8 +25,8 @@ class SpherePoint {
   const SpherePoint(this.index, this.yaw, this.pitch);
 }
 
-/// 20 capture points arranged in three pitch rings: horizon (0°), upper (+30°),
-/// and lower (−30°), spaced evenly around the full 360° yaw.
+/// 20 bodů zachycení uspořádaných ve třech pitch kruzích: horizont (0°), horní (+30°)
+/// a dolní (−30°), rovnoměrně rozmístěných kolem celého 360° yaw.
 const List<SpherePoint> sphereGrid = [
   SpherePoint(0, 0, 0), SpherePoint(1, 45, 0), SpherePoint(2, 90, 0),
   SpherePoint(3, 135, 0), SpherePoint(4, 180, 0), SpherePoint(5, 225, 0),
@@ -39,9 +39,9 @@ const List<SpherePoint> sphereGrid = [
 
 const int _minPhotosToFinalize = 8;
 
-/// Full-screen camera screen that guides the user to capture photos at each
-/// sphere-grid point using compass and accelerometer for real-time alignment
-/// feedback, then uploads each captured frame to the panorama session.
+/// Celoplošná kamera obrazovka provázející uživatele při pořizování snímků v každém
+/// bodu mřížky sféry pomocí kompasu a akcelerometru pro zpětnou vazbu zarovnání
+/// v reálném čase, pak nahrající každý zachycený snímek do panorama session.
 class PanoramaCaptureScreen extends StatefulWidget {
   final String sessionId;
 
@@ -51,8 +51,8 @@ class PanoramaCaptureScreen extends StatefulWidget {
   State<PanoramaCaptureScreen> createState() => _PanoramaCaptureScreenState();
 }
 
-/// State for [PanoramaCaptureScreen]: manages the camera controller, sensor
-/// subscriptions, alignment detection, and auto-capture logic.
+/// State pro [PanoramaCaptureScreen]: spravuje camera controller, subscriptions
+/// senzorů, detekci zarovnání a logiku automatického zachycení.
 class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
     with SingleTickerProviderStateMixin {
   CameraController? _cameraController;
@@ -367,9 +367,9 @@ class _PanoramaCaptureScreenState extends State<PanoramaCaptureScreen>
   }
 }
 
-/// Custom painter that renders a bird's-eye mini-map of the capture sphere,
-/// showing captured (filled) and pending (outline) points and the current
-/// camera heading as a directional arrow.
+/// Custom painter vykreslující pohled z ptačí perspektivy (mini-map) zachycovací sféry,
+/// zobrazující zachycené (vyplněné) a čekající (obrysové) body a aktuální
+/// směr kamery jako šipku.
 class _MiniMapPainter extends CustomPainter {
   final double currentYaw;
   final Set<int> capturedIndices;

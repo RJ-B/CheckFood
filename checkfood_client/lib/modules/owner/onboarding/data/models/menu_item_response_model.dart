@@ -4,7 +4,7 @@ import '../../domain/entities/onboarding_menu_item.dart';
 part 'menu_item_response_model.freezed.dart';
 part 'menu_item_response_model.g.dart';
 
-/// API response model for a single menu item.
+/// API response model pro jednu položku menu.
 @freezed
 class OwnerMenuItemResponseModel with _$OwnerMenuItemResponseModel {
   const OwnerMenuItemResponseModel._();

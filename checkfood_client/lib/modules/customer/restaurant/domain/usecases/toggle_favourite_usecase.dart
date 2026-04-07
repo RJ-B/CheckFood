@@ -1,13 +1,13 @@
 import '../../data/datasources/favourite_remote_datasource.dart';
 
-/// Adds or removes a restaurant from the user's favourites depending on its
-/// current state.
+/// Přidá nebo odebere restauraci z oblíbených uživatele podle
+/// aktuálního stavu.
 class ToggleFavouriteUseCase {
   final FavouriteRemoteDataSource _dataSource;
 
   ToggleFavouriteUseCase(this._dataSource);
 
-  /// Removes the restaurant from favourites if [currentlyFavourite] is true; otherwise adds it.
+  /// Odebere restauraci z oblíbených, pokud je [currentlyFavourite] true; jinak ji přidá.
   Future<void> call({
     required String restaurantId,
     required bool currentlyFavourite,

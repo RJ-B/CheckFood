@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Rozhraní pro operace rezervací dostupné personálu restaurace.
+ * Interface pro operace rezervací dostupné personálu restaurace.
  * Zahrnuje správu rezervací, check-in, návrhy změn, prodloužení a správu opakovaných rezervací.
  *
  * @author Rostislav Jirák

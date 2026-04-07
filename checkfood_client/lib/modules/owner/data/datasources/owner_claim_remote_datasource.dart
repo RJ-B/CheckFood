@@ -3,7 +3,7 @@ import '../../../../security/config/security_endpoints.dart';
 import '../models/ares_lookup_response_model.dart';
 import '../models/claim_result_response_model.dart';
 
-/// Remote data source contract for the owner restaurant-claim API endpoints.
+/// Kontrakt remote data source pro API endpointy procesu nárokování restaurace majitelem.
 abstract class OwnerClaimRemoteDataSource {
   Future<AresLookupResponseModel> lookupAres(String ico);
   Future<ClaimResultResponseModel> verifyBankId(String ico);
@@ -11,7 +11,7 @@ abstract class OwnerClaimRemoteDataSource {
   Future<ClaimResultResponseModel> confirmEmailClaim(String ico, String code);
 }
 
-/// Dio-based implementation of [OwnerClaimRemoteDataSource].
+/// Implementace [OwnerClaimRemoteDataSource] využívající Dio.
 class OwnerClaimRemoteDataSourceImpl implements OwnerClaimRemoteDataSource {
   final Dio _dio;
 

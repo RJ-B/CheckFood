@@ -1,6 +1,6 @@
 import '../repositories/my_restaurant_repository.dart';
 
-/// Updates the granular permissions granted to a specific employee.
+/// Aktualizuje granulární oprávnění přidělená konkrétnímu zaměstnanci.
 class UpdateEmployeePermissionsUseCase {
   final MyRestaurantRepository _repository;
 

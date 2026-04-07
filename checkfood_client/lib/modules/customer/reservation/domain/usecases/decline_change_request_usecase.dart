@@ -1,7 +1,7 @@
 import '../entities/reservation.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Declines a staff-proposed change to the user's reservation.
+/// Odmítne změnu rezervace navrženou personálem.
 class DeclineChangeRequestUseCase {
   final ReservationRepository _repository;
   DeclineChangeRequestUseCase(this._repository);

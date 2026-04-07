@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../domain/entities/staff_reservation.dart';
 
-/// A coloured block on the timeline representing a single reservation, with
-/// optional dashed border (for pending changes) and pulsing animation (when
-/// an action is in progress).
+/// Barevný blok na timeline reprezentující jednu rezervaci, s volitelným
+/// přerušovaným okrajem (pro čekající změny) a pulzující animací
+/// (když probíhá akce).
 class ReservationBlock extends StatelessWidget {
   final StaffReservation reservation;
   final double width;
@@ -109,7 +109,7 @@ class ReservationBlock extends StatelessWidget {
   }
 }
 
-/// Wraps [child] in a repeating fade-in/fade-out animation to indicate an in-progress action.
+/// Obalí [child] do opakující se fade-in/fade-out animace pro indikaci probíhající akce.
 class _PulsingWrapper extends StatefulWidget {
   final Widget child;
   const _PulsingWrapper({required this.child});
@@ -148,7 +148,7 @@ class _PulsingWrapperState extends State<_PulsingWrapper>
   }
 }
 
-/// A [Decoration] that paints a dashed rounded border around its box.
+/// [Decoration] kreslící přerušovaný zaoblený okraj kolem svého boxu.
 class _DashedBorderDecoration extends Decoration {
   final Color color;
   final double radius;
@@ -160,7 +160,7 @@ class _DashedBorderDecoration extends Decoration {
   }
 }
 
-/// [BoxPainter] implementation that draws the dashed border path.
+/// Implementace [BoxPainter] kreslící cestu přerušovaného okraje.
 class _DashedBorderPainter extends BoxPainter {
   final Color color;
   final double radius;

@@ -1,6 +1,6 @@
 import '../repositories/onboarding_repository.dart';
 
-/// Activates a completed panorama session, making it the live panorama for the restaurant.
+/// Aktivuje dokončenou panorama session a nastaví ji jako živé panorama restaurace.
 class ActivatePanoramaUseCase {
   final OnboardingRepository _repository;
 

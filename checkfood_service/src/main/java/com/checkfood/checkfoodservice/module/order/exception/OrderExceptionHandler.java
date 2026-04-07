@@ -22,9 +22,9 @@ import org.springframework.web.context.request.WebRequest;
 public class OrderExceptionHandler extends AppExceptionHandler {
 
     /**
-     * Vytvoří handler s injektovaným stavitelem chybových odpovědí.
+     * Vytvoří handler s injektovaným builderem chybových odpovědí.
      *
-     * @param errorResponseBuilder stavitel standardizované chybové odpovědi
+     * @param errorResponseBuilder builder pro sestavení standardizované chybové odpovědi
      */
     public OrderExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);

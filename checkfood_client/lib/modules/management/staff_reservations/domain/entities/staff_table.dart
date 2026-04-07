@@ -1,4 +1,4 @@
-/// A restaurant table as returned by the staff-management endpoint.
+/// Stůl restaurace vrácený endpointem správy personálu.
 class StaffTable {
   final String id;
   final String label;

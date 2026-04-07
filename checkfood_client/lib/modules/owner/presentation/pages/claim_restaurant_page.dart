@@ -8,8 +8,8 @@ import '../bloc/owner_claim_bloc.dart';
 import '../bloc/owner_claim_event.dart';
 import '../bloc/owner_claim_state.dart';
 
-/// Entry point for the restaurant claim flow, providing the [OwnerClaimBloc]
-/// and rendering the claim wizard view.
+/// Vstupní bod pro proces nárokování restaurace poskytující [OwnerClaimBloc]
+/// a vykreslující pohled průvodce nárokováním.
 class ClaimRestaurantPage extends StatelessWidget {
   const ClaimRestaurantPage({super.key});
 
@@ -22,8 +22,8 @@ class ClaimRestaurantPage extends StatelessWidget {
   }
 }
 
-/// The claim wizard view, collecting the company IČO, confirming company data
-/// via ARES, verifying identity via BankID, and offering an email fallback.
+/// Pohled průvodce nárokováním sbírající IČO společnosti, potvrzující data firmy
+/// přes ARES, ověřující identitu přes BankID a nabízející e-mailovou zálohu.
 class _ClaimRestaurantView extends StatefulWidget {
   const _ClaimRestaurantView();
 

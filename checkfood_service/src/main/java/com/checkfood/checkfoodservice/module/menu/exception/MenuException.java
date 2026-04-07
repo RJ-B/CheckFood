@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.UUID;
 
 /**
- * Výjimka modulu menu poskytující tovární metody pro typické chybové scénáře práce s menu.
+ * Výjimka modulu menu poskytující statické factory metody pro typické chybové scénáře práce s menu.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

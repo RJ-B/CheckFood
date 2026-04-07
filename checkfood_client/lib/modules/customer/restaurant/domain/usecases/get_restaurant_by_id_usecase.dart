@@ -1,7 +1,7 @@
 import '../entities/restaurant.dart';
 import '../repositories/restaurant_repository.dart';
 
-/// Fetches the full detail of a single restaurant by its unique identifier.
+/// Načte úplný detail jedné restaurace podle jejího jedinečného identifikátoru.
 class GetRestaurantByIdUseCase {
   final RestaurantRepository _repository;
 

@@ -8,19 +8,19 @@ package com.checkfood.checkfoodservice.security.module.oauth.exception;
  */
 public enum OAuthErrorCode {
 
-    /** ID token od poskytovatele je neplatný nebo podvržený. */
+    /** ID token od providera je neplatný nebo podvržený. */
     OAUTH_TOKEN_INVALID("SECURITY_INCIDENT"),
 
-    /** Konflikt poskytovatelů — email je registrován přes jiného poskytovatele. */
+    /** Konflikt providerů — email je registrován přes jiného providera. */
     OAUTH_PROVIDER_MISMATCH("SECURITY_ACCOUNT_STATE"),
 
-    /** Poskytovatel není podporován. */
+    /** Provider není podporován. */
     OAUTH_PROVIDER_NOT_SUPPORTED("VALIDATION"),
 
-    /** Poskytovatel nevrátil povinné údaje (email). */
+    /** Provider nevrátil povinné údaje (email). */
     OAUTH_USER_DATA_MISSING("VALIDATION"),
 
-    /** Chyba komunikace s externím API poskytovatele. */
+    /** Chyba komunikace s externím API providera. */
     OAUTH_PROVIDER_COMMUNICATION_ERROR("SYSTEM"),
 
     /** Interní chyba zpracování (kryptografie, JSON parsing). */

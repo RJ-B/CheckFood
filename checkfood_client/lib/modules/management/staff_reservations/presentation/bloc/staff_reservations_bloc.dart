@@ -14,9 +14,9 @@ import '../../domain/usecases/extend_reservation_usecase.dart';
 import 'staff_reservations_event.dart';
 import 'staff_reservations_state.dart';
 
-/// BLoC that manages the staff reservation list: loading reservations for a
-/// selected date, confirming, rejecting, checking in, completing, proposing
-/// changes, extending reservations, and periodic background polling.
+/// BLoC spravující seznam rezervací personálu: načítání rezervací pro vybraný den,
+/// potvrzování, zamítání, check-in, dokončování, navrhování změn,
+/// prodlužování rezervací a periodické pozadí polling.
 class StaffReservationsBloc
     extends Bloc<StaffReservationsEvent, StaffReservationsState> {
   final GetStaffReservationsUseCase _getReservations;

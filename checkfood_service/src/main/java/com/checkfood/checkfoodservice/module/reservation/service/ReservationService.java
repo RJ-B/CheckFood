@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Rozhraní pro operace rezervací přístupné zákazníkovi.
+ * Interface pro operace rezervací přístupné zákazníkovi.
  * Zahrnuje správu rezervací, dotazy na dostupné sloty a zpracování návrhů změn.
  *
  * @author Rostislav Jirák

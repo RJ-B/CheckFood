@@ -11,8 +11,8 @@ import '../../domain/usecases/update_restaurant_info_usecase.dart';
 import 'my_restaurant_event.dart';
 import 'my_restaurant_state.dart';
 
-/// BLoC that manages the owner's restaurant dashboard: loading restaurant info,
-/// switching between owned restaurants, updating info, and managing the employee roster.
+/// BLoC spravující dashboard restaurace majitele: načítání informací o restauraci,
+/// přepínání mezi vlastněnými restauracemi, aktualizaci údajů a správu seznamu zaměstnanců.
 class MyRestaurantBloc extends Bloc<MyRestaurantEvent, MyRestaurantState> {
   final GetMyRestaurantUseCase _getMyRestaurantUseCase;
   final GetMyRestaurantsUseCase _getMyRestaurantsUseCase;

@@ -19,13 +19,13 @@ class LocationService {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Location permissions are denied');
+        throw Exception('Oprávnění pro polohu byla zamítnuta');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       throw Exception(
-        'Location permissions are permanently denied, we cannot request permissions.',
+        'Oprávnění pro polohu jsou trvale zamítnuta, nelze je vyžádat.',
       );
     }
 

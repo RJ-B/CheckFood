@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Servisní rozhraní pro správu menu vlastníkem restaurace — CRUD operace nad kategoriemi a položkami.
+ * Service interface pro správu menu vlastníkem restaurace — CRUD operace nad kategoriemi a položkami.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

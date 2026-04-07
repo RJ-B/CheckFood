@@ -23,9 +23,9 @@ import org.springframework.web.context.request.WebRequest;
 public class DiningContextExceptionHandler extends AppExceptionHandler {
 
     /**
-     * Vytvoří handler s injektovaným stavitelem chybových odpovědí.
+     * Vytvoří handler s injektovaným builderem chybových odpovědí.
      *
-     * @param errorResponseBuilder stavitel standardizované chybové odpovědi
+     * @param errorResponseBuilder builder pro sestavení standardizované chybové odpovědi
      */
     public DiningContextExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);

@@ -6,8 +6,8 @@ import '../../data/models/request/update_restaurant_request_model.dart';
 import '../../domain/entities/my_restaurant.dart';
 import 'panorama_tab.dart';
 
-/// An expandable settings form for editing the restaurant's name, description,
-/// contact info, address, opening hours, special days, and reservation defaults.
+/// Rozbalovací formulář nastavení pro úpravu názvu, popisu, kontaktních údajů,
+/// adresy, otevíracích dob, zvláštních dní a výchozích hodnot rezervací restaurace.
 class RestaurantInfoForm extends StatefulWidget {
   final MyRestaurant restaurant;
   final bool isUpdating;
@@ -15,7 +15,7 @@ class RestaurantInfoForm extends StatefulWidget {
   final String? panoramaUrl;
   final bool isOwner;
 
-  /// Called whenever the form transitions between dirty and clean state.
+  /// Volá se vždy, když formulář přejde mezi stavem se změnami a čistým stavem.
   final ValueChanged<bool>? onDirtyChanged;
 
   const RestaurantInfoForm({
@@ -732,7 +732,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
   ][day - 1];
 }
 
-/// Mutable view-model for a single weekday's operating hours within the form.
+/// Mutable view-model pro otevírací dobu jednoho dne v týdnu v rámci formuláře.
 class _DayHours {
   final int dayOfWeek;
   final bool isClosed;
@@ -759,7 +759,7 @@ class _DayHours {
   );
 }
 
-/// Mutable view-model for a single special operating day (holiday, shortened hours, or closure).
+/// Mutable view-model pro jeden zvláštní provozní den (svátek, zkrácená doba nebo uzavření).
 class _SpecialDay {
   final DateTime date;
   final bool isClosed;

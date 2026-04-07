@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 part 'map_params_model.freezed.dart';
 
-/// Parameters describing the current map viewport, used to query visible restaurant markers.
+/// Parametry popisující aktuální výřez mapy, slouží k dotazování na viditelné markery restaurací.
 @freezed
 class MapParamsModel with _$MapParamsModel {
   const MapParamsModel._();
@@ -14,7 +14,7 @@ class MapParamsModel with _$MapParamsModel {
     double? clusterRadius,
   }) = _MapParamsModel;
 
-  /// Converts the viewport parameters into Dio query parameters.
+  /// Převede parametry výřezu na Dio query parametry.
   Map<String, dynamic> toQueryParameters() {
     final params = <String, dynamic>{
       'minLat': bounds.southwest.latitude,

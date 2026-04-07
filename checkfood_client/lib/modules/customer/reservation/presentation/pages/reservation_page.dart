@@ -21,8 +21,8 @@ import '../bloc/reservation_event.dart';
 import '../bloc/reservation_state.dart';
 import '../widgets/table_bottom_sheet.dart';
 
-/// Full-screen panorama reservation page where the user picks a table from a
-/// Three.js panorama view and confirms a time slot via a bottom sheet.
+/// Celoobrazkový panoramatický rezervační formulář, kde uživatel vybere stůl
+/// z Three.js panoramatického pohledu a potvrdí časový slot přes bottom sheet.
 class ReservationPage extends StatefulWidget {
   final String restaurantId;
 
@@ -32,8 +32,8 @@ class ReservationPage extends StatefulWidget {
   State<ReservationPage> createState() => _ReservationPageState();
 }
 
-/// State for [ReservationPage]: initialises the WebView and [ReservationBloc],
-/// bridges JS table-selection messages, and manages the slot selection sheet.
+/// Stav pro [ReservationPage]: inicializuje WebView a [ReservationBloc],
+/// přemosťuje JS zprávy o výběru stolu a spravuje sheet s výběrem slotu.
 class _ReservationPageState extends State<ReservationPage> {
   late final ReservationBloc _bloc;
   late final WebViewController _webController;
@@ -304,7 +304,7 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 }
 
-/// A compact row showing the currently selected date with a button to open the date picker.
+/// Kompaktní řádek zobrazující aktuálně vybrané datum s tlačítkem pro otevření výběru data.
 class _DatePickerRow extends StatelessWidget {
   final String selectedDate;
   final ValueChanged<String> onDateChanged;

@@ -1,7 +1,7 @@
 import '../entities/reservation.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Accepts a staff-proposed change to the user's reservation.
+/// Přijme změnu rezervace navrženou personálem.
 class AcceptChangeRequestUseCase {
   final ReservationRepository _repository;
   AcceptChangeRequestUseCase(this._repository);

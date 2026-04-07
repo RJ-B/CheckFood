@@ -4,7 +4,7 @@ import com.checkfood.checkfoodservice.module.owner.dto.AresLookupResponse;
 import com.checkfood.checkfoodservice.module.owner.dto.ClaimResultResponse;
 
 /**
- * Rozhraní pro správu procesu přiřazení restaurace majiteli prostřednictvím ARES, BankID nebo e-mailového ověření.
+ * Interface pro správu procesu přiřazení restaurace majiteli prostřednictvím ARES, BankID nebo e-mailového ověření.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

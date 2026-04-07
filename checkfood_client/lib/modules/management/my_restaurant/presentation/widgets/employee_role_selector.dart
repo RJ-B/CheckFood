@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A compact dropdown for selecting an employee's role (MANAGER or STAFF).
+/// Kompaktní dropdown pro výběr role zaměstnance (MANAGER nebo STAFF).
 class EmployeeRoleSelector extends StatelessWidget {
   final String currentRole;
   final ValueChanged<String> onRoleChanged;

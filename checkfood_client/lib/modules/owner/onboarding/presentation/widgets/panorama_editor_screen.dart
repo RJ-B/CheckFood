@@ -12,7 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
-/// Data class for a table marker in the editor.
+/// Datová třída pro marker stolu v editoru.
 class EditorTable {
   final String id;
   String label;
@@ -39,9 +39,9 @@ class EditorTable {
       };
 }
 
-/// Full-screen panorama editor that loads a 360° image into a Three.js WebView
-/// and lets the owner place, label, and save table markers by clicking on the
-/// panorama surface.
+/// Celoplošný editor panoramatu načítající 360° obraz do Three.js WebView
+/// a umožňující majiteli umístit, pojmenovat a uložit markery stolů kliknutím
+/// na povrch panoramatu.
 class PanoramaEditorScreen extends StatefulWidget {
   final String panoramaUrl;
   final List<EditorTable> existingTables;
@@ -58,8 +58,8 @@ class PanoramaEditorScreen extends StatefulWidget {
   State<PanoramaEditorScreen> createState() => _PanoramaEditorScreenState();
 }
 
-/// State for [PanoramaEditorScreen]: initialises the WebView, bridges JS messages,
-/// and manages the mutable list of [EditorTable] markers.
+/// State pro [PanoramaEditorScreen]: inicializuje WebView, přemosťuje JS zprávy
+/// a spravuje mutable seznam markerů [EditorTable].
 class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
   late final WebViewController _webController;
   bool _webViewReady = false;

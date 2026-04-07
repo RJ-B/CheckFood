@@ -1,4 +1,4 @@
-/// Layout constants shared across all timeline widgets.
+/// Layoutové konstanty sdílené napříč všemi timeline widgety.
 class TimelineConstants {
   static const double pixelsPerHour = 120.0;
   static const double rowHeight = 64.0;

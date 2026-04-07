@@ -1,7 +1,7 @@
 import '../entities/onboarding_menu_category.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Returns the full menu (categories with items) for the owner's restaurant.
+/// Vrátí kompletní menu (kategorie s položkami) pro restauraci majitele.
 class GetOwnerMenuUseCase {
   final OnboardingRepository _repository;
 

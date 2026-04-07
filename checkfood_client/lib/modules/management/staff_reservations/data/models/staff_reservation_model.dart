@@ -1,6 +1,6 @@
 import '../../domain/entities/staff_reservation.dart';
 
-/// API response model for a staff-visible reservation.
+/// API response model pro rezervaci viditelnou personálem.
 class StaffReservationModel {
   final String id;
   final String tableId;

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.UUID;
 
 /**
- * Specializovaná výjimka pro modul restaurací s továrními metodami pro typické chybové scénáře.
+ * Specializovaná výjimka pro modul restaurací se statickými factory metodami pro typické chybové scénáře.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

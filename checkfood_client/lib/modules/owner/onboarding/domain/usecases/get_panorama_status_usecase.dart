@@ -1,7 +1,7 @@
 import '../entities/panorama_session.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Polls the current processing status of a panorama stitching session.
+/// Dotazuje se na aktuální stav zpracování panorama stitching session.
 class GetPanoramaStatusUseCase {
   final OnboardingRepository _repository;
 

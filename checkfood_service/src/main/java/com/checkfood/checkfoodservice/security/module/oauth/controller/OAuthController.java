@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.TimeUnit;
 
 /**
- * REST kontroler pro OAuth přihlašování přes externí poskytovatele identity (Google, Apple).
+ * REST kontroler pro OAuth přihlašování přes externí identity providery (Google, Apple).
  * Vrací sjednocený formát AuthResponse kompatibilní s ostatními autentizačními endpointy.
  *
  * @author Rostislav Jirák
@@ -29,9 +29,9 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     /**
-     * Provede OAuth přihlášení uživatele ověřením ID tokenu od poskytovatele.
+     * Provede OAuth přihlášení uživatele ověřením ID tokenu od providera.
      *
-     * @param request požadavek obsahující ID token, typ poskytovatele a data o zařízení
+     * @param request požadavek obsahující ID token, typ providera a data o zařízení
      * @return odpověď s JWT tokeny a daty uživatele
      */
     @RateLimited(

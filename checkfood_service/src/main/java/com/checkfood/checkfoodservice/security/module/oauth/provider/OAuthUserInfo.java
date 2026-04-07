@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * Sjednocená přepravka pro data uživatele získaná z externích OAuth poskytovatelů.
+ * Sjednocená přepravka pro data uživatele získaná z externích OAuth providerů.
  * Normalizuje odlišné formáty odpovědí od Google a Apple do jednotné struktury.
  *
  * @author Rostislav Jirák
@@ -15,7 +15,7 @@ import lombok.Getter;
 @Builder
 public class OAuthUserInfo {
 
-    /** Unikátní ID uživatele u poskytovatele (claim 'sub'). */
+    /** Unikátní ID uživatele u providera (claim 'sub'). */
     private String providerUserId;
 
     /** E-mailová adresa získaná z externího tokenu. */
@@ -30,6 +30,6 @@ public class OAuthUserInfo {
     /** URL adresa profilového obrázku (dostupná u Google). */
     private String profileImageUrl;
 
-    /** Typ poskytovatele identity pro správné přiřazení uživatele v DB. */
+    /** Typ providera identity pro správné přiřazení uživatele v DB. */
     private AuthProvider providerType;
 }

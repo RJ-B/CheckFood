@@ -122,9 +122,9 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     /**
-     * Zjistí, zda chybí křestní jméno v datech uživatele z OAuth poskytovatele.
+     * Zjistí, zda chybí křestní jméno v datech uživatele z OAuth providera.
      *
-     * @param userInfo data uživatele z poskytovatele
+     * @param userInfo data uživatele z providera
      * @return {@code true} pokud křestní jméno chybí nebo je prázdné
      */
     private boolean isNameMissing(OAuthUserInfo userInfo) {
@@ -134,7 +134,7 @@ public class OAuthServiceImpl implements OAuthService {
     /**
      * Doplní chybějící jméno uživatele z dat přijatých v OAuth požadavku (použitelné pro Apple).
      *
-     * @param info    data uživatele z poskytovatele
+     * @param info    data uživatele z providera
      * @param request původní OAuth požadavek
      * @return obohacená data uživatele
      */

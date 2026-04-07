@@ -5,8 +5,8 @@ import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
 
-/// Displays the list of orders placed during the current dining context,
-/// with pull-to-refresh support and per-order status icons.
+/// Zobrazuje seznam objednávek zadaných v průběhu aktuálního dining contextu
+/// s podporou přetažení pro obnovení a ikonami stavu pro každou objednávku.
 class CurrentOrdersWidget extends StatelessWidget {
   const CurrentOrdersWidget({super.key});
 

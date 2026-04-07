@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Kontrakt pro správu životního cyklu klientských zařízení a jejich relací.
+ * Kontrakt pro správu životního cyklu klientských zařízení a jejich sessions.
  * Definuje operace pro orchestraci bezpečnostních mechanismů navázaných na konkrétní terminály.
  * Zajišťuje integritu Refresh tokenů skrze perzistentní sledování aktivních session.
  *
@@ -21,7 +21,7 @@ public interface DeviceService {
 
     /**
      * Zajišťuje synchronizaci stavu zařízení v databázi.
-     * Provádí aktualizaci metadat pro existující relace nebo inicializaci nových záznamů.
+     * Provádí aktualizaci metadat pro existující session nebo inicializaci nových záznamů.
      *
      * @param device transportní entita zařízení
      * @return synchronizovaná perzistentní entita
@@ -46,7 +46,7 @@ public interface DeviceService {
 
     /**
      * Agreguje všechna aktivní i historická zařízení asociovaná s konkrétní identitou.
-     * Používá se pro přehled aktivních relací v uživatelském profilu.
+     * Používá se pro přehled aktivních sessions v uživatelském profilu.
      *
      * @param user vlastník zařízení
      * @return kolekce registrovaných zařízení
@@ -64,11 +64,11 @@ public interface DeviceService {
     List<DeviceResponse> findAllUserDevicesWithStatus(String email, String accessToken);
 
     /**
-     * Verifikuje vazbu mezi identifikátorem relace a uživatelským subjektem.
+     * Verifikuje vazbu mezi identifikátorem session a uživatelským subjektem.
      * Kritická komponenta pro prevenci "Session Hijacking" při rotaci Refresh tokenů.
      *
      * @param identifier klientský identifikátor zařízení
-     * @param user subjekt uplatňující nárok na relaci
+     * @param user subjekt uplatňující nárok na session
      * @return true v případě validní a existující vazby
      */
     boolean existsByIdentifierAndUser(String identifier, UserEntity user);
@@ -82,7 +82,7 @@ public interface DeviceService {
     void updateLastLogin(String identifier);
 
     /**
-     * Okamžitá terminace relace na základě identifikátoru.
+     * Okamžitá terminace session na základě identifikátoru.
      * Slouží k invalidaci všech bezpečnostních artefaktů vydaných pro daný terminál.
      *
      * @param deviceIdentifier identifikátor zařízení k odstranění
@@ -90,31 +90,31 @@ public interface DeviceService {
     void deleteByIdentifier(String deviceIdentifier);
 
     /**
-     * Autorizované odstranění specifické relace se striktní kontrolou vlastnictví.
-     * Zabraňuje neautorizované manipulaci s cizími relacemi v rámci multi-device prostředí.
+     * Autorizované odstranění specifické session se striktní kontrolou vlastnictví.
+     * Zabraňuje neautorizované manipulaci s cizími sessions v rámci multi-device prostředí.
      *
      * @param deviceId interní ID zařízení
      * @param user subjekt provádějící operaci
-     * @throws UserException pokud cílová relace neexistuje nebo došlo k porušení vlastnictví
+     * @throws UserException pokud cílová session neexistuje nebo došlo k porušení vlastnictví
      */
     void removeByIdAndUser(Long deviceId, UserEntity user);
 
     /**
-     * Autorizované odstranění relace pomocí String identifikátoru.
+     * Autorizované odstranění session pomocí String identifikátoru.
      * Bezpečnější alternativa k removeByIdAndUser, která neodhaluje interní Long ID.
      * Umožňuje frontendové aplikaci odstranit zařízení pomocí UUID identifikátoru.
      *
      * @param deviceIdentifier String identifikátor zařízení (UUID)
      * @param user             subjekt provádějící operaci
-     * @throws UserException pokud cílová relace neexistuje nebo nepatří danému uživateli
+     * @throws UserException pokud cílová session neexistuje nebo nepatří danému uživateli
      */
     void removeByIdentifierAndUser(String deviceIdentifier, UserEntity user);
 
     /**
-     * Hromadná invalidace veškerých aktivních relací uživatele.
+     * Hromadná invalidace veškerých aktivních sessions uživatele.
      * Využívá se pro bezpečnostní "Emergency Logout" napříč všemi terminály.
      *
-     * @param user uživatel, jehož relace mají být terminovány
+     * @param user uživatel, jehož sessions mají být terminovány
      */
     void removeAllByUser(UserEntity user);
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Rozhraní pro operace opakovaných rezervací přístupné zákazníkovi.
+ * Interface pro operace opakovaných rezervací přístupné zákazníkovi.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

@@ -5,7 +5,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Posluchač doménové události expirace rezervace.
+ * Listener doménové události expirace rezervace.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

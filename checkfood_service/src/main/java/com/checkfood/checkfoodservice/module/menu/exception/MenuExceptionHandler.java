@@ -22,9 +22,9 @@ import org.springframework.web.context.request.WebRequest;
 public class MenuExceptionHandler extends AppExceptionHandler {
 
     /**
-     * Vytvoří handler s injektovaným stavitelem chybových odpovědí.
+     * Vytvoří handler s injektovaným builderem chybových odpovědí.
      *
-     * @param errorResponseBuilder stavitel standardizované chybové odpovědi
+     * @param errorResponseBuilder builder pro sestavení standardizované chybové odpovědi
      */
     public MenuExceptionHandler(ErrorResponseBuilder errorResponseBuilder) {
         super(errorResponseBuilder);

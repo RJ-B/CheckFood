@@ -1,8 +1,8 @@
 import '../../domain/entities/staff_reservation.dart';
 import '../../domain/entities/staff_table.dart';
 
-/// Immutable state for [StaffReservationsBloc], holding the reservation list,
-/// the selected date, available tables, and per-action progress tracking.
+/// Immutable stav [StaffReservationsBloc] obsahující seznam rezervací,
+/// vybraný datum, dostupné stoly a sledování průběhu jednotlivých akcí.
 class StaffReservationsState {
   final bool isLoading;
   final String? error;

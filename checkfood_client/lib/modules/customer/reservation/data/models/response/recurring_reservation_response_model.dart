@@ -5,7 +5,7 @@ import '../../../domain/entities/recurring_reservation.dart';
 part 'recurring_reservation_response_model.freezed.dart';
 part 'recurring_reservation_response_model.g.dart';
 
-/// API response model for a weekly recurring reservation series.
+/// API response model pro sérii týdenních opakovaných rezervací.
 @freezed
 class RecurringReservationResponseModel with _$RecurringReservationResponseModel {
   const RecurringReservationResponseModel._();

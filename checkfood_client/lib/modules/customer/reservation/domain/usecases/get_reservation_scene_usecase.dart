@@ -1,7 +1,7 @@
 import '../entities/reservation_scene.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Loads the panorama scene configuration (table positions) for a restaurant.
+/// Načte konfiguraci panoramatické scény (pozice stolů) pro restauraci.
 class GetReservationSceneUseCase {
   final ReservationRepository _repository;
 

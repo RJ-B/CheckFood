@@ -17,8 +17,8 @@ class RestaurantMarker with _$RestaurantMarker {
 
   bool get isCluster => count > 1;
 
-  /// Display label for the cluster marker.
-  /// Pure UI cap: counts above 99 show "99+", but the real count is preserved
-  /// in the [count] field for density-proportional decisions (icon sizing etc.).
+  /// Zobrazovací popisek cluster markeru.
+  /// Čistě UI omezení: počty nad 99 zobrazují "99+", skutečný počet je však uchován
+  /// v poli [count] pro rozhodnutí závislá na hustotě (velikost ikony apod.).
   String get clusterLabel => count > 99 ? '99+' : count.toString();
 }

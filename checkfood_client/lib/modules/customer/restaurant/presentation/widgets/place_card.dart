@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../domain/entities/restaurant.dart';
 
-/// A compact list card showing a restaurant's thumbnail, name, address, and rating.
+/// Kompaktní karta v seznamu zobrazující miniaturu restaurace, název, adresu a hodnocení.
 class RestaurantListCard extends StatelessWidget {
   final Restaurant restaurant;
   final VoidCallback? onTap;

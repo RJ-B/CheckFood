@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Rozhraní pro správu panoramatických session — nahrávání fotografií, spuštění stitchingu a správa výsledků.
+ * Interface pro správu panoramatických session — nahrávání fotografií, spuštění stitchingu a správa výsledků.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

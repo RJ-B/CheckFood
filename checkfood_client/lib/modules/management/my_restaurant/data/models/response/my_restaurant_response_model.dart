@@ -4,7 +4,7 @@ import '../../../../../customer/restaurant/domain/entities/address.dart';
 import '../../../../../customer/restaurant/domain/entities/special_day.dart';
 import '../../../domain/entities/my_restaurant.dart';
 
-/// API response model for the owner's restaurant detail view.
+/// API response model pro detail restaurace z pohledu majitele.
 class MyRestaurantResponseModel {
   final String? id;
   final String? name;

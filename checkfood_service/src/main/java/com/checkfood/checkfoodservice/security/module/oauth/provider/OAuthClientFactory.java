@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Továrna pro dynamický výběr OAuth klientů.
+ * Factory pro dynamický výběr OAuth klientů.
  * Automaticky registruje všechny implementace rozhraní OAuthClient dostupné v kontextu aplikace.
  *
  * @author Rostislav Jirák
@@ -31,9 +31,9 @@ public class OAuthClientFactory {
     }
 
     /**
-     * Vrátí konkrétního klienta pro daného poskytovatele.
+     * Vrátí konkrétního klienta pro daného providera.
      *
-     * @param provider typ poskytovatele (GOOGLE, APPLE)
+     * @param provider typ providera (GOOGLE, APPLE)
      * @return implementace OAuthClient
      * @throws OAuthException pokud pro daného providera neexistuje klient
      */

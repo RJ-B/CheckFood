@@ -5,7 +5,7 @@ import '../../../domain/entities/reservation.dart';
 part 'reservation_response_model.freezed.dart';
 part 'reservation_response_model.g.dart';
 
-/// API response model for a single reservation, including edit/cancel permissions and any pending change.
+/// API response model pro jednu rezervaci, včetně oprávnění pro úpravu/zrušení a případné čekající změny.
 @freezed
 class ReservationResponseModel with _$ReservationResponseModel {
   const ReservationResponseModel._();

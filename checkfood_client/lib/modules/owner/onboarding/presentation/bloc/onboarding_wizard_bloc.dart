@@ -23,9 +23,9 @@ import '../../domain/repositories/onboarding_repository.dart';
 import 'onboarding_wizard_event.dart';
 import 'onboarding_wizard_state.dart';
 
-/// BLoC that drives the restaurant onboarding wizard across all steps: loading
-/// status, updating restaurant info and hours, managing tables and menu,
-/// creating and polling panorama sessions, and publishing the restaurant.
+/// BLoC řídící průvodce onboardingem restaurace napříč všemi kroky: načítání
+/// stavu, aktualizaci informací a otevíracích dob, správu stolů a menu,
+/// vytváření a polling panorama sessions a zveřejnění restaurace.
 class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardState> {
   final OnboardingRepository _repository;
   final GetOnboardingStatusUseCase _getOnboardingStatus;

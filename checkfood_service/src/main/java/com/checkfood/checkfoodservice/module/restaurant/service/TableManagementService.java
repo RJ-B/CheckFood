@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Rozhraní pro správu fyzických stolů restaurace a jejich seskupení do sezení.
+ * Interface pro správu fyzických stolů restaurace a jejich seskupení do sezení.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

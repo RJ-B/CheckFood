@@ -1,7 +1,7 @@
 import '../../domain/entities/restaurant_marker_light.dart';
 import '../../domain/repositories/restaurant_repository.dart';
 
-/// Downloads all active restaurant markers from the backend for client-side clustering.
+/// Stáhne všechny aktivní markery restaurací z backendu pro klientské clusterování.
 class GetAllMarkersUseCase {
   final RestaurantRepository _repository;
 

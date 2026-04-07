@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../domain/entities/restaurant_marker.dart';
 
-/// Describes a single marker's animated transition between two screen positions.
+/// Popisuje animovaný přechod jednoho markeru mezi dvěma pozicemi na obrazovce.
 class MarkerTransition {
   final Offset from;
   final Offset to;
@@ -29,9 +29,9 @@ class MarkerTransition {
   }
 }
 
-/// Controls animated transitions between cluster and individual marker states.
+/// Řídí animované přechody mezi stavy clusteru a individuálních markerů.
 ///
-/// ONLY animates cluster↔individual transitions, NOT cluster↔cluster.
+/// Animuje POUZE přechody cluster↔individuální, NE cluster↔cluster.
 class MarkerAnimationManager {
   final TickerProvider vsync;
   final VoidCallback onAnimationComplete;
@@ -80,11 +80,11 @@ class MarkerAnimationManager {
     _transitions = [];
   }
 
-  /// Animate transition. Returns `true` if animation started.
+  /// Spustí animaci přechodu. Vrátí `true`, pokud animace začala.
   ///
-  /// Only animates when:
-  /// - Zoom changed significantly (≥ 0.3)
-  /// - There are cluster↔individual transitions (NOT cluster↔cluster)
+  /// Animuje pouze v případě:
+  /// - Zoom se výrazně změnil (≥ 0.3)
+  /// - Existují přechody cluster↔individuální (NE cluster↔cluster)
   Future<bool> transitionTo({
     required List<RestaurantMarker> newMarkers,
     required double newZoom,
@@ -226,8 +226,8 @@ class MarkerAnimationManager {
   }
 }
 
-/// Internal data class pairing a [RestaurantMarker] with its animation source
-/// and destination coordinates for one cluster expansion or collapse step.
+/// Interní datová třída párující [RestaurantMarker] s jeho zdrojovými
+/// a cílovými souřadnicemi animace pro jeden krok rozbalení nebo sbalení clusteru.
 class _RawTransition {
   final LatLng fromLatLng;
   final LatLng toLatLng;

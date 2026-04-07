@@ -1,7 +1,7 @@
 import '../entities/staff_table.dart';
 import '../repositories/staff_reservation_repository.dart';
 
-/// Returns all tables for the managed restaurant.
+/// Vrátí všechny stoly spravované restaurace.
 class GetRestaurantTablesUseCase {
   final StaffReservationRepository _repository;
   GetRestaurantTablesUseCase(this._repository);

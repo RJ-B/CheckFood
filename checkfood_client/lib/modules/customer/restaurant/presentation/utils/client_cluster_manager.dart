@@ -2,22 +2,22 @@ import 'dart:math';
 import '../../domain/entities/restaurant_marker.dart';
 import '../../domain/entities/restaurant_marker_light.dart';
 
-/// Client-side grid-based clustering engine.
+/// Klientský clusterovací engine na základě mřížky.
 ///
-/// Replaces server-side PostGIS DBSCAN with instant in-memory queries.
-/// Data is loaded once from backend and queried per-viewport locally.
+/// Nahrazuje serverové PostGIS DBSCAN okamžitými in-memory dotazy.
+/// Data se načtou jednou z backendu a dotazují se lokálně pro každý viewport.
 class ClientClusterManager {
   List<RestaurantMarkerLight> _points = [];
-  double? radiusOverride; // Debug: override dynamic radius with fixed value
+  double? radiusOverride; // Debug: přepsat dynamický radius pevnou hodnotou
 
-  /// Load restaurant data into the clustering engine.
+  /// Načte data restaurací do clusterovacího enginu.
   void load(List<RestaurantMarkerLight> points) {
     _points = points;
   }
 
-  /// Query clusters and individual markers for a given viewport and zoom.
+  /// Vrátí clustery a jednotlivé markery pro zadaný viewport a úroveň přiblížení.
   ///
-  /// Returns [RestaurantMarker] list compatible with existing marker rendering.
+  /// Vrací seznam [RestaurantMarker] kompatibilní se stávajícím vykreslováním markerů.
   List<RestaurantMarker> getClusters({
     required double minLng,
     required double minLat,
@@ -78,18 +78,18 @@ class ClientClusterManager {
     }).toList();
   }
 
-  /// Cell size in degrees for a given zoom level.
-  /// Uses the same Gaussian curve as the backend for visual consistency.
+  /// Velikost buňky ve stupních pro danou úroveň přiblížení.
+  /// Používá stejnou Gaussovu křivku jako backend pro vizuální konzistenci.
   double _cellSizeForZoom(int zoom) {
     final radiusPx = radiusOverride ?? dynamicRadiusPx(zoom.toDouble());
     return radiusPx * 360.0 / (256.0 * pow(2, zoom));
   }
 
-  /// Default cluster radius in pixels (industry standard).
+  /// Výchozí poloměr clusteru v pixelech (průmyslový standard).
   static const double defaultRadius = 150.0;
 
-  /// Returns the effective radius for a given zoom level.
-  /// Currently constant (standard), but can be overridden via [radiusOverride].
+  /// Vrátí efektivní poloměr pro danou úroveň přiblížení.
+  /// Momentálně konstantní (standard), lze přepsat přes [radiusOverride].
   double dynamicRadiusPx(double zoom) {
     return defaultRadius;
   }

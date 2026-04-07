@@ -2,7 +2,7 @@ import '../../data/models/request/add_employee_request_model.dart';
 import '../entities/employee.dart';
 import '../repositories/my_restaurant_repository.dart';
 
-/// Adds a new employee to the restaurant's staff roster.
+/// Přidá nového zaměstnance do seznamu personálu restaurace.
 class AddEmployeeUseCase {
   final MyRestaurantRepository _repository;
   AddEmployeeUseCase(this._repository);

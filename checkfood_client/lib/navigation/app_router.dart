@@ -11,9 +11,9 @@ import '../modules/owner/presentation/pages/owner_register_page.dart';
 import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
 import '../l10n/generated/app_localizations.dart';
 
-/// Central route configuration using [Navigator.onGenerateRoute].
+/// Centrální konfigurace route pomocí [Navigator.onGenerateRoute].
 ///
-/// Maps URL paths to page widgets and passes any required arguments.
+/// Mapuje URL cesty na page widgety a předává potřebné argumenty.
 class AppRouter {
   static const String root = '/';
   static const String login = '/login';

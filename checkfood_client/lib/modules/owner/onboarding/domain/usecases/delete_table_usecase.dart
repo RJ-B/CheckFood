@@ -1,6 +1,6 @@
 import '../repositories/onboarding_repository.dart';
 
-/// Permanently removes a table from the restaurant's floor plan.
+/// Trvale odstraní stůl z půdorysu restaurace.
 class DeleteTableUseCase {
   final OnboardingRepository _repository;
 

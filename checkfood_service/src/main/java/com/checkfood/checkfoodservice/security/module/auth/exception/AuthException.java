@@ -4,11 +4,11 @@ import com.checkfood.checkfoodservice.security.exception.SecurityException;
 import org.springframework.http.HttpStatus;
 
 /**
- * Specializovaná výjimka pro autentizační modul poskytující tovární metody
+ * Specializovaná výjimka pro autentizační modul poskytující factory metody
  * pro vytváření specifických auth error scenarios.
  *
  * Implementuje factory pattern pro konzistentní error handling napříč
- * autentizačním modulem. Každá tovární metoda kombinuje AuthErrorCode
+ * autentizačním modulem. Každá factory metoda kombinuje AuthErrorCode
  * s appropriate HTTP status a user-friendly message.
  *
  * @author Rostislav Jirák
@@ -146,7 +146,7 @@ public class AuthException extends SecurityException {
     public static AuthException sessionExpired() {
         return new AuthException(
                 AuthErrorCode.AUTH_SESSION_EXPIRED,
-                "Vaše relace vypršela. Přihlaste se prosím znovu.",
+                "Vaše session vypršela. Přihlaste se prosím znovu.",
                 HttpStatus.UNAUTHORIZED
         );
     }

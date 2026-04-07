@@ -1,4 +1,4 @@
-/// A restaurant employee with their role and optional granular permissions.
+/// Zaměstnanec restaurace s jeho rolí a volitelnými granulárními oprávněními.
 class Employee {
   final int id;
   final int userId;

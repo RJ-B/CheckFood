@@ -8,8 +8,8 @@ import '../../domain/usecases/get_table_statuses_usecase.dart';
 import 'reservation_event.dart';
 import 'reservation_state.dart';
 
-/// BLoC that drives the reservation flow: loading the panorama scene, fetching
-/// table statuses and available time slots, and submitting a new reservation.
+/// BLoC řídící flow rezervace: načítání panoramatické scény, načítání
+/// stavů stolů a dostupných časových slotů a odesílání nové rezervace.
 class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
   final GetReservationSceneUseCase _getSceneUseCase;
   final GetTableStatusesUseCase _getStatusesUseCase;

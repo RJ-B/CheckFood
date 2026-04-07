@@ -6,12 +6,12 @@ import '../entities/restaurant_marker.dart';
 import '../entities/restaurant_marker_light.dart';
 import '../entities/restaurant_table.dart';
 
-/// Abstract contract for the restaurant module data source, independent of any concrete HTTP implementation.
+/// Abstraktní kontrakt pro datový zdroj modulu restaurací, nezávislý na konkrétní HTTP implementaci.
 abstract class RestaurantRepository {
-  /// Returns map markers (individual restaurants or clusters) visible within the given viewport.
+  /// Vrátí markery na mapě (jednotlivé restaurace nebo clustery) viditelné v zadaném výřezu.
   Future<List<RestaurantMarker>> getMarkersInBounds(MapParamsModel params);
 
-  /// Returns a paginated list of restaurants sorted by distance from the user's location.
+  /// Vrátí stránkovaný seznam restaurací seřazených podle vzdálenosti od polohy uživatele.
   Future<List<Restaurant>> getNearestRestaurants({
     required double lat,
     required double lng,
@@ -24,36 +24,36 @@ abstract class RestaurantRepository {
     bool? favouritesOnly,
   });
 
-  /// Fetches the full detail of a single restaurant by its ID.
+  /// Načte úplný detail jedné restaurace podle jejího ID.
   Future<Restaurant> getRestaurantById(String id);
 
-  /// Creates a new restaurant listing (requires OWNER role).
+  /// Vytvoří nový záznam restaurace (vyžaduje roli OWNER).
   Future<Restaurant> createRestaurant(RestaurantRequestModel request);
 
-  /// Returns all restaurants owned by the currently authenticated user.
+  /// Vrátí všechny restaurace vlastněné aktuálně přihlášeným uživatelem.
   Future<List<Restaurant>> getMyRestaurants();
 
-  /// Updates the details of an existing restaurant.
+  /// Aktualizuje detaily existující restaurace.
   Future<Restaurant> updateRestaurant(
     String id,
     RestaurantRequestModel request,
   );
 
-  /// Soft-deletes (deactivates) a restaurant.
+  /// Provede soft-delete (deaktivaci) restaurace.
   Future<void> deleteRestaurant(String id);
 
-  /// Adds a new table to the seating inventory of a restaurant.
+  /// Přidá nový stůl do evidence sezení restaurace.
   Future<RestaurantTable> addTable(
     String restaurantId,
     RestaurantTableRequestModel request,
   );
 
-  /// Returns all tables for a given restaurant.
+  /// Vrátí všechny stoly dané restaurace.
   Future<List<RestaurantTable>> getTables(String restaurantId);
 
-  /// Downloads all active restaurants with a snapshot version for client-side clustering.
+  /// Stáhne všechny aktivní restaurace s verzí snapshotu pro klientské clusterování.
   Future<({int version, List<RestaurantMarkerLight> data})> getAllMarkers();
 
-  /// Returns the current server-side version of the markers snapshot.
+  /// Vrátí aktuální verzi snapshotu markerů na straně serveru.
   Future<int> getMarkersVersion();
 }

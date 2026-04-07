@@ -5,7 +5,7 @@ import '../../../domain/entities/restaurant_marker_light.dart';
 part 'all_markers_response_model.freezed.dart';
 part 'all_markers_response_model.g.dart';
 
-/// API response model for the GET /restaurants/all-markers endpoint, containing a snapshot version and the full list of lightweight restaurant markers.
+/// API response model pro endpoint GET /restaurants/all-markers, obsahující verzi snapshotu a úplný seznam lehkých markerů restaurací.
 @freezed
 class AllMarkersResponseModel with _$AllMarkersResponseModel {
   const factory AllMarkersResponseModel({

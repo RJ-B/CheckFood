@@ -4,7 +4,7 @@ import '../../domain/entities/panorama_session.dart';
 part 'panorama_session_response_model.freezed.dart';
 part 'panorama_session_response_model.g.dart';
 
-/// API response model for a panorama stitching session.
+/// API response model pro session stitchingu panoramatu.
 @freezed
 class PanoramaSessionResponseModel with _$PanoramaSessionResponseModel {
   const PanoramaSessionResponseModel._();

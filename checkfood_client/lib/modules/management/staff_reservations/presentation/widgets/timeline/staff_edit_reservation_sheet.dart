@@ -8,8 +8,8 @@ import '../../../domain/entities/staff_table.dart';
 import '../../bloc/staff_reservations_bloc.dart';
 import '../../bloc/staff_reservations_event.dart';
 
-/// A bottom sheet that lets staff propose a time or table change, or silently
-/// extend the end time, for an existing reservation.
+/// Bottom sheet umožňující personálu navrhnout změnu času nebo stolu, nebo tiše
+/// prodloužit čas konce stávající rezervace.
 class StaffEditReservationSheet extends StatefulWidget {
   final StaffReservation reservation;
   final List<StaffTable> availableTables;

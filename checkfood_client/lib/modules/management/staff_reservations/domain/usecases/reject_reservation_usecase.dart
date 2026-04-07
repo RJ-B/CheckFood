@@ -1,6 +1,6 @@
 import '../repositories/staff_reservation_repository.dart';
 
-/// Rejects a reservation that is awaiting confirmation.
+/// Zamítne rezervaci čekající na potvrzení.
 class RejectReservationUseCase {
   final StaffReservationRepository _repository;
 

@@ -2,7 +2,7 @@ import '../../../../customer/restaurant/domain/entities/address.dart';
 import '../../../../customer/restaurant/domain/entities/opening_hours.dart';
 import '../../../../customer/restaurant/domain/entities/special_day.dart';
 
-/// The full management-level view of a restaurant owned by the authenticated user.
+/// Plný management pohled na restauraci vlastněnou přihlášeným uživatelem.
 class MyRestaurant {
   final String id;
   final String name;

@@ -5,7 +5,7 @@ import com.checkfood.checkfoodservice.module.dining.dto.response.DiningContextRe
 import java.util.Optional;
 
 /**
- * Servisní rozhraní pro určení aktivního kontextu stravování uživatele
+ * Service interface pro určení aktivního kontextu stravování uživatele
  * na základě platných rezervací a sezení u stolu.
  *
  * @author Rostislav Jirák

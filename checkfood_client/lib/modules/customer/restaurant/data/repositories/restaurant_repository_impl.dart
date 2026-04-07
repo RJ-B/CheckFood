@@ -8,7 +8,7 @@ import '../models/request/map_params_model.dart';
 import '../models/request/restaurant_request_model.dart';
 import '../models/request/restaurant_table_request_model.dart';
 
-/// Concrete implementation of [RestaurantRepository] that delegates to the remote data source.
+/// Konkrétní implementace [RestaurantRepository], která deleguje na remote data source.
 class RestaurantRepositoryImpl implements RestaurantRepository {
   final RestaurantRemoteDataSource _remoteDataSource;
 

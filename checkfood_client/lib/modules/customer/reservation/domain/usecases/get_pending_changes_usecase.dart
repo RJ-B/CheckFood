@@ -1,7 +1,7 @@
 import '../entities/pending_change.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Returns all pending change proposals for the authenticated user's reservations.
+/// Vrátí všechny čekající návrhy změn rezervací přihlášeného uživatele.
 class GetPendingChangesUseCase {
   final ReservationRepository _repository;
   GetPendingChangesUseCase(this._repository);

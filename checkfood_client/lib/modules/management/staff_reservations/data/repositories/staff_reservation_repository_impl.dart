@@ -3,8 +3,8 @@ import '../../domain/entities/staff_table.dart';
 import '../../domain/repositories/staff_reservation_repository.dart';
 import '../datasources/staff_reservation_remote_datasource.dart';
 
-/// Repository implementation that delegates to [StaffReservationRemoteDataSource]
-/// and maps response models to domain entities.
+/// Implementace repository delegující na [StaffReservationRemoteDataSource]
+/// a mapující response modely na doménové entity.
 class StaffReservationRepositoryImpl implements StaffReservationRepository {
   final StaffReservationRemoteDataSource _remoteDataSource;
 

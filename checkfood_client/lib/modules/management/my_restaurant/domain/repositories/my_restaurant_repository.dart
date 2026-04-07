@@ -4,7 +4,7 @@ import '../../data/models/request/update_restaurant_request_model.dart';
 import '../entities/employee.dart';
 import '../entities/my_restaurant.dart';
 
-/// Domain contract for managing a restaurant's info and employee roster.
+/// Doménový kontrakt pro správu informací o restauraci a seznamu zaměstnanců.
 abstract class MyRestaurantRepository {
   Future<List<MyRestaurant>> getMyRestaurants();
   Future<MyRestaurant> getMyRestaurant({String? restaurantId});

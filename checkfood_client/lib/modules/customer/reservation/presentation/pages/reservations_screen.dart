@@ -10,8 +10,8 @@ import '../widgets/edit_reservation_sheet.dart';
 import '../widgets/reservation_card.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
-/// Screen displaying the user's upcoming and past reservations with support for
-/// editing, cancelling, responding to pending change proposals, and creating recurring reservations.
+/// Obrazovka zobrazující nadcházející a minulé rezervace uživatele s podporou
+/// úpravy, rušení, reakce na čekající návrhy změn a vytváření opakovaných rezervací.
 class ReservationsScreen extends StatefulWidget {
   const ReservationsScreen({super.key});
 
@@ -19,8 +19,8 @@ class ReservationsScreen extends StatefulWidget {
   State<ReservationsScreen> createState() => _ReservationsScreenState();
 }
 
-/// State for [ReservationsScreen]: triggers the initial load of reservations
-/// and pending changes on mount.
+/// Stav pro [ReservationsScreen]: při inicializaci spustí načítání rezervací
+/// a čekajících změn.
 class _ReservationsScreenState extends State<ReservationsScreen> {
   @override
   void initState() {
@@ -301,7 +301,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   }
 }
 
-/// A section heading row with a leading icon and title text.
+/// Řádek záhlaví sekce s ikonou na začátku a textovým nadpisem.
 class _SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -329,7 +329,7 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-/// A centred placeholder shown when a section has no items.
+/// Vystředěný zástupný obsah zobrazený, pokud sekce nemá žádné položky.
 class _EmptyState extends StatelessWidget {
   final String message;
   final IconData icon;

@@ -1,4 +1,4 @@
-/// Base class for [StaffReservationsBloc] events.
+/// Základní třída pro eventy [StaffReservationsBloc].
 abstract class StaffReservationsEvent {
   const StaffReservationsEvent();
 }

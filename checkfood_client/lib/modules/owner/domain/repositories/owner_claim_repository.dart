@@ -1,7 +1,7 @@
 import '../entities/ares_company.dart';
 import '../entities/claim_result.dart';
 
-/// Domain contract for the owner restaurant-claim flow.
+/// Doménový kontrakt pro proces nárokování restaurace majitelem.
 abstract class OwnerClaimRepository {
   Future<AresCompany> lookupAres(String ico);
   Future<ClaimResult> verifyBankId(String ico);

@@ -1,7 +1,7 @@
 import '../../domain/entities/recurring_reservation.dart';
 import '../../domain/repositories/reservation_repository.dart';
 
-/// Creates a weekly recurring reservation for the authenticated user.
+/// Vytvoří týdenní opakovanou rezervaci pro přihlášeného uživatele.
 class CreateRecurringReservationUseCase {
   final ReservationRepository _repository;
   CreateRecurringReservationUseCase(this._repository);

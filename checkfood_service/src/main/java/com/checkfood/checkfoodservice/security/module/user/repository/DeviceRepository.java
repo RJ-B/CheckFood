@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repository pro správu klientských zařízení a aktivních relací uživatelů.
+ * Repository pro správu klientských zařízení a aktivních sessions uživatelů.
  * Zajišťuje perzistenci dat pro bezpečnostní audit, správu refresh tokenů a session management.
  * Každé zařízení je jednoznačně identifikováno device identifierem a vázáno na uživatele.
  *
@@ -47,8 +47,8 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
     /**
      * Vrátí seznam všech registrovaných zařízení uživatele.
-     * Používá se pro zobrazení aktivních relací v user profilu.
-     * Uživatel může vidět kde všude je přihlášen a případně relace odhlásit.
+     * Používá se pro zobrazení aktivních sessions v user profilu.
+     * Uživatel může vidět kde všude je přihlášen a případně session odhlásit.
      *
      * @param user uživatel, jehož zařízení hledáme
      * @return seznam všech zařízení uživatele
@@ -98,7 +98,7 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     /**
      * Bezpečně smaže konkrétní zařízení pouze pokud patří danému uživateli.
      * Klíčová metoda pro logout API, zabraňuje odhlášení zařízení jiného uživatele.
-     * Používá se když uživatel odhlašuje konkrétní relaci ze seznamu aktivních zařízení.
+     * Používá se když uživatel odhlašuje konkrétní session ze seznamu aktivních zařízení.
      *
      * @param id databázové ID zařízení
      * @param user vlastník zařízení (bezpečnostní kontrola)

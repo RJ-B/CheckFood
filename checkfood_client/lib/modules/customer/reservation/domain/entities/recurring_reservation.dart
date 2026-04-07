@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'recurring_reservation.freezed.dart';
 
-/// A repeating weekly reservation that generates individual booking instances.
+/// Opakující se týdenní rezervace generující jednotlivé instance rezervací.
 @freezed
 class RecurringReservation with _$RecurringReservation {
   const factory RecurringReservation({

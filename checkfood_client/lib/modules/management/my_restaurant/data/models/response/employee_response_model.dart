@@ -1,6 +1,6 @@
 import '../../../domain/entities/employee.dart';
 
-/// API response model for a restaurant employee.
+/// API response model pro zaměstnance restaurace.
 class EmployeeResponseModel {
   final int id;
   final int userId;

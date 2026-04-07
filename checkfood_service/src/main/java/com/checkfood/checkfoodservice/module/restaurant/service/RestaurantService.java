@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Rozhraní pro správu byznys logiky restaurací.
+ * Interface pro správu byznys logiky restaurací.
  */
 public interface RestaurantService {
 

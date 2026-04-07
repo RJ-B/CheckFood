@@ -1,4 +1,4 @@
-/// Request payload for changing an employee's role.
+/// Request payload pro změnu role zaměstnance.
 class UpdateEmployeeRoleRequestModel {
   final String role;
 

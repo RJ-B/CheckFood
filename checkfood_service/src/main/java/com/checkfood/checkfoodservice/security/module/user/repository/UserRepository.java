@@ -36,10 +36,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findWithAllDetailsByEmail(String email);
 
     /**
-     * Vyhledá uživatele podle externí identity (poskytovatel + ID uživatele).
+     * Vyhledá uživatele podle externí identity (provider + ID uživatele).
      * Tato metoda je klíčová pro proces OAuth přihlášení.
      *
-     * @param authProvider Poskytovatel identity (např. GOOGLE, APPLE)
+     * @param authProvider Provider identity (např. GOOGLE, APPLE)
      * @param providerId Unikátní identifikátor z externího systému
      * @return Optional s uživatelem
      */
@@ -49,7 +49,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * Vyhledá uživatele podle externí identity a okamžitě načte jeho role.
      * Optimalizace pro OAuth proces: po nalezení/vytvoření uživatele následuje generování JWT.
      *
-     * @param authProvider Poskytovatel identity
+     * @param authProvider Provider identity
      * @param providerId Unikátní identifikátor z externího systému
      * @return Optional s uživatelem včetně rolí
      */

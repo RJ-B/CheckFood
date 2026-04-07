@@ -13,7 +13,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 
 /**
- * Poskytovatel verifikace pro Google ID tokeny s diagnostickým logováním.
+ * Provider pro verifikaci Google ID tokenů s diagnostickým logováním.
  * Zapouzdřuje oficiální Google knihovnu a zajišťuje její správnou inicializaci s tolerancí
  * na časový posun (clock skew) 60 sekund.
  *

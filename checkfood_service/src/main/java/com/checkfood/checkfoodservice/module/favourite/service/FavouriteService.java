@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Servisní rozhraní pro správu oblíbených restaurací uživatele.
+ * Service interface pro správu oblíbených restaurací uživatele.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

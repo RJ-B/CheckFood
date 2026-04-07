@@ -6,7 +6,7 @@ import '../entities/restaurant_filters.dart';
 import '../entities/restaurant_marker.dart';
 import '../repositories/restaurant_repository.dart';
 
-/// Retrieves the current GPS position and handles location permission.
+/// Načte aktuální GPS pozici a zpracuje oprávnění pro polohu.
 class GetLocationUseCase {
   final LocationService _locationService;
   GetLocationUseCase(this._locationService);
@@ -14,7 +14,7 @@ class GetLocationUseCase {
   Future<Position> execute() => _locationService.getCurrentLocation();
 }
 
-/// Fetches visible restaurant markers for the current map viewport.
+/// Načte viditelné markery restaurací pro aktuální výřez mapy.
 class GetRestaurantMarkersUseCase {
   final RestaurantRepository _repository;
   GetRestaurantMarkersUseCase(this._repository);
@@ -24,7 +24,7 @@ class GetRestaurantMarkersUseCase {
   }
 }
 
-/// Returns a paginated list of nearby restaurants, optionally filtered by search query and cuisine/rating criteria.
+/// Vrátí stránkovaný seznam restaurací v okolí, volitelně filtrovaný podle vyhledávacího dotazu a kritérií kuchyně/hodnocení.
 class GetNearestRestaurantsUseCase {
   final RestaurantRepository _repository;
   GetNearestRestaurantsUseCase(this._repository);

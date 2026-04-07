@@ -1,7 +1,7 @@
 import '../entities/reservation.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Creates a new table reservation for the authenticated user.
+/// Vytvoří novou rezervaci stolu pro přihlášeného uživatele.
 class CreateReservationUseCase {
   final ReservationRepository _repository;
 

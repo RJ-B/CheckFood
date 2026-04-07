@@ -5,8 +5,8 @@ import '../bloc/orders_state.dart';
 import 'cart_bottom_sheet.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
-/// A sticky bar anchored to the bottom of the screen that shows the cart item
-/// count and total, and opens [CartBottomSheet] when tapped.
+/// Přichycený pruh ve spodní části obrazovky zobrazující počet položek a celkovou cenu košíku;
+/// po klepnutí otevře [CartBottomSheet].
 class CartSummaryBar extends StatelessWidget {
   const CartSummaryBar({super.key});
 

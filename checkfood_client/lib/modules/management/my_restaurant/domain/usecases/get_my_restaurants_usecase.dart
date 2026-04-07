@@ -1,7 +1,7 @@
 import '../entities/my_restaurant.dart';
 import '../repositories/my_restaurant_repository.dart';
 
-/// Returns all restaurants owned by the authenticated user.
+/// Vrátí všechny restaurace vlastněné přihlášeným uživatelem.
 class GetMyRestaurantsUseCase {
   final MyRestaurantRepository _repository;
   GetMyRestaurantsUseCase(this._repository);

@@ -7,8 +7,8 @@ import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 
-/// Onboarding step 1: form for entering the restaurant's basic info (name,
-/// description, contact details, address, and cuisine type).
+/// Onboarding krok 1: formulář pro zadání základních informací o restauraci (název,
+/// popis, kontaktní údaje, adresa a typ kuchyně).
 class StepInfoForm extends StatefulWidget {
   const StepInfoForm({super.key});
 
@@ -16,8 +16,8 @@ class StepInfoForm extends StatefulWidget {
   State<StepInfoForm> createState() => _StepInfoFormState();
 }
 
-/// State for [StepInfoForm]: owns the text controllers and pre-fills them from
-/// the existing restaurant data on first render.
+/// State pro [StepInfoForm]: vlastní textové controllery a předvyplní je
+/// z existujících dat restaurace při prvním vykreslení.
 class _StepInfoFormState extends State<StepInfoForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();

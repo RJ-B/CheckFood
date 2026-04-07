@@ -7,7 +7,7 @@ import '../bloc/onboarding_wizard_bloc.dart';
 import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 
-/// Onboarding step 3: form for adding and removing tables from the restaurant's seating plan.
+/// Onboarding krok 3: formulář pro přidávání a odebírání stolů z plánu sezení restaurace.
 class StepTablesForm extends StatefulWidget {
   const StepTablesForm({super.key});
 
@@ -15,7 +15,7 @@ class StepTablesForm extends StatefulWidget {
   State<StepTablesForm> createState() => _StepTablesFormState();
 }
 
-/// State for [StepTablesForm]: triggers the initial table load and shows the add-table dialog.
+/// State pro [StepTablesForm]: spustí počáteční načtení stolů a zobrazí dialog pro přidání stolu.
 class _StepTablesFormState extends State<StepTablesForm> {
   bool _loaded = false;
 

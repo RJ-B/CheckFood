@@ -8,18 +8,18 @@ import '../models/response/restaurant_marker_response_model.dart';
 import '../models/response/restaurant_response_model.dart';
 import '../models/response/restaurant_table_response_model.dart';
 
-/// Remote data source contract for the restaurant module.
+/// Kontrakt remote data source pro modul restaurací.
 abstract class RestaurantRemoteDataSource {
-  /// Returns markers or clusters visible within the given map viewport.
+  /// Vrátí markery nebo clustery viditelné v zadaném výřezu mapy.
   Future<List<RestaurantMarkerResponseModel>> getMarkers(MapParamsModel params);
 
-  /// Downloads the full snapshot of lightweight markers for client-side clustering.
+  /// Stáhne úplný snapshot lehkých markerů pro klientské clusterování.
   Future<AllMarkersResponseModel> getAllMarkers();
 
-  /// Returns the current server-side version of the markers snapshot.
+  /// Vrátí aktuální verzi snapshotu markerů na straně serveru.
   Future<int> getMarkersVersion();
 
-  /// Returns a paginated list of restaurants sorted by distance from the given coordinates.
+  /// Vrátí stránkovaný seznam restaurací seřazených podle vzdálenosti od zadaných souřadnic.
   Future<List<RestaurantResponseModel>> getNearestRestaurants({
     required double lat,
     required double lng,
@@ -55,7 +55,7 @@ abstract class RestaurantRemoteDataSource {
   Future<List<RestaurantTableResponseModel>> getTables(String restaurantId);
 }
 
-/// Dio-based implementation of [RestaurantRemoteDataSource].
+/// Implementace [RestaurantRemoteDataSource] využívající Dio.
 class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   final Dio _dio;
 

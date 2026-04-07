@@ -6,8 +6,8 @@ import '../models/request/add_employee_request_model.dart';
 import '../models/request/update_employee_role_request_model.dart';
 import '../models/request/update_restaurant_request_model.dart';
 
-/// Repository implementation that delegates to [MyRestaurantRemoteDataSource]
-/// and maps response models to domain entities.
+/// Implementace repository delegující na [MyRestaurantRemoteDataSource]
+/// a mapující response modely na doménové entity.
 class MyRestaurantRepositoryImpl implements MyRestaurantRepository {
   final MyRestaurantRemoteDataSource _remoteDataSource;
 

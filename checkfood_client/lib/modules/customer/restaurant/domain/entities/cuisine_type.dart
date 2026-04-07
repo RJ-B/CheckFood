@@ -1,4 +1,4 @@
-/// Cuisine category for a restaurant listing.
+/// Kategorie kuchyně pro záznam restaurace.
 enum CuisineType {
   ITALIAN,
   CZECH,

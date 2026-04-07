@@ -6,8 +6,8 @@ import '../../domain/usecases/confirm_email_claim_usecase.dart';
 import 'owner_claim_event.dart';
 import 'owner_claim_state.dart';
 
-/// BLoC that drives the restaurant claim flow: ARES lookup, BankID verification,
-/// and email-code based claim with confirmation.
+/// BLoC řídící proces nárokování restaurace: vyhledání v ARES, ověření přes BankID
+/// a e-mailem podložené nárokování s potvrzením.
 class OwnerClaimBloc extends Bloc<OwnerClaimEvent, OwnerClaimState> {
   final LookupAresUseCase _lookupAresUseCase;
   final VerifyBankIdUseCase _verifyBankIdUseCase;

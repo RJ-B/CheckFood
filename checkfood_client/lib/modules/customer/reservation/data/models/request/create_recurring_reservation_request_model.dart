@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'create_recurring_reservation_request_model.freezed.dart';
 part 'create_recurring_reservation_request_model.g.dart';
 
-/// Request payload for creating a weekly recurring reservation.
+/// Tělo požadavku pro vytvoření týdenní opakované rezervace.
 @freezed
 class CreateRecurringReservationRequestModel
     with _$CreateRecurringReservationRequestModel {

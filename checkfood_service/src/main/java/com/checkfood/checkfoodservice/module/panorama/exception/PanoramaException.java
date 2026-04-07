@@ -7,7 +7,7 @@ import java.util.UUID;
 
 /**
  * Výjimka pro chyby vzniklé v panoramatickém modulu.
- * Poskytuje statické tovární metody pro typické chybové scénáře.
+ * Poskytuje statické factory metody pro typické chybové scénáře.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

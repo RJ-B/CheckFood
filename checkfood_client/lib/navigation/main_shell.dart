@@ -19,16 +19,16 @@ import '../modules/customer/restaurant/presentation/bloc/explore_bloc.dart';
 import '../modules/customer/reservation/presentation/bloc/my_reservations_bloc.dart';
 import '../modules/customer/reservation/presentation/pages/reservations_screen.dart';
 
-/// Root scaffold that hosts the bottom navigation bar and top-level tab pages.
+/// Kořenový scaffold zajišťující spodní navigační lištu a stránky hlavních záložek.
 ///
-/// The visible tabs adapt to the authenticated user's role: restaurant staff
-/// and owners see an additional "My Restaurant" tab.
+/// Viditelné záložky se přizpůsobují roli přihlášeného uživatele — personál
+/// a majitelé restaurace vidí navíc záložku „Moje restaurace".
 class MainShell extends StatefulWidget {
   static final GlobalKey<_MainShellState> shellKey = GlobalKey<_MainShellState>();
 
   const MainShell({super.key});
 
-  /// Switches the bottom navigation bar to the given [index] from outside the widget tree.
+  /// Přepne spodní navigační lištu na zadaný [index] z vnějšku widget stromu.
   static void switchToTab(int index) {
     shellKey.currentState?._onTabSelected(index);
   }
@@ -37,8 +37,8 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-/// State for [MainShell]: tracks the active bottom-nav index and derives the
-/// correct tab configuration from the current user role.
+/// Stav pro [MainShell]: sleduje aktivní index spodní navigace a odvozuje
+/// správnou konfiguraci záložek z aktuální role uživatele.
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 

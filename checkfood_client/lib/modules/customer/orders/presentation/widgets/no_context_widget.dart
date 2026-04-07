@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Placeholder shown when there is no active check-in context, prompting the
-/// user to refresh or start a reservation.
+/// Zástupný widget zobrazený, pokud není aktivní check-in kontext — vybízí
+/// uživatele k obnovení nebo zahájení rezervace.
 class NoContextWidget extends StatelessWidget {
   final VoidCallback? onRefresh;
 

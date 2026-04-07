@@ -1,7 +1,7 @@
 import '../entities/menu_category.dart';
 import '../repositories/orders_repository.dart';
 
-/// Fetches the menu categories and items for the given restaurant.
+/// Načte kategorie menu a položky pro zadanou restauraci.
 class GetMenuUseCase {
   final OrdersRepository _repository;
 

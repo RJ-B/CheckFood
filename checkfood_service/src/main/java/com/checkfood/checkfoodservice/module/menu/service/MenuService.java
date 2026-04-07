@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Servisní rozhraní pro čtení veřejného menu restaurace zákazníky.
+ * Service interface pro čtení veřejného menu restaurace zákazníky.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

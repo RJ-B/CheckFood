@@ -22,8 +22,8 @@ import '../../../../management/staff_reservations/presentation/bloc/staff_reserv
 import '../../../../management/staff_reservations/presentation/bloc/staff_reservations_event.dart';
 import '../../../../management/staff_reservations/presentation/pages/staff_reservations_page.dart';
 
-/// The owner/manager dashboard page, providing tabs for reservations, employees,
-/// statistics, and restaurant settings, with unsaved-changes guard on the settings tab.
+/// Dashboard page majitele/manažera poskytující záložky pro rezervace, zaměstnance,
+/// statistiky a nastavení restaurace se stráží neuložených změn na záložce nastavení.
 class MyRestaurantPage extends StatefulWidget {
   const MyRestaurantPage({super.key});
 
@@ -40,8 +40,8 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
     context.read<MyRestaurantBloc>().add(const LoadMyRestaurant());
   }
 
-  /// Shows confirm dialog when user tries to navigate away with unsaved changes.
-  /// Returns true if user wants to proceed (discard or save), false to stay.
+  /// Zobrazí potvrzovací dialog, když se uživatel pokusí odejít s neuloženými změnami.
+  /// Vrátí true, pokud chce uživatel pokračovat (zahodit nebo uložit), false pro zůstání.
   Future<bool> _confirmUnsavedChanges(BuildContext context) async {
     if (!_hasUnsavedChanges) return true;
     final result = await showDialog<String>(

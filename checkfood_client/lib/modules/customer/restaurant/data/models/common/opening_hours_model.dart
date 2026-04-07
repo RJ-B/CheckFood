@@ -4,7 +4,7 @@ import '../../../domain/entities/opening_hours.dart';
 part 'opening_hours_model.freezed.dart';
 part 'opening_hours_model.g.dart';
 
-/// API response/request model for a single day's opening hours.
+/// API response/request model pro otevírací dobu jednoho dne.
 @freezed
 class OpeningHoursModel with _$OpeningHoursModel {
   const OpeningHoursModel._();

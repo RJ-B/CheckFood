@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import '../models/staff_reservation_model.dart';
 import '../models/staff_table_model.dart';
 
-/// Remote data source contract for staff-facing reservation management API calls.
+/// Kontrakt remote data source pro API volání správy rezervací na straně personálu.
 abstract class StaffReservationRemoteDataSource {
   Future<List<StaffReservationModel>> getReservations(String date, {String? restaurantId});
   Future<void> confirmReservation(String id);
@@ -15,7 +15,7 @@ abstract class StaffReservationRemoteDataSource {
   Future<void> extendReservation(String reservationId, String endTime);
 }
 
-/// Dio-based implementation of [StaffReservationRemoteDataSource].
+/// Implementace [StaffReservationRemoteDataSource] využívající Dio.
 class StaffReservationRemoteDataSourceImpl
     implements StaffReservationRemoteDataSource {
   final Dio _dio;

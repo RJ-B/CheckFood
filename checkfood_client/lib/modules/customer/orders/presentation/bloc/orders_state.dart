@@ -8,7 +8,7 @@ import '../../domain/entities/session_order_item.dart';
 
 part 'orders_state.freezed.dart';
 
-/// Immutable state for [OrdersBloc], holding all sub-states for the orders flow.
+/// Neměnný state pro [OrdersBloc] obsahující všechny dílčí stavy flow objednávek.
 @freezed
 class OrdersState with _$OrdersState {
   const OrdersState._();

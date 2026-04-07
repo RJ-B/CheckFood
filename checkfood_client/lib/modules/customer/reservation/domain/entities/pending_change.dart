@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'pending_change.freezed.dart';
 
-/// A proposed change to an existing reservation that is awaiting guest acceptance.
+/// Navrhovaná změna existující rezervace čekající na přijetí hostem.
 @freezed
 class PendingChange with _$PendingChange {
   const factory PendingChange({

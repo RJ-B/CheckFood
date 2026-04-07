@@ -1,7 +1,7 @@
 import '../entities/onboarding_table.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Adds a new table to the restaurant's floor plan.
+/// Přidá nový stůl do půdorysu restaurace.
 class AddTableUseCase {
   final OnboardingRepository _repository;
 

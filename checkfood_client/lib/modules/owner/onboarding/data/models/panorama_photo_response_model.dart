@@ -4,7 +4,7 @@ import '../../domain/entities/panorama_photo.dart';
 part 'panorama_photo_response_model.freezed.dart';
 part 'panorama_photo_response_model.g.dart';
 
-/// API response model for a single uploaded panorama photo with angle metadata.
+/// API response model pro jeden nahraný snímek panoramatu s metadaty úhlu.
 @freezed
 class PanoramaPhotoResponseModel with _$PanoramaPhotoResponseModel {
   const PanoramaPhotoResponseModel._();

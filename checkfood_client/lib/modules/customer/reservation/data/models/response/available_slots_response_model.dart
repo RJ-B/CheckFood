@@ -5,7 +5,7 @@ import '../../../domain/entities/available_slots.dart';
 part 'available_slots_response_model.freezed.dart';
 part 'available_slots_response_model.g.dart';
 
-/// API response model carrying the available booking start times for a specific table and date.
+/// API response model nesoucí dostupné časy začátku rezervace pro konkrétní stůl a datum.
 @freezed
 class AvailableSlotsResponseModel with _$AvailableSlotsResponseModel {
   const AvailableSlotsResponseModel._();

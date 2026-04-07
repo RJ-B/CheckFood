@@ -11,7 +11,7 @@ import '../models/response/reservation_response_model.dart';
 import '../models/response/reservation_scene_response_model.dart';
 import '../models/response/table_status_response_model.dart';
 
-/// Remote data source contract for the reservation module.
+/// Kontrakt remote data source pro modul rezervací.
 abstract class ReservationRemoteDataSource {
   Future<ReservationSceneResponseModel> getReservationScene(String restaurantId);
   Future<TableStatusResponseModel> getTableStatuses(String restaurantId, String date);
@@ -32,7 +32,7 @@ abstract class ReservationRemoteDataSource {
       String id);
 }
 
-/// Dio-based implementation of [ReservationRemoteDataSource].
+/// Implementace [ReservationRemoteDataSource] využívající Dio.
 class ReservationRemoteDataSourceImpl implements ReservationRemoteDataSource {
   final Dio _dio;
 

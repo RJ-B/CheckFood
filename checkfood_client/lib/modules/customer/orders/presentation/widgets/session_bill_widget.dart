@@ -8,8 +8,8 @@ import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
 import '../pages/qr_scanner_page.dart';
 
-/// Displays the shared dining session bill, allowing guests to select and pay
-/// their own items or invite others by QR code.
+/// Zobrazuje sdílený účet dining session — hosté mohou vybrat a zaplatit
+/// své položky nebo pozvat ostatní pomocí QR kódu.
 class SessionBillWidget extends StatelessWidget {
   const SessionBillWidget({super.key});
 
@@ -68,7 +68,7 @@ class SessionBillWidget extends StatelessWidget {
   }
 }
 
-/// Prompt shown when the user has no active group session, with a button to scan a table QR code.
+/// Výzva zobrazená, pokud uživatel nemá aktivní skupinové sezení — obsahuje tlačítko pro naskenování QR kódu stolu.
 class _NoSessionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class _NoSessionView extends StatelessWidget {
   }
 }
 
-/// A compact header row showing restaurant and table context, member count, and session action buttons.
+/// Kompaktní záhlaví zobrazující kontext restaurace a stolu, počet členů a akční tlačítka session.
 class _SessionHeader extends StatelessWidget {
   final OrdersState state;
   const _SessionHeader({required this.state});
@@ -180,7 +180,7 @@ class _SessionHeader extends StatelessWidget {
   }
 }
 
-/// Placeholder shown inside the refreshable area when the session has no ordered items yet.
+/// Zástupný obsah zobrazený v oblasti s možností obnovení, pokud session zatím neobsahuje žádné objednané položky.
 class _EmptyItemsView extends StatelessWidget {
   const _EmptyItemsView();
 
@@ -211,7 +211,7 @@ class _EmptyItemsView extends StatelessWidget {
   }
 }
 
-/// Scrollable list of all [SessionOrderItem] rows within the active session.
+/// Scrollovatelný seznam všech řádků [SessionOrderItem] v rámci aktivní session.
 class _ItemsList extends StatelessWidget {
   final List<SessionOrderItem> items;
   final OrdersState state;
@@ -231,7 +231,7 @@ class _ItemsList extends StatelessWidget {
   }
 }
 
-/// A selectable row representing one ordered item in the session, showing payment state.
+/// Vybratelný řádek reprezentující jednu objednanou položku v session, zobrazuje stav platby.
 class _ItemRow extends StatelessWidget {
   final SessionOrderItem item;
   final OrdersState state;
@@ -335,7 +335,7 @@ class _ItemRow extends StatelessWidget {
   }
 }
 
-/// Colour-coded badge indicating whether an item is unpaid, being processed, or paid.
+/// Barevný odznak indikující, zda je položka nezaplacená, zpracovává se nebo zaplacená.
 class _StatusBadge extends StatelessWidget {
   final SessionOrderItem item;
   const _StatusBadge({required this.item});
@@ -394,7 +394,7 @@ class _StatusBadge extends StatelessWidget {
   }
 }
 
-/// Sticky footer displaying session totals and the pay-selected-items action.
+/// Přichycený footer zobrazující celkové částky session a akci pro platbu vybraných položek.
 class _BillFooter extends StatelessWidget {
   final OrdersState state;
   const _BillFooter({required this.state});
@@ -483,7 +483,7 @@ class _BillFooter extends StatelessWidget {
   }
 }
 
-/// A label-value pair row used in the bill footer to show monetary totals.
+/// Řádek páru popisek–hodnota ve footeru účtu pro zobrazení peněžních součtů.
 class _TotalRow extends StatelessWidget {
   final String label;
   final String value;

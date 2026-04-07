@@ -1,7 +1,7 @@
 package com.checkfood.checkfoodservice.module.storage.service;
 
 /**
- * Rozhraní pro abstrakci souborového úložiště — ukládání, mazání a generování veřejných URL souborů.
+ * Interface pro abstrakci souborového úložiště — ukládání, mazání a generování veřejných URL souborů.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

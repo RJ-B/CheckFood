@@ -1,7 +1,7 @@
 import '../entities/employee.dart';
 import '../repositories/my_restaurant_repository.dart';
 
-/// Returns the full employee roster for the managed restaurant.
+/// Vrátí kompletní seznam zaměstnanců spravované restaurace.
 class GetEmployeesUseCase {
   final MyRestaurantRepository _repository;
   GetEmployeesUseCase(this._repository);

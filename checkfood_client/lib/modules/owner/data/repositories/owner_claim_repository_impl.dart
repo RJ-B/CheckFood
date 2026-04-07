@@ -3,8 +3,8 @@ import '../../domain/entities/claim_result.dart';
 import '../../domain/repositories/owner_claim_repository.dart';
 import '../datasources/owner_claim_remote_datasource.dart';
 
-/// Repository implementation that delegates to [OwnerClaimRemoteDataSource]
-/// and maps response models to domain entities.
+/// Implementace repository delegující na [OwnerClaimRemoteDataSource]
+/// a mapující response modely na doménové entity.
 class OwnerClaimRepositoryImpl implements OwnerClaimRepository {
   final OwnerClaimRemoteDataSource _remoteDataSource;
 

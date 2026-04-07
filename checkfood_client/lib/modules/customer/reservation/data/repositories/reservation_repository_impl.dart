@@ -11,8 +11,8 @@ import '../models/request/create_recurring_reservation_request_model.dart';
 import '../models/request/create_reservation_request_model.dart';
 import '../models/request/update_reservation_request_model.dart';
 
-/// Repository implementation that delegates to [ReservationRemoteDataSource]
-/// and maps response models to domain entities.
+/// Implementace repository, která deleguje na [ReservationRemoteDataSource]
+/// a mapuje response modely na domain entity.
 class ReservationRepositoryImpl implements ReservationRepository {
   final ReservationRemoteDataSource _remoteDataSource;
 

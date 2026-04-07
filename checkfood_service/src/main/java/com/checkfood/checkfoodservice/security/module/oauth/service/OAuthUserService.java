@@ -14,7 +14,7 @@ public interface OAuthUserService {
 
     /**
      * Získá existujícího uživatele z databáze nebo vytvoří nového na základě
-     * ověřených informací od OAuth poskytovatele.
+     * ověřených informací od OAuth providera.
      *
      * @param userInfo Ověřená data uživatele (email, providerId, atd.)
      * @return Uložená nebo aktualizovaná entita uživatele

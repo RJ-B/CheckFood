@@ -1,6 +1,6 @@
 import '../repositories/orders_repository.dart';
 
-/// Initiates the payment flow for the given order and returns the redirect URL.
+/// Zahájí platební flow pro zadanou objednávku a vrátí URL pro přesměrování.
 class InitiatePaymentUseCase {
   final OrdersRepository _repository;
 

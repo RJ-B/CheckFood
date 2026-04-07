@@ -13,7 +13,7 @@ class OpeningHours with _$OpeningHours {
     required bool isClosed,
   }) = _OpeningHours;
 
-  /// Returns a formatted string of the opening hours for display.
+  /// Vrátí formátovaný řetězec otevírací doby pro zobrazení.
   String get formattedHours {
     if (isClosed || openAt == null || closeAt == null) return 'Zavřeno';
     final open = openAt!.substring(0, 5);

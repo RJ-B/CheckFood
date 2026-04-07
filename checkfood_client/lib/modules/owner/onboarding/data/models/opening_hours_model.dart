@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'opening_hours_model.freezed.dart';
 part 'opening_hours_model.g.dart';
 
-/// API model for a single day's opening hours entry.
+/// API model pro záznam otevíracích dob jednoho dne.
 @freezed
 class OpeningHoursModel with _$OpeningHoursModel {
   const factory OpeningHoursModel({

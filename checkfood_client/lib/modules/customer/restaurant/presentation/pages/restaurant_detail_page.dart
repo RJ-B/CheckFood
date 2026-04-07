@@ -13,7 +13,7 @@ import '../bloc/restaurant_detail_event.dart';
 import '../bloc/restaurant_detail_state.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 
-/// Full-screen restaurant detail page that loads data via [RestaurantDetailBloc] using the provided [restaurantId].
+/// Celoobrazkový detail restaurace, který načítá data přes [RestaurantDetailBloc] pomocí zadaného [restaurantId].
 class RestaurantDetailPage extends StatelessWidget {
   final String restaurantId;
 
@@ -47,7 +47,7 @@ class RestaurantDetailPage extends StatelessWidget {
   }
 }
 
-/// Scrollable detail body shown once the restaurant has been loaded successfully.
+/// Scrollovatelné tělo detailu zobrazené po úspěšném načtení restaurace.
 class _DetailContent extends StatelessWidget {
   final Restaurant restaurant;
 
@@ -460,7 +460,7 @@ class _DetailContent extends StatelessWidget {
   }
 }
 
-/// Error view shown when the restaurant detail fails to load.
+/// Chybový pohled zobrazený, pokud se nepodaří načíst detail restaurace.
 class _ErrorContent extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;

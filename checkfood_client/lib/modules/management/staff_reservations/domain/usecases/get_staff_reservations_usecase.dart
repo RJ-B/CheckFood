@@ -1,7 +1,7 @@
 import '../entities/staff_reservation.dart';
 import '../repositories/staff_reservation_repository.dart';
 
-/// Returns all reservations for a given date as seen by staff.
+/// Vrátí všechny rezervace pro daný den z pohledu personálu.
 class GetStaffReservationsUseCase {
   final StaffReservationRepository _repository;
 

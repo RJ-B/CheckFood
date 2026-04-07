@@ -4,9 +4,9 @@ import '../../../../../../l10n/generated/app_localizations.dart';
 import '../../../domain/entities/staff_reservation.dart';
 import '../../../domain/entities/staff_table.dart';
 
-/// Shows a dialog with the full detail of a reservation and contextual action
-/// buttons (confirm, reject, check-in, edit, complete) based on backend
-/// capability flags.
+/// Zobrazí dialog s kompletním detailem rezervace a kontextovými tlačítky akcí
+/// (potvrdit, zamítnout, check-in, upravit, dokončit) na základě příznaků
+/// dostupnosti z backendu.
 void showReservationDetailSheet(
   BuildContext context, {
   required StaffReservation reservation,

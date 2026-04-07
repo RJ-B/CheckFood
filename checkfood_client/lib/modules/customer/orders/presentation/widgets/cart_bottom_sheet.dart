@@ -5,8 +5,8 @@ import '../bloc/orders_bloc.dart';
 import '../bloc/orders_event.dart';
 import '../bloc/orders_state.dart';
 
-/// A draggable bottom sheet showing the current cart items with a note field
-/// and a submit button to place the order.
+/// Přetahovatelný bottom sheet zobrazující aktuální položky košíku s polem pro poznámku
+/// a tlačítkem pro odeslání objednávky.
 class CartBottomSheet extends StatefulWidget {
   const CartBottomSheet({super.key});
 

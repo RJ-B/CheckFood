@@ -10,10 +10,10 @@ import '../widgets/menu_list_widget.dart';
 import '../widgets/no_context_widget.dart';
 import '../widgets/session_bill_widget.dart';
 
-/// Top-level page for the orders tab.
+/// Hlavní page záložky objednávek.
 ///
-/// Loads the dining context on mount and routes to [_OrdersTabView] when a
-/// context is available, or to [NoContextWidget] when none is active.
+/// Při inicializaci načte dining context a přesměruje na [_OrdersTabView], pokud
+/// je kontext dostupný, nebo na [NoContextWidget], pokud žádný aktivní kontext není.
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
 
@@ -98,7 +98,7 @@ class _OrdersPageState extends State<OrdersPage> with WidgetsBindingObserver {
   }
 }
 
-/// Three-tab scaffold showing the menu, active orders, and the shared session bill.
+/// Scaffold se třemi záložkami zobrazující menu, aktivní objednávky a sdílený účet relace.
 class _OrdersTabView extends StatelessWidget {
   final String restaurantName;
   final String tableLabel;

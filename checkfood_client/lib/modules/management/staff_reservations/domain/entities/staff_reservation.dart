@@ -1,4 +1,4 @@
-/// A reservation as seen by staff, including per-action capability flags.
+/// Rezervace z pohledu personálu, včetně příznaků dostupnosti jednotlivých akcí.
 class StaffReservation {
   final String id;
   final String tableId;

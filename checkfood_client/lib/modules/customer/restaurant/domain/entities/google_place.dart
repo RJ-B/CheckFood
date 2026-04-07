@@ -1,6 +1,6 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-/// A place result from the Google Places API, used for address autocomplete on the map.
+/// Výsledek místa z Google Places API, využívaný pro automatické doplňování adres na mapě.
 class GooglePlace {
   final String id;
   final String name;

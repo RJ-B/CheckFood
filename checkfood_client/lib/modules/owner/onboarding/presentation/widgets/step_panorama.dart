@@ -8,8 +8,8 @@ import '../bloc/onboarding_wizard_event.dart';
 import '../bloc/onboarding_wizard_state.dart';
 import 'panorama_capture_screen.dart';
 
-/// Onboarding step 5: UI for creating panorama capture sessions, monitoring their
-/// stitching status, and activating a completed panorama for the restaurant.
+/// Onboarding krok 5: UI pro vytváření panorama capture sessions, sledování jejich
+/// stavu stitchingu a aktivaci dokončeného panoramatu pro restauraci.
 class StepPanorama extends StatefulWidget {
   const StepPanorama({super.key});
 
@@ -17,8 +17,8 @@ class StepPanorama extends StatefulWidget {
   State<StepPanorama> createState() => _StepPanoramaState();
 }
 
-/// State for [StepPanorama]: triggers the initial session list load and polls
-/// the stitching status for any sessions that are still processing.
+/// State pro [StepPanorama]: spustí počáteční načtení seznamu sessions a dotazuje se
+/// na stav stitchingu pro sessions, které se stále zpracovávají.
 class _StepPanoramaState extends State<StepPanorama> {
   bool _loaded = false;
   final Set<String> _pollingSessionIds = {};

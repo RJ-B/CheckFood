@@ -5,9 +5,9 @@ import '../../domain/entities/pending_change.dart';
 import '../../domain/entities/reservation.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
-/// A card showing reservation details (restaurant, table, date/time, party size, status)
-/// along with optional edit, cancel, and recurring-booking action buttons.
-/// Displays a [_PendingChangeBanner] above the card when a staff change proposal is pending.
+/// Karta zobrazující detaily rezervace (restaurace, stůl, datum/čas, počet hostů, stav)
+/// spolu s volitelnými tlačítky pro úpravu, zrušení a opakovanou rezervaci.
+/// Pokud čeká návrh změny od personálu, zobrazí nad kartou [_PendingChangeBanner].
 class ReservationCard extends StatelessWidget {
   final Reservation reservation;
   final bool isCancelling;
@@ -167,8 +167,8 @@ class ReservationCard extends StatelessWidget {
   }
 }
 
-/// A warning banner displayed above a reservation card when the restaurant
-/// has proposed a time or table change that requires the guest's response.
+/// Varovný banner zobrazený nad kartou rezervace, pokud restaurace navrhla
+/// změnu času nebo stolu vyžadující reakci hosta.
 class _PendingChangeBanner extends StatelessWidget {
   final PendingChange pendingChange;
   final bool isLoading;
@@ -278,7 +278,7 @@ class _PendingChangeBanner extends StatelessWidget {
   }
 }
 
-/// A small coloured badge that reflects the reservation's current status.
+/// Malý barevný odznak odrážející aktuální stav rezervace.
 class _StatusChip extends StatelessWidget {
   final String status;
 

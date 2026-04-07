@@ -1,7 +1,7 @@
 import '../entities/onboarding_menu_category.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Updates an existing menu category's name and sort order.
+/// Aktualizuje název a pořadí existující kategorie menu.
 class UpdateCategoryUseCase {
   final OnboardingRepository _repository;
 

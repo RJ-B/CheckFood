@@ -1,7 +1,7 @@
 import '../entities/available_slots.dart';
 import '../repositories/reservation_repository.dart';
 
-/// Returns the available booking time slots for a given table and date.
+/// Vrátí dostupné časové sloty rezervace pro zadaný stůl a datum.
 class GetAvailableSlotsUseCase {
   final ReservationRepository _repository;
 

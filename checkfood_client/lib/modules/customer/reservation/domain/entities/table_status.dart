@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'table_status.freezed.dart';
 
-/// The availability statuses for all tables in a restaurant on a given date.
+/// Stavy dostupnosti všech stolů restaurace pro zadané datum.
 @freezed
 class TableStatusList with _$TableStatusList {
   const factory TableStatusList({
@@ -11,7 +11,7 @@ class TableStatusList with _$TableStatusList {
   }) = _TableStatusList;
 }
 
-/// Availability status of a single table (e.g. available, partially booked).
+/// Stav dostupnosti jednoho stolu (např. volný, částečně obsazený).
 @freezed
 class TableStatus with _$TableStatus {
   const factory TableStatus({

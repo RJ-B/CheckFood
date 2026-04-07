@@ -1,6 +1,6 @@
 import '../repositories/staff_reservation_repository.dart';
 
-/// Extends the end time of an active reservation.
+/// Prodlouží čas konce aktivní rezervace.
 class ExtendReservationUseCase {
   final StaffReservationRepository _repository;
   ExtendReservationUseCase(this._repository);

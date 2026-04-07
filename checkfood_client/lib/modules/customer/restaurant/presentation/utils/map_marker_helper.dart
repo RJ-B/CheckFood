@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../core/theme/colors.dart';
 
-/// Generates and caches Qerko-style map markers for restaurants and clusters.
+/// Generuje a cachuje markery na mapě ve stylu Qerko pro restaurace a clustery.
 ///
-/// Individual marker layout (bottom-anchored):
-///   [name label]
-///   [circle avatar (letter or icon)]
-///   [small green teardrop pin]
+/// Rozvržení individuálního markeru (ukotvený dole):
+///   [popisek s názvem]
+///   [kruhový avatar (písmeno nebo ikona)]
+///   [malý zelený pin ve tvaru kapky]
 ///
-/// Cluster marker:
-///   Emerald green circle with white count label +
-///   small orange dot indicator at top-right.
+/// Marker clusteru:
+///   Smaragdově zelený kruh s bílým popiskem počtu +
+///   malý oranžový tečkový indikátor vpravo nahoře.
 class MapMarkerHelper {
   static final Map<String, BitmapDescriptor> _clusterCache = {};
   static final Map<String, BitmapDescriptor> _pinCache = {};
@@ -43,14 +43,14 @@ class MapMarkerHelper {
 
   static const double _scale = 2.5;
 
-  /// Returns the pixel diameter for a cluster icon.
+  /// Vrátí průměr ikony clusteru v pixelech.
   static int clusterIconSize(int count, {int zoom = 14}) {
     final logPart = count > 1 ? math.log(count) / math.ln10 : 0.0;
     final raw = _base + _k * logPart - _zoomScale * zoom;
     return raw.clamp(_minDiameter, _maxDiameter).round();
   }
 
-  /// Creates a cluster bitmap — emerald circle + white count + orange dot.
+  /// Vytvoří bitmapu clusteru — smaragdový kruh + bílý počet + oranžová tečka.
   static Future<BitmapDescriptor> getClusterBitmap(
     int size, {
     required String text,
@@ -130,14 +130,14 @@ class MapMarkerHelper {
     return bitmap;
   }
 
-  /// Creates a Qerko-style restaurant marker:
-  ///   • White-bordered circle avatar (letter or fork icon)
-  ///   • Small green teardrop pin below the circle
-  ///   • Restaurant name label at the bottom
+  /// Vytvoří marker restaurace ve stylu Qerko:
+  ///   • Kruhový avatar s bílým okrajem (písmeno nebo ikona vidličky)
+  ///   • Malý zelený pin ve tvaru kapky pod kruhem
+  ///   • Popisek s názvem restaurace dole
   ///
-  /// [id] — used for cache key differentiation.
-  /// [name] — displayed as label and used for the letter avatar.
-  /// [isSelected] — selected state is larger with a drop shadow.
+  /// [id] — slouží k odlišení klíče cache.
+  /// [name] — zobrazen jako popisek a použit pro písmeno avataru.
+  /// [isSelected] — vybraný stav je větší s vrženým stínem.
   static Future<BitmapDescriptor> getRestaurantBitmap({
     required String id,
     String? name,
@@ -287,7 +287,7 @@ class MapMarkerHelper {
     return bitmap;
   }
 
-  /// Draws a small downward-pointing teardrop/pin below the circle.
+  /// Nakreslí malý pin ve tvaru kapky směřující dolů pod kruh.
   static void _drawPin(Canvas canvas, {required double cx, required double top}) {
     const double halfW = _pinWidth / 2;
     final path = Path()
@@ -299,7 +299,7 @@ class MapMarkerHelper {
     canvas.drawPath(path, Paint()..color = AppColors.primary);
   }
 
-  /// Draws a single character centred in the circle using ui.Paragraph.
+  /// Nakreslí jeden znak vystředěný v kruhu pomocí ui.Paragraph.
   static void _drawLetter(
     Canvas canvas, {
     required String letter,
@@ -331,7 +331,7 @@ class MapMarkerHelper {
     );
   }
 
-  /// Draws a Material icon glyph centred in the circle using ui.Paragraph.
+  /// Nakreslí glyf Material ikony vystředěný v kruhu pomocí ui.Paragraph.
   static void _drawIcon(
     Canvas canvas, {
     required int iconCode,
@@ -363,7 +363,7 @@ class MapMarkerHelper {
     );
   }
 
-  /// Pre-generates two generic pin variants (no id, no name) for fast first render.
+  /// Předgeneruje dvě generické varianty pinu (bez id, bez jména) pro rychlé první vykreslení.
   static Future<void> preGeneratePins() async {
     await Future.wait([
       getRestaurantBitmap(id: '_default', isSelected: false),

@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'reservation.freezed.dart';
 
-/// A single table reservation including its status and any pending change request.
+/// Jednorázová rezervace stolu včetně stavu a případného čekajícího požadavku na změnu.
 @freezed
 class Reservation with _$Reservation {
   const Reservation._();

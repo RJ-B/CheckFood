@@ -1,7 +1,7 @@
 import '../entities/claim_result.dart';
 import '../repositories/owner_claim_repository.dart';
 
-/// Confirms an email-based restaurant claim by submitting the verification code.
+/// Potvrdí e-mailem podložené nárokování restaurace odesláním ověřovacího kódu.
 class ConfirmEmailClaimUseCase {
   final OwnerClaimRepository _repository;
 

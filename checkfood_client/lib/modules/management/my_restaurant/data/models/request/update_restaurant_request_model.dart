@@ -1,4 +1,4 @@
-/// Request payload for updating a restaurant's editable fields.
+/// Request payload pro aktualizaci editovatelných polí restaurace.
 class UpdateRestaurantRequestModel {
   final String name;
   final String? description;

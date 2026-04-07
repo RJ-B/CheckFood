@@ -7,7 +7,7 @@ import lombok.*;
 /**
  * DTO pro odhlášení uživatele ze systému s invalidací refresh tokenu.
  *
- * Zajišťuje bezpečné odhlášení s ukončením relace konkrétního zařízení.
+ * Zajišťuje bezpečné odhlášení s ukončením session konkrétního zařízení.
  * Kombinuje invalidaci tokenu s úklidem záznamu zařízení.
  *
  * @author Rostislav Jirák
@@ -29,9 +29,9 @@ public class LogoutRequest {
     private String refreshToken;
 
     /**
-     * Identifikátor zařízení pro odhlášení konkrétní relace a bezpečnostní sledování.
+     * Identifikátor zařízení pro odhlášení konkrétní session a bezpečnostní sledování.
      * Zajišťuje, že odhlášení ovlivní pouze dané zařízení.
      */
-    @NotBlank(message = "Identifikátor zařízení je povinný pro korektní ukončení relace.")
+    @NotBlank(message = "Identifikátor zařízení je povinný pro korektní ukončení session.")
     private String deviceIdentifier;
 }

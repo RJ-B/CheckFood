@@ -5,9 +5,9 @@ import 'timeline_constants.dart';
 import 'timeline_grid_painter.dart';
 import 'reservation_block.dart';
 
-/// A horizontally scrollable timeline grid showing all active reservations for
-/// a given day, organised by table row, with a current-time indicator when
-/// viewing today.
+/// Horizontálně scrollovatelná mřížka timeline zobrazující všechny aktivní rezervace
+/// pro daný den, uspořádané podle řádků stolů, s indikátorem aktuálního času
+/// při prohlížení dnešního dne.
 class ReservationTimelineView extends StatefulWidget {
   final List<StaffTable> tables;
   final List<StaffReservation> reservations;
@@ -260,7 +260,7 @@ class _ReservationTimelineViewState extends State<ReservationTimelineView> {
   }
 }
 
-/// A fixed-height row that labels each hour (and half-hour) across the top of the timeline.
+/// Řádek s pevnou výškou označující každou hodinu (a půlhodinu) v horní části timeline.
 class _TimelineHeader extends StatelessWidget {
   final int openHour;
   final int openMinute;

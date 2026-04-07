@@ -17,9 +17,9 @@ import '../../domain/usecases/cancel_recurring_reservation_usecase.dart';
 import 'my_reservations_event.dart';
 import 'my_reservations_state.dart';
 
-/// BLoC that manages the user's reservation list: loading the overview, editing and
-/// cancelling individual reservations, responding to pending change proposals, and
-/// creating or cancelling recurring reservation series.
+/// BLoC spravující seznam rezervací uživatele: načítání přehledu, úprava a
+/// rušení jednotlivých rezervací, reakce na čekající návrhy změn a
+/// vytváření nebo rušení sérií opakovaných rezervací.
 class MyReservationsBloc
     extends Bloc<MyReservationsEvent, MyReservationsState> {
   final GetMyReservationsOverviewUseCase _getOverviewUseCase;

@@ -4,7 +4,7 @@ import 'opening_hours_model.dart';
 part 'onboarding_hours_request_model.freezed.dart';
 part 'onboarding_hours_request_model.g.dart';
 
-/// Request payload for saving the restaurant's opening hours during onboarding step 2.
+/// Request payload pro uložení otevíracích dob restaurace v průběhu onboarding kroku 2.
 @freezed
 class OnboardingHoursRequestModel with _$OnboardingHoursRequestModel {
   const factory OnboardingHoursRequestModel({

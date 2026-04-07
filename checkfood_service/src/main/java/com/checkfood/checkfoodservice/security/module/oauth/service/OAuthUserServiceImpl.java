@@ -43,7 +43,7 @@ public class OAuthUserServiceImpl implements OAuthUserService {
      * Pokusí se najít uživatele podle e-mailu a buď ho propojí s OAuth identitou,
      * nebo vytvoří nový účet.
      *
-     * @param userInfo data uživatele od OAuth poskytovatele
+     * @param userInfo data uživatele od OAuth providera
      * @return nalezená nebo nově vytvořená entita uživatele
      */
     private UserEntity handleUserByEmail(OAuthUserInfo userInfo) {
@@ -53,12 +53,12 @@ public class OAuthUserServiceImpl implements OAuthUserService {
     }
 
     /**
-     * Ověří, že existující uživatel pochází od stejného OAuth poskytovatele, a aktualizuje jeho data.
+     * Ověří, že existující uživatel pochází od stejného OAuth providera, a aktualizuje jeho data.
      *
      * @param existingUser existující uživatelská entita
-     * @param userInfo     data uživatele od OAuth poskytovatele
+     * @param userInfo     data uživatele od OAuth providera
      * @return aktualizovaná uživatelská entita
-     * @throws com.checkfood.checkfoodservice.security.module.oauth.exception.OAuthException pokud se poskytovatelé neshodují
+     * @throws com.checkfood.checkfoodservice.security.module.oauth.exception.OAuthException pokud se provideři neshodují
      */
     private UserEntity validateAndLinkUser(UserEntity existingUser, OAuthUserInfo userInfo) {
         if (existingUser.getAuthProvider() != userInfo.getProviderType()) {
@@ -72,10 +72,10 @@ public class OAuthUserServiceImpl implements OAuthUserService {
     }
 
     /**
-     * Aktualizuje atributy existujícího uživatele z dat OAuth poskytovatele a uloží změny.
+     * Aktualizuje atributy existujícího uživatele z dat OAuth providera a uloží změny.
      *
      * @param user     existující uživatelská entita k aktualizaci
-     * @param userInfo data uživatele od OAuth poskytovatele
+     * @param userInfo data uživatele od OAuth providera
      * @return uložená aktualizovaná entita
      */
     private UserEntity updateExistingUser(UserEntity user, OAuthUserInfo userInfo) {
@@ -89,10 +89,10 @@ public class OAuthUserServiceImpl implements OAuthUserService {
     }
 
     /**
-     * Vytvoří a uloží nový uživatelský účet na základě dat od OAuth poskytovatele.
+     * Vytvoří a uloží nový uživatelský účet na základě dat od OAuth providera.
      * Přiřadí výchozí roli USER a označí účet jako ověřený (enabled).
      *
-     * @param userInfo data uživatele od OAuth poskytovatele
+     * @param userInfo data uživatele od OAuth providera
      * @return nově vytvořená a uložená entita uživatele
      */
     private UserEntity createNewUser(OAuthUserInfo userInfo) {
@@ -117,7 +117,7 @@ public class OAuthUserServiceImpl implements OAuthUserService {
      * Prázdné nebo nulové hodnoty jsou ignorovány, aby nedošlo k přepsání existujících dat.
      *
      * @param entity   cílová uživatelská entita
-     * @param userInfo zdrojová data od OAuth poskytovatele
+     * @param userInfo zdrojová data od OAuth providera
      */
     private void mapUserAttributes(UserEntity entity, OAuthUserInfo userInfo) {
         if (userInfo.getFirstName() != null && !userInfo.getFirstName().isBlank()) {

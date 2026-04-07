@@ -6,7 +6,7 @@ import '../entities/reservation.dart';
 import '../entities/reservation_scene.dart';
 import '../entities/table_status.dart';
 
-/// Domain contract for the reservation repository.
+/// Domain kontrakt pro repository rezervací.
 abstract class ReservationRepository {
   Future<ReservationScene> getReservationScene(String restaurantId);
 

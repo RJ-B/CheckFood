@@ -7,8 +7,8 @@ import '../../../domain/entities/staff_reservation.dart';
 import '../../bloc/staff_reservations_bloc.dart';
 import '../../bloc/staff_reservations_event.dart';
 
-/// A dialog that lets staff pick a new end time and dispatch an
-/// [ExtendReservation] event to extend an active reservation.
+/// Dialog umožňující personálu vybrat nový čas konce a odeslat event
+/// [ExtendReservation] pro prodloužení aktivní rezervace.
 class StaffExtendReservationDialog extends StatefulWidget {
   final StaffReservation reservation;
 

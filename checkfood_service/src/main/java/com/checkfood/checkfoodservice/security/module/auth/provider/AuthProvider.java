@@ -59,6 +59,6 @@ public enum AuthProvider {
                 return provider;
             }
         }
-        throw new IllegalArgumentException("Nepodporovaný poskytovatel autentizace: " + providerId);
+        throw new IllegalArgumentException("Nepodporovaný auth provider: " + providerId);
     }
 }

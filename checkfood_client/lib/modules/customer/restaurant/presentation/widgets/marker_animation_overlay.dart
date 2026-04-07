@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/colors.dart';
 import '../utils/marker_animation_controller.dart';
 
-/// Overlay that paints animated marker circles during cluster↔individual transitions.
+/// Overlay kreslící animované kruhy markerů během přechodů cluster↔individuální.
 class MarkerAnimationOverlay extends StatelessWidget {
   final List<MarkerTransition> transitions;
   final double progress;
@@ -30,8 +30,8 @@ class MarkerAnimationOverlay extends StatelessWidget {
   }
 }
 
-/// Custom painter that draws animated circles for each in-flight [MarkerTransition]
-/// as cluster markers expand or collapse on the map.
+/// Custom painter kreslící animované kruhy pro každý probíhající [MarkerTransition]
+/// při rozbalování nebo sbalování cluster markerů na mapě.
 class _MarkerAnimationPainter extends CustomPainter {
   final List<MarkerTransition> transitions;
   final double progress;

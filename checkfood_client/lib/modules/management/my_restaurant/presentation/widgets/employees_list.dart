@@ -5,8 +5,8 @@ import '../../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/employee.dart';
 import 'employee_role_selector.dart';
 
-/// A scrollable list of employee tiles with role-change and remove controls
-/// visible only to the restaurant owner.
+/// Scrollovatelný seznam dlaždic zaměstnanců s ovládáním pro změnu role a odebrání,
+/// viditelným pouze pro majitele restaurace.
 class EmployeesList extends StatelessWidget {
   final List<Employee> employees;
   final bool isOwner;
@@ -62,8 +62,8 @@ class EmployeesList extends StatelessWidget {
   }
 }
 
-/// A single row in [EmployeesList] showing the employee's avatar, name/email,
-/// and (for owners) role selector, permission, and remove controls.
+/// Jeden řádek v [EmployeesList] zobrazující avatar zaměstnance, jméno/e-mail
+/// a (pro majitele) výběr role, oprávnění a ovládání pro odebrání.
 class _EmployeeTile extends StatelessWidget {
   final Employee employee;
   final bool isOwner;

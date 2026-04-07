@@ -5,8 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../domain/entities/restaurant.dart';
 
-/// A detailed restaurant list card showing the cover image, name, cuisine,
-/// rating, distance, and opening status.
+/// Podrobná karta restaurace v seznamu zobrazující titulní obrázek, název, kuchyni,
+/// hodnocení, vzdálenost a stav otevření.
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
   final Position? userPosition;

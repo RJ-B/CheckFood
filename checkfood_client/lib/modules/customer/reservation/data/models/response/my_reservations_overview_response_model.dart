@@ -6,7 +6,7 @@ import 'reservation_response_model.dart';
 part 'my_reservations_overview_response_model.freezed.dart';
 part 'my_reservations_overview_response_model.g.dart';
 
-/// API response model combining a user's upcoming reservations and paginated history.
+/// API response model kombinující nadcházející rezervace uživatele a stránkovanou historii.
 @freezed
 class MyReservationsOverviewResponseModel
     with _$MyReservationsOverviewResponseModel {

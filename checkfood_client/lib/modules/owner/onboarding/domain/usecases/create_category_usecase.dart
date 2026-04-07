@@ -1,7 +1,7 @@
 import '../entities/onboarding_menu_category.dart';
 import '../repositories/onboarding_repository.dart';
 
-/// Creates a new menu category for the owner's restaurant.
+/// Vytvoří novou kategorii menu pro restauraci majitele.
 class CreateCategoryUseCase {
   final OnboardingRepository _repository;
 

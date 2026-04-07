@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * Výjimka pro chyby vzniklé v průběhu procesu přiřazení restaurace majiteli.
- * Poskytuje statické tovární metody pro běžné chybové scénáře.
+ * Poskytuje statické factory metody pro běžné chybové scénáře.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

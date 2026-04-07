@@ -5,7 +5,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Posluchač doménové události úspěšného dokončení scheduler jobu.
+ * Listener doménové události úspěšného dokončení scheduler jobu.
  *
  * @author Rostislav Jirák
  * @version 1.0.0

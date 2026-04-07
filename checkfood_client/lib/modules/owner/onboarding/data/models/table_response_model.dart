@@ -4,8 +4,8 @@ import '../../domain/entities/onboarding_table.dart';
 part 'table_response_model.freezed.dart';
 part 'table_response_model.g.dart';
 
-/// API response model for a single restaurant table, including optional
-/// panorama placement coordinates.
+/// API response model pro jeden stůl restaurace, včetně volitelných
+/// souřadnic umístění v panoramatu.
 @freezed
 class TableResponseModel with _$TableResponseModel {
   const TableResponseModel._();

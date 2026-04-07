@@ -4,7 +4,7 @@ import '../../../domain/entities/restaurant_marker.dart';
 part 'restaurant_marker_response_model.freezed.dart';
 part 'restaurant_marker_response_model.g.dart';
 
-/// API response model for a map marker representing one restaurant or a cluster of restaurants.
+/// API response model pro marker na mapě reprezentující jednu restauraci nebo cluster restaurací.
 @freezed
 class RestaurantMarkerResponseModel with _$RestaurantMarkerResponseModel {
   const RestaurantMarkerResponseModel._();
@@ -30,7 +30,7 @@ class RestaurantMarkerResponseModel with _$RestaurantMarkerResponseModel {
     logoUrl: logoUrl,
   );
 
-  /// Converts a raw JSON list into a list of [RestaurantMarker] entities.
+  /// Převede surový JSON seznam na seznam entit [RestaurantMarker].
   static List<RestaurantMarker> toEntityList(List<dynamic>? jsonList) {
     if (jsonList == null) return [];
     return jsonList

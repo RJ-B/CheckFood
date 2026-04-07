@@ -8,7 +8,7 @@ import '../bloc/orders_state.dart';
 import 'menu_item_card.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
 
-/// Scrollable list of menu categories, each rendered by [_CategorySection].
+/// Scrollovatelný seznam kategorií menu, každou renderuje [_CategorySection].
 class MenuListWidget extends StatelessWidget {
   const MenuListWidget({super.key});
 
@@ -70,7 +70,7 @@ class MenuListWidget extends StatelessWidget {
   }
 }
 
-/// A collapsible section header followed by the [MenuItemCard] rows for one menu category.
+/// Skládací záhlaví sekce následované řádky [MenuItemCard] pro jednu kategorii menu.
 class _CategorySection extends StatelessWidget {
   final MenuCategory category;
   final List<CartItem> cartItems;

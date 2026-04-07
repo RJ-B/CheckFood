@@ -1,6 +1,6 @@
 import '../repositories/orders_repository.dart';
 
-/// Returns the current payment status string for the given order.
+/// Vrátí aktuální stav platby pro zadanou objednávku.
 class GetPaymentStatusUseCase {
   final OrdersRepository _repository;
 

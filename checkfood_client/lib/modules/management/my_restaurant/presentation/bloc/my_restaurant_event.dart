@@ -2,7 +2,7 @@ import '../../data/models/request/add_employee_request_model.dart';
 import '../../data/models/request/update_employee_role_request_model.dart';
 import '../../data/models/request/update_restaurant_request_model.dart';
 
-/// Base class for [MyRestaurantBloc] events.
+/// Základní třída pro eventy [MyRestaurantBloc].
 abstract class MyRestaurantEvent {
   const MyRestaurantEvent();
 }

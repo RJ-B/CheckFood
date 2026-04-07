@@ -1,7 +1,7 @@
 import '../entities/my_restaurant.dart';
 import '../repositories/my_restaurant_repository.dart';
 
-/// Fetches the full management detail of a single restaurant owned by the authenticated user.
+/// Načte plný management detail jedné restaurace vlastněné přihlášeným uživatelem.
 class GetMyRestaurantUseCase {
   final MyRestaurantRepository _repository;
   GetMyRestaurantUseCase(this._repository);

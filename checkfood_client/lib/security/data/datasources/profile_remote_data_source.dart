@@ -34,20 +34,20 @@ abstract class ProfileRemoteDataSource {
   /// Smaže všechna zařízení kromě aktuálního (DELETE /api/user/devices/all).
   Future<void> deleteAllDevices();
 
-  /// Aktualizuje preferenci notifikaci pro zarizeni (PUT /api/user/devices/notifications).
+  /// Aktualizuje preferenci notifikací pro zařízení (PUT /api/user/devices/notifications).
   Future<Map<String, dynamic>> updateNotificationPreference({
     required String deviceIdentifier,
     required bool notificationsEnabled,
     String? fcmToken,
   });
 
-  /// Nacte stav notifikaci pro zarizeni (GET /api/user/devices/notifications).
+  /// Načte stav notifikací pro zařízení (GET /api/user/devices/notifications).
   Future<Map<String, dynamic>> getNotificationPreference({
     required String deviceIdentifier,
   });
 
-  /// Uploaduje profilovou fotku pres generic upload endpoint.
-  /// Vraci URL uploadovane fotky.
+  /// Nahraje profilovou fotku přes generický upload endpoint.
+  /// Vrátí URL nahrané fotky.
   Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
 }
 

@@ -6,7 +6,7 @@ import '../models/request/update_restaurant_request_model.dart';
 import '../models/response/employee_response_model.dart';
 import '../models/response/my_restaurant_response_model.dart';
 
-/// Remote data source contract for the owner's restaurant management endpoints.
+/// Kontrakt remote data source pro endpointy správy restaurace majitelem.
 abstract class MyRestaurantRemoteDataSource {
   Future<List<MyRestaurantResponseModel>> getMyRestaurants();
   Future<MyRestaurantResponseModel> getMyRestaurant({String? restaurantId});
@@ -19,7 +19,7 @@ abstract class MyRestaurantRemoteDataSource {
   Future<List<String>> updateEmployeePermissions(int employeeId, List<String> permissions, {String? restaurantId});
 }
 
-/// Dio-based implementation of [MyRestaurantRemoteDataSource].
+/// Implementace [MyRestaurantRemoteDataSource] využívající Dio.
 class MyRestaurantRemoteDataSourceImpl implements MyRestaurantRemoteDataSource {
   final Dio _dio;
   static const String _baseUrl = '/my-restaurant';

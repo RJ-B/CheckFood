@@ -4,7 +4,7 @@ import '../../../domain/entities/pending_change.dart';
 part 'pending_change_model.freezed.dart';
 part 'pending_change_model.g.dart';
 
-/// API response model representing a staff-proposed change to an existing reservation.
+/// API response model reprezentující změnu existující rezervace navrženou personálem.
 @freezed
 class PendingChangeModel with _$PendingChangeModel {
   const PendingChangeModel._();
