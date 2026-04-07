@@ -9,6 +9,8 @@ import 'package:gap/gap.dart';
 
 import '../../../../../components/dialogs/location_permission_dialog.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
+import '../../domain/entities/cuisine_type.dart';
+import '../../domain/entities/restaurant_filters.dart';
 import '../../domain/entities/restaurant_marker.dart';
 import '../../domain/entities/explore_data.dart';
 import '../../domain/entities/restaurant.dart';
@@ -294,6 +296,12 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
           left: 16,
           right: 16,
           child: _buildTopSearchBar(),
+        ),
+        Positioned(
+          top: MediaQuery.of(context).padding.top + 66,
+          left: 0,
+          right: 0,
+          child: _buildFilterBar(data.activeFilters),
         ),
         Positioned(
           right: 16,
@@ -789,6 +797,60 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     );
   }
 
+  Widget _buildFilterBar(RestaurantFilters activeFilters) {
+    return SizedBox(
+      height: 40,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          // "Otevřené teď" toggle chip
+          _FilterChipItem(
+            label: 'Otevřené teď',
+            icon: Icons.access_time_rounded,
+            selected: activeFilters.openNow,
+            onTap: () {
+              final newFilters = activeFilters.copyWith(
+                openNow: !activeFilters.openNow,
+              );
+              context.read<ExploreBloc>().add(
+                    ExploreEvent.filtersChanged(filters: newFilters),
+                  );
+            },
+          ),
+          const SizedBox(width: 8),
+          // Cuisine chips
+          ...CuisineType.values.map((cuisine) {
+            final selected = activeFilters.cuisineTypes.contains(cuisine);
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _FilterChipItem(
+                label: cuisine.displayName,
+                selected: selected,
+                onTap: () {
+                  final current = List<CuisineType>.from(
+                    activeFilters.cuisineTypes,
+                  );
+                  if (selected) {
+                    current.remove(cuisine);
+                  } else {
+                    current.add(cuisine);
+                  }
+                  final newFilters = activeFilters.copyWith(
+                    cuisineTypes: current,
+                  );
+                  context.read<ExploreBloc>().add(
+                        ExploreEvent.filtersChanged(filters: newFilters),
+                      );
+                },
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
   Widget _buildPanelHandle() {
     return Container(
       width: 40,
@@ -816,6 +878,64 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
             child: Text(S.of(context).retry),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Kompaktní filter chip pro horizontální filter bar na mapě.
+class _FilterChipItem extends StatelessWidget {
+  const _FilterChipItem({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.icon,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                size: 14,
+                color: selected ? Colors.white : AppColors.textSecondary,
+              ),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: selected ? Colors.white : AppColors.textPrimary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

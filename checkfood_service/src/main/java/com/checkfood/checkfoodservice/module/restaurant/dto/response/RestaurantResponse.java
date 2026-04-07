@@ -39,6 +39,10 @@ public class RestaurantResponse {
     private Set<String> tags;
     private boolean onboardingCompleted;
     private int defaultReservationDurationMinutes;
+    private int minAdvanceMinutes;
+    private int minReservationDurationMinutes;
+    private int maxReservationDurationMinutes;
+    private int reservationSlotIntervalMinutes;
     private List<SpecialDayDto> specialDays;
     private Boolean isFavourite;
 }

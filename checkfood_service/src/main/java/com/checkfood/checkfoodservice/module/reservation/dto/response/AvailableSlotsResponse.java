@@ -20,7 +20,15 @@ import java.util.UUID;
 public class AvailableSlotsResponse {
     private LocalDate date;
     private UUID tableId;
+    /** Interval mezi sloty (minuty) — obvykle shodný s {@code reservationSlotIntervalMinutes} restaurace. */
     private int slotMinutes;
+    /** Výchozí délka rezervace (minuty) — pro zpětnou kompatibilitu. */
     private int durationMinutes;
+    /** Minimální délka rezervace v minutách (zákazník si může vybrat v rozmezí min–max). */
+    private int minDurationMinutes;
+    /** Maximální délka rezervace v minutách. */
+    private int maxDurationMinutes;
+    /** Krok výběru délky rezervace v minutách (zákazník vybírá po tomto intervalu). */
+    private int durationStepMinutes;
     private List<LocalTime> availableStartTimes;
 }

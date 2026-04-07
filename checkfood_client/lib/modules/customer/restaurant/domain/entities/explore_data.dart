@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'restaurant.dart';
+import 'restaurant_filters.dart';
 import 'restaurant_marker.dart';
 
 part 'explore_data.freezed.dart';
@@ -16,6 +17,7 @@ class ExploreData with _$ExploreData {
     @Default(null) Restaurant? selectedRestaurant,
     @Default(null) String? searchQuery,
     @Default(false) bool clusterEngineReady,
+    @Default(RestaurantFilters()) RestaurantFilters activeFilters,
   }) = _ExploreData;
 
   factory ExploreData.initial() => ExploreData(

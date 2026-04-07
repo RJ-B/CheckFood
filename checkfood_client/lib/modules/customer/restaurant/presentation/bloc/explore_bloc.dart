@@ -67,6 +67,12 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       transformer: (events, mapper) =>
           events.debounce(const Duration(milliseconds: 400)).switchMap(mapper),
     );
+
+    on<FiltersChanged>(
+      _onFiltersChanged,
+      transformer: (events, mapper) =>
+          events.debounce(const Duration(milliseconds: 200)).switchMap(mapper),
+    );
   }
 
   Future<void> _onInitializeRequested(
@@ -380,9 +386,14 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     if (state is! Loaded) return;
     final currentData = (state as Loaded).data;
 
+    final newQuery = event.query.isEmpty ? null : event.query;
+    final mergedFilters = currentData.activeFilters.copyWith(
+      searchQuery: newQuery,
+    );
+
     emit(ExploreState.loaded(
       data: currentData.copyWith(
-        searchQuery: event.query.isEmpty ? null : event.query,
+        searchQuery: newQuery,
         isMapLoading: true,
       ),
     ));
@@ -392,14 +403,13 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
         lat: currentData.userPosition.latitude,
         lng: currentData.userPosition.longitude,
         page: 0,
-        filters: event.query.isNotEmpty
-            ? RestaurantFilters(searchQuery: event.query)
-            : null,
+        filters: mergedFilters,
       );
 
       emit(ExploreState.loaded(
         data: currentData.copyWith(
-          searchQuery: event.query.isEmpty ? null : event.query,
+          searchQuery: newQuery,
+          activeFilters: mergedFilters,
           restaurants: restaurants,
           isMapLoading: false,
           selectedRestaurantId: null,
@@ -408,6 +418,50 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       ));
     } catch (e) {
       dev.log('Search Error: $e', error: e, name: 'CheckFood.Explore');
+      emit(ExploreState.loaded(
+        data: currentData.copyWith(isMapLoading: false),
+      ));
+    }
+  }
+
+  Future<void> _onFiltersChanged(
+    FiltersChanged event,
+    Emitter<ExploreState> emit,
+  ) async {
+    if (state is! Loaded) return;
+    final currentData = (state as Loaded).data;
+
+    // Preserve existing searchQuery inside filters
+    final mergedFilters = event.filters.copyWith(
+      searchQuery: currentData.searchQuery,
+    );
+
+    emit(ExploreState.loaded(
+      data: currentData.copyWith(
+        activeFilters: mergedFilters,
+        isMapLoading: true,
+      ),
+    ));
+
+    try {
+      final restaurants = await _getNearestUseCase.execute(
+        lat: currentData.userPosition.latitude,
+        lng: currentData.userPosition.longitude,
+        page: 0,
+        filters: mergedFilters,
+      );
+
+      emit(ExploreState.loaded(
+        data: currentData.copyWith(
+          activeFilters: mergedFilters,
+          restaurants: restaurants,
+          isMapLoading: false,
+          selectedRestaurantId: null,
+          selectedRestaurant: null,
+        ),
+      ));
+    } catch (e) {
+      dev.log('Filters Error: $e', error: e, name: 'CheckFood.Explore');
       emit(ExploreState.loaded(
         data: currentData.copyWith(isMapLoading: false),
       ));

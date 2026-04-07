@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../data/models/request/map_params_model.dart';
+import '../../domain/entities/restaurant_filters.dart';
 
 part 'explore_event.freezed.dart';
 
@@ -18,6 +19,10 @@ class ExploreEvent with _$ExploreEvent {
 
   const factory ExploreEvent.searchChanged({required String query}) =
       SearchChanged;
+
+  const factory ExploreEvent.filtersChanged({
+    required RestaurantFilters filters,
+  }) = FiltersChanged;
 
   const factory ExploreEvent.markerSelected({
     String? restaurantId,

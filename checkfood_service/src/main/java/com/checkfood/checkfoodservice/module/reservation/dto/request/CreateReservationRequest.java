@@ -1,6 +1,7 @@
 package com.checkfood.checkfoodservice.module.reservation.dto.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -37,4 +38,13 @@ public class CreateReservationRequest {
     @Min(value = 1, message = "Počet osob musí být alespoň 1")
     @Builder.Default
     private int partySize = 2;
+
+    /**
+     * Požadovaná délka rezervace v minutách. Pokud není uvedena, použije se
+     * {@code defaultReservationDurationMinutes} restaurace. Musí být v rozmezí
+     * {@code minReservationDurationMinutes} až {@code maxReservationDurationMinutes}.
+     */
+    @Min(value = 15, message = "Délka rezervace musí být alespoň 15 minut")
+    @Max(value = 480, message = "Délka rezervace nesmí přesáhnout 8 hodin")
+    private Integer durationMinutes;
 }

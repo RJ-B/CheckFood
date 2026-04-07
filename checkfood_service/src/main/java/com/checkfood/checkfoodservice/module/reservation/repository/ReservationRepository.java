@@ -83,8 +83,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
 
     /**
      * Najde aktivní dining rezervace uživatele pro daný den a časové okno.
-     * Zahrnuje rezervace ve stavu {@code CONFIRMED}, {@code RESERVED} nebo {@code CHECKED_IN},
-     * jejichž čas začátku nepřesahuje konec okna a případný čas konce nepředchází začátku okna.
+     * Zahrnuje pouze rezervace ve stavu {@code CHECKED_IN} — objednávky jsou přístupné
+     * výhradně po check-in zákazníka.
      *
      * @param userId      ID uživatele
      * @param date        datum rezervace
@@ -96,7 +96,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
             SELECT r FROM Reservation r
             WHERE r.userId = :userId
               AND r.date = :date
-              AND r.status IN ('CONFIRMED', 'RESERVED', 'CHECKED_IN')
+              AND r.status = 'CHECKED_IN'
               AND r.startTime <= :windowEnd
               AND (r.endTime IS NULL OR r.endTime >= :windowStart)
             ORDER BY r.startTime ASC

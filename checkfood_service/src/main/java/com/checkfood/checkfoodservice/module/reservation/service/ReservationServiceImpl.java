@@ -42,8 +42,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    private static final int SLOT_INTERVAL_MINUTES = 30;
-    private static final int BOOKING_BUFFER_MINUTES = 10;
     private static final int EDIT_CUTOFF_MINUTES = 120;
     private static final int HISTORY_PREVIEW_LIMIT = 10;
     private static final int MAX_RESERVATIONS_PER_RESTAURANT_PER_DAY = 3;
@@ -141,11 +139,19 @@ public class ReservationServiceImpl implements ReservationService {
                 .findFirst()
                 .orElse(null);
 
+        int slotInterval = restaurant.getReservationSlotIntervalMinutes();
+        int minAdvanceMinutes = restaurant.getMinAdvanceMinutes();
+        int minDuration = restaurant.getMinReservationDurationMinutes();
+        int maxDuration = restaurant.getMaxReservationDurationMinutes();
+
         if (specialDay != null && specialDay.isClosed()) {
             return AvailableSlotsResponse.builder()
                     .date(date).tableId(tableId)
-                    .slotMinutes(SLOT_INTERVAL_MINUTES)
+                    .slotMinutes(slotInterval)
                     .durationMinutes(restaurant.getDefaultReservationDurationMinutes())
+                    .minDurationMinutes(minDuration)
+                    .maxDurationMinutes(maxDuration)
+                    .durationStepMinutes(slotInterval)
                     .availableStartTimes(List.of())
                     .build();
         }
@@ -170,8 +176,11 @@ public class ReservationServiceImpl implements ReservationService {
             return AvailableSlotsResponse.builder()
                     .date(date)
                     .tableId(tableId)
-                    .slotMinutes(SLOT_INTERVAL_MINUTES)
+                    .slotMinutes(slotInterval)
                     .durationMinutes(restaurant.getDefaultReservationDurationMinutes())
+                    .minDurationMinutes(minDuration)
+                    .maxDurationMinutes(maxDuration)
+                    .durationStepMinutes(slotInterval)
                     .availableStartTimes(List.of())
                     .build();
         }
@@ -188,6 +197,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         LocalTime openAt = hours.getOpenAt();
         LocalTime closeAt = hours.getCloseAt();
+        // Pro výpočet dostupných slotů používáme minimální délku rezervace,
+        // aby byla zobrazena i okna která pojmou pouze nejkratší rezervaci.
         int durationMinutes = restaurant.getDefaultReservationDurationMinutes();
 
         boolean crossesMidnight = closeAt.isBefore(openAt) || closeAt.equals(openAt);
@@ -201,8 +212,11 @@ public class ReservationServiceImpl implements ReservationService {
         if (lastPossibleOffset < 0) {
             return AvailableSlotsResponse.builder()
                     .date(date).tableId(tableId)
-                    .slotMinutes(SLOT_INTERVAL_MINUTES)
+                    .slotMinutes(slotInterval)
                     .durationMinutes(durationMinutes)
+                    .minDurationMinutes(minDuration)
+                    .maxDurationMinutes(maxDuration)
+                    .durationStepMinutes(slotInterval)
                     .availableStartTimes(List.of())
                     .build();
         }
@@ -210,7 +224,7 @@ public class ReservationServiceImpl implements ReservationService {
         int startOffset = 0;
         if (date.equals(LocalDate.now(clock))) {
             var now = LocalTime.now(clock);
-            var nowPlusBuffer = now.plusMinutes(BOOKING_BUFFER_MINUTES);
+            var nowPlusBuffer = now.plusMinutes(minAdvanceMinutes);
             int nowMinutes = nowPlusBuffer.getHour() * 60 + nowPlusBuffer.getMinute();
             int offsetFromOpen;
             if (crossesMidnight && nowMinutes < openMinutes) {
@@ -221,19 +235,22 @@ public class ReservationServiceImpl implements ReservationService {
             if (offsetFromOpen > lastPossibleOffset) {
                 return AvailableSlotsResponse.builder()
                         .date(date).tableId(tableId)
-                        .slotMinutes(SLOT_INTERVAL_MINUTES)
+                        .slotMinutes(slotInterval)
                         .durationMinutes(durationMinutes)
+                        .minDurationMinutes(minDuration)
+                        .maxDurationMinutes(maxDuration)
+                        .durationStepMinutes(slotInterval)
                         .availableStartTimes(List.of())
                         .build();
             }
             if (offsetFromOpen > 0) {
-                int slotsToSkip = (offsetFromOpen + SLOT_INTERVAL_MINUTES - 1) / SLOT_INTERVAL_MINUTES;
-                startOffset = slotsToSkip * SLOT_INTERVAL_MINUTES;
+                int slotsToSkip = (offsetFromOpen + slotInterval - 1) / slotInterval;
+                startOffset = slotsToSkip * slotInterval;
             }
         }
 
         List<LocalTime> availableSlots = new ArrayList<>();
-        for (int offset = startOffset; offset <= lastPossibleOffset; offset += SLOT_INTERVAL_MINUTES) {
+        for (int offset = startOffset; offset <= lastPossibleOffset; offset += slotInterval) {
             int candidateMinutes = (openMinutes + offset) % (24 * 60);
             LocalTime slot = LocalTime.of(candidateMinutes / 60, candidateMinutes % 60);
             int slotEndMinutes = (candidateMinutes + durationMinutes) % (24 * 60);
@@ -268,8 +285,11 @@ public class ReservationServiceImpl implements ReservationService {
         return AvailableSlotsResponse.builder()
                 .date(date)
                 .tableId(tableId)
-                .slotMinutes(SLOT_INTERVAL_MINUTES)
+                .slotMinutes(slotInterval)
                 .durationMinutes(durationMinutes)
+                .minDurationMinutes(minDuration)
+                .maxDurationMinutes(maxDuration)
+                .durationStepMinutes(slotInterval)
                 .availableStartTimes(availableSlots)
                 .build();
     }
@@ -280,7 +300,7 @@ public class ReservationServiceImpl implements ReservationService {
         var restaurant = findRestaurant(request.getRestaurantId());
         var table = findTableInRestaurant(request.getTableId(), request.getRestaurantId());
 
-        validateNotInPast(request.getDate(), request.getStartTime());
+        validateNotInPast(request.getDate(), request.getStartTime(), restaurant.getMinAdvanceMinutes());
 
         if (request.getPartySize() > table.getCapacity()) {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
@@ -306,7 +326,20 @@ public class ReservationServiceImpl implements ReservationService {
             throw ReservationException.reservationLimitTotal(MAX_ACTIVE_RESERVATIONS_TOTAL);
         }
 
-        int durationMinutes = restaurant.getDefaultReservationDurationMinutes();
+        // Délka rezervace: zákazník může zadat vlastní délku v rozmezí min-max restaurace
+        int durationMinutes;
+        if (request.getDurationMinutes() != null) {
+            int requested = request.getDurationMinutes();
+            int minDur = restaurant.getMinReservationDurationMinutes();
+            int maxDur = restaurant.getMaxReservationDurationMinutes();
+            if (requested < minDur || requested > maxDur) {
+                throw ReservationException.invalidTime(
+                        "Délka rezervace musí být v rozmezí " + minDur + " až " + maxDur + " minut.");
+            }
+            durationMinutes = requested;
+        } else {
+            durationMinutes = restaurant.getDefaultReservationDurationMinutes();
+        }
         LocalTime endTime = request.getStartTime().plusMinutes(durationMinutes);
 
         boolean conflict = reservationRepository.existsOverlappingReservation(
@@ -400,14 +433,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw ReservationException.cannotEdit();
         }
 
-        validateNotInPast(request.getDate(), request.getStartTime());
+        var restaurant = findRestaurant(reservation.getRestaurantId());
+        validateNotInPast(request.getDate(), request.getStartTime(), restaurant.getMinAdvanceMinutes());
 
         var table = findTableInRestaurant(request.getTableId(), reservation.getRestaurantId());
         if (request.getPartySize() > table.getCapacity()) {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
         }
 
-        var restaurant = findRestaurant(reservation.getRestaurantId());
         int dur = restaurant.getDefaultReservationDurationMinutes();
         LocalTime updateEndTime = request.getStartTime().plusMinutes(dur);
         boolean conflict = reservationRepository.existsOverlappingReservationExcluding(
@@ -662,19 +695,20 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /**
-     * Ověří, že kombinace data a času není v minulosti (s ohledem na booking buffer).
+     * Ověří, že kombinace data a času není v minulosti (s ohledem na minimální předstih restaurace).
      * Vyhodí {@link ReservationException} pokud je datum nebo čas v minulosti.
      *
-     * @param date      datum rezervace
-     * @param startTime čas začátku rezervace
+     * @param date               datum rezervace
+     * @param startTime          čas začátku rezervace
+     * @param minAdvanceMinutes  minimální předstih v minutách (konfigurovaný restaurací)
      */
-    private void validateNotInPast(LocalDate date, LocalTime startTime) {
+    private void validateNotInPast(LocalDate date, LocalTime startTime, int minAdvanceMinutes) {
         LocalDate today = LocalDate.now(clock);
         if (date.isBefore(today)) {
             throw ReservationException.invalidTime("Nelze vytvořit rezervaci v minulosti.");
         }
-        if (date.isEqual(today) && !startTime.isAfter(LocalTime.now(clock).plusMinutes(BOOKING_BUFFER_MINUTES))) {
-            throw ReservationException.invalidTime("Čas rezervace musí být alespoň " + BOOKING_BUFFER_MINUTES + " minut od teď.");
+        if (date.isEqual(today) && !startTime.isAfter(LocalTime.now(clock).plusMinutes(minAdvanceMinutes))) {
+            throw ReservationException.invalidTime("Čas rezervace musí být alespoň " + minAdvanceMinutes + " minut od teď.");
         }
     }
 

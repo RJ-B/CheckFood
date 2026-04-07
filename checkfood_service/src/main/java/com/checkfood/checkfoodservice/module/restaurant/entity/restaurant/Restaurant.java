@@ -111,6 +111,22 @@ public class Restaurant {
     private int defaultReservationDurationMinutes = 60;
 
     @Builder.Default
+    @Column(name = "min_advance_minutes", nullable = false)
+    private int minAdvanceMinutes = 10;
+
+    @Builder.Default
+    @Column(name = "min_reservation_duration_minutes", nullable = false)
+    private int minReservationDurationMinutes = 30;
+
+    @Builder.Default
+    @Column(name = "max_reservation_duration_minutes", nullable = false)
+    private int maxReservationDurationMinutes = 180;
+
+    @Builder.Default
+    @Column(name = "reservation_slot_interval_minutes", nullable = false)
+    private int reservationSlotIntervalMinutes = 30;
+
+    @Builder.Default
     @Column(name = "onboarding_completed", nullable = false)
     private boolean onboardingCompleted = false;
 

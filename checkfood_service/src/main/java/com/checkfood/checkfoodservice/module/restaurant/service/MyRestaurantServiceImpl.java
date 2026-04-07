@@ -107,6 +107,18 @@ public class MyRestaurantServiceImpl implements MyRestaurantService {
         if (request.getDefaultReservationDurationMinutes() != null) {
             restaurant.setDefaultReservationDurationMinutes(request.getDefaultReservationDurationMinutes());
         }
+        if (request.getMinAdvanceMinutes() != null) {
+            restaurant.setMinAdvanceMinutes(request.getMinAdvanceMinutes());
+        }
+        if (request.getMinReservationDurationMinutes() != null) {
+            restaurant.setMinReservationDurationMinutes(request.getMinReservationDurationMinutes());
+        }
+        if (request.getMaxReservationDurationMinutes() != null) {
+            restaurant.setMaxReservationDurationMinutes(request.getMaxReservationDurationMinutes());
+        }
+        if (request.getReservationSlotIntervalMinutes() != null) {
+            restaurant.setReservationSlotIntervalMinutes(request.getReservationSlotIntervalMinutes());
+        }
 
         if (request.getSpecialDays() != null) {
             restaurant.getSpecialDays().clear();
