@@ -7,7 +7,7 @@ import '../security/presentation/pages/auth/register_page.dart';
 import '../security/presentation/pages/auth/email_verification_screen.dart';
 import '../security/presentation/pages/auth/forgot_password_page.dart';
 import '../security/presentation/pages/auth/reset_password_page.dart';
-import '../modules/owner/presentation/pages/owner_register_page.dart';
+import '../modules/restaurant/presentation/onboarding/presentation/pages/owner_register_page.dart';
 import '../l10n/generated/app_localizations.dart';
 
 /// Centrální konfigurace route pomocí [Navigator.onGenerateRoute].

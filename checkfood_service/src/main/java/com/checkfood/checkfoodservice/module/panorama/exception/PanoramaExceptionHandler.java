@@ -2,7 +2,7 @@ package com.checkfood.checkfoodservice.module.panorama.exception;
 
 import com.checkfood.checkfoodservice.exception.ErrorResponse;
 import com.checkfood.checkfoodservice.exception.ErrorResponseBuilder;
-import com.checkfood.checkfoodservice.module.exception.AppExceptionHandler;
+import com.checkfood.checkfoodservice.infrastructure.exception.AppExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

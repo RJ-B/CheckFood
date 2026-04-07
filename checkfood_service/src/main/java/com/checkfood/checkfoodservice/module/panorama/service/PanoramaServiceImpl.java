@@ -12,7 +12,7 @@ import com.checkfood.checkfoodservice.module.restaurant.entity.employee.Restaura
 import com.checkfood.checkfoodservice.module.restaurant.exception.RestaurantException;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
-import com.checkfood.checkfoodservice.module.storage.service.StorageService;
+import com.checkfood.checkfoodservice.infrastructure.storage.service.StorageService;
 import com.checkfood.checkfoodservice.security.module.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

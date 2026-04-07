@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../../modules/customer/restaurant/domain/entities/google_place.dart';
+import '../../modules/restaurant/domain/entities/google_place.dart';
 
 /// Klient pro Google Places API (New) pro vyhledávání restaurací.
 ///

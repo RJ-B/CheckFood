@@ -1,6 +1,6 @@
 package com.checkfood.checkfoodservice.module.restaurant.controller;
 
-import com.checkfood.checkfoodservice.module.favourite.service.FavouriteService;
+import com.checkfood.checkfoodservice.module.restaurant.favourite.service.FavouriteService;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantTableRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.AllMarkersResponse;

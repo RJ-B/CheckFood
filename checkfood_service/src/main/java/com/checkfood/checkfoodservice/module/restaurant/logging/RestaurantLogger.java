@@ -1,6 +1,6 @@
 package com.checkfood.checkfoodservice.module.restaurant.logging;
 
-import com.checkfood.checkfoodservice.module.logging.AppLogger;
+import com.checkfood.checkfoodservice.infrastructure.logging.AppLogger;
 import org.springframework.stereotype.Component;
 import java.util.UUID;
 

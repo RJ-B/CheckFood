@@ -6,7 +6,7 @@ import '../features/splash/splash_screen.dart';
 import '../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../security/presentation/bloc/auth/auth_state.dart';
 import '../../security/domain/enums/user_role.dart';
-import '../modules/owner/onboarding/presentation/pages/onboarding_wizard_page.dart';
+import '../modules/restaurant/presentation/onboarding/presentation/pages/onboarding_wizard_page.dart';
 import 'main_shell.dart';
 
 /// Guard kořenové route — kontroluje stav [AuthBloc] a přesměrovává na

@@ -10,14 +10,14 @@ import '../../security/presentation/pages/auth/login_page.dart';
 import '../../security/presentation/bloc/user/user_bloc.dart';
 import '../../security/presentation/bloc/user/user_event.dart';
 import '../../security/presentation/pages/user/profile_screen.dart';
-import '../modules/customer/restaurant/presentation/pages/explore_page.dart';
-import '../modules/management/my_restaurant/presentation/bloc/my_restaurant_bloc.dart';
-import '../modules/management/my_restaurant/presentation/pages/my_restaurant_page.dart';
-import '../modules/customer/orders/presentation/bloc/orders_bloc.dart';
-import '../modules/customer/orders/presentation/pages/orders_page.dart';
-import '../modules/customer/restaurant/presentation/bloc/explore_bloc.dart';
-import '../modules/customer/reservation/presentation/bloc/my_reservations_bloc.dart';
-import '../modules/customer/reservation/presentation/pages/reservations_screen.dart';
+import '../modules/map/presentation/pages/explore_page.dart';
+import '../modules/restaurant/presentation/management/presentation/bloc/my_restaurant_bloc.dart';
+import '../modules/restaurant/presentation/management/presentation/pages/my_restaurant_page.dart';
+import '../modules/order/presentation/bloc/orders_bloc.dart';
+import '../modules/order/presentation/pages/orders_page.dart';
+import '../modules/map/presentation/bloc/explore_bloc.dart';
+import '../modules/reservation/presentation/customer/bloc/my_reservations_bloc.dart';
+import '../modules/reservation/presentation/customer/pages/reservations_screen.dart';
 
 /// Kořenový scaffold zajišťující spodní navigační lištu a stránky hlavních záložek.
 ///

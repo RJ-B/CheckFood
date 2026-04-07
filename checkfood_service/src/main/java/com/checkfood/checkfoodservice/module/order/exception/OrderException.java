@@ -1,6 +1,6 @@
 package com.checkfood.checkfoodservice.module.order.exception;
 
-import com.checkfood.checkfoodservice.module.exception.AppException;
+import com.checkfood.checkfoodservice.infrastructure.exception.AppException;
 import org.springframework.http.HttpStatus;
 
 import java.util.UUID;

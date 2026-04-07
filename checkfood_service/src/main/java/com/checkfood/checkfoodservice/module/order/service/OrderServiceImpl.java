@@ -1,10 +1,10 @@
 package com.checkfood.checkfoodservice.module.order.service;
 
 import com.checkfood.checkfoodservice.client.payment.MoonePaymentService;
-import com.checkfood.checkfoodservice.module.dining.dto.response.DiningContextResponse;
-import com.checkfood.checkfoodservice.module.dining.service.DiningContextService;
-import com.checkfood.checkfoodservice.module.menu.entity.MenuItem;
-import com.checkfood.checkfoodservice.module.menu.repository.MenuItemRepository;
+import com.checkfood.checkfoodservice.module.order.dining.dto.response.DiningContextResponse;
+import com.checkfood.checkfoodservice.module.order.dining.service.DiningContextService;
+import com.checkfood.checkfoodservice.module.restaurant.menu.entity.MenuItem;
+import com.checkfood.checkfoodservice.module.restaurant.menu.repository.MenuItemRepository;
 import com.checkfood.checkfoodservice.module.order.dto.request.CreateOrderRequest;
 import com.checkfood.checkfoodservice.module.order.dto.request.OrderItemRequest;
 import com.checkfood.checkfoodservice.module.order.dto.response.OrderItemResponse;
