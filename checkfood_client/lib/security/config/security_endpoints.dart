@@ -32,11 +32,6 @@ class SecurityEndpoints {
   /// Vrátí cestu pro smazání konkrétního zařízení.
   static String deleteDevice(int deviceId) => '/user/devices/$deviceId';
 
-  static const String ownerClaimAres = '/v1/owner/claim/ares';
-  static const String ownerClaimBankId = '/v1/owner/claim/bankid';
-  static const String ownerClaimEmailStart = '/v1/owner/claim/email/start';
-  static const String ownerClaimEmailConfirm = '/v1/owner/claim/email/confirm';
-
   static const String ownerRestaurant = '/v1/owner/restaurant/me';
   static const String ownerRestaurantInfo = '/v1/owner/restaurant/me/info';
   static const String ownerRestaurantHours = '/v1/owner/restaurant/me/hours';

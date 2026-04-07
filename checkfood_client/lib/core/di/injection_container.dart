@@ -133,16 +133,6 @@ import '../../modules/management/staff_reservations/domain/usecases/propose_chan
 import '../../modules/management/staff_reservations/domain/usecases/extend_reservation_usecase.dart';
 import '../../modules/management/staff_reservations/presentation/bloc/staff_reservations_bloc.dart';
 
-// Modul nárokování vlastníka
-import '../../modules/owner/data/datasources/owner_claim_remote_datasource.dart';
-import '../../modules/owner/data/repositories/owner_claim_repository_impl.dart';
-import '../../modules/owner/domain/repositories/owner_claim_repository.dart';
-import '../../modules/owner/domain/usecases/lookup_ares_usecase.dart';
-import '../../modules/owner/domain/usecases/verify_bankid_usecase.dart';
-import '../../modules/owner/domain/usecases/start_email_claim_usecase.dart';
-import '../../modules/owner/domain/usecases/confirm_email_claim_usecase.dart';
-import '../../modules/owner/presentation/bloc/owner_claim_bloc.dart';
-
 // Modul onboardingu vlastníka
 import '../../modules/owner/onboarding/data/datasources/onboarding_remote_datasource.dart';
 import '../../modules/owner/onboarding/data/repositories/onboarding_repository_impl.dart';
@@ -600,37 +590,7 @@ Future<void> init() async {
   );
 
   // ===========================================================================
-  // 11. MODUL NÁROKOVÁNÍ VLASTNÍKA
-  // ===========================================================================
-
-  // --- Datové zdroje ---
-  sl.registerLazySingleton<OwnerClaimRemoteDataSource>(
-    () => OwnerClaimRemoteDataSourceImpl(sl()),
-  );
-
-  // --- Repozitáře ---
-  sl.registerLazySingleton<OwnerClaimRepository>(
-    () => OwnerClaimRepositoryImpl(sl()),
-  );
-
-  // --- Případy použití ---
-  sl.registerLazySingleton(() => LookupAresUseCase(sl()));
-  sl.registerLazySingleton(() => VerifyBankIdUseCase(sl()));
-  sl.registerLazySingleton(() => StartEmailClaimUseCase(sl()));
-  sl.registerLazySingleton(() => ConfirmEmailClaimUseCase(sl()));
-
-  // --- BLoC ---
-  sl.registerFactory(
-    () => OwnerClaimBloc(
-      lookupAresUseCase: sl(),
-      verifyBankIdUseCase: sl(),
-      startEmailClaimUseCase: sl(),
-      confirmEmailClaimUseCase: sl(),
-    ),
-  );
-
-  // ===========================================================================
-  // 12. MODUL ONBOARDINGU VLASTNÍKA
+  // 11. MODUL ONBOARDINGU VLASTNÍKA
   // ===========================================================================
 
   // --- Datové zdroje ---

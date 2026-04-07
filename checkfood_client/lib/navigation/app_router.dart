@@ -8,7 +8,6 @@ import '../security/presentation/pages/auth/email_verification_screen.dart';
 import '../security/presentation/pages/auth/forgot_password_page.dart';
 import '../security/presentation/pages/auth/reset_password_page.dart';
 import '../modules/owner/presentation/pages/owner_register_page.dart';
-import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
 import '../l10n/generated/app_localizations.dart';
 
 /// Centrální konfigurace route pomocí [Navigator.onGenerateRoute].
@@ -19,7 +18,6 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String registerOwner = '/register-owner';
-  static const String claimRestaurant = '/claim-restaurant';
   static const String verifyEmail = '/verify-email';
   static const String main = '/main';
   static const String forgotPassword = '/forgot-password';
@@ -49,9 +47,6 @@ class AppRouter {
 
       case registerOwner:
         return MaterialPageRoute(builder: (_) => const OwnerRegisterPage());
-
-      case claimRestaurant:
-        return MaterialPageRoute(builder: (_) => const ClaimRestaurantPage());
 
       case verifyEmail:
         final String? email = settings.arguments as String?;

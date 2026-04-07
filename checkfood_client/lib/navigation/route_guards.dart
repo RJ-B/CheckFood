@@ -6,7 +6,6 @@ import '../features/splash/splash_screen.dart';
 import '../../security/presentation/bloc/auth/auth_bloc.dart';
 import '../../security/presentation/bloc/auth/auth_state.dart';
 import '../../security/domain/enums/user_role.dart';
-import '../modules/owner/presentation/pages/claim_restaurant_page.dart';
 import '../modules/owner/onboarding/presentation/pages/onboarding_wizard_page.dart';
 import 'main_shell.dart';
 
@@ -21,9 +20,6 @@ class RootGuard extends StatelessWidget {
       builder: (context, state) {
         return state.maybeWhen(
           authenticated: (user) {
-            if (user.role == UserRole.owner && user.needsRestaurantClaim) {
-              return const ClaimRestaurantPage();
-            }
             if (user.role == UserRole.owner && user.needsOnboarding) {
               return const OnboardingWizardPage();
             }
