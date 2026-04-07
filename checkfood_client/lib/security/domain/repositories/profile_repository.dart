@@ -45,4 +45,7 @@ abstract class ProfileRepository {
 
   /// Uploaduje profilovou fotku a vraci URL.
   Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
+
+  /// Smaže soubor z úložiště podle relativní cesty (tiché selhání — nový upload proběhne i bez mazání).
+  Future<void> deleteStorageFile(String path);
 }

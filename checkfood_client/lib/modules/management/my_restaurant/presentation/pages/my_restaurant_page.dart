@@ -137,12 +137,12 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
 
       final l = S.of(context);
       final tabs = <Tab>[
-        Tab(icon: const Icon(Icons.calendar_today), text: l.reservationsTab),
+        const Tab(icon: Icon(Icons.calendar_today, size: 26)),
         if (isManagerOrOwner)
-          Tab(icon: const Icon(Icons.people_outline), text: l.employeesTab),
+          const Tab(icon: Icon(Icons.people_outline, size: 26)),
         if (isManagerOrOwner)
-          Tab(icon: const Icon(Icons.bar_chart), text: l.statisticsTab),
-        Tab(icon: const Icon(Icons.settings), text: l.settingsTab),
+          const Tab(icon: Icon(Icons.bar_chart, size: 26)),
+        const Tab(icon: Icon(Icons.settings, size: 26)),
       ];
 
       final tabViews = <Widget>[
@@ -236,9 +236,7 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
             TabBar(
               tabs: tabs,
               isScrollable: false,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-              labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-              unselectedLabelStyle: const TextStyle(fontSize: 11),
+              labelPadding: EdgeInsets.zero,
             ),
             Expanded(
               child: TabBarView(children: tabViews),

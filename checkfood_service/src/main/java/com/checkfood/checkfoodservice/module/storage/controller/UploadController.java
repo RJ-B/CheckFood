@@ -61,4 +61,17 @@ public class UploadController {
                 .filename(filename)
                 .build());
     }
+
+    /**
+     * Smaže soubor z úložiště podle jeho relativní cesty.
+     * Cesta je extrahována z URL (odstraní prefix /uploads/ nebo GCS base URL).
+     *
+     * @param path relativní cesta k souboru (např. profile/abc.jpg)
+     * @return 204 No Content při úspěchu
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam("path") String path) {
+        storageService.delete(path);
+        return ResponseEntity.noContent().build();
+    }
 }

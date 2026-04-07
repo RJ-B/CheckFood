@@ -3,6 +3,7 @@ package com.checkfood.checkfoodservice.security.exception;
 import com.checkfood.checkfoodservice.exception.ErrorResponse;
 import com.checkfood.checkfoodservice.exception.ErrorResponseBuilder;
 import com.checkfood.checkfoodservice.exception.ServiceExceptionHandler;
+import com.checkfood.checkfoodservice.security.ratelimit.exception.RateLimitExceededException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -125,6 +126,24 @@ public abstract class SecurityExceptionHandler extends ServiceExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Zpracovává překročení rate limitu. Vrací HTTP 429 Too Many Requests
+     * místo výchozího HTTP 500.
+     *
+     * @param ex RateLimitExceededException z RateLimitAspect
+     * @param request WebRequest context
+     * @return ResponseEntity s rate limit error response
+     */
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleRateLimit(RateLimitExceededException ex, WebRequest request) {
+        ErrorResponse response = errorResponseBuilder.build(
+                "RATE_LIMIT_EXCEEDED",
+                "Příliš mnoho pokusů. Zkuste to prosím později.",
+                HttpStatus.TOO_MANY_REQUESTS
+        );
+        return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
     }
 
     // =========================================================================

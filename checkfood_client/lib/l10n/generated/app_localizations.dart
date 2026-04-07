@@ -383,12 +383,6 @@ abstract class S {
   /// **'E-mail byl úspěšně ověřen!'**
   String get emailVerified;
 
-  /// No description provided for @verifyIdentity.
-  ///
-  /// In cs, this message translates to:
-  /// **'Ověřit identitu (BankID)'**
-  String get verifyIdentity;
-
   /// No description provided for @changePassword.
   ///
   /// In cs, this message translates to:
@@ -965,42 +959,6 @@ abstract class S {
   /// **'Restaurace byla úspěšně přiřazena!'**
   String get restaurantAssigned;
 
-  /// No description provided for @searchAres.
-  ///
-  /// In cs, this message translates to:
-  /// **'Vyhledat v ARES'**
-  String get searchAres;
-
-  /// No description provided for @enterManually.
-  ///
-  /// In cs, this message translates to:
-  /// **'Zadat ručně'**
-  String get enterManually;
-
-  /// No description provided for @companyId.
-  ///
-  /// In cs, this message translates to:
-  /// **'IČO firmy'**
-  String get companyId;
-
-  /// No description provided for @ownerRegistration.
-  ///
-  /// In cs, this message translates to:
-  /// **'Registrace majitele'**
-  String get ownerRegistration;
-
-  /// No description provided for @assignRestaurant.
-  ///
-  /// In cs, this message translates to:
-  /// **'Přiřazení restaurace'**
-  String get assignRestaurant;
-
-  /// No description provided for @claimRestaurant.
-  ///
-  /// In cs, this message translates to:
-  /// **'Přiřazení restaurace'**
-  String get claimRestaurant;
-
   /// No description provided for @addEmployee.
   ///
   /// In cs, this message translates to:
@@ -1528,6 +1486,12 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.'**
   String get locationPermissionDesc;
+
+  /// No description provided for @enterManually.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zadat ručně'**
+  String get enterManually;
 
   /// No description provided for @errorProfileLoad.
   ///
@@ -2128,72 +2092,6 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Dokončit'**
   String get complete;
-
-  /// No description provided for @searchRestaurantTitle.
-  ///
-  /// In cs, this message translates to:
-  /// **'Vyhledejte svou restauraci'**
-  String get searchRestaurantTitle;
-
-  /// No description provided for @searchRestaurantSubtitle.
-  ///
-  /// In cs, this message translates to:
-  /// **'Zadejte IČO vaší firmy pro vyhledání v ARES'**
-  String get searchRestaurantSubtitle;
-
-  /// No description provided for @icoHint.
-  ///
-  /// In cs, this message translates to:
-  /// **'např. 12345678'**
-  String get icoHint;
-
-  /// No description provided for @foundCompany.
-  ///
-  /// In cs, this message translates to:
-  /// **'Nalezená firma'**
-  String get foundCompany;
-
-  /// No description provided for @companyName.
-  ///
-  /// In cs, this message translates to:
-  /// **'Název:'**
-  String get companyName;
-
-  /// No description provided for @icoLabel.
-  ///
-  /// In cs, this message translates to:
-  /// **'IČO:'**
-  String get icoLabel;
-
-  /// No description provided for @directors.
-  ///
-  /// In cs, this message translates to:
-  /// **'Jednatelé:'**
-  String get directors;
-
-  /// No description provided for @emailVerificationFallback.
-  ///
-  /// In cs, this message translates to:
-  /// **'Ověření e-mailem'**
-  String get emailVerificationFallback;
-
-  /// No description provided for @emailVerificationFallbackDesc.
-  ///
-  /// In cs, this message translates to:
-  /// **'Identita nebyla potvrzena přes BankID. Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.'**
-  String get emailVerificationFallbackDesc;
-
-  /// No description provided for @emailLabel.
-  ///
-  /// In cs, this message translates to:
-  /// **'E-mail: {email}'**
-  String emailLabel(String email);
-
-  /// No description provided for @verificationCodeHint.
-  ///
-  /// In cs, this message translates to:
-  /// **'123456'**
-  String get verificationCodeHint;
 
   /// No description provided for @stepInfo.
   ///

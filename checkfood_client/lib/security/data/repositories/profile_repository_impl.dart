@@ -135,6 +135,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
+  @override
+  Future<void> deleteStorageFile(String path) async {
+    try {
+      await _remoteDataSource.deleteStorageFile(path);
+    } catch (_) {
+      // Tiché selhání — smazání staré fotky je best-effort, nový upload proběhne dál
+    }
+  }
+
   SecurityException _handleDioException(DioException e) {
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.connectionError) {

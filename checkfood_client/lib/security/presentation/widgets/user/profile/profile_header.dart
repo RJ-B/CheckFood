@@ -44,13 +44,16 @@ class ProfileHeader extends StatelessWidget {
       userBloc.add(UserEvent.profilePhotoUploadRequested(bytes, filename));
     } catch (e) {
       if (context.mounted) {
-        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).photoUploadError(e.toString())),
             backgroundColor: AppColors.error,
           ),
         );
+      }
+    } finally {
+      if (context.mounted) {
+        Navigator.of(context).pop();
       }
     }
   }

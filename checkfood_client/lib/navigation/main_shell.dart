@@ -74,22 +74,34 @@ class _MainShellState extends State<MainShell> {
   }
 
   List<NavigationDestination> _buildDestinations(bool showMyRestaurant, S l) {
+    const iconSize = 28.0;
     return [
-      NavigationDestination(icon: const Icon(Icons.search), label: l.explore),
       NavigationDestination(
-        icon: const Icon(Icons.calendar_today),
-        label: l.myReservations,
+        icon: const Icon(Icons.map_outlined, size: iconSize),
+        selectedIcon: const Icon(Icons.map, size: iconSize),
+        label: '',
       ),
       NavigationDestination(
-        icon: const Icon(Icons.shopping_bag),
-        label: l.orders,
+        icon: const Icon(Icons.calendar_today_outlined, size: iconSize),
+        selectedIcon: const Icon(Icons.calendar_today, size: iconSize),
+        label: '',
+      ),
+      NavigationDestination(
+        icon: const Icon(Icons.shopping_bag_outlined, size: iconSize),
+        selectedIcon: const Icon(Icons.shopping_bag, size: iconSize),
+        label: '',
       ),
       if (showMyRestaurant)
         NavigationDestination(
-          icon: const Icon(Icons.store),
-          label: l.myRestaurant,
+          icon: const Icon(Icons.store_outlined, size: iconSize),
+          selectedIcon: const Icon(Icons.store, size: iconSize),
+          label: '',
         ),
-      NavigationDestination(icon: const Icon(Icons.person), label: l.profile),
+      NavigationDestination(
+        icon: const Icon(Icons.person_outline, size: iconSize),
+        selectedIcon: const Icon(Icons.person, size: iconSize),
+        label: '',
+      ),
     ];
   }
 
@@ -124,9 +136,10 @@ class _MainShellState extends State<MainShell> {
           return Scaffold(
             body: IndexedStack(index: safeIndex, children: tabs),
             bottomNavigationBar: NavigationBar(
-              height: 80,
+              height: 64,
               selectedIndex: safeIndex,
               onDestinationSelected: _onTabSelected,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               indicatorColor: AppColors.primary.withValues(alpha: 0.1),
               destinations: destinations,
             ),

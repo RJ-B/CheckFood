@@ -15,6 +15,7 @@ class MyRestaurant {
   final String status;
   final bool isActive;
   final String? panoramaUrl;
+  final String? coverImageUrl;
   final int defaultReservationDurationMinutes;
 
   const MyRestaurant({
@@ -29,6 +30,7 @@ class MyRestaurant {
     required this.status,
     required this.isActive,
     this.panoramaUrl,
+    this.coverImageUrl,
     this.defaultReservationDurationMinutes = 60,
   });
 }

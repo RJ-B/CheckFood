@@ -276,6 +276,7 @@
   "role": "Role",
 
   "locationPermissionDesc": "Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.",
+  "enterManually": "Zadat ručně",
 
   "errorProfileLoad": "Chyba při načítání uživatelského profilu.",
   "errorUnexpected": "Neočekávaná chyba serveru.",

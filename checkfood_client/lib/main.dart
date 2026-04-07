@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -39,6 +40,7 @@ Future<bool> _isLocalBackendReachable() async {
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     // TODO(T-0004): Aktivovat až bude google-services.json z Firebase Console
     // await Firebase.initializeApp();

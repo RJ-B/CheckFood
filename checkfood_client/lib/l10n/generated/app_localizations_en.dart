@@ -157,9 +157,6 @@ class SEn extends S {
   String get emailVerified => 'Email has been successfully verified!';
 
   @override
-  String get verifyIdentity => 'Verify identity (BankID)';
-
-  @override
   String get changePassword => 'Change password';
 
   @override
@@ -458,24 +455,6 @@ class SEn extends S {
   String get restaurantAssigned => 'Restaurant has been successfully assigned!';
 
   @override
-  String get searchAres => 'Search in ARES';
-
-  @override
-  String get enterManually => 'Enter manually';
-
-  @override
-  String get companyId => 'Company ID';
-
-  @override
-  String get ownerRegistration => 'Owner registration';
-
-  @override
-  String get assignRestaurant => 'Assign restaurant';
-
-  @override
-  String get claimRestaurant => 'Claim restaurant';
-
-  @override
   String get addEmployee => 'Add employee';
 
   @override
@@ -752,6 +731,9 @@ class SEn extends S {
 
   @override
   String get locationPermissionDesc => 'To show you nearby restaurants and provide navigation, we need access to your location.';
+
+  @override
+  String get enterManually => 'Enter manually';
 
   @override
   String get errorProfileLoad => 'Error loading user profile.';
@@ -1070,41 +1052,6 @@ class SEn extends S {
 
   @override
   String get complete => 'Complete';
-
-  @override
-  String get searchRestaurantTitle => 'Find your restaurant';
-
-  @override
-  String get searchRestaurantSubtitle => 'Enter your company ID to search in ARES';
-
-  @override
-  String get icoHint => 'e.g. 12345678';
-
-  @override
-  String get foundCompany => 'Found company';
-
-  @override
-  String get companyName => 'Name:';
-
-  @override
-  String get icoLabel => 'Company ID:';
-
-  @override
-  String get directors => 'Directors:';
-
-  @override
-  String get emailVerificationFallback => 'Email verification';
-
-  @override
-  String get emailVerificationFallbackDesc => 'Identity was not confirmed via BankID. You can verify ownership with a code sent to the restaurant\'s contact email.';
-
-  @override
-  String emailLabel(String email) {
-    return 'Email: $email';
-  }
-
-  @override
-  String get verificationCodeHint => '123456';
 
   @override
   String get stepInfo => 'Information';

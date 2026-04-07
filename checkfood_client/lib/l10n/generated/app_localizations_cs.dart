@@ -157,9 +157,6 @@ class SCs extends S {
   String get emailVerified => 'E-mail byl úspěšně ověřen!';
 
   @override
-  String get verifyIdentity => 'Ověřit identitu (BankID)';
-
-  @override
   String get changePassword => 'Změna hesla';
 
   @override
@@ -458,24 +455,6 @@ class SCs extends S {
   String get restaurantAssigned => 'Restaurace byla úspěšně přiřazena!';
 
   @override
-  String get searchAres => 'Vyhledat v ARES';
-
-  @override
-  String get enterManually => 'Zadat ručně';
-
-  @override
-  String get companyId => 'IČO firmy';
-
-  @override
-  String get ownerRegistration => 'Registrace majitele';
-
-  @override
-  String get assignRestaurant => 'Přiřazení restaurace';
-
-  @override
-  String get claimRestaurant => 'Přiřazení restaurace';
-
-  @override
   String get addEmployee => 'Přidat zaměstnance';
 
   @override
@@ -752,6 +731,9 @@ class SCs extends S {
 
   @override
   String get locationPermissionDesc => 'Abychom vám mohli ukázat nejbližší restaurace v okolí a zajistit navigaci, potřebujeme přístup k vaší poloze.';
+
+  @override
+  String get enterManually => 'Zadat ručně';
 
   @override
   String get errorProfileLoad => 'Chyba při načítání uživatelského profilu.';
@@ -1070,41 +1052,6 @@ class SCs extends S {
 
   @override
   String get complete => 'Dokončit';
-
-  @override
-  String get searchRestaurantTitle => 'Vyhledejte svou restauraci';
-
-  @override
-  String get searchRestaurantSubtitle => 'Zadejte IČO vaší firmy pro vyhledání v ARES';
-
-  @override
-  String get icoHint => 'např. 12345678';
-
-  @override
-  String get foundCompany => 'Nalezená firma';
-
-  @override
-  String get companyName => 'Název:';
-
-  @override
-  String get icoLabel => 'IČO:';
-
-  @override
-  String get directors => 'Jednatelé:';
-
-  @override
-  String get emailVerificationFallback => 'Ověření e-mailem';
-
-  @override
-  String get emailVerificationFallbackDesc => 'Identita nebyla potvrzena přes BankID. Můžete ověřit vlastnictví kódem zaslaným na kontaktní e-mail restaurace.';
-
-  @override
-  String emailLabel(String email) {
-    return 'E-mail: $email';
-  }
-
-  @override
-  String get verificationCodeHint => '123456';
 
   @override
   String get stepInfo => 'Informace';

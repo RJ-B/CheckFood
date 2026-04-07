@@ -58,9 +58,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StaffReservationServiceImpl implements StaffReservationService {
 
-    private static final int CHECKIN_BEFORE_MINUTES = 30;
-    private static final int CHECKIN_AFTER_MINUTES = 60;
-
     private final ReservationRepository reservationRepository;
     private final RecurringReservationRepository recurringRepository;
     private final RestaurantRepository restaurantRepository;
@@ -108,12 +105,9 @@ public class StaffReservationServiceImpl implements StaffReservationService {
                 ? Set.of()
                 : new HashSet<>(changeRequestRepository.findReservationIdsWithStatus(reservationIds, ChangeRequestStatus.PENDING));
 
-        var now = LocalTime.now(clock);
-        var today = LocalDate.now(clock);
-
         return reservations.stream()
                 .map(r -> toStaffResponse(r, tableLabels.get(r.getTableId()),
-                        userNames.get(r.getUserId()), date, today, now,
+                        userNames.get(r.getUserId()),
                         reservationIdsWithPendingChange.contains(r.getId())))
                 .toList();
     }
@@ -169,17 +163,6 @@ public class StaffReservationServiceImpl implements StaffReservationService {
                 && reservation.getStatus() != ReservationStatus.RESERVED) {
             throw ReservationException.invalidStatusTransition(
                     reservation.getStatus().name(), ReservationStatus.CHECKED_IN.name());
-        }
-
-        var now = LocalTime.now(clock);
-        var today = LocalDate.now(clock);
-        if (!reservation.getDate().isEqual(today)) {
-            throw ReservationException.checkInOutsideWindow();
-        }
-        var windowStart = reservation.getStartTime().minusMinutes(CHECKIN_BEFORE_MINUTES);
-        var windowEnd = reservation.getStartTime().plusMinutes(CHECKIN_AFTER_MINUTES);
-        if (now.isBefore(windowStart) || now.isAfter(windowEnd)) {
-            throw ReservationException.checkInOutsideWindow();
         }
 
         reservation.setStatus(ReservationStatus.CHECKED_IN);
@@ -570,10 +553,8 @@ public class StaffReservationServiceImpl implements StaffReservationService {
      */
     private StaffReservationResponse toStaffResponse(
             Reservation r, String tableLabel, String userName,
-            LocalDate queryDate, LocalDate today, LocalTime now,
             boolean hasPendingChange) {
 
-        boolean isToday = queryDate.isEqual(today);
         var status = r.getStatus();
 
         boolean canConfirm = status == ReservationStatus.PENDING_CONFIRMATION
@@ -582,10 +563,7 @@ public class StaffReservationServiceImpl implements StaffReservationService {
         boolean canReject = status == ReservationStatus.PENDING_CONFIRMATION
                 || status == ReservationStatus.RESERVED;
 
-        boolean canCheckIn = (status == ReservationStatus.CONFIRMED || status == ReservationStatus.RESERVED)
-                && isToday
-                && !now.isBefore(r.getStartTime().minusMinutes(CHECKIN_BEFORE_MINUTES))
-                && !now.isAfter(r.getStartTime().plusMinutes(CHECKIN_AFTER_MINUTES));
+        boolean canCheckIn = status == ReservationStatus.CONFIRMED || status == ReservationStatus.RESERVED;
 
         boolean canComplete = status == ReservationStatus.CHECKED_IN;
 

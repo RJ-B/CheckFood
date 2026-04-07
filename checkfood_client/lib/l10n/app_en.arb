@@ -263,6 +263,7 @@
   "role": "Role",
 
   "locationPermissionDesc": "To show you nearby restaurants and provide navigation, we need access to your location.",
+  "enterManually": "Enter manually",
 
   "errorProfileLoad": "Error loading user profile.",
   "errorUnexpected": "Unexpected server error.",

@@ -42,7 +42,7 @@ public class RegisterRequest {
      * Email adresa sloužící jako username a pro email verification workflow.
      */
     @NotBlank(message = "Email nesmí být prázdný.")
-    @Email(message = "Zadejte platnou emailovou adresu.")
+    @Email(regexp = "^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$", message = "Zadejte platnou emailovou adresu.")
     @Size(max = 254, message = "Email nesmí překročit délku 254 znaků.")
     private String email;
 

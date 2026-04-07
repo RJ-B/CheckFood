@@ -192,6 +192,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                               : Text(S.of(context).sendOrder),
                         ),
                       ),
+                      SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
                     ],
                   ),
                 ),

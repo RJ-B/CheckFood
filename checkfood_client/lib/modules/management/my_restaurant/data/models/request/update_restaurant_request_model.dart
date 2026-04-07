@@ -8,6 +8,7 @@ class UpdateRestaurantRequestModel {
   final List<Map<String, dynamic>>? openingHours;
   final int? defaultReservationDurationMinutes;
   final List<Map<String, dynamic>>? specialDays;
+  final String? coverImageUrl;
 
   const UpdateRestaurantRequestModel({
     required this.name,
@@ -18,6 +19,7 @@ class UpdateRestaurantRequestModel {
     this.openingHours,
     this.defaultReservationDurationMinutes,
     this.specialDays,
+    this.coverImageUrl,
   });
 
   Map<String, dynamic> toJson() {
@@ -33,6 +35,7 @@ class UpdateRestaurantRequestModel {
       json['defaultReservationDurationMinutes'] = defaultReservationDurationMinutes;
     }
     if (specialDays != null) json['specialDays'] = specialDays;
+    if (coverImageUrl != null) json['coverImageUrl'] = coverImageUrl;
     return json;
   }
 }

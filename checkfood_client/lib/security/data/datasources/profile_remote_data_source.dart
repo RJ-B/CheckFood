@@ -49,6 +49,9 @@ abstract class ProfileRemoteDataSource {
   /// Nahraje profilovou fotku přes generický upload endpoint.
   /// Vrátí URL nahrané fotky.
   Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
+
+  /// Smaže soubor z úložiště podle relativní cesty.
+  Future<void> deleteStorageFile(String path);
 }
 
 /// Implementace [ProfileRemoteDataSource] komunikující s backendem přes [Dio].
@@ -150,6 +153,27 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       data: formData,
     );
     final data = response.data as Map<String, dynamic>;
-    return data['url'] as String;
+    final url = data['url'] as String;
+    return _resolveUrl(url);
+  }
+
+  /// Pokud backend vrátí relativní URL (lokální profil, začíná '/'), doplní base URL hostu.
+  /// V produkci jsou URL absolutní (GCS), takže se vrátí nezměněné.
+  String _resolveUrl(String url) {
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    // Relativní URL — doplníme origin z baseUrl Dia (odstraníme '/api' suffix)
+    final baseUrl = _dio.options.baseUrl;
+    final origin = baseUrl.endsWith('/api')
+        ? baseUrl.substring(0, baseUrl.length - 4)
+        : baseUrl.replaceAll(RegExp(r'/api/?$'), '');
+    return '$origin$url';
+  }
+
+  @override
+  Future<void> deleteStorageFile(String path) async {
+    await _dio.delete(
+      SecurityEndpoints.upload,
+      queryParameters: {'path': path},
+    );
   }
 }

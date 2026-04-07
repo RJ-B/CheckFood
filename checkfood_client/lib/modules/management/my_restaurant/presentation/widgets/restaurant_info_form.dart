@@ -1,10 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../l10n/generated/app_localizations.dart';
+import '../../../../../core/di/injection_container.dart';
 import '../../../../../core/theme/colors.dart';
+import '../../../../../security/config/security_endpoints.dart';
 import '../../data/models/request/update_restaurant_request_model.dart';
 import '../../domain/entities/my_restaurant.dart';
-import 'panorama_tab.dart';
+import '../bloc/my_restaurant_bloc.dart';
+import '../bloc/my_restaurant_event.dart';
 
 /// Rozbalovací formulář nastavení pro úpravu názvu, popisu, kontaktních údajů,
 /// adresy, otevíracích dob, zvláštních dní a výchozích hodnot rezervací restaurace.
@@ -12,7 +19,6 @@ class RestaurantInfoForm extends StatefulWidget {
   final MyRestaurant restaurant;
   final bool isUpdating;
   final void Function(UpdateRestaurantRequestModel request) onSubmit;
-  final String? panoramaUrl;
   final bool isOwner;
 
   /// Volá se vždy, když formulář přejde mezi stavem se změnami a čistým stavem.
@@ -23,7 +29,6 @@ class RestaurantInfoForm extends StatefulWidget {
     required this.restaurant,
     required this.isUpdating,
     required this.onSubmit,
-    this.panoramaUrl,
     this.isOwner = false,
     this.onDirtyChanged,
   });
@@ -52,6 +57,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
   final _section4Controller = ExpansionTileController();
 
   bool _isDirty = false;
+  bool _isUploadingCover = false;
 
   void _markDirty() {
     if (!_isDirty) {
@@ -309,7 +315,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                           ),
                         ),
                         SizedBox(
-                          width: 62,
+                          width: 76,
                           child: Text(
                             _dayNames[idx],
                             style: TextStyle(
@@ -474,48 +480,155 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
               ],
             ),
 
-            if (widget.isOwner) ...[
-              const SizedBox(height: 8),
-              ExpansionTile(
-                leading: const Icon(Icons.panorama),
-                title: const Text('Panorama'),
-                shape: sectionShape,
-                collapsedShape: sectionShape,
-                childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                children: [
-                  const SizedBox(height: 8),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.panorama,
-                        color: widget.panoramaUrl != null ? AppColors.success : AppColors.textMuted,
-                      ),
-                      title: Text(widget.panoramaUrl != null
-                          ? S.of(context).activePanoramaInfo
-                          : S.of(context).noPanoramaInfo),
-                      trailing: FilledButton.icon(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => Scaffold(
-                                appBar: AppBar(title: Text(S.of(context).panorama)),
-                                body: PanoramaTab(activePanoramaUrl: widget.panoramaUrl),
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.settings),
-                        label: Text(S.of(context).managePanorama),
+            const SizedBox(height: 8),
+            ExpansionTile(
+              leading: const Icon(Icons.photo_camera),
+              title: const Text('Fotka restaurace'),
+              shape: sectionShape,
+              collapsedShape: sectionShape,
+              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              children: [
+                const SizedBox(height: 12),
+                if (widget.restaurant.coverImageUrl != null &&
+                    widget.restaurant.coverImageUrl!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.restaurant.coverImageUrl!,
+                        height: 160,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, __, ___) => Container(
+                          height: 160,
+                          color: AppColors.borderLight,
+                          child: const Center(
+                            child: Icon(Icons.broken_image_outlined, color: AppColors.textMuted),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: _isUploadingCover ? null : _uploadCoverImage,
+                    icon: _isUploadingCover
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
+                        : const Icon(Icons.add_photo_alternate),
+                    label: Text(_isUploadingCover ? 'Nahrávám...' : 'Vybrat fotku z galerie'),
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _uploadCoverImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
+    if (picked == null) return;
+
+    setState(() => _isUploadingCover = true);
+    try {
+      final bytes = await picked.readAsBytes();
+      final filename = picked.name.isNotEmpty ? picked.name : 'cover.jpg';
+      final dio = sl<Dio>();
+
+      // Smazání staré fotky (best-effort)
+      final oldUrl = widget.restaurant.coverImageUrl;
+      if (oldUrl != null && oldUrl.isNotEmpty) {
+        final oldPath = _extractStoragePath(oldUrl);
+        if (oldPath != null) {
+          try {
+            await dio.delete(
+              SecurityEndpoints.upload,
+              queryParameters: {'path': oldPath},
+            );
+          } catch (_) {
+            // Tiché selhání — pokračujeme s nahráváním i bez smazání
+          }
+        }
+      }
+
+      // Nahrání nové fotky
+      final formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(bytes, filename: filename),
+        'directory': 'restaurants',
+      });
+      final uploadResponse = await dio.post(SecurityEndpoints.upload, data: formData);
+      final rawUrl = (uploadResponse.data as Map<String, dynamic>)['url'] as String;
+      final resolvedUrl = _resolveUrl(rawUrl, dio.options.baseUrl);
+
+      if (!mounted) return;
+
+      // Uložení URL do restaurace přes BLoC (zachová ostatní pole)
+      context.read<MyRestaurantBloc>().add(UpdateRestaurant(
+        UpdateRestaurantRequestModel(
+          name: widget.restaurant.name,
+          description: widget.restaurant.description,
+          phone: widget.restaurant.phone,
+          email: widget.restaurant.contactEmail,
+          coverImageUrl: resolvedUrl,
+        ),
+      ));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Fotka byla nahrána.'),
+          backgroundColor: AppColors.success,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Nahrávání selhalo: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isUploadingCover = false);
+    }
+  }
+
+  /// Extrahuje relativní cestu z URL pro DELETE volání.
+  /// Lokální /uploads/restaurants/xyz.jpg → restaurants/xyz.jpg
+  /// GCS https://storage.googleapis.com/bucket/restaurants/xyz.jpg → restaurants/xyz.jpg
+  String? _extractStoragePath(String url) {
+    try {
+      final uri = Uri.parse(url);
+      final segments = uri.pathSegments;
+      if (segments.isNotEmpty && segments.first == 'uploads') {
+        return segments.skip(1).join('/');
+      }
+      if (segments.length >= 2) {
+        return segments.skip(1).join('/');
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Pokud backend vrátí relativní URL, doplní origin z baseUrl Dia (odstraní '/api' suffix).
+  String _resolveUrl(String url, String baseUrl) {
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    final origin = baseUrl.endsWith('/api')
+        ? baseUrl.substring(0, baseUrl.length - 4)
+        : baseUrl.replaceAll(RegExp(r'/api/?$'), '');
+    return '$origin$url';
   }
 
   Widget _buildSaveButton(S l) {
@@ -600,6 +713,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
         _specialDays[index] = result;
         _specialDays.sort((a, b) => a.date.compareTo(b.date));
       });
+      _submit();
     }
   }
 
@@ -621,6 +735,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
         _specialDays.add(result);
         _specialDays.sort((a, b) => a.date.compareTo(b.date));
       });
+      _submit();
     }
   }
 
@@ -652,15 +767,39 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
             ],
           ),
           titlePadding: const EdgeInsets.fromLTRB(24, 16, 8, 0),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SwitchListTile(
-                title: const Text('Celý den zavřeno'),
-                value: isClosed,
-                activeColor: AppColors.primary,
-                onChanged: (val) => setDlg(() => isClosed = val),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ChoiceChip(
+                    label: const Text('Otevřeno'),
+                    selected: !isClosed,
+                    selectedColor: AppColors.primary.withValues(alpha: 0.15),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: !isClosed ? AppColors.primary : AppColors.textMuted,
+                    ),
+                    onSelected: (_) => setDlg(() => isClosed = false),
+                  ),
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: const Text('Zavřeno'),
+                    selected: isClosed,
+                    selectedColor: AppColors.error.withValues(alpha: 0.15),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: isClosed ? AppColors.error : AppColors.textMuted,
+                    ),
+                    onSelected: (_) => setDlg(() => isClosed = true),
+                  ),
+                ],
               ),
+              const SizedBox(height: 4),
               if (!isClosed) ...[
                 const SizedBox(height: 8),
                 Row(
@@ -669,6 +808,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                       child: DropdownButtonFormField<String>(
                         value: openAt,
                         isDense: true,
+                        isExpanded: true,
                         decoration: const InputDecoration(
                           labelText: 'Od',
                           border: OutlineInputBorder(),
@@ -686,6 +826,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                       child: DropdownButtonFormField<String>(
                         value: closeAt,
                         isDense: true,
+                        isExpanded: true,
                         decoration: const InputDecoration(
                           labelText: 'Do',
                           border: OutlineInputBorder(),
@@ -709,6 +850,7 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
                 onChanged: (val) => note = val.trim().isEmpty ? null : val.trim(),
               ),
             ],
+          ),
           ),
           actions: [
             FilledButton(

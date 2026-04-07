@@ -16,6 +16,7 @@ class MyRestaurantResponseModel {
   final String? status;
   final bool? isActive;
   final String? panoramaUrl;
+  final String? coverImageUrl;
   final int? defaultReservationDurationMinutes;
   final List<SpecialDay> specialDays;
 
@@ -31,6 +32,7 @@ class MyRestaurantResponseModel {
     this.status,
     this.isActive,
     this.panoramaUrl,
+    this.coverImageUrl,
     this.defaultReservationDurationMinutes,
   });
 
@@ -51,6 +53,7 @@ class MyRestaurantResponseModel {
       status: json['status'] as String?,
       isActive: json['active'] as bool?,
       panoramaUrl: json['panoramaUrl'] as String?,
+      coverImageUrl: json['coverImageUrl'] as String?,
       defaultReservationDurationMinutes: json['defaultReservationDurationMinutes'] as int?,
       specialDays: (json['specialDays'] as List<dynamic>?)
               ?.map((e) => SpecialDay.fromJson(e as Map<String, dynamic>))
@@ -70,6 +73,7 @@ class MyRestaurantResponseModel {
         status: status ?? 'INACTIVE',
         isActive: isActive ?? false,
         panoramaUrl: panoramaUrl,
+        coverImageUrl: coverImageUrl,
         defaultReservationDurationMinutes: defaultReservationDurationMinutes ?? 60,
         specialDays: specialDays,
       );
