@@ -32,6 +32,17 @@ ai/
 
 # --- Claude Code ---
 .claude/
+CLAUDE.md
+DIPLOMKA_PROMPT.md
+
+# --- Diplomka (private) ---
+diplomka/
+
+# --- Scripts (local) ---
+scripts/
+
+# --- Copy folder (env backups) ---
+copy/
 
 # ==========================================
 # BACKEND (checkfood_service)
