@@ -179,7 +179,6 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
         RestaurantInfoForm(
           restaurant: state.restaurant,
           isUpdating: state.isUpdating,
-          panoramaUrl: state.restaurant.panoramaUrl,
           isOwner: isOwner,
           onSubmit: (request) {
             context.read<MyRestaurantBloc>().add(UpdateRestaurant(request));
