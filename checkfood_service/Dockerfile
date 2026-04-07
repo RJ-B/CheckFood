@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ===============================================================
-# 2. FÁZE: RUNTIME (RUN STAGE)
+# 2. FÁZE: RUNTIME (RUN STAGE — optimalizováno pro Cloud Run)
 # ===============================================================
 FROM eclipse-temurin:21-jre
 
@@ -20,8 +20,14 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-ENV PORT=8081
+# Cloud Run nastaví PORT automaticky (default 8080)
+ENV PORT=8080
 
 EXPOSE ${PORT}
 
-ENTRYPOINT java -jar app.jar --server.port=${PORT} --server.address=0.0.0.0
+ENTRYPOINT ["java", \
+    "-XX:+UseG1GC", \
+    "-XX:MaxRAMPercentage=75.0", \
+    "-Djava.security.egd=file:/dev/./urandom", \
+    "--add-opens", "java.base/java.io=ALL-UNNAMED", \
+    "-jar", "app.jar"]

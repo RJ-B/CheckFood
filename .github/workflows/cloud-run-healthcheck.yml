@@ -1,16 +1,15 @@
-name: Render Health Check
+name: Cloud Run Health Check
 
 on:
-  # Každých 15 minut kontroluje health endpoint
+  # Každých 15 minut
   schedule:
     - cron: '*/15 * * * *'
-  # Po každém push na main (počká 5 min na Render deploy)
+  # Po deployi
   workflow_run:
     workflows:
-      - "Backend CI"
+      - "Deploy to Cloud Run"
     types:
       - completed
-  # Manuální spuštění
   workflow_dispatch:
 
 jobs:
@@ -19,23 +18,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for Render deploy (only after CI)
+      - name: Wait for deploy (only after workflow_run)
         if: ${{ github.event_name == 'workflow_run' }}
-        run: sleep 300  # 5 minut čekání na Render deploy
+        run: sleep 60
 
       - name: Check health endpoint
         id: health
         run: |
-          HEALTH_URL="${{ vars.RENDER_HEALTH_URL }}"
+          HEALTH_URL="${{ vars.CLOUD_RUN_HEALTH_URL }}"
 
-          # Fallback na default URL pokud není nastavena
           if [ -z "$HEALTH_URL" ]; then
-            HEALTH_URL="https://checkfood-api.onrender.com/actuator/health"
+            echo "CLOUD_RUN_HEALTH_URL not set. Skipping."
+            echo "status=skipped" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           echo "Checking: $HEALTH_URL"
 
-          # 3 pokusy s 30s timeout
           MAX_RETRIES=3
           RETRY=0
           STATUS="down"
@@ -71,7 +70,6 @@ jobs:
             const httpCode = '${{ steps.health.outputs.http_code }}';
             const response = '${{ steps.health.outputs.response }}';
 
-            // Zkontroluj jestli už neexistuje otevřený health issue
             const { data: existingIssues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -80,7 +78,6 @@ jobs:
             });
 
             if (existingIssues.length > 0) {
-              // Přidej komentář — neotevírej nový issue
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -93,16 +90,15 @@ jobs:
               return;
             }
 
-            // Vytvoř nový issue
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '[AUTO-ERROR] Render API health check failed',
+              title: '[AUTO-ERROR] Cloud Run API health check failed',
               labels: ['auto-error', 'health-failure'],
-              body: `## Render Health Check Failure\n\n` +
+              body: `## Cloud Run Health Check Failure\n\n` +
                 `| Field | Value |\n` +
                 `|-------|-------|\n` +
-                `| **Source** | Render health check |\n` +
+                `| **Source** | Cloud Run health check |\n` +
                 `| **Service** | checkfood-api |\n` +
                 `| **Severity** | critical |\n` +
                 `| **HTTP Code** | ${httpCode} |\n` +
@@ -111,7 +107,7 @@ jobs:
                 `---\n\n` +
                 `> Health check endpoint: \`/actuator/health\`\n` +
                 `> Tři po sobě jdoucí pokusy selhaly.\n` +
-                `> Zkontrolujte Render dashboard a logy.`,
+                `> Zkontrolujte Cloud Run console a logy.`,
             });
 
       - name: Auto-close health issue on recovery
@@ -119,7 +115,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            // Pokud existuje otevřený health issue, zavři ho
             const { data: openIssues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -132,7 +127,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issue.number,
-                body: `## ✅ Recovered\n\nHealth check passed at ${new Date().toISOString()}. Closing issue.`,
+                body: `## Recovered\n\nHealth check passed at ${new Date().toISOString()}. Closing issue.`,
               });
               await github.rest.issues.update({
                 owner: context.repo.owner,
@@ -141,12 +136,3 @@ jobs:
                 state: 'closed',
               });
             }
-
-      # Volitelný webhook
-      - name: Send webhook on failure (optional)
-        if: ${{ steps.health.outputs.status == 'down' && vars.CI_FAILURE_WEBHOOK_URL != '' }}
-        run: |
-          curl -s -X POST "${{ vars.CI_FAILURE_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"source\":\"healthcheck\",\"service\":\"checkfood-api\",\"severity\":\"critical\",\"error_type\":\"health_fail\",\"http_code\":\"${{ steps.health.outputs.http_code }}\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%S)\"}"
-        continue-on-error: true

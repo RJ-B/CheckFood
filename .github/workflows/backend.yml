@@ -33,6 +33,3 @@ jobs:
       - name: Run tests
         run: mvn test -B
         continue-on-error: true
-
-      - name: Verify Docker build
-        run: docker build -t checkfood-api:ci .

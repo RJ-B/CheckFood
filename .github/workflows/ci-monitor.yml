@@ -5,6 +5,7 @@ on:
   workflow_run:
     workflows:
       - "Backend CI"
+      - "Deploy to Cloud Run"
       - "Build Android APK"
       - "Build & Release Android APK"
     types:

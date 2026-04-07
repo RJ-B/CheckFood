@@ -1,0 +1,102 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "checkfood_service/**"
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: checkfood-system-478116
+  REGION: europe-central2
+  SERVICE: checkfood-api
+  REPOSITORY: checkfood-api
+  IMAGE: europe-central2-docker.pkg.dev/checkfood-system-478116/checkfood-api/checkfood-api
+
+jobs:
+  build-and-deploy:
+    name: Build, Push & Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for Workload Identity Federation
+
+    defaults:
+      run:
+        working-directory: checkfood_service
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (WIF)
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Authenticate Docker to Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ env.IMAGE }}:${{ github.sha }} \
+            -t ${{ env.IMAGE }}:latest \
+            .
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push ${{ env.IMAGE }}:${{ github.sha }}
+          docker push ${{ env.IMAGE }}:latest
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}:${{ github.sha }}
+          flags: |
+            --port=8080
+            --memory=512Mi
+            --cpu=1
+            --min-instances=0
+            --max-instances=3
+            --timeout=300
+            --set-cloudsql-instances=checkfood-system-478116:europe-central2:checkfood-db
+            --allow-unauthenticated
+
+      - name: Verify deployment (health check)
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE }} \
+            --region=${{ env.REGION }} \
+            --format='value(status.url)')
+          echo "Service URL: $SERVICE_URL"
+
+          # Wait up to 120s for the service to be healthy
+          MAX_RETRIES=12
+          RETRY=0
+          while [ $RETRY -lt $MAX_RETRIES ]; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+              --connect-timeout 10 --max-time 30 \
+              "$SERVICE_URL/actuator/health" 2>/dev/null || echo "000")
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "Health check passed!"
+              exit 0
+            fi
+
+            RETRY=$((RETRY + 1))
+            echo "Attempt $RETRY/$MAX_RETRIES — HTTP $HTTP_CODE. Retrying in 10s..."
+            sleep 10
+          done
+
+          echo "Health check failed after $MAX_RETRIES attempts"
+          exit 1

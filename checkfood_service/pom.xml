@@ -176,6 +176,20 @@
             <artifactId>duckdb_jdbc</artifactId>
             <version>1.4.4.0</version>
         </dependency>
+
+        <!-- Google Cloud Storage -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-storage</artifactId>
+            <version>2.46.0</version>
+        </dependency>
+
+        <!-- Cloud SQL PostgreSQL Socket Factory -->
+        <dependency>
+            <groupId>com.google.cloud.sql</groupId>
+            <artifactId>postgres-socket-factory</artifactId>
+            <version>1.22.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

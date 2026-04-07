@@ -22,8 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
- * Centrální konfigurace Spring Security.
- * CORS je řešen externě skrze CorsConfig.
+ * Centrální konfigurace Spring Security. Definuje filter chain, povolené URL a CSRF/session politiku.
+ * CORS je řešen externě skrze {@link CorsConfig}.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
  */
 @Configuration
 @EnableWebSecurity
@@ -41,10 +44,17 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+    /**
+     * Sestavuje hlavní security filter chain aplikace.
+     *
+     * @param http HttpSecurity builder pro konfiguraci pravidel
+     * @return nakonfigurovaný SecurityFilterChain
+     * @throws Exception při chybě sestavení filter chain
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults()) // Automaticky vyhledá bean 'corsConfigurationSource'
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
@@ -77,7 +87,6 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/v1/internal/**").permitAll()
                         .requestMatchers("/api/v1/payments/callback").permitAll()
-                        .requestMatchers("/panoramas/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/restaurants/markers",

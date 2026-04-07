@@ -1,3 +1,5 @@
+# Docker Compose pro LOKÁLNÍ VÝVOJ
+# Produkce běží na Cloud Run + Cloud SQL
 services:
   # --- DATABÁZE (PostgreSQL + PostGIS) ---
   db:
@@ -11,7 +13,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d checkfood"]
       interval: 5s
@@ -22,54 +24,6 @@ services:
     networks:
       - checkfood-network
 
-  # --- PANORAMA STITCHER (Python / OpenCV) ---
-  stitcher:
-    build:
-      context: ./stitcher
-      dockerfile: Dockerfile
-    container_name: checkfood-stitcher
-    restart: always
-    ports:
-      - "8090:8090"
-    environment:
-      SUPABASE_URL: ${SUPABASE_URL:-}
-      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
-      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-checkfood-public}
-    volumes:
-      - ./uploads:/app/uploads
-    networks:
-      - checkfood-network
-
-  # --- BACKEND (Java Spring Boot) ---
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: checkfood-service
-    restart: always
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      # Propojení na DB kontejner přes název služby 'db'
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/checkfood
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-local}
-      # Virtual Threads (Java 21)
-      SPRING_THREADS_VIRTUAL_ENABLED: "true"
-      # Panorama stitcher
-      PANORAMA_STITCHER_URL: http://stitcher:8090
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./uploads:/app/uploads
-    networks:
-      - checkfood-network
-
-# --- DEFINICE VOLUME A SÍTÍ ---
 volumes:
   postgres_data:
 

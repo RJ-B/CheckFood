@@ -1,8 +1,5 @@
 package com.checkfood.checkfoodservice.module.panorama.service;
 
-import com.checkfood.checkfoodservice.module.panorama.client.StitchCallbackRequest;
-import com.checkfood.checkfoodservice.module.panorama.client.StitcherClient;
-import com.checkfood.checkfoodservice.module.panorama.config.PanoramaProperties;
 import com.checkfood.checkfoodservice.module.panorama.dto.PanoramaPhotoResponse;
 import com.checkfood.checkfoodservice.module.panorama.dto.PanoramaSessionResponse;
 import com.checkfood.checkfoodservice.module.panorama.entity.PanoramaPhoto;
@@ -28,6 +25,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementace správy panoramatických session — řídí nahrávání fotografií, komunikaci se stitcher službou
+ * a aktualizaci stavu session na základě callbacků.
+ *
+ * @author Rostislav Jirák
+ * @version 1.0.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,9 +44,10 @@ public class PanoramaServiceImpl implements PanoramaService {
     private final RestaurantRepository restaurantRepository;
     private final StorageService storageService;
     private final UserService userService;
-    private final StitcherClient stitcherClient;
-    private final PanoramaProperties panoramaProperties;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PanoramaSessionResponse createSession(String userEmail) {
         UUID restaurantId = findOwnerRestaurantId(userEmail);
@@ -53,6 +58,9 @@ public class PanoramaServiceImpl implements PanoramaService {
         return toResponse(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PanoramaPhotoResponse uploadPhoto(String userEmail, UUID sessionId, int angleIndex, double actualAngle, Double actualPitch, MultipartFile file) {
         UUID restaurantId = findOwnerRestaurantId(userEmail);
@@ -63,7 +71,6 @@ public class PanoramaServiceImpl implements PanoramaService {
             throw PanoramaException.invalidState("Session není ve stavu UPLOADING.");
         }
 
-        // 20 capture points: 8 horizon + 6 upper (+30°) + 6 lower (-30°)
         double[] targetYaws = {
                 0, 45, 90, 135, 180, 225, 270, 315,       // horizon (0-7)
                 0, 60, 120, 180, 240, 300,                 // upper (8-13)
@@ -119,6 +126,9 @@ public class PanoramaServiceImpl implements PanoramaService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PanoramaSessionResponse finalizeSession(String userEmail, UUID sessionId) {
         UUID restaurantId = findOwnerRestaurantId(userEmail);
@@ -129,31 +139,23 @@ public class PanoramaServiceImpl implements PanoramaService {
             throw PanoramaException.invalidState("Session není ve stavu UPLOADING.");
         }
 
-        int minPhotos = 8; // minimum = full horizon ring
+        int minPhotos = 8;
         int photoCount = photoRepository.countBySessionId(sessionId);
         if (photoCount < minPhotos) {
             throw PanoramaException.invalidState("Session vyžaduje " + minPhotos + " fotografií, nahráno: " + photoCount);
         }
 
-        // Async stitching: set PROCESSING and delegate to Python service
-        var photos = photoRepository.findAllBySessionIdOrderByAngleIndexAsc(sessionId);
-        List<String> photoUrls = photos.stream()
-                .map(PanoramaPhoto::getPhotoUrl)
-                .toList();
-
-        session.setStatus(PanoramaSessionStatus.PROCESSING);
+        // Stitcher byl odstraněn — session zůstává v UPLOADING dokud nebude stitching reimplementován
+        session.setPhotoCount(photoCount);
         var saved = sessionRepository.save(session);
-
-        try {
-            stitcherClient.requestStitching(sessionId, photoUrls, panoramaProperties.getCallbackUrl());
-        } catch (Exception e) {
-            log.error("[Panorama] Failed to request stitching: session={}", sessionId, e);
-            // Don't fail the request — session is PROCESSING, stitcher will retry or admin can re-trigger
-        }
+        log.info("[Panorama] Session finalized with {} photos: session={}", photoCount, sessionId);
 
         return toResponse(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public PanoramaSessionResponse getSessionStatus(String userEmail, UUID sessionId) {
@@ -163,6 +165,9 @@ public class PanoramaServiceImpl implements PanoramaService {
         return toResponse(session);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public List<PanoramaSessionResponse> listSessions(String userEmail) {
@@ -171,6 +176,9 @@ public class PanoramaServiceImpl implements PanoramaService {
                 .stream().map(this::toResponse).toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setActivePanorama(String userEmail, UUID sessionId) {
         UUID restaurantId = findOwnerRestaurantId(userEmail);
@@ -188,36 +196,9 @@ public class PanoramaServiceImpl implements PanoramaService {
         restaurantRepository.save(restaurant);
     }
 
-    @Override
-    public void handleStitchingCallback(StitchCallbackRequest request) {
-        UUID sessionId = UUID.fromString(request.getSessionId());
-        var session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> PanoramaException.sessionNotFound(sessionId));
-
-        if (session.getStatus() != PanoramaSessionStatus.PROCESSING) {
-            log.warn("[Panorama] Callback for non-PROCESSING session: id={}, status={}", sessionId, session.getStatus());
-            return;
-        }
-
-        if ("COMPLETED".equals(request.getStatus())) {
-            session.setStatus(PanoramaSessionStatus.COMPLETED);
-            session.setResultUrl(request.getResultPath());
-            session.setCompletedAt(LocalDateTime.now());
-            log.info("[Panorama] Stitching completed: session={}", sessionId);
-        } else {
-            session.setStatus(PanoramaSessionStatus.FAILED);
-            session.setErrorMessage(request.getErrorMessage());
-            log.error("[Panorama] Stitching failed: session={}, error={}", sessionId, request.getErrorMessage());
-        }
-
-        sessionRepository.save(session);
-    }
-
-    // --- Private Helpers ---
-
     private UUID findOwnerRestaurantId(String userEmail) {
         var user = userService.findByEmail(userEmail);
-        var membership = employeeRepository.findByUserIdAndRole(user.getId(), RestaurantEmployeeRole.OWNER)
+        var membership = employeeRepository.findFirstByUserIdAndRole(user.getId(), RestaurantEmployeeRole.OWNER)
                 .orElseThrow(RestaurantException::noRestaurantAssigned);
         return membership.getRestaurant().getId();
     }

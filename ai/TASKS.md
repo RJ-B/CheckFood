@@ -2,6 +2,37 @@
 
 ---
 
+## [T-0014] Migrace Render → Google Cloud Platform (Cloud Run + Cloud SQL + GCS)
+
+- **status:** DONE
+- **priority:** P0
+- **owner:** ARCHITECT → BACKEND DEV + DEVSECOPS → TESTER
+- **description:** Kompletní migrace produkčního prostředí z Render.com na Google Cloud Platform:
+  1. **Cloud Run** — backend API jako serverless container
+  2. **Cloud SQL** — PostgreSQL 15 + PostGIS 3.4
+  3. **Google Cloud Storage** — nahradit Supabase Storage
+  4. **Artifact Registry** — Docker image repository
+  5. **GitHub Actions** — CI/CD pipeline: build → push to AR → deploy Cloud Run
+  6. **Odstranit stitcher** — Python microservice, veškeré reference z kódu
+  7. **Odstranit Render** — render.yaml, render-related konfigurace
+  8. **Odstranit Supabase Storage** — nahrazeno GCS
+  9. **Doména** — připravit Cloud Run domain mapping (vlastní doména později)
+- **GCP:**
+  - Project ID: `checkfood-system-478116`
+  - Region: `europe-central2` (Varšava, nejblíž ČR)
+- **akceptační kritéria:**
+  - [ ] Dockerfile optimalizovaný pro Cloud Run (single backend, bez stitcher)
+  - [ ] GcsStorageService nahrazuje SupabaseStorageService (profil prod)
+  - [ ] application-prod.properties aktualizovány pro Cloud SQL + GCS
+  - [ ] GitHub Actions workflow: build → push Artifact Registry → deploy Cloud Run
+  - [ ] render.yaml smazán
+  - [ ] Stitcher reference odstraněny (docker-compose, PanoramaController, config)
+  - [ ] Supabase Storage reference odstraněny (SupabaseStorageService, SupabaseStorageConfig)
+  - [ ] .env.example aktualizován s GCP proměnnými
+  - [ ] Kompilace OK, testy prochází
+
+---
+
 ## [T-0010] Zapomenuté heslo — forgot password flow (request → email → reset)
 
 - **status:** DONE
