@@ -96,15 +96,23 @@ jobs:
 
       - name: Create GitHub Issue for failure
         uses: actions/github-script@v7
+        env:
+          CI_SERVICE: ${{ steps.details.outputs.service }}
+          CI_WORKFLOW_NAME: ${{ steps.details.outputs.workflow_name }}
+          CI_RUN_URL: ${{ steps.details.outputs.run_url }}
+          CI_FAILED_STEPS: ${{ steps.details.outputs.failed_steps }}
+          CI_COMMIT: ${{ steps.details.outputs.commit }}
+          CI_COMMIT_MESSAGE: ${{ steps.details.outputs.commit_message }}
+          CI_LOG_SNIPPETS: ${{ steps.details.outputs.log_snippets }}
         with:
           script: |
-            const service = '${{ steps.details.outputs.service }}';
-            const workflowName = '${{ steps.details.outputs.workflow_name }}';
-            const runUrl = '${{ steps.details.outputs.run_url }}';
-            const failedSteps = '${{ steps.details.outputs.failed_steps }}';
-            const commit = '${{ steps.details.outputs.commit }}';
-            const commitMessage = `${{ steps.details.outputs.commit_message }}`;
-            const logSnippets = `${{ steps.details.outputs.log_snippets }}`;
+            const service = process.env.CI_SERVICE;
+            const workflowName = process.env.CI_WORKFLOW_NAME;
+            const runUrl = process.env.CI_RUN_URL;
+            const failedSteps = process.env.CI_FAILED_STEPS;
+            const commit = process.env.CI_COMMIT;
+            const commitMessage = process.env.CI_COMMIT_MESSAGE;
+            const logSnippets = (process.env.CI_LOG_SNIPPETS || '').substring(0, 30000);
 
             // Zkontroluj jestli už neexistuje otevřený issue pro stejný workflow
             const { data: existingIssues } = await github.rest.issues.listForRepo({
