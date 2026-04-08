@@ -23,15 +23,34 @@ import requests
 # 1. OVERPASS QUERY
 # ============================================================
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_URL = "https://lz4.overpass-api.de/api/interpreter"
 
-OVERPASS_QUERY = """
-[out:json][timeout:300];
-area["ISO3166-1"="CZ"]->.cz;
+# Bounding boxy pro české kraje (aby se query vešla do Overpass limitu)
+REGION_BBOXES = {
+    "Praha": (49.94, 14.22, 50.18, 14.71),
+    "Středočeský": (49.56, 13.69, 50.38, 15.32),
+    "Jihočeský": (48.55, 13.44, 49.46, 15.17),
+    "Plzeňský": (49.26, 12.65, 49.92, 13.84),
+    "Karlovarský": (49.95, 12.35, 50.40, 13.24),
+    "Ústecký": (50.23, 13.16, 50.87, 14.46),
+    "Liberecký": (50.52, 14.46, 50.94, 15.43),
+    "Královéhradecký": (50.18, 15.32, 50.78, 16.37),
+    "Pardubický": (49.68, 15.43, 50.18, 16.52),
+    "Vysočina": (49.08, 15.17, 49.68, 16.17),
+    "Jihomoravský": (48.62, 15.63, 49.40, 17.34),
+    "Olomoucký": (49.40, 16.52, 50.18, 17.83),
+    "Zlínský": (48.88, 17.14, 49.57, 18.25),
+    "Moravskoslezský": (49.46, 17.51, 50.18, 18.86),
+}
+
+def _build_query(bbox: tuple[float, float, float, float]) -> str:
+    s, w, n, e = bbox
+    return f"""
+[out:json][timeout:120];
 (
-  node["amenity"="restaurant"](area.cz);
-  way["amenity"="restaurant"](area.cz);
-  relation["amenity"="restaurant"](area.cz);
+  node["amenity"="restaurant"]({s},{w},{n},{e});
+  way["amenity"="restaurant"]({s},{w},{n},{e});
+  relation["amenity"="restaurant"]({s},{w},{n},{e});
 );
 out center tags;
 """
@@ -233,14 +252,45 @@ def _to_list(result: dict) -> list[dict]:
 
 
 def fetch_overpass() -> list[dict]:
-    """Stáhne restaurace z Overpass API."""
-    print("Stahuji restaurace z Overpass API (celá ČR)...")
-    resp = requests.post(OVERPASS_URL, data={"data": OVERPASS_QUERY}, timeout=600)
-    resp.raise_for_status()
-    data = resp.json()
-    elements = data.get("elements", [])
-    print(f"  Staženo {len(elements)} elementů z OSM.")
-    return elements
+    """Stáhne restaurace z Overpass API po krajích."""
+    import time as time_mod
+
+    all_elements = []
+    seen_ids = set()
+
+    for region_name, bbox in REGION_BBOXES.items():
+        query = _build_query(bbox)
+        print(f"  Stahuji {region_name}...", end=" ", flush=True)
+
+        for attempt in range(3):
+            try:
+                resp = requests.post(OVERPASS_URL, data={"data": query}, timeout=180)
+                resp.raise_for_status()
+                data = resp.json()
+                elements = data.get("elements", [])
+
+                # Deduplikace (kraje se mohou překrývat)
+                new_count = 0
+                for el in elements:
+                    el_id = f"{el.get('type', 'node')}_{el.get('id', 0)}"
+                    if el_id not in seen_ids:
+                        seen_ids.add(el_id)
+                        all_elements.append(el)
+                        new_count += 1
+
+                print(f"{new_count} nových (celkem {len(all_elements)})")
+                break
+            except Exception as e:
+                if attempt < 2:
+                    print(f"retry ({e})...", end=" ", flush=True)
+                    time_mod.sleep(10)
+                else:
+                    print(f"SELHALO: {e}")
+
+        time_mod.sleep(2)  # pauza mezi kraji
+
+    print(f"\n  Celkem staženo {len(all_elements)} unikátních elementů z OSM.")
+    return all_elements
 
 
 def process_elements(elements: list[dict]) -> list[dict]:
