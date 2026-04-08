@@ -61,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     public RoleEntity findByNameWithPermissions(String name) {
-        return roleRepository.findWithPermissionsByName(name)
+        return roleRepository.findByName(name)
                 .orElseThrow(() -> UserException.roleNotFound(name));
     }
 

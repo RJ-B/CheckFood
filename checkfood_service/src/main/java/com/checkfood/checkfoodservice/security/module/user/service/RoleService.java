@@ -33,7 +33,6 @@ public interface RoleService {
 
     /**
      * Najde roli podle názvu.
-     * Načítá pouze základní data bez permissions (lazy loading).
      *
      * @param name název role (např. "ADMIN", "USER")
      * @return nalezená role
@@ -42,27 +41,24 @@ public interface RoleService {
     RoleEntity findByName(String name);
 
     /**
-     * Najde roli včetně jejích oprávnění v jednom dotazu.
-     * Používá EntityGraph pro prevenci N+1 problému při načítání permissions.
-     * Vhodné pro detailní zobrazení role s její kompletní konfigurací.
+     * Najde roli podle názvu.
+     * Zachováno pro zpětnou kompatibilitu — deleguje na {@link #findByName(String)}.
      *
      * @param name název role
-     * @return nalezená role včetně permissions
+     * @return nalezená role
      * @throws UserException pokud role není nalezena
      */
     RoleEntity findByNameWithPermissions(String name);
 
     /**
      * Vrátí seznam všech rolí v systému.
-     * Eager načte permissions pro všechny role.
      *
-     * @return seznam všech rolí včetně jejich permissions
+     * @return seznam všech rolí
      */
     List<RoleEntity> findAll();
 
     /**
      * Najde všechny role, jejichž názvy jsou v zadané kolekci.
-     * Používá se při hromadném přiřazování rolí uživatelům v admin rozhraní.
      * Optimalizováno pomocí IN klauzule místo N dotazů.
      *
      * @param names kolekce názvů rolí k vyhledání

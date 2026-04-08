@@ -8,12 +8,11 @@ import java.util.Set;
 
 /**
  * JPA entita reprezentující uživatelskou roli v RBAC systému.
- * Role definují základní rozsah oprávnění a mohou obsahovat sadu jemnějších oprávnění.
+ * Role definují základní rozsah oprávnění uživatele.
  *
  * @author Rostislav Jirák
  * @version 1.0.0
  * @see UserEntity
- * @see PermissionEntity
  */
 @Entity
 @Table(
@@ -54,19 +53,6 @@ public class RoleEntity {
     @Builder.Default
     @ManyToMany(mappedBy = "roles")
     private Set<UserEntity> users = new HashSet<>();
-
-    /**
-     * Jemnější oprávnění přiřazená této roli.
-     * Eager fetch je vhodný, protože rolí i jejich permissions je obvykle málo.
-     */
-    @Builder.Default
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private Set<PermissionEntity> permissions = new HashSet<>();
 
     /**
      * Pomocný konstruktor pro rychlé vytváření rolí pouze s názvem.

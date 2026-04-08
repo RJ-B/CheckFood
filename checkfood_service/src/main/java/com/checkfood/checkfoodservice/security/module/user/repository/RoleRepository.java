@@ -1,7 +1,6 @@
 package com.checkfood.checkfoodservice.security.module.user.repository;
 
 import com.checkfood.checkfoodservice.security.module.user.entity.RoleEntity;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repository pro správu uživatelských rolí s optimalizovaným načítáním oprávnění (prevence N+1).
+ * Repository pro správu uživatelských rolí.
  *
  * @author Rostislav Jirák
  * @version 1.0.0
@@ -49,23 +48,18 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
     List<RoleEntity> findAllByNameIn(Collection<String> names);
 
     /**
-     * Najde roli včetně jejích oprávnění v jednom SQL dotazu.
-     * EntityGraph prevence N+1 SELECT problému při načítání permissions.
-     * Vhodné pro detailní zobrazení role s její kompletní konfigurací oprávnění.
+     * Najde roli podle názvu.
+     * Alias pro {@link #findByName(String)} — zachován pro zpětnou kompatibilitu.
      *
      * @param name název role
-     * @return Optional s rolí včetně permissions nebo prázdný Optional
+     * @return Optional s rolí nebo prázdný Optional
      */
-    @EntityGraph(attributePaths = {"permissions"})
     Optional<RoleEntity> findWithPermissionsByName(String name);
 
     /**
-     * Najde všechny role včetně jejich oprávnění.
-     * Eager načte permissions pro všechny role v jednom dotazu.
-     * Vhodné pro inicializaci security kontextu, exporty nebo admin přehledy.
+     * Najde všechny role v systému.
      *
-     * @return seznam všech rolí včetně jejich permissions
+     * @return seznam všech rolí
      */
-    @EntityGraph(attributePaths = {"permissions"})
     List<RoleEntity> findAll();
 }
