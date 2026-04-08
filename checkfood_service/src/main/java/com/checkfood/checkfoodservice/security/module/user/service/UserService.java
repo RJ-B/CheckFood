@@ -99,7 +99,7 @@ public interface UserService {
      * Přiřadí uživateli novou roli pro rozšíření jeho oprávnění.
      *
      * @param userId ID uživatele
-     * @param roleName název role (např. "ADMIN", "MODERATOR")
+     * @param roleName název role (např. "ADMIN", "MANAGER")
      */
     void assignRole(Long userId, String roleName);
 

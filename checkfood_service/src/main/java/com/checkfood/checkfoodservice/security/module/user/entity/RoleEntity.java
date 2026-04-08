@@ -35,7 +35,7 @@ public class RoleEntity {
 
     /**
      * Unikátní název role bez prefixu "ROLE_".
-     * Příklady: "USER", "ADMIN", "MODERATOR".
+     * Příklady: "USER", "ADMIN", "OWNER", "STAFF", "MANAGER".
      * Prefix se přidává automaticky v UserEntity.getAuthorities().
      */
     @Column(nullable = false, unique = true, length = 50)

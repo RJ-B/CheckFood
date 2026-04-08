@@ -23,7 +23,7 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
      * Najde roli podle jejího unikátního názvu.
      * Používá se při přiřazování výchozích rolí (např. "USER" při registraci).
      *
-     * @param name název role (např. "ADMIN", "USER", "MODERATOR")
+     * @param name název role (např. "ADMIN", "USER", "OWNER", "STAFF", "MANAGER")
      * @return Optional s rolí nebo prázdný Optional
      */
     Optional<RoleEntity> findByName(String name);
