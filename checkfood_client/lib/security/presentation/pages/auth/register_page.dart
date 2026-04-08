@@ -57,92 +57,98 @@ class RegisterPage extends StatelessWidget {
         child: Stack(
           children: [
             SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 20.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Icon(
-                        Icons.person_add_rounded,
-                        size: 80,
-                        color: theme.colorScheme.primary,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Spacer(flex: 2),
+                    Icon(
+                      Icons.person_add_rounded,
+                      size: 64,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l.createAccount,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
                       ),
-                      const SizedBox(height: 24),
-                      Text(
-                        l.createAccount,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l.registerSubtitle,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        l.registerSubtitle,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
+                    ),
+                    const SizedBox(height: 24),
 
-                      const RegisterForm(),
+                    const RegisterForm(),
 
-                      const SizedBox(height: 24),
+                    const Spacer(),
 
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          final isLoading = state.maybeWhen(
-                            loading: () => true,
-                            orElse: () => false,
-                          );
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        final isLoading = state.maybeWhen(
+                          loading: () => true,
+                          orElse: () => false,
+                        );
 
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                l.alreadyHaveAccount,
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              l.alreadyHaveAccount,
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed:
+                                  isLoading
+                                      ? null
+                                      : () {
+                                        if (Navigator.of(context).canPop()) {
+                                          Navigator.of(context).pop();
+                                        } else {
+                                          Navigator.of(
+                                            context,
+                                          ).pushReplacementNamed(
+                                            AppRouter.login,
+                                          );
+                                        }
+                                      },
+                              child: Text(
+                                l.loginAction,
                                 style: TextStyle(
-                                  color: theme.colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      isLoading
+                                          ? theme.disabledColor
+                                          : theme.colorScheme.primary,
                                 ),
                               ),
-                              TextButton(
-                                onPressed:
-                                    isLoading
-                                        ? null
-                                        : () {
-                                          if (Navigator.of(context).canPop()) {
-                                            Navigator.of(context).pop();
-                                          } else {
-                                            Navigator.of(
-                                              context,
-                                            ).pushReplacementNamed(
-                                              AppRouter.login,
-                                            );
-                                          }
-                                        },
-                                child: Text(
-                                  l.loginAction,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        isLoading
-                                            ? theme.disabledColor
-                                            : theme.colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
 

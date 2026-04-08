@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -111,56 +113,61 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 40.0,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Icon(
-                    Icons.restaurant_menu_rounded,
-                    size: 80,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    S.of(context).appTitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.textPrimary,
-                      letterSpacing: -1,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Spacer(flex: 2),
+                        const Icon(
+                          Icons.restaurant_menu_rounded,
+                          size: 64,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          S.of(context).appTitle,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.textPrimary,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          S.of(context).loginSubtitle,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                        ),
+                        const SizedBox(height: 24),
+
+                        const LoginForm(),
+
+                        if (_showResendButton) ...[
+                          const SizedBox(height: 8),
+                          _buildResendAction(),
+                        ],
+
+                        const SizedBox(height: 16),
+                        _buildDivider(),
+                        const SizedBox(height: 16),
+                        _buildSocialLoginSection(context),
+                        const Spacer(),
+                        _buildRegisterLink(),
+                        const SizedBox(height: 8),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    S.of(context).loginSubtitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16, color: AppColors.textSecondary),
-                  ),
-                  const SizedBox(height: 48),
-
-                  const LoginForm(),
-
-                  if (_showResendButton) ...[
-                    const SizedBox(height: 16),
-                    _buildResendAction(),
-                  ],
-
-                  const SizedBox(height: 32),
-                  _buildDivider(),
-                  const SizedBox(height: 32),
-                  _buildSocialLoginSection(context),
-                  const SizedBox(height: 40),
-                  _buildRegisterLink(),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -203,17 +210,19 @@ class _LoginPageState extends State<LoginPage> {
                 const AuthEvent.googleLoginRequested(),
               ),
         ),
-        const SizedBox(height: 16),
-        _SocialButton(
-          label: 'Apple',
-          icon: Icons.apple,
-          color: Colors.black,
-          textColor: Colors.white,
-          onPressed:
-              () => context.read<AuthBloc>().add(
-                const AuthEvent.appleLoginRequested(),
-              ),
-        ),
+        if (Platform.isIOS) ...[
+          const SizedBox(height: 12),
+          _SocialButton(
+            label: 'Apple',
+            icon: Icons.apple,
+            color: Colors.black,
+            textColor: Colors.white,
+            onPressed:
+                () => context.read<AuthBloc>().add(
+                  const AuthEvent.appleLoginRequested(),
+                ),
+          ),
+        ],
       ],
     );
   }

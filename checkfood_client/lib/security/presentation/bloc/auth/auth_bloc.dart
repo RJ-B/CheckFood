@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/utils/error_helpers.dart';
 import '../../../domain/entities/auth_failure.dart';
 import '../../../domain/usecases/auth/check_auth_status_usecase.dart';
 import '../../../domain/usecases/auth/get_authenticated_user_usecase.dart';
@@ -130,10 +132,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthState.registerSuccess());
     } on SecurityException catch (e) {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        // Registrace mohla proběhnout i přes timeout — server zpracoval request
+        emit(const AuthState.registerSuccess());
+      } else {
+        emit(AuthState.failure(AuthFailure(message: userFriendlyError(e))));
+      }
     } catch (e) {
-      emit(
-        AuthState.failure(const AuthFailure(message: 'error_register_failed')),
-      );
+      emit(AuthState.failure(AuthFailure(message: userFriendlyError(e))));
     }
   }
 
@@ -148,6 +156,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthState.registerSuccess());
     } on SecurityException catch (e) {
       emit(AuthState.failure(_mapExceptionToFailure(e)));
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        emit(const AuthState.registerSuccess());
+      } else {
+        emit(AuthState.failure(AuthFailure(message: userFriendlyError(e))));
+      }
     } catch (e) {
       emit(
         AuthState.failure(const AuthFailure(message: 'error_register_failed')),
