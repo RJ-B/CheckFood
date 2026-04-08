@@ -48,4 +48,7 @@ abstract class ProfileRepository {
 
   /// Smaže soubor z úložiště podle relativní cesty (tiché selhání — nový upload proběhne i bez mazání).
   Future<void> deleteStorageFile(String path);
+
+  /// Trvale smaže účet přihlášeného uživatele a všechna jeho data (GDPR).
+  Future<void> deleteAccount();
 }

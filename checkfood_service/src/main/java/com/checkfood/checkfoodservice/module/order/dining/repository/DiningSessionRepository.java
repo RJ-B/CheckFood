@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,4 +30,12 @@ public interface DiningSessionRepository extends JpaRepository<DiningSession, UU
     Optional<DiningSession> findActiveByUserId(@Param("userId") Long userId);
 
     boolean existsByInviteCode(String inviteCode);
+
+    /**
+     * Najde všechny session v dané restauraci.
+     *
+     * @param restaurantId UUID restaurace
+     * @return seznam session
+     */
+    List<DiningSession> findAllByRestaurantId(UUID restaurantId);
 }

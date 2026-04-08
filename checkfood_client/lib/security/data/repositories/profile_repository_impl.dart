@@ -174,4 +174,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
         );
     }
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await _remoteDataSource.deleteAccount();
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    } catch (e) {
+      throw AuthServerException('Nepodařilo se smazat účet: $e');
+    }
+  }
 }

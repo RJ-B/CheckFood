@@ -28,4 +28,11 @@ public interface RestaurantTableRepository extends JpaRepository<RestaurantTable
      * Vyhledá stůl podle ID a příslušnosti k restauraci (bezpečnostní kontrola).
      */
     Optional<RestaurantTable> findByIdAndRestaurantId(UUID id, UUID restaurantId);
+
+    /**
+     * Smaže všechny stoly dané restaurace.
+     *
+     * @param restaurantId UUID restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
 }

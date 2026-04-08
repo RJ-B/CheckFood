@@ -42,6 +42,7 @@
   "continueWith": "Pokračovat s {label}",
   "@continueWith": { "placeholders": { "label": { "type": "String" } } },
   "resolveActivation": "VYŘEŠIT AKTIVACI ÚČTU",
+  "accountNotVerified": "Účet není ověřený. Zkontrolujte e-mail a potvrďte registraci.",
 
   "email": "E-mail",
   "password": "Heslo",
@@ -533,5 +534,15 @@
   "paymentProcessing": "Zpracovává se...",
   "paymentCancelled": "Platba zrušena",
   "paymentInitiating": "Spouštím platbu...",
-  "paymentErrorRetry": "Nepodařilo se spustit platbu. Zkuste to znovu."
+  "paymentErrorRetry": "Nepodařilo se spustit platbu. Zkuste to znovu.",
+
+  "deleteAccount": "Smazat účet",
+  "deleteAccountDialogTitle": "Smazat účet?",
+  "deleteAccountDialogContent": "Tato akce je nevratná. Budou smazána veškerá vaše osobní data a restaurace ve vlastnictví. Rezervace a objednávky budou anonymizovány pro zachování statistik. Pro potvrzení napište SMAZAT.",
+  "deleteAccountConfirmWord": "SMAZAT",
+  "deleteAccountConfirmHint": "Napište SMAZAT pro potvrzení",
+  "deleteAccountConfirmError": "Pro potvrzení napište SMAZAT",
+  "deleteAccountSuccess": "Účet byl úspěšně smazán.",
+  "deleteAccountFailed": "Nepodařilo se smazat účet. Zkuste to znovu.",
+  "confirm": "Potvrdit"
 }

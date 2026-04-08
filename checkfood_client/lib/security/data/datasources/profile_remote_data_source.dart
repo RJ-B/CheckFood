@@ -52,6 +52,9 @@ abstract class ProfileRemoteDataSource {
 
   /// Smaže soubor z úložiště podle relativní cesty.
   Future<void> deleteStorageFile(String path);
+
+  /// Trvale smaže účet přihlášeného uživatele a všechna jeho data (DELETE /api/user/account).
+  Future<void> deleteAccount();
 }
 
 /// Implementace [ProfileRemoteDataSource] komunikující s backendem přes [Dio].
@@ -175,5 +178,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       SecurityEndpoints.upload,
       queryParameters: {'path': path},
     );
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    await _dio.delete(SecurityEndpoints.deleteAccount);
   }
 }

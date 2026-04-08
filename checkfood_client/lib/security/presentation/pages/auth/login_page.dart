@@ -82,31 +82,30 @@ class _LoginPageState extends State<LoginPage> {
                 ).pushNamedAndRemoveUntil(AppRouter.main, (route) => false);
               }
             },
+            verificationRequired: (email) {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(S.of(context).accountNotVerified),
+                  backgroundColor: AppColors.warning,
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 5),
+                ),
+              );
+              setState(() {
+                _showResendButton = true;
+                _lastAttemptedEmail = email;
+              });
+            },
             failure: (error) {
-              // ✅ Využití isExpired z modelu místo parsování textu
-              final isNotVerified =
-                  error.message.toLowerCase().contains('aktivní') ||
-                  error.message.toLowerCase().contains('verified');
-              final isExpired = error.isExpired;
-
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(_localizeAuthError(context, error.message)),
-                  backgroundColor:
-                      (isNotVerified || isExpired)
-                          ? AppColors.warning
-                          : AppColors.error,
+                  backgroundColor: AppColors.error,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
-
-              if (isNotVerified || isExpired) {
-                setState(() {
-                  _showResendButton = true;
-                  _lastAttemptedEmail = error.email;
-                });
-              }
             },
             orElse: () {},
           );

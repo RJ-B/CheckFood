@@ -27,4 +27,11 @@ public interface UserFavouriteRestaurantRepository extends JpaRepository<UserFav
     void deleteByUserIdAndRestaurantId(Long userId, UUID restaurantId);
 
     List<UserFavouriteRestaurant> findAllByUserId(Long userId);
+
+    /**
+     * Smaže všechny oblíbené restaurace daného uživatele (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    void deleteAllByUserId(Long userId);
 }

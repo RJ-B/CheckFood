@@ -71,4 +71,6 @@ class SecurityEndpoints {
   static const String upload = '/v1/uploads';
 
   static const String notificationPreference = '/user/devices/notifications';
+
+  static const String deleteAccount = '/user/account';
 }

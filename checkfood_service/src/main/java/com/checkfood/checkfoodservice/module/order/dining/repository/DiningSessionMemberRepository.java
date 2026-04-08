@@ -19,4 +19,18 @@ public interface DiningSessionMemberRepository extends JpaRepository<DiningSessi
     List<DiningSessionMember> findAllBySessionId(UUID sessionId);
 
     boolean existsBySessionIdAndUserId(UUID sessionId, Long userId);
+
+    /**
+     * Smaže všechna členství uživatele ve všech session (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    void deleteAllByUserId(Long userId);
+
+    /**
+     * Smaže všechna členství v dané session.
+     *
+     * @param sessionId UUID session
+     */
+    void deleteAllBySessionId(UUID sessionId);
 }

@@ -311,6 +311,12 @@ abstract class S {
   /// **'VYŘEŠIT AKTIVACI ÚČTU'**
   String get resolveActivation;
 
+  /// No description provided for @accountNotVerified.
+  ///
+  /// In cs, this message translates to:
+  /// **'Účet není ověřený. Zkontrolujte e-mail a potvrďte registraci.'**
+  String get accountNotVerified;
+
   /// No description provided for @email.
   ///
   /// In cs, this message translates to:
@@ -2710,6 +2716,54 @@ abstract class S {
   /// In cs, this message translates to:
   /// **'Nepodařilo se spustit platbu. Zkuste to znovu.'**
   String get paymentErrorRetry;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat účet'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountDialogTitle.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat účet?'**
+  String get deleteAccountDialogTitle;
+
+  /// No description provided for @deleteAccountDialogContent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Tato akce je nevratná. Budou smazána veškerá vaše osobní data a restaurace ve vlastnictví. Rezervace a objednávky budou anonymizovány pro zachování statistik. Pro potvrzení napište SMAZAT.'**
+  String get deleteAccountDialogContent;
+
+  /// No description provided for @deleteAccountConfirmWord.
+  ///
+  /// In cs, this message translates to:
+  /// **'SMAZAT'**
+  String get deleteAccountConfirmWord;
+
+  /// No description provided for @deleteAccountConfirmHint.
+  ///
+  /// In cs, this message translates to:
+  /// **'Napište SMAZAT pro potvrzení'**
+  String get deleteAccountConfirmHint;
+
+  /// No description provided for @deleteAccountConfirmError.
+  ///
+  /// In cs, this message translates to:
+  /// **'Pro potvrzení napište SMAZAT'**
+  String get deleteAccountConfirmError;
+
+  /// No description provided for @deleteAccountSuccess.
+  ///
+  /// In cs, this message translates to:
+  /// **'Účet byl úspěšně smazán.'**
+  String get deleteAccountSuccess;
+
+  /// No description provided for @deleteAccountFailed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nepodařilo se smazat účet. Zkuste to znovu.'**
+  String get deleteAccountFailed;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

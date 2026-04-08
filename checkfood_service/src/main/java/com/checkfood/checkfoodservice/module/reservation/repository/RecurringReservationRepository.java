@@ -33,4 +33,18 @@ public interface RecurringReservationRepository extends JpaRepository<RecurringR
      * @return seznam opakovaných rezervací splňujících podmínky
      */
     List<RecurringReservation> findAllByRestaurantIdAndStatusIn(UUID restaurantId, List<RecurringReservationStatus> statuses);
+
+    /**
+     * Smaže všechny opakované rezervace daného uživatele (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    void deleteAllByUserId(Long userId);
+
+    /**
+     * Smaže všechny opakované rezervace v dané restauraci (mazání restaurace vlastníka).
+     *
+     * @param restaurantId UUID restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
 }

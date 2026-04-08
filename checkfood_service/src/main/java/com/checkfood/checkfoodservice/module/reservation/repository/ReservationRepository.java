@@ -3,6 +3,7 @@ package com.checkfood.checkfoodservice.module.reservation.repository;
 import com.checkfood.checkfoodservice.module.reservation.entity.Reservation;
 import com.checkfood.checkfoodservice.module.reservation.entity.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -140,6 +141,37 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
      */
     List<Reservation> findAllByRecurringReservationIdAndDateGreaterThanEqualAndStatusNotIn(
             UUID recurringReservationId, LocalDate fromDate, List<ReservationStatus> excludeStatuses);
+
+    /**
+     * Vrátí všechny rezervace dané restaurace (pro GDPR mazání).
+     *
+     * @param restaurantId UUID restaurace
+     * @return seznam rezervací
+     */
+    List<Reservation> findAllByRestaurantId(UUID restaurantId);
+
+    /**
+     * Smaže všechny rezervace daného uživatele (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    void deleteAllByUserId(Long userId);
+
+    /**
+     * Anonymizuje rezervace uživatele — nastaví userId na 0 (zachová data pro statistiky restaurací).
+     *
+     * @param userId ID uživatele
+     */
+    @Modifying
+    @Query("UPDATE Reservation r SET r.userId = 0 WHERE r.userId = :userId")
+    void anonymizeByUserId(@Param("userId") Long userId);
+
+    /**
+     * Smaže všechny rezervace v dané restauraci (mazání restaurace vlastníka).
+     *
+     * @param restaurantId UUID restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
 
     /**
      * Kontrola kolize při úpravě rezervace — stejná logika jako {@link #existsOverlappingReservation},

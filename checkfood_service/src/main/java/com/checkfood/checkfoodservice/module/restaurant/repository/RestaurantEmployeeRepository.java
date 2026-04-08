@@ -81,4 +81,28 @@ public interface RestaurantEmployeeRepository extends JpaRepository<RestaurantEm
      * @param restaurantId UUID restaurace
      */
     void deleteByIdAndRestaurantId(Long id, UUID restaurantId);
+
+    /**
+     * Smaže všechny záznamy zaměstnanců pro danou restauraci.
+     * Používá se při mazání restaurace (GDPR mazání účtu vlastníka).
+     *
+     * @param restaurantId UUID restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
+
+    /**
+     * Smaže všechny záznamy zaměstnanectví daného uživatele (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    void deleteAllByUserId(Long userId);
+
+    /**
+     * Najde všechny restaurace kde je uživatel OWNER.
+     *
+     * @param userId ID uživatele
+     * @param role   role (OWNER)
+     * @return seznam employee záznamů
+     */
+    List<RestaurantEmployee> findAllByUserIdAndRole(Long userId, RestaurantEmployeeRole role);
 }

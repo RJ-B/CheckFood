@@ -110,4 +110,13 @@ public interface UserService {
      * @param roleName název role k odebrání (např. "STAFF", "MANAGER")
      */
     void removeRole(Long userId, String roleName);
+
+    /**
+     * Trvale smaže uživatelský účet a veškerá data s ním spojená (GDPR right to erasure).
+     * Pokud je uživatel OWNER, smaže i všechny jeho restaurace a jejich data.
+     * Operace je transakční — buď se smaže vše, nebo nic.
+     *
+     * @param userId ID uživatele k trvalému smazání
+     */
+    void deleteAccount(Long userId);
 }

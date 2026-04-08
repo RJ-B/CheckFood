@@ -20,4 +20,19 @@ public interface MenuCategoryRepository extends JpaRepository<MenuCategory, UUID
     List<MenuCategory> findAllByRestaurantIdAndActiveTrueOrderBySortOrderAsc(UUID restaurantId);
 
     boolean existsByRestaurantId(UUID restaurantId);
+
+    /**
+     * Najde všechny kategorie menu dané restaurace.
+     *
+     * @param restaurantId UUID restaurace
+     * @return seznam kategorií
+     */
+    List<MenuCategory> findAllByRestaurantId(UUID restaurantId);
+
+    /**
+     * Smaže všechny kategorie menu dané restaurace.
+     *
+     * @param restaurantId UUID restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
 }

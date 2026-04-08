@@ -41,6 +41,7 @@
   "errorResetPassword": "Failed to set new password.",
   "continueWith": "Continue with {label}",
   "resolveActivation": "RESOLVE ACCOUNT ACTIVATION",
+  "accountNotVerified": "Account is not verified. Check your email and confirm registration.",
 
   "email": "Email",
   "password": "Password",
@@ -520,5 +521,15 @@
   "paymentProcessing": "Processing...",
   "paymentCancelled": "Payment cancelled",
   "paymentInitiating": "Initiating payment...",
-  "paymentErrorRetry": "Failed to initiate payment. Please try again."
+  "paymentErrorRetry": "Failed to initiate payment. Please try again.",
+
+  "deleteAccount": "Delete account",
+  "deleteAccountDialogTitle": "Delete account?",
+  "deleteAccountDialogContent": "This action is irreversible. All your personal data and owned restaurants will be deleted. Reservations and orders will be anonymized to preserve statistics. Type DELETE to confirm.",
+  "deleteAccountConfirmWord": "DELETE",
+  "deleteAccountConfirmHint": "Type DELETE to confirm",
+  "deleteAccountConfirmError": "Type DELETE to confirm",
+  "deleteAccountSuccess": "Account deleted successfully.",
+  "deleteAccountFailed": "Failed to delete account. Please try again.",
+  "confirm": "Confirm"
 }

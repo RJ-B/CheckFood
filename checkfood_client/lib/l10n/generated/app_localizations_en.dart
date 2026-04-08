@@ -121,6 +121,9 @@ class SEn extends S {
   String get resolveActivation => 'RESOLVE ACCOUNT ACTIVATION';
 
   @override
+  String get accountNotVerified => 'Account is not verified. Check your email and confirm registration.';
+
+  @override
   String get email => 'Email';
 
   @override
@@ -1379,4 +1382,28 @@ class SEn extends S {
 
   @override
   String get paymentErrorRetry => 'Failed to initiate payment. Please try again.';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountDialogTitle => 'Delete account?';
+
+  @override
+  String get deleteAccountDialogContent => 'This action is irreversible. All your personal data and owned restaurants will be deleted. Reservations and orders will be anonymized to preserve statistics. Type DELETE to confirm.';
+
+  @override
+  String get deleteAccountConfirmWord => 'DELETE';
+
+  @override
+  String get deleteAccountConfirmHint => 'Type DELETE to confirm';
+
+  @override
+  String get deleteAccountConfirmError => 'Type DELETE to confirm';
+
+  @override
+  String get deleteAccountSuccess => 'Account deleted successfully.';
+
+  @override
+  String get deleteAccountFailed => 'Failed to delete account. Please try again.';
 }

@@ -3,6 +3,7 @@ package com.checkfood.checkfoodservice.module.reservation.repository;
 import com.checkfood.checkfoodservice.module.reservation.entity.ChangeRequestStatus;
 import com.checkfood.checkfoodservice.module.reservation.entity.ReservationChangeRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -73,4 +74,14 @@ public interface ReservationChangeRequestRepository extends JpaRepository<Reserv
         @Param("reservationIds") Collection<UUID> reservationIds,
         @Param("status") ChangeRequestStatus status
     );
+
+    /**
+     * Smaže všechny change requesty pro zadané rezervace.
+     * Používá se při GDPR mazání účtu nebo mazání restaurace.
+     *
+     * @param reservationIds UUIDs rezervací k smazání
+     */
+    @Modifying
+    @Query("DELETE FROM ReservationChangeRequest cr WHERE cr.reservationId IN :reservationIds")
+    void deleteAllByReservationIdIn(@Param("reservationIds") Collection<UUID> reservationIds);
 }

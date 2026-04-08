@@ -1,6 +1,27 @@
 package com.checkfood.checkfoodservice.security.module.user.service;
 
+import com.checkfood.checkfoodservice.module.order.dining.repository.DiningSessionMemberRepository;
+import com.checkfood.checkfoodservice.module.order.dining.repository.DiningSessionRepository;
+import com.checkfood.checkfoodservice.module.order.repository.OrderRepository;
+import com.checkfood.checkfoodservice.module.panorama.repository.PanoramaPhotoRepository;
+import com.checkfood.checkfoodservice.module.panorama.repository.PanoramaSessionRepository;
+import com.checkfood.checkfoodservice.module.reservation.repository.RecurringReservationRepository;
+import com.checkfood.checkfoodservice.module.reservation.repository.ReservationChangeRequestRepository;
+import com.checkfood.checkfoodservice.module.reservation.repository.ReservationRepository;
+import com.checkfood.checkfoodservice.module.restaurant.entity.employee.RestaurantEmployeeRole;
+import com.checkfood.checkfoodservice.module.restaurant.favourite.repository.UserFavouriteRestaurantRepository;
+import com.checkfood.checkfoodservice.module.restaurant.menu.repository.MenuCategoryRepository;
+import com.checkfood.checkfoodservice.module.restaurant.menu.repository.MenuItemRepository;
+import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
+import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
+import com.checkfood.checkfoodservice.module.restaurant.repository.table.RestaurantTableRepository;
+import com.checkfood.checkfoodservice.module.restaurant.repository.table.TableGroupRepository;
+import com.checkfood.checkfoodservice.security.audit.repository.AuditLogRepository;
+import com.checkfood.checkfoodservice.security.module.auth.repository.PasswordResetTokenRepository;
+import com.checkfood.checkfoodservice.security.module.auth.repository.VerificationTokenRepository;
 import com.checkfood.checkfoodservice.security.module.auth.validator.PasswordValidator;
+import com.checkfood.checkfoodservice.security.module.mfa.repository.MfaBackupCodeRepository;
+import com.checkfood.checkfoodservice.security.module.mfa.repository.MfaSecretRepository;
 import com.checkfood.checkfoodservice.security.module.user.dto.request.UpdateProfileRequest;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import com.checkfood.checkfoodservice.security.module.user.exception.UserException;
@@ -13,6 +34,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Implementace servisní vrstvy pro správu uživatelských účtů, hesel a rolí.
@@ -33,6 +56,28 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final UserMapper userMapper;
     private final UserLogger userLogger;
+
+    // Repozitáře pro GDPR mazání účtu
+    private final VerificationTokenRepository verificationTokenRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final MfaSecretRepository mfaSecretRepository;
+    private final MfaBackupCodeRepository mfaBackupCodeRepository;
+    private final AuditLogRepository auditLogRepository;
+    private final UserFavouriteRestaurantRepository userFavouriteRestaurantRepository;
+    private final ReservationRepository reservationRepository;
+    private final RecurringReservationRepository recurringReservationRepository;
+    private final ReservationChangeRequestRepository reservationChangeRequestRepository;
+    private final OrderRepository orderRepository;
+    private final DiningSessionMemberRepository diningSessionMemberRepository;
+    private final DiningSessionRepository diningSessionRepository;
+    private final RestaurantEmployeeRepository restaurantEmployeeRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final MenuCategoryRepository menuCategoryRepository;
+    private final MenuItemRepository menuItemRepository;
+    private final RestaurantTableRepository restaurantTableRepository;
+    private final TableGroupRepository tableGroupRepository;
+    private final PanoramaSessionRepository panoramaSessionRepository;
+    private final PanoramaPhotoRepository panoramaPhotoRepository;
 
     @Override
     public UserEntity save(UserEntity user) {
@@ -140,5 +185,120 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             userLogger.logRoleRemoved(user.getEmail(), roleName);
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteAccount(Long userId) {
+        var user = findById(userId);
+        String email = user.getEmail();
+
+        // 1. Pokud je uživatel OWNER — smaž všechny jeho restaurace a jejich data
+        var ownerEntries = restaurantEmployeeRepository.findAllByUserIdAndRole(userId, RestaurantEmployeeRole.OWNER);
+        for (var entry : ownerEntries) {
+            deleteRestaurantData(entry.getRestaurant().getId());
+        }
+
+        // 2. Smaž data vázaná na uživatele (mimo FK cascade)
+        // Reservation change requesty pro rezervace uživatele
+        var userReservations = reservationRepository.findAllByUserIdOrderByDateDescStartTimeDesc(userId);
+        if (!userReservations.isEmpty()) {
+            var reservationIds = userReservations.stream()
+                    .map(r -> r.getId())
+                    .collect(Collectors.toList());
+            reservationChangeRequestRepository.deleteAllByReservationIdIn(reservationIds);
+        }
+
+        // Opakující se rezervace uživatele
+        recurringReservationRepository.deleteAllByUserId(userId);
+
+        // Rezervace uživatele — ANONYMIZACE (zachovat pro statistiky restaurací)
+        reservationRepository.anonymizeByUserId(userId);
+
+        // Dining session membership uživatele
+        diningSessionMemberRepository.deleteAllByUserId(userId);
+
+        // Objednávky uživatele — ANONYMIZACE (zachovat pro statistiky restaurací)
+        orderRepository.anonymizeByUserId(userId);
+
+        // Oblíbené restaurace
+        userFavouriteRestaurantRepository.deleteAllByUserId(userId);
+
+        // MFA
+        mfaBackupCodeRepository.deleteByUserId(userId);
+        mfaSecretRepository.findByUserId(userId).ifPresent(mfaSecretRepository::delete);
+
+        // Auth tokeny
+        verificationTokenRepository.deleteByUserId(userId);
+        passwordResetTokenRepository.deleteByUserId(userId);
+
+        // Audit logy (nullable user_id — smaž přímo)
+        auditLogRepository.deleteByUserId(userId);
+
+        // Employee záznamy (ne-OWNER) — ostatní restaurace
+        restaurantEmployeeRepository.deleteAllByUserId(userId);
+
+        // 3. Smaž uživatele (cascade odstraní devices + user_roles)
+        userRepository.delete(user);
+
+        userLogger.logUserDeleted(email);
+    }
+
+    /**
+     * Smaže všechna data restaurace v transakci (volá se při mazání vlastníka).
+     *
+     * @param restaurantId UUID restaurace k smazání
+     */
+    private void deleteRestaurantData(UUID restaurantId) {
+        // Panorama fotky a session
+        var panoramaSessions = panoramaSessionRepository.findAllByRestaurantIdOrderByCreatedAtDesc(restaurantId);
+        for (var session : panoramaSessions) {
+            panoramaPhotoRepository.deleteAllBySessionId(session.getId());
+        }
+        panoramaSessionRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Dining sessions (smaž nejdřív členy, pak sessions)
+        var diningSessions = diningSessionRepository.findAllByRestaurantId(restaurantId);
+        for (var session : diningSessions) {
+            diningSessionMemberRepository.deleteAllBySessionId(session.getId());
+        }
+        diningSessionRepository.deleteAllById(
+                diningSessions.stream().map(ds -> ds.getId()).collect(Collectors.toList())
+        );
+
+        // Objednávky restaurace
+        orderRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Reservation change requesty pro rezervace restaurace
+        var restaurantReservationIds = reservationRepository.findAllByRestaurantId(restaurantId)
+                .stream()
+                .map(r -> r.getId())
+                .collect(Collectors.toList());
+        if (!restaurantReservationIds.isEmpty()) {
+            reservationChangeRequestRepository.deleteAllByReservationIdIn(restaurantReservationIds);
+        }
+
+        // Opakující se rezervace restaurace
+        recurringReservationRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Rezervace restaurace
+        reservationRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Menu položky → kategorie
+        var categories = menuCategoryRepository.findAllByRestaurantId(restaurantId);
+        for (var category : categories) {
+            menuItemRepository.deleteAllByCategoryId(category.getId());
+        }
+        menuCategoryRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Stoly a skupiny stolů
+        tableGroupRepository.deleteAllByRestaurantId(restaurantId);
+        restaurantTableRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Zaměstnanci restaurace
+        restaurantEmployeeRepository.deleteAllByRestaurantId(restaurantId);
+
+        // Restaurace samotná
+        restaurantRepository.deleteById(restaurantId);
     }
 }

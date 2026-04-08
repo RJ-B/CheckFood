@@ -71,4 +71,13 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
     @Modifying
     @Query("DELETE FROM VerificationTokenEntity v WHERE v.expiryDate <= :now")
     void deleteAllExpiredSince(@Param("now") LocalDateTime now);
+
+    /**
+     * Smaže všechny verifikační tokeny daného uživatele (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    @Modifying
+    @Query("DELETE FROM VerificationTokenEntity v WHERE v.user.id = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
 }

@@ -301,4 +301,20 @@ public class UserController {
         );
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Trvale smaže účet přihlášeného uživatele a veškerá jeho data (GDPR čl. 17 — právo na výmaz).
+     * Operace je nevratná. Pokud je uživatel vlastníkem restaurace, smažou se i restaurace a jejich data.
+     *
+     * @param userDetails autentizační detaily z Security kontextu
+     * @return HTTP 204 No Content po úspěšném smazání
+     */
+    @DeleteMapping("/account")
+    public ResponseEntity<Void> deleteAccount(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        UserEntity user = userService.findByEmail(userDetails.getUsername());
+        userService.deleteAccount(user.getId());
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -45,4 +45,13 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     @Modifying
     @Query("DELETE FROM PasswordResetTokenEntity p WHERE p.expiryDate <= :now")
     void deleteAllExpiredSince(@Param("now") LocalDateTime now);
+
+    /**
+     * Smaže všechny reset tokeny daného uživatele (GDPR mazání účtu).
+     *
+     * @param userId ID uživatele
+     */
+    @Modifying
+    @Query("DELETE FROM PasswordResetTokenEntity p WHERE p.user.id = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
 }

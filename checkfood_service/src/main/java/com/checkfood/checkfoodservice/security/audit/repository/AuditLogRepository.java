@@ -58,4 +58,12 @@ public interface AuditLogRepository
      */
     long deleteByCreatedAtBefore(Instant before);
 
+    /**
+     * Smaže všechny auditní záznamy daného uživatele.
+     * Používá se při GDPR mazání účtu.
+     *
+     * @param userId ID uživatele
+     */
+    void deleteByUserId(Long userId);
+
 }

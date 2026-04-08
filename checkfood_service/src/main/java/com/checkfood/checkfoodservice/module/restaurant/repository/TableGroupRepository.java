@@ -22,4 +22,11 @@ public interface TableGroupRepository extends JpaRepository<TableGroup, UUID> {
      * Vyhledá historii sezení v restauraci.
      */
     List<TableGroup> findAllByRestaurantIdAndActiveFalseOrderByClosedAtDesc(UUID restaurantId);
+
+    /**
+     * Smaže všechna sezení dané restaurace.
+     *
+     * @param restaurantId UUID restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
 }

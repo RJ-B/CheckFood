@@ -33,4 +33,11 @@ public interface PanoramaSessionRepository extends JpaRepository<PanoramaSession
      * @return seznam session restaurace
      */
     List<PanoramaSession> findAllByRestaurantIdOrderByCreatedAtDesc(UUID restaurantId);
+
+    /**
+     * Smaže všechny panoramatické session dané restaurace.
+     *
+     * @param restaurantId identifikátor restaurace
+     */
+    void deleteAllByRestaurantId(UUID restaurantId);
 }

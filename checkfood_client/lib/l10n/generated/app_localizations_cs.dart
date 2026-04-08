@@ -121,6 +121,9 @@ class SCs extends S {
   String get resolveActivation => 'VYŘEŠIT AKTIVACI ÚČTU';
 
   @override
+  String get accountNotVerified => 'Účet není ověřený. Zkontrolujte e-mail a potvrďte registraci.';
+
+  @override
   String get email => 'E-mail';
 
   @override
@@ -1379,4 +1382,28 @@ class SCs extends S {
 
   @override
   String get paymentErrorRetry => 'Nepodařilo se spustit platbu. Zkuste to znovu.';
+
+  @override
+  String get deleteAccount => 'Smazat účet';
+
+  @override
+  String get deleteAccountDialogTitle => 'Smazat účet?';
+
+  @override
+  String get deleteAccountDialogContent => 'Tato akce je nevratná. Budou smazána veškerá vaše osobní data a restaurace ve vlastnictví. Rezervace a objednávky budou anonymizovány pro zachování statistik. Pro potvrzení napište SMAZAT.';
+
+  @override
+  String get deleteAccountConfirmWord => 'SMAZAT';
+
+  @override
+  String get deleteAccountConfirmHint => 'Napište SMAZAT pro potvrzení';
+
+  @override
+  String get deleteAccountConfirmError => 'Pro potvrzení napište SMAZAT';
+
+  @override
+  String get deleteAccountSuccess => 'Účet byl úspěšně smazán.';
+
+  @override
+  String get deleteAccountFailed => 'Nepodařilo se smazat účet. Zkuste to znovu.';
 }

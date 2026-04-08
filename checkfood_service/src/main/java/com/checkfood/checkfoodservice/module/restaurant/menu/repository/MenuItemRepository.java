@@ -20,4 +20,19 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
     List<MenuItem> findAllByCategoryIdAndAvailableTrueOrderBySortOrderAsc(UUID categoryId);
 
     List<MenuItem> findAllByIdIn(List<UUID> ids);
+
+    /**
+     * Smaže všechny položky menu v dané kategorii.
+     *
+     * @param categoryId UUID kategorie
+     */
+    void deleteAllByCategoryId(UUID categoryId);
+
+    /**
+     * Najde všechny položky menu v daných kategoriích.
+     *
+     * @param categoryIds seznam UUID kategorií
+     * @return seznam položek menu
+     */
+    List<MenuItem> findAllByCategoryIdIn(List<UUID> categoryIds);
 }

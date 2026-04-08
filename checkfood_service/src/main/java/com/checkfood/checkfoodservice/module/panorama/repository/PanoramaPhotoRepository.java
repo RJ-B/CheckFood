@@ -31,4 +31,11 @@ public interface PanoramaPhotoRepository extends JpaRepository<PanoramaPhoto, UU
      * @return počet fotografií
      */
     int countBySessionId(UUID sessionId);
+
+    /**
+     * Smaže všechny fotografie dané session.
+     *
+     * @param sessionId identifikátor session
+     */
+    void deleteAllBySessionId(UUID sessionId);
 }
