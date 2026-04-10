@@ -127,20 +127,20 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename) async {
+  Future<String> uploadAvatar(Uint8List imageBytes, String filename) async {
     try {
-      return await _remoteDataSource.uploadProfilePhoto(imageBytes, filename);
+      return await _remoteDataSource.uploadAvatar(imageBytes, filename);
     } on DioException catch (e) {
       throw _handleDioException(e);
     }
   }
 
   @override
-  Future<void> deleteStorageFile(String path) async {
+  Future<void> deleteAvatar() async {
     try {
-      await _remoteDataSource.deleteStorageFile(path);
-    } catch (_) {
-      // Tiché selhání — smazání staré fotky je best-effort, nový upload proběhne dál
+      await _remoteDataSource.deleteAvatar();
+    } on DioException catch (e) {
+      throw _handleDioException(e);
     }
   }
 

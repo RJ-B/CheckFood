@@ -96,8 +96,14 @@ class _ReservationPageState extends State<ReservationPage> {
     final scene = _bloc.state.scene;
     if (scene == null || !_webViewReady) return;
 
+    debugPrint('[ReservationPage] Scene loaded for ${widget.restaurantId}: '
+        'panoramaUrl="${scene.panoramaUrl}", tables=${scene.tables.length}');
+
     if (scene.panoramaUrl != null && scene.panoramaUrl!.isNotEmpty) {
       _loadPanoramaImage(scene.panoramaUrl!);
+    } else {
+      debugPrint('[ReservationPage] WARNING: panoramaUrl is null/empty — '
+          'restaurant has no panorama uploaded. Scene will show default texture.');
     }
 
     final tablesJson = jsonEncode(
@@ -123,19 +129,31 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Future<void> _loadPanoramaImage(String url) async {
+    String fullUrl = url;
     try {
-      String fullUrl = url;
       if (url.startsWith('/')) {
         final apiBase = dotenv.get('API_BASE_URL', fallback: 'http://10.0.2.2:8081');
         final uri = Uri.parse(apiBase);
-        final serverBase = '${uri.scheme}://${uri.host}:${uri.port}';
+        final serverBase = uri.hasPort
+            ? '${uri.scheme}://${uri.host}:${uri.port}'
+            : '${uri.scheme}://${uri.host}';
         fullUrl = '$serverBase$url';
+        debugPrint('[ReservationPage] Relative panorama URL detected, '
+            'rewritten to: $fullUrl');
       }
 
+      debugPrint('[ReservationPage] Fetching panorama: $fullUrl');
       final bundle = await NetworkAssetBundle(Uri.parse(fullUrl)).load(fullUrl);
-      final base64 = base64Encode(bundle.buffer.asUint8List());
+      final bytes = bundle.buffer.asUint8List();
+      debugPrint('[ReservationPage] Panorama loaded OK '
+          '(${bytes.lengthInBytes} bytes)');
+      final base64 = base64Encode(bytes);
       _webController.runJavaScript("window.setPanoramaBase64('$base64')");
-    } catch (_) {}
+    } catch (e, st) {
+      debugPrint('[ReservationPage] FAILED to load panorama from $fullUrl');
+      debugPrint('[ReservationPage] Error: $e');
+      debugPrint('[ReservationPage] Stack: $st');
+    }
   }
 
   String _escapeJs(String s) => s.replaceAll('\\', '\\\\').replaceAll("'", "\\'");

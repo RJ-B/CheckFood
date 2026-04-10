@@ -544,43 +544,19 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
       final filename = picked.name.isNotEmpty ? picked.name : 'cover.jpg';
       final dio = sl<Dio>();
 
-      // Smazání staré fotky (best-effort)
-      final oldUrl = widget.restaurant.coverImageUrl;
-      if (oldUrl != null && oldUrl.isNotEmpty) {
-        final oldPath = _extractStoragePath(oldUrl);
-        if (oldPath != null) {
-          try {
-            await dio.delete(
-              SecurityEndpoints.upload,
-              queryParameters: {'path': oldPath},
-            );
-          } catch (_) {
-            // Tiché selhání — pokračujeme s nahráváním i bez smazání
-          }
-        }
-      }
-
-      // Nahrání nové fotky
+      // Typed endpoint — backend automaticky maže předchozí cover.
       final formData = FormData.fromMap({
         'file': MultipartFile.fromBytes(bytes, filename: filename),
-        'directory': 'restaurants',
       });
-      final uploadResponse = await dio.post(SecurityEndpoints.upload, data: formData);
-      final rawUrl = (uploadResponse.data as Map<String, dynamic>)['url'] as String;
-      final resolvedUrl = _resolveUrl(rawUrl, dio.options.baseUrl);
+      await dio.post(
+        SecurityEndpoints.ownerRestaurantCover(widget.restaurant.id),
+        data: formData,
+      );
 
       if (!mounted) return;
 
-      // Uložení URL do restaurace přes BLoC (zachová ostatní pole)
-      context.read<MyRestaurantBloc>().add(UpdateRestaurant(
-        UpdateRestaurantRequestModel(
-          name: widget.restaurant.name,
-          description: widget.restaurant.description,
-          phone: widget.restaurant.phone,
-          email: widget.restaurant.contactEmail,
-          coverImageUrl: resolvedUrl,
-        ),
-      ));
+      // Znovunačteme restauraci ze serveru, abychom dostali aktuální coverImageUrl ze serveru.
+      context.read<MyRestaurantBloc>().add(const LoadMyRestaurant());
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -601,34 +577,6 @@ class _RestaurantInfoFormState extends State<RestaurantInfoForm> {
     } finally {
       if (mounted) setState(() => _isUploadingCover = false);
     }
-  }
-
-  /// Extrahuje relativní cestu z URL pro DELETE volání.
-  /// Lokální /uploads/restaurants/xyz.jpg → restaurants/xyz.jpg
-  /// GCS https://storage.googleapis.com/bucket/restaurants/xyz.jpg → restaurants/xyz.jpg
-  String? _extractStoragePath(String url) {
-    try {
-      final uri = Uri.parse(url);
-      final segments = uri.pathSegments;
-      if (segments.isNotEmpty && segments.first == 'uploads') {
-        return segments.skip(1).join('/');
-      }
-      if (segments.length >= 2) {
-        return segments.skip(1).join('/');
-      }
-      return null;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  /// Pokud backend vrátí relativní URL, doplní origin z baseUrl Dia (odstraní '/api' suffix).
-  String _resolveUrl(String url, String baseUrl) {
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    final origin = baseUrl.endsWith('/api')
-        ? baseUrl.substring(0, baseUrl.length - 4)
-        : baseUrl.replaceAll(RegExp(r'/api/?$'), '');
-    return '$origin$url';
   }
 
   Widget _buildSaveButton(S l) {

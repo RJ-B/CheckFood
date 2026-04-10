@@ -12,9 +12,9 @@ import com.checkfood.checkfoodservice.module.restaurant.entity.employee.Restaura
 import com.checkfood.checkfoodservice.module.restaurant.exception.RestaurantException;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
+import com.checkfood.checkfoodservice.infrastructure.storage.service.PublicStorage;
 import com.checkfood.checkfoodservice.infrastructure.storage.service.StorageService;
 import com.checkfood.checkfoodservice.security.module.user.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,6 @@ import java.util.UUID;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class PanoramaServiceImpl implements PanoramaService {
 
@@ -44,6 +43,21 @@ public class PanoramaServiceImpl implements PanoramaService {
     private final RestaurantRepository restaurantRepository;
     private final StorageService storageService;
     private final UserService userService;
+
+    public PanoramaServiceImpl(
+            PanoramaSessionRepository sessionRepository,
+            PanoramaPhotoRepository photoRepository,
+            RestaurantEmployeeRepository employeeRepository,
+            RestaurantRepository restaurantRepository,
+            @PublicStorage StorageService storageService,
+            UserService userService) {
+        this.sessionRepository = sessionRepository;
+        this.photoRepository = photoRepository;
+        this.employeeRepository = employeeRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.storageService = storageService;
+        this.userService = userService;
+    }
 
     /**
      * {@inheritDoc}
@@ -86,7 +100,7 @@ public class PanoramaServiceImpl implements PanoramaService {
         Double targetPitch = (angleIndex >= 0 && angleIndex < targetPitches.length)
                 ? targetPitches[angleIndex] : null;
 
-        String directory = "panorama/" + sessionId;
+        String directory = "restaurants/" + restaurantId + "/panorama/sessions/" + sessionId;
         String extension = ".jpg";
         String originalName = file.getOriginalFilename();
         if (originalName != null && originalName.contains(".")) {
@@ -96,7 +110,7 @@ public class PanoramaServiceImpl implements PanoramaService {
 
         try {
             String path = storageService.store(directory, filename, file.getBytes(), file.getContentType());
-            String url = storageService.getPublicUrl(path);
+            String url = storageService.getDownloadUrl(path);
 
             var photo = PanoramaPhoto.builder()
                     .sessionId(sessionId)

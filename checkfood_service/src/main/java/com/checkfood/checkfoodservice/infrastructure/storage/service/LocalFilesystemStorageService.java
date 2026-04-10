@@ -1,49 +1,49 @@
 package com.checkfood.checkfoodservice.infrastructure.storage.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 
 /**
  * Implementace souborového úložiště ukládající soubory na lokální filesystem.
- * Aktivní pro profily {@code local} a {@code test}.
+ * Pro lokální vývoj — neexistují signed URL, vždy vrací relativní cestu pod {@code /uploads/...}.
+ *
+ * <p>Instanciuje se přes {@link com.checkfood.checkfoodservice.infrastructure.storage.config.StorageConfig}
+ * — pro každý logický bucket (public/private) jeden subadresář pod {@code uploadDir}.
  *
  * @author Rostislav Jirák
- * @version 1.0.0
+ * @version 2.0.0
  */
 @Slf4j
-@Service
-@Profile({"local", "test"})
 public class LocalFilesystemStorageService implements StorageService {
 
     private final Path uploadDir;
+    private final String urlPrefix;
 
     /**
-     * Vytvoří službu a zajistí existenci konfigurovaneho adresáře pro nahrávání souborů.
-     *
-     * @param uploadDirPath cesta k adresáři pro ukládání souborů (výchozí: {@code ./uploads})
+     * @param uploadDirPath kořenový adresář pro ukládání souborů (např. {@code ./uploads/public})
+     * @param urlPrefix     prefix vracený z {@link #getDownloadUrl(String)} (např. {@code /uploads/public})
      */
-    public LocalFilesystemStorageService(
-            @Value("${app.storage.upload-dir:./uploads}") String uploadDirPath) {
+    public LocalFilesystemStorageService(String uploadDirPath, String urlPrefix) {
         this.uploadDir = Paths.get(uploadDirPath).toAbsolutePath().normalize();
+        this.urlPrefix = urlPrefix.endsWith("/") ? urlPrefix.substring(0, urlPrefix.length() - 1) : urlPrefix;
         try {
             Files.createDirectories(this.uploadDir);
         } catch (IOException e) {
             throw new RuntimeException("Could not create upload directory: " + uploadDirPath, e);
         }
+        log.info("[LocalStorage] Initialized dir={} urlPrefix={}", this.uploadDir, this.urlPrefix);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String store(String directory, String filename, byte[] data, String contentType) {
+        if (directory == null || directory.contains("..") || directory.startsWith("/")) {
+            throw new IllegalArgumentException("Neplatný adresář úložiště: " + directory);
+        }
         try {
             Path targetDir = uploadDir.resolve(directory).normalize();
             if (!targetDir.startsWith(uploadDir)) {
@@ -65,11 +65,11 @@ public class LocalFilesystemStorageService implements StorageService {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void delete(String path) {
+        if (path == null || path.isBlank()) {
+            return;
+        }
         try {
             Path targetFile = uploadDir.resolve(path).normalize();
             if (!targetFile.startsWith(uploadDir)) {
@@ -82,11 +82,16 @@ public class LocalFilesystemStorageService implements StorageService {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getPublicUrl(String path) {
-        return "/uploads/" + path;
+    public String getDownloadUrl(String path) {
+        if (path == null || path.isBlank()) {
+            return null;
+        }
+        return urlPrefix + "/" + path;
+    }
+
+    @Override
+    public String getDownloadUrl(String path, Duration ttl) {
+        return getDownloadUrl(path);
     }
 }

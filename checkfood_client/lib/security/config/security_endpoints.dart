@@ -68,7 +68,33 @@ class SecurityEndpoints {
   /// Vrátí cestu pro aktivaci panoramatu.
   static String ownerPanoramaActivate(String sessionId) => '/v1/owner/restaurant/me/panorama/sessions/$sessionId/activate';
 
-  static const String upload = '/v1/uploads';
+  // ---------- MEDIA UPLOADS (typed endpointy nahrazující generický /v1/uploads) ----------
+
+  /// Avatar přihlášeného uživatele (privátní GCS bucket, vrací signed URL).
+  static const String userAvatar = '/user/me/avatar';
+
+  /// Logo restaurace (veřejný GCS bucket).
+  static String ownerRestaurantLogo(String restaurantId) =>
+      '/v1/owner/restaurants/$restaurantId/logo';
+
+  /// Cover obrázek restaurace (veřejný GCS bucket).
+  static String ownerRestaurantCover(String restaurantId) =>
+      '/v1/owner/restaurants/$restaurantId/cover';
+
+  /// Galerie restaurace — POST přidává, GET vrací seznam (anonymně).
+  static String ownerRestaurantGallery(String restaurantId) =>
+      '/v1/owner/restaurants/$restaurantId/gallery';
+
+  static String publicRestaurantGallery(String restaurantId) =>
+      '/v1/restaurants/$restaurantId/gallery';
+
+  /// Smazání konkrétní fotky z galerie podle photoId.
+  static String ownerRestaurantGalleryPhoto(String restaurantId, String photoId) =>
+      '/v1/owner/restaurants/$restaurantId/gallery/$photoId';
+
+  /// Obrázek konkrétní položky menu (POST nahrazuje, DELETE maže).
+  static String ownerMenuItemImage(String restaurantId, String itemId) =>
+      '/v1/owner/restaurants/$restaurantId/menu-items/$itemId/image';
 
   static const String notificationPreference = '/user/devices/notifications';
 

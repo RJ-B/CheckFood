@@ -2,34 +2,41 @@ package com.checkfood.checkfoodservice.infrastructure.storage.service;
 
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.HttpMethod;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Implementace souborového úložiště využívající Google Cloud Storage.
- * Aktivní pouze pro profil {@code prod}.
+ *
+ * <p>Instanciuje se přes {@link com.checkfood.checkfoodservice.infrastructure.storage.config.StorageConfig}
+ * — nikoliv přes komponentní sken — protože jednu třídu používáme dvakrát
+ * (jednou pro veřejný bucket, jednou pro privátní s podporou signed URL).
  *
  * @author Rostislav Jirák
- * @version 1.0.0
+ * @version 2.0.0
  */
 @Slf4j
-@Primary
-@Service
-@Profile("prod")
 public class GcsStorageService implements StorageService {
 
     private final Storage storage;
     private final String bucketName;
+    private final boolean useSignedUrls;
 
-    public GcsStorageService(
-            @Value("${gcs.bucket-name}") String bucketName) {
+    /**
+     * @param bucketName    název GCS bucketu
+     * @param useSignedUrls pokud {@code true}, {@link #getDownloadUrl(String)} vrací V4 signed URL;
+     *                      pokud {@code false}, vrací přímou veřejnou URL.
+     */
+    public GcsStorageService(String bucketName, boolean useSignedUrls) {
         this.storage = StorageOptions.getDefaultInstance().getService();
         this.bucketName = bucketName;
+        this.useSignedUrls = useSignedUrls;
+        log.info("[GcsStorage] Initialized bucket={} signedUrls={}", bucketName, useSignedUrls);
     }
 
     @Override
@@ -56,6 +63,9 @@ public class GcsStorageService implements StorageService {
 
     @Override
     public void delete(String path) {
+        if (path == null || path.isBlank()) {
+            return;
+        }
         try {
             BlobId blobId = BlobId.of(bucketName, path);
             boolean deleted = storage.delete(blobId);
@@ -70,7 +80,30 @@ public class GcsStorageService implements StorageService {
     }
 
     @Override
-    public String getPublicUrl(String path) {
-        return String.format("https://storage.googleapis.com/%s/%s", bucketName, path);
+    public String getDownloadUrl(String path) {
+        return getDownloadUrl(path, DEFAULT_SIGNED_URL_TTL);
+    }
+
+    @Override
+    public String getDownloadUrl(String path, Duration ttl) {
+        if (path == null || path.isBlank()) {
+            return null;
+        }
+        if (!useSignedUrls) {
+            return String.format("https://storage.googleapis.com/%s/%s", bucketName, path);
+        }
+        try {
+            BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, path)).build();
+            return storage.signUrl(
+                    blobInfo,
+                    ttl.toMinutes(),
+                    TimeUnit.MINUTES,
+                    Storage.SignUrlOption.withV4Signature(),
+                    Storage.SignUrlOption.httpMethod(HttpMethod.GET)
+            ).toString();
+        } catch (Exception e) {
+            log.error("[GcsStorage] Failed to sign URL for {}: {}", path, e.getMessage());
+            return null;
+        }
     }
 }

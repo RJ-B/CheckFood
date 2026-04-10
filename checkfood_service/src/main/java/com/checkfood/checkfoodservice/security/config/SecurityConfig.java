@@ -86,13 +86,15 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
 
                         .requestMatchers("/api/v1/payments/callback").permitAll()
-                        .requestMatchers("/uploads/**").permitAll()
+                        // Lokální dev — statické servírování public uploadů; v prod se nepoužívá (GCS přímo).
+                        .requestMatchers("/uploads/public/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/restaurants/markers",
                                 "/api/v1/restaurants/all-markers",
                                 "/api/v1/restaurants/markers-version",
                                 "/api/v1/restaurants/nearest",
-                                "/api/v1/restaurants/{id}"
+                                "/api/v1/restaurants/{id}",
+                                "/api/v1/restaurants/{restaurantId}/gallery"
                         ).permitAll()
 
                         .anyRequest().authenticated()

@@ -31,6 +31,7 @@ public class RestaurantResponse {
     private String logoUrl;
     private String coverImageUrl;
     private String panoramaUrl;
+    private List<RestaurantPhotoResponse> gallery;
     private RestaurantStatus status;
     private boolean active;
     private BigDecimal rating;

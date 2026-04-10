@@ -46,12 +46,12 @@ abstract class ProfileRemoteDataSource {
     required String deviceIdentifier,
   });
 
-  /// Nahraje profilovou fotku přes generický upload endpoint.
-  /// Vrátí URL nahrané fotky.
-  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
+  /// Nahraje (nebo nahradí) avatar uživatele do privátního bucketu.
+  /// Backend automaticky smaže předchozí verzi a vrátí signed URL nového avataru.
+  Future<String> uploadAvatar(Uint8List imageBytes, String filename);
 
-  /// Smaže soubor z úložiště podle relativní cesty.
-  Future<void> deleteStorageFile(String path);
+  /// Smaže avatar přihlášeného uživatele.
+  Future<void> deleteAvatar();
 
   /// Trvale smaže účet přihlášeného uživatele a všechna jeho data (DELETE /api/user/account).
   Future<void> deleteAccount();
@@ -146,13 +146,12 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename) async {
+  Future<String> uploadAvatar(Uint8List imageBytes, String filename) async {
     final formData = FormData.fromMap({
       'file': MultipartFile.fromBytes(imageBytes, filename: filename),
-      'directory': 'profile',
     });
     final response = await _dio.post(
-      SecurityEndpoints.upload,
+      SecurityEndpoints.userAvatar,
       data: formData,
     );
     final data = response.data as Map<String, dynamic>;
@@ -161,10 +160,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   /// Pokud backend vrátí relativní URL (lokální profil, začíná '/'), doplní base URL hostu.
-  /// V produkci jsou URL absolutní (GCS), takže se vrátí nezměněné.
+  /// V produkci jsou URL absolutní (GCS / signed URL), takže se vrátí nezměněné.
   String _resolveUrl(String url) {
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    // Relativní URL — doplníme origin z baseUrl Dia (odstraníme '/api' suffix)
     final baseUrl = _dio.options.baseUrl;
     final origin = baseUrl.endsWith('/api')
         ? baseUrl.substring(0, baseUrl.length - 4)
@@ -173,11 +171,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<void> deleteStorageFile(String path) async {
-    await _dio.delete(
-      SecurityEndpoints.upload,
-      queryParameters: {'path': path},
-    );
+  Future<void> deleteAvatar() async {
+    await _dio.delete(SecurityEndpoints.userAvatar);
   }
 
   @override

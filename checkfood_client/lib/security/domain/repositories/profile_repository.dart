@@ -43,11 +43,12 @@ abstract class ProfileRepository {
     required String deviceIdentifier,
   });
 
-  /// Uploaduje profilovou fotku a vraci URL.
-  Future<String> uploadProfilePhoto(Uint8List imageBytes, String filename);
+  /// Nahraje (nebo nahradí) avatar uživatele do privátního bucketu.
+  /// Backend automaticky smaže předchozí verzi a vrátí signed URL nového avataru.
+  Future<String> uploadAvatar(Uint8List imageBytes, String filename);
 
-  /// Smaže soubor z úložiště podle relativní cesty (tiché selhání — nový upload proběhne i bez mazání).
-  Future<void> deleteStorageFile(String path);
+  /// Smaže avatar přihlášeného uživatele.
+  Future<void> deleteAvatar();
 
   /// Trvale smaže účet přihlášeného uživatele a všechna jeho data (GDPR).
   Future<void> deleteAccount();

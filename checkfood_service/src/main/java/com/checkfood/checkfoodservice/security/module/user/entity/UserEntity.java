@@ -52,9 +52,18 @@ public class UserEntity implements UserDetails {
 
     /**
      * URL adresa profilového obrázku získaná z OAuth providera (např. Google).
+     * Slouží jako fallback, pokud uživatel neuploadoval custom avatar.
      */
     @Column(name = "profile_image_url", length = 512)
     private String profileImageUrl;
+
+    /**
+     * Object path v privátním GCS bucketu pro custom avatar uploadovaný uživatelem.
+     * Při serializaci se z této cesty generuje V4 signed URL s defaultní platností 1h.
+     * Pokud je {@code null}, používá se {@link #profileImageUrl} jako fallback.
+     */
+    @Column(name = "avatar_object_path", length = 512)
+    private String avatarObjectPath;
 
     @Column(name = "phone", length = 20)
     private String phone;

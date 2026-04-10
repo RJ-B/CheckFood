@@ -3,12 +3,18 @@ package com.checkfood.checkfoodservice.module.restaurant.mapper;
 import com.checkfood.checkfoodservice.module.restaurant.dto.common.SpecialDayDto;
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
+import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantPhotoResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantResponse;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
+import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.RestaurantPhoto;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.SpecialDay;
+import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantPhotoRepository;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +32,10 @@ import java.util.stream.Collectors;
         uses = {AddressMapper.class, OpeningHoursMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
-public interface RestaurantMapper {
+public abstract class RestaurantMapper {
+
+    @Autowired
+    protected RestaurantPhotoRepository restaurantPhotoRepository;
 
     /**
      * Převede entitu restaurace na detailní response DTO.
@@ -34,7 +43,7 @@ public interface RestaurantMapper {
      * @param restaurant entita restaurace
      * @return response DTO
      */
-    RestaurantResponse toResponse(Restaurant restaurant);
+    public abstract RestaurantResponse toResponse(Restaurant restaurant);
 
     /**
      * Převede entitu výjimečného dne na DTO.
@@ -42,7 +51,7 @@ public interface RestaurantMapper {
      * @param specialDay entita výjimečného dne
      * @return DTO výjimečného dne
      */
-    SpecialDayDto toSpecialDayDto(SpecialDay specialDay);
+    public abstract SpecialDayDto toSpecialDayDto(SpecialDay specialDay);
 
     /**
      * Převede seznam entit výjimečných dní na seznam DTO.
@@ -50,7 +59,7 @@ public interface RestaurantMapper {
      * @param specialDays seznam entit výjimečných dní
      * @return seznam DTO
      */
-    List<SpecialDayDto> toSpecialDayDtoList(List<SpecialDay> specialDays);
+    public abstract List<SpecialDayDto> toSpecialDayDtoList(List<SpecialDay> specialDays);
 
     /**
      * Hromadný převod entit restaurací na seznam response DTO.
@@ -58,7 +67,7 @@ public interface RestaurantMapper {
      * @param restaurants seznam entit restaurací
      * @return seznam response DTO
      */
-    List<RestaurantResponse> toResponseList(List<Restaurant> restaurants);
+    public abstract List<RestaurantResponse> toResponseList(List<Restaurant> restaurants);
 
     /**
      * Převede request DTO na entitu restaurace. Systémová pole (id, status, rating) jsou ignorována.
@@ -74,7 +83,28 @@ public interface RestaurantMapper {
     @Mapping(target = "tables", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    Restaurant toEntity(RestaurantRequest request);
+    public abstract Restaurant toEntity(RestaurantRequest request);
+
+    /**
+     * Po automapování načte fotky galerie z {@link RestaurantPhotoRepository}
+     * a doplní je do response DTO. Restaurant entita nemá gallery jako přímou
+     * relaci (M:1 z opačné strany) — proto se načítají dodatečně.
+     */
+    @AfterMapping
+    protected void populateGallery(@MappingTarget RestaurantResponse target, Restaurant source) {
+        if (source == null || source.getId() == null) return;
+        var photos = restaurantPhotoRepository
+                .findAllByRestaurantIdOrderBySortOrderAscCreatedAtAsc(source.getId());
+        target.setGallery(photos.stream().map(this::toPhotoResponse).toList());
+    }
+
+    private RestaurantPhotoResponse toPhotoResponse(RestaurantPhoto photo) {
+        return RestaurantPhotoResponse.builder()
+                .id(photo.getId())
+                .url(photo.getPhotoUrl())
+                .sortOrder(photo.getSortOrder())
+                .build();
+    }
 
     /**
      * Mapuje surový řádek z databáze (Object[]) na strukturované marker DTO.
@@ -83,7 +113,7 @@ public interface RestaurantMapper {
      * @param row surový řádek výsledku nativního SQL dotazu
      * @return marker DTO, nebo {@code null} pokud je row prázdný nebo krátký
      */
-    default RestaurantMarkerResponse toMarkerResponse(Object[] row) {
+    public RestaurantMarkerResponse toMarkerResponse(Object[] row) {
         if (row == null || row.length < 4) {
             return null;
         }
@@ -104,7 +134,7 @@ public interface RestaurantMapper {
      * @param rows seznam surových řádků z databáze
      * @return seznam marker DTO, nebo {@code null} pokud je vstup null
      */
-    default List<RestaurantMarkerResponse> toMarkerResponseList(List<Object[]> rows) {
+    public List<RestaurantMarkerResponse> toMarkerResponseList(List<Object[]> rows) {
         if (rows == null) {
             return null;
         }

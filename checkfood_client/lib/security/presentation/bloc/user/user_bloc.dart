@@ -14,7 +14,6 @@ import '../../../domain/usecases/profile/get_notification_preference_usecase.dar
 import '../../../data/services/notification_service.dart';
 import '../../../data/services/device_info_service.dart';
 import '../../../domain/repositories/profile_repository.dart';
-import '../../../data/models/profile/request/update_profile_request_model.dart';
 import '../../../domain/entities/device.dart';
 
 /// BLoC pro správu profilu uživatele, zařízení a nastavení notifikací.
@@ -241,8 +240,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  /// Nahraje profilovou fotku, aktualizuje profil s novou URL a znovu jej načte.
-  /// Pokud existuje stará fotka, smaže ji z úložiště před nahráním nové.
+  /// Nahraje avatar uživatele do privátního bucketu.
+  /// Backend automaticky maže předchozí verzi a vrací signed URL nového avataru.
+  /// Po uploadu se znovu načte profil — DTO ze serveru obsahuje signed URL.
   Future<void> _onProfilePhotoUploadRequested(
     ProfilePhotoUploadRequested event,
     Emitter<UserState> emit,
@@ -251,51 +251,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (currentState == null) return;
 
     try {
-      // Smazání staré fotky (best-effort, tiché selhání v repozitáři)
-      final oldUrl = currentState.profile.profileImageUrl;
-      if (oldUrl != null && oldUrl.isNotEmpty) {
-        final oldPath = _extractStoragePath(oldUrl);
-        if (oldPath != null) {
-          await _profileRepository.deleteStorageFile(oldPath);
-        }
-      }
-
-      final photoUrl = await _profileRepository.uploadProfilePhoto(
+      await _profileRepository.uploadAvatar(
         event.imageBytes,
         event.filename,
       );
 
-      await _updateProfileUseCase(UpdateProfileRequestModel(
-        firstName: currentState.profile.firstName,
-        lastName: currentState.profile.lastName,
-        profileImageUrl: photoUrl,
-      ));
-
+      // Backend nyní vlastní avatar URL — znovu načteme profil pro získání čerstvé signed URL.
       add(const UserEvent.profileRequested());
     } catch (e) {
       emit(UserState.failure('Nahrání fotky selhalo: $e'));
       add(const UserEvent.profileRequested());
-    }
-  }
-
-  /// Extrahuje relativní cestu souboru z URL pro potřeby DELETE volání.
-  /// Lokální: http://10.0.2.2:8081/uploads/profile/xyz.jpg → profile/xyz.jpg
-  /// GCS:     https://storage.googleapis.com/bucket/profile/xyz.jpg → profile/xyz.jpg
-  String? _extractStoragePath(String url) {
-    try {
-      final uri = Uri.parse(url);
-      final segments = uri.pathSegments;
-      // Lokální: ['uploads', 'profile', 'xyz.jpg'] → skip 'uploads'
-      if (segments.isNotEmpty && segments.first == 'uploads') {
-        return segments.skip(1).join('/');
-      }
-      // GCS: ['bucket', 'profile', 'xyz.jpg'] → skip bucket name (first segment)
-      if (segments.length >= 2) {
-        return segments.skip(1).join('/');
-      }
-      return null;
-    } catch (_) {
-      return null;
     }
   }
 
