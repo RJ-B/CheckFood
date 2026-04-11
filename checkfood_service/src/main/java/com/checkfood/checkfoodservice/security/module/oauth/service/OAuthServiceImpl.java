@@ -39,6 +39,7 @@ public class OAuthServiceImpl implements OAuthService {
     private final OAuthMapper oauthMapper;
     private final OAuthLogger oauthLogger;
     private final HttpServletRequest httpServletRequest;
+    private final OAuthReplayGuard replayGuard;
 
     @Value("${security.jwt.access-token-expiration-seconds:3600}")
     private Long accessTokenExpiration;
@@ -47,6 +48,13 @@ public class OAuthServiceImpl implements OAuthService {
     @Transactional
     public AuthResponse login(OAuthLoginRequest request) {
         oauthLogger.logAuthenticationAttempt(request.getProvider());
+
+        // Replay guard — reject the same ID token being presented twice
+        // within its ~1h lifetime. Google/Apple sign the token for single
+        // user/audience but don't enforce single-use semantics themselves.
+        if (!replayGuard.acceptIfFirstTime(request.getIdToken())) {
+            throw OAuthException.invalidToken("ID token replay detected");
+        }
 
         OAuthUserInfo userInfo;
         try {
@@ -83,7 +91,9 @@ public class OAuthServiceImpl implements OAuthService {
 
         try {
             String accessToken = jwtService.generateAccessToken(user, finalDeviceIdentifier);
-            String refreshToken = jwtService.generateRefreshToken(user, finalDeviceIdentifier);
+            // Use issueFirstRefreshToken so the row is persisted in the
+            // rotation table and future /refresh calls can rotate it.
+            String refreshToken = jwtService.issueFirstRefreshToken(user, finalDeviceIdentifier);
 
             oauthLogger.logSuccessfulOAuthLogin(user.getEmail(), request.getProvider());
 

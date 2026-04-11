@@ -2,22 +2,29 @@ package com.checkfood.checkfoodservice.security.module.jwt.service;
 
 import com.checkfood.checkfoodservice.security.module.auth.dto.response.AuthResponse;
 import com.checkfood.checkfoodservice.security.module.auth.mapper.AuthMapper;
+import com.checkfood.checkfoodservice.security.module.jwt.entity.RefreshTokenEntity;
 import com.checkfood.checkfoodservice.security.module.jwt.exception.JwtException;
 import com.checkfood.checkfoodservice.security.module.jwt.logging.JwtLogger;
 import com.checkfood.checkfoodservice.security.module.jwt.properties.JwtProperties;
+import com.checkfood.checkfoodservice.security.module.jwt.repository.RefreshTokenRepository;
 import com.checkfood.checkfoodservice.security.module.user.entity.RoleEntity;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import com.checkfood.checkfoodservice.security.module.user.service.UserService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +37,7 @@ import java.util.stream.Collectors;
  * @see JwtProperties
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
@@ -50,6 +58,7 @@ public class JwtServiceImpl implements JwtService {
     private final JwtLogger jwtLogger;
     private final UserService userService;
     private final AuthMapper authMapper;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private JwtEncoder jwtEncoder;
     private JwtDecoder jwtDecoder;
@@ -104,6 +113,7 @@ public class JwtServiceImpl implements JwtService {
         var claimsBuilder = JwtClaimsSet.builder()
                 .issuer(jwtProperties.getIssuer())
                 .audience(java.util.List.of(TOKEN_AUDIENCE))
+                .id(UUID.randomUUID().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
                 .subject(user.getEmail())
@@ -128,9 +138,15 @@ public class JwtServiceImpl implements JwtService {
         Instant now = Instant.now();
         long expiry = jwtProperties.getRefreshTokenExpirationSeconds();
 
+        // jti = unique per-token identifier. Without this claim, two refresh
+        // tokens minted in the same second for the same user+device would
+        // produce byte-identical JWT payloads and therefore the same SHA-256
+        // hash → unique-index violation in refresh_tokens when a legitimate
+        // rotation races the JWT generation.
         var claimsBuilder = JwtClaimsSet.builder()
                 .issuer(jwtProperties.getIssuer())
                 .audience(java.util.List.of(TOKEN_AUDIENCE))
+                .id(UUID.randomUUID().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
                 .subject(user.getEmail())
@@ -150,6 +166,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    @Transactional
     public AuthResponse refreshTokens(String refreshToken) {
         Jwt jwt;
         try {
@@ -176,8 +193,57 @@ public class JwtServiceImpl implements JwtService {
             throw JwtException.accountDisabled();
         }
 
+        // ----------------------------------------------------------------
+        // Rotation + reuse detection (OAuth BCP, RFC 9700 §2.2.2).
+        // ----------------------------------------------------------------
+        Instant now = Instant.now();
+        String presentedHash = sha256Hex(refreshToken);
+
+        RefreshTokenEntity stored = refreshTokenRepository
+                .findByTokenHash(presentedHash)
+                .orElseThrow(() -> {
+                    // Token not in DB at all — either forged or from a
+                    // pre-rotation era (never minted via issueFirstRefreshToken).
+                    log.warn("[JWT] Refresh attempted with unknown token hash for {}", email);
+                    return JwtException.invalidToken("Unknown refresh token");
+                });
+
+        if (stored.getRevokedAt() != null) {
+            throw JwtException.invalidToken("Refresh token revoked");
+        }
+        if (stored.getExpiresAt().isBefore(now)) {
+            throw JwtException.invalidToken("Refresh token expired");
+        }
+        if (stored.getUsedAt() != null) {
+            // REUSE DETECTED. Kill the entire family so both the attacker
+            // and the legitimate user lose their sessions simultaneously —
+            // legitimate user will be prompted to log in again, which is
+            // the expected OWASP-compliant fallback.
+            int killed = refreshTokenRepository.revokeFamily(
+                    stored.getFamilyId(),
+                    "REUSE_DETECTED",
+                    now
+            );
+            log.warn("[JWT] Refresh-token REUSE detected for user {}, family {} — {} rows revoked",
+                    email, stored.getFamilyId(), killed);
+            throw JwtException.invalidToken("Refresh token reuse detected");
+        }
+
+        // Normal rotation: mark this token consumed, issue a new pair,
+        // persist the new refresh token row linked to the same family.
+        stored.setUsedAt(now);
+        refreshTokenRepository.save(stored);
+
         String newAccessToken = generateAccessToken(user, deviceIdentifier);
         String newRefreshToken = generateRefreshToken(user, deviceIdentifier);
+        persistRotatedRefreshToken(
+                user,
+                deviceIdentifier,
+                newRefreshToken,
+                stored.getFamilyId(),
+                stored.getTokenHash(),
+                now
+        );
 
         jwtLogger.logTokenRefresh(email);
 
@@ -187,6 +253,78 @@ public class JwtServiceImpl implements JwtService {
                 newRefreshToken,
                 jwtProperties.getAccessTokenExpirationSeconds()
         );
+    }
+
+    @Override
+    @Transactional
+    public String issueFirstRefreshToken(UserEntity user, String deviceIdentifier) {
+        String rawToken = generateRefreshToken(user, deviceIdentifier);
+        UUID familyId = UUID.randomUUID();
+        persistRotatedRefreshToken(
+                user,
+                deviceIdentifier,
+                rawToken,
+                familyId,
+                null, // first of the family — no parent
+                Instant.now()
+        );
+        return rawToken;
+    }
+
+    @Override
+    @Transactional
+    public int revokeRefreshTokensForDevice(Long userId, String deviceIdentifier, String reason) {
+        if (deviceIdentifier == null) return 0;
+        return refreshTokenRepository.revokeByUserAndDevice(
+                userId,
+                deviceIdentifier,
+                reason == null ? "LOGOUT" : reason,
+                Instant.now()
+        );
+    }
+
+    /**
+     * Persist one row in the rotation table for a freshly-minted refresh
+     * token. Shared by both {@code issueFirstRefreshToken} (first of its
+     * family, parent = null) and the normal rotation path inside
+     * {@code refreshTokens} (same family as presented token, parent =
+     * presented hash).
+     */
+    private void persistRotatedRefreshToken(
+            UserEntity user,
+            String deviceIdentifier,
+            String rawToken,
+            UUID familyId,
+            String parentHash,
+            Instant now
+    ) {
+        long ttlSeconds = jwtProperties.getRefreshTokenExpirationSeconds();
+        RefreshTokenEntity entity = RefreshTokenEntity.builder()
+                .user(user)
+                .deviceIdentifier(deviceIdentifier)
+                .tokenHash(sha256Hex(rawToken))
+                .familyId(familyId)
+                .parentHash(parentHash)
+                .issuedAt(now)
+                .expiresAt(now.plusSeconds(ttlSeconds))
+                .build();
+        refreshTokenRepository.save(entity);
+    }
+
+    private static String sha256Hex(String value) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = md.digest(value.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder(bytes.length * 2);
+            for (byte b : bytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            // SHA-256 is a mandatory JRE algorithm, so this cannot happen
+            // — fall back to a no-hash marker for robustness.
+            throw new IllegalStateException("SHA-256 not available", e);
+        }
     }
 
     @Override

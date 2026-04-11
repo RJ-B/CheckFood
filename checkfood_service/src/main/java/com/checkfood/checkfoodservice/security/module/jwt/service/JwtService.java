@@ -96,4 +96,31 @@ public interface JwtService {
      * @return true pokud se jedná o refresh token, jinak false
      */
     boolean isRefreshToken(String token);
+
+    /**
+     * Vygeneruje první refresh token nové rotation family pro daného uživatele
+     * a zařízení, persistuje ho v refresh_tokens tabulce a vrátí raw JWT hodnotu.
+     *
+     * <p>Volá se z login flow ({@code AuthServiceImpl.buildAuthResponse}) místo
+     * nechráněného {@code generateRefreshToken}, aby od okamžiku vydání platila
+     * reuse-detection pravidla RFC 9700 §2.2.2.</p>
+     *
+     * @param user             uživatel-vlastník nového tokenu
+     * @param deviceIdentifier zařízení, na kterém probíhá login
+     * @return raw JWT string, který klient uloží
+     */
+    String issueFirstRefreshToken(UserEntity user, String deviceIdentifier);
+
+    /**
+     * Revokuje všechny aktivní refresh tokeny daného uživatele pro dané
+     * zařízení. Volá se z logout flow — klient se tím nemůže pokusit
+     * refresh-nout i po {@code POST /api/auth/logout}.
+     *
+     * @param userId           ID uživatele
+     * @param deviceIdentifier zařízení, na kterém se logoutuje
+     * @param reason           human-readable důvod zapsaný do audit kolonky
+     *                         {@code revocation_reason} (např. {@code "LOGOUT"})
+     * @return počet revokovaných řádků
+     */
+    int revokeRefreshTokensForDevice(Long userId, String deviceIdentifier, String reason);
 }

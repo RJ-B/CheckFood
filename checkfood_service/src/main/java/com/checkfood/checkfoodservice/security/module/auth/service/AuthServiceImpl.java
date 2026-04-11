@@ -363,6 +363,13 @@ public class AuthServiceImpl implements AuthService {
         if (requestDto.getDeviceIdentifier() != null
                 && deviceService.existsByIdentifierAndUser(requestDto.getDeviceIdentifier(), user)) {
             deviceService.deactivateByIdentifierAndUser(requestDto.getDeviceIdentifier(), user);
+            // Revoke any live refresh-token rows for this user+device pair so
+            // a subsequent /refresh call cannot revive the session.
+            jwtService.revokeRefreshTokensForDevice(
+                    user.getId(),
+                    requestDto.getDeviceIdentifier(),
+                    "LOGOUT"
+            );
         }
 
         authLogger.logLogout(user.getEmail());
@@ -494,7 +501,10 @@ public class AuthServiceImpl implements AuthService {
      */
     private AuthResponse buildAuthResponse(UserEntity user, String deviceIdentifier) {
         String accessToken = jwtService.generateAccessToken(user, deviceIdentifier);
-        String refreshToken = jwtService.generateRefreshToken(user, deviceIdentifier);
+        // Use issueFirstRefreshToken (not generateRefreshToken) so the row is
+        // persisted in the rotation table — without it the first refresh
+        // attempt would fail with "Unknown refresh token".
+        String refreshToken = jwtService.issueFirstRefreshToken(user, deviceIdentifier);
 
         var response = authMapper.toAuthResponse(
                 user,

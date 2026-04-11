@@ -46,6 +46,18 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     /**
+     * Gate for the anonymous Swagger UI + OpenAPI JSON endpoints. Defaults
+     * to {@code false} — turn it on explicitly via
+     * {@code app.swagger.public-access=true} in non-prod profiles. In prod
+     * the endpoints are either hidden (requires authentication with ADMIN
+     * role) or completely excluded via a profile guard on springdoc.
+     * Either way, the prod bundle never advertises its full API surface to
+     * anonymous clients.
+     */
+    @org.springframework.beans.factory.annotation.Value("${app.swagger.public-access:false}")
+    private boolean swaggerPublicAccess;
+
+    /**
      * Sestavuje hlavní security filter chain aplikace.
      *
      * @param http HttpSecurity builder pro konfiguraci pravidel
@@ -113,11 +125,27 @@ public class SecurityConfig {
                                 "/api/oauth/**"
                         ).permitAll()
 
+                        // Swagger UI: anonymous access is dev-only. In prod
+                        // (app.swagger.public-access=false — the default),
+                        // the same matchers fall through to
+                        // hasRole('ADMIN') so the endpoints still work for
+                        // authenticated admins but don't expose the full
+                        // API surface to casual attackers.
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
-                        ).permitAll()
+                        ).access((authenticationSupplier, ctx) -> {
+                            if (swaggerPublicAccess) {
+                                return new org.springframework.security.authorization.AuthorizationDecision(true);
+                            }
+                            var principal = authenticationSupplier.get();
+                            boolean isAdmin = principal != null
+                                    && principal.isAuthenticated()
+                                    && principal.getAuthorities().stream()
+                                            .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+                            return new org.springframework.security.authorization.AuthorizationDecision(isAdmin);
+                        })
 
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
 

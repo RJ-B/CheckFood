@@ -41,10 +41,15 @@ class AuthLogoutIntegrationTest extends BaseAuthIntegrationTest {
                         .content(objectMapper.writeValueAsString(logoutRequest)))
                 .andExpect(status().isNoContent());
 
-        // Verify the device record was removed
+        // Verify the device record was soft-deleted (isActive=false).
+        // deactivateByIdentifierAndUser keeps the row in the DB and just
+        // flips the active flag — future refresh attempts are blocked by
+        // the rotation table (revoked_at) not by the device record itself.
         var user = userRepository.findByEmail(TEST_EMAIL).orElseThrow();
-        boolean deviceStillExists = deviceRepository.existsByDeviceIdentifierAndUser(TEST_DEVICE_ID, user);
-        assertThat(deviceStillExists).isFalse();
+        var deactivated = deviceRepository
+                .findByDeviceIdentifierAndUser(TEST_DEVICE_ID, user)
+                .orElseThrow();
+        assertThat(deactivated.isActive()).isFalse();
     }
 
     @Test
@@ -93,9 +98,13 @@ class AuthLogoutIntegrationTest extends BaseAuthIntegrationTest {
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isNoContent());
 
-        // Assert: only other devices removed; current device (device-B) remains
+        // Assert: all "other device" rows are deactivated (soft-delete),
+        // only the current device (device-B) stays active. The rows
+        // themselves remain in the DB so the audit log keeps its history.
         var devicesAfter = deviceRepository.findAllByUser(user);
-        assertThat(devicesAfter).hasSize(1);
-        assertThat(devicesAfter.get(0).getDeviceIdentifier()).isEqualTo("device-B");
+        long stillActive = devicesAfter.stream().filter(d -> d.isActive()).count();
+        assertThat(stillActive).isEqualTo(1);
+        var activeOne = devicesAfter.stream().filter(d -> d.isActive()).findFirst().orElseThrow();
+        assertThat(activeOne.getDeviceIdentifier()).isEqualTo("device-B");
     }
 }
