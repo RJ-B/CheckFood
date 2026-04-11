@@ -38,7 +38,7 @@ class MassAssignmentTest extends BaseAuthIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
-        UserEntity saved = userRepository.findByEmail("evil@checkfood.test").orElseThrow();
+        UserEntity saved = userRepository.findWithRolesByEmail("evil@checkfood.test").orElseThrow();
 
         assertThat(saved.getRoles())
                 .as("Mass assignment must not grant ADMIN role")
@@ -74,7 +74,7 @@ class MassAssignmentTest extends BaseAuthIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
-        UserEntity saved = userRepository.findByEmail("evil2@checkfood.test").orElseThrow();
+        UserEntity saved = userRepository.findWithRolesByEmail("evil2@checkfood.test").orElseThrow();
         assertThat(saved.getRoles())
                 .noneMatch(r -> "OWNER".equals(r.getName()) || "ADMIN".equals(r.getName()));
     }
@@ -99,7 +99,7 @@ class MassAssignmentTest extends BaseAuthIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
-        UserEntity user = userRepository.findByEmail(TEST_EMAIL).orElseThrow();
+        UserEntity user = userRepository.findWithRolesByEmail(TEST_EMAIL).orElseThrow();
         assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(user.getRoles()).noneMatch(r -> "ADMIN".equals(r.getName()));
     }
