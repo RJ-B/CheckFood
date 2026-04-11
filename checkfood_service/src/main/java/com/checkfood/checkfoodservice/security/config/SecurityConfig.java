@@ -94,7 +94,8 @@ public class SecurityConfig {
                                 "/api/v1/restaurants/markers-version",
                                 "/api/v1/restaurants/nearest",
                                 "/api/v1/restaurants/{id}",
-                                "/api/v1/restaurants/{restaurantId}/gallery"
+                                "/api/v1/restaurants/{restaurantId}/gallery",
+                                "/api/v1/restaurants/{restaurantId}/menu"
                         ).permitAll()
 
                         .anyRequest().authenticated()

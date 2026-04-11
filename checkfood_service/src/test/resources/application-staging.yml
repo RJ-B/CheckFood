@@ -1,0 +1,58 @@
+# =============================================================================
+# STAGING PROFILE — for manual smoke runs ONLY.
+#
+# Activate with:
+#   ./mvnw test -Dgroups=smoke -Dspring.profiles.active=staging
+#
+# This profile is NOT used by the default test run. It wires configuration
+# from environment variables so nothing is hardcoded. The smoke suite is
+# tagged @Tag("smoke") and excluded from the default `./mvnw test` via the
+# Surefire excludedGroups configuration in pom.xml.
+# =============================================================================
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:}
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: false
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:25}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:}
+    issuer: ${JWT_ISSUER:checkfood-staging}
+    access-token-expiration-seconds: 900
+    refresh-token-expiration-seconds: 2592000
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+    apple:
+      client-id: ${APPLE_CLIENT_ID:}
+      issuer: https://appleid.apple.com
+      team-id: ${APPLE_TEAM_ID:}
+      key-id: ${APPLE_KEY_ID:}
+      private-key: ${APPLE_PRIVATE_KEY:}
+  audit:
+    enabled: false
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://staging.checkfood.cz}
+
+app:
+  backend:
+    url: ${BACKEND_URL:https://staging-api.checkfood.cz}
+
+gcs:
+  public-bucket-name: ${GCS_PUBLIC_BUCKET:checkfood-staging-public}
+  private-bucket-name: ${GCS_PRIVATE_BUCKET:checkfood-staging-private}

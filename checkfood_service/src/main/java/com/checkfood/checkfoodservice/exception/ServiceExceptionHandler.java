@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
@@ -53,6 +54,25 @@ public abstract class ServiceExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Zpracuje ResponseStatusException — zachovává HTTP status kód definovaný v místě vyhození.
+     * Musí být registrován před generickým handlerem Exception, jinak by byl přepsán kódem 500.
+     *
+     * @param ex výjimka s explicitně nastaveným HTTP statusem
+     * @return odpověď se statusem z výjimky
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex) {
+        HttpStatus status = HttpStatus.resolve(ex.getStatusCode().value());
+        if (status == null) status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorResponse response = errorResponseBuilder.build(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                ex.getReason() != null ? ex.getReason() : ex.getMessage(),
+                status
+        );
+        return new ResponseEntity<>(response, status);
     }
 
     /**

@@ -27,6 +27,15 @@ Desktop.ini
 .env.test
 !.env.example
 
+# Root-level backup copies of env files (manual cleanup artefacts, never commit)
+/checkfood_client_.env
+/checkfood_client_.env.*
+/checkfood_service_.env
+/checkfood_service_.env.*
+
+# Firebase config at repo root (should live under checkfood_client/android/app/)
+/google-services.json
+
 # --- AI Agent Workflow (internal) ---
 ai/
 
