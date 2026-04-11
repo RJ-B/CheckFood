@@ -1,5 +1,15 @@
 // Golden tests for RestaurantDetailPage-equivalent shell.
 // Run with: flutter test --update-goldens test/golden/...
+//
+// Apr 2026 — tagged `golden` so CI's `--exclude-tags golden`
+// excludes it. Linux runners render fonts/icons differently from
+// macOS Apple Silicon and produce sub-1.5 % pixel diffs against
+// goldens generated locally; rather than maintaining two PNG sets
+// or running golden tests in Docker, we keep golden tests as a
+// developer-local visual regression tool only.
+@Tags(['golden'])
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';

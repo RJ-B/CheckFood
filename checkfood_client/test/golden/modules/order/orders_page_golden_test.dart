@@ -1,3 +1,9 @@
+// Apr 2026 — tagged `golden` so CI's `--exclude-tags golden`
+// excludes it. See restaurant_detail_golden_test.dart for the
+// full rationale (Linux vs macOS rendering drift).
+@Tags(['golden'])
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
