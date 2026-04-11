@@ -36,10 +36,10 @@ jobs:
         working-directory: checkfood_client
         run: |
           cat <<'ENVEOF' > .env
-          API_BASE_URL=https://checkfood-api.onrender.com/api
+          API_BASE_URL=https://checkfood-api-809801655996.europe-central2.run.app/api
           GOOGLE_WEB_CLIENT_ID=placeholder
           APPLE_CLIENT_ID=com.checkfood.checkfood_client
-          APPLE_REDIRECT_URL=https://checkfood-api.onrender.com/api/oauth/apple/callback
+          APPLE_REDIRECT_URL=https://checkfood-api-809801655996.europe-central2.run.app/api/oauth/apple/callback
           ENVEOF
           sed -i 's/^ *//' .env
           cp .env .env.prod

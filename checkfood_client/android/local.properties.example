@@ -1,0 +1,17 @@
+# ===============================================================
+# Android local.properties — SABLONA
+# Zkopiruj jako local.properties a uprav cesty k SDK.
+# ===============================================================
+
+# Cesta k Android SDK (uprav podle sveho PC)
+sdk.dir=C:\\Users\\TVOJE_JMENO\\AppData\\Local\\Android\\sdk
+
+# Cesta k Flutter SDK (uprav podle sveho PC)
+flutter.sdk=C:\\Users\\TVOJE_JMENO\\path\\to\\flutter
+
+flutter.buildMode=debug
+flutter.versionName=1.0.0
+flutter.versionCode=1
+
+# Google Maps nativni SDK klic (stejny jako GOOGLE_MAPS_API_KEY v .env)
+MAPS_API_KEY=your-google-maps-api-key

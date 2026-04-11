@@ -310,7 +310,6 @@ CheckFood/
 │
 ├── ai/                               # Workflow AI agentu (ridici soubory)
 ├── CLAUDE.md                         # Operacni manual pro AI agenty
-├── render.yaml                       # Render.com deployment
 ├── LICENSE                           # MIT
 └── README.md                         # Tento soubor
 ```
