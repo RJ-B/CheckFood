@@ -30,6 +30,7 @@ mixin _$RestaurantResponseModel {
   CuisineType? get cuisineType => throw _privateConstructorUsedError;
   String? get logoUrl => throw _privateConstructorUsedError;
   String? get coverImageUrl => throw _privateConstructorUsedError;
+  String? get panoramaUrl => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
   @JsonKey(name: 'active')
   bool? get isActive => throw _privateConstructorUsedError;
@@ -40,6 +41,8 @@ mixin _$RestaurantResponseModel {
   List<String> get tags => throw _privateConstructorUsedError;
   bool get isFavourite => throw _privateConstructorUsedError;
   List<Map<String, dynamic>> get specialDays =>
+      throw _privateConstructorUsedError;
+  List<RestaurantPhotoResponseModel> get gallery =>
       throw _privateConstructorUsedError;
 
   /// Serializes this RestaurantResponseModel to a JSON map.
@@ -67,6 +70,7 @@ abstract class $RestaurantResponseModelCopyWith<$Res> {
     CuisineType? cuisineType,
     String? logoUrl,
     String? coverImageUrl,
+    String? panoramaUrl,
     String? status,
     @JsonKey(name: 'active') bool? isActive,
     double? rating,
@@ -75,6 +79,7 @@ abstract class $RestaurantResponseModelCopyWith<$Res> {
     List<String> tags,
     bool isFavourite,
     List<Map<String, dynamic>> specialDays,
+    List<RestaurantPhotoResponseModel> gallery,
   });
 
   $AddressModelCopyWith<$Res>? get address;
@@ -105,6 +110,7 @@ class _$RestaurantResponseModelCopyWithImpl<
     Object? cuisineType = freezed,
     Object? logoUrl = freezed,
     Object? coverImageUrl = freezed,
+    Object? panoramaUrl = freezed,
     Object? status = freezed,
     Object? isActive = freezed,
     Object? rating = freezed,
@@ -113,6 +119,7 @@ class _$RestaurantResponseModelCopyWithImpl<
     Object? tags = null,
     Object? isFavourite = null,
     Object? specialDays = null,
+    Object? gallery = null,
   }) {
     return _then(
       _value.copyWith(
@@ -150,6 +157,11 @@ class _$RestaurantResponseModelCopyWithImpl<
                 freezed == coverImageUrl
                     ? _value.coverImageUrl
                     : coverImageUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            panoramaUrl:
+                freezed == panoramaUrl
+                    ? _value.panoramaUrl
+                    : panoramaUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
             status:
                 freezed == status
@@ -191,6 +203,11 @@ class _$RestaurantResponseModelCopyWithImpl<
                     ? _value.specialDays
                     : specialDays // ignore: cast_nullable_to_non_nullable
                         as List<Map<String, dynamic>>,
+            gallery:
+                null == gallery
+                    ? _value.gallery
+                    : gallery // ignore: cast_nullable_to_non_nullable
+                        as List<RestaurantPhotoResponseModel>,
           )
           as $Val,
     );
@@ -228,6 +245,7 @@ abstract class _$$RestaurantResponseModelImplCopyWith<$Res>
     CuisineType? cuisineType,
     String? logoUrl,
     String? coverImageUrl,
+    String? panoramaUrl,
     String? status,
     @JsonKey(name: 'active') bool? isActive,
     double? rating,
@@ -236,6 +254,7 @@ abstract class _$$RestaurantResponseModelImplCopyWith<$Res>
     List<String> tags,
     bool isFavourite,
     List<Map<String, dynamic>> specialDays,
+    List<RestaurantPhotoResponseModel> gallery,
   });
 
   @override
@@ -267,6 +286,7 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
     Object? cuisineType = freezed,
     Object? logoUrl = freezed,
     Object? coverImageUrl = freezed,
+    Object? panoramaUrl = freezed,
     Object? status = freezed,
     Object? isActive = freezed,
     Object? rating = freezed,
@@ -275,6 +295,7 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
     Object? tags = null,
     Object? isFavourite = null,
     Object? specialDays = null,
+    Object? gallery = null,
   }) {
     return _then(
       _$RestaurantResponseModelImpl(
@@ -312,6 +333,11 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
             freezed == coverImageUrl
                 ? _value.coverImageUrl
                 : coverImageUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        panoramaUrl:
+            freezed == panoramaUrl
+                ? _value.panoramaUrl
+                : panoramaUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
         status:
             freezed == status
@@ -353,6 +379,11 @@ class __$$RestaurantResponseModelImplCopyWithImpl<$Res>
                 ? _value._specialDays
                 : specialDays // ignore: cast_nullable_to_non_nullable
                     as List<Map<String, dynamic>>,
+        gallery:
+            null == gallery
+                ? _value._gallery
+                : gallery // ignore: cast_nullable_to_non_nullable
+                    as List<RestaurantPhotoResponseModel>,
       ),
     );
   }
@@ -369,6 +400,7 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     this.cuisineType,
     this.logoUrl,
     this.coverImageUrl,
+    this.panoramaUrl,
     this.status,
     @JsonKey(name: 'active') this.isActive,
     this.rating,
@@ -377,9 +409,11 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     final List<String> tags = const [],
     this.isFavourite = false,
     final List<Map<String, dynamic>> specialDays = const [],
+    final List<RestaurantPhotoResponseModel> gallery = const [],
   }) : _openingHours = openingHours,
        _tags = tags,
        _specialDays = specialDays,
+       _gallery = gallery,
        super._();
 
   factory _$RestaurantResponseModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -399,6 +433,8 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
   final String? logoUrl;
   @override
   final String? coverImageUrl;
+  @override
+  final String? panoramaUrl;
   @override
   final String? status;
   @override
@@ -438,9 +474,18 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     return EqualUnmodifiableListView(_specialDays);
   }
 
+  final List<RestaurantPhotoResponseModel> _gallery;
+  @override
+  @JsonKey()
+  List<RestaurantPhotoResponseModel> get gallery {
+    if (_gallery is EqualUnmodifiableListView) return _gallery;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_gallery);
+  }
+
   @override
   String toString() {
-    return 'RestaurantResponseModel(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite, specialDays: $specialDays)';
+    return 'RestaurantResponseModel(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, panoramaUrl: $panoramaUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite, specialDays: $specialDays, gallery: $gallery)';
   }
 
   @override
@@ -458,6 +503,8 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
             (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl) &&
             (identical(other.coverImageUrl, coverImageUrl) ||
                 other.coverImageUrl == coverImageUrl) &&
+            (identical(other.panoramaUrl, panoramaUrl) ||
+                other.panoramaUrl == panoramaUrl) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
@@ -473,7 +520,8 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
             const DeepCollectionEquality().equals(
               other._specialDays,
               _specialDays,
-            ));
+            ) &&
+            const DeepCollectionEquality().equals(other._gallery, _gallery));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -487,6 +535,7 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     cuisineType,
     logoUrl,
     coverImageUrl,
+    panoramaUrl,
     status,
     isActive,
     rating,
@@ -495,6 +544,7 @@ class _$RestaurantResponseModelImpl extends _RestaurantResponseModel {
     const DeepCollectionEquality().hash(_tags),
     isFavourite,
     const DeepCollectionEquality().hash(_specialDays),
+    const DeepCollectionEquality().hash(_gallery),
   );
 
   /// Create a copy of RestaurantResponseModel
@@ -522,6 +572,7 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
     final CuisineType? cuisineType,
     final String? logoUrl,
     final String? coverImageUrl,
+    final String? panoramaUrl,
     final String? status,
     @JsonKey(name: 'active') final bool? isActive,
     final double? rating,
@@ -530,6 +581,7 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
     final List<String> tags,
     final bool isFavourite,
     final List<Map<String, dynamic>> specialDays,
+    final List<RestaurantPhotoResponseModel> gallery,
   }) = _$RestaurantResponseModelImpl;
   const _RestaurantResponseModel._() : super._();
 
@@ -551,6 +603,8 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
   @override
   String? get coverImageUrl;
   @override
+  String? get panoramaUrl;
+  @override
   String? get status;
   @override
   @JsonKey(name: 'active')
@@ -567,6 +621,8 @@ abstract class _RestaurantResponseModel extends RestaurantResponseModel {
   bool get isFavourite;
   @override
   List<Map<String, dynamic>> get specialDays;
+  @override
+  List<RestaurantPhotoResponseModel> get gallery;
 
   /// Create a copy of RestaurantResponseModel
   /// with the given fields replaced by the non-null parameter values.

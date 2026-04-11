@@ -4,6 +4,7 @@ import '../../../domain/entities/cuisine_type.dart';
 import '../../../domain/entities/restaurant.dart';
 import '../common/address_model.dart';
 import '../common/opening_hours_model.dart';
+import 'restaurant_photo_response_model.dart';
 
 part 'restaurant_response_model.freezed.dart';
 part 'restaurant_response_model.g.dart';
@@ -21,6 +22,7 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     CuisineType? cuisineType,
     String? logoUrl,
     String? coverImageUrl,
+    String? panoramaUrl,
     String? status,
     @JsonKey(name: 'active') bool? isActive,
     double? rating,
@@ -29,6 +31,7 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     @Default([]) List<String> tags,
     @Default(false) bool isFavourite,
     @Default([]) List<Map<String, dynamic>> specialDays,
+    @Default([]) List<RestaurantPhotoResponseModel> gallery,
   }) = _RestaurantResponseModel;
 
   factory RestaurantResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +46,7 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     cuisineType: cuisineType ?? CuisineType.OTHER,
     logoUrl: logoUrl,
     coverImageUrl: coverImageUrl,
+    panoramaUrl: panoramaUrl,
     status: status ?? 'INACTIVE',
     isActive: isActive ?? false,
     rating: rating,
@@ -52,5 +56,6 @@ class RestaurantResponseModel with _$RestaurantResponseModel {
     tags: tags,
     isFavourite: isFavourite,
     specialDays: specialDays,
+    gallery: gallery.map((e) => e.toEntity()).toList(),
   );
 }

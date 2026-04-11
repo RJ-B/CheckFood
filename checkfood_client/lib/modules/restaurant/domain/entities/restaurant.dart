@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'address.dart';
 import 'cuisine_type.dart';
 import 'opening_hours.dart';
+import 'restaurant_photo.dart';
 
 part 'restaurant.freezed.dart';
 
@@ -17,6 +18,7 @@ class Restaurant with _$Restaurant {
     required CuisineType cuisineType,
     String? logoUrl,
     String? coverImageUrl,
+    String? panoramaUrl,
     required String status,
     required bool isActive,
     double? rating,
@@ -25,5 +27,6 @@ class Restaurant with _$Restaurant {
     @Default([]) List<String> tags,
     @Default(false) bool isFavourite,
     @Default([]) List<Map<String, dynamic>> specialDays,
+    @Default([]) List<RestaurantPhoto> gallery,
   }) = _Restaurant;
 }

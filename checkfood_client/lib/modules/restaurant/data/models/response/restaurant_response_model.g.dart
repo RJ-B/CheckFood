@@ -16,6 +16,7 @@ _$RestaurantResponseModelImpl _$$RestaurantResponseModelImplFromJson(
   cuisineType: $enumDecodeNullable(_$CuisineTypeEnumMap, json['cuisineType']),
   logoUrl: json['logoUrl'] as String?,
   coverImageUrl: json['coverImageUrl'] as String?,
+  panoramaUrl: json['panoramaUrl'] as String?,
   status: json['status'] as String?,
   isActive: json['active'] as bool?,
   rating: (json['rating'] as num?)?.toDouble(),
@@ -37,6 +38,15 @@ _$RestaurantResponseModelImpl _$$RestaurantResponseModelImplFromJson(
           ?.map((e) => e as Map<String, dynamic>)
           .toList() ??
       const [],
+  gallery:
+      (json['gallery'] as List<dynamic>?)
+          ?.map(
+            (e) => RestaurantPhotoResponseModel.fromJson(
+              e as Map<String, dynamic>,
+            ),
+          )
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$$RestaurantResponseModelImplToJson(
@@ -49,6 +59,7 @@ Map<String, dynamic> _$$RestaurantResponseModelImplToJson(
   'cuisineType': _$CuisineTypeEnumMap[instance.cuisineType],
   'logoUrl': instance.logoUrl,
   'coverImageUrl': instance.coverImageUrl,
+  'panoramaUrl': instance.panoramaUrl,
   'status': instance.status,
   'active': instance.isActive,
   'rating': instance.rating,
@@ -57,6 +68,7 @@ Map<String, dynamic> _$$RestaurantResponseModelImplToJson(
   'tags': instance.tags,
   'isFavourite': instance.isFavourite,
   'specialDays': instance.specialDays,
+  'gallery': instance.gallery,
 };
 
 const _$CuisineTypeEnumMap = {

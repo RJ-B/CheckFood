@@ -24,6 +24,7 @@ mixin _$Restaurant {
   CuisineType get cuisineType => throw _privateConstructorUsedError;
   String? get logoUrl => throw _privateConstructorUsedError;
   String? get coverImageUrl => throw _privateConstructorUsedError;
+  String? get panoramaUrl => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
@@ -33,6 +34,7 @@ mixin _$Restaurant {
   bool get isFavourite => throw _privateConstructorUsedError;
   List<Map<String, dynamic>> get specialDays =>
       throw _privateConstructorUsedError;
+  List<RestaurantPhoto> get gallery => throw _privateConstructorUsedError;
 
   /// Create a copy of Restaurant
   /// with the given fields replaced by the non-null parameter values.
@@ -56,6 +58,7 @@ abstract class $RestaurantCopyWith<$Res> {
     CuisineType cuisineType,
     String? logoUrl,
     String? coverImageUrl,
+    String? panoramaUrl,
     String status,
     bool isActive,
     double? rating,
@@ -64,6 +67,7 @@ abstract class $RestaurantCopyWith<$Res> {
     List<String> tags,
     bool isFavourite,
     List<Map<String, dynamic>> specialDays,
+    List<RestaurantPhoto> gallery,
   });
 
   $AddressCopyWith<$Res> get address;
@@ -91,6 +95,7 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
     Object? cuisineType = null,
     Object? logoUrl = freezed,
     Object? coverImageUrl = freezed,
+    Object? panoramaUrl = freezed,
     Object? status = null,
     Object? isActive = null,
     Object? rating = freezed,
@@ -99,6 +104,7 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
     Object? tags = null,
     Object? isFavourite = null,
     Object? specialDays = null,
+    Object? gallery = null,
   }) {
     return _then(
       _value.copyWith(
@@ -136,6 +142,11 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
                 freezed == coverImageUrl
                     ? _value.coverImageUrl
                     : coverImageUrl // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            panoramaUrl:
+                freezed == panoramaUrl
+                    ? _value.panoramaUrl
+                    : panoramaUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
             status:
                 null == status
@@ -177,6 +188,11 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
                     ? _value.specialDays
                     : specialDays // ignore: cast_nullable_to_non_nullable
                         as List<Map<String, dynamic>>,
+            gallery:
+                null == gallery
+                    ? _value.gallery
+                    : gallery // ignore: cast_nullable_to_non_nullable
+                        as List<RestaurantPhoto>,
           )
           as $Val,
     );
@@ -210,6 +226,7 @@ abstract class _$$RestaurantImplCopyWith<$Res>
     CuisineType cuisineType,
     String? logoUrl,
     String? coverImageUrl,
+    String? panoramaUrl,
     String status,
     bool isActive,
     double? rating,
@@ -218,6 +235,7 @@ abstract class _$$RestaurantImplCopyWith<$Res>
     List<String> tags,
     bool isFavourite,
     List<Map<String, dynamic>> specialDays,
+    List<RestaurantPhoto> gallery,
   });
 
   @override
@@ -245,6 +263,7 @@ class __$$RestaurantImplCopyWithImpl<$Res>
     Object? cuisineType = null,
     Object? logoUrl = freezed,
     Object? coverImageUrl = freezed,
+    Object? panoramaUrl = freezed,
     Object? status = null,
     Object? isActive = null,
     Object? rating = freezed,
@@ -253,6 +272,7 @@ class __$$RestaurantImplCopyWithImpl<$Res>
     Object? tags = null,
     Object? isFavourite = null,
     Object? specialDays = null,
+    Object? gallery = null,
   }) {
     return _then(
       _$RestaurantImpl(
@@ -290,6 +310,11 @@ class __$$RestaurantImplCopyWithImpl<$Res>
             freezed == coverImageUrl
                 ? _value.coverImageUrl
                 : coverImageUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        panoramaUrl:
+            freezed == panoramaUrl
+                ? _value.panoramaUrl
+                : panoramaUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
         status:
             null == status
@@ -331,6 +356,11 @@ class __$$RestaurantImplCopyWithImpl<$Res>
                 ? _value._specialDays
                 : specialDays // ignore: cast_nullable_to_non_nullable
                     as List<Map<String, dynamic>>,
+        gallery:
+            null == gallery
+                ? _value._gallery
+                : gallery // ignore: cast_nullable_to_non_nullable
+                    as List<RestaurantPhoto>,
       ),
     );
   }
@@ -347,6 +377,7 @@ class _$RestaurantImpl extends _Restaurant {
     required this.cuisineType,
     this.logoUrl,
     this.coverImageUrl,
+    this.panoramaUrl,
     required this.status,
     required this.isActive,
     this.rating,
@@ -355,9 +386,11 @@ class _$RestaurantImpl extends _Restaurant {
     final List<String> tags = const [],
     this.isFavourite = false,
     final List<Map<String, dynamic>> specialDays = const [],
+    final List<RestaurantPhoto> gallery = const [],
   }) : _openingHours = openingHours,
        _tags = tags,
        _specialDays = specialDays,
+       _gallery = gallery,
        super._();
 
   @override
@@ -374,6 +407,8 @@ class _$RestaurantImpl extends _Restaurant {
   final String? logoUrl;
   @override
   final String? coverImageUrl;
+  @override
+  final String? panoramaUrl;
   @override
   final String status;
   @override
@@ -411,9 +446,18 @@ class _$RestaurantImpl extends _Restaurant {
     return EqualUnmodifiableListView(_specialDays);
   }
 
+  final List<RestaurantPhoto> _gallery;
+  @override
+  @JsonKey()
+  List<RestaurantPhoto> get gallery {
+    if (_gallery is EqualUnmodifiableListView) return _gallery;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_gallery);
+  }
+
   @override
   String toString() {
-    return 'Restaurant(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite, specialDays: $specialDays)';
+    return 'Restaurant(id: $id, ownerId: $ownerId, name: $name, description: $description, cuisineType: $cuisineType, logoUrl: $logoUrl, coverImageUrl: $coverImageUrl, panoramaUrl: $panoramaUrl, status: $status, isActive: $isActive, rating: $rating, address: $address, openingHours: $openingHours, tags: $tags, isFavourite: $isFavourite, specialDays: $specialDays, gallery: $gallery)';
   }
 
   @override
@@ -431,6 +475,8 @@ class _$RestaurantImpl extends _Restaurant {
             (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl) &&
             (identical(other.coverImageUrl, coverImageUrl) ||
                 other.coverImageUrl == coverImageUrl) &&
+            (identical(other.panoramaUrl, panoramaUrl) ||
+                other.panoramaUrl == panoramaUrl) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
@@ -446,7 +492,8 @@ class _$RestaurantImpl extends _Restaurant {
             const DeepCollectionEquality().equals(
               other._specialDays,
               _specialDays,
-            ));
+            ) &&
+            const DeepCollectionEquality().equals(other._gallery, _gallery));
   }
 
   @override
@@ -459,6 +506,7 @@ class _$RestaurantImpl extends _Restaurant {
     cuisineType,
     logoUrl,
     coverImageUrl,
+    panoramaUrl,
     status,
     isActive,
     rating,
@@ -467,6 +515,7 @@ class _$RestaurantImpl extends _Restaurant {
     const DeepCollectionEquality().hash(_tags),
     isFavourite,
     const DeepCollectionEquality().hash(_specialDays),
+    const DeepCollectionEquality().hash(_gallery),
   );
 
   /// Create a copy of Restaurant
@@ -487,6 +536,7 @@ abstract class _Restaurant extends Restaurant {
     required final CuisineType cuisineType,
     final String? logoUrl,
     final String? coverImageUrl,
+    final String? panoramaUrl,
     required final String status,
     required final bool isActive,
     final double? rating,
@@ -495,6 +545,7 @@ abstract class _Restaurant extends Restaurant {
     final List<String> tags,
     final bool isFavourite,
     final List<Map<String, dynamic>> specialDays,
+    final List<RestaurantPhoto> gallery,
   }) = _$RestaurantImpl;
   const _Restaurant._() : super._();
 
@@ -513,6 +564,8 @@ abstract class _Restaurant extends Restaurant {
   @override
   String? get coverImageUrl;
   @override
+  String? get panoramaUrl;
+  @override
   String get status;
   @override
   bool get isActive;
@@ -528,6 +581,8 @@ abstract class _Restaurant extends Restaurant {
   bool get isFavourite;
   @override
   List<Map<String, dynamic>> get specialDays;
+  @override
+  List<RestaurantPhoto> get gallery;
 
   /// Create a copy of Restaurant
   /// with the given fields replaced by the non-null parameter values.
