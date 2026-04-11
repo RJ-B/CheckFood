@@ -30,6 +30,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findWithRolesByEmail(String email);
 
     /**
+     * Najde uživatele podle ID a eager načte jeho role.
+     * Používá se v admin endpointech, které mapují entitu na DTO obsahující role —
+     * bez fetch join by mapping volal roles getter mimo transakci a padal by na
+     * {@code LazyInitializationException} → HTTP 500.
+     */
+    @EntityGraph(attributePaths = {"roles"})
+    Optional<UserEntity> findWithRolesById(Long id);
+
+    /**
      * Najde uživatele a eager načte role i registrovaná zařízení.
      */
     @EntityGraph(attributePaths = {"roles", "devices"})

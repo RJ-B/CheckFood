@@ -66,6 +66,27 @@ public class EmailTemplates {
     }
 
     /**
+     * HTML template pro notifikaci "s tvým e-mailem se někdo pokusil registrovat".
+     * Používá se v OWASP-compliant register flow (always-202).
+     *
+     * @param forgotPasswordLink kompletní URL na forgot-password flow
+     * @return formátovaný HTML string
+     */
+    public static String createAccountExistsNotificationEmail(String forgotPasswordLink) {
+        return String.format("""
+            <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <h2 style="color: #E85D04;">Pokus o registraci s vaším e-mailem</h2>
+                <p>Dobrý den,</p>
+                <p>někdo se právě pokusil zaregistrovat účet na CheckFood s vaší e-mailovou adresou.</p>
+                <p><strong>Pokud to nejste vy</strong>, tuto zprávu můžete bez obav ignorovat — váš účet zůstává v bezpečí a nebyl vytvořen žádný nový.</p>
+                <p><strong>Pokud to jste vy a zapomněli jste, že již máte účet</strong>, přihlaste se svým heslem, nebo si ho obnovte:</p>
+                <a href="%s" style="background-color: #E85D04; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Obnovit heslo</a>
+                <p style="margin-top: 20px; font-size: 12px; color: #888;">Tato zpráva byla odeslána automaticky. Neodpovídejte na ni.</p>
+            </div>
+            """, forgotPasswordLink);
+    }
+
+    /**
      * Private constructor - utility class nesmí být instantiated.
      */
     private EmailTemplates() {

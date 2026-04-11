@@ -131,7 +131,10 @@ public class UserController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserAdminResponse> getUserById(@PathVariable Long id) {
-        UserEntity user = userService.findById(id);
+        // findWithRolesById eager-loads roles so userMapper.toAdmin() can
+        // serialise them outside the service-layer transaction without
+        // triggering a LazyInitializationException (→ HTTP 500).
+        UserEntity user = userService.findWithRolesById(id);
         return ResponseEntity.ok(userMapper.toAdmin(user));
     }
 

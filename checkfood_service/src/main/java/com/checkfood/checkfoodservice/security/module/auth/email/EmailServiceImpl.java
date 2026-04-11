@@ -70,6 +70,35 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
+     * Asynchronně odešle notifikaci, že někdo zkusil registrovat nový účet
+     * s již existující e-mailovou adresou. Používá se v OWASP-compliant
+     * register flow (always-202) jako out-of-band signál pro legitimního
+     * vlastníka účtu.
+     *
+     * @param to email adresa existujícího účtu
+     */
+    @Async
+    @Override
+    public void sendAccountExistsNotification(String to) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            String link = backendUrl + "/api/auth/forgot-password";
+            String htmlMsg = EmailTemplates.createAccountExistsNotificationEmail(link);
+
+            helper.setText(htmlMsg, true);
+            helper.setTo(to);
+            helper.setSubject("CheckFood - Pokus o registraci s vaším e-mailem");
+            helper.setFrom(senderEmail);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error("[Email] Chyba při odesílání notifikace o pokusu o duplicitní registraci na {}: {}", to, e.getMessage(), e);
+        }
+    }
+
+    /**
      * Asynchronně odešle HTML email s odkazem pro obnovu hesla.
      *
      * Konstruuje reset URL s backend endpointem a token parametrem.

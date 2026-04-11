@@ -17,6 +17,9 @@ import com.checkfood.checkfoodservice.security.module.auth.exception.AuthExcepti
 import com.checkfood.checkfoodservice.security.module.auth.logging.AuthLogger;
 import com.checkfood.checkfoodservice.security.module.auth.mapper.AuthMapper;
 import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider;
+import com.checkfood.checkfoodservice.security.audit.event.AuditAction;
+import com.checkfood.checkfoodservice.security.audit.event.AuditStatus;
+import com.checkfood.checkfoodservice.security.audit.service.AuditService;
 import com.checkfood.checkfoodservice.security.module.auth.repository.PasswordResetTokenRepository;
 import com.checkfood.checkfoodservice.security.module.auth.repository.VerificationTokenRepository;
 import com.checkfood.checkfoodservice.security.module.auth.validator.PasswordValidator;
@@ -68,13 +71,20 @@ public class AuthServiceImpl implements AuthService {
     private final RestaurantEmployeeRepository restaurantEmployeeRepository;
     private final RestaurantRepository restaurantRepository;
     private final com.checkfood.checkfoodservice.module.restaurant.repository.table.RestaurantTableRepository restaurantTableRepository;
+    private final AuditService auditService;
 
     @Override
     public void register(RegisterRequest requestDto) {
         passwordValidator.validate(requestDto.getPassword());
 
+        // OWASP ASVS V3.2.3 / D1 — always return 202 regardless of whether the
+        // email is already registered. If it exists, notify the legitimate
+        // owner out-of-band with a "someone tried to register with your email"
+        // message. This makes HTTP-status based enumeration impossible.
         if (userService.existsByEmail(requestDto.getEmail())) {
-            throw AuthException.emailExists();
+            emailService.sendAccountExistsNotification(requestDto.getEmail());
+            authLogger.logRegistration(requestDto.getEmail());
+            return;
         }
 
         if (requestDto.isOwnerRegistration()) {
@@ -88,8 +98,11 @@ public class AuthServiceImpl implements AuthService {
     public void registerOwner(RegisterRequest requestDto) {
         passwordValidator.validate(requestDto.getPassword());
 
+        // Same OWASP-compliant enumeration guard as register().
         if (userService.existsByEmail(requestDto.getEmail())) {
-            throw AuthException.emailExists();
+            emailService.sendAccountExistsNotification(requestDto.getEmail());
+            authLogger.logRegistration(requestDto.getEmail());
+            return;
         }
 
         registerAsOwner(requestDto);
@@ -266,6 +279,7 @@ public class AuthServiceImpl implements AuthService {
         String deviceIdentifier = device != null ? device.getDeviceIdentifier() : null;
 
         authLogger.logSuccessfulLogin(user.getEmail());
+        auditService.log(user.getId(), AuditAction.LOGIN, AuditStatus.SUCCESS, null, null);
         return buildAuthResponse(user, deviceIdentifier);
     }
 

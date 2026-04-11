@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
@@ -57,6 +58,41 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // ---------------------------------------------------------
+                // Security headers (OWASP ASVS V14.4 / Secure Headers Project)
+                //
+                // Required because CheckFood ships a REST API consumed by a
+                // mobile client, not a browser app — but Swagger UI and
+                // Spring's error pages ARE served to browsers, so hardening
+                // matters whenever a browser hits any endpoint.
+                // ---------------------------------------------------------
+                .headers(headers -> headers
+                        // HSTS: enforce HTTPS for 1 year, cover subdomains.
+                        // Takes effect automatically only over HTTPS — Spring
+                        // skips the header on http:// (safe for local dev).
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31_536_000))
+                        // Content Security Policy: lock down what Swagger UI
+                        // may load. `self` + inline styles for swagger-ui's
+                        // bundle + data: for icons. No eval, no unknown src.
+                        .contentSecurityPolicy(csp -> csp.policyDirectives(
+                                "default-src 'self'; "
+                                + "script-src 'self' 'unsafe-inline'; "
+                                + "style-src 'self' 'unsafe-inline'; "
+                                + "img-src 'self' data: https:; "
+                                + "font-src 'self' data:; "
+                                + "connect-src 'self'; "
+                                + "frame-ancestors 'none'; "
+                                + "base-uri 'self'; "
+                                + "form-action 'self'"))
+                        // Referrer-Policy: don't leak full URL cross-origin.
+                        .referrerPolicy(rp -> rp.policy(
+                                ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                        // X-Frame-Options / X-Content-Type-Options are on
+                        // by default in Spring Security; leave as-is.
+                )
 
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

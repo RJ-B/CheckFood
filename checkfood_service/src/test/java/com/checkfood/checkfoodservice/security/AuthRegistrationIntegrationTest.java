@@ -58,12 +58,15 @@ class AuthRegistrationIntegrationTest extends BaseAuthIntegrationTest {
     // =========================================================================
 
     @Test
-    @DisplayName("register - duplicate email - returns 409 Conflict")
-    void register_DuplicateEmail_Returns409() throws Exception {
+    @DisplayName("register - duplicate email - still returns 202 (anti-enumeration, OWASP ASVS V3.2.3)")
+    void register_DuplicateEmail_Returns202() throws Exception {
         // First registration succeeds
         registerUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
 
-        // Second registration with the same email should fail
+        // Second registration with the same email must return the SAME
+        // HTTP 202 as a fresh registration — otherwise an attacker could
+        // probe the user database by status code. The legitimate owner is
+        // notified out-of-band via sendAccountExistsNotification().
         RegisterRequest duplicate = RegisterRequest.builder()
                 .firstName("Jiny")
                 .lastName("Uzivatel")
@@ -74,7 +77,10 @@ class AuthRegistrationIntegrationTest extends BaseAuthIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(duplicate)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isAccepted());
+
+        // Out-of-band notification must be sent to the legitimate owner
+        verify(emailService).sendAccountExistsNotification(TEST_EMAIL);
     }
 
     // =========================================================================

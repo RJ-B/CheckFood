@@ -36,4 +36,18 @@ public interface EmailService {
      * @throws AuthException při email delivery failures
      */
     void sendPasswordResetEmail(String to, String token);
+
+    /**
+     * Asynchronně odešle upozornění na opakovaný pokus o registraci s již
+     * existujícím emailem. Používá se v OWASP-compliant registration flow
+     * kde server vrací 202 bez ohledu na to, zda email existuje nebo ne,
+     * aby nebylo možné enumerovat uživatele přes HTTP status code.
+     *
+     * <p>Obsah emailu sděluje uživateli, že někdo použil jeho e-mail
+     * v registraci, a pokud to nebyl on, může tuto zprávu ignorovat. Pokud
+     * zapomněl, že má účet, dostane odkaz na password reset.
+     *
+     * @param to email adresa existujícího účtu
+     */
+    void sendAccountExistsNotification(String to);
 }

@@ -33,6 +33,17 @@ public interface UserService {
     UserEntity findById(Long id);
 
     /**
+     * Vyhledá uživatele podle ID a eager načte jeho role. Použít tam, kde je
+     * výsledek mapován na DTO obsahující role — jinak hrozí
+     * {@code LazyInitializationException} mimo otevřenou transakci.
+     *
+     * @param id ID uživatele
+     * @return entita včetně načtených rolí
+     * @throws UserException pokud uživatel s daným ID neexistuje
+     */
+    UserEntity findWithRolesById(Long id);
+
+    /**
      * Vyhledá uživatele podle e-mailové adresy s využitím líného načítání.
      *
      * @param email emailová adresa uživatele

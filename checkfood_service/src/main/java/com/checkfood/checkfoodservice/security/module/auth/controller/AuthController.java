@@ -113,19 +113,28 @@ public class AuthController {
      * @param response HTTP response pro redirect functionality
      * @throws IOException při redirect failures
      */
+    @RateLimited(key = "auth:verify", limit = 20, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
     @GetMapping("/verify")
     public void verifyAccount(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
         try {
             authService.verifyAccount(token);
             response.sendRedirect("checkfood://app/login?status=success");
         } catch (Exception e) {
+            // Map to opaque error codes — never leak raw exception messages
+            // to the deep-link URL (they might expose stack traces or token
+            // details in edge cases). The mobile app renders a localized
+            // string keyed on `type`.
             String errorType = "VERIFICATION_ERROR";
-            String encodedMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            if (e instanceof com.checkfood.checkfoodservice.security.module.auth.exception.AuthException authEx) {
+                Object code = authEx.getErrorCode();
+                if (code != null) {
+                    errorType = code.toString();
+                }
+            }
 
             response.sendRedirect(String.format(
-                    "checkfood://app/login?status=error&type=%s&message=%s",
-                    errorType,
-                    encodedMessage
+                    "checkfood://app/login?status=error&type=%s",
+                    URLEncoder.encode(errorType, StandardCharsets.UTF_8)
             ));
         }
     }

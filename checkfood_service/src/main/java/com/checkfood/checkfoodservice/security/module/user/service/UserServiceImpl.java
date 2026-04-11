@@ -103,6 +103,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public UserEntity findWithRolesById(Long id) {
+        return userRepository.findWithRolesById(id)
+                .orElseThrow(() -> UserException.userNotFoundById(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public UserEntity findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> UserException.userNotFound(email));
