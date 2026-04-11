@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,9 +22,28 @@ class SplashScreen extends StatefulWidget {
 /// záři, pulzování, odkrytí textu a fade-in loaderu.
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  static const double _nativeLogoSize = 216;
-  static const double _finalLogoSize = 120;
-  static const double _logoRiseDistance = 80;
+  // Počáteční velikost loga na splash screenu se řídí per-platforma, aby
+  // navazovala seamless na nativní launch screen:
+  //
+  // iOS: 50 % kratší strany obrazovky (proporcionální). Stejný poměr 0.5 je
+  // nastavený v ios/Runner/Base.lproj/LaunchScreen.storyboard přes autolayout
+  // multiplier na width/height (vůči superview). Při změně tady musí jít
+  // synchronně i tam, jinak přechod z nativního launch screenu přestane být
+  // bezešvý.
+  //
+  // Android: absolutní 135 dp. Nativní Android 12+ splash API maskuje ikonu
+  // do kruhu o průměru 192 dp (na 288 dp canvasu), takže logo se nedá škálovat
+  // proporcionálně bez clippingu na velkých zařízeních. 135 dp je největší
+  // čtverec, co se celý vejde dovnitř safe zone kruhu
+  // (135 × √2/2 ≈ 95.5 < 96 dp radius). flutter_native_splash pre-padduje
+  // android12splash.png z assets/icons/splash_padded.png (content 540 px
+  // v 1152 canvasu = 135 dp v 288 dp canvasu) aby to sedlo na to samé.
+  static const double _logoToShortestSideRatio = 0.5;
+  static const double _androidNativeLogoSize = 135.0;
+  // Poměr, na který se logo po transition animaci scale-downuje (cca 0.556).
+  static const double _finalLogoScaleRatio = 120 / 216;
+  // Rise distance v násobcích počáteční velikosti loga (cca 0.37).
+  static const double _riseToInitialLogoRatio = 80 / 216;
 
   late final AnimationController _transitionCtrl;
   late final Animation<double> _logoScale;
@@ -57,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _logoScale = Tween<double>(
       begin: 1.0,
-      end: _finalLogoSize / _nativeLogoSize,
+      end: _finalLogoScaleRatio,
     ).animate(CurvedAnimation(
       parent: _transitionCtrl,
       curve: Curves.easeInOutCubic,
@@ -150,6 +170,22 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Počáteční velikost loga per platform — musí matchovat to, co nativně
+    // ukazuje launch screen, jinak bude přechod skákat.
+    //   iOS: proporcionální 50 % kratší strany obrazovky (storyboard má
+    //        width/height multiplier 0.5 vůči superview).
+    //   Android: fixní 135 dp, protože Android 12+ splash API maskuje ikonu
+    //            do kruhu 192 dp diameter na 288 dp canvasu; proporcionální
+    //            škálování by na tabletech trčelo ven a systém by to oklipoval.
+    final double nativeLogoSize;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final screenShortestSide = MediaQuery.of(context).size.shortestSide;
+      nativeLogoSize = screenShortestSide * _logoToShortestSideRatio;
+    } else {
+      nativeLogoSize = _androidNativeLogoSize;
+    }
+    final logoRiseDistance = nativeLogoSize * _riseToInitialLogoRatio;
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         await Future.delayed(const Duration(milliseconds: 3200));
@@ -178,7 +214,7 @@ class _SplashScreenState extends State<SplashScreen>
           ]),
           builder: (context, _) {
             final bgT = _bgBlend.value;
-            final rise = _logoRise.value * _logoRiseDistance;
+            final rise = _logoRise.value * logoRiseDistance;
             final scale = _logoScale.value * _pulse.value;
 
             return Container(
@@ -201,16 +237,16 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Transform.translate(
                         offset: Offset(0, -rise),
                         child: SizedBox(
-                          width: _nativeLogoSize,
-                          height: _nativeLogoSize,
+                          width: nativeLogoSize,
+                          height: nativeLogoSize,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               Opacity(
                                 opacity: _glowOpacity.value,
                                 child: Container(
-                                  width: _nativeLogoSize,
-                                  height: _nativeLogoSize,
+                                  width: nativeLogoSize,
+                                  height: nativeLogoSize,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     boxShadow: [
@@ -228,8 +264,8 @@ class _SplashScreenState extends State<SplashScreen>
                                 scale: scale,
                                 child: Image.asset(
                                   'assets/icons/splash_logo.png',
-                                  width: _nativeLogoSize,
-                                  height: _nativeLogoSize,
+                                  width: nativeLogoSize,
+                                  height: nativeLogoSize,
                                   filterQuality: FilterQuality.high,
                                 ),
                               ),
@@ -246,7 +282,7 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Transform.translate(
                         offset: Offset(
                           0,
-                          -_logoRiseDistance + _nativeLogoSize / 2 + 24,
+                          -logoRiseDistance + nativeLogoSize / 2 + 24,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,

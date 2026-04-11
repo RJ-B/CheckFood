@@ -138,9 +138,15 @@ flutter_launcher_icons:
 flutter_native_splash:
   color: "#0F2027"
   image: assets/icons/splash_logo.png
+  # Android 12+ maskuje ikonu do kruhu o průměru 768 px uvnitř 1152×1152
+  # canvasu. Pro splash_logo.png (skoro full-bleed čtverec) rohy trčí ven
+  # a systém je klipuje. splash_padded.png je předem padovaná varianta
+  # s obsahem 540×540 centrovaným v 1152×1152 transparent canvasu — rohy
+  # čtverce jsou ve vzdálenosti ~382 px od středu, těsně pod limit 384.
+  # iOS dál používá top-level `image:` (splash_logo.png) → nedotčené.
   android_12:
     color: "#0F2027"
-    image: assets/icons/splash_logo.png
+    image: assets/icons/splash_padded.png
 
 # --------------------------------------------------
 # Nastavení Assets a Fontů
