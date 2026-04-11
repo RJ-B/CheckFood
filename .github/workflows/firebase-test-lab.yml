@@ -1,0 +1,119 @@
+name: Firebase Test Lab (integration tests)
+
+# Runs the Flutter integration_test suite on real Android devices in
+# Firebase Test Lab. FTL is the only practical way to run Flutter
+# integration tests in CI — local headless runners don't have a
+# working Flutter engine + display combination.
+#
+# This workflow is a STUB. It will not execute until the following
+# secrets are set in the repository settings:
+#   - FTL_PROJECT_ID           (GCP project with Test Lab API enabled)
+#   - FTL_SERVICE_ACCOUNT_KEY  (base64-encoded JSON key for a SA with
+#                               roles/cloudtestservice.testAdmin)
+#
+# See integration_test/README.md for the full runbook.
+
+on:
+  # Manual-only until the integration suite grows beyond the smoke
+  # test and justifies running on every PR. FTL minutes are not free.
+  workflow_dispatch:
+    inputs:
+      device_model:
+        description: 'FTL device model code (see gcloud firebase test android models list)'
+        required: true
+        default: 'redfin'   # Pixel 5
+      android_api:
+        description: 'Android API level'
+        required: true
+        default: '33'
+
+concurrency:
+  group: ftl-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration-test:
+    name: FTL integration test (${{ github.event.inputs.device_model }}/API${{ github.event.inputs.android_api }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Preflight — verify required secrets are set
+        env:
+          FTL_PROJECT_ID: ${{ secrets.FTL_PROJECT_ID }}
+          FTL_SA_KEY: ${{ secrets.FTL_SERVICE_ACCOUNT_KEY }}
+        run: |
+          if [ -z "$FTL_PROJECT_ID" ] || [ -z "$FTL_SA_KEY" ]; then
+            echo "::error::FTL secrets are not configured. See integration_test/README.md"
+            echo "Missing: FTL_PROJECT_ID and/or FTL_SERVICE_ACCOUNT_KEY"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+          channel: 'stable'
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FTL_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.FTL_PROJECT_ID }}
+
+      - name: Flutter pub get
+        working-directory: checkfood_client
+        run: flutter pub get
+
+      - name: Build app and androidTest APKs
+        working-directory: checkfood_client
+        env:
+          API_BASE_URL: http://localhost:8081/api
+          GOOGLE_WEB_CLIENT_ID: ci-dummy.apps.googleusercontent.com
+          MAPS_API_KEY: ci-dummy-maps-key
+        run: |
+          # This produces two APKs that FTL needs: the app under test
+          # and the instrumentation harness that drives it.
+          pushd android
+          ./gradlew app:assembleDebug app:assembleAndroidTest \
+            -Ptarget=../integration_test/app_smoke_test.dart
+          popd
+
+      - name: Run on Firebase Test Lab
+        env:
+          DEVICE: ${{ github.event.inputs.device_model }}
+          API: ${{ github.event.inputs.android_api }}
+        run: |
+          gcloud firebase test android run \
+            --type instrumentation \
+            --app checkfood_client/build/app/outputs/apk/debug/app-debug.apk \
+            --test checkfood_client/build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device "model=$DEVICE,version=$API,locale=en,orientation=portrait" \
+            --timeout 5m \
+            --results-bucket gs://${{ secrets.FTL_PROJECT_ID }}-ftl-results \
+            --results-dir "run-${{ github.run_id }}"
+
+      - name: Download results
+        if: always()
+        run: |
+          gsutil -m cp -r "gs://${{ secrets.FTL_PROJECT_ID }}-ftl-results/run-${{ github.run_id }}" ./ftl-results || true
+
+      - name: Upload FTL results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftl-results
+          path: ftl-results
+          retention-days: 14

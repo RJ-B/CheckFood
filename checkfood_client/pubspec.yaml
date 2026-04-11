@@ -91,6 +91,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Integration tests run the real Flutter engine on a device/emulator
+  # (or Firebase Test Lab in CI). See integration_test/README.md and
+  # .github/workflows/firebase-test-lab.yml for the wiring.
+  integration_test:
+    sdk: flutter
+
   flutter_lints: ^4.0.0
 
   # --- Testování ---

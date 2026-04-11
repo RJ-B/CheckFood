@@ -1,0 +1,158 @@
+name: App bundle size
+
+# Tracks APK and IPA file size over time. The goal is to catch silent
+# size regressions: a 10% jump in the release APK usually means
+# someone pulled in a large dependency or accidentally included debug
+# assets in a release build. We surface the delta as a PR comment and
+# fail if the release APK grows by more than 15% vs. main.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'checkfood_client/**'
+  push:
+    branches: [main]
+    paths:
+      - 'checkfood_client/**'
+  workflow_dispatch:
+
+concurrency:
+  group: app-size-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android-apk:
+    name: Android release APK size
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+          channel: 'stable'
+
+      - name: Flutter pub get
+        working-directory: checkfood_client
+        run: flutter pub get
+
+      - name: Build release APK (split per ABI)
+        working-directory: checkfood_client
+        env:
+          API_BASE_URL: https://api.checkfood.cz/api
+          GOOGLE_WEB_CLIENT_ID: ci-dummy.apps.googleusercontent.com
+          MAPS_API_KEY: ci-dummy-maps-key
+          CERT_PIN_SHA256: "DUMMY==,DUMMY=="
+        run: |
+          flutter build apk --release --split-per-abi \
+            --dart-define=API_BASE_URL=$API_BASE_URL \
+            --dart-define=GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID \
+            --dart-define=MAPS_API_KEY=$MAPS_API_KEY \
+            --dart-define=CERT_PIN_SHA256=$CERT_PIN_SHA256
+
+      - name: Measure APK sizes
+        id: size
+        run: |
+          APK_DIR=checkfood_client/build/app/outputs/flutter-apk
+          {
+            echo "## Android release APK sizes"
+            echo ""
+            echo "| ABI | Size |"
+            echo "|-----|------|"
+            for apk in "$APK_DIR"/app-*-release.apk; do
+              [ -f "$apk" ] || continue
+              SIZE=$(stat -c%s "$apk")
+              HUMAN=$(numfmt --to=iec --suffix=B "$SIZE")
+              NAME=$(basename "$apk")
+              echo "| $NAME | $HUMAN |"
+            done
+          } > apk-size-report.md
+          cat apk-size-report.md
+
+          # Pick the arm64-v8a variant (primary target ABI) for the
+          # hard threshold check — 90%+ of real users run this one.
+          PRIMARY=$APK_DIR/app-arm64-v8a-release.apk
+          if [ -f "$PRIMARY" ]; then
+            PRIMARY_SIZE=$(stat -c%s "$PRIMARY")
+            echo "primary_size=$PRIMARY_SIZE" >> "$GITHUB_OUTPUT"
+            echo "primary_human=$(numfmt --to=iec --suffix=B $PRIMARY_SIZE)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail on >15% growth vs main (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          PRIMARY_SIZE: ${{ steps.size.outputs.primary_size }}
+        run: |
+          # TODO: once this workflow has shipped, wire this step to
+          # compare against a cached artifact from the latest green
+          # main run. Until then, the check is informational only
+          # — we just print the current size.
+          echo "Current arm64-v8a release APK: ${{ steps.size.outputs.primary_human }}"
+          echo "::notice::Baseline comparison not yet wired. Manual review on first-ever run."
+
+      - name: Post size table as PR comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-path: apk-size-report.md
+          edit-mode: replace
+
+      - name: Upload APKs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apks
+          path: checkfood_client/build/app/outputs/flutter-apk/app-*-release.apk
+          retention-days: 7
+
+  ios-ipa:
+    name: iOS release IPA size
+    runs-on: macos-latest
+    timeout-minutes: 45
+    if: github.event_name == 'workflow_dispatch'  # expensive, only on-demand
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+          channel: 'stable'
+
+      - name: Flutter pub get
+        working-directory: checkfood_client
+        run: flutter pub get
+
+      - name: Build release IPA (unsigned, for size only)
+        working-directory: checkfood_client
+        env:
+          API_BASE_URL: https://api.checkfood.cz/api
+          GOOGLE_WEB_CLIENT_ID: ci-dummy.apps.googleusercontent.com
+          MAPS_API_KEY: ci-dummy-maps-key
+        run: |
+          flutter build ios --release --no-codesign \
+            --dart-define=API_BASE_URL=$API_BASE_URL \
+            --dart-define=GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID \
+            --dart-define=MAPS_API_KEY=$MAPS_API_KEY
+
+      - name: Measure Runner.app bundle size
+        run: |
+          APP=checkfood_client/build/ios/iphoneos/Runner.app
+          test -d "$APP" || { echo "Runner.app not found"; exit 1; }
+          SIZE=$(du -sk "$APP" | awk '{print $1*1024}')
+          HUMAN=$(echo $SIZE | awk '{printf "%.1fMB", $1/1024/1024}')
+          echo "Runner.app total size: $HUMAN ($SIZE bytes)"

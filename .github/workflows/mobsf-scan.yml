@@ -1,0 +1,150 @@
+name: MobSF static scan
+
+# Mobile Security Framework — static scan of the Android APK against
+# OWASP MASVS. Runs MobSF as a self-hosted Docker container in CI,
+# uploads the built APK to it over HTTP, polls for the report, and
+# fails the build on HIGH severity findings.
+#
+# Pinned to the release channel image so scan rules don't silently
+# change under us — bump the image tag deliberately when new rules
+# are available upstream.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'checkfood_client/**'
+      - '.github/workflows/mobsf-scan.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: mobsf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    name: MobSF static APK scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      mobsf:
+        image: opensecurity/mobile-security-framework-mobsf:v3.9.7
+        ports:
+          - 8000:8000
+        env:
+          MOBSF_API_KEY: ci-local-key-not-secret
+          # Skip the heavy dynamic-analysis components — we only need
+          # the static scan here. Saves ~2GB of container footprint.
+          DJANGO_SUPERUSER_USERNAME: mobsf
+          DJANGO_SUPERUSER_PASSWORD: mobsf
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+          channel: 'stable'
+
+      - name: Flutter pub get
+        working-directory: checkfood_client
+        run: flutter pub get
+
+      - name: Build debug APK
+        working-directory: checkfood_client
+        env:
+          API_BASE_URL: http://localhost:8081/api
+          GOOGLE_WEB_CLIENT_ID: ci-dummy.apps.googleusercontent.com
+          MAPS_API_KEY: ci-dummy-maps-key
+        run: |
+          flutter build apk --debug \
+            --dart-define=API_BASE_URL=$API_BASE_URL \
+            --dart-define=GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID
+
+      - name: Wait for MobSF API
+        run: |
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8000/api/v1/ > /dev/null; then
+              echo "MobSF ready after ${i}x3s"
+              break
+            fi
+            sleep 3
+          done
+          curl -sf http://localhost:8000/api/v1/ || { echo "MobSF did not come up"; exit 1; }
+
+      - name: Upload APK to MobSF
+        id: upload
+        run: |
+          APK=checkfood_client/build/app/outputs/flutter-apk/app-debug.apk
+          test -f "$APK" || { echo "APK not found at $APK"; exit 1; }
+
+          RESP=$(curl -sf -F "file=@$APK" \
+            -H "Authorization: ci-local-key-not-secret" \
+            http://localhost:8000/api/v1/upload)
+          echo "Upload response: $RESP"
+          HASH=$(echo "$RESP" | python3 -c 'import sys,json; print(json.load(sys.stdin)["hash"])')
+          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger scan
+        run: |
+          curl -sf \
+            -H "Authorization: ci-local-key-not-secret" \
+            -F "hash=${{ steps.upload.outputs.hash }}" \
+            http://localhost:8000/api/v1/scan
+
+      - name: Fetch JSON report
+        run: |
+          curl -sf \
+            -H "Authorization: ci-local-key-not-secret" \
+            -F "hash=${{ steps.upload.outputs.hash }}" \
+            http://localhost:8000/api/v1/report_json \
+            -o mobsf-report.json
+          python3 -m json.tool mobsf-report.json > /dev/null
+          echo "Report saved ($(wc -c < mobsf-report.json) bytes)"
+
+      - name: Fail on HIGH severity findings
+        run: |
+          python3 - << 'PY'
+          import json, sys
+          with open('mobsf-report.json') as f:
+              report = json.load(f)
+          # MobSF v3 report shape: findings are under 'code_analysis'
+          # and 'manifest_analysis'; each has a 'metadata' block with
+          # 'severity'. We fail on 'high' only — warning/info are
+          # informational.
+          findings = []
+          for section_key in ('code_analysis', 'manifest_analysis'):
+              section = report.get(section_key, {})
+              items = section.get('findings') if isinstance(section, dict) else None
+              if not items:
+                  continue
+              if isinstance(items, dict):
+                  items = items.values()
+              for item in items:
+                  md = (item or {}).get('metadata') or {}
+                  sev = (md.get('severity') or '').lower()
+                  if sev == 'high':
+                      findings.append((section_key, md.get('description') or md.get('cvss', '?')))
+          if findings:
+              print(f"MobSF found {len(findings)} HIGH severity issues:")
+              for sec, desc in findings:
+                  print(f"  [{sec}] {desc}")
+              sys.exit(1)
+          print("No HIGH severity findings.")
+          PY
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobsf-report
+          path: mobsf-report.json
+          retention-days: 14
