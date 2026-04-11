@@ -7,6 +7,7 @@ import com.checkfood.checkfoodservice.module.order.dining.entity.DiningSession;
 import com.checkfood.checkfoodservice.module.order.dining.entity.DiningSessionMember;
 import com.checkfood.checkfoodservice.module.order.dining.exception.DiningSessionException;
 import com.checkfood.checkfoodservice.module.order.dining.repository.DiningSessionMemberRepository;
+import com.checkfood.checkfoodservice.module.order.dining.repository.DiningSessionRepository;
 import com.checkfood.checkfoodservice.module.order.dining.service.DiningSessionService;
 import com.checkfood.checkfoodservice.module.order.dto.response.OrderResponse;
 import com.checkfood.checkfoodservice.module.order.service.OrderService;
@@ -35,6 +36,7 @@ import java.util.UUID;
 public class DiningSessionController {
 
     private final DiningSessionService diningSessionService;
+    private final DiningSessionRepository diningSessionRepository;
     private final DiningSessionMemberRepository memberRepository;
     private final OrderService orderService;
     private final UserService userService;
@@ -90,6 +92,7 @@ public class DiningSessionController {
 
     /**
      * Vrátí pozvánkový kód sezení pro generování QR kódu.
+     * Dostupné pouze pro členy daného sezení — jinak {@code 403 Forbidden}.
      *
      * @param id             UUID sezení
      * @param authentication aktuální autentizace
@@ -99,11 +102,14 @@ public class DiningSessionController {
     public ResponseEntity<Map<String, String>> getQrCode(
             @PathVariable UUID id,
             Authentication authentication) {
-        extractUserId(authentication);
-        DiningSession session = diningSessionService.findActiveSessionForUser(extractUserId(authentication))
-                .filter(s -> s.getId().equals(id))
-                .orElseGet(() -> diningSessionService.findActiveSessionForUser(extractUserId(authentication))
-                        .orElseThrow(() -> DiningSessionException.notFound(id)));
+        Long userId = extractUserId(authentication);
+        if (!memberRepository.existsBySessionIdAndUserId(id, userId)) {
+            // Explicit 403: never leak the invite code to non-members, no
+            // matter whether they themselves happen to host another session.
+            throw DiningSessionException.notMember(id);
+        }
+        DiningSession session = diningSessionRepository.findById(id)
+                .orElseThrow(() -> DiningSessionException.notFound(id));
         return ResponseEntity.ok(Map.of("inviteCode", session.getInviteCode()));
     }
 

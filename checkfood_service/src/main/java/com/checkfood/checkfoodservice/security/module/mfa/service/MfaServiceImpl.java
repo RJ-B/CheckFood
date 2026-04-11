@@ -256,9 +256,16 @@ public class MfaServiceImpl implements MfaService {
             throw new MfaException("Invalid password");
         }
 
-        secretRepository.findByUserId(userId)
-                .ifPresent(secretRepository::delete);
+        // Disable is NOT idempotent — calling disable on an account that
+        // has no active MFA is a client error. Surface as HTTP 409
+        // (MfaNotEnabledException) instead of silently returning 200.
+        MfaSecretEntity secret = secretRepository.findByUserId(userId)
+                .orElseThrow(() -> {
+                    publishAudit(userId, AuditAction.MFA_DISABLED, AuditStatus.FAILED);
+                    return new MfaNotEnabledException("MFA is not enabled");
+                });
 
+        secretRepository.delete(secret);
         backupCodeRepository.deleteByUserId(userId);
 
         publishAudit(

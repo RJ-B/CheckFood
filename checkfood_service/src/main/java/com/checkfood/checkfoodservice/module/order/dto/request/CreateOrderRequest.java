@@ -22,7 +22,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateOrderRequest {
 
+    // Max item count prevents payload-amplification DoS (e.g. attacker
+    // posting 10k lines to force a huge DB transaction). 100 items is
+    // already well above any realistic single-order count.
     @NotEmpty(message = "Objednávka musí obsahovat alespoň jednu položku")
+    @Size(max = 100, message = "Objednávka nesmí obsahovat více než 100 položek")
     @Valid
     private List<OrderItemRequest> items;
 

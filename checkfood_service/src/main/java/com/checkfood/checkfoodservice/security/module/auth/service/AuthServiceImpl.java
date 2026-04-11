@@ -20,6 +20,8 @@ import com.checkfood.checkfoodservice.security.module.auth.provider.AuthProvider
 import com.checkfood.checkfoodservice.security.audit.event.AuditAction;
 import com.checkfood.checkfoodservice.security.audit.event.AuditStatus;
 import com.checkfood.checkfoodservice.security.audit.service.AuditService;
+import com.checkfood.checkfoodservice.security.ratelimit.exception.RateLimitExceededException;
+import com.checkfood.checkfoodservice.security.ratelimit.service.RateLimitService;
 import com.checkfood.checkfoodservice.security.module.auth.repository.PasswordResetTokenRepository;
 import com.checkfood.checkfoodservice.security.module.auth.repository.VerificationTokenRepository;
 import com.checkfood.checkfoodservice.security.module.auth.validator.PasswordValidator;
@@ -72,6 +74,7 @@ public class AuthServiceImpl implements AuthService {
     private final RestaurantRepository restaurantRepository;
     private final com.checkfood.checkfoodservice.module.restaurant.repository.table.RestaurantTableRepository restaurantTableRepository;
     private final AuditService auditService;
+    private final RateLimitService rateLimitService;
 
     @Override
     public void register(RegisterRequest requestDto) {
@@ -374,6 +377,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void requestPasswordReset(String email) {
+        // Per-email rate limit: 3 reset requests per 15 min per lowered
+        // e-mail. The controller already has a per-IP limit, but a single
+        // attacker IP could still hammer a specific victim's e-mail. This
+        // second bucket closes that hole.
+        String normalizedEmail = email == null ? "" : email.trim().toLowerCase();
+        boolean allowed = rateLimitService.tryAcquire(
+                "auth:forgot-password:email=" + normalizedEmail,
+                3,
+                java.util.concurrent.TimeUnit.MINUTES.toMillis(15)
+        );
+        if (!allowed) {
+            throw new RateLimitExceededException("Too many password reset requests for this email");
+        }
+
         if (!userService.existsByEmail(email)) {
             return;
         }
@@ -403,6 +420,19 @@ public class AuthServiceImpl implements AuthService {
 
         if (resetToken.getExpiryDate().isBefore(LocalDateTime.now(clock))) {
             throw AuthException.resetTokenExpired();
+        }
+
+        // Per-user rate limit: 5 reset-password attempts per 15 min per
+        // target user (keyed on user id derived from the token). Prevents
+        // an attacker who grabbed a reset link from trying many weak
+        // passwords in quick succession.
+        boolean allowed = rateLimitService.tryAcquire(
+                "auth:reset-password:user=" + resetToken.getUser().getId(),
+                5,
+                java.util.concurrent.TimeUnit.MINUTES.toMillis(15)
+        );
+        if (!allowed) {
+            throw new RateLimitExceededException("Too many password reset attempts for this account");
         }
 
         passwordValidator.validate(newPassword);

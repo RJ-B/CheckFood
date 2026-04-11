@@ -302,6 +302,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         validateNotInPast(request.getDate(), request.getStartTime(), restaurant.getMinAdvanceMinutes());
 
+        // Closed-day guard. `getAvailableSlots` already filters these out so
+        // the client UI normally won't show a closed day, but anyone can
+        // still POST a crafted payload — reject it at the service layer.
+        validateRestaurantOpen(restaurant, request.getDate());
+
         if (request.getPartySize() > table.getCapacity()) {
             throw ReservationException.partySizeExceedsCapacity(request.getPartySize(), table.getCapacity());
         }
@@ -709,6 +714,46 @@ public class ReservationServiceImpl implements ReservationService {
         }
         if (date.isEqual(today) && !startTime.isAfter(LocalTime.now(clock).plusMinutes(minAdvanceMinutes))) {
             throw ReservationException.invalidTime("Čas rezervace musí být alespoň " + minAdvanceMinutes + " minut od teď.");
+        }
+    }
+
+    /**
+     * Rejects reservation creation on days the restaurant is closed.
+     *
+     * <p>Consults the restaurant's {@code specialDays} override first (e.g.
+     * holidays, special hours) and falls back to the weekly
+     * {@code openingHours}. A day counts as closed if there is no entry,
+     * the entry's {@code closed} flag is true, or the opening times are
+     * missing. Mirrors the logic in {@code getAvailableSlots}, which is
+     * how the UI already hides closed days from the date picker.</p>
+     */
+    private void validateRestaurantOpen(Restaurant restaurant, LocalDate date) {
+        // Special-day override takes precedence.
+        if (restaurant.getSpecialDays() != null) {
+            var special = restaurant.getSpecialDays().stream()
+                    .filter(sd -> sd.getDate() != null && sd.getDate().equals(date))
+                    .findFirst()
+                    .orElse(null);
+            if (special != null) {
+                if (special.isClosed()
+                        || special.getOpenAt() == null
+                        || special.getCloseAt() == null) {
+                    throw ReservationException.restaurantClosed();
+                }
+                return;
+            }
+        }
+
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        OpeningHours hours = restaurant.getOpeningHours() == null
+                ? null
+                : restaurant.getOpeningHours().stream()
+                        .filter(h -> h.getDayOfWeek() == dayOfWeek)
+                        .findFirst()
+                        .orElse(null);
+
+        if (hours == null || hours.isClosed() || hours.getOpenAt() == null || hours.getCloseAt() == null) {
+            throw ReservationException.restaurantClosed();
         }
     }
 

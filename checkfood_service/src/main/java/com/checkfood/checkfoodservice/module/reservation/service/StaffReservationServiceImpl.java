@@ -30,10 +30,8 @@ import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRep
 import com.checkfood.checkfoodservice.module.restaurant.repository.table.RestaurantTableRepository;
 import com.checkfood.checkfoodservice.security.module.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -222,10 +220,11 @@ public class StaffReservationServiceImpl implements StaffReservationService {
                     reservation.getStatus().name(), "CHANGE_PROPOSED");
         }
 
-        if (request.getStartTime() == null && request.getTableId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Alespoň jedno pole (startTime nebo tableId) musí být vyplněno.");
-        }
+        // At-least-one-field validation lives on the DTO itself via
+        // @AssertTrue isHasAnyChange(), which produces a regular
+        // MethodArgumentNotValidException → HTTP 400. No service-layer
+        // check needed (keeping one would still produce 500 because the
+        // module's exception handler doesn't know ResponseStatusException).
 
         changeRequestRepository.findByReservationIdAndStatus(reservationId, ChangeRequestStatus.PENDING)
                 .ifPresent(existing -> {

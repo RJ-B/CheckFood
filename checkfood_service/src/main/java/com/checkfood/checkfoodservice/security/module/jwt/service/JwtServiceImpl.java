@@ -38,6 +38,14 @@ public class JwtServiceImpl implements JwtService {
     private static final String TYPE_ACCESS = "ACCESS";
     private static final String TYPE_REFRESH = "REFRESH";
 
+    /**
+     * Audience claim value. Every token we mint must declare this aud and
+     * every token we accept must contain it — this closes the classic
+     * "token-scope confusion" attack where an attacker tries to reuse a
+     * token issued for another service under a shared HMAC secret.
+     */
+    private static final String TOKEN_AUDIENCE = "checkfood-api";
+
     private final JwtProperties jwtProperties;
     private final JwtLogger jwtLogger;
     private final UserService userService;
@@ -55,7 +63,33 @@ public class JwtServiceImpl implements JwtService {
         var secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");
 
         this.jwtEncoder = new NimbusJwtEncoder(new ImmutableSecret<>(secretKey));
-        this.jwtDecoder = NimbusJwtDecoder.withSecretKey(secretKey).build();
+
+        // Decoder with default validators (timestamp + issuer) PLUS a
+        // strict audience check. Any token missing or carrying a wrong
+        // `aud` claim is rejected, so a token forged by another service
+        // that happens to share the same HMAC key cannot be replayed here.
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(secretKey).build();
+        org.springframework.security.oauth2.core.OAuth2TokenValidator<org.springframework.security.oauth2.jwt.Jwt> defaultValidator =
+                org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer(jwtProperties.getIssuer());
+        org.springframework.security.oauth2.core.OAuth2TokenValidator<org.springframework.security.oauth2.jwt.Jwt> audienceValidator =
+                new org.springframework.security.oauth2.core.OAuth2TokenValidator<>() {
+                    @Override
+                    public org.springframework.security.oauth2.core.OAuth2TokenValidatorResult validate(
+                            org.springframework.security.oauth2.jwt.Jwt jwt) {
+                        var audiences = jwt.getAudience();
+                        if (audiences != null && audiences.contains(TOKEN_AUDIENCE)) {
+                            return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.success();
+                        }
+                        var err = new org.springframework.security.oauth2.core.OAuth2Error(
+                                "invalid_token",
+                                "Missing or wrong aud claim (expected " + TOKEN_AUDIENCE + ")",
+                                null);
+                        return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(err);
+                    }
+                };
+        decoder.setJwtValidator(new org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<>(
+                defaultValidator, audienceValidator));
+        this.jwtDecoder = decoder;
     }
 
     @Override
@@ -69,6 +103,7 @@ public class JwtServiceImpl implements JwtService {
 
         var claimsBuilder = JwtClaimsSet.builder()
                 .issuer(jwtProperties.getIssuer())
+                .audience(java.util.List.of(TOKEN_AUDIENCE))
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
                 .subject(user.getEmail())
@@ -95,6 +130,7 @@ public class JwtServiceImpl implements JwtService {
 
         var claimsBuilder = JwtClaimsSet.builder()
                 .issuer(jwtProperties.getIssuer())
+                .audience(java.util.List.of(TOKEN_AUDIENCE))
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
                 .subject(user.getEmail())

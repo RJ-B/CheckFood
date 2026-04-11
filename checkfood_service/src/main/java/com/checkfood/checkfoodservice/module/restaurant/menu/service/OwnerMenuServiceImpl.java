@@ -98,6 +98,10 @@ public class OwnerMenuServiceImpl implements OwnerMenuService {
         if (!category.getRestaurantId().equals(restaurantId)) {
             throw RestaurantException.accessDenied();
         }
+        // MenuItem.categoryId is a plain UUID column, not a JPA @OneToMany
+        // relation with cascade, so deleting the category would leave items
+        // orphaned in the DB. Purge items first, then the category.
+        itemRepository.deleteAllByCategoryId(categoryId);
         categoryRepository.delete(category);
     }
 

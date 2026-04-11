@@ -15,7 +15,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MfaSetupStartResponse {
 
-    private String qrCode;
+    /**
+     * {@code otpauth://} URI string suitable for display as a QR code by
+     * the mobile client. Field name is {@code qrPayload} — it's not a
+     * rendered QR image, it's the payload the client encodes into one.
+     */
+    private String qrPayload;
 
     private String secret;
 
