@@ -88,13 +88,23 @@ public abstract class RestaurantMapper {
      * Po automapování načte fotky galerie z {@link RestaurantPhotoRepository}
      * a doplní je do response DTO. Restaurant entita nemá gallery jako přímou
      * relaci (M:1 z opačné strany) — proto se načítají dodatečně.
+     *
+     * <p>Cílem je {@link RestaurantResponse.RestaurantResponseBuilder}, ne výsledný
+     * objekt — MapStruct s Lombok {@code @Builder} ignoruje {@code @AfterMapping}
+     * metody, kde je {@code @MappingTarget} už postavený typ, a volá pouze ty,
+     * kde je targetem builder (tj. před {@code .build()}).
      */
     @AfterMapping
-    protected void populateGallery(@MappingTarget RestaurantResponse target, Restaurant source) {
-        if (source == null || source.getId() == null) return;
+    protected void populateGallery(
+            Restaurant source,
+            @MappingTarget RestaurantResponse.RestaurantResponseBuilder target) {
+        if (source == null || source.getId() == null) {
+            target.gallery(java.util.Collections.emptyList());
+            return;
+        }
         var photos = restaurantPhotoRepository
                 .findAllByRestaurantIdOrderBySortOrderAscCreatedAtAsc(source.getId());
-        target.setGallery(photos.stream().map(this::toPhotoResponse).toList());
+        target.gallery(photos.stream().map(this::toPhotoResponse).toList());
     }
 
     private RestaurantPhotoResponse toPhotoResponse(RestaurantPhoto photo) {

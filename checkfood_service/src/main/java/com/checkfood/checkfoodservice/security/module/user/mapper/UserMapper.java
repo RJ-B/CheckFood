@@ -194,31 +194,40 @@ public abstract class UserMapper {
     // ---------- AVATAR URL RESOLUTION ----------
 
     /**
-     * Po automapování přepíše {@code profileImageUrl} v target DTO na signed URL,
+     * Po automapování přepíše {@code profileImageUrl} v target builderu na signed URL,
      * pokud má uživatel custom avatar uploadovaný v privátním bucketu.
      * Jinak ponechá hodnotu z {@link UserEntity#getProfileImageUrl()} (OAuth fallback).
+     *
+     * <p>Cílem jsou Lombok buildery, ne výsledné objekty — MapStruct s {@code @Builder}
+     * volá {@code @AfterMapping} pouze s targetem typu builder (před {@code .build()}).
      */
     @AfterMapping
-    protected void resolveAvatarUrl(@MappingTarget UserProfileResponse target, UserEntity source) {
+    protected void resolveAvatarUrl(
+            UserEntity source,
+            @MappingTarget UserProfileResponse.UserProfileResponseBuilder target) {
         String resolved = resolveAvatar(source);
         if (resolved != null) {
-            target.setProfileImageUrl(resolved);
+            target.profileImageUrl(resolved);
         }
     }
 
     @AfterMapping
-    protected void resolveAvatarUrl(@MappingTarget UserSummaryResponse target, UserEntity source) {
+    protected void resolveAvatarUrl(
+            UserEntity source,
+            @MappingTarget UserSummaryResponse.UserSummaryResponseBuilder target) {
         String resolved = resolveAvatar(source);
         if (resolved != null) {
-            target.setProfileImageUrl(resolved);
+            target.profileImageUrl(resolved);
         }
     }
 
     @AfterMapping
-    protected void resolveAvatarUrl(@MappingTarget UserAdminResponse target, UserEntity source) {
+    protected void resolveAvatarUrl(
+            UserEntity source,
+            @MappingTarget UserAdminResponse.UserAdminResponseBuilder target) {
         String resolved = resolveAvatar(source);
         if (resolved != null) {
-            target.setProfileImageUrl(resolved);
+            target.profileImageUrl(resolved);
         }
     }
 
