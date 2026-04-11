@@ -1,0 +1,9 @@
+# sign_in_with_apple is a `dependency_overrides: path: …` pinned upstream
+# package source. Only the actual plugin source (lib/, ios/, android/,
+# darwin/, macos/, assets/, pubspec.yaml) needs to be tracked — the
+# upstream example app, unit tests and changelog are noise that bloat
+# the repo by ~100 files for zero build/runtime benefit. Apr 2026 cleanup
+# untracked them; this file prevents them from being re-added by mistake.
+example/
+test/
+CHANGELOG.md
