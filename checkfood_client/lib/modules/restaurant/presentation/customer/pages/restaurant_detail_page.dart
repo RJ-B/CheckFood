@@ -7,6 +7,9 @@ import '../../../../../core/di/injection_container.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../domain/entities/restaurant.dart';
 import '../../../domain/entities/opening_hours.dart';
+import '../../../../order/domain/entities/menu_category.dart';
+import '../../../../order/domain/entities/menu_item.dart';
+import '../../../../order/domain/usecases/get_menu_usecase.dart';
 import '../../../../reservation/presentation/customer/pages/reservation_page.dart';
 import '../bloc/restaurant_detail_bloc.dart';
 import '../bloc/restaurant_detail_event.dart';
@@ -48,25 +51,108 @@ class RestaurantDetailPage extends StatelessWidget {
 }
 
 /// Scrollovatelné tělo detailu zobrazené po úspěšném načtení restaurace.
-class _DetailContent extends StatelessWidget {
+/// Obsahuje dva taby: Informace a Menu.
+class _DetailContent extends StatefulWidget {
   final Restaurant restaurant;
 
   const _DetailContent({required this.restaurant});
 
   @override
+  State<_DetailContent> createState() => _DetailContentState();
+}
+
+class _DetailContentState extends State<_DetailContent>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  // Menu state
+  List<MenuCategory>? _menuCategories;
+  bool _menuLoading = false;
+  String? _menuError;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    // Načteme menu až když uživatel přepne na tab Menu (index 1)
+    if (_tabController.index == 1 && _menuCategories == null && !_menuLoading) {
+      _loadMenu();
+    }
+  }
+
+  Future<void> _loadMenu() async {
+    setState(() {
+      _menuLoading = true;
+      _menuError = null;
+    });
+    try {
+      final useCase = sl<GetMenuUseCase>();
+      final categories = await useCase(widget.restaurant.id);
+      if (mounted) {
+        setState(() {
+          _menuCategories = categories;
+          _menuLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _menuError = e.toString();
+          _menuLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController
+      ..removeListener(_onTabChanged)
+      ..dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        _buildAppBar(context),
-        SliverToBoxAdapter(child: _buildBody(context)),
+    return NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        _buildAppBar(context, innerBoxIsScrolled),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _TabBarDelegate(
+            TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: S.of(context).information),
+                Tab(text: S.of(context).menu),
+              ],
+              labelColor: AppColors.primary,
+              unselectedLabelColor: AppColors.textSecondary,
+              indicatorColor: AppColors.primary,
+            ),
+          ),
+        ),
       ],
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildInfoTab(context),
+          _buildMenuTab(context),
+        ],
+      ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  SliverAppBar _buildAppBar(BuildContext context, bool innerBoxIsScrolled) {
+    final restaurant = widget.restaurant;
     return SliverAppBar(
       expandedHeight: 260,
       pinned: true,
+      forceElevated: innerBoxIsScrolled,
       backgroundColor: Colors.white,
       foregroundColor: Colors.black,
       leading: Padding(
@@ -89,7 +175,9 @@ class _DetailContent extends StatelessWidget {
                 restaurant.isFavourite
                     ? Icons.favorite
                     : Icons.favorite_border,
-                color: restaurant.isFavourite ? AppColors.error : AppColors.textPrimary,
+                color: restaurant.isFavourite
+                    ? AppColors.error
+                    : AppColors.textPrimary,
               ),
               onPressed: () => context
                   .read<RestaurantDetailBloc>()
@@ -120,35 +208,40 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return Padding(
+  // ---------------------------------------------------------------------------
+  // Tab 0 — Informace
+  // ---------------------------------------------------------------------------
+
+  Widget _buildInfoTab(BuildContext context) {
+    final restaurant = widget.restaurant;
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
+          _buildHeader(context, restaurant),
           const Gap(12),
-          _buildAddress(),
+          _buildAddress(restaurant),
           if (restaurant.description != null &&
               restaurant.description!.isNotEmpty) ...[
             const Gap(20),
-            _buildDescription(context),
+            _buildDescription(context, restaurant),
           ],
           const Gap(20),
-          _buildOpeningHours(context),
+          _buildOpeningHours(context, restaurant),
           if (restaurant.tags.isNotEmpty) ...[
             const Gap(20),
-            _buildTags(),
+            _buildTags(restaurant),
           ],
           const Gap(32),
-          _buildReserveButton(context),
+          _buildReserveButton(context, restaurant),
           const Gap(20),
         ],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, Restaurant restaurant) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -176,10 +269,11 @@ class _DetailContent extends StatelessWidget {
             ],
             Text(
               restaurant.cuisineType.displayName,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+              style: const TextStyle(
+                  color: AppColors.textSecondary, fontSize: 14),
             ),
             _dot(),
-            _buildOpenNowBadge(context),
+            _buildOpenNowBadge(context, restaurant),
           ],
         ),
       ],
@@ -187,9 +281,9 @@ class _DetailContent extends StatelessWidget {
   }
 
   Widget _dot() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: const Text(
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6),
+      child: Text(
         '\u00B7',
         style: TextStyle(
           color: AppColors.textMuted,
@@ -200,10 +294,10 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildOpenNowBadge(BuildContext context) {
+  Widget _buildOpenNowBadge(BuildContext context, Restaurant restaurant) {
     final l = S.of(context);
     final now = DateTime.now();
-    final todayHours = _getTodayHours(now.weekday);
+    final todayHours = _getTodayHours(restaurant, now.weekday);
 
     final bool isOpen;
     if (todayHours == null || todayHours.isClosed) {
@@ -254,7 +348,7 @@ class _DetailContent extends StatelessWidget {
     return h * 60 + m;
   }
 
-  OpeningHours? _getTodayHours(int weekday) {
+  OpeningHours? _getTodayHours(Restaurant restaurant, int weekday) {
     try {
       return restaurant.openingHours.firstWhere(
         (h) => h.dayOfWeek == weekday,
@@ -264,10 +358,11 @@ class _DetailContent extends StatelessWidget {
     }
   }
 
-  Widget _buildAddress() {
+  Widget _buildAddress(Restaurant restaurant) {
     return Row(
       children: [
-        const Icon(Icons.location_on_outlined, color: AppColors.textSecondary, size: 18),
+        const Icon(Icons.location_on_outlined,
+            color: AppColors.textSecondary, size: 18),
         const Gap(6),
         Expanded(
           child: Text(
@@ -279,7 +374,7 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
+  Widget _buildDescription(BuildContext context, Restaurant restaurant) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -303,7 +398,7 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildOpeningHours(BuildContext context) {
+  Widget _buildOpeningHours(BuildContext context, Restaurant restaurant) {
     final l = S.of(context);
     final dayNames = [
       l.dayMonday,
@@ -332,10 +427,12 @@ class _DetailContent extends StatelessWidget {
         ...List.generate(7, (i) {
           final dayDate = monday.add(Duration(days: i));
           final dayOfWeek = i + 1;
-          final isToday = dayDate.day == now.day && dayDate.month == now.month;
+          final isToday =
+              dayDate.day == now.day && dayDate.month == now.month;
           final dateStr = '${dayDate.day}.${dayDate.month}.';
 
-          final dateIso = '${dayDate.year}-${dayDate.month.toString().padLeft(2, '0')}-${dayDate.day.toString().padLeft(2, '0')}';
+          final dateIso =
+              '${dayDate.year}-${dayDate.month.toString().padLeft(2, '0')}-${dayDate.day.toString().padLeft(2, '0')}';
           final specialDay = restaurant.specialDays
               .where((sd) => sd['date'] == dateIso)
               .firstOrNull;
@@ -352,16 +449,20 @@ class _DetailContent extends StatelessWidget {
               hoursText = 'Zavřeno${note != null ? " — $note" : ""}';
               textColor = AppColors.error;
             } else {
-              final open = (specialDay['openAt'] as String?)?.substring(0, 5) ?? '';
-              final close = (specialDay['closeAt'] as String?)?.substring(0, 5) ?? '';
+              final open =
+                  (specialDay['openAt'] as String?)?.substring(0, 5) ?? '';
+              final close =
+                  (specialDay['closeAt'] as String?)?.substring(0, 5) ?? '';
               final note = specialDay['note'] as String?;
-              hoursText = '$open – $close${note != null ? " — $note" : ""}';
+              hoursText =
+                  '$open – $close${note != null ? " — $note" : ""}';
               textColor = Colors.orange.shade700;
             }
           } else {
-            final hours = _getTodayHours(dayOfWeek);
+            final hours = _getTodayHours(restaurant, dayOfWeek);
             hoursText = hours?.formattedHours ?? l.closed;
-            textColor = isToday ? AppColors.primary : AppColors.textSecondary;
+            textColor =
+                isToday ? AppColors.primary : AppColors.textSecondary;
           }
 
           return Padding(
@@ -374,7 +475,9 @@ class _DetailContent extends StatelessWidget {
                     dateStr,
                     style: TextStyle(
                       fontSize: 12,
-                      color: isToday ? AppColors.primary : AppColors.textMuted,
+                      color: isToday
+                          ? AppColors.primary
+                          : AppColors.textMuted,
                     ),
                   ),
                 ),
@@ -383,9 +486,12 @@ class _DetailContent extends StatelessWidget {
                   child: Text(
                     dayNames[i],
                     style: TextStyle(
-                      fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                      fontWeight:
+                          isToday ? FontWeight.bold : FontWeight.normal,
                       fontSize: 14,
-                      color: isToday ? AppColors.primary : AppColors.textPrimary,
+                      color: isToday
+                          ? AppColors.primary
+                          : AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -393,7 +499,9 @@ class _DetailContent extends StatelessWidget {
                   child: Text(
                     hoursText,
                     style: TextStyle(
-                      fontWeight: isToday || isSpecial ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: isToday || isSpecial
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                       fontSize: 14,
                       color: textColor,
                     ),
@@ -407,7 +515,7 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildTags() {
+  Widget _buildTags(Restaurant restaurant) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -431,7 +539,7 @@ class _DetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildReserveButton(BuildContext context) {
+  Widget _buildReserveButton(BuildContext context, Restaurant restaurant) {
     return SizedBox(
       width: double.infinity,
       height: 52,
@@ -439,7 +547,8 @@ class _DetailContent extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ReservationPage(restaurantId: restaurant.id),
+              builder: (_) =>
+                  ReservationPage(restaurantId: restaurant.id),
             ),
           );
         },
@@ -458,6 +567,194 @@ class _DetailContent extends StatelessWidget {
       ),
     );
   }
+
+  // ---------------------------------------------------------------------------
+  // Tab 1 — Menu
+  // ---------------------------------------------------------------------------
+
+  Widget _buildMenuTab(BuildContext context) {
+    if (_menuLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_menuError != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline,
+                  size: 48, color: AppColors.error),
+              const Gap(16),
+              Text(
+                _menuError!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
+              ),
+              const Gap(16),
+              ElevatedButton(
+                onPressed: _loadMenu,
+                child: Text(S.of(context).retry),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_menuCategories == null) {
+      // Menu se načítá teprve při přepnutí na tab — zobrazíme prázdný stav.
+      return Center(
+        child: Text(
+          S.of(context).menuEmpty,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
+      );
+    }
+
+    if (_menuCategories!.isEmpty) {
+      return Center(
+        child: Text(
+          S.of(context).menuEmpty,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      itemCount: _menuCategories!.length,
+      itemBuilder: (context, index) {
+        return _MenuCategorySection(category: _menuCategories![index]);
+      },
+    );
+  }
+}
+
+/// Záhlaví kategorie a seznam položek menu — pouze pro čtení (bez košíku).
+class _MenuCategorySection extends StatelessWidget {
+  final MenuCategory category;
+
+  const _MenuCategorySection({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final availableItems =
+        category.items.where((item) => item.available).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+          child: Text(
+            category.name,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const Divider(height: 1, indent: 16, endIndent: 16),
+        if (availableItems.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              S.of(context).menuEmpty,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: AppColors.textMuted,
+              ),
+            ),
+          )
+        else
+          ...availableItems.map((item) => _MenuItemRow(item: item)),
+      ],
+    );
+  }
+}
+
+/// Jeden řádek položky menu: název vlevo, cena vpravo.
+class _MenuItemRow extends StatelessWidget {
+  final MenuItem item;
+
+  const _MenuItemRow({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.name,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                if (item.description != null &&
+                    item.description!.isNotEmpty) ...[
+                  const Gap(2),
+                  Text(
+                    item.description!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const Gap(12),
+          Text(
+            item.formattedPrice,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pomocný delegate pro přichycený TabBar v NestedScrollView
+// ---------------------------------------------------------------------------
+
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  const _TabBarDelegate(this.tabBar);
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_TabBarDelegate oldDelegate) =>
+      tabBar != oldDelegate.tabBar;
 }
 
 /// Chybový pohled zobrazený, pokud se nepodaří načíst detail restaurace.

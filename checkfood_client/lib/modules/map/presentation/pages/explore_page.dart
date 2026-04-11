@@ -187,9 +187,11 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
   void _onPinTapped(String? restaurantId) {
     if (restaurantId == null) return;
-    context.read<ExploreBloc>().add(
-          ExploreEvent.markerSelected(restaurantId: restaurantId),
-        );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => RestaurantDetailPage(restaurantId: restaurantId),
+      ),
+    );
   }
 
   void _deselectMarker() {

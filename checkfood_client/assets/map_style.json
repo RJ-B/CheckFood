@@ -1,15 +1,24 @@
 [
   {
-    "featureType": "poi.business",
-    "stylers": [
-      { "visibility": "off" }
-    ]
+    "featureType": "poi",
+    "stylers": [{ "visibility": "off" }]
   },
   {
-    "featureType": "poi.business",
+    "featureType": "poi.park",
+    "stylers": [{ "visibility": "on" }]
+  },
+  {
+    "featureType": "poi.park",
     "elementType": "labels",
-    "stylers": [
-      { "visibility": "off" }
-    ]
+    "stylers": [{ "visibility": "off" }]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [{ "visibility": "off" }]
+  },
+  {
+    "featureType": "landscape.man_made",
+    "elementType": "labels",
+    "stylers": [{ "visibility": "off" }]
   }
 ]
