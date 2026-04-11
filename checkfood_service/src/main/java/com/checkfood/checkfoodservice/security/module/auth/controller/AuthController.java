@@ -158,12 +158,30 @@ public class AuthController {
         String body;
         String emoji;
         String accent;
+        // The success page exposes a deep-link button that opens the app via
+        // the legacy `checkfood://` custom URL scheme. Once the project is
+        // migrated to a paid Apple Developer Program (so that Universal Links
+        // can be enabled — see ios/Runner/Runner.entitlements), Mail.app on
+        // iOS will route the verification link directly to the app and this
+        // intermediate HTML page will only be seen by desktop browsers and
+        // by iOS Mail clients without the app installed. The button below is
+        // therefore a UX bridge for the Personal-team build only — but it
+        // also works fine as a permanent fallback for Android, desktop, and
+        // any device that doesn't (or can't) handle the Universal Link.
+        String actionButtonHtml = "";
         if (success) {
             title = "Účet ověřen — CheckFood";
             headline = "Účet úspěšně ověřen";
-            body = "Můžete se přihlásit v aplikaci CheckFood na svém telefonu.";
+            body = "Tvůj účet je aktivovaný. Otevři aplikaci CheckFood a přihlas se.";
             emoji = "✓";
             accent = "#2ecc71";
+            // The href triggers the existing Flutter custom-scheme handler
+            // (FlutterDeepLinkingEnabled in Info.plist) → AppRouter case
+            // login: → LoginPage(verificationStatus: 'success'). The status
+            // value MUST stay in the whitelist defined in
+            // checkfood_client/lib/navigation/app_router.dart line ~41.
+            actionButtonHtml = "<a class=\"btn\" href=\"checkfood://app/login?status=success\">Otevřít CheckFood</a>"
+                    + "<p class=\"hint\">Tlačítko otevře aplikaci, pokud ji máš nainstalovanou.</p>";
         } else {
             title = "Ověření selhalo — CheckFood";
             headline = "Ověření se nezdařilo";
@@ -171,6 +189,7 @@ public class AuthController {
                     + (errorType != null ? " (kód: " + errorType + ")" : "");
             emoji = "✕";
             accent = "#e74c3c";
+            actionButtonHtml = "<a class=\"btn btn--ghost\" href=\"checkfood://app/login?status=expired\">Otevřít CheckFood</a>";
         }
         return "<!DOCTYPE html>\n<html lang=\"cs\"><head>"
                 + "<meta charset=\"UTF-8\">"
@@ -186,13 +205,21 @@ public class AuthController {
                 + "display:flex;align-items:center;justify-content:center;font-size:40px;"
                 + "margin:0 auto 24px;font-weight:bold}"
                 + "h1{margin:0 0 12px;font-size:22px;font-weight:600}"
-                + "p{margin:0;font-size:15px;line-height:1.5;opacity:0.85}"
+                + "p{margin:0 0 8px;font-size:15px;line-height:1.5;opacity:0.85}"
+                + ".btn{display:inline-block;margin-top:20px;padding:14px 28px;"
+                + "background:" + accent + ";color:#0F2027;text-decoration:none;"
+                + "border-radius:12px;font-weight:600;font-size:16px;"
+                + "box-shadow:0 4px 16px rgba(0,0,0,0.25);transition:transform 0.15s}"
+                + ".btn:active{transform:scale(0.97)}"
+                + ".btn--ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)}"
+                + ".hint{margin-top:12px;font-size:12px;opacity:0.55}"
                 + ".brand{margin-top:24px;font-size:13px;opacity:0.5;letter-spacing:1px}"
                 + "</style></head><body>"
                 + "<div class=\"card\">"
                 + "<div class=\"icon\">" + emoji + "</div>"
                 + "<h1>" + headline + "</h1>"
                 + "<p>" + body + "</p>"
+                + actionButtonHtml
                 + "<div class=\"brand\">CheckFood</div>"
                 + "</div></body></html>";
     }

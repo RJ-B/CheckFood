@@ -3,24 +3,53 @@
 <plist version="1.0">
 <dict>
 	<!--
-	  Universal Links — see Apr 2026 bug #2 fix.
+	  ============================================================
+	  STATUS Apr 2026: NOT WIRED INTO BUILD.
+
+	  This file exists but is *not* referenced by any Xcode target
+	  (CODE_SIGN_ENTITLEMENTS is intentionally absent from
+	  Runner.xcodeproj/project.pbxproj). The reason: the active
+	  Apple Developer team for this project is a Personal (free)
+	  team, which Apple does not allow to use the
+	  `com.apple.developer.associated-domains` capability —
+	  iOS Universal Links require a paid Apple Developer Program
+	  membership ($99/yr).
+
+	  HOW TO RE-ENABLE (after upgrading to a paid Developer Program):
+
+	    1. In Xcode → Signing & Capabilities tab of the Runner
+	       target, change the team from the Personal team
+	       ("Viktorie Jiráková") to the paid team. Xcode will
+	       auto-create a provisioning profile that includes
+	       Associated Domains.
+
+	    2. In `ios/Runner.xcodeproj/project.pbxproj`, add the line
+	         CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+	       inside ALL THREE Runner build configurations
+	       (Debug / Profile / Release). They share the prefix
+	       `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;`
+	       followed by `CLANG_ENABLE_MODULES = YES;` — that's the
+	       anchor to grep for.
+
+	    3. `flutter clean && flutter pub get && flutter run` from
+	       checkfood_client. First launch will fetch the AASA from
+	       https://checkfood-api-…/.well-known/apple-app-site-association
+	       (already served by WellKnownController in checkfood_service).
+
+	    4. Verify with `xcrun simctl openurl booted https://checkfood-api-…/api/auth/verify?token=test`
+	       on the Simulator, or click a verification email link on
+	       a real device — the app should open directly instead of
+	       Safari.
+
+	  No other code changes needed. The Flutter listener in
+	  `lib/main.dart` (`_AppBootstrapperState._handleIncomingUri`)
+	  is already wired and will start receiving events the moment
+	  iOS sees the entitlement claim.
+	  ============================================================
 
 	  Tells iOS that this app is a valid handler for HTTPS URLs whose
 	  host matches checkfood-api-809801655996.europe-central2.run.app
-	  AND whose path matches one of the entries in the AASA file at
-	  https://<host>/.well-known/apple-app-site-association
-	  (served by checkfood_service WellKnownController).
-
-	  When iOS sees a tapped link to that host, it fetches the AASA
-	  file once per install (cached for ~24h, can be refreshed by
-	  reinstalling the app or running `xcrun simctl openurl`), and if
-	  the path matches one of the AASA "paths" entries it dispatches
-	  the URL to the running CheckFood app via NSUserActivity instead
-	  of opening Safari.
-
-	  The matching listener on the Flutter side lives in main.dart
-	  via the `app_links` package; it parses ?token=... and dispatches
-	  AuthEvent.verifyEmailRequested through the global AuthBloc.
+	  AND whose path matches one of the entries in the AASA file.
 	-->
 	<key>com.apple.developer.associated-domains</key>
 	<array>
