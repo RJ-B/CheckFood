@@ -130,7 +130,8 @@ class __$$CreateOrderRequestModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$CreateOrderRequestModelImpl implements _CreateOrderRequestModel {
   const _$CreateOrderRequestModelImpl({
     required final List<OrderItemRequestModel> items,

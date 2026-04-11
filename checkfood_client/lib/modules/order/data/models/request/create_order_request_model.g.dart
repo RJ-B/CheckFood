@@ -18,4 +18,7 @@ _$CreateOrderRequestModelImpl _$$CreateOrderRequestModelImplFromJson(
 
 Map<String, dynamic> _$$CreateOrderRequestModelImplToJson(
   _$CreateOrderRequestModelImpl instance,
-) => <String, dynamic>{'items': instance.items, 'note': instance.note};
+) => <String, dynamic>{
+  'items': instance.items.map((e) => e.toJson()).toList(),
+  'note': instance.note,
+};

@@ -158,7 +158,7 @@ void main() {
   });
 
   group('CreateOrderRequestModel', () {
-    test('toJson serialises items correctly', () {
+    test('toJson serialises items as plain maps (explicitToJson=true)', () {
       const model = CreateOrderRequestModel(
         items: [
           OrderItemRequestModel(menuItemId: 'item-1', quantity: 2),
@@ -170,13 +170,11 @@ void main() {
       expect(json['note'], 'bez cibule');
       final items = json['items'] as List;
       expect(items.length, 1);
-      // json_serializable without explicitToJson:true stores nested freezed
-      // objects as their Dart instances in the items list.
-      // Use the nested model's own toJson to verify field values.
-      final firstItemJson =
-          (items.first as OrderItemRequestModel).toJson();
-      expect(firstItemJson['menuItemId'], 'item-1');
-      expect(firstItemJson['quantity'], 2);
+      // After the explicitToJson:true fix, nested models are serialised
+      // to plain Map<String, dynamic> — dio can JSON-encode them directly.
+      final firstItem = items.first as Map<String, dynamic>;
+      expect(firstItem['menuItemId'], 'item-1');
+      expect(firstItem['quantity'], 2);
     });
 
     test('toJson with null note omits or nulls note', () {
