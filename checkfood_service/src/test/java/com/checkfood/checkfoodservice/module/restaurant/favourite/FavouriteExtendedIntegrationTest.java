@@ -36,7 +36,6 @@ class FavouriteExtendedIntegrationTest extends BaseAuthIntegrationTest {
     @BeforeEach
     void setUpRestaurant() {
         Restaurant restaurant = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Extended Fav Bistro")
                 .cuisineType(CuisineType.ITALIAN)
                 .status(RestaurantStatus.ACTIVE)
@@ -125,7 +124,6 @@ class FavouriteExtendedIntegrationTest extends BaseAuthIntegrationTest {
 
         // Add a second restaurant
         Restaurant restaurant2 = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Second Bistro")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

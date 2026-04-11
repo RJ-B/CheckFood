@@ -572,7 +572,6 @@ class OwnerMenuControllerIntegrationTest extends BaseMenuIntegrationTest {
         userRepository.saveAndFlush(user);
 
         Restaurant otherRestaurant = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Other Restaurant")
                 .cuisineType(CuisineType.ITALIAN)
                 .status(RestaurantStatus.ACTIVE)

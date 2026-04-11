@@ -2,12 +2,13 @@ package com.checkfood.checkfoodservice.module.restaurant.service;
 
 import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantTableRequest;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantTableResponse;
+import com.checkfood.checkfoodservice.module.restaurant.entity.employee.RestaurantEmployeeRole;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.table.RestaurantTable;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.table.TableGroup;
 import com.checkfood.checkfoodservice.module.restaurant.exception.RestaurantException;
 import com.checkfood.checkfoodservice.module.restaurant.logging.RestaurantLogger;
 import com.checkfood.checkfoodservice.module.restaurant.mapper.RestaurantTableMapper;
-import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
+import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.table.RestaurantTableRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.table.TableGroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +31,15 @@ import java.util.stream.Collectors;
 @Transactional
 public class TableManagementServiceImpl implements TableManagementService {
 
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantEmployeeRepository restaurantEmployeeRepository;
     private final RestaurantTableRepository tableRepository;
     private final TableGroupRepository groupRepository;
     private final RestaurantTableMapper tableMapper;
     private final RestaurantLogger restaurantLogger;
 
     @Override
-    public RestaurantTableResponse addTable(UUID restaurantId, RestaurantTableRequest request, UUID ownerId) {
-        validateRestaurantOwnership(restaurantId, ownerId);
+    public RestaurantTableResponse addTable(UUID restaurantId, RestaurantTableRequest request, Long userId) {
+        validateRestaurantOwnership(restaurantId, userId);
 
         var table = tableMapper.toEntity(request);
         table.setRestaurantId(restaurantId);
@@ -51,11 +52,11 @@ public class TableManagementServiceImpl implements TableManagementService {
     }
 
     @Override
-    public RestaurantTableResponse updateTable(UUID tableId, RestaurantTableRequest request, UUID ownerId) {
+    public RestaurantTableResponse updateTable(UUID tableId, RestaurantTableRequest request, Long userId) {
         var table = tableRepository.findById(tableId)
                 .orElseThrow(() -> RestaurantException.tableNotFound(tableId));
 
-        validateRestaurantOwnership(table.getRestaurantId(), ownerId);
+        validateRestaurantOwnership(table.getRestaurantId(), userId);
 
         table.setLabel(request.getLabel());
         table.setCapacity(request.getCapacity());
@@ -101,13 +102,18 @@ public class TableManagementServiceImpl implements TableManagementService {
     }
 
     /**
-     * Ověří, zda zadaný uživatel je vlastníkem restaurace. Vyvolá výjimku při neshodě.
+     * Ověří, že zadaný uživatel je vlastníkem restaurace přes RestaurantEmployee
+     * (role = OWNER). Vyvolá výjimku při neshodě.
      *
      * @param restaurantId UUID restaurace
-     * @param ownerId      UUID požadovaného vlastníka
+     * @param userId       ID přihlášeného uživatele
      */
-    private void validateRestaurantOwnership(UUID restaurantId, UUID ownerId) {
-        if (!restaurantRepository.existsByIdAndOwnerId(restaurantId, ownerId)) {
+    private void validateRestaurantOwnership(UUID restaurantId, Long userId) {
+        boolean isOwner = restaurantEmployeeRepository
+                .findAllByUserIdAndRole(userId, RestaurantEmployeeRole.OWNER)
+                .stream()
+                .anyMatch(e -> e.getRestaurant().getId().equals(restaurantId));
+        if (!isOwner) {
             throw RestaurantException.accessDenied();
         }
     }
@@ -139,11 +145,11 @@ public class TableManagementServiceImpl implements TableManagementService {
     }
 
     @Override
-    public void deleteTable(UUID tableId, UUID ownerId) {
+    public void deleteTable(UUID tableId, Long userId) {
         var table = tableRepository.findById(tableId)
                 .orElseThrow(() -> RestaurantException.tableNotFound(tableId));
 
-        validateRestaurantOwnership(table.getRestaurantId(), ownerId);
+        validateRestaurantOwnership(table.getRestaurantId(), userId);
 
         table.setActive(false);
         tableRepository.save(table);

@@ -76,7 +76,6 @@ public abstract class RestaurantMapper {
      * @return entita restaurace
      */
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "ownerId", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "rating", ignore = true)

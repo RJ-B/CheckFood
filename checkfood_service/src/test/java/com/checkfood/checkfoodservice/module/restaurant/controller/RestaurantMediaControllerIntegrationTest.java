@@ -235,7 +235,6 @@ class RestaurantMediaControllerIntegrationTest extends BaseAuthIntegrationTest {
 
     private Restaurant aRestaurant(String name) {
         return Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name(name)
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)
@@ -257,7 +256,6 @@ class RestaurantMediaControllerIntegrationTest extends BaseAuthIntegrationTest {
         userRepository.saveAndFlush(user);
 
         Restaurant restaurant = restaurantRepository.save(Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name(restaurantName)
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

@@ -13,13 +13,21 @@ import java.util.UUID;
 
 /**
  * Interface pro správu byznys logiky restaurací.
+ *
+ * <p>Vlastnictví restaurací je od Apr 2026 resolvováno výhradně přes tabulku
+ * {@code restaurant_employee} (role = OWNER). Metody přijímají {@code userId}
+ * typu {@link Long}, což je primární klíč {@link UserEntity}.</p>
  */
 public interface RestaurantService {
 
     /**
-     * Vytvoří novou restauraci a přiřadí ji majiteli.
+     * Vytvoří novou restauraci a přiřadí danému uživateli roli OWNER v tabulce
+     * restaurant_employee.
+     *
+     * @param request data nové restaurace
+     * @param userId  ID přihlášeného uživatele (bude zapsán jako OWNER)
      */
-    RestaurantResponse createRestaurant(RestaurantRequest request, UUID ownerId);
+    RestaurantResponse createRestaurant(RestaurantRequest request, Long userId);
 
     /**
      * Načte detail konkrétní restaurace.
@@ -28,19 +36,29 @@ public interface RestaurantService {
 
     /**
      * Aktualizuje údaje existující restaurace.
-     * Ověřuje, zda požadavek provádí skutečný majitel.
+     * Ověřuje, že uživatel má roli OWNER v této restauraci.
+     *
+     * @param id      UUID restaurace
+     * @param request nová data
+     * @param userId  ID přihlášeného uživatele
      */
-    RestaurantResponse updateRestaurant(UUID id, RestaurantRequest request, UUID ownerId);
+    RestaurantResponse updateRestaurant(UUID id, RestaurantRequest request, Long userId);
 
     /**
-     * Vrátí seznam všech restaurací patřících danému majiteli.
+     * Vrátí seznam všech restaurací, kde má daný uživatel roli OWNER.
+     *
+     * @param userId ID přihlášeného uživatele
      */
-    List<RestaurantResponse> getMyRestaurants(UUID ownerId);
+    List<RestaurantResponse> getMyRestaurants(Long userId);
 
     /**
      * Deaktivuje restauraci (soft-delete).
+     * Vyžaduje roli OWNER v restaurant_employee.
+     *
+     * @param id     UUID restaurace
+     * @param userId ID přihlášeného uživatele
      */
-    void deleteRestaurant(UUID id, UUID ownerId);
+    void deleteRestaurant(UUID id, Long userId);
 
     // --- NOVÉ METODY PRO MAPU A SEZNAM (POSTGIS) ---
 

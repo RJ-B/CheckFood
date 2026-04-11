@@ -1,9 +1,12 @@
 package com.checkfood.checkfoodservice.module.restaurant.controller;
 
 import com.checkfood.checkfoodservice.module.restaurant.entity.common.Address;
+import com.checkfood.checkfoodservice.module.restaurant.entity.employee.RestaurantEmployee;
+import com.checkfood.checkfoodservice.module.restaurant.entity.employee.RestaurantEmployeeRole;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.CuisineType;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.RestaurantStatus;
+import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
 import com.checkfood.checkfoodservice.security.BaseAuthIntegrationTest;
 import com.checkfood.checkfoodservice.security.module.user.entity.RoleEntity;
@@ -38,6 +41,9 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private RestaurantEmployeeRepository restaurantEmployeeRepository;
 
     @BeforeEach
     void ensureOwnerRole() {
@@ -322,7 +328,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("happy path — owner updates own restaurant")
         void should_return200_when_ownerUpdatesRestaurant() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-upd");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("Original Name", ownerId);
 
             mockMvc.perform(put("/api/v1/restaurants/" + saved.getId())
@@ -339,7 +345,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
             String ownerToken = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-upd2");
             String otherToken = getTokenWithRole(OTHER_OWNER_EMAIL, "RESTAURANT_OWNER", "device-other-owner-upd");
 
-            UUID ownerId = getOwnerIdFromToken(ownerToken);
+            Long ownerId = getOwnerIdFromToken(ownerToken);
             Restaurant saved = persistRestaurantForOwner("Not Your Restaurant", ownerId);
 
             mockMvc.perform(put("/api/v1/restaurants/" + saved.getId())
@@ -365,7 +371,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("idempotency — PUT twice results in same final state")
         void should_beIdempotent_when_putTwice() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-idem");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("Idempotent Restaurant", ownerId);
 
             mockMvc.perform(put("/api/v1/restaurants/" + saved.getId())
@@ -397,7 +403,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("happy path — owner deletes own restaurant, gets 204")
         void should_return204_when_ownerDeletes() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-del");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("To Delete", ownerId);
 
             mockMvc.perform(delete("/api/v1/restaurants/" + saved.getId())
@@ -416,7 +422,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
             String ownerToken = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-del2");
             String otherToken = getTokenWithRole(OTHER_OWNER_EMAIL, "RESTAURANT_OWNER", "device-other-del");
 
-            UUID ownerId = getOwnerIdFromToken(ownerToken);
+            Long ownerId = getOwnerIdFromToken(ownerToken);
             Restaurant saved = persistRestaurantForOwner("Protected Restaurant", ownerId);
 
             mockMvc.perform(delete("/api/v1/restaurants/" + saved.getId())
@@ -438,7 +444,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("idempotency — DELETE twice is idempotent (second call keeps archived state)")
         void should_beIdempotent_when_deleteTwice() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-del4");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("Double Delete", ownerId);
 
             mockMvc.perform(delete("/api/v1/restaurants/" + saved.getId())
@@ -464,7 +470,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("RESTAURANT_OWNER sees their own restaurants")
         void should_returnMyRestaurants_when_ownerAuthenticated() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-me");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             persistRestaurantForOwner("My Restaurant", ownerId);
 
             mockMvc.perform(get("/api/v1/restaurants/me")
@@ -504,7 +510,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("happy path — owner adds table, gets 201")
         void should_return201_when_ownerAddsTable() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-tbl");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("Table Restaurant", ownerId);
 
             mockMvc.perform(post("/api/v1/restaurants/" + saved.getId() + "/tables")
@@ -520,7 +526,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("400 when label is blank")
         void should_return400_when_labelIsBlank() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-tbl2");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("Table Restaurant 2", ownerId);
 
             mockMvc.perform(post("/api/v1/restaurants/" + saved.getId() + "/tables")
@@ -534,7 +540,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("400 when capacity is 0 (below minimum 1)")
         void should_return400_when_capacityIsZero() throws Exception {
             String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-tbl3");
-            UUID ownerId = getOwnerIdFromToken(token);
+            Long ownerId = getOwnerIdFromToken(token);
             Restaurant saved = persistRestaurantForOwner("Table Restaurant 3", ownerId);
 
             mockMvc.perform(post("/api/v1/restaurants/" + saved.getId() + "/tables")
@@ -550,7 +556,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
             String ownerToken = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-tbl4");
             String otherToken = getTokenWithRole(OTHER_OWNER_EMAIL, "RESTAURANT_OWNER", "device-other-tbl");
 
-            UUID ownerId = getOwnerIdFromToken(ownerToken);
+            Long ownerId = getOwnerIdFromToken(ownerToken);
             Restaurant saved = persistRestaurantForOwner("Someone Else's Restaurant", ownerId);
 
             mockMvc.perform(post("/api/v1/restaurants/" + saved.getId() + "/tables")
@@ -614,7 +620,6 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
 
     private Restaurant persistRestaurant(String name) {
         return restaurantRepository.save(Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name(name)
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)
@@ -629,9 +634,14 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
                 .build());
     }
 
-    private Restaurant persistRestaurantForOwner(String name, UUID ownerId) {
-        return restaurantRepository.save(Restaurant.builder()
-                .ownerId(ownerId)
+    /**
+     * Persist a restaurant and attach the given user as its OWNER via
+     * restaurant_employee. This mirrors the production path (see
+     * {@code RestaurantServiceImpl.createRestaurant}) after the V3 migration
+     * removed {@code restaurant.owner_id}.
+     */
+    private Restaurant persistRestaurantForOwner(String name, Long userId) {
+        Restaurant saved = restaurantRepository.save(Restaurant.builder()
                 .name(name)
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)
@@ -644,6 +654,16 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
                         .country("CZ")
                         .build())
                 .build());
+
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("Test user " + userId + " not found"));
+        restaurantEmployeeRepository.saveAndFlush(RestaurantEmployee.builder()
+                .user(user)
+                .restaurant(saved)
+                .role(RestaurantEmployeeRole.OWNER)
+                .build());
+
+        return saved;
     }
 
     private String validRestaurantJson() {
@@ -701,31 +721,23 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
     }
 
     /**
-     * GAP: RestaurantController.extractUserId() calls UUID.fromString(authentication.getName())
-     * but authentication.getName() returns the user's email (not a UUID). This makes ALL
-     * owner-scoped write endpoints (POST, PUT, DELETE /api/v1/restaurants) throw
-     * IllegalArgumentException → mapped to 400 VALIDATION_ERROR.
-     *
-     * This method returns a deterministic UUID derived from the email so that test setup can
-     * create restaurants with a matching ownerId — but the HTTP call itself will still fail
-     * with 400 because the production code is broken. These tests are intentional GAP tests.
-     *
-     * Fix required in production: use UserService.findByEmail(authentication.getName()).getUuid()
-     * (once UserEntity has a UUID field) or store the user UUID in a JWT custom claim.
+     * Resolve the authenticated user's primary-key id from a JWT token by
+     * reading the {@code sub} claim (e-mail) and looking up the user record.
+     * Mirrors the production path in {@link
+     * com.checkfood.checkfoodservice.module.restaurant.controller.RestaurantController#extractUserId
+     * RestaurantController.extractUserId}.
      */
-    private UUID getOwnerIdFromToken(String token) {
-        // Decode sub (email) from JWT and derive a deterministic UUID via nameUUIDFromBytes.
-        // This UUID is used in test setup only — the production extractUserId() is broken
-        // and will throw before reaching service logic.
+    private Long getOwnerIdFromToken(String token) {
         String[] parts = token.split("\\.");
         String payload = new String(java.util.Base64.getUrlDecoder().decode(parts[1]));
         try {
             JsonNode node = objectMapper.readTree(payload);
-            String sub = node.get("sub").asText();
-            // Return a deterministic UUID from email for test setup purposes only
-            return java.util.UUID.nameUUIDFromBytes(sub.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            String email = node.get("sub").asText();
+            return userRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalStateException("User " + email + " not found in test DB"))
+                    .getId();
         } catch (Exception e) {
-            throw new RuntimeException("Cannot derive UUID from JWT sub", e);
+            throw new RuntimeException("Cannot extract user id from JWT sub claim", e);
         }
     }
 

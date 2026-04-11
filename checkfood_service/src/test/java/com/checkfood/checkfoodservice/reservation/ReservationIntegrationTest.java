@@ -278,7 +278,6 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
         void shouldReturn400ForTableNotInRestaurant() throws Exception {
             // Create a table in a different restaurant
             var otherRestaurant = restaurantRepository.save(Restaurant.builder()
-                    .ownerId(UUID.randomUUID())
                     .name("Other Restaurant")
                     .cuisineType(CuisineType.ITALIAN)
                     .status(RestaurantStatus.ACTIVE)
@@ -675,7 +674,6 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                 .build());
 
         Restaurant restaurant = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Test Restaurant")
                 .description("Integration test restaurant")
                 .cuisineType(CuisineType.CZECH)

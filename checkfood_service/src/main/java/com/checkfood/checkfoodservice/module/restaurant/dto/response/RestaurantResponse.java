@@ -24,7 +24,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestaurantResponse {
     private UUID id;
-    private UUID ownerId;
+    // Field `ownerId` was removed Apr 2026. Ownership is now resolved via
+    // the `restaurant_employee` table (role = OWNER), see RestaurantService
+    // and MyRestaurantService. Client apps never consumed this value since
+    // it was always a random UUID (mass-assignment bug in old registerAsOwner).
     private String name;
     private String description;
     private CuisineType cuisineType;

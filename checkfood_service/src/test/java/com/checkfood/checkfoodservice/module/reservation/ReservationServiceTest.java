@@ -88,7 +88,6 @@ class ReservationServiceTest {
 
         restaurant = Restaurant.builder()
                 .id(RESTAURANT_ID)
-                .ownerId(UUID.randomUUID())
                 .name("Test Restaurant")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

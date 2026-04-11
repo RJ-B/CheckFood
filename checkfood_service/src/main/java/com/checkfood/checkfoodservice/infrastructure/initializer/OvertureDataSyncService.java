@@ -39,7 +39,8 @@ public class OvertureDataSyncService {
 
     private final RestaurantRepository restaurantRepository;
     private final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-    private static final UUID SYSTEM_OWNER_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+    // Systémové restaurace z Overture Maps nemají vlastníka v RestaurantEmployee.
+    // Jsou dostupné jen přes veřejné read endpointy (markers / nearest / detail).
 
     @Value("${overture.release.path:s3://overturemaps-us-west-2/release/2026-*/theme=places/type=place/*.parquet}")
     private String overturePath;
@@ -212,7 +213,6 @@ public class OvertureDataSyncService {
 
         return Restaurant.builder()
                 .overtureId(overtureId)
-                .ownerId(SYSTEM_OWNER_ID)
                 .name(name != null ? name : "Neznámý podnik")
                 .description(description)
                 .cuisineType(cuisineType)

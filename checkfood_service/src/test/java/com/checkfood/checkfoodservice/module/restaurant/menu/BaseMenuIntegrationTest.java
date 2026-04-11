@@ -84,11 +84,9 @@ public abstract class BaseMenuIntegrationTest extends BaseAuthIntegrationTest {
         // Login first to obtain a JWT.
         String token = loginAndGetToken(email, deviceId);
 
-        // The restaurant ownerId field stores a UUID that identifies the owner.
-        // We use a random UUID here since the PanoramaController / MenuController resolve
-        // the owner through RestaurantEmployee → user relationship, not via restaurant.ownerId directly.
+        // Ownership is resolved through the RestaurantEmployee → user relationship
+        // (see V3 migration). The restaurant.owner_id column was removed Apr 2026.
         Restaurant restaurant = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Test Restaurant")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

@@ -10,6 +10,7 @@ import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantR
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantTableResponse;
 import com.checkfood.checkfoodservice.module.restaurant.service.RestaurantService;
 import com.checkfood.checkfoodservice.module.restaurant.service.TableManagementService;
+import com.checkfood.checkfoodservice.security.module.user.service.UserService;
 import com.checkfood.checkfoodservice.security.ratelimit.annotation.RateLimited;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final TableManagementService tableManagementService;
     private final FavouriteService favouriteService;
+    private final UserService userService;
 
     /**
      * Vrací všechny aktivní restaurace jako odlehčené markery spolu s verzí.
@@ -143,16 +145,16 @@ public class RestaurantController {
             @Valid @RequestBody RestaurantRequest request,
             Authentication authentication) {
 
-        UUID ownerId = extractUserId(authentication);
-        RestaurantResponse response = restaurantService.createRestaurant(request, ownerId);
+        Long userId = extractUserId(authentication);
+        RestaurantResponse response = restaurantService.createRestaurant(request, userId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public ResponseEntity<List<RestaurantResponse>> getMyRestaurants(Authentication authentication) {
-        UUID ownerId = extractUserId(authentication);
-        return ResponseEntity.ok(restaurantService.getMyRestaurants(ownerId));
+        Long userId = extractUserId(authentication);
+        return ResponseEntity.ok(restaurantService.getMyRestaurants(userId));
     }
 
     @PutMapping("/{id}")
@@ -162,16 +164,16 @@ public class RestaurantController {
             @Valid @RequestBody RestaurantRequest request,
             Authentication authentication) {
 
-        UUID ownerId = extractUserId(authentication);
-        return ResponseEntity.ok(restaurantService.updateRestaurant(id, request, ownerId));
+        Long userId = extractUserId(authentication);
+        return ResponseEntity.ok(restaurantService.updateRestaurant(id, request, userId));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRestaurant(@PathVariable UUID id, Authentication authentication) {
-        UUID ownerId = extractUserId(authentication);
-        restaurantService.deleteRestaurant(id, ownerId);
+        Long userId = extractUserId(authentication);
+        restaurantService.deleteRestaurant(id, userId);
     }
 
     @PostMapping("/{id}/tables")
@@ -181,9 +183,9 @@ public class RestaurantController {
             @Valid @RequestBody RestaurantTableRequest request,
             Authentication authentication) {
 
-        UUID ownerId = extractUserId(authentication);
+        Long userId = extractUserId(authentication);
         return new ResponseEntity<>(
-                tableManagementService.addTable(restaurantId, request, ownerId),
+                tableManagementService.addTable(restaurantId, request, userId),
                 HttpStatus.CREATED
         );
     }
@@ -197,12 +199,13 @@ public class RestaurantController {
     }
 
     /**
-     * Extrahuje UUID přihlášeného uživatele z Authentication kontextu.
+     * Extrahuje primární klíč přihlášeného uživatele z Authentication kontextu.
+     * JWT subject obsahuje e-mail — entitu usera načteme přes {@link UserService}.
      *
      * @param authentication Spring Security authentication objekt
-     * @return UUID přihlášeného uživatele
+     * @return Long ID přihlášeného uživatele
      */
-    private UUID extractUserId(Authentication authentication) {
-        return UUID.fromString(authentication.getName());
+    private Long extractUserId(Authentication authentication) {
+        return userService.findByEmail(authentication.getName()).getId();
     }
 }

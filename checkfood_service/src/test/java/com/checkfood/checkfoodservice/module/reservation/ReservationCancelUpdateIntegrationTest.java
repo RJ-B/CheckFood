@@ -77,7 +77,6 @@ class ReservationCancelUpdateIntegrationTest extends BaseAuthIntegrationTest {
         }
 
         var restaurant = restaurantRepository.save(Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Integration Restaurant")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

@@ -16,12 +16,12 @@ public class RestaurantLogger extends AppLogger {
     /**
      * Zaloguje úspěšné vytvoření nové restaurace.
      *
-     * @param id      UUID nové restaurace
-     * @param name    název restaurace
-     * @param ownerId UUID majitele
+     * @param id     UUID nové restaurace
+     * @param name   název restaurace
+     * @param userId ID uživatele-vlastníka (primární klíč UserEntity)
      */
-    public void logRestaurantCreated(UUID id, String name, UUID ownerId) {
-        this.info("Nová restaurace '{}' (ID: {}) byla úspěšně vytvořena majitelem {}.", name, id, ownerId);
+    public void logRestaurantCreated(UUID id, String name, Long userId) {
+        this.info("Nová restaurace '{}' (ID: {}) byla úspěšně vytvořena uživatelem {}.", name, id, userId);
     }
 
     /**

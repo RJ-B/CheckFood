@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Hlavní doménová entita reprezentující restauraci na platformě CheckFood.
@@ -27,7 +26,6 @@ import java.util.UUID;
 @Table(
         name = "restaurant",
         indexes = {
-                @Index(name = "idx_restaurant_owner", columnList = "owner_id"),
                 @Index(name = "idx_restaurant_status", columnList = "status"),
                 @Index(name = "idx_restaurant_active", columnList = "is_active"),
                 @Index(name = "idx_restaurant_overture_id", columnList = "overture_id"),
@@ -38,7 +36,7 @@ public class Restaurant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private java.util.UUID id;
 
     @Column(name = "overture_id", unique = true, length = 64)
     private String overtureId;
@@ -46,8 +44,9 @@ public class Restaurant {
     @Column(name = "ico", length = 8, unique = true)
     private String ico;
 
-    @Column(name = "owner_id", nullable = false)
-    private UUID ownerId;
+    // Vlastnictví restaurace se řeší výhradně přes tabulku restaurant_employee
+    // (role = OWNER). Sloupec `owner_id` byl odstraněn ve V3 migraci — viz
+    // db/migration/V3__drop_restaurant_owner_id.sql a AuthServiceImpl.
 
     @Column(name = "name", nullable = false, length = 150)
     private String name;

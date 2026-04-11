@@ -174,7 +174,8 @@ public class AuthServiceImpl implements AuthService {
                     .description("Zkušební restaurace — upravte údaje v nastavení.")
                     .phone("+420 000 000 00" + r)
                     .contactEmail(savedUser.getEmail())
-                    .ownerId(UUID.randomUUID())
+                    // Vlastnictví jde výhradně přes RestaurantEmployee (níže) —
+                    // dřívější .ownerId(UUID.randomUUID()) byl mass-assignment bug.
                     .status(RestaurantStatus.ACTIVE)
                     .active(true)
                     .cuisineType(cuisines[r])

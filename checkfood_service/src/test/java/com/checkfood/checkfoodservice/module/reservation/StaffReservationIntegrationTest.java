@@ -137,7 +137,6 @@ class StaffReservationIntegrationTest extends BaseAuthIntegrationTest {
         }
 
         var restaurant = restaurantRepository.save(Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Staff Restaurant")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

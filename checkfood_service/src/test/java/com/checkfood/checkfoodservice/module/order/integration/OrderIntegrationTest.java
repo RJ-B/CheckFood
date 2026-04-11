@@ -117,7 +117,6 @@ class OrderIntegrationTest extends BaseAuthIntegrationTest {
 
         // Minimal restaurant
         Restaurant restaurant = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Test Restaurant")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

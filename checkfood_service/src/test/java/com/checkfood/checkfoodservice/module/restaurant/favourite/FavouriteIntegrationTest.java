@@ -32,7 +32,6 @@ class FavouriteIntegrationTest extends BaseAuthIntegrationTest {
     void setUpRestaurant() {
         // Vytvoř testovací restauraci v H2 DB (bez PostGIS geometry — location je null)
         Restaurant restaurant = Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name("Test Restaurace")
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.ACTIVE)

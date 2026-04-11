@@ -366,7 +366,6 @@ class OwnerOnboardingControllerIntegrationTest extends BaseAuthIntegrationTest {
         userRepository.saveAndFlush(user);
 
         Restaurant restaurant = restaurantRepository.save(Restaurant.builder()
-                .ownerId(UUID.randomUUID())
                 .name(restaurantName)
                 .cuisineType(CuisineType.CZECH)
                 .status(RestaurantStatus.PENDING)

@@ -4,10 +4,12 @@ import com.checkfood.checkfoodservice.module.restaurant.dto.request.RestaurantRe
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.AllMarkersResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantMarkerResponse;
 import com.checkfood.checkfoodservice.module.restaurant.dto.response.RestaurantResponse;
-import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
+import com.checkfood.checkfoodservice.module.restaurant.entity.employee.RestaurantEmployee;
+import com.checkfood.checkfoodservice.module.restaurant.entity.employee.RestaurantEmployeeRole;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.RestaurantStatus;
 import com.checkfood.checkfoodservice.module.restaurant.exception.RestaurantException;
 import com.checkfood.checkfoodservice.module.restaurant.mapper.RestaurantMapper;
+import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
 import com.checkfood.checkfoodservice.security.module.user.entity.UserEntity;
 import com.checkfood.checkfoodservice.security.module.user.service.UserService;
@@ -38,6 +40,7 @@ import java.util.stream.Collectors;
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantEmployeeRepository restaurantEmployeeRepository;
     private final RestaurantMapper restaurantMapper;
     private final UserService userService;
 
@@ -85,14 +88,23 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public RestaurantResponse createRestaurant(RestaurantRequest request, UUID ownerId) {
-        var restaurant = restaurantMapper.toEntity(request);
+    public RestaurantResponse createRestaurant(RestaurantRequest request, Long userId) {
+        var user = userService.findById(userId);
 
-        restaurant.setOwnerId(ownerId);
+        var restaurant = restaurantMapper.toEntity(request);
         restaurant.setStatus(RestaurantStatus.PENDING);
         restaurant.setActive(true);
 
         var savedRestaurant = restaurantRepository.save(restaurant);
+
+        // Vytvoření OWNER vazby v restaurant_employee tabulce — jediný source
+        // of truth pro vlastnictví restaurace od V3 migrace.
+        restaurantEmployeeRepository.save(RestaurantEmployee.builder()
+                .user(user)
+                .restaurant(savedRestaurant)
+                .role(RestaurantEmployeeRole.OWNER)
+                .build());
+
         incrementMarkerVersion();
         return restaurantMapper.toResponse(savedRestaurant);
     }
@@ -106,17 +118,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public RestaurantResponse updateRestaurant(UUID id, RestaurantRequest request, UUID ownerId) {
+    public RestaurantResponse updateRestaurant(UUID id, RestaurantRequest request, Long userId) {
         var restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> RestaurantException.notFound(id));
 
-        if (!restaurant.getOwnerId().equals(ownerId)) {
-            throw RestaurantException.accessDenied();
-        }
+        assertUserIsOwner(userId, id);
 
         var updatedEntity = restaurantMapper.toEntity(request);
         updatedEntity.setId(restaurant.getId());
-        updatedEntity.setOwnerId(restaurant.getOwnerId());
         updatedEntity.setStatus(restaurant.getStatus());
         updatedEntity.setRating(restaurant.getRating());
 
@@ -127,25 +136,40 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RestaurantResponse> getMyRestaurants(UUID ownerId) {
-        return restaurantRepository.findAllByOwnerId(ownerId).stream()
+    public List<RestaurantResponse> getMyRestaurants(Long userId) {
+        return restaurantEmployeeRepository
+                .findAllByUserIdAndRole(userId, RestaurantEmployeeRole.OWNER)
+                .stream()
+                .map(RestaurantEmployee::getRestaurant)
                 .map(restaurantMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteRestaurant(UUID id, UUID ownerId) {
+    public void deleteRestaurant(UUID id, Long userId) {
         var restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> RestaurantException.notFound(id));
 
-        if (!restaurant.getOwnerId().equals(ownerId)) {
-            throw RestaurantException.accessDenied();
-        }
+        assertUserIsOwner(userId, id);
 
         restaurant.setActive(false);
         restaurant.setStatus(RestaurantStatus.ARCHIVED);
         restaurantRepository.save(restaurant);
         incrementMarkerVersion();
+    }
+
+    /**
+     * Ověří, že uživatel má roli OWNER v restaurant_employee pro danou restauraci.
+     * Vyhodí {@link RestaurantException#accessDenied()} pokud nikoliv.
+     */
+    private void assertUserIsOwner(Long userId, UUID restaurantId) {
+        boolean isOwner = restaurantEmployeeRepository
+                .findAllByUserIdAndRole(userId, RestaurantEmployeeRole.OWNER)
+                .stream()
+                .anyMatch(e -> e.getRestaurant().getId().equals(restaurantId));
+        if (!isOwner) {
+            throw RestaurantException.accessDenied();
+        }
     }
 
     @Override

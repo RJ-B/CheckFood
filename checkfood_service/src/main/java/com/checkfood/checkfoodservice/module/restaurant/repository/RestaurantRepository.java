@@ -35,14 +35,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
     List<Restaurant> findAllByActiveTrueAndStatus(RestaurantStatus status);
 
     /**
-     * Načte všechny restaurace daného majitele.
-     *
-     * @param ownerId UUID majitele
-     * @return seznam restaurací majitele
-     */
-    List<Restaurant> findAllByOwnerId(UUID ownerId);
-
-    /**
      * Ověří, zda restaurace s daným názvem již existuje.
      *
      * @param name název restaurace
@@ -50,14 +42,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, R
      */
     boolean existsByName(String name);
 
-    /**
-     * Ověří, zda restaurace s daným ID patří danému majiteli.
-     *
-     * @param id      UUID restaurace
-     * @param ownerId UUID majitele
-     * @return {@code true} pokud restaurace patří danému majiteli
-     */
-    boolean existsByIdAndOwnerId(UUID id, UUID ownerId);
+    // findAllByOwnerId + existsByIdAndOwnerId removed Apr 2026.
+    // Ownership is now resolved via RestaurantEmployeeRepository
+    // (findAllByUserIdAndRole / existsByUserIdAndRestaurantId).
 
     /**
      * Vyhledá restauraci podle IČO.
