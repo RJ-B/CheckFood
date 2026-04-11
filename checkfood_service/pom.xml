@@ -273,22 +273,6 @@
                     <source>21</source>
                     <target>21</target>
                     <encoding>UTF-8</encoding>
-                    <!-- Exclude broken test stubs that reference not-yet-implemented modules.
-                         These exist as forward-declared tests for future features. -->
-                    <testExcludes>
-                        <testExclude>**/security/audit/AuthorizationIdorTest.java</testExclude>
-                        <testExclude>**/security/audit/RoleEnforcementTest.java</testExclude>
-                        <testExclude>**/support/BasePostgresIntegrationTest.java</testExclude>
-                        <testExclude>**/reservation/ReservationIntegrationTest.java</testExclude>
-                        <testExclude>**/module/panorama/**</testExclude>
-                        <testExclude>**/module/restaurant/menu/**</testExclude>
-                        <testExclude>**/module/restaurant/media/**</testExclude>
-                        <testExclude>**/module/reservation/ReservationCancelUpdateIntegrationTest.java</testExclude>
-                        <testExclude>**/module/reservation/ReservationServiceTest.java</testExclude>
-                        <testExclude>**/module/reservation/StaffReservationIntegrationTest.java</testExclude>
-                        <testExclude>**/module/reservation/StaffReservationServiceTest.java</testExclude>
-                        <testExclude>**/security/module/user/UserProfileIntegrationTest.java</testExclude>
-                    </testExcludes>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -319,20 +303,6 @@
                             <source>21</source>
                             <target>21</target>
                             <encoding>UTF-8</encoding>
-                            <testExcludes>
-                                <testExclude>**/security/audit/AuthorizationIdorTest.java</testExclude>
-                                <testExclude>**/security/audit/RoleEnforcementTest.java</testExclude>
-                                <testExclude>**/support/BasePostgresIntegrationTest.java</testExclude>
-                                <testExclude>**/reservation/ReservationIntegrationTest.java</testExclude>
-                                <testExclude>**/module/panorama/**</testExclude>
-                                <testExclude>**/module/restaurant/menu/**</testExclude>
-                                <testExclude>**/module/restaurant/media/**</testExclude>
-                                <testExclude>**/module/reservation/ReservationCancelUpdateIntegrationTest.java</testExclude>
-                                <testExclude>**/module/reservation/ReservationServiceTest.java</testExclude>
-                                <testExclude>**/module/reservation/StaffReservationIntegrationTest.java</testExclude>
-                                <testExclude>**/module/reservation/StaffReservationServiceTest.java</testExclude>
-                                <testExclude>**/security/module/user/UserProfileIntegrationTest.java</testExclude>
-                            </testExcludes>
                             <proc>none</proc>
                         </configuration>
                     </execution>
