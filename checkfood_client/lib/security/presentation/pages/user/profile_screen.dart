@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:app_settings/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/colors.dart';
 
@@ -602,7 +601,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: Icons.notifications_none,
           title: l.pushNotifications,
           subtitle: 'Spravovat v nastavení zařízení',
-          onTap: () => AppSettings.openAppSettings(type: AppSettingsType.notification),
+          // Apr 2026 — replaced `app_settings` plugin with a direct
+          // url_launcher call after the plugin started crashing on
+          // iOS 26.3.1 inside its native register(with:) selector
+          // (Swift type introspection regression in the plugin's
+          // ObjC bridge). On iOS the `app-settings:` URL opens the
+          // app's settings page — Apple does not allow deep-linking
+          // directly into the Notifications row, so this is the
+          // closest approximation. Android currently shows nothing
+          // because the only Android user is a future test target;
+          // when re-introducing Android we can wire a platform
+          // channel to Settings.ACTION_APP_NOTIFICATION_SETTINGS.
+          onTap: () async {
+            final uri = Uri.parse('app-settings:');
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri);
+            }
+          },
         ),
         ProfileMenuItem(
           icon: Icons.help_outline,
