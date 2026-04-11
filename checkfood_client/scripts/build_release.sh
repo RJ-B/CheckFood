@@ -28,6 +28,14 @@ APPLE_CLIENT_ID="${APPLE_CLIENT_ID:-com.checkfood.checkfood_client}"
 APPLE_REDIRECT_URL="${APPLE_REDIRECT_URL:-https://checkfood-api-809801655996.europe-central2.run.app/api/oauth/apple/callback}"
 GOOGLE_MAPS_API_KEY="${GOOGLE_MAPS_API_KEY:?GOOGLE_MAPS_API_KEY must be set in the environment (used by Dart Places API)}"
 
+# Certificate pinning fingerprints (SHA-256 hex, comma-separated, primary + backup).
+# Generate with:
+#   openssl s_client -servername api.checkfood.cz -connect api.checkfood.cz:443 2>/dev/null \
+#     | openssl x509 -outform DER | openssl dgst -sha256 -hex | awk '{print $2}'
+# Empty value = skip pinning (default TLS validation only — acceptable for
+# initial rollouts until ops team generates + commits both primary + backup).
+CERT_PIN_SHA256="${CERT_PIN_SHA256:-}"
+
 SYMBOLS_DIR="${SYMBOLS_DIR:-build/symbols}"
 
 exec flutter build "$TARGET" \
@@ -39,4 +47,5 @@ exec flutter build "$TARGET" \
   --dart-define=APPLE_CLIENT_ID="$APPLE_CLIENT_ID" \
   --dart-define=APPLE_REDIRECT_URL="$APPLE_REDIRECT_URL" \
   --dart-define=GOOGLE_MAPS_API_KEY="$GOOGLE_MAPS_API_KEY" \
+  --dart-define=CERT_PIN_SHA256="$CERT_PIN_SHA256" \
   "$@"

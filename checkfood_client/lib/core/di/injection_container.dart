@@ -6,6 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 
 // Build-time konfigurace (nahrazuje flutter_dotenv)
 import '../config/build_config.dart';
+import '../network/certificate_pinner.dart';
 
 // Základní služby
 import '../services/google_places_service.dart';
@@ -229,6 +230,11 @@ Future<void> init() async {
         },
       ),
     );
+    // Certificate pinning — release builds insist the leaf cert's
+    // SHA-256 fingerprint matches one of the values passed through
+    // --dart-define=CERT_PIN_SHA256 at build time. Debug builds
+    // skip the pin so LAN dev against self-signed certs still works.
+    CertificatePinner.installOn(dio);
     dio.interceptors.add(apiPathGuard);
     if (kDebugMode) {
       dio.interceptors.add(LogInterceptor(requestBody: false, responseBody: true));
@@ -252,7 +258,8 @@ Future<void> init() async {
         },
       ),
     );
-
+    // Same certificate pinning installed on the authorised instance.
+    CertificatePinner.installOn(dio);
     dio.interceptors.add(apiPathGuard);
     dio.interceptors.add(AuthInterceptor(sl(), sl(), dio));
     if (kDebugMode) {

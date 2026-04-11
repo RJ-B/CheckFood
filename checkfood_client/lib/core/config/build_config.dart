@@ -58,4 +58,26 @@ class BuildConfig {
   /// Useful for guarding OAuth features that would otherwise silently fail.
   static bool get oauthConfigured =>
       googleWebClientId.isNotEmpty && appleClientId.isNotEmpty;
+
+  /// Comma-separated SHA-256 hex fingerprints of pinned leaf certificates
+  /// used by [CertificatePinner]. Supply primary + backup. Empty in dev
+  /// builds — the callback then falls back to standard TLS validation
+  /// (still enforced by `network_security_config.xml` + `ATS`, just
+  /// without the extra pin).
+  ///
+  /// Rotate by running `scripts/cert_fingerprint.sh` 30 days before the
+  /// live Cloud Run certificate expires, then re-build with the new
+  /// value.
+  static const String _pinnedCertFingerprintsCsv = String.fromEnvironment(
+    'CERT_PIN_SHA256',
+  );
+
+  static List<String> get pinnedCertFingerprints {
+    if (_pinnedCertFingerprintsCsv.isEmpty) return const [];
+    return _pinnedCertFingerprintsCsv
+        .split(',')
+        .map((s) => s.trim().toLowerCase())
+        .where((s) => s.isNotEmpty)
+        .toList(growable: false);
+  }
 }

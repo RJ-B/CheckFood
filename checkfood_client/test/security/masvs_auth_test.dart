@@ -7,6 +7,7 @@
 // We exercise RefreshTokenManager directly with a mock AuthRepository.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:checkfood_client/security/domain/entities/auth_tokens.dart';
 import 'package:checkfood_client/security/domain/repositories/auth_repository.dart';
@@ -58,18 +59,30 @@ void main() {
   });
 
   test(
-      'GAP: refresh failure SHOULD also clear TokenStorage — '
-      'RefreshTokenManager currently delegates that concern away', () {
-    // GAP: When refresh fails, RefreshTokenManager merely returns null.
-    // The AuthInterceptor then forwards the original 401. Nothing in the
-    // security layer is guaranteed to call tokenStorage.clearAuthData()
-    // on that path — it relies on a BLoC higher up to react. Wire a
-    // dedicated logout side-effect into the interceptor or repository
-    // so a compromised refresh token can't linger in secure storage.
-    fail(
-      'Refresh failure must eagerly wipe tokens from TokenStorage. '
-      'Currently no code path in lib/security guarantees this — '
-      'see AuthInterceptor.onError() which only returns handler.next(err).',
+      'refresh failure wipes TokenStorage AND emits session-expired (P3 fix)',
+      () {
+    // Phase 3H fix: AuthInterceptor.onError now calls
+    //   tokenStorage.clearAuthData()
+    //   sessionExpiredBus.signalExpired()
+    // whenever refresh returns null, throws, or the /refresh path
+    // itself returns 401. Static check here — full behavioural
+    // coverage lives in test/unit/security/interceptors/
+    // auth_interceptor_test.dart.
+    final src = File(
+      'lib/security/interceptors/auth_interceptor.dart',
+    ).readAsStringSync();
+
+    expect(
+      src.contains('clearAuthData'),
+      isTrue,
+      reason: 'AuthInterceptor must call tokenStorage.clearAuthData() '
+          'on the refresh-failure path.',
+    );
+    expect(
+      src.contains('signalExpired'),
+      isTrue,
+      reason: 'AuthInterceptor must emit on SessionExpiredBus so the UI '
+          'can force a logout navigation.',
     );
   });
 }

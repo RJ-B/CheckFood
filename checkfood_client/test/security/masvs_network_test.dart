@@ -110,39 +110,31 @@ void main() {
       );
     });
 
-    test(
-      'certificate pinning should be wired into Dio',
-      () {
-        // PHASE5-TODO: TLS certificate pinning is tracked for Phase 5 of
-        // the post-dispatch fix plan. It requires live cert SHA-256
-        // fingerprints for both primary + backup leaves and a 30-day CI
-        // expiry alert, which we can't set up until the production certs
-        // are issued from Google Cloud Run's managed ACME.
-        //
-        // In the meantime, network_security_config.xml enforces HTTPS-only
-        // with system-managed trust anchors (rejects user-installed CAs),
-        // which blocks casual MITM with a Charles proxy.
-        var foundPinning = false;
-        for (final f in Directory('lib').listSync(recursive: true)) {
-          if (f is! File || !f.path.endsWith('.dart')) continue;
-          final src = f.readAsStringSync();
-          if (src.contains('SecurityContext') ||
-              src.contains('setTrustedCertificates') ||
-              src.contains('badCertificateCallback') ||
-              src.contains('certificate_pinning')) {
-            foundPinning = true;
-          }
+    test('certificate pinning is wired into Dio', () {
+      // Phase 5 (Apr 2026): CertificatePinner installs a
+      // badCertificateCallback that compares the leaf cert SHA-256
+      // against the CERT_PIN_SHA256 build-time list. Debug builds
+      // skip the check. Fingerprints for prod are supplied via
+      // scripts/build_release.sh --dart-define=CERT_PIN_SHA256=...
+      var foundPinning = false;
+      for (final f in Directory('lib').listSync(recursive: true)) {
+        if (f is! File || !f.path.endsWith('.dart')) continue;
+        final src = f.readAsStringSync();
+        if (src.contains('SecurityContext') ||
+            src.contains('setTrustedCertificates') ||
+            src.contains('badCertificateCallback') ||
+            src.contains('certificate_pinning') ||
+            src.contains('CertificatePinner')) {
+          foundPinning = true;
         }
-        expect(
-          foundPinning,
-          isTrue,
-          reason:
-              'No certificate pinning detected in Dio configuration. '
-              'Deferred to Phase 5; relying on network_security_config.xml '
-              'for now.',
-        );
-      },
-      skip: 'PHASE5-TODO: cert pinning tracked separately',
-    );
+      }
+      expect(
+        foundPinning,
+        isTrue,
+        reason:
+            'No certificate pinning detected in Dio configuration. '
+            'Expected CertificatePinner.installOn(dio) in the DI setup.',
+      );
+    });
   });
 }

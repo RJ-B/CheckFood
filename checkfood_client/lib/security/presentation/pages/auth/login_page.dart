@@ -13,6 +13,7 @@ import '../../../domain/entities/user.dart';
 import '../../../data/models/profile/request/update_profile_request_model.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../bloc/user/user_event.dart';
+import '../../utils/secure_screen.dart';
 import '../../widgets/auth/login_form.dart';
 import '../../widgets/profile_completion_dialog.dart';
 
@@ -41,11 +42,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    // Sensitive screen: protect the password + email form against
+    // screenshots / task-switcher previews. See SecureScreen docstring.
+    SecureScreen.enable();
     if (widget.verificationStatus != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _handleVerificationFeedback();
       });
     }
+  }
+
+  @override
+  void dispose() {
+    SecureScreen.disable();
+    super.dispose();
   }
 
   /// Zobrazí SnackBar na základě výsledku verifikace z Deep Linku

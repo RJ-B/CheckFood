@@ -17,8 +17,18 @@ class TokenStorage {
     encryptedSharedPreferences: true,
   );
 
+  /// iOS Keychain accessibility set to `first_unlock_this_device` —
+  /// the entry is tied to the physical device and is **excluded from
+  /// iCloud Keychain sync**. Previously the token blob was
+  /// `first_unlock`, which is iCloud-syncable, so a user who
+  /// disabled PIN/FaceID and enabled Keychain sync could see their
+  /// refresh token land on every other Apple device in their account.
+  /// `first_unlock_this_device` closes that exfiltration path at the
+  /// cost of the user having to re-login after a full factory reset
+  /// (which is the correct trade-off — a restore is not the same
+  /// trust level as a running device).
   static const IOSOptions _iosOptions = IOSOptions(
-    accessibility: KeychainAccessibility.first_unlock,
+    accessibility: KeychainAccessibility.first_unlock_this_device,
   );
 
   TokenStorage(this._storage);

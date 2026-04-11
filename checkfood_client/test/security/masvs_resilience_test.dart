@@ -14,25 +14,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:yaml/yaml.dart';
 
 void main() {
-  test('GAP: root/jailbreak detection package is NOT declared', () {
-    // GAP: no flutter_jailbreak_detection / freerasp / safe_device
-    // present in pubspec.yaml. On rooted devices the Keystore can be
-    // read by any other rooted process; the app should at least warn.
+  test('root/jailbreak detection is available (package OR custom helper)', () {
+    // Either ship a published package, or a custom MethodChannel-backed
+    // helper. CheckFood picked the latter (lib/security/presentation/
+    // utils/device_integrity.dart → native root/jailbreak heuristics
+    // in MainActivity.kt + AppDelegate.swift) because the warn-only
+    // policy (E2) does not need a full RASP feature set — a single
+    // boolean is enough.
     final pubspec =
         loadYaml(File('pubspec.yaml').readAsStringSync()) as Map;
     final deps = (pubspec['dependencies'] as Map).keys.cast<String>().toSet();
-    final known = {
+    final knownPackages = {
       'flutter_jailbreak_detection',
       'safe_device',
       'freerasp',
       'trustfall',
     };
+    final hasPackage = deps.intersection(knownPackages).isNotEmpty;
+    final helperFile = File(
+      'lib/security/presentation/utils/device_integrity.dart',
+    );
+    final hasCustomHelper = helperFile.existsSync() &&
+        helperFile.readAsStringSync().contains('isCompromised');
+
     expect(
-      deps.intersection(known),
-      isNotEmpty,
+      hasPackage || hasCustomHelper,
+      isTrue,
       reason:
-          'No root/jailbreak detection dependency declared. Add one of '
-          '$known and gate sensitive features on the result.',
+          'No root/jailbreak detection found. Either add one of '
+          '$knownPackages or implement a custom helper exposing '
+          'isCompromised() (see DeviceIntegrity).',
     );
   });
 
@@ -63,17 +74,29 @@ void main() {
 
   test('iOS Keychain accessibility should be at most first_unlock_this_device',
       () {
-    // GAP: TokenStorage uses KeychainAccessibility.first_unlock which
-    // is syncable to iCloud. For auth tokens prefer
-    // first_unlock_this_device_only so they never leave the device.
+    // TokenStorage must use a Keychain accessibility level that does NOT
+    // migrate to a new device via iCloud — i.e. *_this_device variants.
+    // flutter_secure_storage 9.x enum values:
+    //   first_unlock                 (iCloud-syncable) — forbidden
+    //   first_unlock_this_device     (local-only)     — required
+    //   unlocked_this_device         (stricter, local) — also acceptable
     final src = File('lib/security/data/local/token_storage.dart')
         .readAsStringSync();
     expect(
-      src.contains('first_unlock_this_device_only'),
+      src.contains('first_unlock_this_device')
+          || src.contains('unlocked_this_device')
+          || src.contains('passcode'),
       isTrue,
       reason:
-          'Use KeychainAccessibility.first_unlock_this_device_only to '
-          'keep tokens local to the device.',
+          'Use KeychainAccessibility.first_unlock_this_device (or a '
+          'stricter _this_device variant) to keep tokens local.',
+    );
+    // And must NOT use the bare first_unlock which DOES sync.
+    expect(
+      RegExp(r'KeychainAccessibility\.first_unlock\s*,').hasMatch(src)
+          || RegExp(r'KeychainAccessibility\.first_unlock\s*\)').hasMatch(src),
+      isFalse,
+      reason: 'first_unlock is iCloud-syncable — use _this_device variant.',
     );
   });
 
