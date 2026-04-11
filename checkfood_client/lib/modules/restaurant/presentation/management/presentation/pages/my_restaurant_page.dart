@@ -15,6 +15,8 @@ import '../widgets/add_employee_dialog.dart';
 import '../../domain/entities/employee.dart';
 import '../widgets/employee_permissions_dialog.dart';
 import '../widgets/employees_list.dart';
+import '../widgets/menu_management_tab.dart';
+import '../widgets/photos_tab.dart';
 import '../widgets/restaurant_info_form.dart';
 import '../widgets/statistics_tab.dart';
 
@@ -56,7 +58,7 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, 'discard'),
-            child: Text('Zahodit', style: TextStyle(color: AppColors.error)),
+            child: const Text('Zahodit', style: TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -141,6 +143,10 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
         if (isManagerOrOwner)
           const Tab(icon: Icon(Icons.people_outline, size: 26)),
         if (isManagerOrOwner)
+          const Tab(icon: Icon(Icons.photo_library, size: 26)),
+        if (isManagerOrOwner)
+          const Tab(icon: Icon(Icons.restaurant_menu, size: 26)),
+        if (isManagerOrOwner)
           const Tab(icon: Icon(Icons.bar_chart, size: 26)),
         const Tab(icon: Icon(Icons.settings, size: 26)),
       ];
@@ -170,6 +176,16 @@ class _MyRestaurantPageState extends State<MyRestaurantPage> {
         ),
         if (isManagerOrOwner)
           _buildEmployeesTab(context, state, isOwner),
+        if (isManagerOrOwner)
+          PhotosTab(
+            restaurant: state.restaurant,
+            isOwner: isOwner,
+          ),
+        if (isManagerOrOwner)
+          MenuManagementTab(
+            restaurantId: state.selectedRestaurantId ?? state.restaurant.id,
+            isOwner: isOwner,
+          ),
         if (isManagerOrOwner)
           StatisticsTab(
             employeeCount: state.employees.length,
