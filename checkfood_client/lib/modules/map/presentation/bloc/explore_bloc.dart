@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart'
+    show LocationServiceDisabledException, PermissionDeniedException;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'dart:developer' as dev;
@@ -136,7 +138,13 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
       _syncMarkerData();
     } catch (e) {
-      if (e.toString().contains('denied')) {
+      // Typed-exception routing. The previous implementation
+      // `e.toString().contains('denied')` only matched the EN message,
+      // so Czech-locale Geolocator errors ("zamítnuta") fell into the
+      // generic error bucket and the UI showed a snackbar instead of
+      // the permission-required screen.
+      if (e is PermissionDeniedException ||
+          e is LocationServiceDisabledException) {
         emit(const ExploreState.permissionRequired());
       } else {
         emit(ExploreState.error(message: e.toString()));

@@ -9,6 +9,7 @@ import '../../../domain/usecases/auth/params/auth_params.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
+import '../../utils/clipboard_hygiene.dart';
 
 /// Formulář pro přihlášení uživatele (e-mail + heslo).
 ///
@@ -50,6 +51,11 @@ class _LoginFormState extends State<LoginForm> {
       );
 
       context.read<AuthBloc>().add(AuthEvent.loginRequested(params));
+
+      // Clipboard hygiene: minimise the window during which the password
+      // (possibly pasted from a password manager) remains readable by any
+      // app with READ_CLIPBOARD permission.
+      ClipboardHygiene.clearSensitive();
     }
   }
 

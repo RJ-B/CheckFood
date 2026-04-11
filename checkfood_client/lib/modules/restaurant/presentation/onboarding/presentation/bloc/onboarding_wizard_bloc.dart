@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entities/onboarding_status.dart';
 import '../../domain/usecases/get_onboarding_status_usecase.dart';
 import '../../domain/usecases/update_restaurant_info_usecase.dart';
 import '../../domain/usecases/update_restaurant_hours_usecase.dart';
@@ -122,14 +123,54 @@ class OnboardingWizardBloc extends Bloc<OnboardingWizardEvent, OnboardingWizardS
     try {
       final status = await _getOnboardingStatus();
       final restaurant = await _repository.getMyRestaurant();
-      emit(state.copyWith(loading: false, status: status, restaurant: restaurant));
+      // Save-and-resume: jump the wizard to the first incomplete step
+      // rather than always starting at 0. User who has info+hours but
+      // bailed out mid-tables will be taken back to step 2, not step 0.
+      final int resumeStep = _maxUnlockedStep(status);
+      emit(state.copyWith(
+        loading: false,
+        status: status,
+        restaurant: restaurant,
+        currentStep: resumeStep,
+      ));
     } catch (e) {
       emit(state.copyWith(loading: false, error: e.toString()));
     }
   }
 
   void _onGoToStep(GoToStep event, Emitter<OnboardingWizardState> emit) {
-    emit(state.copyWith(currentStep: event.step, error: null));
+    // Backwards navigation is always allowed — the user can revisit any
+    // previously completed step. Forward navigation is capped at
+    // (highestUnlockedStep); this prevents jumping ahead to step 3 (tables)
+    // while step 1 (info) is still empty, which would crash the underlying
+    // form reading null fields.
+    final int target = event.step;
+    if (target <= state.currentStep) {
+      emit(state.copyWith(currentStep: target, error: null));
+      return;
+    }
+    final int maxAllowed = _maxUnlockedStep(state.status);
+    final int clamped = target > maxAllowed ? maxAllowed : target;
+    emit(state.copyWith(currentStep: clamped, error: null));
+  }
+
+  /// Highest step the user may jump to given the current onboarding status.
+  ///
+  /// Steps:
+  ///   0 = info
+  ///   1 = hours (unlocked once info is saved)
+  ///   2 = tables (unlocked once hours saved)
+  ///   3 = menu (unlocked once tables saved)
+  ///   4 = panorama (unlocked once menu saved)
+  ///   5 = summary / publish (unlocked once panorama ready)
+  int _maxUnlockedStep(OnboardingStatus? status) {
+    if (status == null) return 0;
+    if (!status.hasInfo) return 0;
+    if (!status.hasHours) return 1;
+    if (!status.hasTables) return 2;
+    if (!status.hasMenu) return 3;
+    if (!status.hasPanorama) return 4;
+    return 5;
   }
 
   Future<void> _onUpdateInfo(UpdateInfo event, Emitter<OnboardingWizardState> emit) async {

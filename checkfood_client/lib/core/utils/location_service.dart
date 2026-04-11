@@ -4,7 +4,13 @@ import 'package:geolocator/geolocator.dart';
 class LocationService {
   /// Ověří oprávnění a získá aktuální polohu zařízení.
   ///
-  /// Vyhazuje výjimku, pokud jsou služby vypnuté nebo oprávnění zamítnuta.
+  /// Throws:
+  /// - {@code LocationServiceDisabledException} — user vypnul location služby.
+  /// - {@code PermissionDeniedException} — uživatel odepřel (ať už dočasně
+  ///   nebo natrvalo) permission. Volající {@code ExploreBloc} rozlišuje
+  ///   tyto dva stavy podle typu, ne podle textu message (text byl dřív
+  ///   česky "Oprávnění pro polohu byla zamítnuta" a `string.contains('denied')`
+  ///   to nechytil → geo chyby padaly do generic error stavu).
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -19,14 +25,12 @@ class LocationService {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Oprávnění pro polohu byla zamítnuta');
+        throw const PermissionDeniedException('Permission denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw Exception(
-        'Oprávnění pro polohu jsou trvale zamítnuta, nelze je vyžádat.',
-      );
+      throw const PermissionDeniedException('Permission denied forever');
     }
 
     return await Geolocator.getCurrentPosition(

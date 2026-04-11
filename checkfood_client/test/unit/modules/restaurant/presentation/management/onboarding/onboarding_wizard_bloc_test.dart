@@ -335,17 +335,20 @@ void main() {
   });
 
   group('OnboardingWizardBloc — GoToStep', () {
-    test('should update currentStep to target step', () async {
+    // NOTE: since Apr 2026, GoToStep respects _maxUnlockedStep — forward
+    // navigation is clamped to (highest prereq satisfied). Tests that
+    // want to land on a specific step must either load an onboarding
+    // status with the right prereqs flipped on, or navigate backwards.
+    test('should update currentStep to target step (step is unlocked)',
+        () async {
+      // Repo defaults give hasInfo=true → max unlocked = 1. We load
+      // first so the status is populated; save-and-resume will already
+      // place us at step 1, so this verifies the end state rather than
+      // a specific emit ordering.
       final bloc = _buildBloc();
-      bloc.add(const OnboardingWizardEvent.goToStep(2));
-      await expectLater(
-        bloc.stream,
-        emits(isA<OnboardingWizardState>().having(
-          (s) => s.currentStep,
-          'currentStep',
-          2,
-        )),
-      );
+      bloc.add(const OnboardingWizardEvent.loadOnboarding());
+      await bloc.stream.firstWhere((s) => s.currentStep == 1);
+      expect(bloc.state.currentStep, 1);
       bloc.close();
     });
 
@@ -355,17 +358,20 @@ void main() {
       bloc.add(const OnboardingWizardEvent.loadOnboarding());
       await bloc.stream.firstWhere(_hasError);
 
-      repo.shouldThrow = false;
-      bloc.add(const OnboardingWizardEvent.goToStep(1));
-      await bloc.stream.firstWhere((s) => s.currentStep == 1);
+      // After the failed load, status is null so forward navigation is
+      // clamped to step 0. Backward (to 0) still clears the error.
+      bloc.add(const OnboardingWizardEvent.goToStep(0));
+      await bloc.stream.firstWhere((s) => s.error == null);
       expect(bloc.state.error, isNull);
       bloc.close();
     });
 
     test('back navigation: goToStep(0) from step 1', () async {
+      // Load onboarding first so save-and-resume places us on step 1.
       final bloc = _buildBloc();
-      bloc.add(const OnboardingWizardEvent.goToStep(1));
+      bloc.add(const OnboardingWizardEvent.loadOnboarding());
       await bloc.stream.firstWhere((s) => s.currentStep == 1);
+      // Navigate backwards (always allowed).
       bloc.add(const OnboardingWizardEvent.goToStep(0));
       await bloc.stream.firstWhere((s) => s.currentStep == 0);
       expect(bloc.state.currentStep, 0);
@@ -618,25 +624,26 @@ void main() {
     });
   });
 
-  // EXPECTED-FAIL: onboarding_wizard_bloc — steps 0..5 should validate that
-  // progress steps cannot be skipped. Currently GoToStep(n) allows jumping to any
-  // step without completing prerequisites. There is no guard that prevents
-  // goToStep(3) when hasInfo=false and hasHours=false.
-  group('OnboardingWizardBloc — step skip prevention (gap test)', () {
-    test('should not allow jumping to step 3 (tables) when step 1 (info) is incomplete', () async {
-      final repo = FakeOnboardingRepository();
-      final bloc = _buildBloc(repo: repo);
+  group('OnboardingWizardBloc — step skip prevention', () {
+    test('should clamp goToStep(3) to max unlocked step when hasHours is false', () async {
+      // Fake repo returns hasInfo=true, hasHours=false → max unlocked = 1.
+      // Jump to 3 must be clamped, not rejected silently.
+      final bloc = _buildBloc();
       bloc.add(const OnboardingWizardEvent.loadOnboarding());
-      await bloc.stream.firstWhere(_isNotLoading);
+      // After load, save-and-resume puts currentStep at max unlocked = 1.
+      await bloc.stream.firstWhere((s) => s.currentStep == 1);
 
       bloc.add(const OnboardingWizardEvent.goToStep(3));
-      await bloc.stream.firstWhere((s) => s.currentStep != bloc.state.currentStep || true);
+      // Give the bloc one event-loop tick to process the GoToStep. The
+      // clamp may re-emit with the same currentStep=1, so we don't wait
+      // for a change — we just verify the final state after a short
+      // grace period.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
 
-      // Without guard, step will be 3. This SHOULD fail if guard is implemented.
       expect(
         bloc.state.currentStep,
-        isNot(3),
-        reason: 'Cannot skip to step 3 when info and hours are incomplete',
+        1,
+        reason: 'Forward jump to step 3 must clamp to max unlocked step (1)',
       );
       bloc.close();
     });

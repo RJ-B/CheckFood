@@ -8,6 +8,7 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../../domain/usecases/auth/params/auth_params.dart';
+import '../../utils/clipboard_hygiene.dart';
 import 'password_strength_indicator.dart';
 
 /// Formulář pro registraci nového uživatele.
@@ -75,6 +76,8 @@ class _RegisterFormState extends State<RegisterForm> {
         } else {
           context.read<AuthBloc>().add(AuthEvent.registerRequested(params));
         }
+        // Clipboard hygiene after submit — see LoginForm for rationale.
+        ClipboardHygiene.clearSensitive();
       }
     }
   }
