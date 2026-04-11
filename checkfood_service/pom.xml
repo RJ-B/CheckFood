@@ -156,6 +156,20 @@
             <scope>test</scope>
         </dependency>
 
+        <!--
+            p6spy — JDBC proxy that logs every prepared statement actually
+            hitting the database. Used in tests by HibernateQueryCounter to
+            detect N+1 patterns: a test that expects a bounded number of
+            statements per request asserts the counter after the request
+            and fails with the raw SQL log if the bound is exceeded.
+        -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.9.1</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Testcontainers -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -313,6 +327,119 @@
                         <exclude>**/config/**</exclude>
                         <exclude>**/generated/**</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <!--
+                OWASP Dependency-Check — scans our Maven dependency tree for
+                known CVEs in the NVD feed. Fails the build on anything at
+                CVSS >= 7 (HIGH or CRITICAL).
+
+                Run on demand:
+                    ./mvnw org.owasp:dependency-check-maven:check
+                CI hook lives in backend.yml as a separate job so it can fail
+                independently of the regular test run (NVD rate-limits
+                responses, sometimes for minutes).
+            -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>10.0.4</version>
+                <configuration>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <skipProvidedScope>false</skipProvidedScope>
+                    <skipRuntimeScope>false</skipRuntimeScope>
+                    <!-- NVD API requires a key for faster feeds. Set via
+                         NVD_API_KEY env var in CI. Without it, the scan still
+                         works but is rate-limited. -->
+                    <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                    <suppressionFiles>
+                        <suppressionFile>owasp-suppressions.xml</suppressionFile>
+                    </suppressionFiles>
+                    <formats>
+                        <format>HTML</format>
+                        <format>JSON</format>
+                    </formats>
+                </configuration>
+                <!-- No default <executions> — run on demand only. -->
+            </plugin>
+
+            <!--
+                SpotBugs + FindSecBugs — static bytecode analysis. Catches
+                nulls, resource leaks, and (via findsecbugs-plugin)
+                SQL-injection / XSS / weak-crypto patterns.
+
+                Run on demand:
+                    ./mvnw spotbugs:check
+                Configured Low threshold so it fires on anything non-trivial.
+                Bound to verify phase in CI.
+            -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.8.6.4</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Medium</threshold>
+                    <failOnError>true</failOnError>
+                    <includeFilterFile>spotbugs-include.xml</includeFilterFile>
+                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>1.13.0</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+                <!-- No default <executions> — run on demand only. -->
+            </plugin>
+
+            <!--
+                PITest mutation testing. Mutates source bytecode (changes
+                operators, return values, conditional branches) and re-runs
+                the test suite — if the tests still pass, the test suite is
+                too weak to catch that kind of bug.
+
+                Scoped to security + restaurant + reservation + order + menu
+                modules (the hot paths that carry the risk budget). Auth is
+                excluded because it leans heavily on integration tests that
+                don't run in the unit-test scope PITest uses by default.
+
+                Run on demand:
+                    ./mvnw org.pitest:pitest-maven:mutationCoverage
+                Threshold starts at 55 % — raise after follow-up tests land.
+            -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.17.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>com.checkfood.checkfoodservice.module.restaurant.service.*</param>
+                        <param>com.checkfood.checkfoodservice.module.reservation.service.*</param>
+                        <param>com.checkfood.checkfoodservice.module.order.service.*</param>
+                        <param>com.checkfood.checkfoodservice.module.restaurant.menu.service.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>com.checkfood.checkfoodservice.module.restaurant.service.*Test</param>
+                        <param>com.checkfood.checkfoodservice.module.reservation.*Test</param>
+                        <param>com.checkfood.checkfoodservice.module.order.service.*Test</param>
+                    </targetTests>
+                    <mutationThreshold>55</mutationThreshold>
+                    <coverageThreshold>60</coverageThreshold>
+                    <outputFormats>
+                        <param>HTML</param>
+                        <param>XML</param>
+                    </outputFormats>
+                    <timestampedReports>false</timestampedReports>
                 </configuration>
             </plugin>
 

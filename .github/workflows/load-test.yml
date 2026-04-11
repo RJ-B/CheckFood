@@ -1,0 +1,161 @@
+name: Load tests (k6)
+
+# Smoke runs on every push to main — it's 30s, cheap gate.
+# The rest run on workflow_dispatch with a picker, because they
+# are expensive and not every PR needs them.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'checkfood_service/**'
+      - '.github/workflows/load-test.yml'
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: 'Which k6 scenario to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - load
+          - stress
+          - soak
+          - spike
+      base_url:
+        description: 'Target API base URL'
+        required: true
+        default: 'http://localhost:8081/api'
+
+jobs:
+  smoke:
+    name: k6 smoke (push gate)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: checkfood
+          POSTGRES_USER: checkfood
+          POSTGRES_PASSWORD: checkfood
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Boot service
+        working-directory: checkfood_service
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/checkfood
+          SPRING_DATASOURCE_USERNAME: checkfood
+          SPRING_DATASOURCE_PASSWORD: checkfood
+          SERVER_PORT: 8081
+        run: |
+          ./mvnw -B -DskipTests package
+          nohup java -jar target/*.jar > service.log 2>&1 &
+          echo $! > service.pid
+          # Wait up to 90s for /actuator/health to return 200.
+          for i in $(seq 1 45); do
+            if curl -sf http://localhost:8081/actuator/health > /dev/null; then
+              echo "Service up after ${i}x2s"
+              break
+            fi
+            sleep 2
+          done
+          curl -sf http://localhost:8081/actuator/health || { tail -200 service.log; exit 1; }
+
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg \
+            --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" \
+            | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+
+      - name: Run k6 smoke
+        working-directory: checkfood_service/load-tests
+        env:
+          K6_BASE_URL: http://localhost:8081/api
+        run: k6 run --summary-export=smoke-summary.json 01-smoke.js
+
+      - name: Upload k6 summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-smoke-summary
+          path: checkfood_service/load-tests/smoke-summary.json
+
+      - name: Tail service log on failure
+        if: failure()
+        run: tail -500 checkfood_service/service.log || true
+
+      - name: Stop service
+        if: always()
+        run: |
+          if [ -f checkfood_service/service.pid ]; then
+            kill "$(cat checkfood_service/service.pid)" 2>/dev/null || true
+          fi
+
+  manual:
+    name: k6 ${{ github.event.inputs.scenario }} (manual)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg \
+            --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" \
+            | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+
+      - name: Map scenario name to script
+        id: pick
+        run: |
+          case "${{ github.event.inputs.scenario }}" in
+            smoke)  echo "script=01-smoke.js"  >> "$GITHUB_OUTPUT" ;;
+            load)   echo "script=02-load.js"   >> "$GITHUB_OUTPUT" ;;
+            stress) echo "script=03-stress.js" >> "$GITHUB_OUTPUT" ;;
+            soak)   echo "script=04-soak.js"   >> "$GITHUB_OUTPUT" ;;
+            spike)  echo "script=05-spike.js"  >> "$GITHUB_OUTPUT" ;;
+            *) echo "Unknown scenario"; exit 1 ;;
+          esac
+
+      - name: Run k6 ${{ github.event.inputs.scenario }}
+        working-directory: checkfood_service/load-tests
+        env:
+          K6_BASE_URL: ${{ github.event.inputs.base_url }}
+          TEST_USERS: ${{ secrets.LOAD_TEST_USERS_JSON }}
+        run: |
+          k6 run \
+            --summary-export=${{ github.event.inputs.scenario }}-summary.json \
+            ${{ steps.pick.outputs.script }}
+
+      - name: Upload summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-${{ github.event.inputs.scenario }}-summary
+          path: checkfood_service/load-tests/${{ github.event.inputs.scenario }}-summary.json
