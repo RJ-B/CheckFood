@@ -1,8 +1,11 @@
 name: Build & Release Android APK
 
 on:
-  push:
-    branches: [main]
+  # On-demand only — releases shouldn't fire on every commit. Trigger
+  # manually from the Actions tab when you actually want to publish a
+  # GitHub Release with a signed APK for QA distribution. The
+  # `flutter-android.yml` workflow still validates the release-build
+  # path on every push.
   workflow_dispatch:
 
 permissions:

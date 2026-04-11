@@ -11,12 +11,13 @@ name: ZAP baseline (DAST)
 # and graduate them to HIGH once we have a fix in flight.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'checkfood_service/**'
-      - '.github/workflows/zap-baseline.yml'
+  # On-demand + scheduled. DAST scan on every backend push is overkill
+  # and floods CI minutes — run before releases or weekly via cron when
+  # security review is needed.
   workflow_dispatch:
+  schedule:
+    # Sunday 03:00 UTC — quiet hours, won't compete with weekday CI.
+    - cron: '0 3 * * 0'
 
 concurrency:
   group: zap-${{ github.ref }}

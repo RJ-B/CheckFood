@@ -10,11 +10,9 @@ name: MobSF static scan
 # are available upstream.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'checkfood_client/**'
-      - '.github/workflows/mobsf-scan.yml'
+  # On-demand only — MobSF Docker image is flaky in CI (container init
+  # frequently fails) and the scan is expensive. Run before releases or
+  # when client security review is needed; not on every push.
   workflow_dispatch:
 
 concurrency:
