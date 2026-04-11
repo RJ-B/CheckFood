@@ -31,14 +31,33 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const RootGuard());
 
       case login:
-        final String? status = uri.queryParameters['status'];
-        final String? message = uri.queryParameters['message'];
+        // Deep-link status whitelist. The login page can be reached through
+        // custom scheme `checkfood://app/login?status=...` (see backend
+        // AuthController.verifyAccount). Attackers may craft arbitrary
+        // links with phishy query params — we accept only the known fixed
+        // set of status values, drop any free-text `message`, and let the
+        // page render a localised string keyed on the status.
+        final rawStatus = uri.queryParameters['status'];
+        const allowedStatuses = <String>{
+          'success',
+          'verified',
+          'expired',
+          'error',
+        };
+        final safeStatus =
+            (rawStatus != null && allowedStatuses.contains(rawStatus))
+                ? rawStatus
+                : null;
 
         return MaterialPageRoute(
           builder:
               (_) => LoginPage(
-                verificationStatus: status,
-                verificationMessage: message,
+                verificationStatus: safeStatus,
+                // verificationMessage is intentionally NOT forwarded —
+                // it was an attacker-controlled free-text field before
+                // Apr 2026. LoginPage now uses localised strings keyed
+                // on status only.
+                verificationMessage: null,
               ),
         );
 

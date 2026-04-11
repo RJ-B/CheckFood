@@ -128,15 +128,34 @@ void main() {
 
     test('no print/debugPrint dumps tokens or passwords', () {
       // GAP: static guard — fails if any logger emits a raw token.
-      final re = RegExp(
-        r'''(print|debugPrint|logger\.\w+|log)\s*\(\s*[^;]*?(accessToken|refreshToken|password|jwt|bearer)''',
+      //
+      // Word boundary \b prevents false positives against substrings like
+      // `Dialog(`, `catalog(`, etc. that happen to end in "log". Also
+      // `password` on its own matches neutral identifiers like
+      // `passwordField.controller` or `l.changePassword` — only flag the
+      // regex when a value is being passed (quoted string or variable
+      // interpolation). Keep the detector over a single statement.
+      final callRe = RegExp(
+        r'''(?:^|[^A-Za-z0-9_])(print|debugPrint|logger\.\w+)\s*\(''',
+        caseSensitive: true,
+      );
+      final sensitiveRe = RegExp(
+        r'(accessToken|refreshToken|jwt|bearer|\$password\b|password[A-Z]|\.password)',
         caseSensitive: false,
       );
       final offenders = <String>[];
       for (final file in dartFiles()) {
         final src = file.readAsStringSync();
-        if (re.hasMatch(src)) {
-          offenders.add(file.path);
+        // Walk every logger/print call and inspect its arguments until the
+        // matching closing paren / end of statement.
+        for (final call in callRe.allMatches(src)) {
+          final start = call.end;
+          final end = src.indexOf(';', start);
+          final slice = src.substring(start, end == -1 ? src.length : end);
+          if (sensitiveRe.hasMatch(slice)) {
+            offenders.add('${file.path}: ${call.group(1)}');
+            break;
+          }
         }
       }
       expect(

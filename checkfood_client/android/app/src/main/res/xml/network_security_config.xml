@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Release network security config for CheckFood client (Apr 2026).
+
+    Policy:
+      • base-config: cleartextTrafficPermitted="false"
+        → all http:// requests are blocked system-wide in release builds.
+      • Only https:// connections to checkfood-api-*.run.app are allowed.
+      • Only system (Android-managed) trust anchors are honoured — user-
+        installed root CAs are rejected, which blocks the classic
+        "install a MITM proxy cert on the device" attack unless the
+        attacker roots the device.
+
+    Debug builds (flutter run, adb install -r debug APK) use
+    src/debug/res/xml/network_security_config_debug.xml which relaxes
+    cleartext for LAN development.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+
+    <!-- Production backend on Google Cloud Run. Restrict any overrides
+         to HTTPS-only and system CAs. -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">checkfood-api-809801655996.europe-central2.run.app</domain>
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

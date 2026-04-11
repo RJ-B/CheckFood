@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Debug-only network security config.
+
+    Allows cleartext HTTP to LAN development hosts (dev laptop, emulator
+    loopback) so `flutter run` works against a locally-running backend
+    without TLS setup. Release builds use the strict config in
+    src/main/res/xml/network_security_config.xml.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system"/>
+            <!-- In debug we also honour user-installed CAs so devs can
+                 attach Charles/Burp proxies when troubleshooting. -->
+            <certificates src="user"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -9,7 +9,10 @@
         android:label="checkfood_client"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <!-- Google Maps key is injected at build time via
              manifestPlaceholders["mapsApiKey"] in android/app/build.gradle.kts,
@@ -40,12 +43,33 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+            <!-- Custom-scheme deep link for post-verification redirects.
+                 `android:autoVerify="true"` is not applicable to non-http
+                 schemes — see the https intent-filter below for App-Links
+                 verification via assetlinks.json. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="checkfood" android:host="app" android:pathPrefix="/login" />
+            </intent-filter>
+
+            <!-- HTTPS deep links (App Links). Requires the backend to host
+                 /.well-known/assetlinks.json proving ownership of the
+                 `com.checkfood.checkfood_client` package via SHA-256
+                 certificate fingerprint. `autoVerify="true"` tells Android
+                 to fetch that file at install time and, on success, make
+                 our app the DEFAULT handler for checkfood.cz deep links
+                 (no disambiguation dialog, no handler-hijacking by a
+                 malicious sibling app). See backend
+                 AssetLinksController for the served payload. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" android:host="checkfood.cz" android:pathPrefix="/app" />
             </intent-filter>
         </activity>
         

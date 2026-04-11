@@ -92,7 +92,14 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
     if (Platform.isAndroid) {
       final androidController =
           _webController.platform as AndroidWebViewController;
-      AndroidWebViewController.enableDebugging(true);
+      // Gate WebView debugging to debug builds only. In release builds,
+      // `kDebugMode` is false and the Chrome DevTools bridge is kept off
+      // so an attacker with USB access cannot inspect the embedded
+      // webview panel (panorama editor loads internal JSON and token
+      // context).
+      if (kDebugMode) {
+        AndroidWebViewController.enableDebugging(true);
+      }
       androidController.setMediaPlaybackRequiresUserGesture(false);
     }
   }

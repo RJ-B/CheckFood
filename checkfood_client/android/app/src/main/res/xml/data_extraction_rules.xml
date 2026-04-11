@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Android 12+ (API 31+) replacement for the deprecated android:allowBackup
+    / android:fullBackupContent attributes. Disables both cloud backup and
+    device-to-device transfer for our datastore, so the flutter_secure_storage
+    encrypted blob never leaves the device through those paths.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root"/>
+        <exclude domain="sharedpref"/>
+        <exclude domain="database"/>
+        <exclude domain="file"/>
+        <exclude domain="external"/>
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root"/>
+        <exclude domain="sharedpref"/>
+        <exclude domain="database"/>
+        <exclude domain="file"/>
+        <exclude domain="external"/>
+    </device-transfer>
+</data-extraction-rules>

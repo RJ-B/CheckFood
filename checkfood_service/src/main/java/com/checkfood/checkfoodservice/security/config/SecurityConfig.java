@@ -121,6 +121,10 @@ public class SecurityConfig {
 
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
 
+                        // Well-known files for platform verification (Android
+                        // App Links assetlinks.json, Apple App Site Association).
+                        .requestMatchers("/.well-known/**").permitAll()
+
                         .requestMatchers("/api/v1/payments/callback").permitAll()
                         // Lokální dev — statické servírování public uploadů; v prod se nepoužívá (GCS přímo).
                         .requestMatchers("/uploads/public/**").permitAll()
