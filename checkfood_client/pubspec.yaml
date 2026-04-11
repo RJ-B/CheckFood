@@ -100,7 +100,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
   # --- Testování ---
-  # bloc_test: ^9.1.7  # Temporarily disabled — incompatible with freezed ^2.5.2 on Flutter 3.41+
+  # bloc_test: ^9.1.7  # Disabled — conflicts with freezed ^2.5.2 transitively via test_api versions
   mocktail: ^1.0.4
 
   # --- Generování kódu ---
@@ -123,17 +123,19 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: assets/icons/splash_logo.png
+  image_path: assets/icons/launcher_icon.png
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/icons/splash_logo.png
 
 # --------------------------------------------------
 # Konfigurace Splash Screenu
 # --------------------------------------------------
 flutter_native_splash:
   color: "#0F2027"
-  image: assets/icons/CheckFood_icon.png
+  image: assets/icons/splash_logo.png
   android_12:
     color: "#0F2027"
-    image: assets/icons/CheckFood_icon.png
+    image: assets/icons/splash_logo.png
 
 # --------------------------------------------------
 # Nastavení Assets a Fontů

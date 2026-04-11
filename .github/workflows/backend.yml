@@ -31,28 +31,13 @@ jobs:
           java-version: "21"
           cache: maven
 
-      # NOTE: continue-on-error is intentional. The H2 test suite has
-      # ~10 pre-existing failures (DiningContextExceptionHandler missing
-      # bean wiring, RestaurantControllerIntegrationTest authn assertions
-      # that drifted with the ownerId removal, etc.) that pre-date the
-      # current refactor session and need a dedicated cleanup pass.
-      #
-      # The artifact upload at the bottom still records surefire reports
-      # so the failures are visible in the Actions tab; the workflow just
-      # doesn't gate merges on the legacy tests until the backlog is paid
-      # down. Re-enable hard-failure by removing continue-on-error once
-      # the suite is green again.
       - name: Build + test (default groups — no Testcontainers, no smoke)
-        continue-on-error: true
         run: ./mvnw -B test
 
       - name: JaCoCo coverage report
-        continue-on-error: true
         run: ./mvnw -B jacoco:report
 
-      # Coverage gate also relaxed until the test suite is healthy again.
       - name: Coverage gate (60% instruction)
-        continue-on-error: true
         run: |
           ./mvnw -B jacoco:check \
             -Djacoco.instruction=0.60 \
@@ -95,9 +80,7 @@ jobs:
       - name: Pre-pull postgis image (caching for speed)
         run: docker pull postgis/postgis:16-3.4
 
-      # See note above on the H2 job — same legacy test backlog applies.
       - name: Run Testcontainers-tagged tests only
-        continue-on-error: true
         run: ./mvnw -B test -Dgroups=testcontainers
 
       - name: Upload surefire reports
