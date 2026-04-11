@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../core/config/build_config.dart';
 import '../../config/security_claims.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/enums/user_role.dart';
@@ -38,7 +38,12 @@ class OAuthRepositoryImpl implements OAuthRepository {
        _tokenStorage = tokenStorage,
        _deviceInfoService = deviceInfoService,
        _googleSignIn = GoogleSignIn(
-         serverClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'],
+         // Null when the build omits --dart-define=GOOGLE_WEB_CLIENT_ID=...
+         // GoogleSignIn will then fall back to the googleServicesPlist /
+         // google-services.json value (or raise on sign-in).
+         serverClientId: BuildConfig.googleWebClientId.isEmpty
+             ? null
+             : BuildConfig.googleWebClientId,
          scopes: ['email', 'profile'],
        );
 

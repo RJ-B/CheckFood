@@ -2,8 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+
+// Build-time konfigurace (nahrazuje flutter_dotenv)
+import '../config/build_config.dart';
 
 // Základní služby
 import '../services/google_places_service.dart';
@@ -182,18 +184,18 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => LocationService());
 
-  final googleMapsApiKey = dotenv.get('GOOGLE_MAPS_API_KEY', fallback: '');
+  // Google Places API key: injected at build time via --dart-define, same
+  // source as the native Maps SDK key. Dart side only needs it for the
+  // Places REST API (autocomplete/details), not the MapView itself.
+  const googlePlacesApiKey = String.fromEnvironment('GOOGLE_MAPS_API_KEY');
   sl.registerLazySingleton(
-    () => GooglePlacesService(apiKey: googleMapsApiKey),
+    () => GooglePlacesService(apiKey: googlePlacesApiKey),
   );
 
   sl.registerLazySingleton(() => NotificationService());
 
-  // Prostředí
-  final String apiBaseUrl = dotenv.get(
-    'API_BASE_URL',
-    fallback: 'http://10.0.2.2:8081/api',
-  );
+  // Prostředí (build-time konstanta z BuildConfig)
+  const apiBaseUrl = BuildConfig.apiBaseUrl;
 
   // ===========================================================================
   // 2. SÍŤ (DIO)

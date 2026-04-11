@@ -66,5 +66,11 @@
 		<string>Aplikace potřebuje vaši polohu pro zobrazení restaurací v okolí.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- Google Maps API key, injected at build time via
+		     ios/Flutter/Secrets.xcconfig (gitignored).
+		     Never hardcode the key here — it is read by AppDelegate.swift
+		     and passed to GMSServices.provideAPIKey(). -->
+		<key>GMSApiKey</key>
+		<string>$(MAPS_API_KEY)</string>
 	</dict>
 </plist>

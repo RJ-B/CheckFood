@@ -11,9 +11,13 @@
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
 
+        <!-- Google Maps key is injected at build time via
+             manifestPlaceholders["mapsApiKey"] in android/app/build.gradle.kts,
+             which reads MAPS_API_KEY from android/local.properties (gitignored).
+             Never hardcode the key here — it ships in plain text inside the APK. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB2ro-yzrhNW6SdgwLRUtm5RZeq-jMh1jk"/>
+            android:value="${mapsApiKey}"/>
 
         <activity
             android:name=".MainActivity"

@@ -47,8 +47,10 @@ DIPLOMKA_PROMPT.md
 # --- Diplomka (private) ---
 diplomka/
 
-# --- Scripts (local) ---
-scripts/
+# --- Scripts (local only at repo root) ---
+/scripts/
+# Explicitly allow per-app build scripts (Flutter build variants etc.)
+!checkfood_client/scripts/
 
 # --- Copy folder (env backups) ---
 copy/
@@ -110,6 +112,10 @@ checkfood_client/ios/Runner/GoogleService-Info.plist
 checkfood_client/ios/Flutter/Generated.xcconfig
 checkfood_client/ios/Flutter/flutter_export_environment.sh
 checkfood_client/ios/Flutter/.last_build_id
+
+# iOS secrets (Google Maps API key etc.) — never commit
+checkfood_client/ios/Flutter/Secrets.xcconfig
+!checkfood_client/ios/Flutter/Secrets.xcconfig.example
 checkfood_client/macos/Flutter/Generated.xcconfig
 checkfood_client/macos/Flutter/ephemeral/
 checkfood_client/**/Pods/

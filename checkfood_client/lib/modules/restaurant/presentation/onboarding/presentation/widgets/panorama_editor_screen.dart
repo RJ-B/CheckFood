@@ -6,9 +6,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../../../core/config/build_config.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
@@ -227,7 +227,7 @@ class _PanoramaEditorScreenState extends State<PanoramaEditorScreen> {
     try {
       String fullUrl = url;
       if (url.startsWith('/')) {
-        final apiBase = dotenv.get('API_BASE_URL', fallback: 'http://10.0.2.2:8081');
+        const apiBase = BuildConfig.apiBaseUrl;
         final uri = Uri.parse(apiBase);
         final serverBase = '${uri.scheme}://${uri.host}:${uri.port}';
         fullUrl = '$serverBase$url';

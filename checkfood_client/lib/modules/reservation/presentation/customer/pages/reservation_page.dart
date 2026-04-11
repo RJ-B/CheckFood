@@ -6,10 +6,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
+import '../../../../../../core/config/build_config.dart';
 import '../../../../../../core/di/injection_container.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
@@ -132,7 +132,7 @@ class _ReservationPageState extends State<ReservationPage> {
     String fullUrl = url;
     try {
       if (url.startsWith('/')) {
-        final apiBase = dotenv.get('API_BASE_URL', fallback: 'http://10.0.2.2:8081');
+        const apiBase = BuildConfig.apiBaseUrl;
         final uri = Uri.parse(apiBase);
         final serverBase = uri.hasPort
             ? '${uri.scheme}://${uri.host}:${uri.port}'

@@ -7,8 +7,6 @@ version: 1.0.0+1
 environment:
   sdk: ^3.7.2
 
-generate: true
-
 dependencies:
   flutter:
     sdk: flutter
@@ -31,7 +29,9 @@ dependencies:
   app_links: ^6.3.2
 
   # --- Konfigurace prostředí ---
-  flutter_dotenv: ^5.2.1
+  # flutter_dotenv removed Apr 2026 — replaced by compile-time
+  # String.fromEnvironment (--dart-define). See lib/core/config/build_config.dart
+  # and scripts/build_dev.sh / scripts/build_prod.sh.
 
   # --- Síťová komunikace ---
   dio: ^5.4.3
@@ -57,10 +57,6 @@ dependencies:
   url_launcher: ^6.3.0
   io: ^1.0.4
 
-  # --- Push Notifikace (Firebase) ---
-  firebase_core: ^3.8.1
-  firebase_messaging: ^15.2.1
-
   # --- Kamera a Senzory ---
   camera: ^0.11.0+2
   sensors_plus: ^6.1.1
@@ -76,14 +72,8 @@ dependencies:
   webview_flutter_android: ^3.16.0
 
   # --- Mapy a Interaktivní UI ---
-  # Používáme nejnovější verzi Google Maps
   google_maps_flutter: ^2.10.0
-
-  # Client-side marker clustering (port of Mapbox Supercluster)
   supercluster: ^3.1.0
-
-  # (Fluster byl odstraněn - clustering nyní řeší backend PostGIS)
-
   sliding_up_panel: ^2.0.0+1
   geolocator: ^13.0.0
 
@@ -101,7 +91,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
   # --- Testování ---
-  bloc_test: ^9.1.7
+  # bloc_test: ^9.1.7  # Temporarily disabled — incompatible with freezed ^2.5.2 on Flutter 3.41+
   mocktail: ^1.0.4
 
   # --- Generování kódu ---
@@ -112,6 +102,10 @@ dev_dependencies:
   # --- Nástroje ---
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.0
+
+dependency_overrides:
+  sign_in_with_apple:
+    path: ios/local_patches/sign_in_with_apple
 
 # --------------------------------------------------
 # Konfigurace ikony aplikace
@@ -136,6 +130,7 @@ flutter_native_splash:
 # Nastavení Assets a Fontů
 # --------------------------------------------------
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:
@@ -145,6 +140,6 @@ flutter:
     - assets/three/
     - assets/panoramas/
     - assets/map_style.json
-    - .env
-    - .env.local
-    - .env.prod
+    # .env* files removed from assets Apr 2026 — they leaked secrets (Google
+    # Maps API key, OAuth client IDs) into the shipped APK/IPA bundle.
+    # Build-time config now comes from --dart-define (see BuildConfig).
