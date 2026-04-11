@@ -23,10 +23,20 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmail(String email);
 
     /**
-     * Najde uživatele a eager načte jeho role.
-     * Kritické pro Spring Security autentizaci.
+     * Najde uživatele a eager načte jeho role + zařízení.
+     *
+     * <p>Kritické pro Spring Security autentizaci a pro UserMapper.toAuth,
+     * který mapuje nejen role ale i {@code devices} (přes
+     * {@code calculateGlobalLastLogin}). Pokud by se {@code devices}
+     * nenačetly v rámci téže transakce, mapper volá lazy getter mimo
+     * Hibernate session a login response spadne na
+     * {@link org.hibernate.LazyInitializationException} → HTTP 500.</p>
+     *
+     * <p>Tento bug se projevoval jen u nově registrovaných uživatelů,
+     * protože staří měli devices už načtené v second-level cache. Po
+     * čistém restartu instance Cloud Run by spadli i staří.</p>
      */
-    @EntityGraph(attributePaths = {"roles"})
+    @EntityGraph(attributePaths = {"roles", "devices"})
     Optional<UserEntity> findWithRolesByEmail(String email);
 
     /**

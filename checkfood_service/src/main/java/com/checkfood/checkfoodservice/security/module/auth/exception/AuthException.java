@@ -115,12 +115,27 @@ public class AuthException extends SecurityException {
     }
 
     /**
-     * Email address already registered - duplicate registration attempt.
+     * Email address already registered - duplicate registration attempt
+     * against an already-active account. Client should redirect to login.
      */
     public static AuthException emailExists() {
         return new AuthException(
                 AuthErrorCode.AUTH_EMAIL_EXISTS,
-                "Uživatel s tímto emailem již existuje.",
+                "Uživatel s tímto emailem již existuje. Přihlaste se prosím.",
+                HttpStatus.CONFLICT
+        );
+    }
+
+    /**
+     * Email address already registered, but the account has never been
+     * verified. Client should offer the "resend verification code" flow
+     * instead of starting a new registration.
+     */
+    public static AuthException emailExistsNotVerified() {
+        return new AuthException(
+                AuthErrorCode.AUTH_ACCOUNT_NOT_VERIFIED,
+                "Účet s tímto emailem už existuje, ale není ověřený. "
+                        + "Můžeme vám poslat nový verifikační kód.",
                 HttpStatus.CONFLICT
         );
     }

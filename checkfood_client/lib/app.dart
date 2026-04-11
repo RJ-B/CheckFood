@@ -9,8 +9,14 @@ import 'features/splash/splash_screen.dart';
 /// Kořenová aplikace CheckFood.
 ///
 /// Reaguje na změny [LocaleCubit] a překreslí [MaterialApp] při přepnutí jazyka.
+///
+/// [navigatorKey] je předaná z [main.dart] aby Universal Link listener
+/// (`AppBootstrapper`) mohl navigovat na `/login?status=...` po zpracování
+/// verifikačního tokenu, který přijde z Mail.app mimo widget tree.
 class CheckFoodApp extends StatelessWidget {
-  const CheckFoodApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const CheckFoodApp({super.key, required this.navigatorKey});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,7 @@ class CheckFoodApp extends StatelessWidget {
         return MaterialApp(
           title: 'CheckFood',
           debugShowCheckedModeBanner: false,
+          navigatorKey: navigatorKey,
 
           localizationsDelegates: S.localizationsDelegates,
           supportedLocales: S.supportedLocales,

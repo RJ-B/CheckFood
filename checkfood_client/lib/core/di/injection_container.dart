@@ -218,12 +218,18 @@ Future<void> init() async {
   );
 
   // A) DIO AUTH (Pro Login/Register/OAuth - bez interceptoru)
+  //
+  // receiveTimeout je 30 s (ne 10 s) protože Cloud Run běží
+  // s `min-instances=0`, takže první request po nečinnosti vyvolá
+  // cold-start a JVM container startuje 5-15 s. S 10 s timeoutem
+  // klient padal na timeout dřív, než backend vůbec stihl odpovědět.
+  // 30 s pokrývá worst-case cold start s ~2× rezervou.
   sl.registerLazySingleton<Dio>(() {
     final dio = Dio(
       BaseOptions(
         baseUrl: apiBaseUrl,
         connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -246,12 +252,17 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RefreshTokenManager(sl()));
 
   // C) DIO MAIN (S AuthInterceptorem - pro autorizované požadavky)
+  //
+  // Same 30 s receiveTimeout reasoning as the auth instance — Cloud Run
+  // cold start can take 5-15 s, plus the heaviest endpoint
+  // (/restaurants/all-markers, ~524 KB gzipped) needs a few seconds to
+  // serialize 12 k+ rows.
   sl.registerLazySingleton<Dio>(() {
     final dio = Dio(
       BaseOptions(
         baseUrl: apiBaseUrl,
         connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

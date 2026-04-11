@@ -36,7 +36,7 @@ class EmailEnumerationTest extends BaseAuthIntegrationTest {
     }
 
     @Test
-    @DisplayName("GAP: Register with existing email currently returns 409 — enumeration surface")
+    @DisplayName("ACCEPTED RISK: /register intentionally returns 409 for duplicate email (Apr 2026 product decision)")
     void registerExistingEmailEnumeration() throws Exception {
         createVerifiedUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
 
@@ -58,10 +58,18 @@ class EmailEnumerationTest extends BaseAuthIntegrationTest {
                         .content(jsonNew))
                 .andReturn();
 
-        // Ideally both return 202 (async). If one returns 409, it is enumeration.
-        assertThat(dup.getResponse().getStatus())
-                .as("GAP: /register leaks account existence via different HTTP status")
-                .isEqualTo(fresh.getResponse().getStatus());
+        // Apr 2026 — anti-enumeration was deliberately weakened for this
+        // endpoint after iPhone user testing found the silent-202 + "someone
+        // tried to register your account" email confusing for legitimate
+        // users who had simply forgotten about an existing account. The
+        // product decision is documented in AuthServiceImpl.register() and
+        // mirrored here so future security audits don't flag it as a
+        // regression. The risk is bounded because:
+        //   - rate limiting (5 / 15 min per IP) caps any meaningful probe
+        //   - /forgot-password and /login still return constant responses
+        //   - the leak only confirms address existence, not credentials
+        assertThat(dup.getResponse().getStatus()).isEqualTo(409);
+        assertThat(fresh.getResponse().getStatus()).isEqualTo(202);
     }
 
     @Test

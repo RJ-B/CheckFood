@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Universal Links — see Apr 2026 bug #2 fix.
+
+	  Tells iOS that this app is a valid handler for HTTPS URLs whose
+	  host matches checkfood-api-809801655996.europe-central2.run.app
+	  AND whose path matches one of the entries in the AASA file at
+	  https://<host>/.well-known/apple-app-site-association
+	  (served by checkfood_service WellKnownController).
+
+	  When iOS sees a tapped link to that host, it fetches the AASA
+	  file once per install (cached for ~24h, can be refreshed by
+	  reinstalling the app or running `xcrun simctl openurl`), and if
+	  the path matches one of the AASA "paths" entries it dispatches
+	  the URL to the running CheckFood app via NSUserActivity instead
+	  of opening Safari.
+
+	  The matching listener on the Flutter side lives in main.dart
+	  via the `app_links` package; it parses ?token=... and dispatches
+	  AuthEvent.verifyEmailRequested through the global AuthBloc.
+	-->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:checkfood-api-809801655996.europe-central2.run.app</string>
+	</array>
+</dict>
+</plist>

@@ -54,9 +54,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> verifyEmail(VerifyEmailRequestModel request) async {
+    // The backend GET /api/auth/verify endpoint returns text/html (a
+    // success/error landing page) so that desktop browsers and devices
+    // without the app installed get a usable result. Dio's default
+    // ResponseType.json would try to JSON-decode the HTML body and
+    // throw — switch this single call to plain so the body is treated
+    // as a string. We don't read the body anyway; the HTTP status is
+    // what matters (200 = verified, 4xx/5xx = handled by error mapper).
     await _dio.get(
       SecurityEndpoints.verifyEmail,
       queryParameters: {'token': request.token},
+      options: Options(responseType: ResponseType.plain),
     );
   }
 

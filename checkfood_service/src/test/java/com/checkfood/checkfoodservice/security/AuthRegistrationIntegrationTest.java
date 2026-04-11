@@ -7,8 +7,10 @@ import org.springframework.http.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -55,18 +57,25 @@ class AuthRegistrationIntegrationTest extends BaseAuthIntegrationTest {
 
     // =========================================================================
     // Duplicate email
+    //
+    // Apr 2026 — the registration endpoint used to silently 202 on
+    // duplicates and send an out-of-band "someone tried to register
+    // your account" email (OWASP ASVS V3.2.3 anti-enumeration). Real
+    // user testing showed this was confusing — legitimate users who
+    // forgot they already had an account got a "spam-like" email and
+    // no in-app feedback that they should just log in. Product
+    // explicitly opted to break the anti-enumeration property in
+    // favour of a clear 409 response. The two cases are differentiated
+    // so the client can offer the right next action:
+    //   - already verified  → "log in"            (AUTH_EMAIL_EXISTS)
+    //   - never verified    → "resend verify"     (AUTH_ACCOUNT_NOT_VERIFIED)
     // =========================================================================
 
     @Test
-    @DisplayName("register - duplicate email - still returns 202 (anti-enumeration, OWASP ASVS V3.2.3)")
-    void register_DuplicateEmail_Returns202() throws Exception {
-        // First registration succeeds
-        registerUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
+    @DisplayName("register - duplicate email of verified user - returns 409 with AUTH_EMAIL_EXISTS")
+    void register_DuplicateEmail_VerifiedUser_Returns409() throws Exception {
+        createVerifiedUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
 
-        // Second registration with the same email must return the SAME
-        // HTTP 202 as a fresh registration — otherwise an attacker could
-        // probe the user database by status code. The legitimate owner is
-        // notified out-of-band via sendAccountExistsNotification().
         RegisterRequest duplicate = RegisterRequest.builder()
                 .firstName("Jiny")
                 .lastName("Uzivatel")
@@ -77,10 +86,34 @@ class AuthRegistrationIntegrationTest extends BaseAuthIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(duplicate)))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("AUTH_EMAIL_EXISTS"));
 
-        // Out-of-band notification must be sent to the legitimate owner
-        verify(emailService).sendAccountExistsNotification(TEST_EMAIL);
+        // Out-of-band "someone tried to register your account" notification
+        // is no longer sent — see comment above.
+        verify(emailService, never()).sendAccountExistsNotification(anyString());
+    }
+
+    @Test
+    @DisplayName("register - duplicate email of unverified user - returns 409 with AUTH_ACCOUNT_NOT_VERIFIED")
+    void register_DuplicateEmail_UnverifiedUser_Returns409() throws Exception {
+        // First registration leaves the user in unverified state.
+        registerUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
+
+        RegisterRequest duplicate = RegisterRequest.builder()
+                .firstName("Jiny")
+                .lastName("Uzivatel")
+                .email(TEST_EMAIL)
+                .password(TEST_PASSWORD)
+                .build();
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(duplicate)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("AUTH_ACCOUNT_NOT_VERIFIED"));
+
+        verify(emailService, never()).sendAccountExistsNotification(anyString());
     }
 
     // =========================================================================

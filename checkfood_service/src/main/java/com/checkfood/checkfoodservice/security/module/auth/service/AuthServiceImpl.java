@@ -80,14 +80,32 @@ public class AuthServiceImpl implements AuthService {
     public void register(RegisterRequest requestDto) {
         passwordValidator.validate(requestDto.getPassword());
 
-        // OWASP ASVS V3.2.3 / D1 — always return 202 regardless of whether the
-        // email is already registered. If it exists, notify the legitimate
-        // owner out-of-band with a "someone tried to register with your email"
-        // message. This makes HTTP-status based enumeration impossible.
+        // Reject duplicate-email registration attempts with HTTP 409.
+        //
+        // Note on the security trade-off: this enables HTTP-status based
+        // account enumeration (an attacker can probe whether an email is
+        // registered by checking 409 vs 202). The previous implementation
+        // intentionally returned 202 for both cases per OWASP ASVS V3.2.3
+        // to defeat enumeration, and notified the legitimate account owner
+        // out-of-band that "someone tried to register with your email".
+        //
+        // Product feedback (April 2026): the silent-success behaviour was
+        // confusing — a curious person would try to register, see "check
+        // your email", and never get one. Meanwhile the real account holder
+        // would receive an unexpected "registration attempt" email and
+        // panic. Switched to a clear 409 with two distinct error codes:
+        //
+        //   - AUTH_EMAIL_EXISTS         → account is verified, redirect to login
+        //   - AUTH_ACCOUNT_NOT_VERIFIED → account exists, offer "resend code"
+        //
+        // The client should NOT show "check your email" on either of those.
         if (userService.existsByEmail(requestDto.getEmail())) {
-            emailService.sendAccountExistsNotification(requestDto.getEmail());
+            var existing = userService.findByEmail(requestDto.getEmail());
             authLogger.logRegistration(requestDto.getEmail());
-            return;
+            if (existing.isEnabled()) {
+                throw AuthException.emailExists();
+            }
+            throw AuthException.emailExistsNotVerified();
         }
 
         if (requestDto.isOwnerRegistration()) {
@@ -101,11 +119,15 @@ public class AuthServiceImpl implements AuthService {
     public void registerOwner(RegisterRequest requestDto) {
         passwordValidator.validate(requestDto.getPassword());
 
-        // Same OWASP-compliant enumeration guard as register().
+        // Same duplicate-email rejection as register() — see the longer
+        // comment there for the security trade-off rationale.
         if (userService.existsByEmail(requestDto.getEmail())) {
-            emailService.sendAccountExistsNotification(requestDto.getEmail());
+            var existing = userService.findByEmail(requestDto.getEmail());
             authLogger.logRegistration(requestDto.getEmail());
-            return;
+            if (existing.isEnabled()) {
+                throw AuthException.emailExists();
+            }
+            throw AuthException.emailExistsNotVerified();
         }
 
         registerAsOwner(requestDto);

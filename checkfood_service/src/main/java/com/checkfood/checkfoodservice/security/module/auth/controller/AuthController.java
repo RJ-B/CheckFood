@@ -9,6 +9,8 @@ import com.checkfood.checkfoodservice.security.module.auth.service.AuthService;
 import com.checkfood.checkfoodservice.security.ratelimit.annotation.RateLimited;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -104,39 +106,95 @@ public class AuthController {
     }
 
     /**
-     * Verifikuje účet přes email link a přesměrovává do mobile app.
+     * Verifikuje účet přes email link a vrátí HTML page.
      *
-     * Implementuje deep link integration pro seamless UX - úspěch i chyby
-     * jsou handleovány přes custom URL scheme pro Flutter app.
+     * <p>HTML stránka:
+     * <ul>
+     *   <li>Pokud iOS / Android otevře link a má nainstalovanou CheckFood app,
+     *       Universal Link / App Link otevře app přímo (řízeno
+     *       {@code apple-app-site-association} a {@code assetlinks.json}
+     *       v {@code WellKnownController}).</li>
+     *   <li>Jinak (desktop, jiný telefon bez app, in-app browser, atd.)
+     *       uživatel vidí pěknou success/error stránku s pokyny —
+     *       místo Safari error o nemožném {@code checkfood://} scheme.</li>
+     * </ul>
+     *
+     * <p>Tato cesta nahradila starší {@code response.sendRedirect("checkfood://...")},
+     * která fungovala jen na zařízeních s nainstalovanou app a všude jinde
+     * končila chybou v prohlížeči.</p>
      *
      * @param token verification token z email linku
-     * @param response HTTP response pro redirect functionality
-     * @throws IOException při redirect failures
+     * @param response HTTP response (HTML body)
+     * @throws IOException při zápisu odpovědi
      */
     @RateLimited(key = "auth:verify", limit = 20, duration = 1, unit = TimeUnit.MINUTES, perIp = true)
-    @GetMapping("/verify")
+    @GetMapping(value = "/verify", produces = MediaType.TEXT_HTML_VALUE)
     public void verifyAccount(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
+        boolean success;
+        String errorType = null;
         try {
             authService.verifyAccount(token);
-            response.sendRedirect("checkfood://app/login?status=success");
+            success = true;
         } catch (Exception e) {
-            // Map to opaque error codes — never leak raw exception messages
-            // to the deep-link URL (they might expose stack traces or token
-            // details in edge cases). The mobile app renders a localized
-            // string keyed on `type`.
-            String errorType = "VERIFICATION_ERROR";
+            success = false;
+            // Map to opaque error codes — don't leak raw exception messages.
+            errorType = "VERIFICATION_ERROR";
             if (e instanceof com.checkfood.checkfoodservice.security.module.auth.exception.AuthException authEx) {
                 Object code = authEx.getErrorCode();
                 if (code != null) {
                     errorType = code.toString();
                 }
             }
-
-            response.sendRedirect(String.format(
-                    "checkfood://app/login?status=error&type=%s",
-                    URLEncoder.encode(errorType, StandardCharsets.UTF_8)
-            ));
         }
+
+        response.setContentType("text/html; charset=UTF-8");
+        response.setStatus(HttpStatus.OK.value());
+        response.getWriter().write(buildVerificationHtml(success, errorType));
+    }
+
+    private String buildVerificationHtml(boolean success, String errorType) {
+        String title;
+        String headline;
+        String body;
+        String emoji;
+        String accent;
+        if (success) {
+            title = "Účet ověřen — CheckFood";
+            headline = "Účet úspěšně ověřen";
+            body = "Můžete se přihlásit v aplikaci CheckFood na svém telefonu.";
+            emoji = "✓";
+            accent = "#2ecc71";
+        } else {
+            title = "Ověření selhalo — CheckFood";
+            headline = "Ověření se nezdařilo";
+            body = "Odkaz je neplatný nebo expiroval. Vyžádejte si nový kód v aplikaci."
+                    + (errorType != null ? " (kód: " + errorType + ")" : "");
+            emoji = "✕";
+            accent = "#e74c3c";
+        }
+        return "<!DOCTYPE html>\n<html lang=\"cs\"><head>"
+                + "<meta charset=\"UTF-8\">"
+                + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+                + "<title>" + title + "</title>"
+                + "<style>"
+                + "body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;"
+                + "background:#0F2027;color:#fff;display:flex;align-items:center;justify-content:center;"
+                + "min-height:100vh;padding:24px;text-align:center}"
+                + ".card{background:#1e3540;border-radius:16px;padding:32px;max-width:420px;"
+                + "box-shadow:0 8px 32px rgba(0,0,0,0.3)}"
+                + ".icon{width:80px;height:80px;border-radius:50%;background:" + accent + ";"
+                + "display:flex;align-items:center;justify-content:center;font-size:40px;"
+                + "margin:0 auto 24px;font-weight:bold}"
+                + "h1{margin:0 0 12px;font-size:22px;font-weight:600}"
+                + "p{margin:0;font-size:15px;line-height:1.5;opacity:0.85}"
+                + ".brand{margin-top:24px;font-size:13px;opacity:0.5;letter-spacing:1px}"
+                + "</style></head><body>"
+                + "<div class=\"card\">"
+                + "<div class=\"icon\">" + emoji + "</div>"
+                + "<h1>" + headline + "</h1>"
+                + "<p>" + body + "</p>"
+                + "<div class=\"brand\">CheckFood</div>"
+                + "</div></body></html>";
     }
 
     /**

@@ -13,17 +13,24 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the email verification and resend-code endpoints.
  *
- * GET  /api/auth/verify?token=...   - activates the account via redirect
+ * GET  /api/auth/verify?token=...   - activates the account, returns HTML
  * POST /api/auth/resend-code        - re-sends the verification email
  *
- * The verify endpoint uses HttpServletResponse.sendRedirect() so all
- * assertions check for HTTP 302 and the redirect URL pattern.
+ * Apr 2026 — the verify endpoint used to send a 302 redirect to a custom
+ * URL scheme ({@code checkfood://app/login?status=...}). That worked only
+ * on devices with the app installed; cross-device clicks (e.g. opening
+ * the email on a desktop) ended up at a Safari "Cannot Open Page" error.
+ * The endpoint now renders an HTML success/error landing page so any
+ * device gets a usable result, and Universal Links (see
+ * {@code WellKnownController.appleAppSiteAssociation()}) handle the
+ * "open the app directly when installed" case via iOS Mail.app intent
+ * routing rather than via an HTTP redirect.
  */
 class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
 
@@ -32,8 +39,8 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
     // =========================================================================
 
     @Test
-    @DisplayName("verify - valid token - redirects to success deep link and enables account")
-    void verifyAccount_ValidToken_RedirectsSuccess() throws Exception {
+    @DisplayName("verify - valid token - returns success HTML page and enables account")
+    void verifyAccount_ValidToken_ReturnsSuccessHtml() throws Exception {
         // Register a user (unverified)
         registerUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
 
@@ -44,8 +51,9 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
 
         // Perform the verification request
         mockMvc.perform(get("/api/auth/verify").param("token", token))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("checkfood://app/login?status=success*"));
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Účet úspěšně ověřen")));
 
         // User should now be enabled
         UserEntity updatedUser = userRepository.findByEmail(TEST_EMAIL).orElseThrow();
@@ -60,11 +68,12 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
     // =========================================================================
 
     @Test
-    @DisplayName("verify - invalid/non-existent token - redirects to error deep link")
-    void verifyAccount_InvalidToken_RedirectsError() throws Exception {
+    @DisplayName("verify - invalid/non-existent token - returns error HTML page")
+    void verifyAccount_InvalidToken_ReturnsErrorHtml() throws Exception {
         mockMvc.perform(get("/api/auth/verify").param("token", "non-existent-token-xyz"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("checkfood://app/login?status=error*"));
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Ověření se nezdařilo")));
     }
 
     // =========================================================================
@@ -72,8 +81,8 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
     // =========================================================================
 
     @Test
-    @DisplayName("verify - expired token - redirects to error deep link")
-    void verifyAccount_ExpiredToken_RedirectsError() throws Exception {
+    @DisplayName("verify - expired token - returns error HTML page")
+    void verifyAccount_ExpiredToken_ReturnsErrorHtml() throws Exception {
         // Register a user
         registerUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
 
@@ -92,8 +101,9 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
 
         // Attempt to verify with the expired token
         mockMvc.perform(get("/api/auth/verify").param("token", expiredToken))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("checkfood://app/login?status=error*"));
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Ověření se nezdařilo")));
 
         // User should still be disabled
         UserEntity stillDisabled = userRepository.findByEmail(TEST_EMAIL).orElseThrow();
@@ -105,7 +115,7 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
     // =========================================================================
 
     @Test
-    @DisplayName("verify - already verified account - redirects to success (idempotent)")
+    @DisplayName("verify - already verified account - returns success HTML page (idempotent)")
     void verifyAccount_AlreadyVerified_Idempotent() throws Exception {
         // Register and manually verify the user
         registerUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
@@ -119,11 +129,14 @@ class AuthVerificationIntegrationTest extends BaseAuthIntegrationTest {
         user.setEnabled(true);
         userRepository.save(user);
 
-        // Verifying again with the same valid token should still redirect to success
-        // (the controller catches the already-verified case and redirects successfully)
+        // Verifying again with the same valid token should still report success —
+        // AuthServiceImpl.verifyAccount short-circuits on isEnabled() and just
+        // deletes the token rather than throwing, so the controller renders the
+        // success landing page.
         mockMvc.perform(get("/api/auth/verify").param("token", token))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("checkfood://app/login?status=success*"));
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Účet úspěšně ověřen")));
 
         // User should still be enabled
         assertThat(userRepository.findByEmail(TEST_EMAIL).orElseThrow().isEnabled()).isTrue();
