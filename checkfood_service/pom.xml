@@ -181,6 +181,20 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--
+            Toxiproxy module — lets tests insert a TCP proxy between
+            the app and Postgres so they can simulate network-level
+            failures (cut connection, latency spikes, bandwidth caps,
+            dropped packets mid-query). Used by ChaosPostgresTest to
+            verify that transient DB failures do NOT leak as HTTP 500s
+            and that connection pool recovers cleanly.
+        -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>toxiproxy</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>

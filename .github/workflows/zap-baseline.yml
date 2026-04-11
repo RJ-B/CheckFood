@@ -1,0 +1,105 @@
+name: ZAP baseline (DAST)
+
+# OWASP ZAP passive scan against the running backend. Runs the
+# service in a local container, points ZAP at it, and generates
+# an HTML + SARIF report. Passive scan only — it does NOT send
+# attack payloads, just observes responses. Safe to run on every
+# push because there is no destructive traffic.
+#
+# The hard gate fails on HIGH severity ZAP findings. MEDIUM is
+# reported but does not fail the build; we review MEDIUM weekly
+# and graduate them to HIGH once we have a fix in flight.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'checkfood_service/**'
+      - '.github/workflows/zap-baseline.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: zap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    name: ZAP baseline scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: checkfood
+          POSTGRES_USER: checkfood
+          POSTGRES_PASSWORD: checkfood
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build service JAR
+        working-directory: checkfood_service
+        run: ./mvnw -B -DskipTests package
+
+      - name: Boot service
+        working-directory: checkfood_service
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/checkfood
+          SPRING_DATASOURCE_USERNAME: checkfood
+          SPRING_DATASOURCE_PASSWORD: checkfood
+          SERVER_PORT: 8081
+        run: |
+          nohup java -jar target/*.jar > service.log 2>&1 &
+          echo $! > service.pid
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8081/actuator/health > /dev/null; then
+              echo "Service up after ${i}x2s"
+              break
+            fi
+            sleep 2
+          done
+          curl -sf http://localhost:8081/actuator/health || {
+            echo "::error::Service failed to start within 120s";
+            tail -200 service.log;
+            exit 1;
+          }
+
+      - name: Run ZAP baseline
+        uses: zaproxy/action-baseline@v0.13.0
+        with:
+          target: http://localhost:8081
+          # Rules file to suppress specific alerts (e.g. the CORS
+          # ones that are expected in dev mode). Empty file is fine
+          # — placeholder until we need to suppress something.
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -j'
+          # Don't fail on warnings (yellow). Only HIGH (red) fails.
+          fail_action: true
+          allow_issue_writing: false
+
+      - name: Tail service log on failure
+        if: failure()
+        run: tail -500 checkfood_service/service.log || true
+
+      - name: Stop service
+        if: always()
+        run: |
+          if [ -f checkfood_service/service.pid ]; then
+            kill "$(cat checkfood_service/service.pid)" 2>/dev/null || true
+          fi

@@ -1,0 +1,10 @@
+# OWASP ZAP rule suppressions for CheckFood baseline scan.
+#
+# Format (tab-separated):
+#   <rule_id>	<action>	<url_pattern (optional)>
+#
+# Actions: IGNORE, WARN, FAIL
+#
+# Keep this file empty unless you have a documented reason for each
+# suppression. A suppressed rule without a comment here is a code
+# smell — future-you will not remember why.
