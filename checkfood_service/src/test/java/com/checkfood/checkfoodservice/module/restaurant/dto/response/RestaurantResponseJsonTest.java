@@ -63,7 +63,7 @@ class RestaurantResponseJsonTest {
         assertThat(written).extractingJsonPathStringValue("$.name")
                 .isEqualTo("Test Bistro");
         assertThat(written).extractingJsonPathStringValue("$.status")
-                .isEqualTo(RestaurantStatus.APPROVED.name());
+                .isEqualTo(RestaurantStatus.ACTIVE.name());
         assertThat(written).extractingJsonPathBooleanValue("$.active").isTrue();
         assertThat(written).extractingJsonPathNumberValue("$.rating")
                 .isEqualTo(4.5);
@@ -115,7 +115,7 @@ class RestaurantResponseJsonTest {
 
         assertThat(parsed.getId()).isEqualTo(RESTAURANT_ID);
         assertThat(parsed.getCuisineType()).isEqualTo(CuisineType.ITALIAN);
-        assertThat(parsed.getStatus()).isEqualTo(RestaurantStatus.APPROVED);
+        assertThat(parsed.getStatus()).isEqualTo(RestaurantStatus.ACTIVE);
         assertThat(parsed.isActive()).isTrue();
     }
 
@@ -125,7 +125,7 @@ class RestaurantResponseJsonTest {
                 .name("Test Bistro")
                 .description("desc")
                 .cuisineType(CuisineType.ITALIAN)
-                .status(RestaurantStatus.APPROVED)
+                .status(RestaurantStatus.ACTIVE)
                 .active(true)
                 .rating(new BigDecimal("4.5"))
                 .gallery(List.of())

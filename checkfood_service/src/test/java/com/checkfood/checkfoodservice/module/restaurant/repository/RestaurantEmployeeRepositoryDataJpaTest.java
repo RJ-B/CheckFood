@@ -76,7 +76,7 @@ class RestaurantEmployeeRepositoryDataJpaTest extends BaseDataJpaTest {
                 .name("Bistro A")
                 .description("First trial resto")
                 .cuisineType(CuisineType.ITALIAN)
-                .status(RestaurantStatus.APPROVED)
+                .status(RestaurantStatus.ACTIVE)
                 .active(true)
                 .build();
         em.persist(a);
@@ -85,7 +85,7 @@ class RestaurantEmployeeRepositoryDataJpaTest extends BaseDataJpaTest {
                 .name("Bistro B")
                 .description("Second trial resto — same owner")
                 .cuisineType(CuisineType.ASIAN)
-                .status(RestaurantStatus.APPROVED)
+                .status(RestaurantStatus.ACTIVE)
                 .active(true)
                 .build();
         em.persist(b);

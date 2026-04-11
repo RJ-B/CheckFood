@@ -79,7 +79,7 @@ class RestaurantControllerWebMvcTest {
         RestaurantResponse r = RestaurantResponse.builder()
                 .id(id)
                 .name("Bistro 1")
-                .status(RestaurantStatus.APPROVED)
+                .status(RestaurantStatus.ACTIVE)
                 .active(true)
                 .rating(new BigDecimal("4.5"))
                 .build();
@@ -115,7 +115,7 @@ class RestaurantControllerWebMvcTest {
         RestaurantResponse r = RestaurantResponse.builder()
                 .id(id)
                 .name("Bistro 2")
-                .status(RestaurantStatus.APPROVED)
+                .status(RestaurantStatus.ACTIVE)
                 .active(true)
                 .rating(new BigDecimal("4.0"))
                 .build();
