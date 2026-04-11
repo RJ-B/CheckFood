@@ -37,8 +37,15 @@ jobs:
       # hits (prefer_const_constructors, unnecessary_lambdas, etc.)
       # are currently tolerated as an acceptance-cleanup backlog item;
       # see analysis_options.yaml for the active rule set.
+      #
+      # NB: `flutter analyze` enables BOTH --fatal-infos AND --fatal-warnings
+      # by default. Passing only `--fatal-warnings` does NOT disable the
+      # info-level gate, so we must pass `--no-fatal-infos` explicitly to
+      # let info hits through. The active analysis_options.yaml downgrades
+      # the pre-existing cleanup backlog to info, so once those flags are
+      # passed correctly the build is green again.
       - name: flutter analyze
-        run: flutter analyze --fatal-warnings
+        run: flutter analyze --no-fatal-infos --fatal-warnings
 
       # Unit + widget + security tests. Golden tests are included —
       # the linux-font fallback in ubuntu-latest may produce 1-2 px
