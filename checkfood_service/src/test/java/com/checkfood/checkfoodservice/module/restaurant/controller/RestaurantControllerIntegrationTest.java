@@ -568,51 +568,11 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
     }
 
     // =========================================================================
-    // GET /api/v1/restaurants/all-markers
+    // Geospatial endpoints (all-markers, markers-version, nearest) live in
+    // RestaurantControllerPostgisIntegrationTest — they depend on PostGIS
+    // functions (ST_X / ST_Y / ST_MakePoint / KNN <->) that H2 doesn't
+    // implement. Keeping them here would be a guaranteed 500.
     // =========================================================================
-
-    @Test
-    @DisplayName("GET /all-markers — public endpoint returns 200 with version and data")
-    void should_return200_when_allMarkersRequested() throws Exception {
-        mockMvc.perform(get("/api/v1/restaurants/all-markers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.version").exists())
-                .andExpect(jsonPath("$.data").isArray());
-    }
-
-    @Test
-    @DisplayName("GET /markers-version — public endpoint returns 200 with version")
-    void should_return200_when_markersVersionRequested() throws Exception {
-        mockMvc.perform(get("/api/v1/restaurants/markers-version"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.version").exists());
-    }
-
-    // GAP: GET /api/v1/restaurants/nearest — missing pagination tests (page/size params)
-    @Test
-    @DisplayName("GET /nearest — returns 200 with default pagination params")
-    void should_return200_when_nearestRequestedWithDefaultPagination() throws Exception {
-        // GAP: production code accepts page/size but there are no tests for page=0, size=10 defaults
-        mockMvc.perform(get("/api/v1/restaurants/nearest")
-                        .param("lat", "49.74")
-                        .param("lng", "13.37"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
-    }
-
-    // GAP: pagination boundary — page beyond last should return empty list, not 500
-    @Test
-    @DisplayName("GET /nearest — page beyond last should return empty list")
-    void should_returnEmptyList_when_pageIsBeyondLast() throws Exception {
-        // GAP: no validation that page=9999 returns [] instead of 500
-        mockMvc.perform(get("/api/v1/restaurants/nearest")
-                        .param("lat", "49.74")
-                        .param("lng", "13.37")
-                        .param("page", "9999")
-                        .param("size", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
-    }
 
     // =========================================================================
     // Helpers

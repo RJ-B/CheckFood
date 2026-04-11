@@ -3,16 +3,18 @@ name: Build Android APK
 on:
   push:
     branches: [main]
+    paths:
+      - "checkfood_client/**"
+      - ".github/workflows/flutter-android.yml"
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build Release APK
+    name: Build Release APK (obfuscated)
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: checkfood_client
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,34 +23,43 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: "21"
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'
+          flutter-version: "3.29.3"
           channel: stable
 
-      - name: Create .env files for build
+      # Secrets come from GitHub Environment secrets / repo secrets:
+      #   GOOGLE_WEB_CLIENT_ID, GOOGLE_MAPS_API_KEY,
+      #   APPLE_REDIRECT_URL,
+      #   MAPS_API_KEY           (Android native, fed into local.properties)
+      #   CERT_PIN_SHA256        (comma-separated primary + backup fingerprints)
+      - name: Write android/local.properties (Maps key)
         run: |
-          cat <<'ENVEOF' > .env
-          API_BASE_URL=https://checkfood-api.onrender.com/api
-          GOOGLE_WEB_CLIENT_ID=placeholder
-          APPLE_CLIENT_ID=com.checkfood.checkfood_client
-          APPLE_REDIRECT_URL=https://checkfood-api.onrender.com/api/oauth/apple/callback
-          ENVEOF
-          sed -i 's/^ *//' .env
-          cp .env .env.prod
-          cp .env .env.local
+          mkdir -p android
+          printf 'MAPS_API_KEY=%s\n' "${{ secrets.MAPS_API_KEY }}" >> android/local.properties
 
-      - name: Install dependencies
+      - name: flutter pub get
         run: flutter pub get
 
-      - name: Build release APK
-        run: flutter build apk --release
+      - name: Build release APK with --obfuscate + --split-debug-info
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          APPLE_REDIRECT_URL: ${{ secrets.APPLE_REDIRECT_URL }}
+          CERT_PIN_SHA256: ${{ secrets.CERT_PIN_SHA256 }}
+        run: ./scripts/build_release.sh apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
           path: checkfood_client/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload obfuscation symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-symbols
+          path: checkfood_client/build/symbols/

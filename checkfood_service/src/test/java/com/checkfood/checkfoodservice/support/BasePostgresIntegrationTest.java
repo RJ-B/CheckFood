@@ -42,10 +42,10 @@ public abstract class BasePostgresIntegrationTest {
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
         registry.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
-        registry.add("spring.jpa.database-platform", () -> "org.hibernate.dialect.PostgreSQLDialect");
-        registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-        // Flyway must run against real Postgres so PostGIS-specific migrations work
-        registry.add("spring.flyway.enabled", () -> "true");
+        // JPA/Flyway strategy is pinned in application-postgres-test.properties:
+        //   ddl-auto=create-drop (Hibernate bootstraps the schema from entities)
+        //   flyway.enabled=false (V1..V4 are incremental and assume an
+        //                          initial schema that doesn't exist here).
     }
 
     /**
