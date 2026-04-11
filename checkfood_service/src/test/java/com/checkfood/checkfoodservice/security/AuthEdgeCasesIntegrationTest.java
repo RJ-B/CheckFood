@@ -86,10 +86,16 @@ class AuthEdgeCasesIntegrationTest extends BaseAuthIntegrationTest {
                         .content(objectMapper.writeValueAsString(logoutRequest)))
                 .andExpect(status().isNoContent());
 
-        // 5a. Verify the device was removed
+        // 5a. Verify the device was deactivated. NB: logout *deactivates*
+        // the device row (sets active = false) instead of hard-deleting it
+        // — the row is kept for auditing and so refresh-token revocation
+        // has something to FK against.
         var user = userRepository.findByEmail(TEST_EMAIL).orElseThrow();
-        boolean deviceExists = deviceRepository.existsByDeviceIdentifierAndUser(TEST_DEVICE_ID, user);
-        assertThat(deviceExists).isFalse();
+        var devices = deviceRepository.findAllByUser(user);
+        assertThat(devices)
+                .filteredOn(d -> TEST_DEVICE_ID.equals(d.getDeviceIdentifier()))
+                .singleElement()
+                .satisfies(d -> assertThat(d.isActive()).isFalse());
     }
 
     @Test

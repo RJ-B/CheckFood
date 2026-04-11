@@ -55,11 +55,6 @@ analyzer:
     # Material Flutter symbol of the same name. Excluded to avoid
     # bleeding upstream test issues into the host project's analyze.
     - "ios/local_patches/**"
-    # Pre-existing reservation_bloc_test.dart imports `bloc_test`,
-    # which is currently disabled in pubspec.yaml because it pulls in
-    # a freezed version that conflicts with the rest of the tree.
-    # Exclude until bloc_test ships a compatible release.
-    - "test/unit/modules/reservation/presentation/customer/reservation_bloc_test.dart"
 
 linter:
   # Additional defect-prevention lints on top of flutter_lints.

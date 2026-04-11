@@ -34,20 +34,29 @@ class AuthDeviceManagementIntegrationTest extends BaseAuthIntegrationTest {
     }
 
     @Test
-    @DisplayName("DELETE /api/user/devices/{id} - removing own device returns 204")
+    @DisplayName("DELETE /api/user/devices/{id} - removing a non-current device returns 204")
     void logoutDevice_OwnDevice_Returns204() throws Exception {
-        // Arrange: create a verified user and log in to create a device record
+        // Arrange: create a verified user and log in TWICE — once with a
+        // "phone" device, then again with a "tablet" device. The second
+        // login becomes the "current" session, and we try to delete the
+        // first device. Production rejects deleting the *current* device
+        // (would log you out mid-request), so the test must target the
+        // other one.
         createVerifiedUser(TEST_EMAIL, TEST_PASSWORD, TEST_FIRST_NAME, TEST_LAST_NAME);
-        String accessToken = getAccessToken(TEST_EMAIL, TEST_PASSWORD, TEST_DEVICE_ID);
+        getAccessToken(TEST_EMAIL, TEST_PASSWORD, "phone-device");
+        String tabletToken = getAccessToken(TEST_EMAIL, TEST_PASSWORD, "tablet-device");
 
-        // Find the device ID from the database
         var user = userRepository.findByEmail(TEST_EMAIL).orElseThrow();
         var devices = deviceRepository.findAllByUser(user);
-        Long deviceId = devices.get(0).getId();
+        Long phoneDeviceId = devices.stream()
+                .filter(d -> "phone-device".equals(d.getDeviceIdentifier()))
+                .findFirst()
+                .orElseThrow()
+                .getId();
 
-        // Act & Assert
-        mockMvc.perform(delete("/api/user/devices/" + deviceId)
-                        .header("Authorization", "Bearer " + accessToken))
+        // Act & Assert: delete the phone device while authenticated as tablet
+        mockMvc.perform(delete("/api/user/devices/" + phoneDeviceId)
+                        .header("Authorization", "Bearer " + tabletToken))
                 .andExpect(status().isNoContent());
     }
 

@@ -220,39 +220,46 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                     .andExpect(jsonPath("$.date").value(testDate.toString()))
                     .andExpect(jsonPath("$.tableId").value(freeTableId.toString()))
                     .andExpect(jsonPath("$.slotMinutes").value(30))
-                    // Open-ended model: last slot = closeAt - 30min = 21:30
-                    // Slots from 10:00 to 21:30 in 30-min increments = 24 slots
-                    .andExpect(jsonPath("$.availableStartTimes", hasSize(24)))
+                    // Flexible-duration model: a slot is offered only when
+                    // start + defaultDuration (60min) ≤ closeAt (22:00).
+                    // Last valid start = 21:00 → slots 10:00..21:00 in 30-min
+                    // increments = 23 slots.
+                    .andExpect(jsonPath("$.availableStartTimes", hasSize(23)))
                     .andExpect(jsonPath("$.availableStartTimes[0]").value("10:00:00"))
                     .andExpect(jsonPath("$.availableStartTimes[1]").value("10:30:00"));
         }
 
         @Test
-        @DisplayName("200 — excludes slots blocked by active open-ended reservation")
+        @DisplayName("200 — excludes slots blocked by active reservation")
         void shouldExcludeOverlappingSlots() throws Exception {
-            // The reserved table has an active reservation starting at 12:00 (open-ended).
-            // Open-ended model: slot is blocked if any active reservation has startTime <= candidate.
-            // So all slots from 12:00 onward are blocked.
-            // Available: 10:00, 10:30, 11:00, 11:30 = 4 slots
+            // The reserved table has an active reservation 12:00 → 13:00.
+            // Flexible-duration model uses a half-open overlap check:
+            // a candidate [start, start+60) is blocked when it overlaps
+            // [12:00, 13:00) — that's starts 11:30, 12:00, 12:30.
+            // 11:00 → 12:00 ends exactly when the existing reservation
+            // starts, so it does NOT overlap and remains free.
+            //
+            // Free starts = 10:00, 10:30, 11:00, 13:00..21:00 = 20 slots.
 
             var result = mockMvc.perform(get("/api/v1/restaurants/{id}/tables/{tid}/available-slots",
                             restaurantId, reservedTableId)
                             .param("date", testDate.toString())
                             .header("Authorization", "Bearer " + accessToken))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.availableStartTimes", hasSize(4)))
+                    .andExpect(jsonPath("$.availableStartTimes", hasSize(20)))
                     .andReturn();
 
             String body = result.getResponse().getContentAsString();
-            // 12:00 and later should NOT be available
+            // Slots that overlap [12:00, 13:00) must NOT be present
+            assertThat(body).doesNotContain("\"11:30:00\"");
             assertThat(body).doesNotContain("\"12:00:00\"");
-            assertThat(body).doesNotContain("\"13:00:00\"");
-            assertThat(body).doesNotContain("\"13:30:00\"");
-            // Slots before 12:00 should be available
+            assertThat(body).doesNotContain("\"12:30:00\"");
+            // Slots that abut or sit outside the window must be present
             assertThat(body).contains("\"10:00:00\"");
             assertThat(body).contains("\"10:30:00\"");
             assertThat(body).contains("\"11:00:00\"");
-            assertThat(body).contains("\"11:30:00\"");
+            assertThat(body).contains("\"13:00:00\"");
+            assertThat(body).contains("\"13:30:00\"");
         }
 
         @Test
@@ -337,8 +344,12 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                     .andExpect(jsonPath("$.tableId").value(freeTableId.toString()))
                     .andExpect(jsonPath("$.date").value(testDate.toString()))
                     .andExpect(jsonPath("$.startTime").value("18:00:00"))
-                    .andExpect(jsonPath("$.endTime").value(nullValue())) // open-ended: no endTime
-                    .andExpect(jsonPath("$.status").value("PENDING_CONFIRMATION"))
+                    // endTime is auto-filled from restaurant.defaultReservationDurationMinutes (60min)
+                    .andExpect(jsonPath("$.endTime").value("19:00:00"))
+                    // Reservations now go straight to CONFIRMED on create —
+                    // the older PENDING_CONFIRMATION step was removed once
+                    // the staff approval flow moved to ChangeRequests instead.
+                    .andExpect(jsonPath("$.status").value("CONFIRMED"))
                     .andExpect(jsonPath("$.partySize").value(3));
 
             // Verify in DB
@@ -346,7 +357,7 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                     freeTableId, testDate, List.of(ReservationStatus.CANCELLED, ReservationStatus.REJECTED));
             assertThat(all).hasSize(1);
             assertThat(all.get(0).getStartTime()).isEqualTo(LocalTime.of(18, 0));
-            assertThat(all.get(0).getEndTime()).isNull(); // open-ended: endTime is null
+            assertThat(all.get(0).getEndTime()).isEqualTo(LocalTime.of(19, 0));
         }
 
         @Test
@@ -372,13 +383,16 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
         @Test
         @DisplayName("409 — conflict when booking after active open-ended reservation")
         void shouldReturn409WhenBookingAfterActiveReservation() throws Exception {
-            // Existing active reservation starts at 12:00 (open-ended).
-            // New: 14:00 → existing.startTime (12:00) <= 14:00 → CONFLICT
+            // Existing active reservation 12:00 → 13:00 on reservedTable.
+            // Flexible-duration model: a new booking conflicts only when its
+            // [start, start+duration) overlaps the existing window. So a
+            // booking at 12:30 → 13:30 must fail (overlaps the inner half),
+            // but a booking at 14:00 → 15:00 would be fine.
             var request = CreateReservationRequest.builder()
                     .restaurantId(restaurantId)
                     .tableId(reservedTableId)
                     .date(testDate)
-                    .startTime(LocalTime.of(14, 0))
+                    .startTime(LocalTime.of(12, 30))
                     .partySize(2)
                     .build();
 
@@ -392,8 +406,9 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
         @Test
         @DisplayName("201 — booking before active reservation succeeds")
         void shouldSucceedForSlotBeforeActiveReservation() throws Exception {
-            // Existing active reservation starts at 12:00 (open-ended).
-            // New: 10:00 → existing.startTime (12:00) <= 10:00 is FALSE → no conflict
+            // Existing reservation 12:00 → 13:00 on reservedTable.
+            // New: 10:00 → 11:00 (auto-filled by defaultDuration 60min) — does
+            // not overlap [12:00, 13:00), so the booking succeeds.
             var request = CreateReservationRequest.builder()
                     .restaurantId(restaurantId)
                     .tableId(reservedTableId)
@@ -408,7 +423,7 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.startTime").value("10:00:00"))
-                    .andExpect(jsonPath("$.endTime").value(nullValue()));
+                    .andExpect(jsonPath("$.endTime").value("11:00:00"));
         }
 
         @Test
@@ -566,19 +581,20 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                     .status(ReservationStatus.CANCELLED)
                     .build());
 
-            // All 24 slots should still be available (cancelled doesn't block)
+            // All 23 slots should still be available (cancelled doesn't block).
+            // 23 = (closeAt 22:00 − openAt 10:00 − defaultDuration 60min) / 30min + 1
             mockMvc.perform(get("/api/v1/restaurants/{id}/tables/{tid}/available-slots",
                             restaurantId, freeTableId)
                             .param("date", testDate.toString())
                             .header("Authorization", "Bearer " + accessToken))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.availableStartTimes", hasSize(24)));
+                    .andExpect(jsonPath("$.availableStartTimes", hasSize(23)));
         }
 
         @Test
         @DisplayName("Completed reservation does not block, active reservation blocks from startTime onward")
         void completedDoesNotBlockActiveBlocksFromStart() throws Exception {
-            // COMPLETED reservation at 10:00 (with endTime set) — should NOT block
+            // COMPLETED reservation 10:00→11:30 — should NOT block (history)
             reservationRepository.save(Reservation.builder()
                     .restaurantId(restaurantId)
                     .tableId(freeTableId)
@@ -588,13 +604,16 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
                     .endTime(LocalTime.of(11, 30))
                     .status(ReservationStatus.COMPLETED)
                     .build());
-            // Active reservation at 18:00 (open-ended) — blocks 18:00 onward
+            // Active reservation 18:00 → 19:00 (defaultDuration 60min)
+            // Flexible-duration model blocks any slot whose [start, start+60)
+            // overlaps [18:00, 19:00). That's starts 17:30, 18:00, 18:30.
             reservationRepository.save(Reservation.builder()
                     .restaurantId(restaurantId)
                     .tableId(freeTableId)
                     .userId(1L)
                     .date(testDate)
                     .startTime(LocalTime.of(18, 0))
+                    .endTime(LocalTime.of(19, 0))
                     .status(ReservationStatus.RESERVED)
                     .build());
 
@@ -608,11 +627,13 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
             String body = result.getResponse().getContentAsString();
             // 10:00 should be available (COMPLETED doesn't block)
             assertThat(body).contains("\"10:00:00\"");
-            // 18:00 and later should NOT be available (active blocks)
+            // The window blocked by the 18:00–19:00 reservation
+            assertThat(body).doesNotContain("\"17:30:00\"");
             assertThat(body).doesNotContain("\"18:00:00\"");
             assertThat(body).doesNotContain("\"18:30:00\"");
-            // 17:30 should be available (before active reservation)
-            assertThat(body).contains("\"17:30:00\"");
+            // After the reservation ends, 19:00 onward should be free again
+            assertThat(body).contains("\"19:00:00\"");
+            assertThat(body).contains("\"19:30:00\"");
         }
 
         @Test
@@ -726,13 +747,17 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
     }
 
     private void seedExistingReservation() {
-        // Active reservation on reservedTable: starts at 12:00, open-ended (no endTime)
+        // Active reservation on reservedTable: 12:00 → 13:00 (60 min default).
+        // Older versions of this fixture used an "open-ended" model with no
+        // endTime, but the production slot algorithm now blocks based on
+        // [startTime, endTime), so endTime must be set explicitly.
         reservationRepository.save(Reservation.builder()
                 .restaurantId(restaurantId)
                 .tableId(reservedTableId)
                 .userId(999L) // system/other user
                 .date(testDate)
                 .startTime(LocalTime.of(12, 0))
+                .endTime(LocalTime.of(13, 0))
                 .status(ReservationStatus.RESERVED)
                 .partySize(4)
                 .build());

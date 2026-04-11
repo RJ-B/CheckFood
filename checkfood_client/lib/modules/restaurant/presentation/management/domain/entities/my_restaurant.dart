@@ -1,5 +1,6 @@
 import '../../../../domain/entities/address.dart';
 import '../../../../domain/entities/opening_hours.dart';
+import '../../../../domain/entities/restaurant_photo.dart';
 import '../../../../domain/entities/special_day.dart';
 
 /// Plný management pohled na restauraci vlastněnou přihlášeným uživatelem.
@@ -14,8 +15,10 @@ class MyRestaurant {
   final List<SpecialDay> specialDays;
   final String status;
   final bool isActive;
+  final String? logoUrl;
   final String? panoramaUrl;
   final String? coverImageUrl;
+  final List<RestaurantPhoto> gallery;
   final int defaultReservationDurationMinutes;
 
   const MyRestaurant({
@@ -29,8 +32,10 @@ class MyRestaurant {
     this.specialDays = const [],
     required this.status,
     required this.isActive,
+    this.logoUrl,
     this.panoramaUrl,
     this.coverImageUrl,
+    this.gallery = const [],
     this.defaultReservationDurationMinutes = 60,
   });
 }

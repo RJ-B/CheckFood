@@ -53,6 +53,7 @@ void main() {
               'FCM token must be non-null after Firebase initialisation (T-0004)',
         );
       },
+      skip: 'Firebase removed; re-enable when push notifications return',
     );
   });
 }

@@ -174,6 +174,23 @@ public class UserException extends SecurityException {
     }
 
     /**
+     * Vytvoří výjimku pro porušení business pravidla — request je validně
+     * zformovaný, ale aktuální stav serveru ho odmítá (např. pokus smazat
+     * právě používané zařízení). Mapuje se na HTTP 409 Conflict, což je
+     * správný status pro state-machine konflikty (RFC 9110 §15.5.10).
+     *
+     * @param message popis konkrétního konfliktu
+     * @return nová instance výjimky
+     */
+    public static UserException conflict(String message) {
+        return new UserException(
+                UserErrorCode.USER_INVALID_OPERATION,
+                message,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    /**
      * Vytvoří výjimku pro systémovou nebo databázovou chybu.
      *
      * @param message popis systémové chyby

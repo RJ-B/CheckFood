@@ -459,21 +459,29 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
     }
 
     // =========================================================================
-    // GET /api/v1/restaurants/me
+    // GET /api/my-restaurant/list
     // =========================================================================
 
     @Nested
-    @DisplayName("GET /api/v1/restaurants/me")
+    @DisplayName("GET /api/my-restaurant/list")
     class GetMyRestaurants {
 
         @Test
-        @DisplayName("RESTAURANT_OWNER sees their own restaurants")
+        @DisplayName("OWNER sees their own restaurants")
         void should_returnMyRestaurants_when_ownerAuthenticated() throws Exception {
-            String token = getTokenWithRole(OWNER_EMAIL, "RESTAURANT_OWNER", "device-owner-me");
+            // /api/my-restaurant/list is gated by hasAnyRole('OWNER',
+            // 'MANAGER', 'STAFF') — note OWNER, not RESTAURANT_OWNER.
+            // RESTAURANT_OWNER is the older "can register a new restaurant"
+            // role and lives on a different controller
+            // (RestaurantController.create*).
+            ensureRole("OWNER");
+            String token = getTokenWithRole(OWNER_EMAIL, "OWNER", "device-owner-me");
             Long ownerId = getOwnerIdFromToken(token);
+            // persistRestaurantForOwner already wires up a RestaurantEmployee
+            // row with role=OWNER, which is what MyRestaurantService walks.
             persistRestaurantForOwner("My Restaurant", ownerId);
 
-            mockMvc.perform(get("/api/v1/restaurants/me")
+            mockMvc.perform(get("/api/my-restaurant/list")
                             .header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").isArray())
@@ -483,7 +491,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         @Test
         @DisplayName("401 when unauthenticated")
         void should_return401_when_anonymous() throws Exception {
-            mockMvc.perform(get("/api/v1/restaurants/me"))
+            mockMvc.perform(get("/api/my-restaurant/list"))
                     .andExpect(status().isUnauthorized());
         }
 
@@ -492,7 +500,7 @@ class RestaurantControllerIntegrationTest extends BaseAuthIntegrationTest {
         void should_return403_when_regularUser() throws Exception {
             String token = getAccessToken(USER_EMAIL, TEST_PASSWORD, "device-user-me");
 
-            mockMvc.perform(get("/api/v1/restaurants/me")
+            mockMvc.perform(get("/api/my-restaurant/list")
                             .header("Authorization", "Bearer " + token))
                     .andExpect(status().isForbidden());
         }

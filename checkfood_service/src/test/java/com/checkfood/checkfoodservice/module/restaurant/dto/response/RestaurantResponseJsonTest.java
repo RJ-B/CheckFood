@@ -95,7 +95,7 @@ class RestaurantResponseJsonTest {
               "name": "Test Bistro",
               "description": "desc",
               "cuisineType": "ITALIAN",
-              "status": "APPROVED",
+              "status": "ACTIVE",
               "active": true,
               "rating": 4.5,
               "onboardingCompleted": true,

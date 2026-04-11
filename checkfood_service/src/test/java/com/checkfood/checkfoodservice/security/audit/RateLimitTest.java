@@ -111,19 +111,34 @@ class RateLimitTest extends BaseAuthIntegrationTest {
     }
 
     @Test
-    @DisplayName("GAP: /api/auth/verify (email link) has NO rate limit — token enumeration possible")
-    void verifyEndpointGap() throws Exception {
-        // GAP: /api/auth/verify is not annotated @RateLimited. A bot can
-        // brute-force verification UUIDs across thousands of requests.
-        // Mitigation is token entropy (UUID v4) — still, add rate limit.
-        int hits = 0;
+    @DisplayName("/api/auth/verify is rate-limited (token brute-force protection)")
+    void verifyEndpointIsRateLimited() throws Exception {
+        // /api/auth/verify is annotated @RateLimited(limit = 20, perIp = true).
+        // From a single IP, the first 20 requests are accepted (302 redirect)
+        // and any subsequent request inside the 1-min window is rejected
+        // with 429 Too Many Requests.
+        //
+        // Reset the limiter so a previous test in the same JVM didn't
+        // already burn through the bucket.
+        rateLimitService.reset();
+
+        int accepted = 0;
+        int throttled = 0;
         for (int i = 0; i < 100; i++) {
             MvcResult r = mockMvc.perform(get("/api/auth/verify").param("token", "random-" + i))
                     .andReturn();
-            if (r.getResponse().getStatus() < 500) hits++;
+            int status = r.getResponse().getStatus();
+            if (status == 429) {
+                throttled++;
+            } else if (status < 500) {
+                accepted++;
+            }
         }
-        assertThat(hits)
-                .as("GAP: /api/auth/verify has no rate limit — 100 requests all succeed")
-                .isLessThan(100);
+        assertThat(accepted)
+                .as("first batch under the rate limit must succeed")
+                .isLessThanOrEqualTo(20);
+        assertThat(throttled)
+                .as("requests beyond the rate limit must return 429")
+                .isGreaterThanOrEqualTo(80);
     }
 }

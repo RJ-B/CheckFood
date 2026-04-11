@@ -79,16 +79,22 @@ class ReservationCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.table_restaurant, size: 16, color: AppColors.textMuted),
                     const SizedBox(width: 4),
-                    Text(
-                      reservation.tableLabel ?? l.table,
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    Flexible(
+                      child: Text(
+                        reservation.tableLabel ?? l.table,
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     const Icon(Icons.people, size: 16, color: AppColors.textMuted),
                     const SizedBox(width: 4),
-                    Text(
-                      l.partySizeShort(reservation.partySize),
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    Flexible(
+                      child: Text(
+                        l.partySizeShort(reservation.partySize),
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
@@ -98,11 +104,14 @@ class ReservationCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
                     const SizedBox(width: 4),
-                    Text(
-                      reservation.endTime != null
-                          ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
-                          : '${_formatDate(reservation.date)}  ${l.timeFrom(_formatTime(reservation.startTime))}',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    Expanded(
+                      child: Text(
+                        reservation.endTime != null
+                            ? '${_formatDate(reservation.date)}  ${_formatTime(reservation.startTime)} – ${_formatTime(reservation.endTime!)}'
+                            : '${_formatDate(reservation.date)}  ${l.timeFrom(_formatTime(reservation.startTime))}',
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),

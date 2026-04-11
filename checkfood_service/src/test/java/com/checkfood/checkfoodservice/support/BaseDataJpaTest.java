@@ -38,7 +38,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public abstract class BaseDataJpaTest {
 
     @Container
-    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgis/postgis:16-3.4")
+    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>(
+            org.testcontainers.utility.DockerImageName.parse("postgis/postgis:16-3.4")
+                    .asCompatibleSubstituteFor("postgres"))
             .withDatabaseName("checkfood_test")
             .withUsername("test")
             .withPassword("test");

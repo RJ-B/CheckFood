@@ -1,6 +1,8 @@
 import '../../../../../data/models/common/address_model.dart';
 import '../../../../../data/models/common/opening_hours_model.dart';
+import '../../../../../data/models/response/restaurant_photo_response_model.dart';
 import '../../../../../domain/entities/address.dart';
+import '../../../../../domain/entities/restaurant_photo.dart';
 import '../../../../../domain/entities/special_day.dart';
 import '../../../domain/entities/my_restaurant.dart';
 
@@ -15,8 +17,10 @@ class MyRestaurantResponseModel {
   final List<OpeningHoursModel> openingHours;
   final String? status;
   final bool? isActive;
+  final String? logoUrl;
   final String? panoramaUrl;
   final String? coverImageUrl;
+  final List<RestaurantPhotoResponseModel> gallery;
   final int? defaultReservationDurationMinutes;
   final List<SpecialDay> specialDays;
 
@@ -31,8 +35,10 @@ class MyRestaurantResponseModel {
     this.specialDays = const [],
     this.status,
     this.isActive,
+    this.logoUrl,
     this.panoramaUrl,
     this.coverImageUrl,
+    this.gallery = const [],
     this.defaultReservationDurationMinutes,
   });
 
@@ -52,8 +58,13 @@ class MyRestaurantResponseModel {
           [],
       status: json['status'] as String?,
       isActive: json['active'] as bool?,
+      logoUrl: json['logoUrl'] as String?,
       panoramaUrl: json['panoramaUrl'] as String?,
       coverImageUrl: json['coverImageUrl'] as String?,
+      gallery: (json['gallery'] as List<dynamic>?)
+              ?.map((e) => RestaurantPhotoResponseModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       defaultReservationDurationMinutes: json['defaultReservationDurationMinutes'] as int?,
       specialDays: (json['specialDays'] as List<dynamic>?)
               ?.map((e) => SpecialDay.fromJson(e as Map<String, dynamic>))
@@ -72,8 +83,10 @@ class MyRestaurantResponseModel {
         openingHours: openingHours.map((e) => e.toEntity()).toList(),
         status: status ?? 'INACTIVE',
         isActive: isActive ?? false,
+        logoUrl: logoUrl,
         panoramaUrl: panoramaUrl,
         coverImageUrl: coverImageUrl,
+        gallery: gallery.map((e) => e.toEntity()).toList(),
         defaultReservationDurationMinutes: defaultReservationDurationMinutes ?? 60,
         specialDays: specialDays,
       );

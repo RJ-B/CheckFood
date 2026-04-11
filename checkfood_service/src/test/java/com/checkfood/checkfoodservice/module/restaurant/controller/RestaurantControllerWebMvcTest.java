@@ -7,11 +7,13 @@ import com.checkfood.checkfoodservice.module.restaurant.favourite.service.Favour
 import com.checkfood.checkfoodservice.module.restaurant.service.RestaurantService;
 import com.checkfood.checkfoodservice.module.restaurant.service.TableManagementService;
 import com.checkfood.checkfoodservice.security.module.user.service.UserService;
+import com.checkfood.checkfoodservice.testsupport.WebMvcSliceTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -47,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WebMvcTest(controllers = RestaurantController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(WebMvcSliceTestConfig.class)
 class RestaurantControllerWebMvcTest {
 
     @Autowired private MockMvc mockMvc;
@@ -97,7 +100,7 @@ class RestaurantControllerWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(id.toString()))
                 .andExpect(jsonPath("$[0].name").value("Bistro 1"))
-                .andExpect(jsonPath("$[0].status").value("APPROVED"));
+                .andExpect(jsonPath("$[0].status").value("ACTIVE"));
     }
 
     @Test

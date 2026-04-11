@@ -241,7 +241,13 @@ class AuditIntegrationTest extends BaseAuthIntegrationTest {
     private String createAdminAndGetToken() throws Exception {
         getAccessToken(TEST_EMAIL, TEST_PASSWORD, TEST_DEVICE_ID);
         promoteToAdmin(TEST_EMAIL);
-        return loginAgain(TEST_EMAIL, TEST_PASSWORD);
+        String token = loginAgain(TEST_EMAIL, TEST_PASSWORD);
+        // Bootstrap (login + role promotion + login again) generates audit
+        // entries of its own. Strip them so each test starts from a clean
+        // audit table and assertions on totalElements only count entries
+        // that the test itself inserted.
+        auditLogRepository.deleteAll();
+        return token;
     }
 
     private void promoteToAdmin(String email) {

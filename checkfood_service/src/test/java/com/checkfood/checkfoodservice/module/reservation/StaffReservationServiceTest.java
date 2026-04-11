@@ -406,9 +406,15 @@ class StaffReservationServiceTest {
             givenOwnerMembership();
             var r = confirmedReservation();
             r.setStatus(ReservationStatus.CHECKED_IN);
+            // Anchor the reservation to the same date as the fixed test
+            // clock (2025-01-13). Production now compares the reservation's
+            // date+time against the current LocalDateTime — not just the
+            // wall-clock time-of-day — so the past-time check only makes
+            // sense when the date matches.
+            r.setDate(LocalDate.of(2025, 1, 13));
             when(reservationRepository.findById(r.getId())).thenReturn(Optional.of(r));
 
-            // Clock is fixed at 12:00, so 11:00 is in the past
+            // Clock is fixed at 2025-01-13 12:00, so 11:00 on the same day is past
             var req = new ExtendReservationRequest(LocalTime.of(11, 0));
             assertThatThrownBy(() -> service.extendReservation(r.getId(), req, STAFF_EMAIL, RESTAURANT_ID))
                     .isInstanceOf(ReservationException.class)

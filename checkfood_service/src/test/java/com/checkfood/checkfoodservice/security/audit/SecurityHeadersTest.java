@@ -50,14 +50,20 @@ class SecurityHeadersTest extends BaseAuthIntegrationTest {
     }
 
     @Test
-    @DisplayName("GAP: Strict-Transport-Security header should be set in production-like profile")
+    @DisplayName("Strict-Transport-Security header is set on HTTPS requests")
     void hstsHeaderPresent() throws Exception {
-        MvcResult result = mockMvc.perform(get("/actuator/health")).andReturn();
+        // Spring Security only writes the HSTS header on requests it
+        // considers secure. MockMvc requests are HTTP by default, so the
+        // header is suppressed — flip request.isSecure() to true via
+        // `secure(true)` to exercise the production code path.
+        MvcResult result = mockMvc.perform(get("/actuator/health").secure(true)).andReturn();
         String hsts = result.getResponse().getHeader("Strict-Transport-Security");
 
         assertThat(hsts)
-                .as("GAP: HSTS header not explicitly configured. Add .headers(h -> h.httpStrictTransportSecurity(...))")
-                .isNotNull();
+                .as("HSTS header missing on HTTPS request — check SecurityConfig.headers().httpStrictTransportSecurity")
+                .isNotNull()
+                .contains("max-age=")
+                .contains("includeSubDomains");
     }
 
     @Test

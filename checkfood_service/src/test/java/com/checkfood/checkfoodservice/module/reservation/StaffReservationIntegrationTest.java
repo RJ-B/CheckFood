@@ -536,7 +536,10 @@ class StaffReservationIntegrationTest extends BaseAuthIntegrationTest {
         @DisplayName("409 — cannot extend if conflicting reservation exists")
         void should_return409_when_slotConflict() throws Exception {
             var r = seedReservationWithStatus(ReservationStatus.CHECKED_IN);
-            // Seed a conflicting reservation right after
+            // Seed a conflicting reservation right after the existing one.
+            // futureDate is +14 days, so any wall-clock time of day is in
+            // the future — production validation now checks date+time, not
+            // just LocalTime.now().
             reservationRepository.save(Reservation.builder()
                     .restaurantId(restaurantId).tableId(tableId)
                     .userId(99L).date(futureDate)

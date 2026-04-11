@@ -84,8 +84,14 @@ class SqlInjectionTest extends BaseAuthIntegrationTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Tag("testcontainers")
     @DisplayName("Restaurant search 'q' parameter is parameterized — no SQL leak")
     void restaurantSearchParameterizedQuery() throws Exception {
+        // NB: this test exercises the /restaurants/nearest endpoint, whose
+        // backing query uses the PostGIS <-> KNN operator. H2 doesn't know
+        // <->, so the test would crash with an unrelated H2 syntax error
+        // and look like a 500 leak. Tagged @testcontainers so the CI matrix
+        // runs it only against the real PostGIS container.
         for (String payload : PAYLOADS) {
             MvcResult result = mockMvc.perform(get("/api/v1/restaurants/nearest")
                             .param("lat", "49.74")

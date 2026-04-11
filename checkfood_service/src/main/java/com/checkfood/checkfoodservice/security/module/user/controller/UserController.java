@@ -254,8 +254,11 @@ public class UserController {
         String currentDeviceIdentifier = jwtService.extractDeviceIdentifier(token);
         deviceService.findById(deviceId).ifPresent(device -> {
             if (device.getDeviceIdentifier().equals(currentDeviceIdentifier)) {
+                // 409 Conflict — request is well-formed, but it conflicts
+                // with the current session state (deleting your own device
+                // would log you out mid-request). Use logout instead.
                 throw com.checkfood.checkfoodservice.security.module.user.exception.UserException
-                        .invalidOperation("Nelze smazat aktuální zařízení. Použijte standardní odhlášení.");
+                        .conflict("Nelze smazat aktuální zařízení. Použijte standardní odhlášení.");
             }
         });
         deviceService.removeByIdAndUser(deviceId, user);

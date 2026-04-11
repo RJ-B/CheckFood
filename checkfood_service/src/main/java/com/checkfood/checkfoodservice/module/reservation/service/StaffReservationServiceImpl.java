@@ -220,11 +220,17 @@ public class StaffReservationServiceImpl implements StaffReservationService {
                     reservation.getStatus().name(), "CHANGE_PROPOSED");
         }
 
-        // At-least-one-field validation lives on the DTO itself via
-        // @AssertTrue isHasAnyChange(), which produces a regular
-        // MethodArgumentNotValidException → HTTP 400. No service-layer
-        // check needed (keeping one would still produce 500 because the
-        // module's exception handler doesn't know ResponseStatusException).
+        // At-least-one-field validation primarily lives on the DTO via
+        // @AssertTrue isHasAnyChange() (→ MethodArgumentNotValidException
+        // → HTTP 400). The defensive guard below mirrors that contract at
+        // the service level so unit tests + any non-controller callers
+        // (e.g. internal code paths that bypass DTO validation) get a
+        // 400 instead of an NPE on `saved.getId()` further down.
+        if (request.getStartTime() == null && request.getTableId() == null) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST,
+                    "Návrh změny musí obsahovat alespoň jedno pole (čas nebo stůl).");
+        }
 
         changeRequestRepository.findByReservationIdAndStatus(reservationId, ChangeRequestStatus.PENDING)
                 .ifPresent(existing -> {
@@ -319,8 +325,15 @@ public class StaffReservationServiceImpl implements StaffReservationService {
                     reservation.getStatus().name(), "EXTENDED");
         }
 
-        var now = LocalTime.now(clock);
-        if (!request.getEndTime().isAfter(now)) {
+        // Compare against the reservation's date+endTime, not just wall-clock
+        // time-of-day. The previous check used `LocalTime.now(clock)` which
+        // ignored the date entirely — meaning a 17:00 staff session could not
+        // extend a reservation scheduled for tomorrow morning to end at 10:00.
+        // Now we build a proper LocalDateTime from the reservation's date and
+        // the requested endTime and check it against the current instant.
+        var requestedEnd = java.time.LocalDateTime.of(reservation.getDate(), request.getEndTime());
+        var nowDateTime = java.time.LocalDateTime.now(clock);
+        if (!requestedEnd.isAfter(nowDateTime)) {
             throw ReservationException.invalidTime("Čas ukončení musí být v budoucnosti.");
         }
 
