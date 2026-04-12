@@ -18,31 +18,55 @@ import 'package:checkfood_client/security/presentation/pages/auth/login_page.dar
 // Minimal stub blocs — hand-rolled to avoid real dependencies
 // ---------------------------------------------------------------------------
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
+class _FakeAuthBloc extends Fake implements AuthBloc {
+  final StreamController<AuthState> _controller =
+      StreamController<AuthState>.broadcast();
+  AuthState _state;
 
-/// Fake AuthBloc založený na reálném Bloc — BlocListener správně subscribuje.
-class _FakeAuthBloc extends Bloc<AuthEvent, AuthState> {
-  _FakeAuthBloc() : super(const AuthState.unauthenticated()) {
-    on<AuthEvent>((_, __) {}); // no-op handler
+  _FakeAuthBloc([this._state = const AuthState.unauthenticated()]);
+
+  @override
+  AuthState get state => _state;
+
+  @override
+  Stream<AuthState> get stream => _controller.stream;
+
+  @override
+  bool get isClosed => false;
+
+  void emit(AuthState s) {
+    _state = s;
+    _controller.add(s);
   }
 
   final List<AuthEvent> addedEvents = [];
 
   @override
-  void onEvent(AuthEvent event) {
-    addedEvents.add(event);
-    super.onEvent(event);
-  }
+  void add(AuthEvent event) => addedEvents.add(event);
 
-  /// Veřejný emit pro testy — BlocBase.emit je @visibleForTesting.
-  void emitState(AuthState s) => emit(s);
+  @override
+  Future<void> close() async => _controller.close();
 }
 
-/// Fake UserBloc založený na reálném Bloc.
-class _FakeUserBloc extends Bloc<UserEvent, UserState> {
-  _FakeUserBloc() : super(const UserState.initial()) {
-    on<UserEvent>((_, __) {});
-  }
+class _FakeUserBloc extends Fake implements UserBloc {
+  final StreamController<UserState> _controller =
+      StreamController<UserState>.broadcast();
+  UserState _state = const UserState.initial();
+
+  @override
+  UserState get state => _state;
+
+  @override
+  Stream<UserState> get stream => _controller.stream;
+
+  @override
+  bool get isClosed => false;
+
+  @override
+  void add(UserEvent event) {}
+
+  @override
+  Future<void> close() async => _controller.close();
 }
 
 // ---------------------------------------------------------------------------
