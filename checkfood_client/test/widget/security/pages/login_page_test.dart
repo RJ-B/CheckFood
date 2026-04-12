@@ -31,6 +31,9 @@ class _FakeAuthBloc extends Fake implements AuthBloc {
   @override
   Stream<AuthState> get stream => _controller.stream;
 
+  @override
+  bool get isClosed => false;
+
   void emit(AuthState s) {
     _state = s;
     _controller.add(s);
@@ -55,6 +58,9 @@ class _FakeUserBloc extends Fake implements UserBloc {
 
   @override
   Stream<UserState> get stream => _controller.stream;
+
+  @override
+  bool get isClosed => false;
 
   @override
   void add(UserEvent event) {}
