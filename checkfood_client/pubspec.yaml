@@ -82,12 +82,16 @@ dependencies:
   intl: any
   logger: ^2.3.0
   uuid: ^4.4.0
-  # app_settings removed Apr 2026 — its native iOS plugin crashed on
-  # iOS 26.3.1 in `AppSettingsPlugin.register(with:)` (Swift type
-  # introspection regression in the plugin's ObjC bridge), taking
-  # the app down at startup before Flutter even booted. The single
-  # call site (profile_screen.dart "Push notifications" tile) now
-  # uses a direct `url_launcher` → `app-settings:` instead.
+  # app_settings restored Apr 12 2026 — earlier "iOS 26.3.1 plugin
+  # crash" was actually a stale Pods + Xcode DerivedData cache from
+  # before the iOS SDK upgrade to 26.4. After
+  #   rm -rf ios/Pods ios/Podfile.lock ~/Library/.../DerivedData/Runner-*
+  #   && flutter clean && flutter pub get && pod install --repo-update
+  # the plugin compiles fresh against iOS 26.4 SDK and works fine.
+  # Lesson learned: when plugin native code crashes in
+  # `swift_getObjectType` after a major iOS SDK bump, try a clean Pod
+  # install BEFORE blaming the plugin.
+  app_settings: ^7.0.0
 
   # --- Kryptografie (pro certificate pinning) ---
   crypto: ^3.0.3
