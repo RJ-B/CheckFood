@@ -6,6 +6,10 @@ import com.checkfood.checkfoodservice.module.restaurant.entity.employee.Restaura
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.CuisineType;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.Restaurant;
 import com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.RestaurantStatus;
+import com.checkfood.checkfoodservice.module.restaurant.menu.entity.MenuCategory;
+import com.checkfood.checkfoodservice.module.restaurant.menu.entity.MenuItem;
+import com.checkfood.checkfoodservice.module.restaurant.menu.repository.MenuCategoryRepository;
+import com.checkfood.checkfoodservice.module.restaurant.menu.repository.MenuItemRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantEmployeeRepository;
 import com.checkfood.checkfoodservice.module.restaurant.repository.RestaurantRepository;
 import com.checkfood.checkfoodservice.security.module.auth.dto.request.*;
@@ -75,6 +79,8 @@ public class AuthServiceImpl implements AuthService {
     private final com.checkfood.checkfoodservice.module.restaurant.repository.table.RestaurantTableRepository restaurantTableRepository;
     private final AuditService auditService;
     private final RateLimitService rateLimitService;
+    private final MenuCategoryRepository menuCategoryRepository;
+    private final MenuItemRepository menuItemRepository;
 
     @Override
     public void register(RegisterRequest requestDto) {
@@ -158,7 +164,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Registruje majitele restaurace s rolí OWNER a vytváří dvě zkušební restaurace (TRIAL).
+     * URL sdíleného testovacího panoramatu přiřazovaného všem trial restauracím.
+     */
+    private static final String TRIAL_PANORAMA_URL =
+            "https://storage.googleapis.com/checkfood-uploads/trial/panoramaTest.jpg";
+
+    /**
+     * Výchozí yaw/pitch pozice pro stoly v testovacím panoramatu.
+     * Tři stoly rozmístěné po 120° v horizontální rovině.
+     */
+    private static final double[][] DEFAULT_TABLE_POSITIONS = {
+            {-60.0, -10.0},   // Stůl 1 — levá část scény
+            {0.0, -5.0},      // Stůl 2 — střed scény
+            {60.0, -10.0}     // Stůl 3 — pravá část scény
+    };
+
+    /**
+     * Registruje majitele restaurace s rolí OWNER a vytváří dvě zkušební restaurace (TRIAL)
+     * kompletně vybavené panoramatem, stoly s markery a ukázkovým menu.
      *
      * @param requestDto registrační data majitele
      */
@@ -182,7 +205,7 @@ public class AuthServiceImpl implements AuthService {
         double lat = requestDto.getLatitude() != null ? requestDto.getLatitude() : 49.7474;
         double lng = requestDto.getLongitude() != null ? requestDto.getLongitude() : 13.3776;
 
-        var managerRole = roleService.findByName("USER");
+        var userRole = roleService.findByName("USER");
         var managerUser = UserEntity.builder()
                 .email("manager." + savedUser.getId() + "@trial.checkfood.cz")
                 .firstName("Karel")
@@ -191,7 +214,7 @@ public class AuthServiceImpl implements AuthService {
                 .authProvider(AuthProvider.LOCAL)
                 .providerId("manager." + savedUser.getId() + "@trial.checkfood.cz")
                 .enabled(true)
-                .roles(new HashSet<>(Set.of(managerRole)))
+                .roles(new HashSet<>(Set.of(userRole)))
                 .build();
         var savedManager = userService.save(managerUser);
 
@@ -200,11 +223,8 @@ public class AuthServiceImpl implements AuthService {
         CuisineType[] cuisines = {CuisineType.CZECH, CuisineType.ITALIAN};
 
         for (int r = 0; r < 2; r++) {
+            // Adresa — pouze GPS souřadnice, textová pole prázdná
             var address = new Address();
-            address.setStreet(r == 0 ? "Hlavní 1" : "Vedlejší 5");
-            address.setCity("Plzeň");
-            address.setPostalCode("301 00");
-            address.setCountry("CZ");
             address.setCoordinates(lat + (r * 0.002), lng + (r * 0.003));
 
             var restaurant = Restaurant.builder()
@@ -212,13 +232,12 @@ public class AuthServiceImpl implements AuthService {
                     .description("Zkušební restaurace — upravte údaje v nastavení.")
                     .phone("+420 000 000 00" + r)
                     .contactEmail(savedUser.getEmail())
-                    // Vlastnictví jde výhradně přes RestaurantEmployee (níže) —
-                    // dřívější .ownerId(UUID.randomUUID()) byl mass-assignment bug.
                     .status(RestaurantStatus.ACTIVE)
                     .active(true)
                     .cuisineType(cuisines[r])
                     .defaultReservationDurationMinutes(60)
                     .onboardingCompleted(true)
+                    .panoramaUrl(TRIAL_PANORAMA_URL)
                     .address(address)
                     .build();
 
@@ -235,17 +254,21 @@ public class AuthServiceImpl implements AuthService {
 
             var savedRestaurant = restaurantRepository.save(restaurant);
 
-            for (int t = 1; t <= 3; t++) {
+            // Stoly s panorama markery (yaw/pitch)
+            for (int t = 0; t < 3; t++) {
                 restaurantTableRepository.save(
                     com.checkfood.checkfoodservice.module.restaurant.entity.restaurant.table.RestaurantTable.builder()
                         .restaurantId(savedRestaurant.getId())
-                        .label("Stůl " + t)
-                        .capacity(t == 1 ? 2 : t == 2 ? 4 : 6)
+                        .label("Stůl " + (t + 1))
+                        .capacity(t == 0 ? 2 : t == 1 ? 4 : 6)
                         .active(true)
+                        .yaw(DEFAULT_TABLE_POSITIONS[t][0])
+                        .pitch(DEFAULT_TABLE_POSITIONS[t][1])
                         .build()
                 );
             }
 
+            // Zaměstnanci
             restaurantEmployeeRepository.save(RestaurantEmployee.builder()
                     .user(savedUser)
                     .restaurant(savedRestaurant)
@@ -266,7 +289,7 @@ public class AuthServiceImpl implements AuthService {
                     .authProvider(AuthProvider.LOCAL)
                     .providerId("staff" + (r + 1) + "." + savedUser.getId() + "@trial.checkfood.cz")
                     .enabled(true)
-                    .roles(new HashSet<>(Set.of(managerRole)))
+                    .roles(new HashSet<>(Set.of(userRole)))
                     .build();
             var savedStaff = userService.save(staffUser);
 
@@ -275,10 +298,70 @@ public class AuthServiceImpl implements AuthService {
                     .restaurant(savedRestaurant)
                     .role(RestaurantEmployeeRole.STAFF)
                     .build());
+
+            // Ukázkové menu — kategorie + položky
+            createTrialMenu(savedRestaurant.getId());
         }
 
         generateAndSendVerificationToken(savedUser);
         authLogger.logRegistration(savedUser.getEmail());
+    }
+
+    /**
+     * Vytvoří ukázkové menu s kategoriemi a položkami pro trial restauraci.
+     */
+    private void createTrialMenu(UUID restaurantId) {
+        // Předkrmy
+        var starters = menuCategoryRepository.save(MenuCategory.builder()
+                .restaurantId(restaurantId).name("Předkrmy").sortOrder(0).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(starters.getId()).restaurantId(restaurantId)
+                .name("Tatarský biftek").description("200g hovězí tartare, topinky, česnek")
+                .priceMinor(28900).sortOrder(0).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(starters.getId()).restaurantId(restaurantId)
+                .name("Carpaccio z řepy").description("Pečená řepa, kozí sýr, vlašské ořechy")
+                .priceMinor(17900).sortOrder(1).build());
+
+        // Hlavní chody
+        var mains = menuCategoryRepository.save(MenuCategory.builder()
+                .restaurantId(restaurantId).name("Hlavní chody").sortOrder(1).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(mains.getId()).restaurantId(restaurantId)
+                .name("Svíčková na smetaně").description("Hovězí svíčková, houskový knedlík, brusinky")
+                .priceMinor(25900).sortOrder(0).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(mains.getId()).restaurantId(restaurantId)
+                .name("Kuřecí řízek").description("Kuřecí prsní řízek, bramborový salát")
+                .priceMinor(21900).sortOrder(1).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(mains.getId()).restaurantId(restaurantId)
+                .name("Grilovaný losos").description("Filet z lososa, grilovaná zelenina, bylinková omáčka")
+                .priceMinor(32900).sortOrder(2).build());
+
+        // Dezerty
+        var desserts = menuCategoryRepository.save(MenuCategory.builder()
+                .restaurantId(restaurantId).name("Dezerty").sortOrder(2).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(desserts.getId()).restaurantId(restaurantId)
+                .name("Palačinky s Nutellou").description("Domácí palačinky, Nutella, šlehačka, jahody")
+                .priceMinor(12900).sortOrder(0).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(desserts.getId()).restaurantId(restaurantId)
+                .name("Tiramisu").description("Klasické italské tiramisu s mascarpone")
+                .priceMinor(14900).sortOrder(1).build());
+
+        // Nápoje
+        var drinks = menuCategoryRepository.save(MenuCategory.builder()
+                .restaurantId(restaurantId).name("Nápoje").sortOrder(3).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(drinks.getId()).restaurantId(restaurantId)
+                .name("Pilsner Urquell 0,5l").description("Čepované pivo")
+                .priceMinor(5900).sortOrder(0).build());
+        menuItemRepository.save(MenuItem.builder()
+                .categoryId(drinks.getId()).restaurantId(restaurantId)
+                .name("Domácí limonáda").description("Citron, máta, třtinový cukr")
+                .priceMinor(7900).sortOrder(1).build());
     }
 
     @Override

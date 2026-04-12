@@ -69,8 +69,7 @@ class SEn extends S {
   String get forgotPasswordTitle => 'Password Recovery';
 
   @override
-  String get forgotPasswordSubtitle =>
-      'Enter your email and we will send you a link to reset your password.';
+  String get forgotPasswordSubtitle => 'Enter your email and we will send you a link to reset your password.';
 
   @override
   String get forgotPasswordSend => 'Send link';
@@ -81,8 +80,7 @@ class SEn extends S {
   }
 
   @override
-  String get forgotPasswordCheckSpam =>
-      'Can\'t find the email? Check your spam folder.';
+  String get forgotPasswordCheckSpam => 'Can\'t find the email? Check your spam folder.';
 
   @override
   String get resetPasswordTitle => 'New Password';
@@ -100,8 +98,7 @@ class SEn extends S {
   String get resetPasswordButton => 'Set new password';
 
   @override
-  String get resetPasswordSuccess =>
-      'Password changed successfully! You can now log in.';
+  String get resetPasswordSuccess => 'Password changed successfully! You can now log in.';
 
   @override
   String get passwordsDoNotMatch => 'Passwords do not match.';
@@ -124,8 +121,7 @@ class SEn extends S {
   String get resolveActivation => 'RESOLVE ACCOUNT ACTIVATION';
 
   @override
-  String get accountNotVerified =>
-      'Account is not verified. Check your email and confirm registration.';
+  String get accountNotVerified => 'Account is not verified. Check your email and confirm registration.';
 
   @override
   String get email => 'Email';
@@ -170,8 +166,7 @@ class SEn extends S {
   String get changePasswordSuccess => 'Password has been changed successfully.';
 
   @override
-  String get passwordManagedByProvider =>
-      'Password is managed by external provider';
+  String get passwordManagedByProvider => 'Password is managed by external provider';
 
   @override
   String loginVia(String provider) {
@@ -194,8 +189,7 @@ class SEn extends S {
   String get myReservationsSubtitle => 'History and upcoming reservations';
 
   @override
-  String get reservationsModuleSoon =>
-      'Reservations module will be available soon.';
+  String get reservationsModuleSoon => 'Reservations module will be available soon.';
 
   @override
   String get profileUpdated => 'Profile has been updated successfully';
@@ -227,8 +221,7 @@ class SEn extends S {
   String get logoutOthers => 'Log out others';
 
   @override
-  String get loggedOutFromDevices =>
-      'You have been logged out from all other devices.';
+  String get loggedOutFromDevices => 'You have been logged out from all other devices.';
 
   @override
   String get pushNotifications => 'Push notifications';
@@ -291,8 +284,7 @@ class SEn extends S {
   String get allowInSystem => 'Allow in system settings';
 
   @override
-  String get cannotGetLocation =>
-      'Cannot determine location. Check permissions.';
+  String get cannotGetLocation => 'Cannot determine location. Check permissions.';
 
   @override
   String get reserveTable => 'Reserve a table';
@@ -313,8 +305,7 @@ class SEn extends S {
   String get note => 'Note';
 
   @override
-  String get reservationCreated =>
-      'Reservation created! Waiting for confirmation.';
+  String get reservationCreated => 'Reservation created! Waiting for confirmation.';
 
   @override
   String get reservationEdited => 'Reservation updated.';
@@ -326,12 +317,10 @@ class SEn extends S {
   String get cancelReservation => 'Cancel reservation';
 
   @override
-  String get cancelReservationConfirm =>
-      'Are you sure you want to cancel this reservation?';
+  String get cancelReservationConfirm => 'Are you sure you want to cancel this reservation?';
 
   @override
-  String get slotUnavailable =>
-      'This slot is no longer available. Please choose a different time.';
+  String get slotUnavailable => 'This slot is no longer available. Please choose a different time.';
 
   @override
   String get noReservationsForDay => 'No reservations for this day.';
@@ -529,12 +518,10 @@ class SEn extends S {
   String get panoramaActive => 'Panorama is active';
 
   @override
-  String get panoramaActiveDesc =>
-      'Panorama is set up and displayed to customers.';
+  String get panoramaActiveDesc => 'Panorama is set up and displayed to customers.';
 
   @override
-  String get panoramaHelp =>
-      'A panoramic shot of the restaurant will help customers explore the venue.';
+  String get panoramaHelp => 'A panoramic shot of the restaurant will help customers explore the venue.';
 
   @override
   String get noPanoramaYet => 'No panorama yet. Click the button above.';
@@ -612,8 +599,7 @@ class SEn extends S {
   }
 
   @override
-  String get accountActivated =>
-      'Your account has been activated! You can now log in.';
+  String get accountActivated => 'Your account has been activated! You can now log in.';
 
   @override
   String get activationError => 'Error during account activation.';
@@ -634,8 +620,7 @@ class SEn extends S {
   String get registerAsOwner => 'I want to add my restaurant';
 
   @override
-  String get registerAsOwnerSubtitle =>
-      'We\'ll create a trial restaurant for you — you can set it up after logging in';
+  String get registerAsOwnerSubtitle => 'We\'ll create a trial restaurant for you — you can set it up after logging in';
 
   @override
   String get enterEmail => 'Enter email';
@@ -656,12 +641,10 @@ class SEn extends S {
   String get createAccount => 'Create your account';
 
   @override
-  String get registerSubtitle =>
-      'Enter your details to start your journey with CheckFood';
+  String get registerSubtitle => 'Enter your details to start your journey with CheckFood';
 
   @override
-  String get registerSuccess =>
-      'Registration successful. Please check your email.';
+  String get registerSuccess => 'Registration successful. Please check your email.';
 
   @override
   String get alreadyHaveAccount => 'Already have an account?';
@@ -681,8 +664,7 @@ class SEn extends S {
   String get backToLogin => 'Back to login';
 
   @override
-  String get emailNotReceived =>
-      'Didn\'t receive the email or the link expired?';
+  String get emailNotReceived => 'Didn\'t receive the email or the link expired?';
 
   @override
   String get resend => 'Resend';
@@ -739,8 +721,7 @@ class SEn extends S {
   String get ownerRegisterHeading => 'Restaurant owner registration';
 
   @override
-  String get ownerRegisterSubtitle =>
-      'Create an account to manage your restaurant';
+  String get ownerRegisterSubtitle => 'Create an account to manage your restaurant';
 
   @override
   String get emailRequired => 'Email is required';
@@ -752,8 +733,7 @@ class SEn extends S {
   String get role => 'Role';
 
   @override
-  String get locationPermissionDesc =>
-      'To show you nearby restaurants and provide navigation, we need access to your location.';
+  String get locationPermissionDesc => 'To show you nearby restaurants and provide navigation, we need access to your location.';
 
   @override
   String get enterManually => 'Enter manually';
@@ -818,29 +798,25 @@ class SEn extends S {
   String get logoutDeviceDialogTitle => 'Log out device?';
 
   @override
-  String get logoutDeviceDialogContent =>
-      'The device will be logged out but remain saved in the list.';
+  String get logoutDeviceDialogContent => 'The device will be logged out but remain saved in the list.';
 
   @override
   String get deleteDeviceDialogTitle => 'Delete device?';
 
   @override
-  String get deleteDeviceDialogContent =>
-      'The device will be logged out and permanently removed from the list.';
+  String get deleteDeviceDialogContent => 'The device will be logged out and permanently removed from the list.';
 
   @override
   String get logoutAllDevicesDialogTitle => 'Log out all devices?';
 
   @override
-  String get logoutAllDevicesDialogContent =>
-      'All devices except this one will be logged out but remain saved in the list.';
+  String get logoutAllDevicesDialogContent => 'All devices except this one will be logged out but remain saved in the list.';
 
   @override
   String get deleteAllDevicesDialogTitle => 'Delete all devices?';
 
   @override
-  String get deleteAllDevicesDialogContent =>
-      'All devices except this one will be logged out and permanently removed from the list.';
+  String get deleteAllDevicesDialogContent => 'All devices except this one will be logged out and permanently removed from the list.';
 
   @override
   String get firstNameRequired => 'First name is required';
@@ -1032,8 +1008,7 @@ class SEn extends S {
   String get activePanoramaTitle => 'Active panorama';
 
   @override
-  String get activePanoramaDesc =>
-      'Panorama is set up and displayed to customers.';
+  String get activePanoramaDesc => 'Panorama is set up and displayed to customers.';
 
   @override
   String get creatingPanorama => 'Creating...';
@@ -1146,8 +1121,7 @@ class SEn extends S {
   String get panoramaOptionalTitle => 'Panorama (optional)';
 
   @override
-  String get panoramaHelpText =>
-      'A panoramic photo of the restaurant will help customers explore the venue.';
+  String get panoramaHelpText => 'A panoramic photo of the restaurant will help customers explore the venue.';
 
   @override
   String get existingSessions => 'Existing sessions:';
@@ -1179,8 +1153,7 @@ class SEn extends S {
   String get publishedSuccess => 'Restaurant has been published successfully!';
 
   @override
-  String get fillRequiredSteps =>
-      'Complete all required steps before publishing.';
+  String get fillRequiredSteps => 'Complete all required steps before publishing.';
 
   @override
   String capturedPhotos(int count, int total) {
@@ -1226,8 +1199,7 @@ class SEn extends S {
   String get searchHint => 'Search restaurants, cuisines...';
 
   @override
-  String get restaurantDescription =>
-      'This restaurant offers a curated menu made from fresh ingredients, a welcoming atmosphere and excellent service.';
+  String get restaurantDescription => 'This restaurant offers a curated menu made from fresh ingredients, a welcoming atmosphere and excellent service.';
 
   @override
   String get openingHoursInfo => 'Opening hours';
@@ -1333,12 +1305,10 @@ class SEn extends S {
   String get extendReservation => 'Extend';
 
   @override
-  String get pendingChangeInfo =>
-      'The customer will be asked to approve the change.';
+  String get pendingChangeInfo => 'The customer will be asked to approve the change.';
 
   @override
-  String get extendInfo =>
-      'The customer will not be notified about the extension.';
+  String get extendInfo => 'The customer will not be notified about the extension.';
 
   @override
   String get waitingForResponse => 'Waiting for customer response';
@@ -1384,12 +1354,10 @@ class SEn extends S {
   String get selectTable => 'Select table';
 
   @override
-  String get checkInConfirmMessage =>
-      'Are you sure you want to check in this guest?';
+  String get checkInConfirmMessage => 'Are you sure you want to check in this guest?';
 
   @override
-  String get completeConfirmMessage =>
-      'Are you sure you want to complete this reservation?';
+  String get completeConfirmMessage => 'Are you sure you want to complete this reservation?';
 
   @override
   String get payButton => 'Pay';
@@ -1413,8 +1381,7 @@ class SEn extends S {
   String get paymentInitiating => 'Initiating payment...';
 
   @override
-  String get paymentErrorRetry =>
-      'Failed to initiate payment. Please try again.';
+  String get paymentErrorRetry => 'Failed to initiate payment. Please try again.';
 
   @override
   String get deleteAccount => 'Delete account';
@@ -1423,8 +1390,7 @@ class SEn extends S {
   String get deleteAccountDialogTitle => 'Delete account?';
 
   @override
-  String get deleteAccountDialogContent =>
-      'This action is irreversible. All your personal data and owned restaurants will be deleted. Reservations and orders will be anonymized to preserve statistics. Type DELETE to confirm.';
+  String get deleteAccountDialogContent => 'This action is irreversible. All your personal data and owned restaurants will be deleted. Reservations and orders will be anonymized to preserve statistics. Type DELETE to confirm.';
 
   @override
   String get deleteAccountConfirmWord => 'DELETE';
@@ -1439,6 +1405,5 @@ class SEn extends S {
   String get deleteAccountSuccess => 'Account deleted successfully.';
 
   @override
-  String get deleteAccountFailed =>
-      'Failed to delete account. Please try again.';
+  String get deleteAccountFailed => 'Failed to delete account. Please try again.';
 }
