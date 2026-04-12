@@ -88,8 +88,11 @@ class ReservationIntegrationTest extends BaseAuthIntegrationTest {
         // Delete restaurants, but opening hours are cascade-deleted via ElementCollection
         restaurantRepository.deleteAll();
 
-        // Deterministic future date (7 days from now, always in the future)
+        // Deterministické budoucí datum — přeskočí neděli (restaurace má v neděli zavřeno)
         testDate = LocalDate.now().plusDays(7);
+        if (testDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            testDate = testDate.plusDays(1); // pondělí
+        }
         testDayOfWeek = testDate.getDayOfWeek();
 
         // Seed restaurant with opening hours

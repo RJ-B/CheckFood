@@ -73,6 +73,10 @@ class OrderIntegrationTest extends BaseAuthIntegrationTest {
     @MockitoBean
     private MoonePaymentService moonePaymentService;
 
+    // Sdílený Clock bean (Europe/Prague) — test musí používat stejnou zónu jako service
+    @Autowired
+    private java.time.Clock clock;
+
     // =========================================================================
     // Test users / tokens
     // =========================================================================
@@ -135,14 +139,18 @@ class OrderIntegrationTest extends BaseAuthIntegrationTest {
         table = restaurantTableRepository.save(table);
         tableId = table.getId();
 
-        // Checked-in reservation for today so DiningContextService resolves it
+        // Checked-in reservation for today so DiningContextService resolves it.
+        // Používá Clock bean (Europe/Prague) — stejnou zónu jako DiningContextServiceImpl,
+        // aby test nefailoval když CI běží v UTC a clock je v CET.
+        LocalDate today = LocalDate.now(clock);
+        LocalTime now = LocalTime.now(clock);
         Reservation reservation = Reservation.builder()
                 .restaurantId(restaurantId)
                 .tableId(tableId)
                 .userId(userId)
-                .date(LocalDate.now())
-                .startTime(LocalTime.now().minusMinutes(15))
-                .endTime(LocalTime.now().plusMinutes(90))
+                .date(today)
+                .startTime(now.minusMinutes(15))
+                .endTime(now.plusMinutes(90))
                 .status(ReservationStatus.CHECKED_IN)
                 .partySize(2)
                 .build();

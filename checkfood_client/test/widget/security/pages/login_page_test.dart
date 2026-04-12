@@ -200,6 +200,7 @@ void main() {
     testWidgets('should show resend/resolve button when account not verified', (tester) async {
       await _pump(tester, authBloc, userBloc);
       authBloc.emit(const AuthState.verificationRequired('test@example.com'));
+      await tester.pump(); // setState() v BlocListeneru potřebuje extra pump cyklus
       await tester.pumpAndSettle();
       // An OutlinedButton appears for re-sending verification
       expect(find.byType(OutlinedButton), findsAtLeastNWidgets(1));
